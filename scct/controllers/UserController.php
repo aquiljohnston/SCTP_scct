@@ -61,19 +61,10 @@ class UserController extends Controller
     public function actionView($id)
     {
 		$curl = new curl\Curl();
- 
+        
         //get http://example.com/
         $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id);
-        /* return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]); */
-		
-		$dataProvider = new ArrayDataProvider([
-        'allModels' => json_decode($response,true),
-		]);
-		var_dump($dataProvider);
-		
-		//return $this -> render('view', ['model' => $dataProvider]);
+		return $this -> render('view', ['model' => json_decode($response)]);
     }
 
     /**
@@ -86,16 +77,15 @@ class UserController extends Controller
 		$curl = new curl\Curl();
  
         //get http://example.com/
-        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fcreate');
-        var_dump(json_decode($response));
+        //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fcreate');
 		
-        $model = new user();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->UserID]);
+        //$response = new user();
+		
+        if ($response->load(Yii::$app->request->post('http://api.southerncrossinc.com/index.php?r=user%2Fcreate')) && $response->save()) {
+            return $this->redirect(['view', 'id' => $response->UserID]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $response,
             ]);
         }
     }
@@ -111,18 +101,21 @@ class UserController extends Controller
 		$curl = new curl\Curl();
  
         //get http://example.com/
-        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id);
-        var_dump(json_decode($response));
+        $response = $curl->post('http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id);
+        //var_dump(json_decode($response));
 		
-        $model = $this->findModel($id);
+        //$response = $this->findModel($id);
+		//$response = json_decode($response);
+		
+		//$response = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->UserID]);
+         if ($response->load(Yii::$app->request->post('http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id=')) && $response->save()) {
+            return $this->redirect(['update', 'id' => $response->UserID]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model' => $response,
             ]);
-        }
+        } 
     }
 
     /**
@@ -133,12 +126,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-		$curl = new curl\Curl();
- 
-        //get http://example.com/
-        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fdelete&id='.$id);
-        var_dump(json_decode($response));
-        $this->findModel($id)->delete();
+		$this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
@@ -152,10 +140,11 @@ class UserController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = user::findOne($id)) !== null) {
+         if (($model = user::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
-        }
+        } 
+		
     }
 }

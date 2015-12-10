@@ -45,8 +45,30 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'UserModifiedDTLTOffset',
             // 'UserInactiveDTLTOffset',
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
+            //['class' => 'yii\grid\ActionColumn'],
+			
+			['class' => 'yii\grid\ActionColumn',
+                             /* 'buttons'=>[
+                              'View' => function ($url, $model) { 
+                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                        'title' => Yii::t('yii', 'View'),
+                                ]);                                
+            
+                              }
+                          ], */
+							  'urlCreator' => function ($action, $model, $key, $index) {
+								  //var_dump($model["UserID"]);
+											if ($action === 'view') {
+											$url ='index.php?r=user%2Fview&id='.$model["UserID"];
+											return $url;
+											}
+											if ($action === 'update') {
+											$url ='index.php?r=user%2Fupdate&id='.$model["UserID"];
+											return $url;
+											}
+										}						  
+                            ],
+			],
     ]); ?>
 
 </div>
