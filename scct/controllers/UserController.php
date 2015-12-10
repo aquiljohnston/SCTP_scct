@@ -40,7 +40,6 @@ class UserController extends Controller
  
         //get http://example.com/
         $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Findex');
-		
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
         'allModels' => json_decode($response,true),
@@ -64,6 +63,7 @@ class UserController extends Controller
         
         //get http://example.com/
         $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id);
+
 		return $this -> render('view', ['model' => json_decode($response)]);
     }
 
@@ -74,26 +74,52 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+		/* Yii::app()->curl
+             ->setOption(CURLOPT_HTTPHEADER, array('Content-type: application/json'))
+             ->post("localhost/testforget.php",$data);
+			 
 		$curl = new curl\Curl();
  
-        //get http://example.com/
-        //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fcreate');
-		
-        //$response = new user();
-		
+        //post http://example.com/
+        $response = $curl->setOption(
+                CURLOPT_POSTFIELDS, 
+                http_build_query(array(
+                    'myPostField' => 'value'
+                )
+            ))
+            ->post('http://example.com/'); */
+		$username = "Yasmin"; 
+		$curl = new curl\Curl();
+        
+		if (Yii::$app->request->post()){
+			 return $this->redirect(['view']);
+		} 
+		else {
+            return $this->render('create');
+        }  
+			
+		/* $response = $curl->setOption(CURLOPT_POSTFIELDS,http_build_query(array(
+                    'UserName' => $username
+                )
+            ))
+            ->post('http://api.southerncrossinc.com/index.php?r=user%2Fcreate');
+		 */
 		//get variables from form
 		// set curl options with key value pairs
 		// send post request 
 		// get userid from scapi response 
 		// load new view
 		
-        if ($response->load(Yii::$app->request->post('http://api.southerncrossinc.com/index.php?r=user%2Fcreate')) && $response->save()) {
-            return $this->redirect(['view', 'id' => $response->UserID]);
+		/* $model = new user(); 
+		var_dump(Yii::$app->request->post());
+	
+          if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->UserID]);
         } else {
             return $this->render('create', [
-                'model' => $response,
+                'model' => $model,
             ]);
-        }
+        }   */
     }
 
     /**
