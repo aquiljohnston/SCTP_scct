@@ -81,6 +81,12 @@ class UserController extends Controller
 		
         //$response = new user();
 		
+		//get variables from form
+		// set curl options with key value pairs
+		// send post request 
+		// get userid from scapi response 
+		// load new view
+		
         if ($response->load(Yii::$app->request->post('http://api.southerncrossinc.com/index.php?r=user%2Fcreate')) && $response->save()) {
             return $this->redirect(['view', 'id' => $response->UserID]);
         } else {
