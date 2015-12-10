@@ -19,11 +19,18 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+		'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
     ];
+	public $cssOptions = [
+		'type' => 'text/css',
+	];
     public $js = [
+		'js/header.js',
+		'js/footer.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
+		'yii\bootstrap\BootstrapPluginAsset',
     ];
 }
