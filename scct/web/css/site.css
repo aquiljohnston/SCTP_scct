@@ -89,3 +89,52 @@ a.desc:after {
     padding: 10px 20px;
     margin: 0 0 15px 0;
 }
+
+/*---------Start Header----------*/
+
+.logo{
+	float: left;
+	margin-bottom: .5%;
+}
+#logout_btn{
+	float: right;
+	margin-top: 20px;
+}
+.container{
+	width: 100%;
+}
+#top-header{
+	margin-top: 15px;	
+}
+.menu, .copyright-section{
+	background-color: #0067A6;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+}
+#nav{
+	float:right;
+}
+#copyright-bar{
+	float: right;
+	height: 50px;
+	text-align: right;
+	padding-top: 16px;
+	color: #FFFFFF;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+}
+ul > li > a {
+	color: #FFFFFF;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+}
+.nav > a:hover{
+	background-color: #0067A6;
+	color: #FBB03B;
+}
+ul > li >a:hover{
+	background-color: #0067A6;
+	color: #FBB03B;
+}
+
+/*-----------End Header----------*/
