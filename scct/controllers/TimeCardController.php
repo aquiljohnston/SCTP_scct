@@ -8,6 +8,9 @@ use app\models\TimeCardSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
+use linslin\yii2\curl;
 
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
@@ -32,12 +35,25 @@ class TimeCardController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new TimeCardSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		// create curl for restful call.
+		$curl = new curl\Curl();
+		
+		// get response from api 
+		$response = $curl->get('http://api.southerncrossinc.com/index.php/r=time-card%2Findex');
+		
+        //$searchModel = new TimeCardSearch();
+        // passing decode data into dataProvider
+		$dataProvider = new ArrayDataProvider([
+		'allModels' => json_decode($response, true),]);
 
+		// fill gridview by applying data provider
+		GridView::widget([
+			'dataProvider' => $dataProvider,
+			]);
+			
+		//calling index page to pass dataProvider.
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'dataProvider' => $dataProvider
         ]);
     }
 
