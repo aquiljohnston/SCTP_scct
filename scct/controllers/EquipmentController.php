@@ -61,9 +61,15 @@ class EquipmentController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+		$curl = new curl\Curl();
+        
+        //get http://example.com/
+        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=equipment%2Fview&=id='.$id);
+
+		return $this -> render('view', ['model' => json_decode($response)]);
+        /*return $this->render('view', [
+            'model' => $this->find()->where(['EquipmentSerialNumber' => $EquipmentSerialNumber])->one(),//$this->findModel($id),
+        ]);*/
     }
 
     /**
@@ -78,11 +84,12 @@ class EquipmentController extends Controller
 			'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
 			'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
 			'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus', 'EquipmentAssignedUserID',
-			'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord', 'EquipmentID'
+			'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord'
 		]);
 		
-		$model->addRule('EquipmentName', 'string')
-			  ->addRule('EquipmentID', 'integer')
+		$model
+		//->addRule('EquipmentID', 'integer')
+			  ->addRule('EquipmentName', 'string')			  
 			  ->addRule('EquipmentSerialNumber', 'string')
 			  ->addRule('EquipmentDetails', 'string')
 			  ->addRule('EquipmentType', 'string')
@@ -104,7 +111,6 @@ class EquipmentController extends Controller
 			  ->addRule('EquipmentModifiedBy', 'string')
 			  ->addRule('EquipmentModifiedDate', 'safe');
 			  
-		 //$model = new equipment();
 		// Reading the response from the the api and filling the GridView
 		$curl = new curl\Curl();
 
@@ -114,7 +120,7 @@ class EquipmentController extends Controller
 				CURLOPT_POSTFIELDS, 
 				http_build_query(array(
 					'EquipmentName' => $model->EquipmentName,
-					// 'EquipmentSerialNumber' => $EquipmentSerialNumber,
+					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
 					// 'EquipmentDetails' => $EquipmentDetails,
 					// 'EquipmentType' => $EquipmentType,
 					// 'EquipmentManufacturer' => $EquipmentManufacturer,
@@ -137,8 +143,10 @@ class EquipmentController extends Controller
 				)
 			))
 			->post('http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate');
-			var_dump($model->EquipmentID);
-            return $this->redirect(['view', 'id' => $model->EquipmentID]);
+			//var_dump($model->EquipmentID);		
+			var_dump(json_decode($response, true));
+			
+            return $this->redirect(['view', 'id' => $response->EquipmentID]);
         }else {
             return $this->render('create',[
 				'model' => $model,
