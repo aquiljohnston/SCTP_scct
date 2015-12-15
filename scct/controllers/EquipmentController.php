@@ -8,12 +8,17 @@ use app\models\EquipmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use linslin\yii2\curl;
+use yii\data\ArrayDataProvider;
+use yii\grid\GridView;
 
 /**
  * EquipmentController implements the CRUD actions for equipment model.
  */
 class EquipmentController extends Controller
 {
+	private $model;
+	
     public function behaviors()
     {
         return [
@@ -32,13 +37,21 @@ class EquipmentController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new EquipmentSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+		
+		// Reading the response from the the api and filling the GridView
+		$curl = new curl\Curl();
+		
+        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=equipment%2Findex');
+		//Passing data to the dataProvider and formating it in an associative array
+		$dataProvider = new ArrayDataProvider([
+        'allModels' => json_decode($response,true),
+		]);
+		
+				GridView::widget([
+			'dataProvider' => $dataProvider,
+		]);
+		
+		return $this -> render('index', ['dataProvider' => $dataProvider]);
     }
 
     /**
@@ -60,14 +73,76 @@ class EquipmentController extends Controller
      */
     public function actionCreate()
     {
-        $model = new equipment();
+		 //$request = Yii::$app->request;
+		$model = new \yii\base\DynamicModel([
+			'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
+			'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
+			'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus', 'EquipmentAssignedUserID',
+			'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord', 'EquipmentID'
+		]);
+		
+		$model->addRule('EquipmentName', 'string')
+			  ->addRule('EquipmentID', 'integer')
+			  ->addRule('EquipmentSerialNumber', 'string')
+			  ->addRule('EquipmentDetails', 'string')
+			  ->addRule('EquipmentType', 'string')
+			  ->addRule('EquipmentManufacturer', 'string')
+			  ->addRule('EquipmentManufactureYear', 'string')
+			  ->addRule('EquipmentCondition', 'string')
+			  ->addRule('EquipmentMACID', 'string')
+			  ->addRule('EquipmentModel', 'string')
+			  ->addRule('EquipmentColor', 'string')
+			  ->addRule('EquipmentWarrantyDetail', 'string')
+			  ->addRule('EquipmentComment', 'string')
+			  ->addRule('EquipmentClientID', 'integer')
+			  ->addRule('EquipmentProjectID', 'integer')
+			  ->addRule('EquipmentAnnualCalibrationDate', 'safe')
+			  ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
+			  ->addRule('EquipmentAssignedUserID', 'string')
+			  ->addRule('EquipmentCreatedByUser', 'string')
+			  ->addRule('EquipmentCreateDate', 'safe')
+			  ->addRule('EquipmentModifiedBy', 'string')
+			  ->addRule('EquipmentModifiedDate', 'safe');
+			  
+		 //$model = new equipment();
+		// Reading the response from the the api and filling the GridView
+		$curl = new curl\Curl();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		if ($model->load(Yii::$app->request->post())){
+			$response = $curl->setOption(
+				CURLOPT_POSTFIELDS, 
+				http_build_query(array(
+					'EquipmentName' => $model->EquipmentName,
+					// 'EquipmentSerialNumber' => $EquipmentSerialNumber,
+					// 'EquipmentDetails' => $EquipmentDetails,
+					// 'EquipmentType' => $EquipmentType,
+					// 'EquipmentManufacturer' => $EquipmentManufacturer,
+					// 'EquipmentManufactureYear' => $EquipmentManufactureYear,
+					// 'EquipmentCondition' => $EquipmentCondition,
+					// 'EquipmentMACID' => $EquipmentMACID,
+					// 'EquipmentModel' => $EquipmentModel,
+					// 'EquipmentColor' => $EquipmentColor,
+					// 'EquipmentWarrantyDetail' => $EquipmentWarrantyDetail,
+					// 'EquipmentComment' => $EquipmentComment,
+					// 'EquipmentClientID' => $EquipmentClientID,
+					// 'EquipmentProjectID' => $EquipmentProjectID,
+					// 'EquipmentAnnualCalibrationDate' => $EquipmentAnnualCalibrationDate,
+					// 'EquipmentAnnualCalibrationStatus' => $EquipmentAnnualCalibrationStatus,
+					// 'EquipmentAssignedUserID' => $EquipmentAssignedUserID,
+					// 'EquipmentCreatedByUser' => $EquipmentCreatedByUser,
+					// 'EquipmentCreateDate' => $EquipmentCreateDate,
+					// 'EquipmentModifiedBy' => $EquipmentModifiedBy,
+					// 'EquipmentModifiedDate' => $EquipmentModifiedDate,
+				)
+			))
+			->post('http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate');
+			var_dump($model->EquipmentID);
             return $this->redirect(['view', 'id' => $model->EquipmentID]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        }else {
+            return $this->render('create',[
+				'model' => $model,
+				]);
         }
     }
 
