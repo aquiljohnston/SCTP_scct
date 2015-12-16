@@ -106,6 +106,9 @@ a.desc:after {
 #top-header{
 	margin-top: 15px;	
 }
+#top-wrapper{
+	position: absolute;
+}
 .menu, .copyright-section{
 	background-color: #0067A6;
 	font-family: 'Roboto', sans-serif;
