@@ -3,7 +3,8 @@
 $params = require(__DIR__ . '/params.php');
 
 $config = [
-    'id' => 'basic',
+    'id' => 'scct',
+    'defaultRoute' => 'login',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [

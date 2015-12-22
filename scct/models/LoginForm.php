@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use linslin\yii2\curl;
 
 /**
  * LoginForm is the model behind the login form.
@@ -70,7 +71,14 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            $this->_user = User::findByUsername($this->username);
+            // Reading the response from the the api and filling the GridView
+            $curl = new curl\Curl();
+    
+            // todo: complete the rest call
+            //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=login%2Findex');
+            //$this->_user = json_decode($response, true);
+            
+            //$this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;
