@@ -38,10 +38,10 @@ $(document).ready(function(){
     var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "ADMINISTRATION<b class='caret'></b></a>"
         + "    <ul class='dropdown-menu' role='menu'>"        
-            + "<li><a data-description='Image Animation' href=''>admin 1</a></li>"
-            + "<li><a data-description='Image Animation' href=''>admin 2</a></li>"
-            + "<li><a data-description='Image Animation' href=''>admin 3</a></li>"
-            + "<li><a data-description='Instrument Repair' href=''>admin 4</a></li>"
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=user%2Findex'>User Management</a></li>"
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=equipment%2Findex'>Equipment Manager</a></li>"
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=time-card%2Findex'>Timecards</a></li>"
+            + "<li><a data-description='Instrument Repair' href='http://localhost:8000/index.php?r=mileage-card%2Findex'>Mileagecards</a></li>"
         + "</ul></li>");
     
     // var nav5 = $("<li><a href='equipmentrepairs.html'>equipment repairs</a></li>");

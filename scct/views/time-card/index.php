@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="time-card-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -24,21 +24,35 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'TimeCardID',
             'TimeCardStartDate',
             'TimeCardEndDate',
             'TimeCardHoursWorked',
-            //'TimeCardProjectID',
-            //'TimeCardTechID',
             'TimeCardApproved:datetime',
             'TimeCardSupervisorName',
             'TimeCardComment',
             'TimeCardCreateDate',
-            //'TimeCardCreatedBy',
-            //'TimeCardModifiedDate',
-            //'TimeCardModifiedBy',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+							/* 'buttons'=>[
+                              'View' => function ($url, $model) { 
+                                return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
+                                        'title' => Yii::t('yii', 'View'),
+                                ]);                                
+            
+                              }
+                          ], */
+							  'urlCreator' => function ($action, $model, $key, $index) {
+								  //var_dump($model["UserID"]);
+											if ($action === 'view') {
+											$url ='index.php?r=time-card%2Fview&id='.$model["TimeCardID"];
+											return $url;
+											}
+											if ($action === 'update') {
+											$url ='index.php?r=time-card%2Fupdate&id='.$model["TimeCardID"];
+											return $url;
+											}
+										}
+							],
         ],
     ]); ?>
 

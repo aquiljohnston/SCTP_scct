@@ -190,26 +190,13 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-		$curl = new curl\Curl();
- 
-        //get http://example.com/
-        $response = $curl->post('http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id);
-        //var_dump(json_decode($response));
-		
-        //$response = $this->findModel($id);
-		$response = json_decode($response);
-		
-		//$response = $this->findModel($id);
+		$model = $this->findModel($id);
 
-         if ($response->load(Yii::$app->request->post('http://api.southerncrossinc.com/index.php?r=user%2Fupdate&amp;id='.$id))) {
-            $request = Yii::$app->request;
-			$get = $request->get('id'); 
-			var_dump($get);
-			
-			return $this->redirect(['update', 'id' => $response["UserID"]]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {	
+			 return $this->redirect(['view', 'id' => $model["UserID"]]);
         } else {
             return $this->render('update', [
-                'model' => $response,
+                'model' => $model,
             ]);
         } 
     }

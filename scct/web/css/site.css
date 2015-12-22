@@ -141,3 +141,14 @@ ul > li >a:hover{
 }
 
 /*-----------End Header----------*/
+
+/*-----------Start body----------*/
+.btn-success{
+	margin-top: 1%;
+	color: white;
+}
+#w1{
+	margin-top: 2%;	
+}
+
+/*-----------End body----------*/
