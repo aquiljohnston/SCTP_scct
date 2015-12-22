@@ -66,8 +66,8 @@ class EquipmentController extends Controller
         
         //get http://example.com/
         $response = $curl->get('http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id);
-
-		return $this -> render('view', ['model' => json_decode($response)]);
+		
+		return $this -> render('view', ['model' => json_decode($response, true)]);
         /*return $this->render('view', [
             'model' => $this->find()->where(['EquipmentSerialNumber' => $EquipmentSerialNumber])->one(),//$this->findModel($id),
         ]);*/
@@ -80,7 +80,6 @@ class EquipmentController extends Controller
      */
     public function actionCreate()
     {
-		 //$request = Yii::$app->request;
 		$model = new \yii\base\DynamicModel([
 			'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
 			'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
@@ -110,46 +109,78 @@ class EquipmentController extends Controller
 			  ->addRule('EquipmentModifiedBy', 'string')
 			  ->addRule('EquipmentModifiedDate', 'safe');
 			  
-		// Reading the response from the the api and filling the GridView
+		// create curl object
 		$curl = new curl\Curl();
+		
+		// put data into array
+		/*$data =array(
+				'EquipmentName' => $model->EquipmentName,
+				'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+				'EquipmentDetails' => $model->EquipmentDetails,
+				'EquipmentType' => $model->EquipmentType,
+				'EquipmentManufacturer' => $model->EquipmentManufacturer,
+				'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
+				'EquipmentCondition' => $model->EquipmentCondition,
+				'EquipmentMACID' => $model->EquipmentMACID,
+				'EquipmentModel' => $model->EquipmentModel,
+				'EquipmentColor' => $model->EquipmentColor,
+				'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
+				'EquipmentComment' => $model->EquipmentComment,
+				'EquipmentClientID' => $model->EquipmentClientID,
+				'EquipmentProjectID' => $model->EquipmentProjectID,
+				'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
+				'EquipmentAnnualCalibrationStatus' => $model->EquipmentAnnualCalibrationStatus,
+				'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
+				'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
+				'EquipmentCreateDate' => $model->EquipmentCreateDate,
+				'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
+				'EquipmentModifiedDate' => $model->EquipmentModifiedDate
+		);*/
+		
+		// post url
+		$url_send = "http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate";
 
-        //if ($model->load(Yii::$app->request->post()) && $model->save()) {
 		if ($model->load(Yii::$app->request->post())){
 			$request = Yii::$app->request;
-			$response = $curl->setOption(
-				CURLOPT_POSTFIELDS, 
-				http_build_query(array(
-					'EquipmentName' => $model->EquipmentName,
-					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
-					'EquipmentDetails' => $EquipmentDetails,
-					'EquipmentType' => $EquipmentType,
-					'EquipmentManufacturer' => $EquipmentManufacturer,
-					'EquipmentManufactureYear' => $EquipmentManufactureYear,
-					'EquipmentCondition' => $EquipmentCondition,
-					'EquipmentMACID' => $EquipmentMACID,
-					'EquipmentModel' => $EquipmentModel,
-					'EquipmentColor' => $EquipmentColor,
-					'EquipmentWarrantyDetail' => $EquipmentWarrantyDetail,
-					'EquipmentComment' => $EquipmentComment,
-					'EquipmentClientID' => $EquipmentClientID,
-					'EquipmentProjectID' => $EquipmentProjectID,
-					'EquipmentAnnualCalibrationDate' => $EquipmentAnnualCalibrationDate,
-					'EquipmentAnnualCalibrationStatus' => $EquipmentAnnualCalibrationStatus,
-					'EquipmentAssignedUserID' => $EquipmentAssignedUserID,
-					'EquipmentCreatedByUser' => $EquipmentCreatedByUser,
-					'EquipmentCreateDate' => $EquipmentCreateDate,
-					'EquipmentModifiedBy' => $EquipmentModifiedBy,
-					'EquipmentModifiedDate' => $EquipmentModifiedDate,
-				)
-			))
-			->post('http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate');
-			$data = json_decode($response,true);
 			
-			//echo $data->EquipmentID;
-			
-			/*$uid = $request->post('EquipmentID');
-			var_dump($uid);*/
-            return $this->redirect(['view', 'id' => $data->EquipmentID);
+			$data =array(
+				'EquipmentName' => $model->EquipmentName,
+				'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+				'EquipmentDetails' => $model->EquipmentDetails,
+				'EquipmentType' => $model->EquipmentType,
+				'EquipmentManufacturer' => $model->EquipmentManufacturer,
+				'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
+				'EquipmentCondition' => $model->EquipmentCondition,
+				'EquipmentMACID' => $model->EquipmentMACID,
+				'EquipmentModel' => $model->EquipmentModel,
+				'EquipmentColor' => $model->EquipmentColor,
+				'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
+				'EquipmentComment' => $model->EquipmentComment,
+				'EquipmentClientID' => $model->EquipmentClientID,
+				'EquipmentProjectID' => $model->EquipmentProjectID,
+				'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
+				'EquipmentAnnualCalibrationStatus' => $model->EquipmentAnnualCalibrationStatus,
+				'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
+				'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
+				'EquipmentCreateDate' => $model->EquipmentCreateDate,
+				'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
+				'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
+				);
+				
+			$json_data = json_encode($data);		
+			$ch = curl_init($url_send);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+			curl_setopt($ch, CURLOPT_POSTFIELDS,$json_data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($json_data))
+			);			
+			$result = curl_exec($ch);
+			curl_close($ch);
+			$obj = (array)json_decode($result);
+
+            return $this->redirect(['view', 'id' => $obj["EquipmentID"]]);
         }else {
             return $this->render('create',[
 				'model' => $model,

@@ -11,12 +11,14 @@ use yii\filters\VerbFilter;
 use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
+use yii\web\Request;
 
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
  */
 class TimeCardController extends Controller
 {
+	private $model;
     public function behaviors()
     {
         return [
@@ -39,7 +41,7 @@ class TimeCardController extends Controller
 		$curl = new curl\Curl();
 		
 		// get response from api 
-		$response = $curl->get('http://api.southerncrossinc.com/index.php/r=time-card%2Findex');
+		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=time-card%2Findex');
 		
         //$searchModel = new TimeCardSearch();
         // passing decode data into dataProvider
@@ -64,9 +66,16 @@ class TimeCardController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+		$curl = new curl\Curl();
+		//var_dump($id);
+		//get response
+		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id);
+		//var_dump($response);
+		return $this -> render('view', ['model' => json_decode($response, true)]);
+		
+		// return $this->render('view', [
+            // 'model' => $this->findModel($id),
+        // ]);
     }
 
     /**
@@ -76,10 +85,62 @@ class TimeCardController extends Controller
      */
     public function actionCreate()
     {
-        $model = new TimeCard();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->TimeCardID]);
+        $model = new \yii\base\DynamicModel([
+			'TimeCardStartDate', 'TimeCardEndDate', 'TimeCardCreateDate', 'TimeCardModifiedDate', 'TimeCardHoursWorked', 'TimeCardProjectID', 
+			'TimeCardTechID', 'TimeCardApproved', 'TimeCardSupervisorName', 'TimeCardComment', 'TimeCardCreatedBy', 'TimeCardModifiedBy', 'isNewRecord'
+		]);
+		
+		$model->addRule('TimeCardStartDate', 'safe')
+			  ->addRule('TimeCardEndDate', 'safe')
+			  ->addRule('TimeCardCreateDate', 'safe')
+			  ->addRule('TimeCardModifiedDate', 'safe')
+			  ->addRule('TimeCardHoursWorked', 'number')
+			  ->addRule('TimeCardProjectID', 'integer')
+			  ->addRule('TimeCardTechID', 'integer')
+			  ->addRule('TimeCardApproved', 'integer')
+			  ->addRule('TimeCardSupervisorName', 'string')
+			  ->addRule('TimeCardComment', 'string')
+			  ->addRule('TimeCardCreatedBy', 'string')
+			  ->addRule('TimeCardModifiedBy', 'string');
+		
+		// create curl object
+		$curl = new curl\Curl();
+		
+		// post url
+		$url_send = "http://api.southerncrossinc.com/index.php?r=time-card%2Fcreate";
+		
+        if ($model->load(Yii::$app->request->post())) {
+			
+			$data = array(
+				'TimeCardStartDate' => $model->TimeCardStartDate,
+				'TimeCardEndDate' => $model->TimeCardEndDate,
+				'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
+				'TimeCardProjectID' => $model->TimeCardProjectID,
+				'TimeCardTechID' => $model->TimeCardTechID,
+				'TimeCardApproved' => $model->TimeCardApproved,
+				'TimeCardSupervisorName' => $model->TimeCardSupervisorName,
+				'TimeCardComment' => $model->TimeCardComment,
+				'TimeCardCreateDate' => $model->TimeCardCreateDate,
+				'TimeCardCreatedBy' => $model->TimeCardCreatedBy,
+				'TimeCardModifiedDate' => $model->TimeCardModifiedDate,
+				'TimeCardModifiedBy' => $model->TimeCardModifiedBy,
+			);
+			
+			$json_data = json_encode($data);		
+			$ch = curl_init($url_send);
+			curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
+			curl_setopt($ch, CURLOPT_POSTFIELDS,$json_data);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+				'Content-Type: application/json',
+				'Content-Length: ' . strlen($json_data))
+			);			
+			$result = curl_exec($ch);
+			curl_close($ch);
+			//var_dump($result);
+			$obj = (array)json_decode($result);
+			//var_dump($obj["TimeCardID"]);
+            return $this->redirect(['view', 'id' => $obj["TimeCardID"]]);
         } else {
             return $this->render('create', [
                 'model' => $model,

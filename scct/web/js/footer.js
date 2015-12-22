@@ -1,8 +1,8 @@
 $(function(){
     
-var imageRow = $("<a id='footer_image' href'index.html'><img alt='' src='images/logo/sc_logo_inverse.png'></a>");
+/*var imageRow = $("<a id='footer_image' href'index.html'><img alt='' src='images/logo/sc_logo_inverse.png'></a>");
     
-    $(".row > p").append(imageRow);
+    $(".row > p").append(imageRow);*/
     
     
     // var address = $("<div class='footer_address'>"
