@@ -45,9 +45,14 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
 
-            if (!$user || !$user->validatePassword($this->password)) {
+            // todo: review 
+            // if (!$user || !$user->validatePassword($this->password)) {
+            if (!$user) {
                 $this->addError($attribute, 'Incorrect username or password.');
-            }
+            }    
+            /*if (!$user || !$user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Incorrect username or password.');
+            }*/
         }
     }
 
@@ -58,7 +63,10 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
+            $user = $this->getUser();
+            if(is_array($user))
+                return $this->user;
+            // return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
         }
         return false;
     }
@@ -71,13 +79,31 @@ class LoginForm extends Model
     public function getUser()
     {
         if ($this->_user === false) {
-            // Reading the response from the the api and filling the GridView
-            $curl = new curl\Curl();
-    
-            // todo: complete the rest call
-            //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=login%2Findex');
-            //$this->_user = json_decode($response, true);
+            // Authenticate using the SCAPI 
+            $url = "http://api.southerncrossinc.com//index.php?r=login%2Fuser-login";
+            $secretKey = 'sparusholdings12';
+            $iv = 'abcdefghijklmnop';
+            $pass = openssl_encrypt($this->password,  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+            $pwd = base64_encode($pass);
             
+            $data = array(
+                'UserName' => $this->username,
+                'Password' => $pwd
+            );    
+            $json_data = json_encode($data);        
+            $curl = curl_init($url);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST,"POST");
+            curl_setopt($curl, CURLOPT_POSTFIELDS,$json_data);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($json_data))
+            );
+            $result = curl_exec($curl);
+            curl_close($curl);
+
+            $this->_user = json_decode($result, true);
+            //var_dump($this->_user);
             //$this->_user = User::findByUsername($this->username);
         }
 

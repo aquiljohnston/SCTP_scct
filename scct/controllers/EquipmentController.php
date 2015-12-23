@@ -178,7 +178,7 @@ class EquipmentController extends Controller
 			);			
 			$result = curl_exec($ch);
 			curl_close($ch);
-			$obj = (array)json_decode($result);
+			$obj = json_decode($result, true);
 
             return $this->redirect(['view', 'id' => $obj["EquipmentID"]]);
         }else {

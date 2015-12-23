@@ -65,7 +65,7 @@ class LoginController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             //return $this->goBack();
-            return $this->render('home');
+            return $this->redirect('index.php?r=home');
         }
         return $this->render('index', [
             'model' => $model,
