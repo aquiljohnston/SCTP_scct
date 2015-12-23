@@ -48,7 +48,20 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'EquipmentModifiedBy',
             // 'EquipmentModifiedDate',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+			
+			'urlCreator' => function ($action, $model, $key, $index) {
+								  //var_dump($model["UserID"]);
+											if ($action === 'view') {
+											$url ='index.php?r=user%2Fview&id='.$model["UserID"];
+											return $url;
+											}
+											if ($action === 'update') {
+											$url ='index.php?r=user%2Fupdate&id='.$model["UserID"];
+											return $url;
+											}
+										}
+							],
         ],
     ]); ?>
 
