@@ -46,7 +46,8 @@ class UserController extends Controller
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		$headers = array(
 			'Content-Type:application/json',
-    		'Authorization: Basic '. base64_encode("user:password")
+			'Accept:application/json',
+    		'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
 			);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         $response = curl_exec ($curl);

@@ -64,7 +64,7 @@ class LoginController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
-             Yii::$app->session->set('token', $user['AuthToken']);
+            Yii::$app->session->set('token', $user['AuthToken'].': ');
             return $this->redirect('index.php?r=home&token='. $user['AuthToken']);
         }
         return $this->render('index', [
