@@ -64,6 +64,7 @@ class LoginForm extends Model
     {
         if ($this->validate()) {
             $user = $this->getUser();
+            //Yii::trace("Login user: " . $user['AuthToken'] . ", username: " . $user['UserID']);
             if(is_array($user))
                 return $this->user;
             // return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600*24*30 : 0);
@@ -103,8 +104,6 @@ class LoginForm extends Model
             curl_close($curl);
 
             $this->_user = json_decode($result, true);
-            //var_dump($this->_user);
-            //$this->_user = User::findByUsername($this->username);
         }
 
         return $this->_user;

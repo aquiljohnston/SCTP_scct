@@ -36,13 +36,24 @@ class UserController extends Controller
     public function actionIndex()
     {
 		// Reading the response from the the api and filling the GridView
-		$curl = new curl\Curl();
- 
-		//$searchModel = new UserSearch();
-        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
- 
-        //get http://example.com/
-        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Findex');
+		//$curl = new curl\Curl();
+ 		
+ 		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL,"http://api.southerncrossinc.com/index.php?r=user%2Findex");
+		// not a post
+		//curl_setopt($ch, CURLOPT_POST, 1);
+		//curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$headers = array(
+			'Content-Type:application/json',
+    		'Authorization: Basic '. base64_encode("user:password")
+			);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $response = curl_exec ($curl);
+		curl_close ($curl);
+
+        //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Findex');
+		
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
         'allModels' => json_decode($response,true),

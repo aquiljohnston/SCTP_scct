@@ -63,9 +63,9 @@ class LoginController extends Controller
         // }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            //return $this->goBack();
-            return $this->redirect('index.php?r=home');
+        if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
+             Yii::$app->session->set('token', $user['AuthToken']);
+            return $this->redirect('index.php?r=home&token='. $user['AuthToken']);
         }
         return $this->render('index', [
             'model' => $model,
