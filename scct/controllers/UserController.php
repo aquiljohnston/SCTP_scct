@@ -36,13 +36,9 @@ class UserController extends Controller
     public function actionIndex()
     {
 		// Reading the response from the the api and filling the GridView
-		//$curl = new curl\Curl();
- 		
+		
  		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_URL,"http://api.southerncrossinc.com/index.php?r=user%2Findex");
-		// not a post
-		//curl_setopt($ch, CURLOPT_POST, 1);
-		//curl_setopt($ch, CURLOPT_POSTFIELDS,$vars);  //Post Fields
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		$headers = array(
 			'Content-Type:application/json',
@@ -53,9 +49,7 @@ class UserController extends Controller
         $response = curl_exec ($curl);
 		curl_close ($curl);
 
-        //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Findex');
-		
-		//Passing data to the dataProvider and formating it in an associative array
+        //Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
         'allModels' => json_decode($response,true),
 		]);
@@ -74,10 +68,16 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
-		$curl = new curl\Curl();
-        
-        //get http://example.com/
-        $response = $curl->get('http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id);
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_URL,'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		$headers = array(
+			'Accept:application/json',
+    		'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
+			);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        $response = curl_exec ($curl);
+		curl_close ($curl);
 
 		return $this -> render('view', ['model' => json_decode($response)]);
     }
@@ -116,14 +116,11 @@ class UserController extends Controller
 			  ->addRule('UserCreatedDate', 'safe')
 			  ->addRule('UserModifiedDate', 'safe');
 		
-		//$model = new user();	
-		$curl = new curl\Curl();
-		
 		// post url
 		$url_send = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";
 		
-		if ($model->load(Yii::$app->request->post())){
-			
+		if ($model->load(Yii::$app->request->post()))
+		{
 			$data = array(
 				'UserName' => $model->UserName,
 				'UserFirstName' => $model-> UserFirstName,
@@ -148,6 +145,8 @@ class UserController extends Controller
 				
 				$json_data = json_encode($data);		
 				$ch = curl_init($url_send);
+				// todo: add for post request
+				//curl_setopt($ch, CURLOPT_POST, 1);
 				curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
 				curl_setopt($ch, CURLOPT_POSTFIELDS,$json_data);
 				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -158,34 +157,7 @@ class UserController extends Controller
 				$result = curl_exec($ch);
 				curl_close($ch);
 				$obj = (array)json_decode($result);
-				
-			/*$response = $curl->setOption(
-				CURLOPT_POSTFIELDS, 
-				http_build_query(array(
-					'UserName' => $model->UserName,
-					'UserFirstName' => $model-> UserFirstName,
-					'UserLastName' => $model-> UserLastName,
-					'UserLoginID' => $model-> UserLoginID,
-					'UserEmployeeType' => $model-> UserEmployeeType,
-					'UserPhone' => $model-> UserPhone,
-					'UserCompanyName' => $model-> UserCompanyName,
-					'UserCompanyPhone' => $model-> UserCompanyPhone,
-					'UserAppRoleType' => $model-> UserAppRoleType,
-					'UserComments' => $model-> UserComments,
-					'UserKey' => $model-> UserKey,
-					'UserActiveFlag' => $model-> UserActiveFlag,
-					'UserCreatedDate' => $model-> UserCreatedDate,
-					'UserModifiedDate' => $model-> UserModifiedDate,
-					'UserCreatedBy' => $model-> UserCreatedBy,
-					'UserModifiedBy' => $model-> UserModifiedBy,
-					'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
-					'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
-					'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
-				)
-			))
-			->post('http://api.southerncrossinc.com/index.php?r=user%2Fcreate'); 
-			$data = json_decode($response,true);*/
-			
+	
 			return $this->redirect(['view', 'id' => $obj["UserID"]]);
 		}else{
 			return $this->render('create', [
