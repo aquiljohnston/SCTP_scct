@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\user;
 use app\models\UserSearch;
-use yii\web\Controller;
+use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use linslin\yii2\curl;
@@ -15,7 +15,7 @@ use yii\grid\GridView;
 /**
  * UserController implements the CRUD actions for user model.
  */
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function behaviors()
     {
@@ -23,7 +23,7 @@ class UserController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['delete'],
                 ],
             ],
         ];
@@ -36,25 +36,16 @@ class UserController extends Controller
     public function actionIndex()
     {
 		// Reading the response from the the api and filling the GridView
-		
- 		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL,"http://api.southerncrossinc.com/index.php?r=user%2Findex");
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$headers = array(
-			'Content-Type:application/json',
-			'Accept:application/json',
-    		'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
-			);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        $response = curl_exec ($curl);
-		curl_close ($curl);
+		$url = "http://api.southerncrossinc.com/index.php?r=user%2Findex";
+		$response = Parent::executeGetRequest($url);
 
         //Passing data to the dataProvider and formating it in an associative array
-		$dataProvider = new ArrayDataProvider([
-        'allModels' => json_decode($response,true),
+		$dataProvider = new ArrayDataProvider
+		([
+			'allModels' => json_decode($response,true),
 		]);
-		
-				GridView::widget([
+		GridView::widget
+		([
 			'dataProvider' => $dataProvider,
 		]);
 		
@@ -68,18 +59,10 @@ class UserController extends Controller
      */
     public function actionView($id)
     {
-		$curl = curl_init();
-		curl_setopt($curl, CURLOPT_URL,'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$headers = array(
-			'Accept:application/json',
-    		'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
-			);
-		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        $response = curl_exec ($curl);
-		curl_close ($curl);
+		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url);
 
-		return $this -> render('view', ['model' => json_decode($response)]);
+		return $this -> render('view', ['model' => json_decode($response), true]);
     }
 
     /**
@@ -109,15 +92,12 @@ class UserController extends Controller
 			  ->addRule('UserCreatedBy', 'string')
 			  ->addRule('UserModifiedBy', 'string')
 			  ->addRule('UserCreateDTLTOffset', 'string')
-			  ->addRule('UserKey', 'integer')
+			  ->addRule('UserKey', 'string')
 			  ->addRule('UserActiveFlag', 'integer')
 			  ->addRule('UserModifiedDTLTOffset', 'integer')
 			  ->addRule('UserInactiveDTLTOffset', 'integer')
 			  ->addRule('UserCreatedDate', 'safe')
 			  ->addRule('UserModifiedDate', 'safe');
-		
-		// post url
-		$url_send = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";
 		
 		if ($model->load(Yii::$app->request->post()))
 		{
@@ -142,21 +122,25 @@ class UserController extends Controller
 				'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
 				'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
 				);
-				
-				$json_data = json_encode($data);		
-				$ch = curl_init($url_send);
-				// todo: add for post request
-				//curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
-				curl_setopt($ch, CURLOPT_POSTFIELDS,$json_data);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Content-Length: ' . strlen($json_data))
-				);			
-				$result = curl_exec($ch);
-				curl_close($ch);
-				$obj = (array)json_decode($result);
+		
+			//iv and secret key of openssl
+			$iv = "abcdefghijklmnop";
+			$secretKey= "sparusholdings12";
+			
+			//encrypt and encode password
+			$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+			$encodedKey = base64_encode($encryptedKey);
+			
+			$data['UserKey'] = $encodedKey;
+			
+			$json_data = json_encode($data);
+			
+			// post url
+			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";	
+			$response = Parent::executePostRequest($url, $json_data);
+		
+		
+			$obj = json_decode($response, true);
 	
 			return $this->redirect(['view', 'id' => $obj["UserID"]]);
 		}else{
@@ -174,10 +158,72 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-		$model = $this->findModel($id);
+		$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		// $keys = array_values(array_keys($response));
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {	
-			 return $this->redirect(['view', 'id' => $model["UserID"]]);
+		// $arrKey = array();
+		// for($i=0; $i<count($keys); $i++)
+		// {
+			// $arrKey[$i] = $keys[$i];
+		// }
+		
+		// $model = new \yii\base\DynamicModel($arrKey);
+		
+		$model = new \yii\base\DynamicModel($getResponse);
+		
+		$model->addRule('UserName', 'string')
+			  ->addRule('UserFirstName', 'string')
+			  ->addRule('UserLastName', 'string')
+			  ->addRule('UserLoginID', 'string')
+			  ->addRule('UserEmployeeType', 'string')
+			  ->addRule('UserPhone', 'string')
+			  ->addRule('UserCompanyName', 'string')
+			  ->addRule('UserCompanyPhone', 'string')
+			  ->addRule('UserAppRoleType', 'string')
+			  ->addRule('UserComments', 'string')
+			  ->addRule('UserCreatedBy', 'string')
+			  ->addRule('UserModifiedBy', 'string')
+			  ->addRule('UserCreateDTLTOffset', 'string')
+			  ->addRule('UserKey', 'string')
+			  ->addRule('UserActiveFlag', 'integer')
+			  ->addRule('UserModifiedDTLTOffset', 'integer')
+			  ->addRule('UserInactiveDTLTOffset', 'integer')
+			  ->addRule('UserCreatedDate', 'safe')
+			  ->addRule('UserModifiedDate', 'safe');
+		
+		if ($model->load(Yii::$app->request->post()))
+		{
+			$data = array(
+				'UserName' => $model->UserName,
+				'UserFirstName' => $model-> UserFirstName,
+				'UserLastName' => $model-> UserLastName,
+				'UserLoginID' => $model-> UserLoginID,
+				'UserEmployeeType' => $model-> UserEmployeeType,
+				'UserPhone' => $model-> UserPhone,
+				'UserCompanyName' => $model-> UserCompanyName,
+				'UserCompanyPhone' => $model-> UserCompanyPhone,
+				'UserAppRoleType' => $model-> UserAppRoleType,
+				'UserComments' => $model-> UserComments,
+				'UserKey' => $model-> UserKey,
+				'UserActiveFlag' => $model-> UserActiveFlag,
+				'UserCreatedDate' => $model-> UserCreatedDate,
+				'UserModifiedDate' => $model-> UserModifiedDate,
+				'UserCreatedBy' => $model-> UserCreatedBy,
+				'UserModifiedBy' => $model-> UserModifiedBy,
+				'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
+				'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
+				'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
+				);
+		
+			$json_data = json_encode($data);
+			
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			$obj = json_decode($putResponse, true);
+			
+			 return $this->redirect(['view', 'id' => $obj["UserID"]]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -193,7 +239,8 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-		$this->findModel($id)->delete();
+		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url);
 
         return $this->redirect(['index']);
     }

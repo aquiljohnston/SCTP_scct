@@ -49,6 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
 											$url ='index.php?r=mileage-card%2Fupdate&id='.$model["MileageCardID"];
 											return $url;
 											}
+											if ($action === 'delete') {
+											$url ='index.php?r=mileage-card%2Fupdate&id='.$model["MileageCardID"];
+											return $url;
+											}
 										}						  
                             ],
 			],
