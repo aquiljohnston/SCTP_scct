@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\MileageCard;
 use app\models\MileageCardSearch;
-use yii\web\Controller;
+use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
@@ -17,9 +17,9 @@ use yii\web\Request;
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
  */
-class MileageCardController extends Controller
+class MileageCardController extends BaseController
 {
-	private $model;
+	
     public function behaviors()
     {
         return [
@@ -38,11 +38,8 @@ class MileageCardController extends Controller
      */
     public function actionIndex()
     {
-        // create curl for restful call.
-		$curl = new curl\Curl();
-		
-		// get response from api 
-		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=mileage-card%2Findex');
+		$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Findex";
+		$response = Parent::executeGetRequest($url);
 		
         // passing decode data into dataProvider
 		$dataProvider = new ArrayDataProvider([
@@ -66,11 +63,9 @@ class MileageCardController extends Controller
      */
     public function actionView($id)
     {
-		$curl = new curl\Curl();
-		//get response
-		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id);
-		//var_dump($id);
-		//var_dump(json_decode($response, true));
+		$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url);
+		
 		return $this -> render('view', ['model' => json_decode($response, true)]);
 		
         // return $this->render('view', [
@@ -155,10 +150,47 @@ class MileageCardController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $getUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->MileageCardID]);
+		$model = new \yii\base\DynamicModel($getResponse);
+		
+		$model->addRule('MileageCardEmpID', 'integer')
+			  ->addRule('MileageCardTechID', 'integer')
+			  ->addRule('MileageCardProjectID', 'integer')
+			  ->addRule('MileageCardAppStatus', 'integer')
+			  ->addRule('MileagCardBusinessMiles', 'integer')
+			  ->addRule('MileagCardPersonalMiles', 'integer')
+			  ->addRule('MileageCardType', 'string')
+			  ->addRule('MileageCardCreatedBy', 'string')
+			  ->addRule('MileageCardModifiedBy', 'string')
+			  ->addRule('MileageCardCreateDate', 'safe')
+			  ->addRule('MileageCardModifiedDate', 'safe');
+		
+		if ($model->load(Yii::$app->request->post()))
+		{
+			$data = array(
+				'MileageCardEmpID' => $model->MileageCardEmpID,
+				'MileageCardTechID' => $model->MileageCardTechID,
+				'MileageCardProjectID' => $model->MileageCardProjectID,
+				'MileageCardAppStatus' => $model->MileageCardAppStatus,
+				'MileagCardBusinessMiles' => $model->MileagCardBusinessMiles,
+				'MileagCardPersonalMiles' => $model->MileagCardPersonalMiles,
+				'MileageCardType' => $model->MileageCardType,
+				'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
+				'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
+				'MileageCardCreateDate' => $model->MileageCardCreateDate,
+				'MileageCardModifiedDate' => $model->MileageCardModifiedDate,
+			);
+		
+			$json_data = json_encode($data);
+			
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			$obj = json_decode($putResponse, true);
+			
+		return $this->redirect(['view', 'id' => $obj["MileageCardID"]]);
         } else {
             return $this->render('update', [
                 'model' => $model,

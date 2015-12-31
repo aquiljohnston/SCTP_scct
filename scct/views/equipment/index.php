@@ -51,13 +51,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn',
 			
 			'urlCreator' => function ($action, $model, $key, $index) {
-								  //var_dump($model["UserID"]);
 											if ($action === 'view') {
-											$url ='index.php?r=user%2Fview&id='.$model["UserID"];
+											$url ='index.php?r=equipment%2Fview&id='.$model["EquipmentID"];
 											return $url;
 											}
 											if ($action === 'update') {
-											$url ='index.php?r=user%2Fupdate&id='.$model["UserID"];
+											$url ='index.php?r=equipment%2Fupdate&id='.$model["EquipmentID"];
+											return $url;
+											}
+											if ($action === 'delete') {
+											$url ='index.php?r=equipment%2Fdelete&id='.$model["EquipmentID"];
 											return $url;
 											}
 										}

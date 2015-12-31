@@ -51,7 +51,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'UserInactiveDTLTOffset')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton( 'Create', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

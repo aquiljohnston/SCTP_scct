@@ -5,7 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\TimeCard;
 use app\models\TimeCardSearch;
-use yii\web\Controller;
+use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
@@ -16,9 +16,8 @@ use yii\web\Request;
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
  */
-class TimeCardController extends Controller
+class TimeCardController extends BaseController
 {
-	private $model;
     public function behaviors()
     {
         return [
@@ -37,13 +36,11 @@ class TimeCardController extends Controller
      */
     public function actionIndex()
     {
-		// create curl for restful call.
-		$curl = new curl\Curl();
+		// create curl for restful call.		
+		// get response from api 		
+		$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Findex";
+		$response = Parent::executeGetRequest($url);
 		
-		// get response from api 
-		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=time-card%2Findex');
-		
-        //$searchModel = new TimeCardSearch();
         // passing decode data into dataProvider
 		$dataProvider = new ArrayDataProvider([
 		'allModels' => json_decode($response, true),]);
@@ -65,17 +62,11 @@ class TimeCardController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {
-		$curl = new curl\Curl();
-		//var_dump($id);
-		//get response
-		$response = $curl->get('http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id);
-		//var_dump($response);
-		return $this -> render('view', ['model' => json_decode($response, true)]);
+    {		
+		$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url);
 		
-		// return $this->render('view', [
-            // 'model' => $this->findModel($id),
-        // ]);
+		return $this -> render('view', ['model' => json_decode($response, true)]);
     }
 
     /**
@@ -156,10 +147,49 @@ class TimeCardController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->TimeCardID]);
+        $getUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		
+		$model = new \yii\base\DynamicModel($getResponse);
+		
+		$model->addRule('TimeCardStartDate', 'safe')
+			  ->addRule('TimeCardEndDate', 'safe')
+			  ->addRule('TimeCardCreateDate', 'safe')
+			  ->addRule('TimeCardModifiedDate', 'safe')
+			  ->addRule('TimeCardHoursWorked', 'number')
+			  ->addRule('TimeCardProjectID', 'integer')
+			  ->addRule('TimeCardTechID', 'integer')
+			  ->addRule('TimeCardApproved', 'integer')
+			  ->addRule('TimeCardSupervisorName', 'string')
+			  ->addRule('TimeCardComment', 'string')
+			  ->addRule('TimeCardCreatedBy', 'string')
+			  ->addRule('TimeCardModifiedBy', 'string');
+		
+		if ($model->load(Yii::$app->request->post()))
+		{
+			$data = array(
+				'TimeCardStartDate' => $model->TimeCardStartDate,
+				'TimeCardEndDate' => $model->TimeCardEndDate,
+				'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
+				'TimeCardProjectID' => $model->TimeCardProjectID,
+				'TimeCardTechID' => $model->TimeCardTechID,
+				'TimeCardApproved' => $model->TimeCardApproved,
+				'TimeCardSupervisorName' => $model->TimeCardSupervisorName,
+				'TimeCardComment' => $model->TimeCardComment,
+				'TimeCardCreateDate' => $model->TimeCardCreateDate,
+				'TimeCardCreatedBy' => $model->TimeCardCreatedBy,
+				'TimeCardModifiedDate' => $model->TimeCardModifiedDate,
+				'TimeCardModifiedBy' => $model->TimeCardModifiedBy,
+			);
+			
+			$json_data = json_encode($data);
+			
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			$obj = json_decode($putResponse, true);
+			
+            return $this->redirect(['view', 'id' => $obj[TimeCardID"]]);
         } else {
             return $this->render('update', [
                 'model' => $model,

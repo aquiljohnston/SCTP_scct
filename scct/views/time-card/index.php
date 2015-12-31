@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\TimeCardSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Time Cards';
@@ -42,13 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
                               }
                           ], */
 							  'urlCreator' => function ($action, $model, $key, $index) {
-								  //var_dump($model["UserID"]);
 											if ($action === 'view') {
 											$url ='index.php?r=time-card%2Fview&id='.$model["TimeCardID"];
 											return $url;
 											}
 											if ($action === 'update') {
 											$url ='index.php?r=time-card%2Fupdate&id='.$model["TimeCardID"];
+											return $url;
+											}
+											if ($action === 'delete') {
+											$url ='index.php?r=time-card%2Fdelete&id='.$model["TimeCardID"];
 											return $url;
 											}
 										}
