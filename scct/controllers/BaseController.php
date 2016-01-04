@@ -14,6 +14,17 @@ use yii\grid\GridView;
 
 class BaseController extends Controller
 {
+	public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['delete'],
+                ],
+            ],
+        ];
+    }
 	
 	//function generates and executes a "GET" request and returns the response
 	public function executeGetRequest($url)
@@ -103,7 +114,7 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-		//execute put
+		//execute delete
 		$response = curl_exec ($curl);
 		curl_close ($curl);
 		
