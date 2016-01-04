@@ -17,17 +17,17 @@ use yii\grid\GridView;
  */
 class UserController extends BaseController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['delete'],
-                ],
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+        // return [
+            // 'verbs' => [
+                // 'class' => VerbFilter::className(),
+                // 'actions' => [
+                    // 'delete' => ['delete'],
+                // ],
+            // ],
+        // ];
+    // }
 
     /**
      * Lists all user models.
