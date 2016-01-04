@@ -189,7 +189,7 @@ class TimeCardController extends BaseController
 			
 			$obj = json_decode($putResponse, true);
 			
-            return $this->redirect(['view', 'id' => $obj[TimeCardID"]]);
+            return $this->redirect(['view', 'id' => $obj["TimeCardID"]]);
         } else {
             return $this->render('update', [
                 'model' => $model,
