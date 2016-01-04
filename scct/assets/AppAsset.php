@@ -27,6 +27,7 @@ class AppAsset extends AssetBundle
     public $js = [
 		'js/header.js',
 		'js/footer.js',
+		'js/logout_btn.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
