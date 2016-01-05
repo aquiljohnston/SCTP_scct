@@ -66,6 +66,7 @@ class LoginController extends BaseController
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->session->set('token', $user['AuthToken'].': ');
+			Yii::$app->session->set('userID', $user['UserID']);
             return $this->redirect('index.php?r=home&token='. $user['AuthToken']);
         }
         return $this->render('index', [
@@ -76,12 +77,9 @@ class LoginController extends BaseController
     public function actionUserLogout()
     {	
 		Yii::Trace("User Logout.");
-		$url = 'http://api.southerncrossinc.com/index.php?r=login%2Fuser-logout';
-		Yii::Trace("Request url: ".$url);
+		$id = Yii::$app->session['userID'];
+		$url = 'http://api.southerncrossinc.com/index.php?r=login%2Fuser-logout&userID='.$id;
 		$response = Parent::executeGetRequest($url);
-		Yii::Trace("Request Response: ". $response);
-		//$curl = new curl\Curl();
-        //$response = $curl->get('http://api.southerncrossinc.com/index.php?r=login%2Fuser-logout');
 		
 		//Yii::$app->user->logout();
 		
