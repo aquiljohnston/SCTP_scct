@@ -18,18 +18,6 @@ use yii\web\Request;
  */
 class TimeCardController extends BaseController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all TimeCard models.
      * @return mixed
@@ -205,9 +193,9 @@ class TimeCardController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url);
+		$this->redirect('/index.php?r=time-card%2Findex');
     }
 
     /**

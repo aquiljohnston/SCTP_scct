@@ -18,18 +18,6 @@ use yii\grid\GridView;
 class EquipmentController extends BaseController
 {
 	
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all equipment models.
      * @return mixed
@@ -229,9 +217,9 @@ class EquipmentController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url);
+		$this->redirect('/index.php?r=equipment%2Findex');
     }
 
     /**
