@@ -17,18 +17,6 @@ use yii\grid\GridView;
  */
 class UserController extends BaseController
 {
-    // public function behaviors()
-    // {
-        // return [
-            // 'verbs' => [
-                // 'class' => VerbFilter::className(),
-                // 'actions' => [
-                    // 'delete' => ['delete'],
-                // ],
-            // ],
-        // ];
-    // }
-
     /**
      * Lists all user models.
      * @return mixed
@@ -241,8 +229,7 @@ class UserController extends BaseController
     {
 		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdelete&id='.$id;
 		Parent::executeDeleteRequest($url);
-
-        return $this->redirect(['index']);
+		$this->redirect('/index.php?r=user%2Findex');
     }
 
     /**
