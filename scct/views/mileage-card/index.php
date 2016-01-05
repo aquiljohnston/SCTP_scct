@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\controllers\MileageCard;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -53,7 +54,20 @@ $this->params['breadcrumbs'][] = $this->title;
 											$url ='index.php?r=mileage-card%2Fupdate&id='.$model["MileageCardID"];
 											return $url;
 											}
-										}						  
+										},
+										'buttons' => [
+											'delete' => function ($url, $model, $key) {
+												$url ='/index.php?r=mileage-card%2Fdelete&id='.$model["MileageCardID"];       
+													$options = [
+													'title' => Yii::t('yii', 'Delete'),
+													'aria-label' => Yii::t('yii', 'Delete'),
+													'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+													'data-method' => 'Delete',
+													'data-pjax' => '0',
+													];
+													return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+											},
+										]											
                             ],
 			],
     ]); ?>

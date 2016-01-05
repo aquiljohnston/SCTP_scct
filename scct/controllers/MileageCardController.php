@@ -19,18 +19,6 @@ use yii\web\Request;
  */
 class MileageCardController extends BaseController
 {
-	
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all MileageCard models.
@@ -206,9 +194,9 @@ class MileageCardController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url);
+		$this->redirect('/index.php?r=mileage-card%2Findex');
     }
 
     /**
