@@ -47,23 +47,35 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'UserInactiveDTLTOffset',
 			
 			['class' => 'yii\grid\ActionColumn',
-
-							  'urlCreator' => function ($action, $model, $key, $index) {
-											if ($action === 'view') {
-											$url ='index.php?r=user%2Fview&id='.$model["UserID"];
-											return $url;
-											}
-											if ($action === 'update') {
-											$url ='index.php?r=user%2Fupdate&id='.$model["UserID"];
-											return $url;
-											}
-											if ($action === 'delete') {
-											$url ='index.php?r=user%2Fdelete&id='.$model["UserID"];											
-											return $url;
-											}
-										}						  
-                            ],
-			],
+                'urlCreator' => function ($action, $model, $key, $index) {
+        			if ($action === 'view') {
+        			$url ='index.php?r=user%2Fview&id='.$model["UserID"];
+        			return $url;
+        			}
+        			if ($action === 'update') {
+        			$url ='index.php?r=user%2Fupdate&id='.$model["UserID"];
+        			return $url;
+        			}
+        			if ($action === 'delete') {
+        			$url ='index.php?r=user%2Fdelete&id='.$model["UserID"];											
+        			return $url;
+        			}
+        		},
+                'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        $url ='/index.php?r=user%2Fdelete&id='.$model["UserID"];       
+                            $options = [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'aria-label' => Yii::t('yii', 'Delete'),
+                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            'data-method' => 'Delete',
+                            'data-pjax' => '0',
+                            ];
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+                    },
+                ]						  
+            ],
+		],
     ]); ?>
 
 </div>
