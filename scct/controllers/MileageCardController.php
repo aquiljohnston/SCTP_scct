@@ -30,13 +30,17 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Findex";
+			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
-			$dataProvider = new ArrayDataProvider([
-			'allModels' => json_decode($response, true),]);
-
+			$dataProvider = new ArrayDataProvider
+			([
+				'allModels' => json_decode($response, true),
+				'pagination' => [
+					'pageSize' => 100,
+				],
+			]);
 			// fill gridview by applying data provider
 			GridView::widget([
 				'dataProvider' => $dataProvider,

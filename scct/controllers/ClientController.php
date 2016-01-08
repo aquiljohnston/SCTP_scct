@@ -38,6 +38,7 @@ class ClientController extends Controller
 		{
 			$searchModel = new ClientSearch();
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+			$dataProvider->pagination->pagesize=100;
 
 			return $this->render('index', [
 				'searchModel' => $searchModel,

@@ -29,13 +29,16 @@ class EquipmentController extends BaseController
 		if (Yii::$app->user->can('viewEquipmentIndex'))
 		{
 			// Reading the response from the the api and filling the GridView
-			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Findex';
+			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fget-all';
 			$response = Parent::executeGetRequest($url);
 			
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider
 			([
-			'allModels' => json_decode($response,true),
+				'allModels' => json_decode($response, true),
+				'pagination' => [
+					'pageSize' => 100,
+				],
 			]);
 			GridView::widget
 			([

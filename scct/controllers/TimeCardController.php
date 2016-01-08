@@ -30,12 +30,17 @@ class TimeCardController extends BaseController
 		{
 			// create curl for restful call.		
 			// get response from api 		
-			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Findex";
+			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
-			$dataProvider = new ArrayDataProvider([
-			'allModels' => json_decode($response, true),]);
+			$dataProvider = new ArrayDataProvider
+			([
+				'allModels' => json_decode($response, true),
+				'pagination' => [
+					'pageSize' => 100,
+				],
+			]);
 
 			// fill gridview by applying data provider
 			GridView::widget([
