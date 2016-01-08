@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "UserTb".
@@ -32,7 +33,7 @@ use Yii;
  * @property ProjectUserTb[] $projectUserTbs
  * @property KeyTb $userKey
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     /**
      * @inheritdoc
@@ -105,5 +106,33 @@ class User extends \yii\db\ActiveRecord
     public function getUserKey()
     {
         return $this->hasOne(KeyTb::className(), ['KeyID' => 'UserKey']);
+    }
+	
+	//identity interface methods
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return static::findOne(['access_token' => $token]);
+    }
+
+    public function getId()
+    {
+		//$userID = Yii::$app->session['userID'];
+        //return $userID;
+		return $this->UserID;
+    }
+
+    public function getAuthKey()
+    {
+        return $this->authKey;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
     }
 }

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use Yii;
+use app\models\User;
 use yii\filters\AccessControl;
 use app\controllers\BaseController;
 use yii\filters\VerbFilter;
@@ -67,6 +68,11 @@ class LoginController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->session->set('token', $user['AuthToken'].': ');
 			Yii::$app->session->set('userID', $user['UserID']);
+			Yii::Trace("session user id: ".Yii::$app->session['userID']);
+			$userIdentity = new User();
+			$userIdentity->UserID = $user['UserID'];
+			Yii::$app->user->login($userIdentity);
+			Yii::Trace("identity user id: ".Yii::$app->user->getId());
             return $this->redirect('index.php?r=home&token='. $user['AuthToken']);
         }
         return $this->render('index', [
