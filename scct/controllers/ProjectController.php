@@ -8,6 +8,7 @@ use app\models\ProjectSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 /**
  * ProjectController implements the CRUD actions for project model.
@@ -32,13 +33,21 @@ class ProjectController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ProjectSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		//RBAC permissions check
+		if (Yii::$app->user->can('viewProjectIndex'))
+		{
+			$searchModel = new ProjectSearch();
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+			return $this->render('index', [
+				'searchModel' => $searchModel,
+				'dataProvider' => $dataProvider,
+			]);
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
     }
 
     /**
@@ -48,9 +57,17 @@ class ProjectController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+		//RBAC permissions check
+		if (Yii::$app->user->can('viewProject'))
+		{
+			return $this->render('view', [
+				'model' => $this->findModel($id),
+			]);
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
     }
 
     /**
@@ -60,15 +77,23 @@ class ProjectController extends Controller
      */
     public function actionCreate()
     {
-        $model = new project();
+		//RBAC permissions check
+		if (Yii::$app->user->can('createProject'))
+		{
+			$model = new project();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ProjectID]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
+			if ($model->load(Yii::$app->request->post()) && $model->save()) {
+				return $this->redirect(['view', 'id' => $model->ProjectID]);
+			} else {
+				return $this->render('create', [
+					'model' => $model,
+				]);
+			}
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
     }
 
     /**
@@ -79,15 +104,23 @@ class ProjectController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+		//RBAC permissions check
+		if (Yii::$app->user->can('updateProject'))
+		{
+			$model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ProjectID]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
+			if ($model->load(Yii::$app->request->post()) && $model->save()) {
+				return $this->redirect(['view', 'id' => $model->ProjectID]);
+			} else {
+				return $this->render('update', [
+					'model' => $model,
+				]);
+			}
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
     }
 
     /**
@@ -98,9 +131,17 @@ class ProjectController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+		//RBAC permissions check
+		if (Yii::$app->user->can('deleteProject'))
+		{
+			$this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+			return $this->redirect(['index']);
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
     }
 
     /**
