@@ -13,6 +13,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'UserName')->textInput() ?>
+	
+	<?= $form->field($model, 'Password')->textInput() ?>
 
     <?= $form->field($model, 'UserFirstName')->textInput() ?>
 
@@ -31,8 +33,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'UserAppRoleType')->textInput() ?>
 
     <?= $form->field($model, 'UserComments')->textInput() ?>
-
-    <?= $form->field($model, 'UserKey')->textInput() ?>
 
     <?= $form->field($model, 'UserActiveFlag')->textInput() ?>
 

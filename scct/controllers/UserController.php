@@ -85,8 +85,8 @@ class UserController extends BaseController
 		if (Yii::$app->user->can('createUser'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'UserName', 'UserFirstName', 'UserLastName', 'UserLoginID', 'UserEmployeeType',
-				'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey',
+				'UserName', 'Password', 'UserFirstName', 'UserLastName', 'UserLoginID', 'UserEmployeeType',
+				'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 
 				'UserActiveFlag', 'UserCreatedDate', 'UserModifiedDate', 'UserCreatedBy', 'UserModifiedBy',
 				'UserCreateDTLTOffset', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'isNewRecord'
 			]);
@@ -104,7 +104,7 @@ class UserController extends BaseController
 				  ->addRule('UserCreatedBy', 'string')
 				  ->addRule('UserModifiedBy', 'string')
 				  ->addRule('UserCreateDTLTOffset', 'string')
-				  ->addRule('UserKey', 'string')
+				  ->addRule('Password', 'string')
 				  ->addRule('UserActiveFlag', 'integer')
 				  ->addRule('UserModifiedDTLTOffset', 'integer')
 				  ->addRule('UserInactiveDTLTOffset', 'integer')
@@ -124,7 +124,7 @@ class UserController extends BaseController
 					'UserCompanyPhone' => $model-> UserCompanyPhone,
 					'UserAppRoleType' => $model-> UserAppRoleType,
 					'UserComments' => $model-> UserComments,
-					'UserKey' => $model-> UserKey,
+					'UserKey' => $model-> Password,
 					'UserActiveFlag' => $model-> UserActiveFlag,
 					'UserCreatedDate' => $model-> UserCreatedDate,
 					'UserModifiedDate' => $model-> UserModifiedDate,
