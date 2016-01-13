@@ -39,8 +39,11 @@ AppAsset::register($this);
 				</div>
 			</div>
 			<div class="container">
+			<?php if (Yii::$app->user->can('viewClientIndex')){ ?>
+				<div class="adminMenu sc_megamenu">
+			<?php }else{ ?>
 				<div class="menu sc_megamenu">
-				
+			<?php } ?>
 				</div>
 			</div>
 		</div>

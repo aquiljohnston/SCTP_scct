@@ -67,10 +67,10 @@ class LoginController extends BaseController
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->session->set('token', $user['AuthToken'].': ');
-			Yii::$app->session->set('userID', $user['UserID']);
+			Yii::$app->session->set('userID', $user['AuthUserID']);
 			Yii::Trace("session user id: ".Yii::$app->session['userID']);
 			$userIdentity = new User();
-			$userIdentity->UserID = $user['UserID'];
+			$userIdentity->UserID = $user['AuthUserID'];
 			Yii::$app->user->login($userIdentity);
 			Yii::Trace("identity user id: ".Yii::$app->user->getId());
             return $this->redirect('index.php?r=home&token='. $user['AuthToken']);

@@ -16,6 +16,11 @@ $(document).ready(function(){
         + "<ul class='nav navbar-nav' id='nav'></ul>"
         + "</div><div class='clear'></div>");    
     $(".menu").prepend(head);
+	
+	var adminHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
+        + "<ul class='nav navbar-nav' id='adminNav'></ul>"
+        + "</div><div class='clear'></div>");    
+	$(".adminMenu").prepend(adminHead);
 
     var nav1 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "DASHBOARD<b class='caret'></b></a>"
@@ -35,9 +40,21 @@ $(document).ready(function(){
             + "<li><a data-description='Instrument Repair' href=''>report 4</a></li>"
         + "</ul></li>");
 
-    var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+		
+	var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "ADMINISTRATION<b class='caret'></b></a>"
-        + "    <ul class='dropdown-menu' role='menu'>"        
+        + "    <ul class='dropdown-menu' role='menu'>"  
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=user%2Findex'>User Management</a></li>"
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=equipment%2Findex'>Equipment Manager</a></li>"
+            + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=time-card%2Findex'>Timecards</a></li>"
+            + "<li><a data-description='Instrument Repair' href='http://localhost:8000/index.php?r=mileage-card%2Findex'>Mileagecards</a></li>"
+        + "</ul></li>");
+		
+    var nav5 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+        + "ADMINISTRATION<b class='caret'></b></a>"
+        + "    <ul class='dropdown-menu' role='menu'>"  
+			+ "<li><a data-description='Instrument Repair' href='http://localhost:8000/index.php?r=client%2Findex'>Clients</a></li>"
+			+ "<li><a data-description='Instrument Repair' href='http://localhost:8000/index.php?r=project%2Findex'>Projects</a></li>"			
             + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=user%2Findex'>User Management</a></li>"
             + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=equipment%2Findex'>Equipment Manager</a></li>"
             + "<li><a data-description='Image Animation' href='http://localhost:8000/index.php?r=time-card%2Findex'>Timecards</a></li>"
@@ -52,8 +69,9 @@ $(document).ready(function(){
 
     
     // $("#nav").prepend(nav1, nav2, nav3, nav4, nav5, nav6, nav7, nav8);
-        $("#nav").prepend(nav1, nav2, nav3, nav4);
-
+		$("#nav").prepend(nav1, nav2, nav3, nav4);
+		$("#adminNav").prepend(nav1, nav2, nav3, nav5);
+		
     
     // assign class to current active link
     var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
@@ -70,7 +88,7 @@ $(document).ready(function(){
                 var url2 = "a[href$='"+url+"']";
             $(url2).css({"color": "#FF9E19"});
         }
-    });    
+    });  
 });
 //         $('#nav > ul').not('ul li ul').not('li ul li').children().addClass('current');
 //         $(this).closest('li').addClass('current');
