@@ -33,6 +33,11 @@ class ClientController extends Controller
      */
     public function actionIndex()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewClientIndex'))
 		{
@@ -58,6 +63,11 @@ class ClientController extends Controller
      */
     public function actionView($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewClient'))
 		{
@@ -78,6 +88,11 @@ class ClientController extends Controller
      */
     public function actionCreate()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('createClient'))
 		{
@@ -105,6 +120,11 @@ class ClientController extends Controller
      */
     public function actionUpdate($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateClient'))
 		{
@@ -132,6 +152,11 @@ class ClientController extends Controller
      */
     public function actionDelete($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteUser'))
 		{

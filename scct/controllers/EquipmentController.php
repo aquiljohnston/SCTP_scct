@@ -25,6 +25,11 @@ class EquipmentController extends BaseController
      */
     public function actionIndex()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewEquipmentIndex'))
 		{
@@ -60,6 +65,11 @@ class EquipmentController extends BaseController
      */
     public function actionView($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewEquipment'))
 		{
@@ -81,6 +91,11 @@ class EquipmentController extends BaseController
      */
     public function actionCreate()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('createEquipment'))
 		{
@@ -168,6 +183,11 @@ class EquipmentController extends BaseController
      */
     public function actionUpdate($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateEquipment'))
 		{
@@ -252,6 +272,11 @@ class EquipmentController extends BaseController
      */
     public function actionDelete($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteEquipment'))
 		{

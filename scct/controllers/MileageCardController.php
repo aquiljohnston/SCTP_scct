@@ -27,6 +27,11 @@ class MileageCardController extends BaseController
      */
     public function actionIndex()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
@@ -64,6 +69,11 @@ class MileageCardController extends BaseController
      */
     public function actionView($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCard'))
 		{
@@ -89,6 +99,11 @@ class MileageCardController extends BaseController
      */
     public function actionCreate()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('createMileageCard'))
 		{
@@ -167,6 +182,11 @@ class MileageCardController extends BaseController
      */
     public function actionUpdate($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateMileageCard'))
 		{
@@ -231,6 +251,11 @@ class MileageCardController extends BaseController
      */
     public function actionDelete($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteMileageCard'))
 		{

@@ -25,6 +25,11 @@ class TimeCardController extends BaseController
      */
     public function actionIndex()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewTimeCardIndex'))
 		{
@@ -65,7 +70,12 @@ class TimeCardController extends BaseController
      */
     public function actionView($id)
     {		
-	//RBAC permissions check
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+		//RBAC permissions check
 		if (Yii::$app->user->can('viewTimeCard'))
 		{
 			$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
@@ -86,6 +96,11 @@ class TimeCardController extends BaseController
      */
     public function actionCreate()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('createTimeCard'))
 		{
@@ -165,6 +180,11 @@ class TimeCardController extends BaseController
      */
     public function actionUpdate($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateTimeCard'))
 		{
@@ -231,6 +251,11 @@ class TimeCardController extends BaseController
      */
     public function actionDelete($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteTimeCard'))
 		{

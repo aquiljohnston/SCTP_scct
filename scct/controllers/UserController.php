@@ -24,6 +24,11 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewUserIndex'))
 		{
@@ -59,6 +64,11 @@ class UserController extends BaseController
      */
     public function actionView($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewUser'))
 		{
@@ -80,6 +90,11 @@ class UserController extends BaseController
      */
     public function actionCreate()
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		Yii::Trace("user id: ".Yii::$app->user->getId());
 		//RBAC permissions check
 		if (Yii::$app->user->can('createUser'))
@@ -184,6 +199,11 @@ class UserController extends BaseController
      */
     public function actionUpdate($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateUser'))
 		{
@@ -273,6 +293,11 @@ class UserController extends BaseController
      */
     public function actionDelete($id)
     {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteUser'))
 		{
