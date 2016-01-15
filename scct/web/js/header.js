@@ -11,16 +11,24 @@ $(document).ready(function(){
         +"<span class='icon-bar'></span>"
         +"</button>"
         +"</div>";
-
+	
+	// default head setting
     var head = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
         + "<ul class='nav navbar-nav' id='nav'></ul>"
         + "</div><div class='clear'></div>");    
     $(".menu").prepend(head);
 	
+	// admin header setting
 	var adminHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
         + "<ul class='nav navbar-nav' id='adminNav'></ul>"
         + "</div><div class='clear'></div>");    
 	$(".adminMenu").prepend(adminHead);
+	
+	//login header setting
+	var login_head = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
+        + "<ul class='nav navbar-nav' id='nonav'></ul>"
+        + "</div><div class='clear'></div>");    
+    $(".loginMenu").prepend(login_head);
 
     var nav1 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "DASHBOARD<b class='caret'></b></a>"
