@@ -12,10 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <!--h1><?/*= Html::encode($this->title) */?></h1-->
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
+    <p class="create-btn">
         <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'ProjectID',
+            //'ProjectID',
             'ProjectName',
             'ProjectDescription',
             'ProjectNotes',

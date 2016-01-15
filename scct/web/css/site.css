@@ -92,6 +92,9 @@ a.desc:after {
 
 /*---------Start Header----------*/
 
+#login_header{
+	padding-top: 50px;
+}
 .logo{
 	float: left;
 	margin-bottom: .5%;
@@ -114,7 +117,16 @@ a.desc:after {
 	font-family: 'Roboto', sans-serif;
 	font-weight: 100;
 }
+.loginMenu {
+	background-color: #0067A6;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 100;
+	height: 50px;
+}
 #nav{
+	float:right;
+}
+#non-nav{
 	float:right;
 }
 #copyright-bar{
@@ -139,7 +151,15 @@ ul > li >a:hover{
 	background-color: #0067A6;
 	color: #FBB03B;
 }
-
+#adminNav{
+	float:right;
+}
+.adminMenu{
+	background-color: #0067A6;
+}
+.create-btn{
+	margin-top: 70px;
+}
 /*-----------End Header----------*/
 
 /*-----------Start body----------*/

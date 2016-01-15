@@ -39,20 +39,26 @@ AppAsset::register($this);
 				</div>
 			</div>
 			<div class="container">
-			<?php if (Yii::$app->user->can('viewClientIndex')){ ?>
-				<div class="adminMenu sc_megamenu">
+			<?php if (Yii::$app->user->isGuest){?>
+					<div class="loginMenu sc_megamenu"></div>
+			<?php }else{?>
+			<?php $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->session['userID']);?>
+			<?php $role = current($userRole);?>
+			<?php Yii::Trace("Session userID is : ".$role->name);?>
+			<?php if(($role->name) == "admin"){?>
+					<div class="adminMenu sc_megamenu"></div>
+			<?php }else if (($role->name) == "projectManager"){ ?>
+					<div class="menu sc_megamenu"></div>
 			<?php }else{ ?>
-				<div class="menu sc_megamenu">
-			<?php } ?>
-				</div>
+					<div class="menu sc_megamenu"></div>
+				<?php }?>
+			<?php }?>
 			</div>
 		</div>
 		<!--//End-header-->
 		
 		<div class="container">
-			<?= Breadcrumbs::widget([
-				'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-			]) ?>
+			
 			<?= $content ?>
 		</div>
 
