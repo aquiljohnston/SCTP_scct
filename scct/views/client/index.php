@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -47,7 +47,35 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'ClientModifiedDate',
             // 'ClientModifiedBy',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+				'urlCreator' => function ($action, $model, $key, $index) {
+        			if ($action === 'view') {
+        			$url ='index.php?r=client%2Fview&id='.$model["ClientID"];
+        			return $url;
+        			}
+        			if ($action === 'update') {
+        			$url ='index.php?r=client%2Fupdate&id='.$model["ClientID"];
+        			return $url;
+        			}
+        			if ($action === 'delete') {
+        			$url ='index.php?r=client%2Fdelete&id='.$model["ClientID"];											
+        			return $url;
+        			}
+        		},
+                'buttons' => [
+                    'delete' => function ($url, $model, $key) {
+                        $url ='/index.php?r=client%2Fdelete&id='.$model["ClientID"];       
+                            $options = [
+                            'title' => Yii::t('yii', 'Delete'),
+                            'aria-label' => Yii::t('yii', 'Delete'),
+                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            'data-method' => 'Delete',
+                            'data-pjax' => '0',
+                            ];
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+                    },
+                ]
+			],
         ],
     ]); ?>
 

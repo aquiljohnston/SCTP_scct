@@ -5,27 +5,18 @@ namespace app\controllers;
 use Yii;
 use app\models\project;
 use app\models\ProjectSearch;
-use yii\web\Controller;
+use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
-
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
+use linslin\yii2\curl;
 /**
  * ProjectController implements the CRUD actions for project model.
  */
-class ProjectController extends Controller
+class ProjectController extends BaseController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all project models.
@@ -41,14 +32,24 @@ class ProjectController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewProjectIndex'))
 		{
-			$searchModel = new ProjectSearch();
-			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-			$dataProvider->pagination->pagesize=100;
+			// Reading the response from the the api and filling the GridView
+			$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+			$response = Parent::executeGetRequest($url);
 
-			return $this->render('index', [
-				'searchModel' => $searchModel,
+			//Passing data to the dataProvider and formating it in an associative array
+			$dataProvider = new ArrayDataProvider
+			([
+				'allModels' => json_decode($response, true),
+				'pagination' => [
+					'pageSize' => 100,
+				],
+			]);
+			GridView::widget
+			([
 				'dataProvider' => $dataProvider,
 			]);
+			
+			return $this -> render('index', ['dataProvider' => $dataProvider]);
 		}
 		else
 		{
@@ -71,9 +72,10 @@ class ProjectController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewProject'))
 		{
-			return $this->render('view', [
-				'model' => $this->findModel($id),
-			]);
+			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+			$response = Parent::executeGetRequest($url);
+
+			return $this -> render('view', ['model' => json_decode($response), true]);
 		}
 		else
 		{
@@ -96,14 +98,46 @@ class ProjectController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('createProject'))
 		{
-			$model = new project();
+			$model = new \yii\base\DynamicModel([
+				'ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectStatus', 'ProjectClientID',
+				'ProjectStartDate', 'ProjectEndDate','isNewRecord'
+			]);
+			
+			$model->addRule('ProjectName', 'string')			  
+				  ->addRule('ProjectDescription', 'string')
+				  ->addRule('ProjectNotes', 'string')
+				  ->addRule('ProjectType', 'string')
+				  ->addRule('ProjectStatus', 'integer')
+				  ->addRule('ProjectClientID', 'integer')
+				  ->addRule('ProjectStartDate', 'safe')
+				  ->addRule('ProjectEndDate', 'safe');
+				  
+			if ($model->load(Yii::$app->request->post())){
+				
+				$data =array(
+					'ProjectName' => $model->ProjectName,
+					'ProjectDescription' => $model->ProjectDescription,
+					'ProjectNotes' => $model->ProjectNotes,
+					'ProjectType' => $model->ProjectType,
+					'ProjectStatus' => $model->ProjectStatus,
+					'ProjectClientID' => $model->ProjectClientID,
+					'ProjectStartDate' => $model->ProjectStartDate,
+					'ProjectEndDate' => $model->ProjectEndDate,
+					);
 
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['view', 'id' => $model->ProjectID]);
-			} else {
-				return $this->render('create', [
+				$json_data = json_encode($data);
+
+				// post url
+				$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
+				$response = Parent::executePostRequest($url, $json_data);
+				
+				$obj = json_decode($response, true);
+
+				return $this->redirect(['view', 'id' => $obj["ProjectID"]]);
+			}else {
+				return $this->render('create',[
 					'model' => $model,
-				]);
+					]);
 			}
 		}
 		else
@@ -128,15 +162,46 @@ class ProjectController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateProject'))
 		{
-			$model = $this->findModel($id);
+			$getUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['view', 'id' => $model->ProjectID]);
+			$model = new \yii\base\DynamicModel($getResponse);
+			
+			$model->addRule('ProjectName', 'string')			  
+				  ->addRule('ProjectDescription', 'string')
+				  ->addRule('ProjectNotes', 'string')
+				  ->addRule('ProjectType', 'string')
+				  ->addRule('ProjectStatus', 'integer')
+				  ->addRule('ProjectClientID', 'integer')
+				  ->addRule('ProjectStartDate', 'safe')
+				  ->addRule('ProjectEndDate', 'safe');
+				  
+			if ($model->load(Yii::$app->request->post()))
+			{
+				$data =array(
+					'ProjectName' => $model->ProjectName,
+					'ProjectDescription' => $model->ProjectDescription,
+					'ProjectNotes' => $model->ProjectNotes,
+					'ProjectType' => $model->ProjectType,
+					'ProjectStatus' => $model->ProjectStatus,
+					'ProjectClientID' => $model->ProjectClientID,
+					'ProjectStartDate' => $model->ProjectStartDate,
+					'ProjectEndDate' => $model->ProjectEndDate,
+					);
+
+				$json_data = json_encode($data);
+				
+				$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
+				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				
+				$obj = json_decode($putResponse, true);
+				
+				return $this->redirect(['view', 'id' => $model["ProjectID"]]);
 			} else {
 				return $this->render('update', [
 					'model' => $model,
 				]);
-			}
+			} 
 		}
 		else
 		{
@@ -160,29 +225,13 @@ class ProjectController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteProject'))
 		{
-			$this->findModel($id)->delete();
-
-			return $this->redirect(['index']);
+			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fdelete&id='.$id;
+			Parent::executeDeleteRequest($url);
+			$this->redirect('/index.php?r=project%2Findex');
 		}
 		else
 		{
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
-    }
-
-    /**
-     * Finds the project model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return project the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = project::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 }

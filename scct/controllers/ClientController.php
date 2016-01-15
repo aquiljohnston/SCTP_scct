@@ -5,27 +5,19 @@ namespace app\controllers;
 use Yii;
 use app\models\client;
 use app\models\ClientSearch;
-use yii\web\Controller;
+use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
+use yii\grid\GridView;
+use yii\data\ArrayDataProvider;
+use linslin\yii2\curl;
 
 /**
  * ClientController implements the CRUD actions for client model.
  */
-class ClientController extends Controller
+class ClientController extends BaseController
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * Lists all client models.
@@ -41,14 +33,24 @@ class ClientController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewClientIndex'))
 		{
-			$searchModel = new ClientSearch();
-			$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-			$dataProvider->pagination->pagesize=100;
+			// Reading the response from the the api and filling the GridView
+			$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
+			$response = Parent::executeGetRequest($url);
 
-			return $this->render('index', [
-				'searchModel' => $searchModel,
+			//Passing data to the dataProvider and formating it in an associative array
+			$dataProvider = new ArrayDataProvider
+			([
+				'allModels' => json_decode($response, true),
+				'pagination' => [
+					'pageSize' => 100,
+				],
+			]);
+			GridView::widget
+			([
 				'dataProvider' => $dataProvider,
 			]);
+			
+			return $this -> render('index', ['dataProvider' => $dataProvider]);
 		}
 		else
 		{
@@ -71,9 +73,10 @@ class ClientController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewClient'))
 		{
-			return $this->render('view', [
-				'model' => $this->findModel($id),
-			]);
+			$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+			$response = Parent::executeGetRequest($url);
+
+			return $this -> render('view', ['model' => json_decode($response), true]);
 		}
 		else
 		{
@@ -96,14 +99,72 @@ class ClientController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('createClient'))
 		{
-			$model = new client();
+			$model = new \yii\base\DynamicModel([
+				'ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone',
+				'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4',
+				'ClientTerritory', 'ClientActiveFlag', 'ClientDivisionsFlag', 'ClientComment', 'ClientCreateDate',
+				'ClientCreatorUserID', 'ClientModifiedDate', 'ClientModifiedBy', 'isNewRecord'
+			]);
+			
+			$model->addRule('ClientName', 'string')			  
+				  ->addRule('ClientContactTitle', 'string')
+				  ->addRule('ClientContactFName', 'string')
+				  ->addRule('ClientContactMI', 'string')
+				  ->addRule('ClientContactLName', 'string')
+				  ->addRule('ClientPhone', 'string')
+				  ->addRule('ClientEmail', 'string')
+				  ->addRule('ClientAddr1', 'string')
+				  ->addRule('ClientAddr2', 'string')
+				  ->addRule('ClientCity', 'string')
+				  ->addRule('ClientState', 'string')
+				  ->addRule('ClientZip4', 'string')
+				  ->addRule('ClientTerritory', 'string')
+				  ->addRule('ClientActiveFlag', 'integer')
+				  ->addRule('ClientDivisionsFlag', 'integer')
+				  ->addRule('ClientComment', 'string')
+				  ->addRule('ClientCreateDate', 'safe')
+				  ->addRule('ClientCreatorUserID', 'string')
+				  ->addRule('ClientModifiedDate', 'safe')
+				  ->addRule('ClientModifiedBy', 'string');
+				  
+			if ($model->load(Yii::$app->request->post())){
+				
+				$data =array(
+					'ClientName' => $model->ClientName,
+					'ClientContactTitle' => $model->ClientContactTitle,
+					'ClientContactFName' => $model->ClientContactFName,
+					'ClientContactMI' => $model->ClientContactMI,
+					'ClientContactLName' => $model->ClientContactLName,
+					'ClientPhone' => $model->ClientPhone,
+					'ClientEmail' => $model->ClientEmail,
+					'ClientAddr1' => $model->ClientAddr1,
+					'ClientAddr2' => $model->ClientAddr2,
+					'ClientCity' => $model->ClientCity,
+					'ClientState' => $model->ClientState,
+					'ClientZip4' => $model->ClientZip4,
+					'ClientTerritory' => $model->ClientTerritory,
+					'ClientActiveFlag' => $model->ClientActiveFlag,
+					'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
+					'ClientComment' => $model->ClientComment,
+					'ClientCreateDate' => $model->ClientCreateDate,
+					'ClientCreatorUserID' => $model->ClientCreatorUserID,
+					'ClientModifiedDate' => $model->ClientModifiedDate,
+					'ClientModifiedBy' => $model->ClientModifiedBy,
+					);
 
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['view', 'id' => $model->ClientID]);
-			} else {
-				return $this->render('create', [
+				$json_data = json_encode($data);
+
+				// post url
+				$url= "http://api.southerncrossinc.com/index.php?r=client%2Fcreate";			
+				$response = Parent::executePostRequest($url, $json_data);
+				
+				$obj = json_decode($response, true);
+
+				return $this->redirect(['view', 'id' => $obj["ClientID"]]);
+			}else {
+				return $this->render('create',[
 					'model' => $model,
-				]);
+					]);
 			}
 		}
 		else
@@ -128,15 +189,70 @@ class ClientController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('updateClient'))
 		{
-			$model = $this->findModel($id);
+			$getUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				return $this->redirect(['view', 'id' => $model->ClientID]);
+			$model = new \yii\base\DynamicModel($getResponse);
+			
+			$model->addRule('ClientName', 'string')			  
+				  ->addRule('ClientContactTitle', 'string')
+				  ->addRule('ClientContactFName', 'string')
+				  ->addRule('ClientContactMI', 'string')
+				  ->addRule('ClientContactLName', 'string')
+				  ->addRule('ClientPhone', 'string')
+				  ->addRule('ClientEmail', 'string')
+				  ->addRule('ClientAddr1', 'string')
+				  ->addRule('ClientAddr2', 'string')
+				  ->addRule('ClientCity', 'string')
+				  ->addRule('ClientState', 'string')
+				  ->addRule('ClientZip4', 'string')
+				  ->addRule('ClientTerritory', 'string')
+				  ->addRule('ClientActiveFlag', 'integer')
+				  ->addRule('ClientDivisionsFlag', 'integer')
+				  ->addRule('ClientComment', 'string')
+				  ->addRule('ClientCreateDate', 'safe')
+				  ->addRule('ClientCreatorUserID', 'string')
+				  ->addRule('ClientModifiedDate', 'safe')
+				  ->addRule('ClientModifiedBy', 'string');
+				  
+			if ($model->load(Yii::$app->request->post()))
+			{
+				$data =array(
+					'ClientName' => $model->ClientName,
+					'ClientContactTitle' => $model->ClientContactTitle,
+					'ClientContactFName' => $model->ClientContactFName,
+					'ClientContactMI' => $model->ClientContactMI,
+					'ClientContactLName' => $model->ClientContactLName,
+					'ClientPhone' => $model->ClientPhone,
+					'ClientEmail' => $model->ClientEmail,
+					'ClientAddr1' => $model->ClientAddr1,
+					'ClientAddr2' => $model->ClientAddr2,
+					'ClientCity' => $model->ClientCity,
+					'ClientState' => $model->ClientState,
+					'ClientZip4' => $model->ClientZip4,
+					'ClientTerritory' => $model->ClientTerritory,
+					'ClientActiveFlag' => $model->ClientActiveFlag,
+					'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
+					'ClientComment' => $model->ClientComment,
+					'ClientCreateDate' => $model->ClientCreateDate,
+					'ClientCreatorUserID' => $model->ClientCreatorUserID,
+					'ClientModifiedDate' => $model->ClientModifiedDate,
+					'ClientModifiedBy' => $model->ClientModifiedBy,
+					);
+
+				$json_data = json_encode($data);
+				
+				$putUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fupdate&id='.$id;
+				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				
+				$obj = json_decode($putResponse, true);
+				
+				return $this->redirect(['view', 'id' => $model["ClientID"]]);
 			} else {
 				return $this->render('update', [
 					'model' => $model,
 				]);
-			}
+			} 
 		}
 		else
 		{
@@ -160,29 +276,13 @@ class ClientController extends Controller
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteUser'))
 		{
-			$this->findModel($id)->delete();
-
-			return $this->redirect(['index']);
+			$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fdelete&id='.$id;
+			Parent::executeDeleteRequest($url);
+			$this->redirect('/index.php?r=client%2Findex');
 		}
 		else
 		{
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
-    }
-
-    /**
-     * Finds the client model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return client the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = client::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 }
