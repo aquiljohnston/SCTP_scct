@@ -10,7 +10,7 @@ use app\controllers\TimeCard;
 $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="time-card-index">
+<div class="timecard-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

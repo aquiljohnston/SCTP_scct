@@ -10,7 +10,7 @@ use yii\widgets\DetailView;
 $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="time-card-view">
+<div class="timecard-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

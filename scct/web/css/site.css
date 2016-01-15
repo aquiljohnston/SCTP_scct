@@ -160,6 +160,9 @@ ul > li >a:hover{
 .create-btn{
 	margin-top: 70px;
 }
+.title{
+	margin-top: 60px;
+}
 /*-----------End Header----------*/
 
 /*-----------Start body----------*/
@@ -169,6 +172,9 @@ ul > li >a:hover{
 }
 #w1{
 	margin-top: 2%;	
+}
+.user-view, .client-view, .equipment-view, .project-view , .timecard-view, .mileagecard-view{
+	margin-top: 60px;
 }
 
 /*-----------End body----------*/
