@@ -13,6 +13,10 @@ $this->params['breadcrumbs'][] = 'Update';
 <div class="client-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
+	
+	<p>
+		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
+	</p>
 
     <?= $this->render('_form', [
         'model' => $model,
