@@ -100,7 +100,7 @@ class UserController extends BaseController
 		if (Yii::$app->user->can('createUser'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'UserName', 'Password', 'UserFirstName', 'UserLastName', 'UserLoginID', 'UserEmployeeType',
+				'UserName', 'Password', 'UserFirstName', 'UserLastName','UserEmployeeType',
 				'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 
 				'UserActiveFlag', 'UserCreatedDate', 'UserModifiedDate', 'UserCreatedBy', 'UserModifiedBy',
 				'UserCreateDTLTOffset', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'isNewRecord'
@@ -109,7 +109,6 @@ class UserController extends BaseController
 			$model->addRule('UserName', 'string')
 				  ->addRule('UserFirstName', 'string')
 				  ->addRule('UserLastName', 'string')
-				  ->addRule('UserLoginID', 'string')
 				  ->addRule('UserEmployeeType', 'string')
 				  ->addRule('UserPhone', 'string')
 				  ->addRule('UserCompanyName', 'string')
@@ -132,7 +131,6 @@ class UserController extends BaseController
 					'UserName' => $model->UserName,
 					'UserFirstName' => $model-> UserFirstName,
 					'UserLastName' => $model-> UserLastName,
-					'UserLoginID' => $model-> UserLoginID,
 					'UserEmployeeType' => $model-> UserEmployeeType,
 					'UserPhone' => $model-> UserPhone,
 					'UserCompanyName' => $model-> UserCompanyName,
@@ -224,7 +222,6 @@ class UserController extends BaseController
 			$model->addRule('UserName', 'string')
 				  ->addRule('UserFirstName', 'string')
 				  ->addRule('UserLastName', 'string')
-				  ->addRule('UserLoginID', 'string')
 				  ->addRule('UserEmployeeType', 'string')
 				  ->addRule('UserPhone', 'string')
 				  ->addRule('UserCompanyName', 'string')
@@ -247,7 +244,6 @@ class UserController extends BaseController
 					'UserName' => $model->UserName,
 					'UserFirstName' => $model-> UserFirstName,
 					'UserLastName' => $model-> UserLastName,
-					'UserLoginID' => $model-> UserLoginID,
 					'UserEmployeeType' => $model-> UserEmployeeType,
 					'UserPhone' => $model-> UserPhone,
 					'UserCompanyName' => $model-> UserCompanyName,
