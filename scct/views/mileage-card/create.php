@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\mileagecard */
 
-$this->title = 'Create MileageCard';
+$this->title = 'Create';
 $this->params['breadcrumbs'][] = ['label' => 'MileageCard', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
