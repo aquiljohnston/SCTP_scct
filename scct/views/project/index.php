@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel app\models\ProjectSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Projects';
+// $this->title = 'Projects';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-index">
