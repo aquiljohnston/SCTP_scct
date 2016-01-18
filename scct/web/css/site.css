@@ -102,9 +102,12 @@ a.desc:after {
 #logout_btn{
 	float: right;
 	margin-top: 20px;
+	margin-right: 1%;
 }
 .container{
 	width: 100%;
+	padding-left: 0;
+	padding-right: 0;
 }
 #top-header{
 	margin-top: 15px;	
@@ -133,10 +136,11 @@ a.desc:after {
 	float: right;
 	height: 50px;
 	text-align: right;
-	padding-top: 16px;
+	padding-top: 18px;
 	color: #FFFFFF;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 100;
+	padding-right: 2%;
 }
 ul > li > a {
 	color: #FFFFFF;
