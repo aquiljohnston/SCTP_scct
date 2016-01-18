@@ -1,6 +1,6 @@
 $(document).ready(function(){
     
-    var head = $("<a href='index.php'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+    var head = $("<a href='http://scct.southerncrossinc.com/index.php?r=home'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
     var toggleButton =    "<div class='navbar-default navbar-header'>"
