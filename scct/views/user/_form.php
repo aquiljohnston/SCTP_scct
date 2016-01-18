@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'UserLastName')->textInput() ?>
 
+    <?= $form->field($model, 'UserLoginID')->textInput() ?>
+
     <?= $form->field($model, 'UserEmployeeType')->textInput() ?>
 
     <?= $form->field($model, 'UserPhone')->textInput() ?>

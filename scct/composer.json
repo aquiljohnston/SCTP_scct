@@ -18,8 +18,7 @@
         "yiisoft/yii2": ">=2.0.5",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
-        "linslin/yii2-curl": "^1.0",
-		"kartik-v/yii2-widget-activeform": "@dev" 
+        "linslin/yii2-curl": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
