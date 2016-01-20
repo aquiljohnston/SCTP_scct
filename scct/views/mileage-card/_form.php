@@ -87,23 +87,23 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'MileageCardModifiedBy']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'MileagCardBusinessMiles', [
-					'label'=>'MileagCardBusinessMiles', 
+				<?= Html::activeLabel($model, 'MileageCardBusinessMiles', [
+					'label'=>'MileageCardBusinessMiles', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
-					<?= $form->field($model, 'MileagCardBusinessMiles',[
+					<?= $form->field($model, 'MileageCardBusinessMiles',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileagCardBusinessMiles']); ?>
+					])->textInput(['placeholder'=>'MileageCardBusinessMiles']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'MileagCardPersonalMiles', [
-					'label'=>'MileagCardPersonalMiles', 
+				<?= Html::activeLabel($model, 'MileageCardPersonalMiles', [
+					'label'=>'MileageCardPersonalMiles', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
-					<?= $form->field($model, 'MileagCardPersonalMiles',[
+					<?= $form->field($model, 'MileageCardPersonalMiles',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileagCardPersonalMiles']); ?>
+					])->textInput(['placeholder'=>'MileageCardPersonalMiles']); ?>
 				</div>
 			</div>	
 
