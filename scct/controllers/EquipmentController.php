@@ -128,6 +128,11 @@ class EquipmentController extends BaseController
 				  ->addRule('EquipmentModifiedBy', 'string')
 				  ->addRule('EquipmentModifiedDate', 'safe');
 				  
+			//get clients for form dropdown
+			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+			$clientResponse = Parent::executeGetRequest($clientUrl);
+			$clients = json_decode($clientResponse, true);	  
+				  
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
@@ -166,6 +171,7 @@ class EquipmentController extends BaseController
 			}else {
 				return $this->render('create',[
 					'model' => $model,
+					'clients' => $clients,
 					]);
 			}
 		}
@@ -218,6 +224,11 @@ class EquipmentController extends BaseController
 				  ->addRule('EquipmentModifiedBy', 'string')
 				  ->addRule('EquipmentModifiedDate', 'safe');
 				  
+			//get clients for form dropdown
+			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+			$clientResponse = Parent::executeGetRequest($clientUrl);
+			$clients = json_decode($clientResponse, true);	  
+				  
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data =array(
@@ -255,6 +266,7 @@ class EquipmentController extends BaseController
 			} else {
 				return $this->render('update', [
 					'model' => $model,
+					'clients' => $clients,
 				]);
 			} 
 		}

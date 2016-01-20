@@ -130,7 +130,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentClientID',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentClientID']); ?>
+					])->dropDownList($clients); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentProjectID', [
 					'label'=>'EquipmentProjectID', 
