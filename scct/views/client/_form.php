@@ -16,7 +16,7 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="client_form">
 				<?= Html::activeLabel($model, 'ClientName', [
-					'label'=>'ClientName', 
+					'label'=>'Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -25,7 +25,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientContactTitle', [
-					'label'=>'ClientContactTitle', 
+					'label'=>'ContactTitle', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientContactTitle']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientContactFName', [
-					'label'=>'ClientContactFName', 
+					'label'=>'ContactFName', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -43,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientContactFName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientContactMI', [
-					'label'=>'ClientContactMI', 
+					'label'=>'ContactMI', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -52,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientContactMI']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientContactLName', [
-					'label'=>'ClientContactLName', 
+					'label'=>'ContactLName', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -61,7 +61,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientContactLName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientPhone', [
-					'label'=>'ClientPhone', 
+					'label'=>'Phone', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -70,7 +70,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientPhone']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientEmail', [
-					'label'=>'ClientEmail', 
+					'label'=>'Email', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -79,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'Begin Date']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientAddr1', [
-					'label'=>'ClientAddr1', 
+					'label'=>'Addr1', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -88,7 +88,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientAddr1']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientAddr2', [
-					'label'=>'ClientAddr2', 
+					'label'=>'Addr2', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -97,7 +97,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientAddr2']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientCity', [
-					'label'=>'ClientCity', 
+					'label'=>'City', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -106,7 +106,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientCity']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientState', [
-					'label'=>'ClientState', 
+					'label'=>'State', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -115,7 +115,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientState']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientZip4', [
-					'label'=>'ClientZip4', 
+					'label'=>'Zip4', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -124,7 +124,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientZip4']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientTerritory', [
-					'label'=>'ClientTerritory', 
+					'label'=>'Territory', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -133,7 +133,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientTerritory']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientActiveFlag', [
-					'label'=>'ClientActiveFlag', 
+					'label'=>'ActiveFlag', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -142,7 +142,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientActiveFlag']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientDivisionsFlag', [
-					'label'=>'ClientDivisionsFlag', 
+					'label'=>'DivisionsFlag', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -151,7 +151,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientDivisionsFlag']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientComment', [
-					'label'=>'ClientComment', 
+					'label'=>'Comment', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -160,7 +160,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientComment']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientCreateDate', [
-					'label'=>'ClientCreateDate', 
+					'label'=>'CreateDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -169,7 +169,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientCreateDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientCreatorUserID', [
-					'label'=>'ClientCreatorUserID', 
+					'label'=>'CreatorUserID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -178,7 +178,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientCreatorUserID']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientModifiedDate', [
-					'label'=>'ClientModifiedDate', 
+					'label'=>'ModifiedDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -187,7 +187,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientModifiedDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientModifiedBy', [
-					'label'=>'ClientModifiedBy', 
+					'label'=>'ModifiedBy', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
