@@ -28,15 +28,28 @@ AppAsset::register($this);
 		<!--start-header-->
 		<div class="header navbar-fixed-top" id="top-wrapper">
 			<div class="container" id="top-header">
+			
+			<?php if(Yii::$app->user->isGuest){?>
+				<div class="sc_logout_logo">	
+				
+				</div>	
+			<?php }else{?>
 				<div class="logo">
 		
 				</div>	
+			<?php }?>
 				<div class="login-info">
 				
 				</div>
+			<?php if(Yii::$app->user->isGuest){?>
+				<div class="logout_hide">
+					
+				</div>
+			<?php }else{?>
 				<div class="logout">
 					<input type='button' value='LOGOUT' id='logout_btn'>
 				</div>
+			<?php }?>
 			</div>
 			<div class="container">
 			<?php if (Yii::$app->user->isGuest){?>

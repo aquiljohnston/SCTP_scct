@@ -24,6 +24,10 @@ $(document).ready(function(){
         + "</div><div class='clear'></div>");    
 	$(".adminMenu").prepend(adminHead);
 	
+	//set login logo link
+	var sc_logout_logo = $("<a href='http://scct.southerncrossinc.com/index.php?'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+    $(".sc_logout_logo").prepend(sc_logout_logo);
+	
 	//login header setting
 	var login_head = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
         + "<ul class='nav navbar-nav' id='nonav'></ul>"
