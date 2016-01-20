@@ -16,7 +16,7 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="project_form">
 				<?= Html::activeLabel($model, 'ProjectName', [
-					'label'=>'ProjectName', 
+					'label'=>'Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -25,7 +25,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectDescription', [
-					'label'=>'ProjectDescription', 
+					'label'=>'Description', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectDescription']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectNotes', [
-					'label'=>'ProjectNotes', 
+					'label'=>'Notes', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -43,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectNotes']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectType', [
-					'label'=>'ProjectType', 
+					'label'=>'Type', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -52,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectType']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectStatus', [
-					'label'=>'ProjectStatus', 
+					'label'=>'Status', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -61,7 +61,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectStatus']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
-					'label'=>'ProjectClientID', 
+					'label'=>'ClientID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -70,7 +70,7 @@ use kartik\form\ActiveForm;
 					])->dropDownList($clients); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectStartDate', [
-					'label'=>'ProjectStartDate', 
+					'label'=>'StartDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -79,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ProjectStartDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectEndDate', [
-					'label'=>'ProjectEndDate', 
+					'label'=>'EndDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">

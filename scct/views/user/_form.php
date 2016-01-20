@@ -16,7 +16,7 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="user_mgt_form">
 				<?= Html::activeLabel($model, 'UserName', [
-					'label'=>'UserName', 
+					'label'=>'Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'Password']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserFirstName', [
-					'label'=>'UserFirstName', 
+					'label'=>'FirstName', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -43,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserFirstName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserLastName', [
-					'label'=>'UserLastName', 
+					'label'=>'LastName', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -52,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserLastName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserEmployeeType', [
-					'label'=>'UserEmployeeType', 
+					'label'=>'EmployeeType', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -61,7 +61,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserEmployeeType']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserPhone', [
-					'label'=>'UserPhone', 
+					'label'=>'Phone', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -70,7 +70,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserPhone']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCompanyName', [
-					'label'=>'UserCompanyName', 
+					'label'=>'CompanyName', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -79,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCompanyName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCompanyPhone', [
-					'label'=>'UserCompanyPhone', 
+					'label'=>'CompanyPhone', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -88,7 +88,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCompanyPhone']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserAppRoleType', [
-					'label'=>'UserAppRoleType', 
+					'label'=>'AppRoleType', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -97,7 +97,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserAppRoleType']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserComments', [
-					'label'=>'UserComments', 
+					'label'=>'Comments', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -106,7 +106,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserComments']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserActiveFlag', [
-					'label'=>'UserActiveFlag', 
+					'label'=>'ActiveFlag', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -115,7 +115,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserActiveFlag']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCreatedDate', [
-					'label'=>'UserCreatedDate', 
+					'label'=>'CreatedDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -124,7 +124,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCreatedDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserModifiedDate', [
-					'label'=>'UserModifiedDate', 
+					'label'=>'ModifiedDate', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -133,7 +133,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserModifiedDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCreatedBy', [
-					'label'=>'UserCreatedBy', 
+					'label'=>'CreatedBy', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -142,7 +142,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCreatedBy']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserModifiedBy', [
-					'label'=>'UserModifiedBy', 
+					'label'=>'ModifiedBy', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -151,7 +151,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserModifiedBy']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCreateDTLTOffset', [
-					'label'=>'UserCreateDTLTOffset', 
+					'label'=>'CreateDTLTOffset', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -160,7 +160,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCreateDTLTOffset']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserModifiedDTLTOffset', [
-					'label'=>'UserModifiedDTLTOffset', 
+					'label'=>'ModifiedDTLTOffset', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -169,7 +169,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserModifiedDTLTOffset']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserInactiveDTLTOffset', [
-					'label'=>'UserInactiveDTLTOffset', 
+					'label'=>'InactiveDTLTOffset', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
