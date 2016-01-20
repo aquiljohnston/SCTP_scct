@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 	</p>
 	
-    <?= $this->render('_form', [
+    <?= $this->render('_updateForm', [
         'model' => $model,
     ]) ?>
 

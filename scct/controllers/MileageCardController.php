@@ -110,15 +110,15 @@ class MileageCardController extends BaseController
 			$model = new \yii\base\DynamicModel([
 				'MileageCardEmpID', 'MileageCardTechID', 'MileageCardProjectID', 'MileageCardType', 'MileageCardAppStatus', 
 				'MileageCardCreateDate', 'MileageCardCreatedBy', 'MileageCardModifiedDate', 'MileageCardModifiedBy', 
-				'MileagCardBusinessMiles', 'MileagCardPersonalMiles', 'isNewRecord'
+				'MileageCardBusinessMiles', 'MileageCardPersonalMiles', 'isNewRecord'
 			]);
 			
 			$model->addRule('MileageCardEmpID', 'integer')
 				  ->addRule('MileageCardTechID', 'integer')
 				  ->addRule('MileageCardProjectID', 'integer')
 				  ->addRule('MileageCardAppStatus', 'integer')
-				  ->addRule('MileagCardBusinessMiles', 'integer')
-				  ->addRule('MileagCardPersonalMiles', 'integer')
+				  ->addRule('MileageCardBusinessMiles', 'integer')
+				  ->addRule('MileageCardPersonalMiles', 'integer')
 				  ->addRule('MileageCardType', 'string')
 				  ->addRule('MileageCardCreatedBy', 'string')
 				  ->addRule('MileageCardModifiedBy', 'string')
@@ -138,8 +138,8 @@ class MileageCardController extends BaseController
 					'MileageCardTechID' => $model->MileageCardTechID,
 					'MileageCardProjectID' => $model->MileageCardProjectID,
 					'MileageCardAppStatus' => $model->MileageCardAppStatus,
-					'MileagCardBusinessMiles' => $model->MileagCardBusinessMiles,
-					'MileagCardPersonalMiles' => $model->MileagCardPersonalMiles,
+					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
+					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
 					'MileageCardType' => $model->MileageCardType,
 					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
 					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
@@ -199,8 +199,8 @@ class MileageCardController extends BaseController
 				  ->addRule('MileageCardTechID', 'integer')
 				  ->addRule('MileageCardProjectID', 'integer')
 				  ->addRule('MileageCardAppStatus', 'integer')
-				  ->addRule('MileagCardBusinessMiles', 'integer')
-				  ->addRule('MileagCardPersonalMiles', 'integer')
+				  ->addRule('MileageCardBusinessMiles', 'integer')
+				  ->addRule('MileageCardPersonalMiles', 'integer')
 				  ->addRule('MileageCardType', 'string')
 				  ->addRule('MileageCardCreatedBy', 'string')
 				  ->addRule('MileageCardModifiedBy', 'string')
@@ -214,8 +214,8 @@ class MileageCardController extends BaseController
 					'MileageCardTechID' => $model->MileageCardTechID,
 					'MileageCardProjectID' => $model->MileageCardProjectID,
 					'MileageCardAppStatus' => $model->MileageCardAppStatus,
-					'MileagCardBusinessMiles' => $model->MileagCardBusinessMiles,
-					'MileagCardPersonalMiles' => $model->MileagCardPersonalMiles,
+					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
+					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
 					'MileageCardType' => $model->MileageCardType,
 					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
 					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
