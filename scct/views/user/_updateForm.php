@@ -49,7 +49,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'UserEmployeeType',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserEmployeeType']); ?>
+					])->dropDownList($types); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserPhone', [
 					'label'=>'Phone', 

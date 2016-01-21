@@ -130,6 +130,11 @@ class UserController extends BaseController
 			$rolesResponse = Parent::executeGetRequest($rolesUrl);
 			$roles = json_decode($rolesResponse, true);
 			
+			//get types for form dropdown
+			$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
+			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -184,6 +189,7 @@ class UserController extends BaseController
 				return $this->render('create', [
 					'model' => $model,
 					'roles' => $roles,
+					'types' => $types,
 				]);
 			}
 		}
@@ -247,6 +253,11 @@ class UserController extends BaseController
 			$rolesResponse = Parent::executeGetRequest($rolesUrl);
 			$roles = json_decode($rolesResponse, true);
 			
+			//get types for form dropdown
+			$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
+			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -289,6 +300,7 @@ class UserController extends BaseController
 				return $this->render('update', [
 					'model' => $model,
 					'roles' => $roles,
+					'types' => $types,
 				]);
 			} 
 		}
