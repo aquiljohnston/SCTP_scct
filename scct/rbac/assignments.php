@@ -1,36 +1,42 @@
 <?php
 return [
     161 => [
-        'admin',
+        'Admin',
     ],
     162 => [
-        'admin',
+        'Admin',
     ],
     182 => [
-        'admin',
+        'Admin',
     ],
     184 => [
-        'admin',
-    ],
-    185 => [
-        'projectManager',
+        'Admin',
     ],
     186 => [
-        'supervisor',
-    ],
-    187 => [
-        'admin',
-    ],
-    188 => [
-        'admin',
-    ],
-    189 => [
-        'admin',
+        'Supervisor',
     ],
     194 => [
-        'admin',
+        'Admin',
     ],
-    195 => [
-        'admin',
+    196 => [
+        'Technician',
+    ],
+    197 => [
+        'Technician',
+    ],
+    198 => [
+        'Technician',
+    ],
+    199 => [
+        'Technician',
+    ],
+    200 => [
+        'Technician',
+    ],
+    201 => [
+        'Technician',
+    ],
+    226 => [
+        'Engineer',
     ],
 ];

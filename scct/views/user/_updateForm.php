@@ -85,7 +85,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'UserAppRoleType',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserAppRoleType']); ?>
+					])->dropDownList($roles); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserComments', [
 					'label'=>'Comments', 
