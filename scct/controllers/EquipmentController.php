@@ -127,11 +127,28 @@ class EquipmentController extends BaseController
 				  ->addRule('EquipmentCreateDate', 'safe')
 				  ->addRule('EquipmentModifiedBy', 'string')
 				  ->addRule('EquipmentModifiedDate', 'safe');
-				  
+			
+
+			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
 			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);	  
+			$clients = json_decode($clientResponse, true);	
+
+			//get types for form dropdown
+			$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
+			
+			//get conditions for form dropdown
+			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+			$conditionResponse = Parent::executeGetRequest($conditionUrl);
+			$conditions = json_decode($conditionResponse, true);
+			
+			//get userIDs for form dropdown
+			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
+			$userResponse = Parent::executeGetRequest($userUrl);
+			$users = json_decode($userResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post())){
 				
@@ -172,6 +189,9 @@ class EquipmentController extends BaseController
 				return $this->render('create',[
 					'model' => $model,
 					'clients' => $clients,
+					'types' => $types,
+					'conditions' => $conditions,
+					'users' => $users,
 					]);
 			}
 		}
@@ -224,10 +244,26 @@ class EquipmentController extends BaseController
 				  ->addRule('EquipmentModifiedBy', 'string')
 				  ->addRule('EquipmentModifiedDate', 'safe');
 				  
+			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
 			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);	  
+			$clients = json_decode($clientResponse, true);	
+
+			//get types for form dropdown
+			$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
+			
+			//get conditions for form dropdown
+			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+			$conditionResponse = Parent::executeGetRequest($conditionUrl);
+			$conditions = json_decode($conditionResponse, true);
+			
+			//get userIDs for form dropdown
+			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
+			$userResponse = Parent::executeGetRequest($userUrl);
+			$users = json_decode($userResponse, true);	  
 				  
 			if ($model->load(Yii::$app->request->post()))
 			{
@@ -267,6 +303,9 @@ class EquipmentController extends BaseController
 				return $this->render('update', [
 					'model' => $model,
 					'clients' => $clients,
+					'types' => $types,
+					'conditions' => $conditions,
+					'users' => $users,
 				]);
 			} 
 		}
