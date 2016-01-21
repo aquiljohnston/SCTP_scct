@@ -6,7 +6,8 @@ use yii\console\Controller;
 
 class RbacController extends Controller
 {
-
+	// Technician - None
+	// Engineer - CRUD for Equipment
 	// Supervisor - CRUD
 	// Project Manager - CRUD
 	// Admin - Project + Client + CRUD
@@ -182,19 +183,29 @@ class RbacController extends Controller
 		
 		
 		// add role and children/////////////////////////////////////////////////////////////////
+		// add "Technician" role and give this role CRUD permissions
+		$technician = $auth->createRole('Technician');
+		$auth->add($technician);
+		
+		// add "Engineer" role and give this role CRUD permissions
+		$engineer = $auth->createRole('Engineer');
+		$auth->add($engineer);
+		$auth->addChild($engineer, $technician);
+		$auth->addChild($engineer, $viewEquipmentIndex);
+		$auth->addChild($engineer, $viewEquipment);
+		$auth->addChild($engineer, $createEquipment);
+		$auth->addChild($engineer, $updateEquipment);
+		$auth->addChild($engineer, $deleteEquipment);
+
         // add "supervisor" role and give this role CRUD permissions
-        $supervisor = $auth->createRole('supervisor');
+        $supervisor = $auth->createRole('Supervisor');
         $auth->add($supervisor);
+		$auth->addChild($supervisor, $engineer);
 		$auth->addChild($supervisor, $viewUserIndex);
 		$auth->addChild($supervisor, $viewUser);
         $auth->addChild($supervisor, $createUser);
 		$auth->addChild($supervisor, $updateUser);
 		$auth->addChild($supervisor, $deleteUser);
-		$auth->addChild($supervisor, $viewEquipmentIndex);
-		$auth->addChild($supervisor, $viewEquipment);
-		$auth->addChild($supervisor, $createEquipment);
-		$auth->addChild($supervisor, $updateEquipment);
-		$auth->addChild($supervisor, $deleteEquipment);
 		$auth->addChild($supervisor, $viewMileageCardIndex);
 		$auth->addChild($supervisor, $viewMileageCard);
 		$auth->addChild($supervisor, $createMileageCard);
@@ -205,12 +216,12 @@ class RbacController extends Controller
 		$auth->addChild($supervisor, $updateTimeCard);
 
         // add "projectManager" role and give this role the permissions of the "supervisor"
-        $projectManager = $auth->createRole('projectManager');
+        $projectManager = $auth->createRole('ProjectManager');
         $auth->add($projectManager);
         $auth->addChild($projectManager, $supervisor);
 		
 		// add "admin" role and give this role the permissions of the "projectManager"
-		$admin = $auth->createRole('admin');
+		$admin = $auth->createRole('Admin');
         $auth->add($admin);
         $auth->addChild($admin, $projectManager);
 		$auth->addChild($admin, $deleteTimeCard);
@@ -226,20 +237,50 @@ class RbacController extends Controller
 		$auth->addChild($admin, $updateProject);
 		$auth->addChild($admin, $deleteProject);
 		
-
+		//get users already in the system
+		$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all";
+		$headers = array(
+			'Accept:application/json',
+			'Content-Type:application/json',
+			//use postman to get tokent to add for request
+			'Authorization: Basic '. base64_encode("eX6afWz6TDHO_91-wUHkCMePqRXtxBIo".": ")
+			);
+		//init new curl
+		$curl = curl_init();
+		//set curl options
+		curl_setopt($curl, CURLOPT_URL, $url);
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+		//execute curl
+		$response = curl_exec ($curl);
+		curl_close ($curl);
+		
+		$userArray = json_decode($response, true);
+		$userSize = count($userArray);
+		
+		//assign roles to users already in the system
+		for($i = 0; $i < $userSize; $i++)
+		{
+			var_dump($userArray);
+			if($userRole = $auth->getRole($userArray[$i]["UserAppRoleType"]))
+			{
+				$auth->assign($userRole, $userArray[$i]["UserID"]);
+			}
+		}
+		
         // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
         // usually implemented in your User model.
 		//make jose an admin
-        $auth->assign($admin, 161);
+        //$auth->assign($admin, 161);
 		//make michael an admin
-        $auth->assign($admin, 162);
+        //$auth->assign($admin, 162);
 		//make tao an admin
-		$auth->assign($admin, 182);
+		//$auth->assign($admin, 182);
 		//make test admin an admin
-		$auth->assign($admin, 184);
+		//$auth->assign($admin, 184);
 		//make test pm a projectManager
-		$auth->assign($projectManager, 185);
+		//$auth->assign($projectManager, 185);
 		//make test supervisor a supervisor
-		$auth->assign($supervisor, 186);
+		//$auth->assign($supervisor, 186);
     }
 }

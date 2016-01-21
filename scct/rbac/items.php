@@ -120,19 +120,29 @@ return [
         'type' => 2,
         'description' => 'Delete project',
     ],
-    'supervisor' => [
+    'Technician' => [
+        'type' => 1,
+    ],
+    'Engineer' => [
         'type' => 1,
         'children' => [
-            'viewUserIndex',
-            'viewUser',
-            'createUser',
-            'updateUser',
-            'deleteUser',
+            'Technician',
             'viewEquipmentIndex',
             'viewEquipment',
             'createEquipment',
             'updateEquipment',
             'deleteEquipment',
+        ],
+    ],
+    'Supervisor' => [
+        'type' => 1,
+        'children' => [
+            'Engineer',
+            'viewUserIndex',
+            'viewUser',
+            'createUser',
+            'updateUser',
+            'deleteUser',
             'viewMileageCardIndex',
             'viewMileageCard',
             'createMileageCard',
@@ -143,16 +153,16 @@ return [
             'updateTimeCard',
         ],
     ],
-    'projectManager' => [
+    'ProjectManager' => [
         'type' => 1,
         'children' => [
-            'supervisor',
+            'Supervisor',
         ],
     ],
-    'admin' => [
+    'Admin' => [
         'type' => 1,
         'children' => [
-            'projectManager',
+            'ProjectManager',
             'deleteTimeCard',
             'deleteMileageCard',
             'viewClientIndex',

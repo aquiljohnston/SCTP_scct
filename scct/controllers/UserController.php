@@ -125,6 +125,11 @@ class UserController extends BaseController
 				  ->addRule('UserCreatedDate', 'safe')
 				  ->addRule('UserModifiedDate', 'safe');
 			
+			//get App Roles for form dropdown
+			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$roles = json_decode($rolesResponse, true);
+			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -165,21 +170,20 @@ class UserController extends BaseController
 				$response = Parent::executePostRequest($url, $json_data);
 			
 				$obj = json_decode($response, true);
-		
+				
+				//set auth roles
 				$auth = Yii::$app->authManager;
 				if($userRole = $auth->getRole($obj["UserAppRoleType"]))
 				{
 					$auth->assign($userRole, $obj["UserID"]);
 				}
-				else
-				{
-					//invalid role type error
-				}
+
 				
 				return $this->redirect(['view', 'id' => $obj["UserID"]]);
 			}else{
 				return $this->render('create', [
 					'model' => $model,
+					'roles' => $roles,
 				]);
 			}
 		}
@@ -237,6 +241,11 @@ class UserController extends BaseController
 				  ->addRule('UserInactiveDTLTOffset', 'integer')
 				  ->addRule('UserCreatedDate', 'safe')
 				  ->addRule('UserModifiedDate', 'safe');
+				  
+			//get App Roles for form dropdown
+			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$roles = json_decode($rolesResponse, true);
 			
 			if ($model->load(Yii::$app->request->post()))
 			{
@@ -268,10 +277,18 @@ class UserController extends BaseController
 				
 				$obj = json_decode($putResponse, true);
 				
+				//set auth role
+				$auth = Yii::$app->authManager;
+				if($userRole = $auth->getRole($obj["UserAppRoleType"]))
+				{
+					$auth->assign($userRole, $obj["UserID"]);
+				}
+				
 				 return $this->redirect(['view', 'id' => $obj["UserID"]]);
 			} else {
 				return $this->render('update', [
 					'model' => $model,
+					'roles' => $roles,
 				]);
 			} 
 		}
