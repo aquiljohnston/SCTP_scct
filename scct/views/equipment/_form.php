@@ -49,7 +49,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentType',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentType']); ?>
+					])->dropDownList($types);  ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentManufacturer', [
 					'label'=>'Manufacturer', 
@@ -76,7 +76,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentCondition',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentCondition']); ?>
+					])->dropDownList($conditions);  ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentMACID', [
 					'label'=>'MACID', 
@@ -166,7 +166,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentAssignedUserID',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentAssignedUserID']); ?>
+					])->dropDownList($users);  ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentCreatedByUser', [
 					'label'=>'CreatedByUser', 
