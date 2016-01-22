@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'Password']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserFirstName', [
-					'label'=>'FirstName', 
+					'label'=>'First Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -43,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserFirstName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserLastName', [
-					'label'=>'LastName', 
+					'label'=>'Last Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -52,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserLastName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserEmployeeType', [
-					'label'=>'EmployeeType', 
+					'label'=>'Employee Type', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -70,7 +70,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserPhone']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCompanyName', [
-					'label'=>'CompanyName', 
+					'label'=>'Company Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -79,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCompanyName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserCompanyPhone', [
-					'label'=>'CompanyPhone', 
+					'label'=>'Company Phone', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -88,7 +88,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserCompanyPhone']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserAppRoleType', [
-					'label'=>'AppRoleType', 
+					'label'=>'App Role Type', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -106,76 +106,13 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'UserComments']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserActiveFlag', [
-					'label'=>'ActiveFlag', 
+					'label'=>'Active Flag', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
 					<?= $form->field($model, 'UserActiveFlag',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserActiveFlag']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserCreatedDate', [
-					'label'=>'CreatedDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserCreatedDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserCreatedDate']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserModifiedDate', [
-					'label'=>'ModifiedDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserModifiedDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserModifiedDate']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserCreatedBy', [
-					'label'=>'CreatedBy', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserCreatedBy',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserCreatedBy']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserModifiedBy', [
-					'label'=>'ModifiedBy', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserModifiedBy',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserModifiedBy']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserCreateDTLTOffset', [
-					'label'=>'CreateDTLTOffset', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserCreateDTLTOffset',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserCreateDTLTOffset']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserModifiedDTLTOffset', [
-					'label'=>'ModifiedDTLTOffset', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserModifiedDTLTOffset',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserModifiedDTLTOffset']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'UserInactiveDTLTOffset', [
-					'label'=>'InactiveDTLTOffset', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserInactiveDTLTOffset',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserInactiveDTLTOffset']); ?>
+					])->dropDownList($flag); ?>
 				</div>
 			</div>	
 
