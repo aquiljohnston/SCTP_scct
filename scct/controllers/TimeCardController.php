@@ -78,10 +78,110 @@ class TimeCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewTimeCard'))
 		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
+			$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-entries&id='.$id;
+			$time_card_url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
 			
-			return $this -> render('view', ['model' => json_decode($response, true)]);
+			$response = Parent::executeGetRequest($url);
+			$time_card_response = Parent::executeGetRequest($time_card_url);
+			$dateProvider = json_decode($response, true);
+			
+			//var_dump($dateProvider["TimeEntries"][0]["Thursday"]);
+			$Sundaydata = $dateProvider["TimeEntries"][0]["Sunday"];
+			$SundayProvider = new ArrayDataProvider([
+				'allModels' => $Sundaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Mondaydata = $dateProvider["TimeEntries"][0]["Monday"];
+			$MondayProvider = new ArrayDataProvider([
+				'allModels' => $Mondaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Tuesdaydata = $dateProvider["TimeEntries"][0]["Tuesday"];
+			$TuesdayProvider = new ArrayDataProvider([
+				'allModels' => $Tuesdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Wednesdaydata = $dateProvider["TimeEntries"][0]["Wednesday"];
+			$WednesdayProvider = new ArrayDataProvider([
+				'allModels' => $Wednesdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Thursdaydata = $dateProvider["TimeEntries"][0]["Thursday"];
+			$ThursdayProvider = new ArrayDataProvider([
+				'allModels' => $Thursdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Fridaydata = $dateProvider["TimeEntries"][0]["Friday"];
+			$FridayProvider = new ArrayDataProvider([
+				'allModels' => $Fridaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Saturdaydata = $dateProvider["TimeEntries"][0]["Saturday"];
+			$SaturdayProvider = new ArrayDataProvider([
+				'allModels' => $Saturdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			//Yii::trace("sunday", $SundayProvider);
+			//var_dump($MondayProvider);
+			return $this -> render('view', [
+											'model' => json_decode($time_card_response, true),
+											'dateProvider' => $dateProvider,
+												// 'SundayProvider' => $dateProvider["TimeEntries"][0]["Sunday"],
+												// 'MondayProvider' => $dateProvider["TimeEntries"][1]["Monday"],
+												// 'TuesdayProvider' => $dateProvider["TimeEntries"][2]["Tuesday"],
+												// 'WednesdayProvider' => $dateProvider["TimeEntries"][3]["Wednesday"],
+												// 'ThursdayProvider' => $dateProvider["TimeEntries"][4]["Thursday"],
+												// 'FridayProvider' => $dateProvider["TimeEntries"][5]["Friday"],
+												// 'SaturdayProvider' => $dateProvider["TimeEntries"][6]["Saturday"],
+												'SundayProvider' => $SundayProvider,
+												'MondayProvider' => $MondayProvider,
+												'TuesdayProvider' => $TuesdayProvider,
+												'WednesdayProvider' => $WednesdayProvider,
+												'ThursdayProvider' => $ThursdayProvider,
+												'FridayProvider' => $FridayProvider,
+												'SaturdayProvider' => $SaturdayProvider,
+									]);
 		}
 		else
 		{

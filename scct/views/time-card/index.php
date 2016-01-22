@@ -28,9 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'TimeCardEndDate',
             'TimeCardHoursWorked',
             'TimeCardApproved:datetime',
-            'TimeCardSupervisorName',
+            /*'TimeCardSupervisorName',
             'TimeCardComment',
-            'TimeCardCreateDate',
+            'TimeCardCreateDate',*/
 
             ['class' => 'yii\grid\ActionColumn',
 							/* 'buttons'=>[
