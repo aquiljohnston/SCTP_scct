@@ -135,6 +135,13 @@ class UserController extends BaseController
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
 			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -190,6 +197,7 @@ class UserController extends BaseController
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
+					'flag' => $flag,
 				]);
 			}
 		}
@@ -258,6 +266,13 @@ class UserController extends BaseController
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
 			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -301,6 +316,7 @@ class UserController extends BaseController
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
+					'flag' => $flag,
 				]);
 			} 
 		}
