@@ -175,7 +175,7 @@ ul > li >a:hover{
 	color: white;
 }
 #w1{
-	margin-top: 2%;	
+	/* margin-top: 2%;	 */
 }
 .user-view, .client-view, .equipment-view, .project-view , .timecard-view, .mileagecard-view{
 	margin-top: 60px;
