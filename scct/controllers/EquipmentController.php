@@ -149,6 +149,11 @@ class EquipmentController extends BaseController
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
 			$users = json_decode($userResponse, true);
+			
+			//get projects for form dropdown
+			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
+			$projectResponse = Parent::executeGetRequest($projectUrl);
+			$projects = json_decode($projectResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post())){
 				
@@ -192,6 +197,7 @@ class EquipmentController extends BaseController
 					'types' => $types,
 					'conditions' => $conditions,
 					'users' => $users,
+					'projects' => $projects,
 					]);
 			}
 		}
@@ -263,7 +269,12 @@ class EquipmentController extends BaseController
 			//get userIDs for form dropdown
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
-			$users = json_decode($userResponse, true);	  
+			$users = json_decode($userResponse, true);	 
+
+			//get projects for form dropdown
+			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
+			$projectResponse = Parent::executeGetRequest($projectUrl);
+			$projects = json_decode($projectResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post()))
 			{
@@ -306,6 +317,7 @@ class EquipmentController extends BaseController
 					'types' => $types,
 					'conditions' => $conditions,
 					'users' => $users,
+					'projects' => $projects,
 				]);
 			} 
 		}

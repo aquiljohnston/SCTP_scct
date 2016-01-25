@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		'types' => $types,
 		'conditions' => $conditions,
 		'users' => $users,
+		'projects' => $projects,
     ]) ?>
 
 </div>
