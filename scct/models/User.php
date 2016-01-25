@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\IdentityInterface;
+use app\controllers\BaseController;
 
 /**
  * This is the model class for table "UserTb".
@@ -106,31 +107,75 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasOne(KeyTb::className(), ['KeyID' => 'UserKey']);
     }
 	
+	
+	
+	// //////identity interface methods/////
+    // public static function findIdentity($id)
+    // {
+        // return static::findOne($id);
+    // }
+
+    // public static function findIdentityByAccessToken($token, $type = null)
+    // {
+        // return static::findOne(['access_token' => $token]);
+    // }
+
+    // public function getId()
+    // {
+		// //$userID = Yii::$app->session['userID'];
+        // //return $userID;
+		// return $this->UserID;
+    // }
+
+    // public function getAuthKey()
+    // {
+        // return $this->authKey;
+    // }
+
+    // public function validateAuthKey($authKey)
+    // {
+        // return $this->authKey === $authKey;
+    // }
+	
 	//identity interface methods
     public static function findIdentity($id)
     {
-        return static::findOne($id);
+		$url = 'api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$response = BaseController::executeGetRequest($url);
+		$identityAttributes = json_decode($response, true);
+		$userIdentity = new User();
+		$userIdentity->attributes = $identityAttributes;
+		
+		return $userIdentity;
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['access_token' => $token]);
+		$url = 'api.southerncrossinc.com/index.php?r=auth%2Fget-user-by-token&token='.$token;
+		$response = BaseController::executeGetRequest($url);
+		$identityAttributes = json_decode($response, true);
+		$userIdentity = new User();
+		$userIdentity->attributes = $identityAttributes;
+		
+		return $userIdentity;
     }
 
     public function getId()
     {
-		//$userID = Yii::$app->session['userID'];
-        //return $userID;
-		return $this->UserID;
+		$userID = Yii::$app->session['userID'];
+        return $userID;
     }
 
     public function getAuthKey()
     {
-        return $this->authKey;
+		$authKey = Yii::$app->session['token'];
+        return $authKey;
     }
 
     public function validateAuthKey($authKey)
     {
-        return $this->authKey === $authKey;
+		$url = 'api.southerncrossinc.com/index.php?r=auth%2Fvalidate-auth-key&token='.$authKey;
+		$response = BaseController::executeGetRequest($url);
+		return $response;
     }
 }

@@ -20,6 +20,7 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\User',
+			//'identityClass' => 'app\controllers\IdentityController',
             'enableAutoLogin' => false,
         ],
 		'authManager' => [
