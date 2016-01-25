@@ -84,8 +84,6 @@ class TimeCardController extends BaseController
 			$response = Parent::executeGetRequest($url);
 			$time_card_response = Parent::executeGetRequest($time_card_url);
 			$dateProvider = json_decode($response, true);
-			
-			//var_dump($dateProvider["TimeEntries"][0]["Thursday"]);
 			$Sundaydata = $dateProvider["TimeEntries"][0]["Sunday"];
 			$SundayProvider = new ArrayDataProvider([
 				'allModels' => $Sundaydata,
@@ -162,18 +160,9 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
-			//Yii::trace("sunday", $SundayProvider);
-			//var_dump($MondayProvider);
 			return $this -> render('view', [
 											'model' => json_decode($time_card_response, true),
 											'dateProvider' => $dateProvider,
-												// 'SundayProvider' => $dateProvider["TimeEntries"][0]["Sunday"],
-												// 'MondayProvider' => $dateProvider["TimeEntries"][1]["Monday"],
-												// 'TuesdayProvider' => $dateProvider["TimeEntries"][2]["Tuesday"],
-												// 'WednesdayProvider' => $dateProvider["TimeEntries"][3]["Wednesday"],
-												// 'ThursdayProvider' => $dateProvider["TimeEntries"][4]["Thursday"],
-												// 'FridayProvider' => $dateProvider["TimeEntries"][5]["Friday"],
-												// 'SaturdayProvider' => $dateProvider["TimeEntries"][6]["Saturday"],
 												'SundayProvider' => $SundayProvider,
 												'MondayProvider' => $MondayProvider,
 												'TuesdayProvider' => $TuesdayProvider,
