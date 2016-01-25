@@ -139,7 +139,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentProjectID',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentProjectID']); ?>
+					])->dropDownList($projects); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentAnnualCalibrationDate', [
 					'label'=>'AnnualCalibrationDate', 
@@ -167,42 +167,6 @@ use kartik\form\ActiveForm;
 					<?= $form->field($model, 'EquipmentAssignedUserID',[
 						'showLabels'=>false
 					])->dropDownList($users);  ?>
-				</div>
-				<?= Html::activeLabel($model, 'EquipmentCreatedByUser', [
-					'label'=>'CreatedByUser', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentCreatedByUser',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentCreatedByUser']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'EquipmentCreateDate', [
-					'label'=>'CreateDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentCreateDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentCreateDate']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'EquipmentModifiedBy', [
-					'label'=>'ModifiedBy', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentModifiedBy',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentModifiedBy']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'EquipmentModifiedDate', [
-					'label'=>'ModifiedDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentModifiedDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentModifiedDate']); ?>
 				</div>
 			</div>
 

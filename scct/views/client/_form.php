@@ -139,7 +139,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ClientActiveFlag',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientActiveFlag']); ?>
+					])->dropDownList($flag); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientDivisionsFlag', [
 					'label'=>'DivisionsFlag', 
@@ -158,43 +158,7 @@ use kartik\form\ActiveForm;
 					<?= $form->field($model, 'ClientComment',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'ClientComment']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'ClientCreateDate', [
-					'label'=>'CreateDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'ClientCreateDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientCreateDate']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'ClientCreatorUserID', [
-					'label'=>'CreatorUserID', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'ClientCreatorUserID',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientCreatorUserID']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'ClientModifiedDate', [
-					'label'=>'ModifiedDate', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'ClientModifiedDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientModifiedDate']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'ClientModifiedBy', [
-					'label'=>'ModifiedBy', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'ClientModifiedBy',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientModifiedBy']); ?>
-				</div>								
+				</div>							
 			</div>
 
     <div class="form-group">

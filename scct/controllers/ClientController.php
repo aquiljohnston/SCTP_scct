@@ -127,6 +127,13 @@ class ClientController extends BaseController
 				  ->addRule('ClientModifiedDate', 'safe')
 				  ->addRule('ClientModifiedBy', 'string');
 				  
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+				  
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
@@ -164,6 +171,7 @@ class ClientController extends BaseController
 			}else {
 				return $this->render('create',[
 					'model' => $model,
+					'flag' => $flag,
 					]);
 			}
 		}
@@ -215,6 +223,13 @@ class ClientController extends BaseController
 				  ->addRule('ClientModifiedDate', 'safe')
 				  ->addRule('ClientModifiedBy', 'string');
 				  
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+				  
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data =array(
@@ -251,6 +266,7 @@ class ClientController extends BaseController
 			} else {
 				return $this->render('update', [
 					'model' => $model,
+					'flag' => $flag,
 				]);
 			} 
 		}
