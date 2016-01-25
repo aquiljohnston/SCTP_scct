@@ -16,13 +16,13 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="user_mgt_form">
 				<?= Html::activeLabel($model, 'UserName', [
-					'label'=>'Name', 
+					'label'=>'Username', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
 					<?= $form->field($model, 'UserName',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'UserName']); ?>
+					])->textInput(['placeholder'=>'Username']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserFirstName', [
 					'label'=>'First Name', 
