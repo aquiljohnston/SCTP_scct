@@ -72,18 +72,11 @@ $(document).ready(function(){
             + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=time-card%2Findex'>Timecards</a></li>"
             + "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=mileage-card%2Findex'>Mileagecards</a></li>"
         + "</ul></li>");
-    
-    // var nav5 = $("<li><a href='equipmentrepairs.html'>equipment repairs</a></li>");
-    // var nav6 = $("<li><a href='industry.html'>Our Industry</a></li>");
-    // var nav7 = $("<li><a href='careers.html'>Careers</a></li>");
-    // var nav8 = $("<li><a href='contact.html'>Contact</a></li>");
-    
-
-    
-    // $("#nav").prepend(nav1, nav2, nav3, nav4, nav5, nav6, nav7, nav8);
-		$("#nav").prepend(nav1, nav2, nav3, nav4);
-		$("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		
+   
+		// $("#nav").prepend(nav1, nav2, nav3, nav4);
+		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
+		$("#nav").prepend(nav4);
+		$("#adminNav").prepend(nav5);
     
     // assign class to current active link
     var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
