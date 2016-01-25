@@ -27,13 +27,13 @@ class BaseController extends Controller
     }
 	
 	//function generates and executes a "GET" request and returns the response
-	public function executeGetRequest($url)
+	public static function executeGetRequest($url)
 	{
 		//set headers
 		$headers = array(
 			'Accept:application/json',
 			'Content-Type:application/json',
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
 			);
 		//init new curl
 		$curl = curl_init();
@@ -49,14 +49,14 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "POST" request and returns the response
-    public function executePostRequest($url, $postData)
+    public static function executePostRequest($url, $postData)
 	{
 		//set headers
 		$headers = array(
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
 			);
 		//init new curl
 		$curl = curl_init();
@@ -74,14 +74,14 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "PUT" request and returns the response
-	public function executePutRequest($url, $putData)
+	public static function executePutRequest($url, $putData)
 	{
 		//set headers
 		$headers = array(
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
 			);
 		//init new curl
 		$curl = curl_init();
@@ -99,13 +99,13 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "Delete" request and returns the response
-	public function executeDeleteRequest($url)
+	public static function executeDeleteRequest($url)
 	{
 		//set headers
 		$headers = array(
 			'Accept:application/json',
 			'Content-Type:application/json',
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'])
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
 			);
 		//init new curl
 		$curl = curl_init();
