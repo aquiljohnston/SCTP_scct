@@ -100,7 +100,8 @@ class ProjectController extends BaseController
 		{
 			$model = new \yii\base\DynamicModel([
 				'ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectStatus', 'ProjectClientID',
-				'ProjectStartDate', 'ProjectEndDate','isNewRecord'
+				'ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectCreatedBy', 'ProjectModifiedDate',
+				'ProjectModifiedBy','isNewRecord'
 			]);
 			
 			$model->addRule('ProjectName', 'string')			  
@@ -110,7 +111,11 @@ class ProjectController extends BaseController
 				  ->addRule('ProjectStatus', 'integer')
 				  ->addRule('ProjectClientID', 'integer')
 				  ->addRule('ProjectStartDate', 'safe')
-				  ->addRule('ProjectEndDate', 'safe');
+				  ->addRule('ProjectEndDate', 'safe')
+				  ->addRule('ProjectCreateDate', 'safe')
+				  ->addRule('ProjectCreatedBy', 'string')
+				  ->addRule('ProjectModifiedDate', 'safe')
+				  ->addRule('ProjectModifiedBy', 'string');
 				  
 			//get clients for form dropdown
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
@@ -128,6 +133,10 @@ class ProjectController extends BaseController
 					'ProjectClientID' => $model->ProjectClientID,
 					'ProjectStartDate' => $model->ProjectStartDate,
 					'ProjectEndDate' => $model->ProjectEndDate,
+					'ProjectCreateDate' => $model->ProjectCreateDate,
+					'ProjectCreatedBy' => Yii::$app->session['userID'],
+					'ProjectModifiedDate' => $model->ProjectModifiedDate,
+					'ProjectModifiedBy' => $model->ProjectModifiedBy,
 					);
 
 				$json_data = json_encode($data);
@@ -180,7 +189,11 @@ class ProjectController extends BaseController
 				  ->addRule('ProjectStatus', 'integer')
 				  ->addRule('ProjectClientID', 'integer')
 				  ->addRule('ProjectStartDate', 'safe')
-				  ->addRule('ProjectEndDate', 'safe');
+				  ->addRule('ProjectEndDate', 'safe')
+				  ->addRule('ProjectCreateDate', 'safe')
+				  ->addRule('ProjectCreatedBy', 'string')
+				  ->addRule('ProjectModifiedDate', 'safe')
+				  ->addRule('ProjectModifiedBy', 'string');
 				  
 			//get clients for form dropdown
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
@@ -198,6 +211,10 @@ class ProjectController extends BaseController
 					'ProjectClientID' => $model->ProjectClientID,
 					'ProjectStartDate' => $model->ProjectStartDate,
 					'ProjectEndDate' => $model->ProjectEndDate,
+					'ProjectCreateDate' => $model->ProjectCreateDate,
+					'ProjectCreatedBy' => $model->ProjectCreatedBy,
+					'ProjectModifiedDate' => $model->ProjectModifiedDate,
+					'ProjectModifiedBy' => Yii::$app->session['userID'],
 					);
 
 				$json_data = json_encode($data);
