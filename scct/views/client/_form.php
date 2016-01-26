@@ -76,7 +76,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ClientEmail',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'Begin Date']); ?>
+					])->textInput(['placeholder'=>'Email']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientAddr1', [
 					'label'=>'Addr1', 

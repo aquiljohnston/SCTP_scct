@@ -149,6 +149,7 @@ class EquipmentController extends BaseController
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
 			$users = json_decode($userResponse, true);
+			natcasesort($users);
 			
 			//get projects for form dropdown
 			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
@@ -175,7 +176,7 @@ class EquipmentController extends BaseController
 					'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
 					'EquipmentAnnualCalibrationStatus' => $model->EquipmentAnnualCalibrationStatus,
 					'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
-					'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
+					'EquipmentCreatedByUser' => Yii::$app->session['userID'],
 					'EquipmentCreateDate' => $model->EquipmentCreateDate,
 					'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
 					'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
@@ -269,7 +270,8 @@ class EquipmentController extends BaseController
 			//get userIDs for form dropdown
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
-			$users = json_decode($userResponse, true);	 
+			$users = json_decode($userResponse, true);	
+			natcasesort($users);
 
 			//get projects for form dropdown
 			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
@@ -298,7 +300,7 @@ class EquipmentController extends BaseController
 					'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
 					'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
 					'EquipmentCreateDate' => $model->EquipmentCreateDate,
-					'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
+					'EquipmentModifiedBy' => Yii::$app->session['userID'],
 					'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
 					);
 

@@ -154,7 +154,7 @@ class ClientController extends BaseController
 					'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
 					'ClientComment' => $model->ClientComment,
 					'ClientCreateDate' => $model->ClientCreateDate,
-					'ClientCreatorUserID' => $model->ClientCreatorUserID,
+					'ClientCreatorUserID' => Yii::$app->session['userID'],
 					'ClientModifiedDate' => $model->ClientModifiedDate,
 					'ClientModifiedBy' => $model->ClientModifiedBy,
 					);
@@ -252,7 +252,7 @@ class ClientController extends BaseController
 					'ClientCreateDate' => $model->ClientCreateDate,
 					'ClientCreatorUserID' => $model->ClientCreatorUserID,
 					'ClientModifiedDate' => $model->ClientModifiedDate,
-					'ClientModifiedBy' => $model->ClientModifiedBy,
+					'ClientModifiedBy' => Yii::$app->session['userID'],
 					);
 
 				$json_data = json_encode($data);
