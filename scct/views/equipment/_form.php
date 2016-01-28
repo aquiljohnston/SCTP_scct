@@ -25,7 +25,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentSerialNumber', [
-					'label'=>'SerialNumber', 
+					'label'=>'Serial Number', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -61,7 +61,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentManufacturer']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentManufactureYear', [
-					'label'=>'ManufactureYear', 
+					'label'=>'Manufacture Year', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -106,7 +106,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentColor']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentWarrantyDetail', [
-					'label'=>'WarrantyDetail', 
+					'label'=>'Warranty Detail', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -124,7 +124,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentComment']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentClientID', [
-					'label'=>'ClientID', 
+					'label'=>'Client ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -133,7 +133,7 @@ use kartik\form\ActiveForm;
 					])->dropDownList($clients); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentProjectID', [
-					'label'=>'ProjectID', 
+					'label'=>'Project ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -142,7 +142,7 @@ use kartik\form\ActiveForm;
 					])->dropDownList($projects); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentAnnualCalibrationDate', [
-					'label'=>'AnnualCalibrationDate', 
+					'label'=>'Annual Calibration Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -151,7 +151,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentAnnualCalibrationDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentAnnualCalibrationStatus', [
-					'label'=>'AnnualCalibrationStatus', 
+					'label'=>'Annual Calibration Status', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -160,7 +160,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'EquipmentAnnualCalibrationStatus']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentAssignedUserID', [
-					'label'=>'AssignedUserID', 
+					'label'=>'Assigned User ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
