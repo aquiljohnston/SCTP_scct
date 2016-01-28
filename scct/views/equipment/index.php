@@ -26,28 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'EquipmentID',
             'EquipmentName',
             'EquipmentSerialNumber',
             'EquipmentDetails',
             'EquipmentType',
-            // 'EquipmentManufacturer',
-            // 'EquipmentManufactureYear',
-            // 'EquipmentCondition',
-            // 'EquipmentMACID',
-            // 'EquipmentModel',
-            // 'EquipmentColor',
-            // 'EquipmentWarrantyDetail',
-            // 'EquipmentComment',
-            // 'EquipmentClientID',
-            // 'EquipmentProjectID',
-            // 'EquipmentAnnualCalibrationDate',
-            // 'EquipmentAnnualCalibrationStatus',
-            // 'EquipmentAssignedUserID',
-            // 'EquipmentCreatedByUser',
-            // 'EquipmentCreateDate',
-            // 'EquipmentModifiedBy',
-            // 'EquipmentModifiedDate',
 
             ['class' => 'yii\grid\ActionColumn',
 			
