@@ -77,14 +77,99 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCard'))
 		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
+			$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
+			$mileage_entries_url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
+			
 			$response = Parent::executeGetRequest($url);
+			$mileage_entries_response = Parent::executeGetRequest($mileage_entries_url);
+			$dateProvider = json_decode($response, true);
+			$Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
+			$SundayProvider = new ArrayDataProvider([
+				'allModels' => $Sundaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
 			
-			return $this -> render('view', ['model' => json_decode($response, true)]);
+			$Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
+			$MondayProvider = new ArrayDataProvider([
+				'allModels' => $Mondaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
 			
-			// return $this->render('view', [
-				// 'model' => $this->findModel($id),
-			// ]);
+			$Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
+			$TuesdayProvider = new ArrayDataProvider([
+				'allModels' => $Tuesdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
+			$WednesdayProvider = new ArrayDataProvider([
+				'allModels' => $Wednesdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
+			$ThursdayProvider = new ArrayDataProvider([
+				'allModels' => $Thursdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
+			$FridayProvider = new ArrayDataProvider([
+				'allModels' => $Fridaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			
+			$Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
+			$SaturdayProvider = new ArrayDataProvider([
+				'allModels' => $Saturdaydata,
+				'pagination' => [
+					'pageSize' => 10,
+				],
+				// 'sort' => [
+					// 'attributes' => ['id', 'name'],
+				// ],
+			]);
+			return $this -> render('view', [
+											'model' => json_decode($mileage_entries_response, true),
+											'dateProvider' => $dateProvider,
+												'SundayProvider' => $SundayProvider,
+												'MondayProvider' => $MondayProvider,
+												'TuesdayProvider' => $TuesdayProvider,
+												'WednesdayProvider' => $WednesdayProvider,
+												'ThursdayProvider' => $ThursdayProvider,
+												'FridayProvider' => $FridayProvider,
+												'SaturdayProvider' => $SaturdayProvider,
+									]);
 		}
 		else
 		{
@@ -108,18 +193,18 @@ class MileageCardController extends BaseController
 		if (Yii::$app->user->can('createMileageCard'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'MileageCardEmpID', 'MileageCardTechID', 'MileageCardProjectID', 'MileageCardType', 'MileageCardAppStatus', 
+				'MileageCardEmpID', 'MileageCardTechID', 'MileageCardProjectID', 'MileageCardApprovedBy', 
 				'MileageCardCreateDate', 'MileageCardCreatedBy', 'MileageCardModifiedDate', 'MileageCardModifiedBy', 
-				'MileageCardBusinessMiles', 'MileageCardPersonalMiles', 'isNewRecord'
+				'MileageCardBusinessMiles', 'MileageCardPersonalMiles', 'MileageCardApprovedFlag', 'isNewRecord'
 			]);
 			
 			$model->addRule('MileageCardEmpID', 'integer')
 				  ->addRule('MileageCardTechID', 'integer')
 				  ->addRule('MileageCardProjectID', 'integer')
-				  ->addRule('MileageCardAppStatus', 'integer')
 				  ->addRule('MileageCardBusinessMiles', 'integer')
 				  ->addRule('MileageCardPersonalMiles', 'integer')
-				  ->addRule('MileageCardType', 'string')
+				  ->addRule('MileageCardApprovedFlag', 'integer')
+				  ->addRule('MileageCardApprovedBy', 'string')
 				  ->addRule('MileageCardCreatedBy', 'string')
 				  ->addRule('MileageCardModifiedBy', 'string')
 				  ->addRule('MileageCardCreateDate', 'safe')
@@ -137,10 +222,10 @@ class MileageCardController extends BaseController
 					'MileageCardEmpID' => $model->MileageCardEmpID,
 					'MileageCardTechID' => $model->MileageCardTechID,
 					'MileageCardProjectID' => $model->MileageCardProjectID,
-					'MileageCardAppStatus' => $model->MileageCardAppStatus,
 					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
 					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
-					'MileageCardType' => $model->MileageCardType,
+					'MileageCardApprovedFlag' => $model->MileageCardApprovedFlag,
+					'MileageCardApprovedBy' => $model->MileageCardApprovedBy,
 					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
 					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
 					'MileageCardCreateDate' => $model->MileageCardCreateDate,
@@ -198,10 +283,10 @@ class MileageCardController extends BaseController
 			$model->addRule('MileageCardEmpID', 'integer')
 				  ->addRule('MileageCardTechID', 'integer')
 				  ->addRule('MileageCardProjectID', 'integer')
-				  ->addRule('MileageCardAppStatus', 'integer')
 				  ->addRule('MileageCardBusinessMiles', 'integer')
 				  ->addRule('MileageCardPersonalMiles', 'integer')
-				  ->addRule('MileageCardType', 'string')
+				  ->addRule('MileageCardApprovedFlag', 'integer')
+				  ->addRule('MileageCardApprovedBy', 'string')
 				  ->addRule('MileageCardCreatedBy', 'string')
 				  ->addRule('MileageCardModifiedBy', 'string')
 				  ->addRule('MileageCardCreateDate', 'safe')
@@ -213,10 +298,10 @@ class MileageCardController extends BaseController
 					'MileageCardEmpID' => $model->MileageCardEmpID,
 					'MileageCardTechID' => $model->MileageCardTechID,
 					'MileageCardProjectID' => $model->MileageCardProjectID,
-					'MileageCardAppStatus' => $model->MileageCardAppStatus,
 					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
 					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
-					'MileageCardType' => $model->MileageCardType,
+					'MileageCardApprovedFlag' => $model->MileageCardApprovedFlag,
+					'MileageCardApprovedBy' => $model->MileageCardApprovedBy,
 					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
 					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
 					'MileageCardCreateDate' => $model->MileageCardCreateDate,
