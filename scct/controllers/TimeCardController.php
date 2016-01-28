@@ -195,7 +195,8 @@ class TimeCardController extends BaseController
 		{
 			$model = new \yii\base\DynamicModel([
 				'TimeCardStartDate', 'TimeCardEndDate', 'TimeCardCreateDate', 'TimeCardModifiedDate', 'TimeCardHoursWorked', 'TimeCardProjectID', 
-				'TimeCardTechID', 'TimeCardApproved', 'TimeCardSupervisorName', 'TimeCardComment', 'TimeCardCreatedBy', 'TimeCardModifiedBy', 'isNewRecord'
+				'TimeCardTechID', 'TimeCardApprovedBy', 'TimeCardApprovedFlag', 'TimeCardSupervisorName', 'TimeCardComment', 'TimeCardCreatedBy', 
+				'TimeCardModifiedBy', 'isNewRecord'
 			]);
 			
 			$model->addRule('TimeCardStartDate', 'safe')
@@ -205,7 +206,8 @@ class TimeCardController extends BaseController
 				  ->addRule('TimeCardHoursWorked', 'number')
 				  ->addRule('TimeCardProjectID', 'integer')
 				  ->addRule('TimeCardTechID', 'integer')
-				  ->addRule('TimeCardApproved', 'integer')
+				  ->addRule('TimeCardApprovedBy', 'string')
+				  ->addRule('TimeCardApprovedFlag', 'integer')
 				  ->addRule('TimeCardSupervisorName', 'string')
 				  ->addRule('TimeCardComment', 'string')
 				  ->addRule('TimeCardCreatedBy', 'string')
@@ -225,7 +227,8 @@ class TimeCardController extends BaseController
 					'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
 					'TimeCardProjectID' => $model->TimeCardProjectID,
 					'TimeCardTechID' => $model->TimeCardTechID,
-					'TimeCardApproved' => $model->TimeCardApproved,
+					'TimeCardApprovedBy' => $model->TimeCardApprovedBy,
+					'TimeCardApprovedFlag' => $model->TimeCardApprovedFlag,
 					'TimeCardSupervisorName' => $model->TimeCardSupervisorName,
 					'TimeCardComment' => $model->TimeCardComment,
 					'TimeCardCreateDate' => $model->TimeCardCreateDate,
@@ -289,7 +292,8 @@ class TimeCardController extends BaseController
 				  ->addRule('TimeCardHoursWorked', 'number')
 				  ->addRule('TimeCardProjectID', 'integer')
 				  ->addRule('TimeCardTechID', 'integer')
-				  ->addRule('TimeCardApproved', 'integer')
+				  ->addRule('TimeCardApprovedBy', 'string')
+				  ->addRule('TimeCardApprovedFlag', 'integer')
 				  ->addRule('TimeCardSupervisorName', 'string')
 				  ->addRule('TimeCardComment', 'string')
 				  ->addRule('TimeCardCreatedBy', 'string')
@@ -303,7 +307,8 @@ class TimeCardController extends BaseController
 					'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
 					'TimeCardProjectID' => $model->TimeCardProjectID,
 					'TimeCardTechID' => $model->TimeCardTechID,
-					'TimeCardApproved' => $model->TimeCardApproved,
+					'TimeCardApprovedBy' => $model->TimeCardApprovedBy,
+					'TimeCardApprovedFlag' => $model->TimeCardApprovedFlag,
 					'TimeCardSupervisorName' => $model->TimeCardSupervisorName,
 					'TimeCardComment' => $model->TimeCardComment,
 					'TimeCardCreateDate' => $model->TimeCardCreateDate,
