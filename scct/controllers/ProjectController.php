@@ -122,6 +122,13 @@ class ProjectController extends BaseController
 			$clientResponse = Parent::executeGetRequest($clientUrl);
 			$clients = json_decode($clientResponse, true);
 			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+			
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
@@ -152,6 +159,7 @@ class ProjectController extends BaseController
 				return $this->render('create',[
 					'model' => $model,
 					'clients' => $clients,
+					'flag' => $flag,
 					]);
 			}
 		}
@@ -199,6 +207,13 @@ class ProjectController extends BaseController
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
 			$clientResponse = Parent::executeGetRequest($clientUrl);
 			$clients = json_decode($clientResponse, true);
+			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
 				  
 			if ($model->load(Yii::$app->request->post()))
 			{
@@ -229,6 +244,7 @@ class ProjectController extends BaseController
 				return $this->render('update', [
 					'model' => $model,
 					'clients' => $clients,
+					'flag' => $flag,
 				]);
 			} 
 		}

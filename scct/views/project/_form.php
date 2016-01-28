@@ -58,7 +58,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectStatus',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectStatus']); ?>
+					])->dropDownList($flag); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
 					'label'=>'ClientID', 
