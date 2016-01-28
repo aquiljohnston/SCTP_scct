@@ -73,7 +73,7 @@ class LoginController extends BaseController
 			$userIdentity->UserID = $user['AuthUserID'];
 			Yii::$app->user->login($userIdentity);
 			Yii::Trace("identity user id: ".Yii::$app->user->getId());
-            return $this->redirect('index.php?r=home&token='. $user['AuthToken']);
+            return $this->redirect('index.php?r=home');
         }
         return $this->render('index', [
             'model' => $model,
