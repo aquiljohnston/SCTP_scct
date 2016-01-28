@@ -1,9 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\helpers\Url;
 use yii\grid\GridView;
-
+use app\controllers\TimeCard;
+use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\time-card */
 
@@ -29,26 +31,112 @@ $this->params['breadcrumbs'][] = $this->title;
     
 	<!--Sunday TableView-->
 	<h2 class="time_entry_header">Sunday</h2>
+	<?php  
+		Modal::begin([
+				'header' => '<h4>Sunday</h4>',
+				'id' => 'modal',
+				'size' => 'modal-lg',
+		]);
+		
+		echo "<div id='modalContent'></div>";
+		
+		Modal::end();
+	?>
+	<!--p>
+		<?/*= Html::button('Edit', ['value'=>Url::to('index.php?r=time-entry/edit'), 'class' => 'btn btn-success', 'id' => 'modalButton'])*/?>
+	</p-->
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SundayProvider,
 		'columns' => [
-			//'TimeEntryID',
-			//'TimeEntryUserId',
 			'TimeEntryStartTime',
 			'TimeEntryEndTime',
 			'TimeEntryDate',
-			//'TimeEntryTimeCardID',
-			//'TimeEntryActivityID',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
-		]
-	])?>
+			'TimeEntryModifiedBy',
+
+			[   
+				'class' => 'yii\grid\ActionColumn', 
+				'template' => '{view} {update}',
+				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
+					'contentOptions' => ['class' => 'padding-left-5px'],
+
+				'buttons' => [
+					'view' => function ($url, $model, $key) {
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
+								'id' => 'activity-view-link',
+								'title' => Yii::t('yii', 'View'),
+								'data-toggle' => 'modal',
+								'data-target' => '#activity-modal',
+								'data-id' => $key,
+								'data-pjax' => '0',
+
+						]);
+					},
+				],
+			],
+			
+		],
+	]);	
+	?>
+	<?php Pjax::end();?>
+	
+	<?php
+
+	Modal::begin([
+		'header' => '<h4 class="modal-title">Create New</b></h4>',
+		'toggleButton' => ['label' => 'Create New'],
+		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+	]);
+
+	echo 'Say hello...';
+
+	Modal::end();
+	?>
+	<br />     
+
+	<?php $this->registerJs(
+		"$('.activity-view-link').click(function() {
+			$.get(
+				'imgview',         
+				{
+					id: $(this).closest('tr').data('key')
+				},
+				function (data) {
+					$('.modal-body').html(data);
+					$('#activity-modal').modal();
+				}  
+			);
+		});"
+	); ?>
+	
+	<?php Modal::begin([
+		'id' => 'activity-modal',
+		'header' => '<h4 class="modal-title">View</h4>',
+		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+
+	]); ?>
+	
+	<?php Modal::end(); ?>
 	
 	<!--Monday TableView-->
 	<h2 class="time_entry_header">Monday</h2>
+	<?php  
+		Modal::begin([
+				'header' => '<h4>Sunday</h4>',
+				'id' => 'modal',
+				'size' => 'modal-lg',
+		]);
+		
+		echo "<div id='modalContent'></div>";
+		
+		Modal::end();
+	?>
+	
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $MondayProvider,
 		'columns' => [
@@ -59,9 +147,69 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
-		]
+			'TimeEntryModifiedBy',
+			
+			[   
+				'class' => 'yii\grid\ActionColumn', 
+				'template' => '{view} {update}',
+				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
+					'contentOptions' => ['class' => 'padding-left-5px'],
+
+				'buttons' => [
+					'view' => function ($url, $model, $key) {
+						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','apicall', [
+								'id' => 'activity-view-link',
+								'title' => Yii::t('yii', 'View'),
+								'data-toggle' => 'modal',
+								'data-target' => '#activity-modal',
+								'data-id' => $key,
+								'data-pjax' => '0',
+
+						]);
+					},
+				],
+			],
+		],
 	])?>
+	
+	<?php Pjax::end();?>
+	
+	<?php
+
+	Modal::begin([
+		'header' => '<h4 class="modal-title">Create New</b></h4>',
+		'toggleButton' => ['label' => 'Create New'],
+		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+	]);
+
+	echo 'Say hello...';
+
+	Modal::end();
+	?>
+	<br />     
+
+	<?php $this->registerJs(
+		"$('.activity-view-link').click(function() {
+			$.get(
+				'imgview',         
+				{
+					id: $(this).closest('tr').data('key')
+				},
+				function (data) {
+					$('.modal-body').html(data);
+					$('#activity-modal').modal();
+				}  
+			);
+		});"
+	); ?>
+	
+	<?php Modal::begin([
+		'id' => 'activity-modal',
+		'header' => '<h4 class="modal-title">View</h4>',
+		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+
+	]); ?>
+	<?php Modal::end(); ?>
 	
 	<!--Tuesday TableView-->
 	<h2 class="time_entry_header">Tuesday</h2>

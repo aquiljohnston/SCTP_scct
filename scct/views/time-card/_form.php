@@ -16,7 +16,7 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="time_card_form">
 				<?= Html::activeLabel($model, 'TimeCardStartDate', [
-					'label'=>'StartDate', 
+					'label'=>'Start Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -25,7 +25,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardStartDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardEndDate', [
-					'label'=>'EndDate', 
+					'label'=>'End Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -34,7 +34,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardEndDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardHoursWorked', [
-					'label'=>'HoursWorked', 
+					'label'=>'Hours Worked', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -43,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardHoursWorked']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardProjectID', [
-					'label'=>'ProjectID', 
+					'label'=>'Project ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -52,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardProjectID']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardTechID', [
-					'label'=>'TechID', 
+					'label'=>'Tech ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -60,17 +60,8 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'TimeCardTechID']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'TimeCardApproved', [
-					'label'=>'Approved', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'TimeCardApproved',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'TimeCardApproved']); ?>
-				</div>
 				<?= Html::activeLabel($model, 'TimeCardSupervisorName', [
-					'label'=>'SupervisorName', 
+					'label'=>'Supervisor Name', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -88,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardComment']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardCreateDate', [
-					'label'=>'CreateDate', 
+					'label'=>'Create Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -97,7 +88,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardCreateDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardCreatedBy', [
-					'label'=>'CreatedBy', 
+					'label'=>'Created By', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -106,7 +97,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardCreatedBy']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardModifiedDate', [
-					'label'=>'ModifiedDate', 
+					'label'=>'Modified Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -115,7 +106,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'TimeCardModifiedDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'TimeCardModifiedBy', [
-					'label'=>'ModifiedBy', 
+					'label'=>'Modified By', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">

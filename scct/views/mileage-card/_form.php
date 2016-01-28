@@ -16,7 +16,7 @@ use kartik\form\ActiveForm;
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="mileage_card_form">
 				<?= Html::activeLabel($model, 'MileageCardTechID', [
-					'label'=>'TechID', 
+					'label'=>'Tech ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -25,7 +25,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardTechID']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardProjectID', [
-					'label'=>'ProjectID', 
+					'label'=>'Project ID', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -33,26 +33,8 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'MileageCardProjectID']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'MileageCardType', [
-					'label'=>'Type', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'MileageCardType',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileageCardType']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'MileageCardAppStatus', [
-					'label'=>'AppStatus', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'MileageCardAppStatus',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileageCardAppStatus']); ?>
-				</div>
 				<?= Html::activeLabel($model, 'MileageCardCreateDate', [
-					'label'=>'CreateDate', 
+					'label'=>'Create Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -61,7 +43,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardCreateDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardCreatedBy', [
-					'label'=>'CreatedBy', 
+					'label'=>'Created By', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -70,7 +52,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardCreatedBy']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardModifiedDate', [
-					'label'=>'ModifiedDate', 
+					'label'=>'Modified Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -79,7 +61,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardModifiedDate']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardModifiedBy', [
-					'label'=>'ModifiedBy', 
+					'label'=>'Modified By', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -88,7 +70,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardModifiedBy']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardBusinessMiles', [
-					'label'=>'BusinessMiles', 
+					'label'=>'Business Miles', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -97,7 +79,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'MileageCardBusinessMiles']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'MileageCardPersonalMiles', [
-					'label'=>'PersonalMiles', 
+					'label'=>'Personal Miles', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
