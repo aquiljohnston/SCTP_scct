@@ -58,9 +58,9 @@ AppAsset::register($this);
 			<?php $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->session['userID']);?>
 			<?php $role = current($userRole);?>
 			<?php Yii::Trace("Session userID is : ".$role->name);?>
-			<?php if(($role->name) == "admin"){?>
+			<?php if(($role->name) == "Admin"){?>
 					<div class="adminMenu sc_megamenu"></div>
-			<?php }else if (($role->name) == "projectManager"){ ?>
+			<?php }else if (($role->name) == "ProjectManager"){ ?>
 					<div class="menu sc_megamenu"></div>
 			<?php }else{ ?>
 					<div class="menu sc_megamenu"></div>
