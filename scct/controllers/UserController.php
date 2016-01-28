@@ -295,6 +295,16 @@ class UserController extends BaseController
 					'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
 					'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
 					);
+					
+				//iv and secret key of openssl
+				$iv = "abcdefghijklmnop";
+				$secretKey= "sparusholdings12";
+				
+				//encrypt and encode password
+				$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+				$encodedKey = base64_encode($encryptedKey);
+				
+				$data['UserKey'] = $encodedKey;
 			
 				$json_data = json_encode($data);
 				
@@ -307,6 +317,7 @@ class UserController extends BaseController
 				$auth = Yii::$app->authManager;
 				if($userRole = $auth->getRole($obj["UserAppRoleType"]))
 				{
+					$auth->revokeAll($obj["UserID"]);
 					$auth->assign($userRole, $obj["UserID"]);
 				}
 				
