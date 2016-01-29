@@ -50,7 +50,13 @@ class LoginController extends BaseController
 
     public function actionIndex()
     {
-        return $this->redirect(['login']);
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}else{
+			return $this->redirect('index.php?r=home');
+		}
 
         // $model = new LoginForm();
         // return $this->render('index', [
