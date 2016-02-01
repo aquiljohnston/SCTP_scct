@@ -13,3 +13,12 @@
 .white_space {
 	margin-top: 3%;
 }
+#modalContent .wrap #top-wrapper{
+	display: none;
+}
+#modalContent .container{
+	padding: 10px 15px 20px;
+}
+.approve{
+	margin-top: 0;
+}
