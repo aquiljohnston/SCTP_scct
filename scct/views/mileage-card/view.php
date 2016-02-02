@@ -19,18 +19,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Update', ['update', 'id' => $model['MileageCardID']], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model['MileageCardID']], [
-            'class' => 'btn btn-danger',
+        <?= Html::a('Approve', ['approve', 'id' => $model["TimeCardID"]], [
+            'class' => 'btn btn-success approve',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'delete',
+                'confirm' => 'Are you sure you want to approve this item?',
             ],
         ]) ?>
     </p>
 	
 	<!--Sunday TableView-->
-	<h2 class="time_entry_header">Sunday</h2>
+	<h2 class="mileage_entry_header">Sunday</h2>
 	<?php  
 		Modal::begin([
 				'header' => '<h4>Sunday</h4>',
