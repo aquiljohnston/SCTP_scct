@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'TimeCardEndDate',
             'TimeCardHoursWorked',
             'TimeCardApproved:datetime',
+			'TimeCardHoursWorked',
             /*'TimeCardSupervisorName',
             'TimeCardComment',
             'TimeCardCreateDate',*/
