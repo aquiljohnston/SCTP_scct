@@ -29,21 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
     
 	<!--Sunday TableView-->
 	<h2 class="time_entry_header">Sunday</h2>
-	<?php  
-		Modal::begin([
-				'header' => '<h4>Sunday</h4>',
-				'id' => 'modal_Sunday',
-				'size' => 'modal-lg',
-		]);
-		
-		echo "<div id='modalContent'></div>";
-		
-		Modal::end();
-	?>
-	<!--p>
-		<?/*= Html::button('Edit', ['value'=>Url::to('index.php?r=time-entry/edit'), 'class' => 'btn btn-success', 'id' => 'modalButton'])*/?>
-	</p-->
-	<?php Pjax::begin(); ?>
+
+	<?php Pjax::begin(['id'=>'SundayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SundayProvider,
 		'columns' => [
@@ -56,69 +43,79 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryModifiedDate',
 			'TimeEntryModifiedBy',
 
-			[   
-				'class' => 'yii\grid\ActionColumn', 
-				'template' => '{view} {update}',
-				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
-					'contentOptions' => ['class' => 'padding-left-5px'],
+			// [   
+				// 'class' => 'yii\grid\ActionColumn', 
+				// 'template' => '{view} {update}',
+				// 'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
+					// 'contentOptions' => ['class' => 'padding-left-5px'],
 
-				'buttons' => [
-					'view' => function ($url, $model, $key) {
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
-								'id' => 'activity-view-link',
-								'title' => Yii::t('yii', 'View'),
-								'data-toggle' => 'modal',
-								'data-target' => '#activity-modal',
-								'data-id' => $key,
-								'data-pjax' => '0',
+				// 'buttons' => [
+					// 'view' => function ($url, $model, $key) {
+						// return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
+								// 'id' => 'activity-view-link',
+								// 'title' => Yii::t('yii', 'View'),
+								// 'data-toggle' => 'modal',
+								// 'data-target' => '#activity-modal',
+								// 'data-id' => $key,
+								// 'data-pjax' => '0',
 
-						]);
-					},
-				],
-			],
+						// ]);
+					// },
+				// ],
+			// ],
 			
 		],
 	]);	
 	?>
 	<?php Pjax::end();?>
 	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
+	</p>
+	
 	<?php
+		Modal::begin([
+			'header' => '<h4>Sunday</h4>',
+			'id' => 'modalSunday',
+			'size' => 'modal-lg',
+		]);
 
-	Modal::begin([
-		'header' => '<h4 class="modal-title">Create New</b></h4>',
-		'toggleButton' => ['label' => 'Create New'],
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
-	]);
+		echo "<div id='modalContentSunday'></div>";
 
-	echo 'Say hello...';
-
-	Modal::end();
+		Modal::end();
 	?>
 	<br />     
 
-	<?php $this->registerJs(
-		"$('.activity-view-link').click(function() {
-			$.get(
-				'imgview',         
-				{
-					id: $(this).closest('tr').data('key')
-				},
-				function (data) {
-					$('.modal-body').html(data);
-					$('#activity-modal').modal();
-				}  
-			);
-		});"
-	); ?>
-	
-	<?php Modal::begin([
-		'id' => 'activity-modal',
-		'header' => '<h4 class="modal-title">View</h4>',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+	<?php  
 
-	]); ?>
-	
-	<?php Modal::end(); ?>
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#SundayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalSunday").modal("toggle");
+								$.pjax.reload({container:"#SundayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
 	
 	<!--Monday TableView-->
 	<h2 class="time_entry_header">Monday</h2>
@@ -135,60 +132,29 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
 			'TimeEntryModifiedBy',			
-			[   
-				'class' => 'yii\grid\ActionColumn', 
-				'template' => '{view} {update}',
-				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
-					'contentOptions' => ['class' => 'padding-left-5px'],
-
-				'buttons' => [
-					'view' => function ($url, $model, $key) {
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','apicall', [
-								'id' => 'activity-view-link',
-								'title' => Yii::t('yii', 'View'),
-								'data-toggle' => 'modal',
-								'data-target' => '#activity-modal',
-								'data-id' => $key,
-								'data-pjax' => '0',
-
-						]);
-					},
-				],
-			],
 		],
 	])?>
 	
 	<?php Pjax::end();?>
 	
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
 	</p>
 	
 	<?php
 		Modal::begin([
 			'header' => '<h4>Monday</h4>',
-			'id' => 'modal',
+			'id' => 'modalMonday',
 			'size' => 'modal-lg',
-			'toggleButton' => ['label' => 'Create New'],
-			//'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
 		]);
 
-		echo "<div id='modalContent'></div>";
+		echo "<div id='modalContentMonday'></div>";
 
 		Modal::end();
 	?>
 	<br />     
 
 	<?php  
-		$this->registerJs(
-        "$(document).on('ready pjax:success', function() {
-                $('.modalButton').click(function(e){
-                   e.preventDefault(); //for prevent default behavior of <a> tag.
-                   var tagname = $(this)[0].tagName;
-                   $('#modal').modal('show').find('.modalContent').load($(this).attr('href'));
-               });
-            });
-        ");
 
         // JS: Update response handling
         $this->registerJs(
@@ -206,7 +172,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							type   : "post",
 							data   : form.serialize(),
 							success: function (response) {
-								$("#modal").modal("toggle");
+								$("#modalMonday").modal("toggle");
 								$.pjax.reload({container:"#MondayEntry"}); //for pjax update
 							},
 							error  : function () {
@@ -214,21 +180,15 @@ $this->params['breadcrumbs'][] = $this->title;
 							}
 						});
 						return false;
-					 });
 					});
-					});'
-			); ?>
-	
-	<?php Modal::begin([
-		'id' => 'activity-modal',
-		'header' => '<h4 class="modal-title">View</h4>',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
-
-	]); ?>
-	<?php Modal::end(); ?>
+				});
+			});'
+		); ?>
 	
 	<!--Tuesday TableView-->
 	<h2 class="time_entry_header">Tuesday</h2>
+	
+	<?php Pjax::begin(['id'=>'TuesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $TuesdayProvider,
 		'columns' => [
@@ -243,8 +203,60 @@ $this->params['breadcrumbs'][] = $this->title;
 		]
 	])?>
 	
+	<?php Pjax::end();?>
+	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
+	</p>
+	
+	<?php
+		Modal::begin([
+			'header' => '<h4>Tuesday</h4>',
+			'id' => 'modalTuesday',
+			'size' => 'modal-lg',
+		]);
+
+		echo "<div id='modalContentTuesday'></div>";
+
+		Modal::end();
+	?>
+	<br />     
+
+	<?php  
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#TuesdayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalTuesday").modal("toggle");
+								$.pjax.reload({container:"#TuesdayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
+	
 	<!--Wednesday TableView-->
 	<h2 class="time_entry_header">Wednesday</h2>
+	
+	<?php Pjax::begin(['id'=>'WednesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $WednesdayProvider,
 		'columns' => [
@@ -259,8 +271,60 @@ $this->params['breadcrumbs'][] = $this->title;
 		]
 	])?>
 	
+	<?php Pjax::end();?>
+	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
+	</p>
+	
+	<?php
+		Modal::begin([
+			'header' => '<h4>Wednesday</h4>',
+			'id' => 'modalWednesday',
+			'size' => 'modal-lg',
+		]);
+
+		echo "<div id='modalContentWednesday'></div>";
+
+		Modal::end();
+	?>
+	<br />     
+
+	<?php  
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#WednesdayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalWednesday").modal("toggle");
+								$.pjax.reload({container:"#WednesdayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
+	
 	<!--Thursday TableView-->
 	<h2 class="time_entry_header">Thursday</h2>
+	
+	<?php Pjax::begin(['id'=>'ThursdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $ThursdayProvider,
 		'columns' => [
@@ -275,8 +339,60 @@ $this->params['breadcrumbs'][] = $this->title;
 		]
 	])?>
 	
+	<?php Pjax::end();?>
+	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
+	</p>
+	
+	<?php
+		Modal::begin([
+			'header' => '<h4>Thursday</h4>',
+			'id' => 'modalThursday',
+			'size' => 'modal-lg',
+		]);
+
+		echo "<div id='modalContentThursday'></div>";
+
+		Modal::end();
+	?>
+	<br />     
+
+	<?php  
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#ThursdayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalThursday").modal("toggle");
+								$.pjax.reload({container:"#ThursdayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+	); ?>
+	
 	<!--Friday TableView-->
 	<h2 class="time_entry_header">Friday</h2>
+	
+	<?php Pjax::begin(['id'=>'FridayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $FridayProvider,
 		'columns' => [
@@ -291,8 +407,60 @@ $this->params['breadcrumbs'][] = $this->title;
 		]
 	])?>
 	
+	<?php Pjax::end();?>
+	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
+	</p>
+	
+	<?php
+		Modal::begin([
+			'header' => '<h4>Friday</h4>',
+			'id' => 'modalFriday',
+			'size' => 'modal-lg',
+		]);
+
+		echo "<div id='modalContentFriday'></div>";
+
+		Modal::end();
+	?>
+	<br />     
+
+	<?php  
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#FridayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalFriday").modal("toggle");
+								$.pjax.reload({container:"#FridayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
+	
 	<!--Saturday TableView-->
 	<h2 class="time_entry_header">Saturday</h2>
+	
+	<?php Pjax::begin(['id'=>'SaturdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SaturdayProvider,
 		'columns' => [
@@ -306,5 +474,55 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryModifiedBy'
 		]
 	])?>
+	
+	<?php Pjax::end();?>
+	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
+	</p>
+	
+	<?php
+		Modal::begin([
+			'header' => '<h4>Saturday</h4>',
+			'id' => 'modalSaturday',
+			'size' => 'modal-lg',
+		]);
+
+		echo "<div id='modalContentSaturday'></div>";
+
+		Modal::end();
+	?>
+	<br />     
+
+	<?php  
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#SaturdayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalSaturday").modal("toggle");
+								$.pjax.reload({container:"#SaturdayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
 
 </div>
