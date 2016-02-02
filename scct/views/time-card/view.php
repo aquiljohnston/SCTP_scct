@@ -19,12 +19,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
    <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Update', ['update', 'id' => $model["TimeCardID"]], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model["TimeCardID"]], [
-            'class' => 'btn btn-danger',
+		<?= Html::a('Approve', ['approve', 'id' => $model["TimeCardID"]], [
+            'class' => 'btn btn-success approve',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'delete',
+                'confirm' => 'Are you sure you want to approve this item?',
             ],
         ]) ?>
     </p>
@@ -34,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php  
 		Modal::begin([
 				'header' => '<h4>Sunday</h4>',
-				'id' => 'modal',
+				'id' => 'modal_Sunday',
 				'size' => 'modal-lg',
 		]);
 		
@@ -124,19 +122,8 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<!--Monday TableView-->
 	<h2 class="time_entry_header">Monday</h2>
-	<?php  
-		Modal::begin([
-				'header' => '<h4>Sunday</h4>',
-				'id' => 'modal',
-				'size' => 'modal-lg',
-		]);
-		
-		echo "<div id='modalContent'></div>";
-		
-		Modal::end();
-	?>
 	
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'MondayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $MondayProvider,
 		'columns' => [
@@ -147,8 +134,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			
+			'TimeEntryModifiedBy',			
 			[   
 				'class' => 'yii\grid\ActionColumn', 
 				'template' => '{view} {update}',
@@ -174,34 +160,64 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<p>
+		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButton']) ?>
+	</p>
+	
 	<?php
+		Modal::begin([
+			'header' => '<h4>Monday</h4>',
+			'id' => 'modal',
+			'size' => 'modal-lg',
+			'toggleButton' => ['label' => 'Create New'],
+			//'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+		]);
 
-	Modal::begin([
-		'header' => '<h4 class="modal-title">Create New</b></h4>',
-		'toggleButton' => ['label' => 'Create New'],
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
-	]);
+		echo "<div id='modalContent'></div>";
 
-	echo 'Say hello...';
-
-	Modal::end();
+		Modal::end();
 	?>
 	<br />     
 
-	<?php $this->registerJs(
-		"$('.activity-view-link').click(function() {
-			$.get(
-				'imgview',         
-				{
-					id: $(this).closest('tr').data('key')
-				},
-				function (data) {
-					$('.modal-body').html(data);
-					$('#activity-modal').modal();
-				}  
-			);
-		});"
-	); ?>
+	<?php  
+		$this->registerJs(
+        "$(document).on('ready pjax:success', function() {
+                $('.modalButton').click(function(e){
+                   e.preventDefault(); //for prevent default behavior of <a> tag.
+                   var tagname = $(this)[0].tagName;
+                   $('#modal').modal('show').find('.modalContent').load($(this).attr('href'));
+               });
+            });
+        ");
+
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#MondayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modal").modal("toggle");
+								$.pjax.reload({container:"#MondayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					 });
+					});
+					});'
+			); ?>
 	
 	<?php Modal::begin([
 		'id' => 'activity-modal',
