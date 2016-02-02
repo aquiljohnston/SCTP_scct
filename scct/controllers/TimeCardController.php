@@ -177,7 +177,33 @@ class TimeCardController extends BaseController
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
+	
+	/**
+     * Displays a single TimeEntry model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionViewTE($id)
+    {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+		//RBAC permissions check
+		if (Yii::$app->user->can('viewTimeEntry'))
+		{
+			$url = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fview&id='.$id;
+			$response = Parent::executeGetRequest($url);
 
+			return $this -> render('view', ['model' => json_decode($response), true]);
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
+    }
+	
     /**
      * Creates a new TimeCard model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -264,6 +290,85 @@ class TimeCardController extends BaseController
 		}
     }
 
+	/**
+     * Creates a new TimeEntry model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+	public function actionCreatee()
+    {
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+		//RBAC permissions check
+		if (Yii::$app->user->can('createTimeCard'))
+		{
+			$model = new \yii\base\DynamicModel([
+				'TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
+				'TimeEntryUserID', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 
+				'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
+			]);
+			
+			$model->addRule('TimeEntryStartTime', 'safe')
+				  ->addRule('TimeEntryEndTime', 'safe')
+				  ->addRule('TimeEntryDate', 'safe')
+				  ->addRule('TimeEntryCreateDate', 'safe')
+				  ->addRule('TimeEntryModifiedDate', 'safe')
+				  ->addRule('TimeEntryUserID', 'integer')
+				  ->addRule('TimeEntryTimeCardID', 'integer')
+				  ->addRule('TimeEntryActivityID', 'integer')
+				  ->addRule('TimeEntryComment', 'string')
+				  ->addRule('TimeEntryCreatedBy', 'string')
+				  ->addRule('TimeEntryModifiedBy', 'string');
+			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+			
+			if ($model->load(Yii::$app->request->post())) {
+				
+				$data = array(
+					'TimeEntryStartTime' => $model->TimeEntryStartTime,
+					'TimeEntryEndTime' => $model->TimeEntryEndTime,
+					'TimeEntryDate' => $model->TimeEntryDate,
+					'TimeEntryCreateDate' => $model->TimeEntryCreateDate,
+					'TimeEntryModifiedDate' => $model->TimeEntryModifiedDate,
+					'TimeEntryUserID' => $model->TimeEntryUserID,
+					'TimeEntryTimeCardID' => $model->TimeEntryTimeCardID,
+					'TimeEntryActivityID' => $model->TimeEntryActivityID,
+					'TimeEntryComment' => $model->TimeEntryComment,
+					'TimeEntryCreatedBy' => $model->TimeEntryCreatedBy,
+					'TimeEntryModifiedBy' => $model->TimeEntryModifiedBy,
+				);
+				
+				$json_data = json_encode($data);	
+
+				// post url
+				$url_send = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fcreate';				
+				$response = Parent::executePostRequest($url_send, $json_data);
+				$obj = json_decode($response, true);
+				//var_dump($obj["TimeEntryTimeCardID"]);
+
+				//return $this->redirect(['view', 'id' => 56]);
+				return $this->redirect(['index']);
+			} else {
+				return $this->render('create_time_entry', [
+					'model' => $model,
+					'flag' => $flag,
+				]);
+			}
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
+    }
+	
     /**
      * Updates an existing TimeCard model.
      * If update is successful, the browser will be redirected to the 'view' page.
