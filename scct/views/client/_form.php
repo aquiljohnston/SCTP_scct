@@ -15,6 +15,15 @@ use kartik\form\ActiveForm;
 				'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="client_form">
+				<?= Html::activeLabel($model, 'ClientAccountID', [
+					'label'=>'AccountID', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'ClientAccountID',[
+						'showLabels'=>false
+					])->dropDownList($clientAccounts); ?>
+				</div>
 				<?= Html::activeLabel($model, 'ClientName', [
 					'label'=>'Name', 
 					'class'=>'col-sm-2 control-label'

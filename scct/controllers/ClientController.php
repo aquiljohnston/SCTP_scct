@@ -100,13 +100,14 @@ class ClientController extends BaseController
 		if (Yii::$app->user->can('createClient'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone',
+				'ClientAccountID', 'ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone',
 				'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4',
 				'ClientTerritory', 'ClientActiveFlag', 'ClientDivisionsFlag', 'ClientComment', 'ClientCreateDate',
 				'ClientCreatorUserID', 'ClientModifiedDate', 'ClientModifiedBy', 'isNewRecord'
 			]);
 			
-			$model->addRule('ClientName', 'string')			  
+			$model->addRule('ClientAccountID', 'integer')
+				  ->addRule('ClientName', 'string')	
 				  ->addRule('ClientContactTitle', 'string')
 				  ->addRule('ClientContactFName', 'string')
 				  ->addRule('ClientContactMI', 'string')
@@ -133,10 +134,16 @@ class ClientController extends BaseController
 				1 => "Active",
 				0 => "Inactive",
 			];
+			
+			//get clients for form dropdown
+			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
+			$clientAccounts = json_decode($clientAccountsResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
+					'ClientAccountID' => $model->ClientAccountID,
 					'ClientName' => $model->ClientName,
 					'ClientContactTitle' => $model->ClientContactTitle,
 					'ClientContactFName' => $model->ClientContactFName,
@@ -172,6 +179,7 @@ class ClientController extends BaseController
 				return $this->render('create',[
 					'model' => $model,
 					'flag' => $flag,
+					'clientAccounts' => $clientAccounts,
 					]);
 			}
 		}
@@ -202,7 +210,8 @@ class ClientController extends BaseController
 
 			$model = new \yii\base\DynamicModel($getResponse);
 			
-			$model->addRule('ClientName', 'string')			  
+			$model->addRule('ClientAccountID', 'integer')
+				  ->addRule('ClientName', 'string')			  
 				  ->addRule('ClientContactTitle', 'string')
 				  ->addRule('ClientContactFName', 'string')
 				  ->addRule('ClientContactMI', 'string')
@@ -229,10 +238,16 @@ class ClientController extends BaseController
 				1 => "Active",
 				0 => "Inactive",
 			];
+			
+			//get clients for form dropdown
+			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
+			$clientAccounts = json_decode($clientAccountsResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data =array(
+					'ClientAccountID' => $model->ClientAccountID,
 					'ClientName' => $model->ClientName,
 					'ClientContactTitle' => $model->ClientContactTitle,
 					'ClientContactFName' => $model->ClientContactFName,
@@ -267,6 +282,7 @@ class ClientController extends BaseController
 				return $this->render('update', [
 					'model' => $model,
 					'flag' => $flag,
+					'clientAccounts' => $clientAccounts,
 				]);
 			} 
 		}
