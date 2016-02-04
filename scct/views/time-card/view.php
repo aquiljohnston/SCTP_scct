@@ -17,16 +17,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-   <p>
+	<?php 
+			$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+	?>
+	<p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-		<?= Html::a('Approve', ['approve', 'id' => $model["TimeCardID"]], [
-            'class' => 'btn btn-success approve',
-            'data' => [
-                'confirm' => 'Are you sure you want to approve this item?',
-            ],
-        ]) ?>
-    </p>
-    
+		<?= Html::a('Approve', $approveUrl, [
+											 'class' => 'btn btn-primary', 
+											 'data' => [
+														'confirm' => 'Are you sure you want to approve this item?']
+													])?>
+	</p>
+
 	<!--Sunday TableView-->
 	<h2 class="time_entry_header">Sunday</h2>
 
@@ -69,8 +71,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<?php Pjax::end();?>
 	
+	<?php 
+			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
 	</p>
 	
 	<?php
@@ -137,8 +142,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
+		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
 	</p>
 	
 	<?php
@@ -205,8 +213,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
+		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
 	</p>
 	
 	<?php
@@ -273,8 +284,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
+		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
 	</p>
 	
 	<?php
@@ -341,8 +355,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
+		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
 	</p>
 	
 	<?php
@@ -409,8 +426,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
+		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
 	</p>
 	
 	<?php
@@ -477,8 +497,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<?php Pjax::end();?>
 	
+	<?php 
+			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>Url::to('index.php?r=time-card/createe'), 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
+		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
 	</p>
 	
 	<?php

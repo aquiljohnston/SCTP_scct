@@ -295,7 +295,7 @@ class TimeCardController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-	public function actionCreatee()
+	public function actionCreatee($id)
     {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -339,7 +339,7 @@ class TimeCardController extends BaseController
 					'TimeEntryCreateDate' => $model->TimeEntryCreateDate,
 					'TimeEntryModifiedDate' => $model->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $model->TimeEntryUserID,
-					'TimeEntryTimeCardID' => $model->TimeEntryTimeCardID,
+					'TimeEntryTimeCardID' => $id,
 					'TimeEntryActivityID' => $model->TimeEntryActivityID,
 					'TimeEntryComment' => $model->TimeEntryComment,
 					'TimeEntryCreatedBy' => $model->TimeEntryCreatedBy,
@@ -352,10 +352,8 @@ class TimeCardController extends BaseController
 				$url_send = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fcreate';				
 				$response = Parent::executePostRequest($url_send, $json_data);
 				$obj = json_decode($response, true);
-				//var_dump($obj["TimeEntryTimeCardID"]);
-
-				//return $this->redirect(['view', 'id' => 56]);
-				return $this->redirect(['index']);
+				
+				return $this->redirect(['view', 'id' => $obj["TimeEntryTimeCardID"]]);
 			} else {
 				return $this->render('create_time_entry', [
 					'model' => $model,
@@ -370,6 +368,34 @@ class TimeCardController extends BaseController
     }
 	
     /**
+     * Approve an existing TimeCard.
+     * If approve is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+	public function actionApprove($id){
+		//guest redirect
+		if(Yii::$app->user->isGuest){
+			return $this->redirect(['login/login']);
+		}
+			$cardIDArray[] = $id;
+			
+			$data = array(
+				'approvedByID' => Yii::$app->session['userID'],
+				'cardIDArray' => $cardIDArray,
+			);
+			Yii::Trace("approvedByID is : ".$id);
+			$json_data = json_encode($data);
+			
+			// post url
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-time-cards';
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			$obj = json_decode($putResponse, true);
+			$responseTimeCardID = $obj[0]["TimeCardID"];
+			return $this->redirect(['view', 'id' => $responseTimeCardID]);
+	}
+	
+	/**
      * Updates an existing TimeCard model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
