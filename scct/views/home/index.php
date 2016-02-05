@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h3><?= Html::encode($this->title) ?></h3>
 
     <p>
-        <?= Html::a('Home', ['index'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Home', ['index'], ['class' => 'btn btn-success', 'id' => 'home_btn']) ?>
     </p>
 
 </div>
