@@ -44,6 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
 			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 
 			// [   
 				// 'class' => 'yii\grid\ActionColumn', 
@@ -136,7 +137,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',			
+			'TimeEntryModifiedBy',	
+			'TimeEntryMinutes',			
 		],
 	])?>
 	
@@ -207,7 +209,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
+			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 		]
 	])?>
 	
@@ -278,7 +281,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
+			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 		]
 	])?>
 	
@@ -349,7 +353,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
+			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 		]
 	])?>
 	
@@ -420,7 +425,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
+			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 		]
 	])?>
 	
@@ -491,7 +497,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
 			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy'
+			'TimeEntryModifiedBy',
+			'TimeEntryMinutes',
 		]
 	])?>
 	
