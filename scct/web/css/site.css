@@ -103,6 +103,9 @@ a.desc:after {
 	float: left;
 	margin-bottom: .5%;
 }
+.sc_logout_logo {
+	margin-bottom: .5%;
+}
 #logout_btn{
 	float: right;
 	margin-top: 20px;
