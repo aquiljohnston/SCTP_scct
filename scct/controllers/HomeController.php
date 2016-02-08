@@ -31,7 +31,11 @@ class HomeController extends Controller
      */
     public function actionIndex()
     {
+		if(Yii::$app->user->isGuest){
+			return $this->redirect(['login/login']);			
+		}else{
 			return $this->render('index');
+		}
     }
 
     /**
