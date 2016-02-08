@@ -35,7 +35,7 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-all";
+			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-mileage-cards-current-week";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
