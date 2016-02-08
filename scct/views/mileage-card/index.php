@@ -24,10 +24,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'MileageCardEmpID',
+			'UserFirstName',
+			'UserLastName',
+			'MileageStartDate',
+			'MileageEndDate',
+			'MileageCardBusinessMiles',
+			'MileageCardApproved',
+            /*'MileageCardEmpID',
             'MileageCardTechID',
             'MileageCardProjectID',
-            'MileageCardType',
+            'MileageCardType',*/
 
             //['class' => 'yii\grid\ActionColumn'],
 			
