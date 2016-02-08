@@ -24,7 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'TimeCardStartDate',
+            'TimeCardID',
+			'UserFirstName',
+			'UserLastName',
+			'TimeCardStartDate',
+			'TimeCardEndDate',
+			'TimeCardHoursWorked',
+			'TimeCardApproved',
+			/*'TimeCardStartDate',
             'TimeCardEndDate',
             'TimeCardHoursWorked',
             'TimeCardApproved:datetime',
