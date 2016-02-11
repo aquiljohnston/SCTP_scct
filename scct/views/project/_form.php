@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
+use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\project */
@@ -70,13 +71,19 @@ use kartik\form\ActiveForm;
 					])->dropDownList($clients); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectStartDate', [
-					'label'=>'StartDate', 
+					'label'=>'Start Date', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectStartDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectStartDate']); ?>
+					'showLabels'=>false
+					])->widget(DateTimePicker::classname(),[
+						'options' => ['placeholder' => 'Enter time...'],
+						'pluginOptions' => [
+							'autoclose' => true,
+							'format' => 'yyyy-mm-dd hh:ii:ss'
+						]
+					]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectEndDate', [
 					'label'=>'EndDate', 
@@ -84,8 +91,14 @@ use kartik\form\ActiveForm;
 				]) ?>
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectEndDate',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectEndDate']); ?>
+					'showLabels'=>false
+					])->widget(DateTimePicker::classname(),[
+						'options' => ['placeholder' => 'Enter time...'],
+						'pluginOptions' => [
+							'autoclose' => true,
+							'format' => 'yyyy-mm-dd hh:ii:ss'
+						]
+					]); ?>
 				</div>
 			</div>
 
