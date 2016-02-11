@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'UserID',
             'UserName',
             'UserFirstName',
             'UserLastName',
@@ -39,15 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'UserCompanyPhone',
             'UserAppRoleType',
             'UserComments',
-            'UserKey',
             'UserActiveFlag',
-            'UserCreatedDate',
-            'UserModifiedDate',
-            'UserCreatedBy',
-            'UserModifiedBy',
-            'UserCreateDTLTOffset',
-            'UserModifiedDTLTOffset',
-            'UserInactiveDTLTOffset',
         ],
     ]) ?>
 
