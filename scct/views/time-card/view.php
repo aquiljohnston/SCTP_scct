@@ -42,9 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 
 			// [   
 				// 'class' => 'yii\grid\ActionColumn', 
@@ -77,6 +75,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
+		 
+		<?php	if($Total_Hours_Sun != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Sun?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?> 
 	</p>
 	
 	<?php
@@ -136,10 +140,9 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',	
-			'TimeEntryMinutes',			
+			'TimeEntryHours',
 		],
+		'showFooter' => true,
 	])?>
 	
 	<?php Pjax::end();?>
@@ -149,6 +152,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
+
+		<?php	if($Total_Hours_Mon != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Mon?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?> 
 	</p>
 	
 	<?php
@@ -208,9 +217,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 		]
 	])?>
 	
@@ -221,6 +228,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
+
+		<?php	if($Total_Hours_Tue != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Tue?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?> 
 	</p>
 	
 	<?php
@@ -280,9 +293,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 		]
 	])?>
 	
@@ -293,6 +304,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
+		
+		<?php	if($Total_Hours_Wed != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Wed?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?> 
 	</p>
 	
 	<?php
@@ -352,9 +369,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 		]
 	])?>
 	
@@ -365,6 +380,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
+		
+		<?php	if($Total_Hours_Thu != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Thu?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?>
 	</p>
 	
 	<?php
@@ -424,9 +445,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 		]
 	])?>
 	
@@ -437,6 +456,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
+		
+		<?php	if($Total_Hours_Fri != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Fri?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?>
 	</p>
 	
 	<?php
@@ -496,9 +521,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
 			'TimeEntryCreateBy',
-			'TimeEntryModifiedDate',
-			'TimeEntryModifiedBy',
-			'TimeEntryMinutes',
+			'TimeEntryHours',
 		]
 	])?>
 	
@@ -509,6 +532,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
+		
+		<?php	if($Total_Hours_Sat != 0){ ?>
+						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Sat?></span>
+		<?php	}else{ ?>
+						<span class="no_totalhours"></span>
+		<?php   } ?>
 	</p>
 	
 	<?php

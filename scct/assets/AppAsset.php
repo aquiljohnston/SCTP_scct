@@ -35,6 +35,7 @@ class AppAsset extends AssetBundle
 		'js/footer.js',
 		'js/logout_btn.js',
 		'js/time_entry_modal.js',
+		'js/mileage_entry_modal.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

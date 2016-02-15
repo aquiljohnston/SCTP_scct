@@ -17,32 +17,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+	<?php 
+			$approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model["MileageCardID"]]));
+	?>
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Approve', ['approve', 'id' => $model["TimeCardID"]], [
-            'class' => 'btn btn-success approve',
-            'data' => [
-                'confirm' => 'Are you sure you want to approve this item?',
-            ],
-        ]) ?>
+        <?= Html::a('Approve', $approveUrl, [
+											 'class' => 'btn btn-primary', 
+											 'data' => [
+														'confirm' => 'Are you sure you want to approve this item?']
+													])?>
     </p>
 	
 	<!--Sunday TableView-->
 	<h2 class="mileage_entry_header">Sunday</h2>
-	<?php  
-		Modal::begin([
-				'header' => '<h4>Sunday</h4>',
-				'id' => 'modal',
-				'size' => 'modal-lg',
-		]);
-		
-		echo "<div id='modalContent'></div>";
-		
-		Modal::end();
-	?>
-	<!--p>
-		<?/*= Html::button('Edit', ['value'=>Url::to('index.php?r=time-entry/edit'), 'class' => 'btn btn-success', 'id' => 'modalButton'])*/?>
-	</p-->
+
 	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SundayProvider,
@@ -55,71 +44,62 @@ $this->params['breadcrumbs'][] = $this->title;
             'MileageCardModifiedDate',
             'MileageCardModifiedBy',
             'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
-
-			[   
-				'class' => 'yii\grid\ActionColumn', 
-				'template' => '{view} {update}',
-				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
-					'contentOptions' => ['class' => 'padding-left-5px'],
-
-				'buttons' => [
-					'view' => function ($url, $model, $key) {
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
-								'id' => 'activity-view-link',
-								'title' => Yii::t('yii', 'View'),
-								'data-toggle' => 'modal',
-								'data-target' => '#activity-modal',
-								'data-id' => $key,
-								'data-pjax' => '0',
-
-						]);
-					},
-				],
-			],
-			
+            'MileagCardPersonalMiles',			
 		],
 	]);	
 	?>
 	<?php Pjax::end();?>
+	<?php 
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'id' => $model["MileageCardID"]]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'MileagemodalButtonSunday']) ?>
+		<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sun?></span>
+	</p>
 	
 	<?php
+		Modal::begin([
+			'header' => '<h4>Sunday</h4>',
+			'id' => 'MileagemodalSunday',
+			'size' => 'modal-lg',
+		]);
 
-	Modal::begin([
-		'header' => '<h4 class="modal-title">Create New</b></h4>',
-		'toggleButton' => ['label' => 'Create New'],
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
-	]);
+		echo "<div id='modalContentMileageSunday'></div>";
 
-	echo 'Say hello...';
-
-	Modal::end();
+		Modal::end();
 	?>
 	<br />     
 
-	<?php $this->registerJs(
-		"$('.activity-view-link').click(function() {
-			$.get(
-				'imgview',         
-				{
-					id: $(this).closest('tr').data('key')
-				},
-				function (data) {
-					$('.modal-body').html(data);
-					$('#activity-modal').modal();
-				}  
-			);
-		});"
-	); ?>
-	
-	<?php Modal::begin([
-		'id' => 'activity-modal',
-		'header' => '<h4 class="modal-title">View</h4>',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+	<?php  
 
-	]); ?>
-	
-	<?php Modal::end(); ?>
+        // JS: Update response handling
+        $this->registerJs(
+			'jQuery(document).ready(function($){
+				$(document).ready(function () {
+					$("body").on("beforeSubmit", "form#SundayEntry", function () {
+						var form = $(this);
+						// return false if form still have some validation errors
+						if (form.find(".has-error").length) {
+							return false;
+						}
+						// submit form
+						$.ajax({
+							url    : form.attr("action"),
+							type   : "post",
+							data   : form.serialize(),
+							success: function (response) {
+								$("#modalSunday").modal("toggle");
+								$.pjax.reload({container:"#SundayEntry"}); //for pjax update
+							},
+							error  : function () {
+								console.log("internal server error");
+							}
+						});
+						return false;
+					});
+				});
+			});'
+		); ?>
 	
 	<!--Monday TableView-->
 	<h2 class="mileage_entry_header">Monday</h2>

@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="timecard-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p class="white_space">
        
@@ -24,7 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            //'TimeCardID',
 			'UserFirstName',
 			'UserLastName',
 			'TimeCardStartDate',
@@ -41,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'TimeCardCreateDate',*/
 
             ['class' => 'yii\grid\ActionColumn',
+							'template' => '{view}',
 							/* 'buttons'=>[
                               'View' => function ($url, $model) { 
                                 return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url, [
@@ -54,14 +53,14 @@ $this->params['breadcrumbs'][] = $this->title;
 											$url ='index.php?r=time-card%2Fview&id='.$model["TimeCardID"];
 											return $url;
 											}
-											if ($action === 'update') {
+											/*if ($action === 'update') {
 											$url ='index.php?r=time-card%2Fupdate&id='.$model["TimeCardID"];
 											return $url;
 											}
 											if ($action === 'delete') {
 											$url ='index.php?r=time-card%2Fdelete&id='.$model["TimeCardID"];
 											return $url;
-											}
+											}*/
 										},
 										'buttons' => [
 											'delete' => function ($url, $model, $key) {
