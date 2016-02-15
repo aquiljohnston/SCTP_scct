@@ -58,3 +58,11 @@
 .approve{
 	margin-top: 0;
 }
+.totalhours {
+	float: right;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 800;
+}
+.no_totalhours {
+	float: right;
+}

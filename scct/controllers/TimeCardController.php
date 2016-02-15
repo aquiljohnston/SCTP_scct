@@ -94,6 +94,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Sun = $this->TotalHourCal($Sundaydata);
 			
 			$Mondaydata = $dateProvider["TimeEntries"][0]["Monday"];
 			$MondayProvider = new ArrayDataProvider([
@@ -105,6 +106,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Mon = $this->TotalHourCal($Mondaydata);
 			
 			$Tuesdaydata = $dateProvider["TimeEntries"][0]["Tuesday"];
 			$TuesdayProvider = new ArrayDataProvider([
@@ -116,6 +118,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Tue = $this->TotalHourCal($Tuesdaydata);
 			
 			$Wednesdaydata = $dateProvider["TimeEntries"][0]["Wednesday"];
 			$WednesdayProvider = new ArrayDataProvider([
@@ -127,6 +130,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Wed = $this->TotalHourCal($Wednesdaydata);
 			
 			$Thursdaydata = $dateProvider["TimeEntries"][0]["Thursday"];
 			$ThursdayProvider = new ArrayDataProvider([
@@ -138,6 +142,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Thu = $this->TotalHourCal($Thursdaydata);
 			
 			$Fridaydata = $dateProvider["TimeEntries"][0]["Friday"];
 			$FridayProvider = new ArrayDataProvider([
@@ -149,6 +154,7 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Fri = $this->TotalHourCal($Fridaydata);
 			
 			$Saturdaydata = $dateProvider["TimeEntries"][0]["Saturday"];
 			$SaturdayProvider = new ArrayDataProvider([
@@ -160,16 +166,25 @@ class TimeCardController extends BaseController
 					// 'attributes' => ['id', 'name'],
 				// ],
 			]);
+			$Total_Hours_Sat = $this->TotalHourCal($Saturdaydata);
+			
 			return $this -> render('view', [
 											'model' => json_decode($time_card_response, true),
 											'dateProvider' => $dateProvider,
-												'SundayProvider' => $SundayProvider,
-												'MondayProvider' => $MondayProvider,
-												'TuesdayProvider' => $TuesdayProvider,
-												'WednesdayProvider' => $WednesdayProvider,
-												'ThursdayProvider' => $ThursdayProvider,
-												'FridayProvider' => $FridayProvider,
-												'SaturdayProvider' => $SaturdayProvider,
+											'SundayProvider' => $SundayProvider,
+											'Total_Hours_Sun' => $Total_Hours_Sun,
+											'MondayProvider' => $MondayProvider,
+											'Total_Hours_Mon' => $Total_Hours_Mon,
+											'TuesdayProvider' => $TuesdayProvider,
+											'Total_Hours_Tue' => $Total_Hours_Tue,
+											'WednesdayProvider' => $WednesdayProvider,
+											'Total_Hours_Wed' => $Total_Hours_Wed,
+											'ThursdayProvider' => $ThursdayProvider,
+											'Total_Hours_Thu' => $Total_Hours_Thu,
+											'FridayProvider' => $FridayProvider,
+											'Total_Hours_Fri' => $Total_Hours_Fri,
+											'SaturdayProvider' => $SaturdayProvider,
+											'Total_Hours_Sat' => $Total_Hours_Sat,
 									]);
 		}
 		else
@@ -493,4 +508,18 @@ class TimeCardController extends BaseController
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
+	
+	/**
+     * Calculate total work hours
+     * @return total work hours
+     */
+	 public function TotalHourCal($dataProvider){
+		 $Total_Work_Hours = 0;
+		 foreach($dataProvider as $item){
+			 $Total_Work_Hours += $item["TimeEntryMinutes"];
+			 Yii::Trace("item minutes is: ".$item["TimeEntryMinutes"]);
+		 }
+		 
+		 return number_format ($Total_Work_Hours / 60, 2);
+	 }
 }
