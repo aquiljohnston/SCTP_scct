@@ -15,15 +15,21 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'EquipmentID') ?>
+    <?//= $form->field($model, 'EquipmentID') ?>
 
-    <?= $form->field($model, 'EquipmentName') ?>
+    <?= $form->field($model, 'Name') ?>
 
-    <?= $form->field($model, 'EquipmentSerialNumber') ?>
+    <?= $form->field($model, 'Serial Number') ?>
 
-    <?= $form->field($model, 'EquipmentDetails') ?>
+    <?= $form->field($model, 'Details') ?>
 
-    <?= $form->field($model, 'EquipmentType') ?>
+    <?= $form->field($model, 'Type') ?>
+	
+	<?= $form->field($model, 'Client Name') ?>
+	
+	<?= $form->field($model, 'Project Name') ?>
+	
+	<?= $form->field($model, 'Accepted Flag') ?>
 
     <?php // echo $form->field($model, 'EquipmentManufacturer') ?>
 
