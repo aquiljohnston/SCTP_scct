@@ -133,15 +133,6 @@ use kartik\datetime\DateTimePicker;
 						'showLabels'=>false
 					])->dropDownList($clients); ?>
 				</div>
-				<?= Html::activeLabel($model, 'EquipmentProjectID', [
-					'label'=>'Project ID', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentProjectID',[
-						'showLabels'=>false
-					])->dropDownList($projects); ?>
-				</div>
 				<?= Html::activeLabel($model, 'EquipmentAnnualCalibrationDate', [
 					'label'=>'Annual Calibration Date', 
 					'class'=>'col-sm-2 control-label'
@@ -166,15 +157,6 @@ use kartik\datetime\DateTimePicker;
 					<?= $form->field($model, 'EquipmentAnnualCalibrationStatus',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'EquipmentAnnualCalibrationStatus']); ?>
-				</div>
-				<?= Html::activeLabel($model, 'EquipmentAssignedUserID', [
-					'label'=>'Assigned User ID', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentAssignedUserID',[
-						'showLabels'=>false
-					])->dropDownList($users);  ?>
 				</div>
 			</div>
 

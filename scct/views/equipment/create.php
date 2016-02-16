@@ -18,13 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 	</p>
 	
-    <?= $this->render('_form', [
+    <?= $this->render('_createForm', [
         'model' => $model,
 		'clients' => $clients,
 		'types' => $types,
 		'conditions' => $conditions,
-		'users' => $users,
-		'projects' => $projects,
     ]) ?>
 
 </div>

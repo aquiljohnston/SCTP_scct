@@ -79,6 +79,7 @@ use kartik\datetime\DateTimePicker;
 					'showLabels'=>false
 					])->widget(DateTimePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
+						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
 							'format' => 'yyyy-mm-dd hh:ii:ss'
@@ -94,6 +95,7 @@ use kartik\datetime\DateTimePicker;
 					'showLabels'=>false
 					])->widget(DateTimePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
+						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
 							'format' => 'yyyy-mm-dd hh:ii:ss'
