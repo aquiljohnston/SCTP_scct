@@ -102,7 +102,7 @@ class EquipmentController extends BaseController
 			$model = new \yii\base\DynamicModel([
 				'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
 				'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
-				'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus', 'EquipmentAssignedUserID',
+				'EquipmentClientID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus',
 				'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord'
 			]);
 			
@@ -119,10 +119,8 @@ class EquipmentController extends BaseController
 				  ->addRule('EquipmentWarrantyDetail', 'string')
 				  ->addRule('EquipmentComment', 'string')
 				  ->addRule('EquipmentClientID', 'integer')
-				  ->addRule('EquipmentProjectID', 'integer')
 				  ->addRule('EquipmentAnnualCalibrationDate', 'safe')
 				  ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
-				  ->addRule('EquipmentAssignedUserID', 'string')
 				  ->addRule('EquipmentCreatedByUser', 'string')
 				  ->addRule('EquipmentCreateDate', 'safe')
 				  ->addRule('EquipmentModifiedBy', 'string')
@@ -172,10 +170,8 @@ class EquipmentController extends BaseController
 					'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
 					'EquipmentComment' => $model->EquipmentComment,
 					'EquipmentClientID' => $model->EquipmentClientID,
-					'EquipmentProjectID' => $model->EquipmentProjectID,
 					'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
 					'EquipmentAnnualCalibrationStatus' => $model->EquipmentAnnualCalibrationStatus,
-					'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
 					'EquipmentCreatedByUser' => Yii::$app->session['userID'],
 					'EquipmentCreateDate' => $model->EquipmentCreateDate,
 					'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
@@ -197,8 +193,6 @@ class EquipmentController extends BaseController
 					'clients' => $clients,
 					'types' => $types,
 					'conditions' => $conditions,
-					'users' => $users,
-					'projects' => $projects,
 					]);
 			}
 		}
