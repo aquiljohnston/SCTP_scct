@@ -310,7 +310,7 @@ class TimeCardController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-	public function actionCreatee($id)
+	public function actionCreatee($id, $TimeCardTechID)
     {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -344,6 +344,7 @@ class TimeCardController extends BaseController
 				1 => "Active",
 				0 => "Inactive",
 			];
+			$obj = "";
 			
 			if ($model->load(Yii::$app->request->post())) {
 				
@@ -353,7 +354,7 @@ class TimeCardController extends BaseController
 					'TimeEntryDate' => $model->TimeEntryDate,
 					'TimeEntryCreateDate' => $model->TimeEntryCreateDate,
 					'TimeEntryModifiedDate' => $model->TimeEntryModifiedDate,
-					'TimeEntryUserID' => $model->TimeEntryUserID,
+					'TimeEntryUserID' => $TimeCardTechID,
 					'TimeEntryTimeCardID' => $id,
 					'TimeEntryActivityID' => $model->TimeEntryActivityID,
 					'TimeEntryComment' => $model->TimeEntryComment,
@@ -372,7 +373,6 @@ class TimeCardController extends BaseController
 			} else {
 				return $this->render('create_time_entry', [
 					'model' => $model,
-					'flag' => $flag,
 				]);
 			}
 		}
