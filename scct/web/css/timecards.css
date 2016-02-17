@@ -3,8 +3,9 @@
     margin-top: 3%;
 }
 #time_card_submit_btn{
-	margin-top: 2%;
-	margin-left: 1%;
+	margin-top: 1%;
+    float: right;
+    margin-right: 3%;
 }
 .time_entry_header{
 	font-size: 25px;
@@ -65,4 +66,8 @@
 }
 .no_totalhours {
 	float: right;
+}
+#multiple_time_card_approve_btn{
+	margin-bottom: 2%;
+	margin-top: 1%;
 }

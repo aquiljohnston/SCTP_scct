@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
+use yii\widgets\Pjax;
 use app\controllers\TimeCard;
 
 /* @var $this yii\web\View */
@@ -14,8 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h3><?= Html::encode($this->title) ?></h3>
 
-    <p class="white_space">
-       
+	<?php 
+			//$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+			$approveUrl = "";
+	?>
+    <p id="multiple_time_card_approve_btn">
+       <?= Html::a('Approve', $approveUrl, [
+											 'class' => 'btn btn-primary', 
+											 'data' => [
+														'confirm' => 'Are you sure you want to approve this item?']
+													])?>
     </p>
 
     <?= GridView::widget([
@@ -74,8 +84,11 @@ $this->params['breadcrumbs'][] = $this->title;
 													];
 													return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
 											},
-										]
-							],
+										],
+			],
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+			],
         ],
     ]); ?>
 

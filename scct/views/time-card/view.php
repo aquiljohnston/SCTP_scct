@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
@@ -148,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
@@ -224,7 +224,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
@@ -300,7 +300,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
@@ -376,7 +376,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
@@ -452,7 +452,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
@@ -528,7 +528,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"]]));
+			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
