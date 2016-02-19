@@ -72,11 +72,13 @@ $(document).ready(function(){
             + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=time-card%2Findex'>Timecards</a></li>"
             + "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=mileage-card%2Findex'>Mileagecards</a></li>"
         + "</ul></li>");
-   
+
+    var nav6 = $("<li><a id='home_btn' href='http://scct.southerncrossinc.com/index.php?'>HOME</a></li>");
+
 		// $("#nav").prepend(nav1, nav2, nav3, nav4);
 		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		$("#nav").prepend(nav4);
-		$("#adminNav").prepend(nav5);
+		$("#nav").prepend(nav6, nav4);
+		$("#adminNav").prepend(nav6, nav5);
     
     // assign class to current active link
     var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
