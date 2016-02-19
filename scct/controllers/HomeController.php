@@ -4,14 +4,16 @@ namespace app\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\grid\GridView;
 use linslin\yii2\curl;
 
 /**
  * HomeController implements the CRUD actions for home model.
  */
-class HomeController extends Controller
+class HomeController extends BaseController
 {
     public function behaviors()
     {
@@ -31,11 +33,83 @@ class HomeController extends Controller
      */
     public function actionIndex()
     {
-		if(Yii::$app->user->isGuest){
-			return $this->redirect(['login/login']);			
-		}else{
-			return $this->render('index');
-		}
+		 //guest redirect
+//        if (Yii::$app->user->isGuest) {
+//            return $this->redirect(['login/login']);
+//        }
+        //RBAC permissions check
+        if (Yii::$app->user->can('viewEquipmentIndex'))
+        {
+            // Reading the response from the the api and filling the GridView
+            $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications&userID='.Yii::$app->session['userID'];
+            $response = Parent::executeGetRequest($url);
+
+            //Passing data to the dataProvider and formatting it in an associative array
+            $dataProvider = json_decode($response, true);
+
+            $firstName = $dataProvider["firstName"];
+            $lastName = $dataProvider["lastName"];
+
+            Yii::trace("Tao".$firstName);
+            Yii::trace("Zhang".$lastName);
+
+            $i = 0;
+            $equipmentInfo = [];
+            $timeCardInfo = [];
+            $mileageCardInfo = [];
+            foreach ($dataProvider as $dataArray) {
+                if ($dataProvider["equipment"]!=null) {
+                    $equipmentInfo[$i] = $dataProvider["equipment"][$i];
+                }
+                if ($dataProvider["timeCards"]!=null) {
+                    $timeCardInfo[$i] = $dataProvider["timeCards"][$i];
+                }
+                if ($dataProvider["mileageCards"]!=null) {
+                    $mileageCardInfo[$i] = $dataProvider["mileageCards"][$i];
+                }
+                $i++;
+                if ($i==10) {
+                    break;
+                }
+            }
+
+            $equipmentProvider = new ArrayDataProvider([
+                'allModels' => $equipmentInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            $timeCardProvider = new ArrayDataProvider([
+                'allModels' => $timeCardInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            $mileageCardProvider = new ArrayDataProvider([
+                'allModels' => $mileageCardInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            GridView::widget
+            ([
+                'dataProvider' => $equipmentProvider,
+            ]);
+
+            return $this -> render('index', ['firstName' => $firstName,
+                                             'lastName' => $lastName,
+                                             'equipmentProvider' => $equipmentProvider,
+                                             'timeCardProvider' => $timeCardProvider,
+                                             'mileageCardProvider' => $mileageCardProvider]);
+            //return $this->render('index');
+        }
+        else
+        {
+            return $this->render('index');
+        }
     }
 
     /**
@@ -46,8 +120,6 @@ class HomeController extends Controller
     public function actionView($id)
     {
 		$curl = new curl\Curl();
-        
-		return $this -> render('view', ['model' => json_decode($response)]);
     }
 
     /**
