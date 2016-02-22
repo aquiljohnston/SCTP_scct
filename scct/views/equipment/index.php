@@ -8,12 +8,12 @@ use app\controllers\Equipment;
 /* @var $searchModel app\models\EquipmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Equipments';
+$this->title = 'Equipment Management';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="equipment-index">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+    <h1 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
