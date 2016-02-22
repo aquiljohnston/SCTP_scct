@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageStartDate',
 			'MileageEndDate',
 			'MileageCardBusinessMiles',
-			'MileageCardApproved',
+			'MileageCardApprove',
             /*'MileageCardEmpID',
             'MileageCardTechID',
             'MileageCardProjectID',
