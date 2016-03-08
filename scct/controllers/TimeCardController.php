@@ -12,6 +12,7 @@ use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use yii\web\Request;
+use \DateTime;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -310,7 +311,7 @@ class TimeCardController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-	public function actionCreatee($id, $TimeCardTechID)
+	public function actionCreatee($id, $TimeCardTechID, $TimeEntryDate)
     {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -320,19 +321,28 @@ class TimeCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createTimeCard'))
 		{
+			// temperary commented attributes maybe used later
 			$model = new \yii\base\DynamicModel([
-				'TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
-				'TimeEntryUserID', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 
+				/*'TimeEntryStartDateTime', 'TimeEntryEndDateTime',*/ 'TimeEntryStartTime', 'TimeEntryEndTime',
+				/*'TimeEntryWeekDay',*/ 'TimeEntryDate', /*'TimeEntryHours',*/ 'TimeEntryMinutes',
+				'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
+				'TimeEntryUserID', 'TimeEntryTimeCardID', /*'TimeCardFK',*/ 'TimeEntryActivityID', 
 				'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
 			]);
 			
-			$model->addRule('TimeEntryStartTime', 'safe')
+			$model/*->addRule('TimeEntryStartDateTime', 'safe')
+				  ->addRule('TimeEntryEndDateTime', 'safe')*/
+				  ->addRule('TimeEntryStartTime', 'safe')
 				  ->addRule('TimeEntryEndTime', 'safe')
+				  //->addRule('TimeEntryWeekDay', 'string')
 				  ->addRule('TimeEntryDate', 'safe')
+				  //->addRule('TimeEntryHours', 'string')
+				  ->addRule('TimeEntryMinutes', 'integer')
 				  ->addRule('TimeEntryCreateDate', 'safe')
 				  ->addRule('TimeEntryModifiedDate', 'safe')
 				  ->addRule('TimeEntryUserID', 'integer')
 				  ->addRule('TimeEntryTimeCardID', 'integer')
+				  //->addRule('TimeCardFK', 'integer')
 				  ->addRule('TimeEntryActivityID', 'integer')
 				  ->addRule('TimeEntryComment', 'string')
 				  ->addRule('TimeEntryCreatedBy', 'string')
@@ -346,12 +356,27 @@ class TimeCardController extends BaseController
 			];
 			$obj = "";
 			
+			//GET DATA TO FILL FORM DROPDOWNS//
+			//get clients for form dropdown
+			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
+			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
+			$activityCode = json_decode($activityCodeResponse, true);	
+			
+			//Yii::Trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".$TimeEntryDate);
+			
 			if ($model->load(Yii::$app->request->post())) {
+				// concatenate start time
+				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryStartTime);
+				$TimeEntryStartTimeConcatenate = $TimeEntryStartTimeConcatenate->format('Y-m-d H:i:s');
+				
+				// concatenate end time
+				$TimeEntryEndTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryEndTime);
+				$TimeEntryEndTimeConcatenate = $TimeEntryEndTimeConcatenate->format('Y-m-d H:i:s');
 				
 				$data = array(
-					'TimeEntryStartTime' => $model->TimeEntryStartTime,
-					'TimeEntryEndTime' => $model->TimeEntryEndTime,
-					'TimeEntryDate' => $model->TimeEntryDate,
+					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
+					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
+					'TimeEntryDate' => $TimeEntryDate,
 					'TimeEntryCreateDate' => $model->TimeEntryCreateDate,
 					'TimeEntryModifiedDate' => $model->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $TimeCardTechID,
@@ -363,7 +388,7 @@ class TimeCardController extends BaseController
 				);
 				
 				$json_data = json_encode($data);	
-
+				
 				// post url
 				$url_send = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fcreate';				
 				$response = Parent::executePostRequest($url_send, $json_data);
@@ -373,6 +398,7 @@ class TimeCardController extends BaseController
 			} else {
 				return $this->render('create_time_entry', [
 					'model' => $model,
+					'activityCode' => $activityCode,
 				]);
 			}
 		}
@@ -409,6 +435,47 @@ class TimeCardController extends BaseController
 			$responseTimeCardID = $obj[0]["TimeCardID"];
 			return $this->redirect(['view', 'id' => $responseTimeCardID]);
 	}
+	
+	/**
+     * Approve Multiple existing TimeCard.
+     * If approve is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+	public function actionApproveM() {
+		$i = 0;
+    if (isset($_POST['keylist'])) {
+        $keys = \yii\helpers\Json::decode($_POST['keylist']);
+        if (!is_array($keys)) {
+            echo Json::encode([
+                'status' => 'error',
+                'total' => 0
+            ]);
+            return;
+        }
+        $cardIDArray = [];
+		
+		 // loop the data array to get all id's.		
+        foreach ($keys as $key) {
+           $cardIDArray[$i++] = $key["TimeCardID"];
+		   Yii::Trace("TimeCardid is ; ". $key["TimeCardID"]);
+        }
+		$i = 0;
+		
+		$data = array(
+				'approvedByID' => Yii::$app->session['userID'],
+				'cardIDArray' => $cardIDArray,
+			);		
+		$json_data = json_encode($data);
+		
+		// post url
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-time-cards';
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			$obj = json_decode($putResponse, true);
+			$responseTimeCardID = $obj[0]["TimeCardID"];
+			return $this->redirect(['view', 'id' => $responseTimeCardID]);
+    }
+}
 	
 	/**
      * Updates an existing TimeCard model.
