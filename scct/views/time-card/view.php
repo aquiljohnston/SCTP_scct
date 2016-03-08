@@ -6,6 +6,7 @@ use yii\grid\GridView;
 use app\controllers\TimeCard;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use \DateTime;
 /* @var $this yii\web\View */
 /* @var $model app\models\time-card */
 
@@ -18,6 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
 	<?php 
+			// check start date for this timecard.
+			//var_dump("TimeCardStartDate is : ".$model["TimeCardStartDate"]);
 			$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
 	?>
 	<p>
@@ -41,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 
 			// [   
@@ -71,7 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get current TimeCard's Date
+			$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$SundayStr = $TimeCardStartDate->format('Y-m-d');
+			
+			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SundayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
@@ -139,16 +146,21 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		],
-		'showFooter' => true,
+		//'showFooter' => true,
 	])?>
 	
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Monday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$MondayDate = $TimeCardStartDate->modify('+1 day');	
+			$MondayStr = $MondayDate->format('Y-m-d');
+			
+			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $MondayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
@@ -216,7 +228,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		]
 	])?>
@@ -224,7 +236,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Tuesday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$TuesdayDate = $TimeCardStartDate->modify('+2 day');	
+			$TuesdayStr = $TuesdayDate->format('Y-m-d');
+			
+			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $TuesdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
@@ -292,7 +309,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		]
 	])?>
@@ -300,7 +317,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Wednesday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$WednesdayDate = $TimeCardStartDate->modify('+3 day');	
+			$WednesdayStr = $WednesdayDate->format('Y-m-d');
+			
+			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $WednesdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
@@ -368,7 +390,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		]
 	])?>
@@ -376,7 +398,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Thursday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$ThursdayDate = $TimeCardStartDate->modify('+4 day');	
+			$ThursdayStr = $ThursdayDate->format('Y-m-d');
+			
+			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $ThursdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
@@ -444,7 +471,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		]
 	])?>
@@ -452,7 +479,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Friday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$FridayDate = $TimeCardStartDate->modify('+5 day');	
+			$FridayStr = $FridayDate->format('Y-m-d');
+			
+			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $FridayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
@@ -520,7 +552,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryDate',
 			'TimeEntryComment',
 			'TimeEntryCreateDate',
-			'TimeEntryCreateBy',
+			'TimeEntryCreatedBy',
 			'TimeEntryHours',
 		]
 	])?>
@@ -528,7 +560,12 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	
 	<?php 
-			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"]]));
+			// get Saturday's date for current TimeCard
+			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
+			$SaturdayDate = $TimeCardStartDate->modify('+6 day');	
+			$SaturdayStr = $SaturdayDate->format('Y-m-d');
+			
+			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SaturdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
