@@ -10,19 +10,19 @@ use app\controllers\MileageCard;
 $this->title = 'MileageCard';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mileagecard-index">
+<div class="user-index">
 
-    <h3><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+	<h3><?= Html::encode($this->title) ?></h3>
+	<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p class="white_space">
-        
-    </p>
+	<p class="white_space">
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+	</p>
+
+	<?= GridView::widget([
+		'dataProvider' => $dataProvider,
+		'columns' => [
+			['class' => 'yii\grid\SerialColumn'],
 
 			'UserFirstName',
 			'UserLastName',
@@ -30,17 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEndDate',
 			'MileageCardBusinessMiles',
 			'MileageCardApprove',
-			
+
 			['class' => 'yii\grid\ActionColumn',
 				'template' => '{view}',
 				'urlCreator' => function ($action, $model, $key, $index) {
-						if ($action === 'view') {
+					if ($action === 'view') {
 						$url ='index.php?r=mileage-card%2Fview&id='.$model["MileageCardID"];
 						return $url;
-						}
-					},											
+					}
+				},
 			],
 		],
-    ]); ?>
+	]); ?>
 
 </div>
