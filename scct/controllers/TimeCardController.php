@@ -34,8 +34,8 @@ class TimeCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewTimeCardIndex'))
 		{
-			// create curl for restful call.		
-			// get response from api 		
+			// create curl for restful call.
+			// get response from api
 			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
 			$response = Parent::executeGetRequest($url);
 
@@ -307,11 +307,11 @@ class TimeCardController extends BaseController
 	}
 
 	/**
-     * Creates a new TimeEntry model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-	public function actionCreatee($id, $TimeCardTechID)
+	 * Creates a new TimeEntry model.
+	 * If creation is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionCreatee($id, $TimeCardTechID, $TimeEntryDate)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -327,37 +327,22 @@ class TimeCardController extends BaseController
 				/*'TimeEntryWeekDay',*/ 'TimeEntryDate', /*'TimeEntryHours',*/ 'TimeEntryMinutes',
 				'TimeEntryCreateDate', 'TimeEntryModifiedDate',
 				'TimeEntryUserID', 'TimeEntryTimeCardID', /*'TimeCardFK',*/ 'TimeEntryActivityID',
-				'TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate',
-				'TimeEntryUserID', 'TimeEntryTimeCardID', 'TimeEntryActivityID',
 				'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
 			]);
-			
+
 			$model/*->addRule('TimeEntryStartDateTime', 'safe')
 				  ->addRule('TimeEntryEndDateTime', 'safe')*/
-				  ->addRule('TimeEntryStartTime', 'safe')
-				  ->addRule('TimeEntryEndTime', 'safe')
-				  //->addRule('TimeEntryWeekDay', 'string')
-				  ->addRule('TimeEntryDate', 'safe')
-				  //->addRule('TimeEntryHours', 'string')
-				  ->addRule('TimeEntryMinutes', 'integer')
-				  ->addRule('TimeEntryCreateDate', 'safe')
-				  ->addRule('TimeEntryModifiedDate', 'safe')
-				  ->addRule('TimeEntryUserID', 'integer')
-				  ->addRule('TimeEntryTimeCardID', 'integer')
-				  //->addRule('TimeCardFK', 'integer')
-				  ->addRule('TimeEntryActivityID', 'integer')
-				  ->addRule('TimeEntryComment', 'string')
-				  ->addRule('TimeEntryCreatedBy', 'string')
-				  ->addRule('TimeEntryModifiedBy', 'string');
-			
-
-			$model->addRule('TimeEntryStartTime', 'safe')
+			->addRule('TimeEntryStartTime', 'safe')
 				->addRule('TimeEntryEndTime', 'safe')
+				//->addRule('TimeEntryWeekDay', 'string')
 				->addRule('TimeEntryDate', 'safe')
+				//->addRule('TimeEntryHours', 'string')
+				->addRule('TimeEntryMinutes', 'integer')
 				->addRule('TimeEntryCreateDate', 'safe')
 				->addRule('TimeEntryModifiedDate', 'safe')
 				->addRule('TimeEntryUserID', 'integer')
 				->addRule('TimeEntryTimeCardID', 'integer')
+				//->addRule('TimeCardFK', 'integer')
 				->addRule('TimeEntryActivityID', 'integer')
 				->addRule('TimeEntryComment', 'string')
 				->addRule('TimeEntryCreatedBy', 'string')
@@ -371,15 +356,14 @@ class TimeCardController extends BaseController
 				];
 			$obj = "";
 
-
 			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown
 			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
 			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
-			$activityCode = json_decode($activityCodeResponse, true);	
-			
+			$activityCode = json_decode($activityCodeResponse, true);
+
 			//Yii::Trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".$TimeEntryDate);
-			
+
 			if ($model->load(Yii::$app->request->post())) {
 				// concatenate start time
 				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryStartTime);
@@ -402,11 +386,9 @@ class TimeCardController extends BaseController
 					'TimeEntryCreatedBy' => $model->TimeEntryCreatedBy,
 					'TimeEntryModifiedBy' => $model->TimeEntryModifiedBy,
 				);
-				
-				$json_data = json_encode($data);	
-
 
 				$json_data = json_encode($data);
+
 				// post url
 				$url_send = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fcreate';
 				$response = Parent::executePostRequest($url_send, $json_data);
@@ -454,58 +436,16 @@ class TimeCardController extends BaseController
 		return $this->redirect(['view', 'id' => $responseTimeCardID]);
 	}
 
-
-	/**
-     * Approve Multiple existing TimeCard.
-     * If approve is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
-	public function actionApproveM() {
-		$i = 0;
-    if (isset($_POST['id'])) {
-        $keys = \yii\helpers\Json::decode($_POST['id']);
-        if (!is_array($keys)) {
-            echo Json::encode([
-                'status' => 'error',
-                'total' => 0
-            ]);
-            return;
-        }
-        $cardIDArray = [];
-
-		 // loop the data array to get all id's.
-        foreach ($keys as $key) {
-           $cardIDArray[$i++] = $key["TimeCardID"];
-		   Yii::Trace("TimeCardid is ; ". $key["TimeCardID"]);
-        }
-		$i = 0;
-
-		$data = array(
-				'approvedByID' => Yii::$app->session['userID'],
-				'cardIDArray' => $cardIDArray,
-			);
-		$json_data = json_encode($data);
-
-		// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-time-cards';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data);
-			$obj = json_decode($putResponse, true);
-			$responseTimeCardID = $obj[0]["TimeCardID"];
-			return $this->redirect(['view', 'id' => $responseTimeCardID]);
-    }
-}
-
 	/**
 	 * Approve Multiple existing TimeCard.
 	 * If approve is successful, the browser will be redirected to the 'view' page.
 	 * @param string $id
 	 * @return mixed
 	 */
-	public function actionApproveMultiple() {
+	public function actionApproveM() {
 		$i = 0;
-		if (isset($_POST['keylist'])) {
-			$keys = \yii\helpers\Json::decode($_POST['keylist']);
+		if (isset($_POST['id'])) {
+			$keys = \yii\helpers\Json::decode($_POST['id']);
 			if (!is_array($keys)) {
 				echo Json::encode([
 					'status' => 'error',
