@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
     <p id="multiple_time_card_approve_btn">
        <?= Html::button('Approve', [
-											 'class' => 'btn btn-primary multiple_approve_btn', 
+											 'class' => 'btn btn-primary multiple_approve_btn',
 											 'id' => 'multiple_approve_btn',
 											 /*'data' => [
 														'confirm' => 'Are you sure you want to approve this item?']*/
@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							},
 							'buttons' => [
 								'delete' => function ($url, $model, $key) {
-									$url ='/index.php?r=time-card%2Fdelete&id='.$model["TimeCardID"];       
+									$url ='/index.php?r=time-card%2Fdelete&id='.$model["TimeCardID"];
 										$options = [
 										'title' => Yii::t('yii', 'Delete'),
 										'aria-label' => Yii::t('yii', 'Delete'),

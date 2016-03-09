@@ -1,0 +1,29 @@
+#equipmentWidget{
+	float: left;
+	width: 32%;
+}
+#timeCardWidget{
+	float: left;
+	width: 32%;
+	margin-left: 2%;
+}
+#mileageCardWidget{
+	float: right;
+	width: 32%;
+}
+.home-index tbody tr:last-child {
+	background: #f0f0f2;
+	color: #333;
+	font-weight: bold;
+	border-top: solid #333;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.home-index [title~=View] {
+	display: block;
+	margin: 0 auto;
+	text-align:center;
+}
+.home-index thead th:last-child {
+	text-align:center;
+}

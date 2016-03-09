@@ -9,85 +9,83 @@ use yii\grid\GridView;
 $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="home-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
-    <center><h1>Hello <?=$firstName; $lastName;?></h1></center>
+    <h3>Hello, <?=$firstName; $lastName;?></h3>
 
     <!-- Table for Unaccepted Equipment -->
     <?= GridView::widget([
+        'id' => 'equipmentWidget',
         'dataProvider' => $equipmentProvider,
         'layout' => "{items}\n{pager}",
         'caption' => 'Unaccepted Equipment',
 
         'columns' => [
-            'Name',
-            'Serial Number',
-            'Client Name',
-            'Project Name',
+            'Project',
+            'Number of Items',
 
             ['class' => 'yii\grid\ActionColumn',
-                'header' => 'View Equipment',
+                'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=equipment%2Fview&id='.$model["EquipmentID"];
+                        $url ='index.php?r=equipment%2Findex';
                         return $url;
                     }
                 }
             ],
+
         ],
     ]); ?>
 
     <!-- Table for Unapproved Time Cards -->
     <?= GridView::widget([
+        'id'=> 'timeCardWidget',
         'dataProvider' => $timeCardProvider,
         'layout' => "{items}\n{pager}",
-        'caption' => 'Unapproved Time Cards',
+        'caption' => 'Unapproved Time ',
 
         'columns' => [
-            'UserFirstName',
-            'UserLastName',
-            'TimeCardStartDate',
-            'TimeCardEndDate',
+            'Project',
+            'Number of Items',
 
             ['class' => 'yii\grid\ActionColumn',
-                'header' => 'View Time Card',
+                'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=time-card%2Fview&id='.$model["TimeCardID"];
+                        $url ='index.php?r=time-card%2Findex';
                         return $url;
                     }
                 }
             ],
+
         ],
     ]); ?>
 
     <!-- Table for Unapproved Mileage Cards -->
     <?= GridView::widget([
+        'id'=> 'mileageCardWidget',
         'dataProvider' => $mileageCardProvider,
         'layout' => "{items}\n{pager}",
         'caption' => 'Unapproved Mileage Cards',
 
         'columns' => [
-            'UserFirstName',
-            'UserLastName',
-            'MileageStartDate',
-            'MileageEndDate',
-            'MileageCardBusinessMiles',
-            'MileageCardPersonalMiles',
+            'Project',
+            'Number of Items',
 
             ['class' => 'yii\grid\ActionColumn',
-                'header' => 'View Mileage Card',
+                'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=mileage-card%2Fview&id='.$model["MileageCardID"];
+                        $url ='index.php?r=mileage-card%2Findex';
                         return $url;
                     }
                 }
             ],
+
         ],
     ]); ?>
 

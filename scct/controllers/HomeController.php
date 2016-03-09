@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use yii\web\Controller;
+use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,24 +53,22 @@ class HomeController extends BaseController
             Yii::trace("Tao".$firstName);
             Yii::trace("Zhang".$lastName);
 
-            $i = 0;
             $equipmentInfo = [];
             $timeCardInfo = [];
             $mileageCardInfo = [];
-            foreach ($dataProvider as $dataArray) {
+
+            try {
                 if ($dataProvider["equipment"]!=null) {
-                    $equipmentInfo[$i] = $dataProvider["equipment"][$i];
+                    $equipmentInfo = $dataProvider["equipment"];
                 }
                 if ($dataProvider["timeCards"]!=null) {
-                    $timeCardInfo[$i] = $dataProvider["timeCards"][$i];
+                    $timeCardInfo = $dataProvider["timeCards"];
                 }
                 if ($dataProvider["mileageCards"]!=null) {
-                    $mileageCardInfo[$i] = $dataProvider["mileageCards"][$i];
+                    $mileageCardInfo = $dataProvider["mileageCards"];
                 }
-                $i++;
-                if ($i==10) {
-                    break;
-                }
+            } catch(ErrorException $error) {
+                //Continue - Unable to retrieve equipment item
             }
 
             $equipmentProvider = new ArrayDataProvider([

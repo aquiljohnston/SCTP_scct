@@ -142,18 +142,20 @@ class EquipmentController extends BaseController
 			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
 			$conditionResponse = Parent::executeGetRequest($conditionUrl);
 			$conditions = json_decode($conditionResponse, true);
-			
+
+			//TODO: Remove when necessary - current equipment create page is not utilizing below logic
 			//get userIDs for form dropdown
-			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
-			$userResponse = Parent::executeGetRequest($userUrl);
-			$users = json_decode($userResponse, true);
-			natcasesort($users);
-			
+//			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
+//			$userResponse = Parent::executeGetRequest($userUrl);
+//			$users = json_decode($userResponse, true);
+//			natcasesort($users);
+
+			//TODO: Remove when necessary - current equipment create page is not utilizing below logic
 			//get projects for form dropdown
-			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
-			$projectResponse = Parent::executeGetRequest($projectUrl);
-			$projects = json_decode($projectResponse, true);
-				  
+//			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
+//			$projectResponse = Parent::executeGetRequest($projectUrl);
+//			$projects = json_decode($projectResponse, true);
+
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
