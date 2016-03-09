@@ -32,18 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageCardApprove',
 			
 			['class' => 'yii\grid\ActionColumn',
-			
+				'template' => '{view}',
 				'urlCreator' => function ($action, $model, $key, $index) {
 						if ($action === 'view') {
 						$url ='index.php?r=mileage-card%2Fview&id='.$model["MileageCardID"];
-						return $url;
-						}
-						if ($action === 'update') {
-						$url ='index.php?r=mileage-card%2Fupdate&id='.$model["MileageCardID"];
-						return $url;
-						}
-						if ($action === 'delete') {
-						$url ='index.php?r=mileage-card%2Fupdate&id='.$model["MileageCardID"];
 						return $url;
 						}
 					},											
