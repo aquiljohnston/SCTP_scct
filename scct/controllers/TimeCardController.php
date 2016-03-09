@@ -463,8 +463,8 @@ class TimeCardController extends BaseController
      */
 	public function actionApproveM() {
 		$i = 0;
-    if (isset($_POST['keylist'])) {
-        $keys = \yii\helpers\Json::decode($_POST['keylist']);
+    if (isset($_POST['id'])) {
+        $keys = \yii\helpers\Json::decode($_POST['id']);
         if (!is_array($keys)) {
             echo Json::encode([
                 'status' => 'error',
