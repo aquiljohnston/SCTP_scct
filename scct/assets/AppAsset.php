@@ -20,6 +20,7 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
 		'css/clients.css',
+		'css/home.css',
 		'css/projects.css',
 		'css/user.css',
 		'css/equipments.css',
@@ -36,6 +37,7 @@ class AppAsset extends AssetBundle
 		'js/logout_btn.js',
 		'js/time_entry_modal.js',
 		'js/mileage_entry_modal.js',
+		'js/approve_multiple_timecard.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

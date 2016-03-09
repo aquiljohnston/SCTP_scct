@@ -10,7 +10,7 @@ use app\controllers\MileageCard;
 $this->title = 'MileageCard';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-index">
+<div class="mileagecard-index">
 
     <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>

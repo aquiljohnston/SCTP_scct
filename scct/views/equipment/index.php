@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use kartik\form\ActiveForm;
 use app\controllers\Equipment;
 
 /* @var $this yii\web\View */
@@ -13,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="equipment-index">
 
-    <h1 class="title"><?= Html::encode($this->title) ?></h3>
+    <h1 class="title"><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
@@ -56,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
 												$url ='/index.php?r=equipment%2Fdelete&id='.$model["EquipmentID"];       
 													$options = [
 													'title' => Yii::t('yii', 'Delete'),
-													'aria-label' => Yii::t('yii', 'Delete'),
-													'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-													'data-method' => 'Delete',
-													'data-pjax' => '0',
+														'aria-label' => Yii::t('yii', 'Delete'),
+														'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+														'data-method' => 'Delete',
+														'data-pjax' => '0',
 													];
 													return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
 											},
