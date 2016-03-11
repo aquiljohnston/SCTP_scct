@@ -31,6 +31,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
+			'X-Client: 0',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -53,6 +54,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
+			'X-Client: 0',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
@@ -78,10 +80,11 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
+			'X-Client: 0',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': '),
 			);
 		//init new curl
 		$curl = curl_init();
@@ -103,6 +106,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
+			'X-Client: 0',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
