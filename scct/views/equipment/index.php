@@ -18,13 +18,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<p>
 			<?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
-			<?php
-			//$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
-			$approveUrl = "";
-			?>
+			
 			<?= Html::button('Approve', [
 				'class' => 'btn btn-primary multiple_approve_btn',
-				'id' => 'multiple_approve_btn',
+				'id' => 'multiple_approve_btn_id_equipment',
 				/*'data' => [
                            'confirm' => 'Are you sure you want to approve this item?']*/
 			])?>
@@ -72,10 +69,16 @@ $this->params['breadcrumbs'][] = $this->title;
 							];
 							return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
 						},
-					]
+					],
 				],
 				[
 					'class' => 'yii\grid\CheckboxColumn',
+					'checkboxOptions' => function ($model, $key, $index, $column) {
+						return ['equipmentid' => $model["EquipmentID"]/*, 'data-jid'=>$model->job_id*/];
+					}
+					/*'pageSummary' => true,
+					'rowSelectedClass' => GridView::TYPE_SUCCESS,
+					'contentOptions'=>['style'=>'width: 0.5%'],*/
 				],
 			],
 		]); ?>

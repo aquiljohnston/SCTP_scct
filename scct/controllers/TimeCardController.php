@@ -43,10 +43,17 @@ class TimeCardController extends BaseController
 			$dataProvider = new ArrayDataProvider
 			([
 				'allModels' => json_decode($response, true),
+				/*'key' => function (){
+					return md5($model["TimeCardID"]);
+				},*/
 				'pagination' => [
 					'pageSize' => 100,
 				],
 			]);
+			
+			//set timecardid as id 
+			$dataProvider->key ='TimeCardID';
+			
 
 			// fill gridview by applying data provider
 			GridView::widget([
@@ -442,40 +449,35 @@ class TimeCardController extends BaseController
      * @param string $id
      * @return mixed
      */
-	public function actionApproveM() {
-		$i = 0;
-    if (isset($_POST['id'])) {
-        $keys = \yii\helpers\Json::decode($_POST['id']);
-        if (!is_array($keys)) {
-            echo Json::encode([
-                'status' => 'error',
-                'total' => 0
-            ]);
-            return;
-        }
-        $cardIDArray = [];
+	public function actionApproveMultiple() {
 		
-		 // loop the data array to get all id's.		
-        foreach ($keys as $key) {
-           $cardIDArray[$i++] = $key["TimeCardID"];
-		   Yii::Trace("TimeCardid is ; ". $key["TimeCardID"]);
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+			
+		 // loop the data array to get all id's.	
+        foreach ($data as $key) {
+			foreach($key as $keyitem){
+			
+			   $TimeCardIDArray[] = $keyitem;
+			   Yii::Trace("TimeCardid is ; ". $keyitem);
+			}
         }
-		$i = 0;
 		
 		$data = array(
 				'approvedByID' => Yii::$app->session['userID'],
-				'cardIDArray' => $cardIDArray,
+				'cardIDArray' => $TimeCardIDArray,
 			);		
 		$json_data = json_encode($data);
 		
 		// post url
 			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-time-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
-			$obj = json_decode($putResponse, true);
-			$responseTimeCardID = $obj[0]["TimeCardID"];
-			return $this->redirect(['view', 'id' => $responseTimeCardID]);
-    }
-}
+			
+			return $this->redirect(['index']);
+		}else{
+			  throw new \yii\web\BadRequestHttpException;
+		}
+	}
 	
 	/**
      * Updates an existing TimeCard model.

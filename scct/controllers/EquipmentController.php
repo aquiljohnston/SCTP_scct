@@ -45,6 +45,10 @@ class EquipmentController extends BaseController
 					'pageSize' => 100,
 				],
 			]);
+			
+			//set timecardid as id 
+			$dataProvider->key ='EquipmentID';
+			
 			GridView::widget
 			([
 				'dataProvider' => $dataProvider,
@@ -203,6 +207,42 @@ class EquipmentController extends BaseController
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
+	
+	/**
+     * Approve Multiple existing Equipment.
+     * If approve is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+	public function actionApproveMultipleEquipment() {
+		
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+			
+			 // loop the data array to get all id's.	
+			foreach ($data as $key) {
+				foreach($key as $keyitem){
+				   //$cardIDArray[] = $key["TimeCardID"];
+				   $EquipmentIDArray[] = $keyitem;
+				   Yii::Trace("Equipment is ; ". $keyitem);
+				}
+			}
+			
+			$data_approve = array(
+					'acceptedByID' => Yii::$app->session['userID'],
+					'equipmentIDArray' => $EquipmentIDArray,
+				);		
+			$json_data = json_encode($data_approve);
+			
+			// post url
+				$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				
+				return $this->redirect(['index']);
+		}else{
+			  throw new \yii\web\BadRequestHttpException;
+		}
+	}
 
     /**
      * Updates an existing equipment model.
