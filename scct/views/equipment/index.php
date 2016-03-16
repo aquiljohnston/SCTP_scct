@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				['class' => 'yii\grid\ActionColumn',
 
-					'template' => '{view}',
+					'template' => '{view} {update}',
 					'urlCreator' => function ($action, $model, $key, $index) {
 						if ($action === 'view') {
 							$url ='index.php?r=equipment%2Fview&id='.$model["EquipmentID"];
