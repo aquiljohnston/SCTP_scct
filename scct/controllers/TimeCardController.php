@@ -330,26 +330,21 @@ class TimeCardController extends BaseController
 		{
 			// temperary commented attributes maybe used later
 			$model = new \yii\base\DynamicModel([
-				/*'TimeEntryStartDateTime', 'TimeEntryEndDateTime',*/ 'TimeEntryStartTime', 'TimeEntryEndTime',
-				/*'TimeEntryWeekDay',*/ 'TimeEntryDate', /*'TimeEntryHours',*/ 'TimeEntryMinutes',
+				'TimeEntryStartTime', 'TimeEntryEndTime',
+				'TimeEntryDate', 'TimeEntryMinutes',
 				'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
-				'TimeEntryUserID', 'TimeEntryTimeCardID', /*'TimeCardFK',*/ 'TimeEntryActivityID', 
+				'TimeEntryUserID', 'TimeEntryTimeCardID','TimeEntryActivityID', 
 				'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
 			]);
 			
-			$model/*->addRule('TimeEntryStartDateTime', 'safe')
-				  ->addRule('TimeEntryEndDateTime', 'safe')*/
-				  ->addRule('TimeEntryStartTime', 'safe')
+			$model->addRule('TimeEntryStartTime', 'safe')
 				  ->addRule('TimeEntryEndTime', 'safe')
-				  //->addRule('TimeEntryWeekDay', 'string')
 				  ->addRule('TimeEntryDate', 'safe')
-				  //->addRule('TimeEntryHours', 'string')
 				  ->addRule('TimeEntryMinutes', 'integer')
 				  ->addRule('TimeEntryCreateDate', 'safe')
 				  ->addRule('TimeEntryModifiedDate', 'safe')
 				  ->addRule('TimeEntryUserID', 'integer')
 				  ->addRule('TimeEntryTimeCardID', 'integer')
-				  //->addRule('TimeCardFK', 'integer')
 				  ->addRule('TimeEntryActivityID', 'integer')
 				  ->addRule('TimeEntryComment', 'string')
 				  ->addRule('TimeEntryCreatedBy', 'string')
@@ -368,8 +363,6 @@ class TimeCardController extends BaseController
 			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
 			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
 			$activityCode = json_decode($activityCodeResponse, true);	
-			
-			//Yii::Trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!".$TimeEntryDate);
 			
 			if ($model->load(Yii::$app->request->post())) {
 				// concatenate start time

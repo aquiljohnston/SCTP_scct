@@ -27,10 +27,6 @@ use kartik\datetime\DateTimePicker;
 					'showLabels'=>false
 					])->widget(TimePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
-						'pluginOptions' => [
-							'autoclose' => true,
-							'format' => 'hh:ii:ss'
-						]
 					]); ?>
 				</div>
 				
@@ -43,14 +39,8 @@ use kartik\datetime\DateTimePicker;
 					'showLabels'=>false
 					])->widget(TimePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
-						'pluginOptions' => [
-							'autoclose' => true,
-							'format' => 'hh:ii:ss'
-						]
 					]); ?>
 				</div>
-
-				
 				
 				<?= Html::activeLabel($model, 'TimeEntryActivityID', [
 					'label'=>'Activity Type', 
@@ -61,7 +51,17 @@ use kartik\datetime\DateTimePicker;
 					'showLabels'=>false
 					])->dropDownList($activityCode); ?>
 				</div>
-	
+						
+				<?= Html::activeLabel($model, 'TimeEntryComment', [
+					'label'=>'Comment', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($model, 'TimeEntryComment',[
+						'showLabels'=>false
+					])->textInput(['placeholder'=>'TimeEntryComment']); ?>
+				</div>
+				
 				<!--div class="col-sm-4">
 					<?/*= $form->field($model, 'TimeEntryDate')
 					  ->hiddenInput(['value' =>$model["TimeEntryStartTime"]])

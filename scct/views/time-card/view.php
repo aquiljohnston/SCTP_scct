@@ -103,36 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#SundayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalSunday").modal("toggle");
-								$.pjax.reload({container:"#SundayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
+	
 	
 	<!--Monday TableView-->
 	<h2 class="time_entry_header">Monday</h2>
@@ -185,36 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#MondayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalMonday").modal("toggle");
-								$.pjax.reload({container:"#MondayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
+	
 	
 	<!--Tuesday TableView-->
 	<h2 class="time_entry_header">Tuesday</h2>
@@ -266,36 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#TuesdayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalTuesday").modal("toggle");
-								$.pjax.reload({container:"#TuesdayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
+	
 	
 	<!--Wednesday TableView-->
 	<h2 class="time_entry_header">Wednesday</h2>
@@ -347,36 +260,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#WednesdayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalWednesday").modal("toggle");
-								$.pjax.reload({container:"#WednesdayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
+	
 	
 	<!--Thursday TableView-->
 	<h2 class="time_entry_header">Thursday</h2>
@@ -428,36 +312,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#ThursdayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalThursday").modal("toggle");
-								$.pjax.reload({container:"#ThursdayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-	); ?>
+	
 	
 	<!--Friday TableView-->
 	<h2 class="time_entry_header">Friday</h2>
@@ -509,36 +364,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#FridayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalFriday").modal("toggle");
-								$.pjax.reload({container:"#FridayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
+	
 	
 	<!--Saturday TableView-->
 	<h2 class="time_entry_header">Saturday</h2>
@@ -589,36 +415,5 @@ $this->params['breadcrumbs'][] = $this->title;
 		Modal::end();
 	?>
 	<br />     
-
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#SaturdayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalSaturday").modal("toggle");
-								$.pjax.reload({container:"#SaturdayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
 
 </div>
