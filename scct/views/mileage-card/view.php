@@ -31,36 +31,41 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<!--Sunday TableView-->
 	<h2 class="mileage_entry_header">Sunday</h2>
-
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'SundayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SundayProvider,
 		'columns' => [
-			'MileageCardType',
-			'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',			
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+            'MileageEntryEndDate',
+            'MileageEntryComment',
+            'MileageEntryCreateDate',
+            'MileageEntryCreatedBy',
 		],
 	]);	
 	?>
 	<?php Pjax::end();?>
-	<?php 
-			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'id' => $model["MileageCardID"]]));
+	<?php
+			// get current Mileage Card's Date
+			$MileageCardStartDate = new DateTime($model["MileageStartDate"]);
+			$SundayStr = $MileageCardStartDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $SundayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'MileagemodalButtonSunday']) ?>
-		<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sun?></span>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSunday']) ?>
+		<?php	if($Total_Mileage_Sun != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sun?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
 	</p>
 	
 	<?php
 		Modal::begin([
 			'header' => '<h4>Sunday</h4>',
-			'id' => 'MileagemodalSunday',
+			'id' => 'mileageModalSunday',
 			'size' => 'modal-lg',
 		]);
 
@@ -70,210 +75,275 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<br />     
 
-	<?php  
-
-        // JS: Update response handling
-        $this->registerJs(
-			'jQuery(document).ready(function($){
-				$(document).ready(function () {
-					$("body").on("beforeSubmit", "form#SundayEntry", function () {
-						var form = $(this);
-						// return false if form still have some validation errors
-						if (form.find(".has-error").length) {
-							return false;
-						}
-						// submit form
-						$.ajax({
-							url    : form.attr("action"),
-							type   : "post",
-							data   : form.serialize(),
-							success: function (response) {
-								$("#modalSunday").modal("toggle");
-								$.pjax.reload({container:"#SundayEntry"}); //for pjax update
-							},
-							error  : function () {
-								console.log("internal server error");
-							}
-						});
-						return false;
-					});
-				});
-			});'
-		); ?>
-	
 	<!--Monday TableView-->
 	<h2 class="mileage_entry_header">Monday</h2>
-	<?php  
-		Modal::begin([
-				'header' => '<h4>Monday</h4>',
-				'id' => 'modal',
-				'size' => 'modal-lg',
-		]);
-		
-		echo "<div id='modalContent'></div>";
-		
-		Modal::end();
-	?>
-	
 	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $MondayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
-			
-			[   
-				'class' => 'yii\grid\ActionColumn', 
-				'template' => '{view} {update}',
-				'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],        
-					'contentOptions' => ['class' => 'padding-left-5px'],
-
-				'buttons' => [
-					'view' => function ($url, $model, $key) {
-						return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','apicall', [
-								'id' => 'activity-view-link',
-								'title' => Yii::t('yii', 'View'),
-								'data-toggle' => 'modal',
-								'data-target' => '#activity-modal',
-								'data-id' => $key,
-								'data-pjax' => '0',
-
-						]);
-					},
-				],
-			],
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		],
-	])?>
-	
+	])
+	?>
 	<?php Pjax::end();?>
-	
 	<?php
+			// get current Mileage Card's Date
+			$MondayDate = $MileageCardStartDate->modify('+1 day');
+			$MondayStr = $MondayDate->format('Y-m-d');
 
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $MondayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonMonday']) ?>
+		<?php	if($Total_Mileage_Mon != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Mon?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
 	Modal::begin([
-		'header' => '<h4 class="modal-title">Create New</b></h4>',
-		'toggleButton' => ['label' => 'Create New'],
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+		'header' => '<h4>Monday</h4>',
+		'id' => 'mileageModalMonday',
+		'size' => 'modal-lg',
 	]);
 
-	echo 'Say hello...';
+	echo "<div id='modalContentMileageMonday'></div>";
 
 	Modal::end();
 	?>
-	<br />     
+	<br />
 
-	<?php $this->registerJs(
-		"$('.activity-view-link').click(function() {
-			$.get(
-				'imgview',         
-				{
-					id: $(this).closest('tr').data('key')
-				},
-				function (data) {
-					$('.modal-body').html(data);
-					$('#activity-modal').modal();
-				}  
-			);
-		});"
-	); ?>
-	
-	<?php Modal::begin([
-		'id' => 'activity-modal',
-		'header' => '<h4 class="modal-title">View</h4>',
-		'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
-
-	]); ?>
-	<?php Modal::end(); ?>
-	
 	<!--Tuesday TableView-->
 	<h2 class="mileage_entry_header">Tuesday</h2>
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $TuesdayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		]
 	])?>
-	
+	<?php Pjax::end();?>
+	<?php
+			// get current Mileage Card's Date
+			$TuesdayDate = $MileageCardStartDate->modify('+2 day');
+			$TuesdayStr = $TuesdayDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $TuesdayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonTuesday']) ?>
+		<?php	if($Total_Mileage_Tue != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Tue?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
+	Modal::begin([
+		'header' => '<h4>Tuesday</h4>',
+		'id' => 'mileageModalTuesday',
+		'size' => 'modal-lg',
+	]);
+
+	echo "<div id='modalContentMileageTuesday'></div>";
+
+	Modal::end();
+	?>
+	<br />
+
 	<!--Wednesday TableView-->
 	<h2 class="mileage_entry_header">Wednesday</h2>
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $WednesdayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		]
 	])?>
-	
+	<?php Pjax::end();?>
+	<?php
+			// get current Mileage Card's Date
+			$WednesdayDate = $MileageCardStartDate->modify('+3 day');
+			$WednesdayStr = $WednesdayDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $WednesdayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonWednesday']) ?>
+		<?php	if($Total_Mileage_Wed != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Wed?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
+	Modal::begin([
+		'header' => '<h4>Wednesday</h4>',
+		'id' => 'mileageModalWednesday',
+		'size' => 'modal-lg',
+	]);
+
+	echo "<div id='modalContentMileageWednesday'></div>";
+
+	Modal::end();
+	?>
+	<br />
+
 	<!--Thursday TableView-->
 	<h2 class="mileage_entry_header">Thursday</h2>
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $ThursdayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		]
 	])?>
+	<?php Pjax::end();?>
+	<?php
+			// get current Mileage Card's Date
+			$ThursdayDate = $MileageCardStartDate->modify('+4 day');
+			$ThursdayStr = $ThursdayDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $ThursdayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonThursday']) ?>
+		<?php	if($Total_Mileage_Thr != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Thr?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
+	Modal::begin([
+		'header' => '<h4>Thursday</h4>',
+		'id' => 'mileageModalThursday',
+		'size' => 'modal-lg',
+	]);
+
+	echo "<div id='modalContentMileageThursday'></div>";
+
+	Modal::end();
+	?>
+	<br />
 	
 	<!--Friday TableView-->
 	<h2 class="mileage_entry_header">Friday</h2>
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $FridayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		]
 	])?>
+	<?php Pjax::end();?>
+	<?php
+			// get current Mileage Card's Date
+			$FridayDate = $MileageCardStartDate->modify('+5 day');
+			$FridayStr = $FridayDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $FridayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonFriday']) ?>
+		<?php	if($Total_Mileage_Fri != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Fri?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
+	Modal::begin([
+		'header' => '<h4>Friday</h4>',
+		'id' => 'mileageModalFriday',
+		'size' => 'modal-lg',
+	]);
+
+	echo "<div id='modalContentMileageFriday'></div>";
+
+	Modal::end();
+	?>
+	<br />
 	
 	<!--Saturday TableView-->
 	<h2 class="mileage_entry_header">Saturday</h2>
+	<?php Pjax::begin(); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SaturdayProvider,
 		'columns' => [
-			'MileageCardType',
-            'MileageCardApprovedFlag',
-			'MileageCardApprovedBy',
-            'MileageCardCreateDate',
-            'MileageCardCreatedBy',
-            'MileageCardModifiedDate',
-            'MileageCardModifiedBy',
-            'MileagCardBusinessMiles',
-            'MileagCardPersonalMiles',
+			'MileageEntryStartingMileage',
+			'MileageEntryEndingMileage',
+			'MileageEntryStartDate',
+			'MileageEntryEndDate',
+			'MileageEntryComment',
+			'MileageEntryCreateDate',
+			'MileageEntryCreatedBy',
 		]
 	])?>
+	<?php Pjax::end();?>
+	<?php
+			// get current Mileage Card's Date
+			$SaturdayDate = $MileageCardStartDate->modify('+6 day');
+			$SaturdayStr = $SaturdayDate->format('Y-m-d');
+
+			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $SaturdayStr]));
+	?>
+	<p>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSaturday']) ?>
+		<?php	if($Total_Mileage_Sat != 0){ ?>
+			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sat?></span>
+		<?php	}else{ ?>
+			<span class="no_totalhours"></span>
+		<?php   } ?>
+	</p>
+
+	<?php
+	Modal::begin([
+		'header' => '<h4>Saturday</h4>',
+		'id' => 'mileageModalSaturday',
+		'size' => 'modal-lg',
+	]);
+
+	echo "<div id='modalContentMileageSaturday'></div>";
+
+	Modal::end();
+	?>
+	<br />
 
 </div>

@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
+use kartik\time\TimePicker;
+use kartik\datetime\DateTimePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\MileageCard */
@@ -16,8 +18,9 @@ use kartik\form\ActiveForm;
 				'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_SMALL],
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="mileage_entry_form">
+				<!-- Starting Mileage Field -->
 				<?= Html::activeLabel($model, 'MileageEntryStartingMileage', [
-					'label'=>'Start Mileage', 
+					'label'=>'Starting Mileage',
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -25,35 +28,58 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Starting Mileage']); ?>
 				</div>
+
+				<!-- Ending Mileage Field -->
 				<?= Html::activeLabel($model, 'MileageEntryEndingMileage', [
-					'label'=>'End Mileage', 
+					'label'=>'Ending Mileage',
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
 					<?= $form->field($model, 'MileageEntryEndingMileage',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Ending Mileage']); ?>
-				</div>				
-			
-				<!--div class="col-sm-2">
-					<?= $form->field($model, 'MileageEntryMileageCardID',[
+				</div>
+
+				<!-- Time Picker for Mileage Entry Start Time -->
+				<?= Html::activeLabel($model, 'MileageEntryStartDate', [
+					'label'=>'Start Time',
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($model, 'MileageEntryStartDate',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileageEntryMileageCardID']); ?>
-				</div-->
-				
-				<!--div class="col-sm-2">
+					])->widget(TimePicker::classname(),[
+						'options' => ['placeholder' => 'Enter time...'],
+					]); ?>
+				</div>
+
+				<!-- Time Picker for Mileage Entry End Time -->
+				<?= Html::activeLabel($model, 'MileageEntryEndDate', [
+					'label'=>'End Time',
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($model, 'MileageEntryEndDate',[
+						'showLabels'=>false
+					])->widget(TimePicker::classname(),[
+						'options' => ['placeholder' => 'Enter time...'],
+					]); ?>
+				</div>
+
+				<!-- Activity Drop-down Selection -->
+				<?= Html::activeLabel($model, 'MileageEntryActivityID', [
+					'label'=>'Activity Type',
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
 					<?= $form->field($model, 'MileageEntryActivityID',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'MileageEntryActivityID']); ?>
-				</div-->
-
-				<!--div class="col-sm-2">
-					<?= $form->field($model, 'MileageEntryCreatedBy',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'Created By']); ?>
+					])->dropDownList($activityCode); ?>
 				</div>
-			</div>
 
+		<!-- Retrieve the User ID that is creating the mileage entry -->
+		<?=Html::activeHiddenInput($model, 'MileageEntryCreatedBy', ['value' => Yii::$app->user->identity->id]); ?>
+	</div>
     <div class="form-group">
         <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success', 'id'=> 'mileage_card_submit_btn']) ?>
     </div>

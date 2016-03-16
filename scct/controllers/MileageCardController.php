@@ -13,7 +13,7 @@ use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use yii\web\Request;
 use yii\web\ForbiddenHttpException;
-
+use \DateTime;
 
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
@@ -170,20 +170,20 @@ class MileageCardController extends BaseController
 			return $this -> render('view', [
 											'model' => json_decode($mileage_card_response, true),
 											'dateProvider' => $dateProvider,
-												'SundayProvider' => $SundayProvider,
-												'Total_Mileage_Sun' => $Total_Mileage_Sun,
-												'MondayProvider' => $MondayProvider,
-												'Total_Mileage_Mon' => $Total_Mileage_Mon,
-												'TuesdayProvider' => $TuesdayProvider,
-												'Total_Mileage_Tue' => $Total_Mileage_Tue,
-												'WednesdayProvider' => $WednesdayProvider,
-												'Total_Mileage_Wed' => $Total_Mileage_Wed,
-												'ThursdayProvider' => $ThursdayProvider,
-												'Total_Mileage_Thr' => $Total_Mileage_Thr,
-												'FridayProvider' => $FridayProvider,
-												'Total_Mileage_Fri' => $Total_Mileage_Fri,
-												'SaturdayProvider' => $SaturdayProvider,
-												'Total_Mileage_Sat' => $Total_Mileage_Sat,
+											'SundayProvider' => $SundayProvider,
+											'Total_Mileage_Sun' => $Total_Mileage_Sun,
+											'MondayProvider' => $MondayProvider,
+											'Total_Mileage_Mon' => $Total_Mileage_Mon,
+											'TuesdayProvider' => $TuesdayProvider,
+											'Total_Mileage_Tue' => $Total_Mileage_Tue,
+											'WednesdayProvider' => $WednesdayProvider,
+											'Total_Mileage_Wed' => $Total_Mileage_Wed,
+											'ThursdayProvider' => $ThursdayProvider,
+											'Total_Mileage_Thr' => $Total_Mileage_Thr,
+											'FridayProvider' => $FridayProvider,
+											'Total_Mileage_Fri' => $Total_Mileage_Fri,
+											'SaturdayProvider' => $SaturdayProvider,
+											'Total_Mileage_Sat' => $Total_Mileage_Sat,
 									]);
 		}
 		else
@@ -301,12 +301,11 @@ class MileageCardController extends BaseController
     }
 	
 	/**
-     * Creates a new MileageCard model.
+     * Creates a new MileageEntry model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreateMileageEntry($id)
-    {
+	public function actionCreateMileageEntry($mileageCardId, $mileageCardTechId, $mileageCardDate) {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
@@ -316,51 +315,74 @@ class MileageCardController extends BaseController
 		if (Yii::$app->user->can('createMileageCard'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'MileageCardEmpID', 'MileageCardTechID', 'MileageCardProjectID', 'MileageCardApprovedBy', 
-				'MileageCardCreateDate', 'MileageCardCreatedBy', 'MileageCardModifiedDate', 'MileageCardModifiedBy', 
-				'MileageCardBusinessMiles', 'MileageCardPersonalMiles', 'MileageCardApprovedFlag', 'isNewRecord'
+				'MileageEntryUserID', 'MileageEntryStartingMileage', 'MileageEntryEndingMileage', 'MileageEntryStartDate',
+				'MileageEntryEndDate', 'MileageEntryWeekDay', 'MileageEntryDate', 'MileageEntryType', 'MileageEntryMileageCardID',
+				'MileageEntryActivityID', 'MileageEntryApprovedBy', 'MileageEntryStatus', 'MileageEntryComment', 'MileageEntryCreatedDate',
+				'MileageEntryCreatedBy', 'MileageEntryModifiedDate', 'MileageEntryModifiedBy',
 			]);
-			
-			$model->addRule('MileageCardEmpID', 'integer')
-				  ->addRule('MileageCardTechID', 'integer')
-				  ->addRule('MileageCardProjectID', 'integer')
-				  ->addRule('MileageCardBusinessMiles', 'integer')
-				  ->addRule('MileageCardPersonalMiles', 'integer')
-				  ->addRule('MileageCardApprovedFlag', 'integer')
-				  ->addRule('MileageCardApprovedBy', 'string')
-				  ->addRule('MileageCardCreatedBy', 'string')
-				  ->addRule('MileageCardModifiedBy', 'string')
-				  ->addRule('MileageCardCreateDate', 'safe')
-				  ->addRule('MileageCardModifiedDate', 'safe');
-				  
-			
+
+			$model->addRule('MileageEntryUserID', 'integer')
+				->addRule('MileageEntryStartingMileage', 'integer')
+				->addRule('MileageEntryEndingMileage', 'integer')
+				->addRule('MileageEntryStartDate', 'safe')
+				->addRule('MileageEntryEndDate', 'safe')
+				//->addRule('MileageEntryWeekDay', 'integer')
+				->addRule('MileageEntryDate', 'safe')
+				->addRule('MileageEntryType', 'integer')
+				->addRule('MileageEntryMileageCardID', 'integer')
+				->addRule('MileageEntryActivityID', 'integer')
+				->addRule('MileageEntryApprovedBy', 'string')
+				//->addRule('MileageEntryStatus', 'integer')
+				->addRule('MileageEntryComment', 'string')
+				->addRule('MileageEntryCreatedDate', 'safe')
+				->addRule('MileageEntryCreatedBy', 'string')
+				->addRule('MileageEntryModifiedDate', 'safe')
+				->addRule('MileageEntryModifiedBy', 'string');
+
+			//GET DATA TO FILL FORM DROPDOWNS
+			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
+			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
+			$activityCode = json_decode($activityCodeResponse, true);
+
 			if ($model->load(Yii::$app->request->post())) {
-				
+
+				//concatenate start time
+				$MileageEntryStartTimeConcatenate = new DateTime($mileageCardDate.$model->MileageEntryStartDate);
+				$MileageEntryStartTimeConcatenate = $MileageEntryStartTimeConcatenate->format('Y-m-d H:i:s');
+
+				//concatenate end time
+				$MileageEntryEndTimeConcatenate = new DateTime($mileageCardDate.$model->MileageEntryEndDate);
+				$MileageEntryEndTimeConcatenate = $MileageEntryEndTimeConcatenate->format('Y-m-d H:i:s');
+
 				$data = array(
-					'MileageCardEmpID' => $model->MileageCardEmpID,
-					'MileageCardTechID' => $model->MileageCardTechID,
-					'MileageCardProjectID' => $model->MileageCardProjectID,
-					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
-					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
-					'MileageCardApprovedFlag' => $model->MileageCardApprovedFlag,
-					'MileageCardApprovedBy' => $model->MileageCardApprovedBy,
-					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
-					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
-					'MileageCardCreateDate' => $model->MileageCardCreateDate,
-					'MileageCardModifiedDate' => $model->MileageCardModifiedDate,
+					'MileageEntryUserID' => $mileageCardTechId,
+					'MileageEntryStartingMileage' => $model->MileageEntryStartingMileage,
+					'MileageEntryEndingMileage' => $model->MileageEntryEndingMileage,
+					'MileageEntryStartDate' => $MileageEntryStartTimeConcatenate,
+					'MileageEntryEndDate' => $MileageEntryEndTimeConcatenate,
+					'MileageEntryDate' => $mileageCardDate,
+					'MileageEntryType' => $model->MileageEntryType,
+					'MileageEntryMileageCardID' => $mileageCardId,
+					'MileageEntryActivityID' => $model->MileageEntryActivityID,
+					'MileageEntryApprovedBy' => $model->MileageEntryApprovedBy,
+					'MileageEntryComment' => $model->MileageEntryComment,
+					'MileageEntryCreatedDate' => $model->MileageEntryCreatedDate,
+					'MileageEntryCreatedBy' => $model->MileageEntryCreatedBy,
+					'MileageEntryModifiedDate' => $model->MileageEntryModifiedDate,
+					'MileageEntryModifiedBy' => $model->MileageEntryModifiedBy,
 				);
-				
-				$json_data = json_encode($data);		
 
-				// post url
+				$json_data = json_encode($data);
+
+				//Execute the POST call
 				$url_send = "http://api.southerncrossinc.com/index.php?r=mileage-entry%2Fcreate";
-				$response = Parent::executePostRequest($url_send, $json_data);
-				$obj = json_decode($response, true);
+				Parent::executePostRequest($url_send, $json_data);
 
-				return $this->redirect(['view', 'id' => $obj["MileageEntryID"]]);
+				return $this->redirect(['view', 'id' => $mileageCardId]);
 			} else {
 				return $this->render('create_mileage_entry', [
 					'model' => $model,
+					'activityCode' => $activityCode,
 				]);
 			}
 		}
@@ -368,7 +390,8 @@ class MileageCardController extends BaseController
 		{
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
-    }
+	}
+
 
     /**
      * Updates an existing MileageCard model.
