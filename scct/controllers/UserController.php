@@ -156,8 +156,8 @@ class UserController extends BaseController
 					'UserComments' => $model-> UserComments,
 					'UserKey' => $model-> Password,
 					'UserActiveFlag' => $model-> UserActiveFlag,
-					'UserCreatedDate' => $model-> UserCreatedDate,
-					'UserModifiedDate' => $model-> UserModifiedDate,
+					//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
+					//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
 					'UserCreatedBy' =>  Yii::$app->session['userID'],
 					'UserModifiedBy' => $model-> UserModifiedBy,
 					'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,

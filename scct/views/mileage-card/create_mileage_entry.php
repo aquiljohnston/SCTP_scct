@@ -10,10 +10,11 @@ $this->title = 'Create Mileage Entry';
 $this->params['breadcrumbs'][] = ['label' => 'Mileage Entry', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="time-entry-create">
+<div class="mileage-entry-create">
 	
     <?= $this->render('_formte', [
         'model' => $model,
+        'activityCode' => $activityCode,
     ]) ?>
 
 </div>

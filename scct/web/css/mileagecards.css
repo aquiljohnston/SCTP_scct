@@ -9,3 +9,10 @@
 .white_space {
 	margin-top: 3%;
 }
+div[id^=modalContent] .container {
+	padding: 10px 15px 20px;
+}
+div[id^=modalContent] .wrap #top-wrapper {
+	display: none;
+}
+
