@@ -31,7 +31,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
-			'X-Client: 0',
+			'X-Client:CometTracker',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -54,7 +54,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
-			'X-Client: 0',
+			'X-Client:CometTracker',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
@@ -80,7 +80,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
-			'X-Client: 0',
+			'X-Client:CometTracker',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
@@ -106,7 +106,7 @@ class BaseController extends Controller
 	{
 		//set headers
 		$headers = array(
-			'X-Client: 0',
+			'X-Client:CometTracker',
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
