@@ -9,6 +9,7 @@ $(document).ready(function(){
         + "<span class='icon-bar'></span>"
         +"<span class='icon-bar'></span>"
         +"<span class='icon-bar'></span>"
+        +"<?php ?>"
         +"</button>"
         +"</div>";
 	
@@ -75,10 +76,15 @@ $(document).ready(function(){
 
     var nav6 = $("<li><a id='home_btn' href='http://scct.southerncrossinc.com/index.php?'>HOME</a></li>");
 
-		// $("#nav").prepend(nav1, nav2, nav3, nav4);
+//Ajax call to retrieve all the projects for the project drop-down selection on the main menu
+    var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+        + "PROJECTS<b class='caret'></b></a>"
+        + "    <ul href='project_toolbar.php' id='projects_dropdown' class='dropdown-menu' role='menu'>");
+
+    // $("#nav").prepend(nav1, nav2, nav3, nav4);
 		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		$("#nav").prepend(nav6, nav4);
-		$("#adminNav").prepend(nav6, nav5);
+		$("#nav").prepend(nav6, nav7, nav4);
+		$("#adminNav").prepend(nav6, nav7, nav5);
     
     // assign class to current active link
     var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
