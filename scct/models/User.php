@@ -7,7 +7,7 @@ use yii\web\IdentityInterface;
 use app\controllers\BaseController;
 
 /**
- * This is the model class for table "UserTb".
+ * This is the model class for a user.
  *
  * @property string $UserID
  * @property string $UserName
@@ -33,16 +33,36 @@ use app\controllers\BaseController;
  * @property ProjectUserTb[] $projectUserTbs
  * @property KeyTb $userKey
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends \yii\base\model implements IdentityInterface
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'UserTb';
-    }
+    // /**
+     // * @inheritdoc
+     // */
+    // public static function tableName()
+    // {
+        // return 'UserTb';
+    // }
 
+	public $UserID;
+	public $UserName;
+	public $UserFirstName;
+	public $UserLastName;
+	public $UserEmployeeType;
+	public $UserPhone;
+	public $UserCompanyName;
+	public $UserCompanyPhone;
+	public $UserAppRoleType;
+	public $UserComments;
+	public $UserKey;
+	public $UserActiveFlag;
+	public $UserCreatedDate;
+	public $UserModifiedDate;
+	public $UserCreatedBy;
+	public $UserModifiedBy;
+	public $UserCreateDTLTOffset;
+	public $UserModifiedDTLTOffset;
+	public $UserInactiveDTLTOffset;
+	
     /**
      * @inheritdoc
      */
@@ -83,29 +103,29 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEquipmentTbs()
-    {
-        return $this->hasMany(EquipmentTb::className(), ['EquipmentAssignedUserID' => 'UserID']);
-    }
+    // /**
+     // * @return \yii\db\ActiveQuery
+     // */
+    // public function getEquipmentTbs()
+    // {
+        // return $this->hasMany(EquipmentTb::className(), ['EquipmentAssignedUserID' => 'UserID']);
+    // }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProjectUserTbs()
-    {
-        return $this->hasMany(ProjectUserTb::className(), ['ProjUserUserID' => 'UserID']);
-    }
+    // /**
+     // * @return \yii\db\ActiveQuery
+     // */
+    // public function getProjectUserTbs()
+    // {
+        // return $this->hasMany(ProjectUserTb::className(), ['ProjUserUserID' => 'UserID']);
+    // }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getUserKey()
-    {
-        return $this->hasOne(KeyTb::className(), ['KeyID' => 'UserKey']);
-    }
+    // /**
+     // * @return \yii\db\ActiveQuery
+     // */
+    // public function getUserKey()
+    // {
+        // return $this->hasOne(KeyTb::className(), ['KeyID' => 'UserKey']);
+    // }
 	
 	
 	
@@ -178,4 +198,5 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 		$response = BaseController::executeGetRequest($url);
 		return $response;
     }
+
 }
