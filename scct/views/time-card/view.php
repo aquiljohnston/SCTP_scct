@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php 
 			// get Tuesday's date for current TimeCard
 			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
-			$TuesdayDate = $TimeCardStartDate->modify('+2 day');	
+			$TuesdayDate = $MondayDate->modify('+1 day');	
 			$TuesdayStr = $TuesdayDate->format('Y-m-d');
 			
 			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $TuesdayStr ]));
@@ -232,7 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php 
 			// get Wednesday's date for current TimeCard
 			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
-			$WednesdayDate = $TimeCardStartDate->modify('+3 day');	
+			$WednesdayDate = $TuesdayDate->modify('+1 day');	
 			$WednesdayStr = $WednesdayDate->format('Y-m-d');
 			
 			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $WednesdayStr ]));
@@ -284,7 +284,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php 
 			// get Thursday's date for current TimeCard
 			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
-			$ThursdayDate = $TimeCardStartDate->modify('+4 day');	
+			$ThursdayDate = $WednesdayDate->modify('+1 day');	
 			$ThursdayStr = $ThursdayDate->format('Y-m-d');
 			
 			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $ThursdayStr ]));
@@ -336,7 +336,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php 
 			// get Friday's date for current TimeCard
 			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
-			$FridayDate = $TimeCardStartDate->modify('+5 day');	
+			$FridayDate = $ThursdayDate->modify('+1 day');	
 			$FridayStr = $FridayDate->format('Y-m-d');
 			
 			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $FridayStr ]));
@@ -388,7 +388,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php 
 			// get Saturday's date for current TimeCard
 			//$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
-			$SaturdayDate = $TimeCardStartDate->modify('+6 day');	
+			$SaturdayDate = $FridayDate->modify('+1 day');	
 			$SaturdayStr = $SaturdayDate->format('Y-m-d');
 			
 			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SaturdayStr ]));
