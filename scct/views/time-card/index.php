@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="timecard-index">
 
-	<h3><?= Html::encode($this->title) ?></h3>
+	<h3 class="title"><?= Html::encode($this->title) ?></h3>
 
 	<p id="multiple_time_card_approve_btn">
 		<?= Html::button('Approve',

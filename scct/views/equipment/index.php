@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<p>
 			<?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
 			
-			<?= Html::button('Accepted', [
+			<?= Html::button('Accept Equipment', [
 				'class' => 'btn btn-primary multiple_approve_btn',
 				'id' => 'multiple_approve_btn_id_equipment',
 				'data' => [

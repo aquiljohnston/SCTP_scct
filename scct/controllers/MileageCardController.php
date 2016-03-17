@@ -46,6 +46,9 @@ class MileageCardController extends BaseController
 					'pageSize' => 100,
 				],
 			]);
+			//Set Mile Card ID On the JS Call
+			$dataProvider->key ='MileageCardID';
+
 			// fill gridview by applying data provider
 			GridView::widget([
 				'dataProvider' => $dataProvider,
@@ -515,7 +518,42 @@ class MileageCardController extends BaseController
 			$responseMileageCardID = $obj[0]["MileageCardID"];
 			return $this->redirect(['view', 'id' => $responseMileageCardID]);
 	}
-	
+
+	/**
+	 * Approve Multiple existing Mileage Card(s)
+	 * If approve is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionApproveMultiple() {
+
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+
+			// loop the data array to get all id's.
+			foreach ($data as $key) {
+				foreach($key as $keyitem){
+
+					$MileageCardIDArray[] = $keyitem;
+					Yii::Trace("Mileage Card ID is : ". $keyitem);
+				}
+			}
+
+			$data = array(
+				'approvedByID' => Yii::$app->session['userID'],
+				'cardIDArray' => $MileageCardIDArray,
+			);
+			$json_data = json_encode($data);
+
+			// post url
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-mileage-cards';
+			Parent::executePutRequest($putUrl, $json_data);
+
+			return $this->redirect(['index']);
+		}else{
+			throw new \yii\web\BadRequestHttpException;
+		}
+	}
+
 		/**
      * Calculate total work hours
      * @return total work hours
