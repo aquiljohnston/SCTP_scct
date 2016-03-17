@@ -139,7 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	<?php
 			// get current Mileage Card's Date
-			$TuesdayDate = $MileageCardStartDate->modify('+2 day');
+			$TuesdayDate = $MondayDate->modify('+1 day');
 			$TuesdayStr = $TuesdayDate->format('Y-m-d');
 
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $TuesdayStr]));
@@ -184,7 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	<?php
 			// get current Mileage Card's Date
-			$WednesdayDate = $MileageCardStartDate->modify('+3 day');
+			$WednesdayDate = $TuesdayDate->modify('+1 day');
 			$WednesdayStr = $WednesdayDate->format('Y-m-d');
 
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $WednesdayStr]));
@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	<?php
 			// get current Mileage Card's Date
-			$ThursdayDate = $MileageCardStartDate->modify('+4 day');
+			$ThursdayDate = $WednesdayDate->modify('+1 day');
 			$ThursdayStr = $ThursdayDate->format('Y-m-d');
 
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $ThursdayStr]));
@@ -274,7 +274,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	<?php
 			// get current Mileage Card's Date
-			$FridayDate = $MileageCardStartDate->modify('+5 day');
+			$FridayDate = $ThursdayDate->modify('+1 day');
 			$FridayStr = $FridayDate->format('Y-m-d');
 
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $FridayStr]));
@@ -319,7 +319,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::end();?>
 	<?php
 			// get current Mileage Card's Date
-			$SaturdayDate = $MileageCardStartDate->modify('+6 day');
+			$SaturdayDate = $FridayDate->modify('+1 day');
 			$SaturdayStr = $SaturdayDate->format('Y-m-d');
 
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $SaturdayStr]));
