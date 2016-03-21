@@ -17,7 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 		<p>
-			<?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
+			<?php $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->session['userID']);?>
+			<?php $role = current($userRole);?>
+			<?php if((($role->name) == "Admin") || (($role->name) == "Engineer")){?>
+				<?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
+			<?php } ?>
 			
 			<?= Html::button('Accept Equipment', [
 				'class' => 'btn btn-primary multiple_approve_btn',

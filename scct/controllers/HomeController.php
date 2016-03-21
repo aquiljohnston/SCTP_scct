@@ -34,80 +34,71 @@ class HomeController extends BaseController
     public function actionIndex()
     {
 		 //guest redirect
-//        if (Yii::$app->user->isGuest) {
-//            return $this->redirect(['login/login']);
-//        }
-        //RBAC permissions check
-        if (Yii::$app->user->can('viewEquipmentIndex'))
-        {
-            // Reading the response from the the api and filling the GridView
-            $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications&userID='.Yii::$app->session['userID'];
-            $response = Parent::executeGetRequest($url);
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['login/login']);
+        }
+        // Reading the response from the the api and filling the GridView
+        $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications&userID='.Yii::$app->session['userID'];
+        $response = Parent::executeGetRequest($url);
 
-            //Passing data to the dataProvider and formatting it in an associative array
-            $dataProvider = json_decode($response, true);
+        //Passing data to the dataProvider and formatting it in an associative array
+        $dataProvider = json_decode($response, true);
 
-            $firstName = $dataProvider["firstName"];
-            $lastName = $dataProvider["lastName"];
+        $firstName = $dataProvider["firstName"];
+        $lastName = $dataProvider["lastName"];
 
-            Yii::trace("Tao".$firstName);
-            Yii::trace("Zhang".$lastName);
+        Yii::trace("Tao".$firstName);
+        Yii::trace("Zhang".$lastName);
 
-            $equipmentInfo = [];
-            $timeCardInfo = [];
-            $mileageCardInfo = [];
+        $equipmentInfo = [];
+        $timeCardInfo = [];
+        $mileageCardInfo = [];
 
-            try {
-                if ($dataProvider["equipment"]!=null) {
-                    $equipmentInfo = $dataProvider["equipment"];
-                }
-                if ($dataProvider["timeCards"]!=null) {
-                    $timeCardInfo = $dataProvider["timeCards"];
-                }
-                if ($dataProvider["mileageCards"]!=null) {
-                    $mileageCardInfo = $dataProvider["mileageCards"];
-                }
-            } catch(ErrorException $error) {
-                //Continue - Unable to retrieve equipment item
+        try {
+            if ($dataProvider["equipment"]!=null) {
+                $equipmentInfo = $dataProvider["equipment"];
             }
-
-            $equipmentProvider = new ArrayDataProvider([
-                'allModels' => $equipmentInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
-            ]);
-
-            $timeCardProvider = new ArrayDataProvider([
-                'allModels' => $timeCardInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
-            ]);
-
-            $mileageCardProvider = new ArrayDataProvider([
-                'allModels' => $mileageCardInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
-            ]);
-
-            GridView::widget
-            ([
-                'dataProvider' => $equipmentProvider,
-            ]);
-
-            return $this -> render('index', ['firstName' => $firstName,
-                                             'lastName' => $lastName,
-                                             'equipmentProvider' => $equipmentProvider,
-                                             'timeCardProvider' => $timeCardProvider,
-                                             'mileageCardProvider' => $mileageCardProvider]);
-            //return $this->render('index');
+            if ($dataProvider["timeCards"]!=null) {
+                $timeCardInfo = $dataProvider["timeCards"];
+            }
+            if ($dataProvider["mileageCards"]!=null) {
+                $mileageCardInfo = $dataProvider["mileageCards"];
+            }
+        } catch(ErrorException $error) {
+            //Continue - Unable to retrieve equipment item
         }
-        else
-        {
-            return $this->render('index');
-        }
+
+        $equipmentProvider = new ArrayDataProvider([
+            'allModels' => $equipmentInfo,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
+        ]);
+
+        $timeCardProvider = new ArrayDataProvider([
+            'allModels' => $timeCardInfo,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
+        ]);
+
+        $mileageCardProvider = new ArrayDataProvider([
+            'allModels' => $mileageCardInfo,
+            'pagination' => [
+                'pageSize' => 10,
+            ]
+        ]);
+
+        GridView::widget
+        ([
+            'dataProvider' => $equipmentProvider,
+        ]);
+
+        return $this -> render('index', ['firstName' => $firstName,
+                                         'lastName' => $lastName,
+                                         'equipmentProvider' => $equipmentProvider,
+                                         'timeCardProvider' => $timeCardProvider,
+                                         'mileageCardProvider' => $mileageCardProvider]);
     }
 
     /**

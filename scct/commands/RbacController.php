@@ -236,8 +236,14 @@ class RbacController extends Controller
 		$auth->addChild($admin, $createProject);
 		$auth->addChild($admin, $updateProject);
 		$auth->addChild($admin, $deleteProject);
-		
-		//get users already in the system
+        $auth->addChild($admin, $viewEquipmentIndex);
+        $auth->addChild($admin, $viewEquipment);
+        $auth->addChild($admin, $createEquipment);
+        $auth->addChild($admin, $updateEquipment);
+        $auth->addChild($admin, $deleteEquipment);
+
+
+        //get users already in the system
 		$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all";
 		$headers = array(
 			'Accept:application/json',
