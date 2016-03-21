@@ -69,7 +69,7 @@ class Equipment extends \yii\base\model
     {
         return [
             [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAnnualCalibrationStatus', 'EquipmentCreatedByUser', 'EquipmentModifiedBy', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy'], 'string'],
-            [['EquipmentClientID', 'EquipmentProjectID', 'EquipmentAssignedUserID'], 'integer'],
+            [['EquipmentID', 'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAssignedUserID'], 'integer'],
             [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate'], 'safe']
         ];
     }

@@ -24,12 +24,12 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Username']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'Password', [
+				<?= Html::activeLabel($model, 'UserKey', [
 					'label'=>'Password', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
-					<?= $form->field($model, 'Password',[
+					<?= $form->field($model, 'UserKey',[
 						'showLabels'=>false
 					])->passwordInput(['placeholder'=>'Password']); ?>
 				</div>

@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\MileageCard;
 use app\models\MileageCardSearch;
+use app\models\MileageEntry;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -317,30 +318,32 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createMileageCard'))
 		{
-			$model = new \yii\base\DynamicModel([
-				'MileageEntryUserID', 'MileageEntryStartingMileage', 'MileageEntryEndingMileage', 'MileageEntryStartDate',
-				'MileageEntryEndDate', 'MileageEntryWeekDay', 'MileageEntryDate', 'MileageEntryType', 'MileageEntryMileageCardID',
-				'MileageEntryActivityID', 'MileageEntryApprovedBy', 'MileageEntryStatus', 'MileageEntryComment', 'MileageEntryCreatedDate',
-				'MileageEntryCreatedBy', 'MileageEntryModifiedDate', 'MileageEntryModifiedBy',
-			]);
+			// $model = new \yii\base\DynamicModel([
+				// 'MileageEntryUserID', 'MileageEntryStartingMileage', 'MileageEntryEndingMileage', 'MileageEntryStartDate',
+				// 'MileageEntryEndDate', 'MileageEntryWeekDay', 'MileageEntryDate', 'MileageEntryType', 'MileageEntryMileageCardID',
+				// 'MileageEntryActivityID', 'MileageEntryApprovedBy', 'MileageEntryStatus', 'MileageEntryComment', 'MileageEntryCreatedDate',
+				// 'MileageEntryCreatedBy', 'MileageEntryModifiedDate', 'MileageEntryModifiedBy',
+			// ]);
 
-			$model->addRule('MileageEntryUserID', 'integer')
-				->addRule('MileageEntryStartingMileage', 'integer')
-				->addRule('MileageEntryEndingMileage', 'integer')
-				->addRule('MileageEntryStartDate', 'safe')
-				->addRule('MileageEntryEndDate', 'safe')
-				//->addRule('MileageEntryWeekDay', 'integer')
-				->addRule('MileageEntryDate', 'safe')
-				->addRule('MileageEntryType', 'integer')
-				->addRule('MileageEntryMileageCardID', 'integer')
-				->addRule('MileageEntryActivityID', 'integer')
-				->addRule('MileageEntryApprovedBy', 'string')
-				//->addRule('MileageEntryStatus', 'integer')
-				->addRule('MileageEntryComment', 'string')
-				->addRule('MileageEntryCreatedDate', 'safe')
-				->addRule('MileageEntryCreatedBy', 'string')
-				->addRule('MileageEntryModifiedDate', 'safe')
-				->addRule('MileageEntryModifiedBy', 'string');
+			// $model->addRule('MileageEntryUserID', 'integer')
+				// ->addRule('MileageEntryStartingMileage', 'integer')
+				// ->addRule('MileageEntryEndingMileage', 'integer')
+				// ->addRule('MileageEntryStartDate', 'safe')
+				// ->addRule('MileageEntryEndDate', 'safe')
+				// //->addRule('MileageEntryWeekDay', 'integer')
+				// ->addRule('MileageEntryDate', 'safe')
+				// ->addRule('MileageEntryType', 'integer')
+				// ->addRule('MileageEntryMileageCardID', 'integer')
+				// ->addRule('MileageEntryActivityID', 'integer')
+				// ->addRule('MileageEntryApprovedBy', 'string')
+				// //->addRule('MileageEntryStatus', 'integer')
+				// ->addRule('MileageEntryComment', 'string')
+				// ->addRule('MileageEntryCreatedDate', 'safe')
+				// ->addRule('MileageEntryCreatedBy', 'string')
+				// ->addRule('MileageEntryModifiedDate', 'safe')
+				// ->addRule('MileageEntryModifiedBy', 'string');
+				
+			$model = new MileageEntry();	
 
 			//GET DATA TO FILL FORM DROPDOWNS
 			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";

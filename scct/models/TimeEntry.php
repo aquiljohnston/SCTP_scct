@@ -48,7 +48,7 @@ class TimeEntry extends \yii\base\model
     {
         return [
             [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
-            [['TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID'], 'integer'],
+            [['TimeEntryID', 'TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID'], 'integer'],
             [['TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
         ];
     }

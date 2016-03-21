@@ -99,34 +99,36 @@ class ClientController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createClient'))
 		{
-			$model = new \yii\base\DynamicModel([
-				'ClientAccountID', 'ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone',
-				'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4',
-				'ClientTerritory', 'ClientActiveFlag', 'ClientDivisionsFlag', 'ClientComment', 'ClientCreateDate',
-				'ClientCreatorUserID', 'ClientModifiedDate', 'ClientModifiedBy', 'isNewRecord'
-			]);
+			// $model = new \yii\base\DynamicModel([
+				// 'ClientAccountID', 'ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone',
+				// 'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4',
+				// 'ClientTerritory', 'ClientActiveFlag', 'ClientDivisionsFlag', 'ClientComment', 'ClientCreateDate',
+				// 'ClientCreatorUserID', 'ClientModifiedDate', 'ClientModifiedBy', 'isNewRecord'
+			// ]);
 			
-			$model->addRule('ClientAccountID', 'integer')
-				  ->addRule('ClientName', 'string')	
-				  ->addRule('ClientContactTitle', 'string')
-				  ->addRule('ClientContactFName', 'string')
-				  ->addRule('ClientContactMI', 'string')
-				  ->addRule('ClientContactLName', 'string')
-				  ->addRule('ClientPhone', 'string')
-				  ->addRule('ClientEmail', 'string')
-				  ->addRule('ClientAddr1', 'string')
-				  ->addRule('ClientAddr2', 'string')
-				  ->addRule('ClientCity', 'string')
-				  ->addRule('ClientState', 'string')
-				  ->addRule('ClientZip4', 'string')
-				  ->addRule('ClientTerritory', 'string')
-				  ->addRule('ClientActiveFlag', 'integer')
-				  ->addRule('ClientDivisionsFlag', 'integer')
-				  ->addRule('ClientComment', 'string')
-				  ->addRule('ClientCreateDate', 'safe')
-				  ->addRule('ClientCreatorUserID', 'string')
-				  ->addRule('ClientModifiedDate', 'safe')
-				  ->addRule('ClientModifiedBy', 'string');
+			// $model->addRule('ClientAccountID', 'integer')
+				  // ->addRule('ClientName', 'string')	
+				  // ->addRule('ClientContactTitle', 'string')
+				  // ->addRule('ClientContactFName', 'string')
+				  // ->addRule('ClientContactMI', 'string')
+				  // ->addRule('ClientContactLName', 'string')
+				  // ->addRule('ClientPhone', 'string')
+				  // ->addRule('ClientEmail', 'string')
+				  // ->addRule('ClientAddr1', 'string')
+				  // ->addRule('ClientAddr2', 'string')
+				  // ->addRule('ClientCity', 'string')
+				  // ->addRule('ClientState', 'string')
+				  // ->addRule('ClientZip4', 'string')
+				  // ->addRule('ClientTerritory', 'string')
+				  // ->addRule('ClientActiveFlag', 'integer')
+				  // ->addRule('ClientDivisionsFlag', 'integer')
+				  // ->addRule('ClientComment', 'string')
+				  // ->addRule('ClientCreateDate', 'safe')
+				  // ->addRule('ClientCreatorUserID', 'string')
+				  // ->addRule('ClientModifiedDate', 'safe')
+				  // ->addRule('ClientModifiedBy', 'string');
+				  
+			$model = new client();
 				  
 			//generate array for Active Flag dropdown
 			$flag = 
@@ -208,29 +210,32 @@ class ClientController extends BaseController
 			$getUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			$model = new \yii\base\DynamicModel($getResponse);
+			// $model = new \yii\base\DynamicModel($getResponse);
 			
-			$model->addRule('ClientAccountID', 'integer')
-				  ->addRule('ClientName', 'string')			  
-				  ->addRule('ClientContactTitle', 'string')
-				  ->addRule('ClientContactFName', 'string')
-				  ->addRule('ClientContactMI', 'string')
-				  ->addRule('ClientContactLName', 'string')
-				  ->addRule('ClientPhone', 'string')
-				  ->addRule('ClientEmail', 'string')
-				  ->addRule('ClientAddr1', 'string')
-				  ->addRule('ClientAddr2', 'string')
-				  ->addRule('ClientCity', 'string')
-				  ->addRule('ClientState', 'string')
-				  ->addRule('ClientZip4', 'string')
-				  ->addRule('ClientTerritory', 'string')
-				  ->addRule('ClientActiveFlag', 'integer')
-				  ->addRule('ClientDivisionsFlag', 'integer')
-				  ->addRule('ClientComment', 'string')
-				  ->addRule('ClientCreateDate', 'safe')
-				  ->addRule('ClientCreatorUserID', 'string')
-				  ->addRule('ClientModifiedDate', 'safe')
-				  ->addRule('ClientModifiedBy', 'string');
+			// $model->addRule('ClientAccountID', 'integer')
+				  // ->addRule('ClientName', 'string')			  
+				  // ->addRule('ClientContactTitle', 'string')
+				  // ->addRule('ClientContactFName', 'string')
+				  // ->addRule('ClientContactMI', 'string')
+				  // ->addRule('ClientContactLName', 'string')
+				  // ->addRule('ClientPhone', 'string')
+				  // ->addRule('ClientEmail', 'string')
+				  // ->addRule('ClientAddr1', 'string')
+				  // ->addRule('ClientAddr2', 'string')
+				  // ->addRule('ClientCity', 'string')
+				  // ->addRule('ClientState', 'string')
+				  // ->addRule('ClientZip4', 'string')
+				  // ->addRule('ClientTerritory', 'string')
+				  // ->addRule('ClientActiveFlag', 'integer')
+				  // ->addRule('ClientDivisionsFlag', 'integer')
+				  // ->addRule('ClientComment', 'string')
+				  // ->addRule('ClientCreateDate', 'safe')
+				  // ->addRule('ClientCreatorUserID', 'string')
+				  // ->addRule('ClientModifiedDate', 'safe')
+				  // ->addRule('ClientModifiedBy', 'string');
+				  
+			$model = new client();
+			$model->attributes = $getResponse;
 				  
 			//generate array for Active Flag dropdown
 			$flag = 

@@ -20,6 +20,7 @@ use app\controllers\BaseController;
  * @property string $UserAppRoleType
  * @property string $UserComments
  * @property string $UserKey
+ * @property string $Password 
  * @property integer $UserActiveFlag
  * @property string $UserCreatedDate
  * @property string $UserModifiedDate
@@ -69,8 +70,8 @@ class User extends \yii\base\model implements IdentityInterface
     public function rules()
     {
         return [
-            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserCreatedBy', 'UserModifiedBy', 'UserCreateDTLTOffset'], 'string'],
-            [['UserKey', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset'], 'integer'],
+            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreatedBy', 'UserModifiedBy', 'UserCreateDTLTOffset'], 'string'],
+            [['UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset'], 'integer'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe']
         ];
     }

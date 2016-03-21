@@ -20,7 +20,7 @@ use Yii;
  * @property string $MileageEntryApprovedBy
  * @property integer $MileageEntryStatus
  * @property string $MileageEntryComment
- * @property string $MileageEntryCreateDate
+ * @property string $MileageEntryCreatedDate
  * @property string $MileageEntryCreatedBy
  * @property string $MileageEntryModifiedDate
  * @property string $MileageEntryModifiedBy
@@ -44,7 +44,7 @@ class MileageEntry extends \yii\base\model
 	public $MileageEntryApprovedBy;
 	public $MileageEntryStatus;
 	public $MileageEntryComment;
-	public $MileageEntryCreateDate;
+	public $MileageEntryCreatedDate;
 	public $MileageEntryCreatedBy;
 	public $MileageEntryModifiedDate;
 	public $MileageEntryModifiedBy;
@@ -55,10 +55,9 @@ class MileageEntry extends \yii\base\model
     public function rules()
     {
         return [
-            [['MileageEntryStartingMileage', 'MileageEntryEndingMileage'], 'number'],
-            [['MileageEntryType', 'MileageEntryMileageCardID', 'MileageEntryActivityID', 'MileageEntryStatus', 'MileageEntryUserID'], 'integer'],
+            [['MileageEntryStartingMileage', 'MileageEntryEndingMileage', 'MileageEntryID', 'MileageEntryType', 'MileageEntryMileageCardID', 'MileageEntryActivityID', 'MileageEntryStatus', 'MileageEntryUserID'], 'integer'],
             [['MileageEntryApprovedBy', 'MileageEntryComment', 'MileageEntryCreatedBy', 'MileageEntryModifiedBy'], 'string'],
-            [['MileageEntryDate', 'MileageEntryStartDate', 'MileageEntryEndDate',  'MileageEntryCreateDate', 'MileageEntryModifiedDate'], 'safe']
+            [['MileageEntryDate', 'MileageEntryStartDate', 'MileageEntryEndDate',  'MileageEntryCreatedDate', 'MileageEntryModifiedDate'], 'safe']
         ];
     }
 
@@ -81,7 +80,7 @@ class MileageEntry extends \yii\base\model
             'MileageEntryApprovedBy' => 'Mileage Entry Approved By',
             'MileageEntryStatus' => 'Mileage Entry Status',
             'MileageEntryComment' => 'Mileage Entry Comment',
-            'MileageEntryCreateDate' => 'Mileage Entry Create Date',
+            'MileageEntryCreatedDate' => 'Mileage Entry Created Date',
             'MileageEntryCreatedBy' => 'Mileage Entry Created By',
             'MileageEntryModifiedDate' => 'Mileage Entry Modified Date',
             'MileageEntryModifiedBy' => 'Mileage Entry Modified By',
