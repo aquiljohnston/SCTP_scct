@@ -67,7 +67,7 @@ class Client extends \yii\base\model
         return [
             [['ClientName'], 'required'],
             [['ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone', 'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4', 'ClientTerritory', 'ClientComment', 'ClientCreatorUserID', 'ClientModifiedBy'], 'string'],
-            [['ClientActiveFlag', 'ClientDivisionsFlag', 'ClientAccountID'], 'integer'],
+            [['ClientID', 'ClientActiveFlag', 'ClientDivisionsFlag', 'ClientAccountID'], 'integer'],
             [['ClientCreateDate', 'ClientModifiedDate'], 'safe']
         ];
     }

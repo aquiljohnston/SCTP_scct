@@ -103,33 +103,34 @@ class EquipmentController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createEquipment'))
 		{
-			$model = new \yii\base\DynamicModel([
-				'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
-				'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
-				'EquipmentClientID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus',
-				'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord'
-			]);
+			// $model = new \yii\base\DynamicModel([
+				// 'EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear',
+				// 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment',
+				// 'EquipmentClientID', 'EquipmentAnnualCalibrationDate', 'EquipmentAnnualCalibrationStatus',
+				// 'EquipmentCreatedByUser', 'EquipmentCreateDate', 'EquipmentModifiedBy', 'EquipmentModifiedDate', 'isNewRecord'
+			// ]);
 			
-			$model->addRule('EquipmentName', 'string')			  
-				  ->addRule('EquipmentSerialNumber', 'string')
-				  ->addRule('EquipmentDetails', 'string')
-				  ->addRule('EquipmentType', 'string')
-				  ->addRule('EquipmentManufacturer', 'string')
-				  ->addRule('EquipmentManufactureYear', 'string')
-				  ->addRule('EquipmentCondition', 'string')
-				  ->addRule('EquipmentMACID', 'string')
-				  ->addRule('EquipmentModel', 'string')
-				  ->addRule('EquipmentColor', 'string')
-				  ->addRule('EquipmentWarrantyDetail', 'string')
-				  ->addRule('EquipmentComment', 'string')
-				  ->addRule('EquipmentClientID', 'integer')
-				  ->addRule('EquipmentAnnualCalibrationDate', 'safe')
-				  ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
-				  ->addRule('EquipmentCreatedByUser', 'string')
-				  ->addRule('EquipmentCreateDate', 'safe')
-				  ->addRule('EquipmentModifiedBy', 'string')
-				  ->addRule('EquipmentModifiedDate', 'safe');
+			// $model->addRule('EquipmentName', 'string')			  
+				  // ->addRule('EquipmentSerialNumber', 'string')
+				  // ->addRule('EquipmentDetails', 'string')
+				  // ->addRule('EquipmentType', 'string')
+				  // ->addRule('EquipmentManufacturer', 'string')
+				  // ->addRule('EquipmentManufactureYear', 'string')
+				  // ->addRule('EquipmentCondition', 'string')
+				  // ->addRule('EquipmentMACID', 'string')
+				  // ->addRule('EquipmentModel', 'string')
+				  // ->addRule('EquipmentColor', 'string')
+				  // ->addRule('EquipmentWarrantyDetail', 'string')
+				  // ->addRule('EquipmentComment', 'string')
+				  // ->addRule('EquipmentClientID', 'integer')
+				  // ->addRule('EquipmentAnnualCalibrationDate', 'safe')
+				  // ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
+				  // ->addRule('EquipmentCreatedByUser', 'string')
+				  // ->addRule('EquipmentCreateDate', 'safe')
+				  // ->addRule('EquipmentModifiedBy', 'string')
+				  // ->addRule('EquipmentModifiedDate', 'safe');
 			
+			$model = new equipment();
 
 			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown
@@ -263,29 +264,32 @@ class EquipmentController extends BaseController
 			$getUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			$model = new \yii\base\DynamicModel($getResponse);
+			// $model = new \yii\base\DynamicModel($getResponse);
 			
-			$model->addRule('EquipmentName', 'string')			  
-				  ->addRule('EquipmentSerialNumber', 'string')
-				  ->addRule('EquipmentDetails', 'string')
-				  ->addRule('EquipmentType', 'string')
-				  ->addRule('EquipmentManufacturer', 'string')
-				  ->addRule('EquipmentManufactureYear', 'string')
-				  ->addRule('EquipmentCondition', 'string')
-				  ->addRule('EquipmentMACID', 'string')
-				  ->addRule('EquipmentModel', 'string')
-				  ->addRule('EquipmentColor', 'string')
-				  ->addRule('EquipmentWarrantyDetail', 'string')
-				  ->addRule('EquipmentComment', 'string')
-				  ->addRule('EquipmentClientID', 'integer')
-				  ->addRule('EquipmentProjectID', 'integer')
-				  ->addRule('EquipmentAnnualCalibrationDate', 'safe')
-				  ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
-				  ->addRule('EquipmentAssignedUserID', 'string')
-				  ->addRule('EquipmentCreatedByUser', 'string')
-				  ->addRule('EquipmentCreateDate', 'safe')
-				  ->addRule('EquipmentModifiedBy', 'string')
-				  ->addRule('EquipmentModifiedDate', 'safe');
+			// $model->addRule('EquipmentName', 'string')			  
+				  // ->addRule('EquipmentSerialNumber', 'string')
+				  // ->addRule('EquipmentDetails', 'string')
+				  // ->addRule('EquipmentType', 'string')
+				  // ->addRule('EquipmentManufacturer', 'string')
+				  // ->addRule('EquipmentManufactureYear', 'string')
+				  // ->addRule('EquipmentCondition', 'string')
+				  // ->addRule('EquipmentMACID', 'string')
+				  // ->addRule('EquipmentModel', 'string')
+				  // ->addRule('EquipmentColor', 'string')
+				  // ->addRule('EquipmentWarrantyDetail', 'string')
+				  // ->addRule('EquipmentComment', 'string')
+				  // ->addRule('EquipmentClientID', 'integer')
+				  // ->addRule('EquipmentProjectID', 'integer')
+				  // ->addRule('EquipmentAnnualCalibrationDate', 'safe')
+				  // ->addRule('EquipmentAnnualCalibrationStatus', 'integer')
+				  // ->addRule('EquipmentAssignedUserID', 'string')
+				  // ->addRule('EquipmentCreatedByUser', 'string')
+				  // ->addRule('EquipmentCreateDate', 'safe')
+				  // ->addRule('EquipmentModifiedBy', 'string')
+				  // ->addRule('EquipmentModifiedDate', 'safe');
+				  
+			$model = new equipment();
+			$model->attributes = $getResponse;
 				  
 			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown

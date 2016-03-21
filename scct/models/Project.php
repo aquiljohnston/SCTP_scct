@@ -50,7 +50,7 @@ class Project extends \yii\base\model
         return [
             [['ProjectName'], 'required'],
             [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'string'],
-            [['ProjectStatus', 'ProjectClientID'], 'integer'],
+            [['ProjectID', 'ProjectStatus', 'ProjectClientID'], 'integer'],
             [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe']
         ];
     }

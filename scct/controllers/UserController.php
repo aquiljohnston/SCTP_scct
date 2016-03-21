@@ -99,31 +99,32 @@ class UserController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createUser'))
 		{
-			$model = new \yii\base\DynamicModel([
-				'UserName', 'Password', 'UserFirstName', 'UserLastName','UserEmployeeType',
-				'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 
-				'UserActiveFlag', 'UserCreatedDate', 'UserModifiedDate', 'UserCreatedBy', 'UserModifiedBy',
-				'UserCreateDTLTOffset', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'isNewRecord'
-			]);
+			// $model = new \yii\base\DynamicModel([
+				// 'UserName', 'Password', 'UserFirstName', 'UserLastName','UserEmployeeType',
+				// 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 
+				// 'UserActiveFlag', 'UserCreatedDate', 'UserModifiedDate', 'UserCreatedBy', 'UserModifiedBy',
+				// 'UserCreateDTLTOffset', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'isNewRecord'
+			// ]);
 			
-			$model->addRule('UserName', 'string')
-				  ->addRule('UserFirstName', 'string')
-				  ->addRule('UserLastName', 'string')
-				  ->addRule('UserEmployeeType', 'string')
-				  ->addRule('UserPhone', 'string')
-				  ->addRule('UserCompanyName', 'string')
-				  ->addRule('UserCompanyPhone', 'string')
-				  ->addRule('UserAppRoleType', 'string')
-				  ->addRule('UserComments', 'string')
-				  ->addRule('UserCreatedBy', 'string')
-				  ->addRule('UserModifiedBy', 'string')
-				  ->addRule('UserCreateDTLTOffset', 'string')
-				  ->addRule('Password', 'string')
-				  ->addRule('UserActiveFlag', 'integer')
-				  ->addRule('UserModifiedDTLTOffset', 'integer')
-				  ->addRule('UserInactiveDTLTOffset', 'integer')
-				  ->addRule('UserCreatedDate', 'safe')
-				  ->addRule('UserModifiedDate', 'safe');
+			// $model->addRule('UserName', 'string')
+				  // ->addRule('UserFirstName', 'string')
+				  // ->addRule('UserLastName', 'string')
+				  // ->addRule('UserEmployeeType', 'string')
+				  // ->addRule('UserPhone', 'string')
+				  // ->addRule('UserCompanyName', 'string')
+				  // ->addRule('UserCompanyPhone', 'string')
+				  // ->addRule('UserAppRoleType', 'string')
+				  // ->addRule('UserComments', 'string')
+				  // ->addRule('UserCreatedBy', 'string')
+				  // ->addRule('UserModifiedBy', 'string')
+				  // ->addRule('UserCreateDTLTOffset', 'string')
+				  // ->addRule('Password', 'string')
+				  // ->addRule('UserActiveFlag', 'integer')
+				  // ->addRule('UserModifiedDTLTOffset', 'integer')
+				  // ->addRule('UserInactiveDTLTOffset', 'integer')
+				  // ->addRule('UserCreatedDate', 'safe')
+				  // ->addRule('UserModifiedDate', 'safe');
+			$model = new User();
 			
 			//get App Roles for form dropdown
 			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
@@ -154,7 +155,7 @@ class UserController extends BaseController
 					'UserCompanyPhone' => $model-> UserCompanyPhone,
 					'UserAppRoleType' => $model-> UserAppRoleType,
 					'UserComments' => $model-> UserComments,
-					'UserKey' => $model-> Password,
+					'UserKey' => $model-> UserKey,
 					'UserActiveFlag' => $model-> UserActiveFlag,
 					//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
 					//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
@@ -225,36 +226,29 @@ class UserController extends BaseController
 		{
 			$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
-			// $keys = array_values(array_keys($response));
-
-			// $arrKey = array();
-			// for($i=0; $i<count($keys); $i++)
-			// {
-				// $arrKey[$i] = $keys[$i];
-			// }
 			
-			// $model = new \yii\base\DynamicModel($arrKey);
+			// $model = new \yii\base\DynamicModel($getResponse);
 			
-			$model = new \yii\base\DynamicModel($getResponse);
-			
-			$model->addRule('UserName', 'string')
-				  ->addRule('UserFirstName', 'string')
-				  ->addRule('UserLastName', 'string')
-				  ->addRule('UserEmployeeType', 'string')
-				  ->addRule('UserPhone', 'string')
-				  ->addRule('UserCompanyName', 'string')
-				  ->addRule('UserCompanyPhone', 'string')
-				  ->addRule('UserAppRoleType', 'string')
-				  ->addRule('UserComments', 'string')
-				  ->addRule('UserCreatedBy', 'string')
-				  ->addRule('UserModifiedBy', 'string')
-				  ->addRule('UserCreateDTLTOffset', 'string')
-				  ->addRule('UserKey', 'string')
-				  ->addRule('UserActiveFlag', 'integer')
-				  ->addRule('UserModifiedDTLTOffset', 'integer')
-				  ->addRule('UserInactiveDTLTOffset', 'integer')
-				  ->addRule('UserCreatedDate', 'safe')
-				  ->addRule('UserModifiedDate', 'safe');
+			// $model->addRule('UserName', 'string')
+				  // ->addRule('UserFirstName', 'string')
+				  // ->addRule('UserLastName', 'string')
+				  // ->addRule('UserEmployeeType', 'string')
+				  // ->addRule('UserPhone', 'string')
+				  // ->addRule('UserCompanyName', 'string')
+				  // ->addRule('UserCompanyPhone', 'string')
+				  // ->addRule('UserAppRoleType', 'string')
+				  // ->addRule('UserComments', 'string')
+				  // ->addRule('UserCreatedBy', 'string')
+				  // ->addRule('UserModifiedBy', 'string')
+				  // ->addRule('UserCreateDTLTOffset', 'string')
+				  // ->addRule('UserKey', 'string')
+				  // ->addRule('UserActiveFlag', 'integer')
+				  // ->addRule('UserModifiedDTLTOffset', 'integer')
+				  // ->addRule('UserInactiveDTLTOffset', 'integer')
+				  // ->addRule('UserCreatedDate', 'safe')
+				  // ->addRule('UserModifiedDate', 'safe');
+			$model = new User();
+			$model->attributes = $getResponse;
 				  
 			//get App Roles for form dropdown
 			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";

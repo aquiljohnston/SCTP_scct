@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\TimeCard;
 use app\models\TimeCardSearch;
+use app\models\TimeEntry;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,7 +37,8 @@ class TimeCardController extends BaseController
 		{
 			// create curl for restful call.		
 			// get response from api 		
-			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
+			//$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
+			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
@@ -329,26 +331,28 @@ class TimeCardController extends BaseController
 		if (Yii::$app->user->can('createTimeCard'))
 		{
 			// temperary commented attributes maybe used later
-			$model = new \yii\base\DynamicModel([
-				'TimeEntryStartTime', 'TimeEntryEndTime',
-				'TimeEntryDate', 'TimeEntryMinutes',
-				'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
-				'TimeEntryUserID', 'TimeEntryTimeCardID','TimeEntryActivityID', 
-				'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
-			]);
+			// $model = new \yii\base\DynamicModel([
+				// 'TimeEntryStartTime', 'TimeEntryEndTime',
+				// 'TimeEntryDate', 'TimeEntryMinutes',
+				// 'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
+				// 'TimeEntryUserID', 'TimeEntryTimeCardID','TimeEntryActivityID', 
+				// 'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
+			// ]);
 			
-			$model->addRule('TimeEntryStartTime', 'safe')
-				  ->addRule('TimeEntryEndTime', 'safe')
-				  ->addRule('TimeEntryDate', 'safe')
-				  ->addRule('TimeEntryMinutes', 'integer')
-				  ->addRule('TimeEntryCreateDate', 'safe')
-				  ->addRule('TimeEntryModifiedDate', 'safe')
-				  ->addRule('TimeEntryUserID', 'integer')
-				  ->addRule('TimeEntryTimeCardID', 'integer')
-				  ->addRule('TimeEntryActivityID', 'integer')
-				  ->addRule('TimeEntryComment', 'string')
-				  ->addRule('TimeEntryCreatedBy', 'string')
-				  ->addRule('TimeEntryModifiedBy', 'string');
+			// $model->addRule('TimeEntryStartTime', 'safe')
+				  // ->addRule('TimeEntryEndTime', 'safe')
+				  // ->addRule('TimeEntryDate', 'safe')
+				  // ->addRule('TimeEntryMinutes', 'integer')
+				  // ->addRule('TimeEntryCreateDate', 'safe')
+				  // ->addRule('TimeEntryModifiedDate', 'safe')
+				  // ->addRule('TimeEntryUserID', 'integer')
+				  // ->addRule('TimeEntryTimeCardID', 'integer')
+				  // ->addRule('TimeEntryActivityID', 'integer')
+				  // ->addRule('TimeEntryComment', 'string')
+				  // ->addRule('TimeEntryCreatedBy', 'string')
+				  // ->addRule('TimeEntryModifiedBy', 'string');
+				  
+			$model = new TimeEntry();
 			
 			//generate array for Active Flag dropdown
 			$flag = 
