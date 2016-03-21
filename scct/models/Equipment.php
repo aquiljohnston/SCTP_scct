@@ -25,6 +25,8 @@ use Yii;
  * @property string $EquipmentAnnualCalibrationDate
  * @property string $EquipmentAnnualCalibrationStatus
  * @property string $EquipmentAssignedUserID
+ * @property string $EquipmentAcceptedFlag
+ * @property string $EquipmentAcceptedBy
  * @property string $EquipmentCreatedByUser
  * @property string $EquipmentCreateDate
  * @property string $EquipmentModifiedBy
@@ -33,15 +35,32 @@ use Yii;
  * @property ClientTb $equipmentClient
  * @property UserTb $equipmentAssignedUser
  */
-class Equipment extends \yii\db\ActiveRecord
+class Equipment extends \yii\base\model
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'EquipmentTb';
-    }
+	public $EquipmentID;
+	public $EquipmentName;
+	public $EquipmentSerialNumber;
+	public $EquipmentDetails;
+	public $EquipmentType;
+	public $EquipmentManufacturer;
+	public $EquipmentManufactureYear;
+	public $EquipmentCondition;
+	public $EquipmentMACID;
+	public $EquipmentModel;
+	public $EquipmentColor;
+	public $EquipmentWarrantyDetail;
+	public $EquipmentComment;
+	public $EquipmentClientID;
+	public $EquipmentProjectID;
+	public $EquipmentAnnualCalibrationDate;
+	public $EquipmentAnnualCalibrationStatus;
+	public $EquipmentAssignedUserID;
+	public $EquipmentAcceptedFlag;
+	public $EquipmentAcceptedBy;
+	public $EquipmentCreatedByUser;
+	public $EquipmentCreateDate;
+	public $EquipmentModifiedBy;
+	public $EquipmentModifiedDate;
 
     /**
      * @inheritdoc
@@ -49,7 +68,7 @@ class Equipment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAnnualCalibrationStatus', 'EquipmentCreatedByUser', 'EquipmentModifiedBy'], 'string'],
+            [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAnnualCalibrationStatus', 'EquipmentCreatedByUser', 'EquipmentModifiedBy', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy'], 'string'],
             [['EquipmentClientID', 'EquipmentProjectID', 'EquipmentAssignedUserID'], 'integer'],
             [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate'], 'safe']
         ];
@@ -79,26 +98,12 @@ class Equipment extends \yii\db\ActiveRecord
             'EquipmentAnnualCalibrationDate' => 'Equipment Annual Calibration Date',
             'EquipmentAnnualCalibrationStatus' => 'Equipment Annual Calibration Status',
             'EquipmentAssignedUserID' => 'Equipment Assigned User ID',
+			'EquipmentAcceptedFlag' => 'Equipment Accepted Flag',
+			'EquipmentAcceptedBy' => 'Equipment Accepted By',
             'EquipmentCreatedByUser' => 'Equipment Created By User',
             'EquipmentCreateDate' => 'Equipment Create Date',
             'EquipmentModifiedBy' => 'Equipment Modified By',
             'EquipmentModifiedDate' => 'Equipment Modified Date',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEquipmentClient()
-    {
-        return $this->hasOne(ClientTb::className(), ['ClientID' => 'EquipmentClientID']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEquipmentAssignedUser()
-    {
-        return $this->hasOne(UserTb::className(), ['UserID' => 'EquipmentAssignedUserID']);
     }
 }

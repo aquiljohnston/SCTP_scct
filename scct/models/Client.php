@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "ClientTb".
  *
  * @property integer $ClientID
+ * @property integer $ClientAccountID
  * @property string $ClientName
  * @property string $ClientContactTitle
  * @property string $ClientContactFName
@@ -32,15 +33,31 @@ use Yii;
  * @property EquipmentTb[] $equipmentTbs
  * @property ProjectTb[] $projectTbs
  */
-class Client extends \yii\db\ActiveRecord
+class Client extends \yii\base\model
 {
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'ClientTb';
-    }
+	
+	public $ClientID;
+	public $ClientAccountID;
+	public $ClientName;
+	public $ClientContactTitle;
+	public $ClientContactFName;
+	public $ClientContactMI;
+	public $ClientContactLName;
+	public $ClientPhone;
+	public $ClientEmail;
+	public $ClientAddr1;
+	public $ClientAddr2;
+	public $ClientCity;
+	public $ClientState;
+	public $ClientZip4;
+	public $ClientTerritory;
+	public $ClientActiveFlag;
+	public $ClientDivisionsFlag;
+	public $ClientComment;
+	public $ClientCreateDate;
+	public $ClientCreatorUserID;
+	public $ClientModifiedDate;
+	public $ClientModifiedBy;
 
     /**
      * @inheritdoc
@@ -50,7 +67,7 @@ class Client extends \yii\db\ActiveRecord
         return [
             [['ClientName'], 'required'],
             [['ClientName', 'ClientContactTitle', 'ClientContactFName', 'ClientContactMI', 'ClientContactLName', 'ClientPhone', 'ClientEmail', 'ClientAddr1', 'ClientAddr2', 'ClientCity', 'ClientState', 'ClientZip4', 'ClientTerritory', 'ClientComment', 'ClientCreatorUserID', 'ClientModifiedBy'], 'string'],
-            [['ClientActiveFlag', 'ClientDivisionsFlag'], 'integer'],
+            [['ClientActiveFlag', 'ClientDivisionsFlag', 'ClientAccountID'], 'integer'],
             [['ClientCreateDate', 'ClientModifiedDate'], 'safe']
         ];
     }
@@ -62,6 +79,7 @@ class Client extends \yii\db\ActiveRecord
     {
         return [
             'ClientID' => 'Client ID',
+			'ClientAccountID' => 'Client Account ID',
             'ClientName' => 'Client Name',
             'ClientContactTitle' => 'Client Contact Title',
             'ClientContactFName' => 'Client Contact Fname',
@@ -83,21 +101,5 @@ class Client extends \yii\db\ActiveRecord
             'ClientModifiedDate' => 'Client Modified Date',
             'ClientModifiedBy' => 'Client Modified By',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEquipmentTbs()
-    {
-        return $this->hasMany(EquipmentTb::className(), ['EquipmentClientID' => 'ClientID']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProjectTbs()
-    {
-        return $this->hasMany(ProjectTb::className(), ['ProjectClientID' => 'ClientID']);
     }
 }
