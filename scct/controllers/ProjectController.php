@@ -284,4 +284,62 @@ class ProjectController extends BaseController
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
+	
+	/**
+     * Get all projects associate with the specific user based on the userID
+     * It will return all projects in json format
+     * @param string $userID
+     * @return mixed
+     */
+    public function actionGetAllProjects()
+    {
+		
+		if (Yii::$app->request->isAjax) {
+		$data = Yii::$app->request->post();
+		$userIDArray= explode(":", $data['userID']);
+		$userID= $userIDArray[0];
+		Yii::Trace("UserID is ; ". $userID);
+		
+		//get projects by calling API route
+		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-projects&userID=".$userID;
+		$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
+		
+		//set up response data type
+		Yii::$app->response->format = 'json';
+		
+		Yii::Trace("User ID is :　".$projectDropdownResponse);
+		// echo no clients JSON
+        return ['projects' => $projectDropdownResponse];//json_encode($response);
+		//$searchby= $searchby[0];
+		//$search = // your logic;
+		//\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+		}
+		//guest redirect
+		/*if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+		//RBAC permissions check
+		if (Yii::$app->user->can('viewProject'))
+		{
+				  
+			//get projects for dropdown menu
+			$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-projects&userID=".$userID;
+			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
+			//$projectDropdown = json_decode($projectDropdownResponse, true);
+			
+			Yii::Trace("!!!!!!!!!!!".$projectDropdownResponse);
+			
+			//generate array for Active Flag dropdown
+			$flag = 
+			[
+				1 => "Active",
+				0 => "Inactive",
+			];
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}*/
+    }
 }

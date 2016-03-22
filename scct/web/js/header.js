@@ -79,7 +79,8 @@ $(document).ready(function(){
 //Ajax call to retrieve all the projects for the project drop-down selection on the main menu
     var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "PROJECTS<b class='caret'></b></a>"
-        + "    <ul href='project_toolbar.php' id='projects_dropdown' class='dropdown-menu' role='menu'>");
+        + "    <ul href='#' id='projects_dropdown' class='dropdown-menu' role='menu'>"
+		+ "</ul></li>");
 
     // $("#nav").prepend(nav1, nav2, nav3, nav4);
 		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
@@ -102,6 +103,47 @@ $(document).ready(function(){
             $(url2).css({"color": "#FF9E19"});
         }
     });  
+	
+	// gather userID based on user role type
+	var adminID = $(".adminMenu").attr("id");
+	var projectManagerID = $(".menu").attr("id");
+	
+	var userRoleID = -1;
+	
+	if(adminID != null || projectManagerID != null){
+	
+		if(adminID != null){
+			userRoleID = adminID;
+		}else{
+			userRoleID = projectManagerID;
+		}
+		
+		//setup ajax call to get all project associate with the user
+		$.ajax({
+			type:"POST",
+			url:"index.php?r=project%2Fget-all-projects",
+			dataType:"json",	
+			data: {userID: userRoleID},
+			beforeSend: function () {
+                        //alert("before send");
+                    },
+			success: function(data){
+				//alert("success to get projects! "+data.projects);
+				var Data = $.parseJSON(data.projects);
+				$('#projects_dropdown').empty();
+				$('#projects_dropdown').append('<li><a data-description="All Projects" href="http://scct.southerncrossinc.com/index.php?r=project%2Findex">All Projects</a></li>');
+				
+				$.each(Data, function(i, item){
+					//alert("project name are "+Data[i].ProjectName);
+					//append projec name to the dropdown-menu
+					$('#projects_dropdown').append('<li><a data-description="SubProject" href="#">'+Data[i].ProjectName+'</a></li>');
+				});
+			},
+			failure: function () {
+				alert("Failure!");
+			}
+		});
+	}
 });
 //         $('#nav > ul').not('ul li ul').not('li ul li').children().addClass('current');
 //         $(this).closest('li').addClass('current');
