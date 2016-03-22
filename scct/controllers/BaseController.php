@@ -44,6 +44,13 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		//execute curl
 		$response = curl_exec ($curl);
+		//check authorization, logout and redirect to login if unauthorized
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		if($httpCode == 401)
+		{
+			//should be able to check response for error message at this point if we end up having more unauthorized cases
+			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -70,6 +77,12 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		//execute curl
 		$response = curl_exec ($curl);
+		//check authorization, logout and redirect to login if unauthorized
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		if($httpCode == 401)
+		{
+			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -96,6 +109,12 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		//execute put
 		$response = curl_exec ($curl);
+		//check authorization, logout and redirect to login if unauthorized
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		if($httpCode == 401)
+		{
+			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -120,6 +139,12 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		//execute delete
 		$response = curl_exec ($curl);
+		//check authorization, logout and redirect to login if unauthorized
+		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		if($httpCode == 401)
+		{
+			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+		}
 		curl_close ($curl);
 		
 		return $response;
