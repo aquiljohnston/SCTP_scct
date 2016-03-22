@@ -36,7 +36,6 @@ class EquipmentController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fequipment-view';
 			$response = Parent::executeGetRequest($url);
-			
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider
 			([
@@ -190,7 +189,6 @@ class EquipmentController extends BaseController
 				// post url
 				$url= "http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate";			
 				$response = Parent::executePostRequest($url, $json_data);
-				
 				$obj = json_decode($response, true);
 
 				return $this->redirect(['view', 'id' => $obj["EquipmentID"]]);
