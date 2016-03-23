@@ -1,0 +1,26 @@
+#equipmentWidget{
+	float: left;
+	width: 32%;
+}
+#timeCardWidget{
+	float: left;
+	width: 32%;
+	margin-left: 2%;
+}
+#mileageCardWidget{
+	float: right;
+	width: 32%;
+}
+.projectlanding-index tbody tr:last-child {
+	background: #f0f0f2;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+.projectlanding-index [title~=View] {
+	display: block;
+	margin: 0 auto;
+	text-align:center;
+}
+.projectlanding-index thead th:last-child {
+	text-align:center;
+}

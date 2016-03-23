@@ -131,12 +131,12 @@ $(document).ready(function(){
 				//alert("success to get projects! "+data.projects);
 				var Data = $.parseJSON(data.projects);
 				$('#projects_dropdown').empty();
-				$('#projects_dropdown').append('<li><a data-description="All Projects" href="http://scct.southerncrossinc.com/index.php?r=project%2Findex">All Projects</a></li>');
+				$('#projects_dropdown').append('<li><a data-description="All Projects" href="http://scct.southerncrossinc.com/index.php?r=project-landing%2Findex">All Projects</a></li>');
 				
 				$.each(Data, function(i, item){
 					//alert("project name are "+Data[i].ProjectName);
 					//append projec name to the dropdown-menu
-					$('#projects_dropdown').append('<li><a data-description="SubProject" href="#">'+Data[i].ProjectName+'</a></li>');
+					$('#projects_dropdown').append('<li><a data-description="SubProject" href="http://scct.southerncrossinc.com/index.php?r=project%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
 				});
 			},
 			failure: function () {

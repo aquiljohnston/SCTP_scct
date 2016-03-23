@@ -26,6 +26,7 @@ class AppAsset extends AssetBundle
 		'css/equipments.css',
 		'css/timecards.css',
 		'css/mileagecards.css',
+		'css/projectlanding.css',
 		'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
     ];
 	public $cssOptions = [
