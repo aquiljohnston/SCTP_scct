@@ -16,19 +16,19 @@ $(function() {
 		for(var i=0; i < pks.length; i++){
 			// get approved value for this timecard
 			flag = $("#w1 input[timecardid="+pks[i]+"]").attr("approved");
+			
 			// get totalworkhours for this timecard
 			totalworkhours = $("#w1 input[timecardid="+pks[i]+"]").attr("totalworkhours");
+			
 			//alert("loop flag is "+flag+" i is : "+i);
-			if(flag == "Yes" || totalworkhours < 0 || flag == "yes"){
+			if(flag == "Yes" || totalworkhours == .0 || flag == "yes"){
 				flag = "Yes";
 				break;
 			}else{
-				//flag = "No";
 				continue;
 			}
 		}
-		//alert("flag is : "+ flag);
-		//if (!pks || pks.length != 0 && checkApproved != "Yes"){
+		
 		if (!pks || pks.length != 0 && flag != "Yes"){
 				$('#multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
 				

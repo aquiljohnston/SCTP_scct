@@ -17,7 +17,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Update', ['update', 'id' => $model['EquipmentID']], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model['EquipmentID']], [
+		
+		<?php 
+			// get approve equipment action
+			$approveUrl = "";//urldecode(Url::to(['equipment/approve', 'id' => $model["equipmentID"]]));
+		?>
+		<?php if($model['EquipmentAcceptedFlag']=='Yes'){ ?>
+			<?= Html::a('Accept Equipment', $approveUrl, [
+				'class' => 'btn btn-primary multiple_approve_btn',
+				'disabled' => true,
+				'id' => 'enable_single_approve_btn_id_equipment',
+				'data' => [
+                           'confirm' => 'Are you sure you want to accept this item?']
+			])?>
+		<?php }else{ ?>
+				<?= Html::a('Accept Equipment', $approveUrl, [
+					'class' => 'btn btn-primary multiple_approve_btn',
+					'disabled' => false,
+					'id' => 'disable_single_approve_btn_id_equipment',
+					'data' => [
+							   'confirm' => 'Are you sure you want to accept this item?']
+				])?>
+		<?php } ?>
+		<?= Html::a('Delete', ['delete', 'id' => $model['EquipmentID']], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -47,6 +69,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'EquipmentAnnualCalibrationDate',
             'EquipmentAnnualCalibrationStatus',
             'EquipmentAssignedUserID',
+			'EquipmentAcceptedFlag',
+			'EquipmentAcceptedBy',
             'EquipmentCreatedByUser',
             'EquipmentCreateDate',
             'EquipmentModifiedBy',

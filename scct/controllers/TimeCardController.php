@@ -245,7 +245,7 @@ class TimeCardController extends BaseController
 		if (Yii::$app->user->can('createTimeCard'))
 		{
 			$model = new \yii\base\DynamicModel([
-				'TimeCardStartDate', 'TimeCardEndDate', 'TimeCardCreateDate', 'TimeCardModifiedDate', 'TimeCardHoursWorked', 'TimeCardProjectID', 
+				'TimeCardStartDate', 'TimeCardEndDate', 'TimeCardCreateDate', 'TimeCardModifiedDate', 'TimeCardProjectID', 
 				'TimeCardTechID', 'TimeCardApprovedBy', 'TimeCardApprovedFlag', 'TimeCardSupervisorName', 'TimeCardComment', 'TimeCardCreatedBy', 
 				'TimeCardModifiedBy', 'isNewRecord'
 			]);
@@ -254,7 +254,6 @@ class TimeCardController extends BaseController
 				  ->addRule('TimeCardEndDate', 'safe')
 				  ->addRule('TimeCardCreateDate', 'safe')
 				  ->addRule('TimeCardModifiedDate', 'safe')
-				  ->addRule('TimeCardHoursWorked', 'number')
 				  ->addRule('TimeCardProjectID', 'integer')
 				  ->addRule('TimeCardTechID', 'integer')
 				  ->addRule('TimeCardApprovedBy', 'string')
@@ -275,7 +274,6 @@ class TimeCardController extends BaseController
 				$data = array(
 					'TimeCardStartDate' => $model->TimeCardStartDate,
 					'TimeCardEndDate' => $model->TimeCardEndDate,
-					'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
 					'TimeCardProjectID' => $model->TimeCardProjectID,
 					'TimeCardTechID' => $model->TimeCardTechID,
 					'TimeCardApprovedBy' => $model->TimeCardApprovedBy,
@@ -501,7 +499,7 @@ class TimeCardController extends BaseController
 				  ->addRule('TimeCardEndDate', 'safe')
 				  ->addRule('TimeCardCreateDate', 'safe')
 				  ->addRule('TimeCardModifiedDate', 'safe')
-				  ->addRule('TimeCardHoursWorked', 'number')
+				  //->addRule('TimeCardHoursWorked', 'number')
 				  ->addRule('TimeCardProjectID', 'integer')
 				  ->addRule('TimeCardTechID', 'integer')
 				  ->addRule('TimeCardApprovedBy', 'string')
@@ -516,7 +514,7 @@ class TimeCardController extends BaseController
 				$data = array(
 					'TimeCardStartDate' => $model->TimeCardStartDate,
 					'TimeCardEndDate' => $model->TimeCardEndDate,
-					'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
+					//'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
 					'TimeCardProjectID' => $model->TimeCardProjectID,
 					'TimeCardTechID' => $model->TimeCardTechID,
 					'TimeCardApprovedBy' => $model->TimeCardApprovedBy,
