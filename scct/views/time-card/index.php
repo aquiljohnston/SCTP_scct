@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'UserLastName',
 			'TimeCardStartDate',
 			'TimeCardEndDate',
-			'TimeCardHoursWorked',
+			'SumHours',
 			'TimeCardApprovedFlag',
 
 			['class' => 'yii\grid\ActionColumn',
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["TimeCardHoursWorked"] ];
+					return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
