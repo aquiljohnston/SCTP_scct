@@ -99,31 +99,6 @@ class UserController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createUser'))
 		{
-			// $model = new \yii\base\DynamicModel([
-				// 'UserName', 'Password', 'UserFirstName', 'UserLastName','UserEmployeeType',
-				// 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 
-				// 'UserActiveFlag', 'UserCreatedDate', 'UserModifiedDate', 'UserCreatedBy', 'UserModifiedBy',
-				// 'UserCreateDTLTOffset', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'isNewRecord'
-			// ]);
-			
-			// $model->addRule('UserName', 'string')
-				  // ->addRule('UserFirstName', 'string')
-				  // ->addRule('UserLastName', 'string')
-				  // ->addRule('UserEmployeeType', 'string')
-				  // ->addRule('UserPhone', 'string')
-				  // ->addRule('UserCompanyName', 'string')
-				  // ->addRule('UserCompanyPhone', 'string')
-				  // ->addRule('UserAppRoleType', 'string')
-				  // ->addRule('UserComments', 'string')
-				  // ->addRule('UserCreatedBy', 'string')
-				  // ->addRule('UserModifiedBy', 'string')
-				  // ->addRule('UserCreateDTLTOffset', 'string')
-				  // ->addRule('Password', 'string')
-				  // ->addRule('UserActiveFlag', 'integer')
-				  // ->addRule('UserModifiedDTLTOffset', 'integer')
-				  // ->addRule('UserInactiveDTLTOffset', 'integer')
-				  // ->addRule('UserCreatedDate', 'safe')
-				  // ->addRule('UserModifiedDate', 'safe');
 			$model = new User();
 			
 			//get App Roles for form dropdown
@@ -226,27 +201,7 @@ class UserController extends BaseController
 		{
 			$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
-			
-			// $model = new \yii\base\DynamicModel($getResponse);
-			
-			// $model->addRule('UserName', 'string')
-				  // ->addRule('UserFirstName', 'string')
-				  // ->addRule('UserLastName', 'string')
-				  // ->addRule('UserEmployeeType', 'string')
-				  // ->addRule('UserPhone', 'string')
-				  // ->addRule('UserCompanyName', 'string')
-				  // ->addRule('UserCompanyPhone', 'string')
-				  // ->addRule('UserAppRoleType', 'string')
-				  // ->addRule('UserComments', 'string')
-				  // ->addRule('UserCreatedBy', 'string')
-				  // ->addRule('UserModifiedBy', 'string')
-				  // ->addRule('UserCreateDTLTOffset', 'string')
-				  // ->addRule('UserKey', 'string')
-				  // ->addRule('UserActiveFlag', 'integer')
-				  // ->addRule('UserModifiedDTLTOffset', 'integer')
-				  // ->addRule('UserInactiveDTLTOffset', 'integer')
-				  // ->addRule('UserCreatedDate', 'safe')
-				  // ->addRule('UserModifiedDate', 'safe');
+
 			$model = new User();
 			$model->attributes = $getResponse;
 				  

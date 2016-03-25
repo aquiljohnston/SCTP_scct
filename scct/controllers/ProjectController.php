@@ -98,25 +98,6 @@ class ProjectController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createProject'))
 		{
-			// $model = new \yii\base\DynamicModel([
-				// 'ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectStatus', 'ProjectClientID',
-				// 'ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectCreatedBy', 'ProjectModifiedDate',
-				// 'ProjectModifiedBy','isNewRecord'
-			// ]);
-			
-			// $model->addRule('ProjectName', 'string')			  
-				  // ->addRule('ProjectDescription', 'string')
-				  // ->addRule('ProjectNotes', 'string')
-				  // ->addRule('ProjectType', 'string')
-				  // ->addRule('ProjectStatus', 'integer')
-				  // ->addRule('ProjectClientID', 'integer')
-				  // ->addRule('ProjectStartDate', 'safe')
-				  // ->addRule('ProjectEndDate', 'safe')
-				  // ->addRule('ProjectCreateDate', 'safe')
-				  // ->addRule('ProjectCreatedBy', 'string')
-				  // ->addRule('ProjectModifiedDate', 'safe')
-				  // ->addRule('ProjectModifiedBy', 'string');
-				  
 			$model  = new project();
 				  
 			//get clients for form dropdown
@@ -189,22 +170,7 @@ class ProjectController extends BaseController
 		{
 			$getUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
-
-			// $model = new \yii\base\DynamicModel($getResponse);
-			
-			// $model->addRule('ProjectName', 'string')			  
-				  // ->addRule('ProjectDescription', 'string')
-				  // ->addRule('ProjectNotes', 'string')
-				  // ->addRule('ProjectType', 'string')
-				  // ->addRule('ProjectStatus', 'integer')
-				  // ->addRule('ProjectClientID', 'integer')
-				  // ->addRule('ProjectStartDate', 'safe')
-				  // ->addRule('ProjectEndDate', 'safe')
-				  // ->addRule('ProjectCreateDate', 'safe')
-				  // ->addRule('ProjectCreatedBy', 'string')
-				  // ->addRule('ProjectModifiedDate', 'safe')
-				  // ->addRule('ProjectModifiedBy', 'string');
-				  
+ 
 			$model  = new project();
 			$model->attributes = $getResponse;
 				  
