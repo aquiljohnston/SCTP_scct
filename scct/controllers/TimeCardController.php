@@ -327,29 +327,7 @@ class TimeCardController extends BaseController
 		}
 		//RBAC permissions check
 		if (Yii::$app->user->can('createTimeCard'))
-		{
-			// temperary commented attributes maybe used later
-			// $model = new \yii\base\DynamicModel([
-				// 'TimeEntryStartTime', 'TimeEntryEndTime',
-				// 'TimeEntryDate', 'TimeEntryMinutes',
-				// 'TimeEntryCreateDate', 'TimeEntryModifiedDate', 
-				// 'TimeEntryUserID', 'TimeEntryTimeCardID','TimeEntryActivityID', 
-				// 'TimeEntryComment', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy', 'isNewRecord'
-			// ]);
-			
-			// $model->addRule('TimeEntryStartTime', 'safe')
-				  // ->addRule('TimeEntryEndTime', 'safe')
-				  // ->addRule('TimeEntryDate', 'safe')
-				  // ->addRule('TimeEntryMinutes', 'integer')
-				  // ->addRule('TimeEntryCreateDate', 'safe')
-				  // ->addRule('TimeEntryModifiedDate', 'safe')
-				  // ->addRule('TimeEntryUserID', 'integer')
-				  // ->addRule('TimeEntryTimeCardID', 'integer')
-				  // ->addRule('TimeEntryActivityID', 'integer')
-				  // ->addRule('TimeEntryComment', 'string')
-				  // ->addRule('TimeEntryCreatedBy', 'string')
-				  // ->addRule('TimeEntryModifiedBy', 'string');
-				  
+		{				  
 			$model = new TimeEntry();
 			
 			//generate array for Active Flag dropdown
@@ -499,7 +477,6 @@ class TimeCardController extends BaseController
 				  ->addRule('TimeCardEndDate', 'safe')
 				  ->addRule('TimeCardCreateDate', 'safe')
 				  ->addRule('TimeCardModifiedDate', 'safe')
-				  //->addRule('TimeCardHoursWorked', 'number')
 				  ->addRule('TimeCardProjectID', 'integer')
 				  ->addRule('TimeCardTechID', 'integer')
 				  ->addRule('TimeCardApprovedBy', 'string')
@@ -514,7 +491,6 @@ class TimeCardController extends BaseController
 				$data = array(
 					'TimeCardStartDate' => $model->TimeCardStartDate,
 					'TimeCardEndDate' => $model->TimeCardEndDate,
-					//'TimeCardHoursWorked' => $model->TimeCardHoursWorked,
 					'TimeCardProjectID' => $model->TimeCardProjectID,
 					'TimeCardTechID' => $model->TimeCardTechID,
 					'TimeCardApprovedBy' => $model->TimeCardApprovedBy,
