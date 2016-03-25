@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
@@ -20,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		
 		<?php 
 			// get approve equipment action
-			$approveUrl = "";//urldecode(Url::to(['equipment/approve', 'id' => $model["equipmentID"]]));
+			$approveUrl = urldecode(Url::to(['equipment/approve', 'id' => $model["EquipmentID"]]));
 		?>
 		<?php if($model['EquipmentAcceptedFlag']=='Yes'){ ?>
 			<?= Html::a('Accept Equipment', $approveUrl, [
