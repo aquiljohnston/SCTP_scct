@@ -227,21 +227,21 @@ class EquipmentController extends BaseController
 		if(Yii::$app->user->isGuest){
 			return $this->redirect(['login/login']);
 		}
-			$equipmentIDArray[] = $id;
+			$EquipmentIDArray[0] = $id;
 			
 			$data = array(
-				'approvedByID' => Yii::$app->session['userID'],
-				'equipmentIDArray' => $equipmentIDArray,
+				'acceptedByID' => Yii::$app->session['userID'],
+				'equipmentIDArray' => $EquipmentIDArray,
 			);
-			Yii::Trace("approvedByID is : ".$id);
-			$json_data = json_encode($data);
+			
+			$json_data_approve = json_encode($data);
 			
 			// post url
 			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			$putResponse = Parent::executePutRequest($putUrl, $json_data_approve);
 			$obj = json_decode($putResponse, true);
-			//$responseEquipmentID = $obj["EquipmentID"];
-			//return $this->redirect(['view', 'id' => $responseEquipmentID]);
+			$responseEquipmentID = $obj[0]["EquipmentID"];
+			return $this->redirect(['view', 'id' => $responseEquipmentID]);
 	}
 
     /**
