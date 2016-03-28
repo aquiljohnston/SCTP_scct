@@ -22,7 +22,8 @@
 		"kartik-v/yii2-widget-activeform": "@dev",
         "kartik-v/yii2-widget-datepicker": "*",
 		"kartik-v/yii2-widget-timepicker": "*",
-        "kartik-v/yii2-sortable-input": "*"
+		"kartik-v/yii2-widget-datetimepicker": "*",
+        "kartik-v/yii2-sortable-input": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
