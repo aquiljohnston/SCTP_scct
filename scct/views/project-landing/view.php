@@ -1,38 +1,40 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $model app\models\project */
 
-$this->title = 'Project Landing';
+$this->title = $model->ProjectName;
+$this->params['breadcrumbs'][] = ['label' => 'Project Landing', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="projectlanding-index">
+<div class="projectlanding-view">
 
-    <h3><?= Html::encode($this->title) ?></h3>
-
-    <!-- Table for Projects -->
-    <?= GridView::widget([
-        //'id' => 'equipmentWidget',
-        'dataProvider' => $singleprojectProvider,
-        //'layout' => "{items}\n{pager}",
-        //'caption' => 'All Projects',
-
-        'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
-            'ProjectID',
-			'ProjectDescription',
-			'ProjectNotes',
-			'ProjectType',
-			'ProjectStatus',
-			'ProjectStartDate',
-			'ProjectEndDate',
+    <h1 class="title"><?= Html::encode($this->title) ?></h3>
+	
+	<p>
+		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
+		<?= Html::a('Add Users', ['add-user', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
+	</p>
+	
+	<?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'ProjectName',
+            'ProjectDescription',
+            'ProjectNotes',
+            'ProjectType',
+            'ProjectStatus',
+            'ProjectClientID',
+            'ProjectStartDate',
+            'ProjectEndDate',	
 			'ProjectCreateDate',
-			'ProjectCreateBy',
-
+			'ProjectCreatedBy',
+			'ProjectModifiedDate',
+			'ProjectModifiedBy',
         ],
-    ]); ?>
+    ]) ?>
 
 </div>
