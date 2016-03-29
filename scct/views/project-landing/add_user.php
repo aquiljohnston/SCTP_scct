@@ -1,0 +1,69 @@
+<?php
+
+use yii\helpers\Html;
+use kartik\form\ActiveForm;
+use kartik\sortinput\SortableInput;
+
+/* @var $this yii\web\View */
+/* @var $project app\models\project */
+/* @var $dataProvider yii\data\ActiveDataProvider */
+
+$this->title = 'Add Users to' . ' ' . $project->ProjectName;
+$this->params['breadcrumbs'][] = ['label' => 'Project Landing', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $project->ProjectID, 'url' => ['view', 'id' => $project->ProjectID]];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="projectlanding-add-user">
+
+    <h1 class="title"><?= Html::encode($this->title) ?></h1>
+
+	<p>
+		<?= Html::a('Back', ['view' , 'id' => $project->ProjectID], ['class' => 'btn btn-primary']) ?>
+	</p>
+	
+	 <?php $form = ActiveForm::begin([
+				'type' => ActiveForm::TYPE_VERTICAL,
+				'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
+			]); ?>
+		<div class="row">
+		<div class="col-sm-6">
+		<label style="font-size:20px">Unassigned Users</label>
+		<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
+			//'name'=>'Unassigned Users',
+			'items' => $unassignedData,
+			'hideInput' => true,
+			'sortableOptions' => [
+				'connected'=>true,
+				'options' => ['style'=> 'min-height: 50px']
+			],
+			'options' => [
+				'class'=>'form-control',
+				'readonly'=>true
+				]
+		]); ?>
+		</div>
+		<div class="col-sm-6">
+		<label style="font-size:20px">Assigned Users</label>
+		<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
+			'name'=>'Assigned Users',
+			'items' => $assignedData,
+			'hideInput' => true,
+			'sortableOptions' => [
+				'itemOptions'=>['class'=>'alert alert-warning'],
+				'connected'=>true,
+				'options' => ['style'=> 'min-height: 50px']
+			],
+			'options' => [
+				'class'=>'form-control',
+				'readonly'=>true
+				]
+		]); ?>
+		</div>
+		</div>
+	
+	<div class="form-group" id="">
+       <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success']) ?>
+	   <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+    </div>
+	
+</div>

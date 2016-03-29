@@ -136,7 +136,7 @@ $(document).ready(function(){
 				$.each(Data, function(i, item){
 					//alert("project name are "+Data[i].ProjectName);
 					//append projec name to the dropdown-menu
-					$('#projects_dropdown').append('<li><a data-description="SubProject" href="http://scct.southerncrossinc.com/index.php?r=project%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
+					$('#projects_dropdown').append('<li><a data-description="SubProject" href="http://scct.southerncrossinc.com/index.php?r=project-landing%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
 				});
 			},
 			failure: function () {

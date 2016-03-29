@@ -3,12 +3,15 @@
 namespace app\controllers;
 
 use Yii;
+use app\controllers\BaseController;
 use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
 use linslin\yii2\curl;
+use kartik\sortinput\SortableInput;
 
 /**
  * ProjectLandingController
@@ -97,38 +100,82 @@ class ProjectLandingController extends BaseController
 		{
 			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
 			$response = Parent::executeGetRequest($url);
-			Yii::Trace("project details are : ".$response);
-			$projectProvider = json_decode($response, true);
-			/*$project[] = [];
-			
-		try {
-            if ($projectProvider!=null) {
-                $project = $projectProvider;
-            }
-        } catch(ErrorException $error) {
-            //Continue - Unable to retrieve equipment item
-        }*/
 
-        $singleprojectProvider = new ArrayDataProvider([
-            'allModels' => $projectProvider,//$project,
-			/*'pagination' => [
-					'pageSize' => 1,
-				],*/
-        ]);
-
-        GridView::widget
-        ([
-            'dataProvider' => $singleprojectProvider,
-        ]);
-
-			return $this -> render('view', [
-                                         'singleprojectProvider' => $singleprojectProvider,
-										]);
+			return $this -> render('view', ['model' => json_decode($response), true]);
 		}
 		else
 		{
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
+	
+	public function actionAddUser($id)
+	{
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+		//RBAC permissions check
+		if (Yii::$app->user->can('viewProject'))
+		{
+			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-user-relationships&projectID='.$id;
+			$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+			$response = Parent::executeGetRequest($url);
+			$projectResponse = Parent::executeGetRequest($projectUrl);
+			$users = json_decode($response,true);
+			$project = json_decode($projectResponse);
+			
+			//load get data into variables
+			$unassignedData = $users["unassignedUsers"];
+			$assignedData = $users["assignedUsers"];
+			
+			//create model for active form
+			$model = new \yii\base\DynamicModel([
+				'UnassignedUsers', 'AssignedUsers' ]);
+			$model->addRule('UnassignedUsers', 'string')
+					 ->addRule('AssignedUsers',  'string');
+			
+			
+		
+			if ($model->load(Yii::$app->request->post()))
+			{
+				//prepare arrays for post request
+				//explode strings from active form into arrays
+				$unassignedUsersArray = explode(',',$model->UnassignedUsers);
+				$assignedUsersArray = explode(',',$model->AssignedUsers);
+				//array diff new arrays with arrays previous to submission to get changes
+				$usersAdded = array_diff($assignedUsersArray,array_keys($assignedData));
+				$usersRemoved = array_diff($unassignedUsersArray,array_keys($unassignedData));
+				//load arrays of changes into post data
+				$data = [];
+				$data["usersRemoved"] = $usersRemoved;
+				$data["usersAdded"] = $usersAdded; 
+				
+				//encode data
+				$jsonData = json_encode($data);
+				
+				//set post url
+				$postUrl = 'api.southerncrossinc.com/index.php?r=project%2Fadd-remove-users&projectID='.$id;
+				//execute post request
+				$postResponse = Parent::executePostRequest($postUrl, $jsonData);
+				//refresh page
+				return $this->redirect(['add-user', 'id' => $project->ProjectID]);
+			}
+			else
+			{
+			return $this -> render('add_user', [
+											'project' => $project,
+											'model' => $model,
+											'unassignedData' => $unassignedData,
+											'assignedData' => $assignedData,
+									]);
+			}	
+		}
+		else
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
+	}
 
 }
