@@ -38,7 +38,7 @@ class TimeCardController extends BaseController
 			// create curl for restful call.		
 			// get response from api 		
 			//$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
-			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked";
+			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
