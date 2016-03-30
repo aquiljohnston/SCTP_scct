@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				[
 					'class' => 'yii\grid\CheckboxColumn',
 					'checkboxOptions' => function ($model, $key, $index, $column) {
-						return ['equipmentid' => $model["EquipmentID"]/*, 'data-jid'=>$model->job_id*/];
+						return ['equipmentid' => $model["EquipmentID"], 'accepted' =>$model["Accepted Flag"] ];
 					}
 					/*'pageSummary' => true,
 					'rowSelectedClass' => GridView::TYPE_SUCCESS,

@@ -243,6 +243,42 @@ class EquipmentController extends BaseController
 			$responseEquipmentID = $obj[0]["EquipmentID"];
 			return $this->redirect(['view', 'id' => $responseEquipmentID]);
 	}
+	
+	/**
+     * Approve Multiple existing TimeCard.
+     * If approve is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+	public function actionApproveMultiple() {
+		
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+			
+		 // loop the data array to get all id's.	
+        foreach ($data as $key) {
+			foreach($key as $keyitem){
+			
+			   $EquipmentIDArray[] = $keyitem;
+			   Yii::Trace("Equipmentid is ; ". $keyitem);
+			}
+        }
+		
+		$data = array(
+				'approvedByID' => Yii::$app->session['userID'],
+				'cardIDArray' => $EquipmentIDArray,
+			);		
+		$json_data = json_encode($data);
+		
+		// post url
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			return $this->redirect(['index']);
+		}else{
+			  throw new \yii\web\BadRequestHttpException;
+		}
+	}
 
     /**
      * Updates an existing equipment model.
