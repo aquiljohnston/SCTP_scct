@@ -25,11 +25,23 @@ $this->params['breadcrumbs'][] = $this->title;
 	?>
 	<p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-		<?= Html::a('Approve', $approveUrl, [
-											 'class' => 'btn btn-primary', 
-											 'data' => [
-														'confirm' => 'Are you sure you want to approve this item?']
-													])?>
+		<?php if($model['TimeCardApprovedFlag']=='Yes' ||$Total_Hours_Current_TimeCard ==.0){ ?>
+			<?= Html::a('Approve', $approveUrl, [
+												 'class' => 'btn btn-primary', 
+												 'disabled' => true,
+												 'id' => 'enable_single_approve_btn_id_timecard',
+												 'data' => [
+															'confirm' => 'Are you sure you want to approve this item?']
+												])?>
+		<?php }else{ ?>	
+			<?= Html::a('Approve', $approveUrl, [
+												 'class' => 'btn btn-primary', 
+												 'disabled' => false,
+												 'id' => 'disable_single_approve_btn_id_timecard',
+												 'data' => [
+															'confirm' => 'Are you sure you want to approve this item?']
+												])?>
+		<?php } ?>											
 	</p>
 
 	<!--Sunday TableView-->
