@@ -178,8 +178,18 @@ class TimeCardController extends BaseController
 			]);
 			$Total_Hours_Sat = $this->TotalHourCal($Saturdaydata);
 			
+			//calculation total hours for this timecardid
+			$Total_Hours_Current_TimeCard = $Total_Hours_Sun +
+											$Total_Hours_Mon +
+											$Total_Hours_Tue +
+											$Total_Hours_Wed +
+											$Total_Hours_Thu +
+											$Total_Hours_Fri +
+											$Total_Hours_Sat;
+			
 			return $this -> render('view', [
 											'model' => json_decode($time_card_response, true),
+											'Total_Hours_Current_TimeCard' => $Total_Hours_Current_TimeCard,
 											'dateProvider' => $dateProvider,
 											'SundayProvider' => $SundayProvider,
 											'Total_Hours_Sun' => $Total_Hours_Sun,
