@@ -47,6 +47,11 @@ $config = [
         ],
         //'db' => require(__DIR__ . '/db.php'),
     ],
+	'modules' => [
+        'dispatch' => [
+            'class' => 'app\modules\dispatch\Module',
+        ],
+    ],
     'params' => $params,
 ];
 
