@@ -1,6 +1,6 @@
 $(document).ready(function(){
     
-    var head = $("<a href='http://scct.southerncrossinc.com/index.php?r=home'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+    var head = $("<a href='index.php?r=home'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
     var toggleButton =    "<div class='navbar-default navbar-header'>"
@@ -26,7 +26,7 @@ $(document).ready(function(){
 	$(".adminMenu").prepend(adminHead);
 	
 	//set login logo link
-	var sc_logout_logo = $("<a href='http://scct.southerncrossinc.com/index.php?'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+	var sc_logout_logo = $("<a href='index.php?'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".sc_logout_logo").prepend(sc_logout_logo);
 	
 	//login header setting
@@ -57,24 +57,24 @@ $(document).ready(function(){
 	var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "ADMINISTRATION<b class='caret'></b></a>"
         + "    <ul class='dropdown-menu' role='menu'>"  
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=user%2Findex'>User Management</a></li>"
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=equipment%2Findex'>Equipment Management</a></li>"
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=time-card%2Findex'>Time Cards</a></li>"
-            + "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
+            + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
+            + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
+            + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
+            + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
         + "</ul></li>");
 		
     var nav5 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "ADMINISTRATION<b class='caret'></b></a>"
         + "    <ul class='dropdown-menu' role='menu'>"  
-			+ "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=client%2Findex'>Clients</a></li>"
-			+ "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=project%2Findex'>Projects</a></li>"			
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=user%2Findex'>User Management</a></li>"
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=equipment%2Findex'>Equipment Management</a></li>"
-            + "<li><a data-description='Image Animation' href='http://scct.southerncrossinc.com/index.php?r=time-card%2Findex'>Time Cards</a></li>"
-            + "<li><a data-description='Instrument Repair' href='http://scct.southerncrossinc.com/index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
+			+ "<li><a data-description='Instrument Repair' href='index.php?r=client%2Findex'>Clients</a></li>"
+			+ "<li><a data-description='Instrument Repair' href='index.php?r=project%2Findex'>Projects</a></li>"			
+            + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
+            + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
+            + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
+            + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
         + "</ul></li>");
 
-    var nav6 = $("<li><a id='home_btn' href='http://scct.southerncrossinc.com/index.php?'>HOME</a></li>");
+    var nav6 = $("<li><a id='home_btn' href='index.php?'>HOME</a></li>");
 
 //Ajax call to retrieve all the projects for the project drop-down selection on the main menu
     var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
@@ -131,12 +131,12 @@ $(document).ready(function(){
 				//alert("success to get projects! "+data.projects);
 				var Data = $.parseJSON(data.projects);
 				$('#projects_dropdown').empty();
-				$('#projects_dropdown').append('<li><a data-description="All Projects" href="http://scct.southerncrossinc.com/index.php?r=project-landing%2Findex">All Projects</a></li>');
+				$('#projects_dropdown').append('<li><a data-description="All Projects" href="index.php?r=project-landing%2Findex">All Projects</a></li>');
 				
 				$.each(Data, function(i, item){
 					//alert("project name are "+Data[i].ProjectName);
 					//append projec name to the dropdown-menu
-					$('#projects_dropdown').append('<li><a data-description="SubProject" href="http://scct.southerncrossinc.com/index.php?r=project-landing%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
+					$('#projects_dropdown').append('<li><a data-description="SubProject" href="index.php?r=project-landing%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
 				});
 			},
 			failure: function () {
