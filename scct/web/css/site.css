@@ -133,7 +133,7 @@ a.desc:after {
 	font-weight: 100;
 	height: 50px;
 }
-#nav{
+#nav, #middlePrivilegeNav{
 	float:right;
 }
 #non-nav{
@@ -165,7 +165,7 @@ ul > li >a:hover{
 #adminNav{
 	float:right;
 }
-.adminMenu{
+.adminMenu, .middlePrivilegeMenu{
 	background-color: #0067A6;
 }
 .create-btn{

@@ -158,15 +158,6 @@ use kartik\datetime\DateTimePicker;
 						]
 					]); ?>
 				</div>
-				<?= Html::activeLabel($model, 'EquipmentAnnualCalibrationStatus', [
-					'label'=>'Annual Calibration Status', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'EquipmentAnnualCalibrationStatus',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'EquipmentAnnualCalibrationStatus']); ?>
-				</div>
 				<?= Html::activeLabel($model, 'EquipmentAssignedUserID', [
 					'label'=>'Assigned User ID', 
 					'class'=>'col-sm-2 control-label'

@@ -12,12 +12,19 @@ $(document).ready(function(){
         +"<?php ?>"
         +"</button>"
         +"</div>";
-	
-	// default head setting
+
+    // default head setting
     var head = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
         + "<ul class='nav navbar-nav' id='nav'></ul>"
-        + "</div><div class='clear'></div>");    
+        + "</div><div class='clear'></div>");
     $(".menu").prepend(head);
+
+
+	// middle privilege (less than admin more than technician) head setting
+    var MiddlePrivilegeHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
+        + "<ul class='nav navbar-nav' id='middlePrivilegeNav'></ul>"
+        + "</div><div class='clear'></div>");    
+    $(".middlePrivilegeMenu").prepend(MiddlePrivilegeHead);
 	
 	// admin header setting
 	var adminHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
@@ -84,14 +91,15 @@ $(document).ready(function(){
 
     // $("#nav").prepend(nav1, nav2, nav3, nav4);
 		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		$("#nav").prepend(nav6, nav7, nav4);
+		$("#middlePrivilegeNav").prepend(nav6, nav7, nav4);
 		$("#adminNav").prepend(nav6, nav7, nav5);
+        $("#nav").prepend(nav6, nav7);
     
     // assign class to current active link
     var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
         
                                     
-    var listItems = $(".menu li a");
+    var listItems = $(".menu .adminMenu .middlePrivilegeMenu li a");
     listItems.each(function(idx, li) {
         var product = String($(li)[0]).substring(String($(li)[0]).lastIndexOf('/') + 1);
         
@@ -106,17 +114,19 @@ $(document).ready(function(){
 	
 	// gather userID based on user role type
 	var adminID = $(".adminMenu").attr("id");
-	var projectManagerID = $(".menu").attr("id");
-	
+	var middlePrivilegeID = $(".middlePrivilegeMenu").attr("id");
+	var defaultID = $(".menu").attr("id");
 	var userRoleID = -1;
 	
-	if(adminID != null || projectManagerID != null){
+	if(adminID != null || middlePrivilegeID != null || defaultID != null){
 	
 		if(adminID != null){
 			userRoleID = adminID;
-		}else{
-			userRoleID = projectManagerID;
-		}
+		} else if(middlePrivilegeID != null) {
+			userRoleID = middlePrivilegeID;
+		} else {
+            userRoleID = defaultID;
+        }
 		
 		//setup ajax call to get all project associate with the user
 		$.ajax({
@@ -140,7 +150,7 @@ $(document).ready(function(){
 				});
 			},
 			failure: function () {
-				alert("Failure!");
+				alert("Failure getting project list!");
 			}
 		});
 	}
