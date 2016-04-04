@@ -53,7 +53,6 @@ class Equipment extends \yii\base\model
 	public $EquipmentClientID;
 	public $EquipmentProjectID;
 	public $EquipmentAnnualCalibrationDate;
-	public $EquipmentAnnualCalibrationStatus;
 	public $EquipmentAssignedUserID;
 	public $EquipmentAcceptedFlag;
 	public $EquipmentAcceptedBy;
@@ -68,7 +67,7 @@ class Equipment extends \yii\base\model
     public function rules()
     {
         return [
-            [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAnnualCalibrationStatus', 'EquipmentCreatedByUser', 'EquipmentModifiedBy', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy'], 'string'],
+            [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentCreatedByUser', 'EquipmentModifiedBy', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy'], 'string'],
             [['EquipmentID', 'EquipmentClientID', 'EquipmentAssignedUserID'], 'integer'],
             [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate', 'EquipmentProjectID'], 'safe']
         ];
@@ -96,7 +95,6 @@ class Equipment extends \yii\base\model
             'EquipmentClientID' => 'Equipment Client ID',
             'EquipmentProjectID' => 'Equipment Project ID',
             'EquipmentAnnualCalibrationDate' => 'Equipment Annual Calibration Date',
-            'EquipmentAnnualCalibrationStatus' => 'Equipment Annual Calibration Status',
             'EquipmentAssignedUserID' => 'Equipment Assigned User ID',
 			'EquipmentAcceptedFlag' => 'Equipment Accepted Flag',
 			'EquipmentAcceptedBy' => 'Equipment Accepted By',

@@ -59,10 +59,11 @@ AppAsset::register($this);
 			<?php $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->session['userID']);?>
 			<?php $role = current($userRole);?>
 			<?php Yii::Trace("Session userID is : ".$role->name);?>
-			<?php if(($role->name) == "Admin"){?>
+			<?php if(($role->name) == "Admin") {?>
 					<div class="adminMenu sc_megamenu" id="<?php echo Yii::$app->session['userID']; ?>"></div>
-			<?php }else if (($role->name) == "ProjectManager"){ ?>
-					<div class="menu sc_megamenu" id="<?php echo Yii::$app->session['userID']; ?>"></div>
+			<?php } else if (($role->name) == "Supervisor" || ($role->name) == "Engineer" ||
+						($role->name) == "ProjectManager") { ?>
+					<div class="middlePrivilegeMenu sc_megamenu" id="<?php echo Yii::$app->session['userID']; ?>"></div>
 			<?php }else{ ?>
 					<div class="menu sc_megamenu" id="<?php echo Yii::$app->session['userID']; ?>"></div>
 				<?php }?>
