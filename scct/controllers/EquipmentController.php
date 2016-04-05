@@ -45,7 +45,7 @@ class EquipmentController extends BaseController
 				],
 			]);
 			
-			//set timecardid as id 
+			//set equipmentid as id 
 			$dataProvider->key ='EquipmentID';
 			
 			GridView::widget
@@ -119,30 +119,24 @@ class EquipmentController extends BaseController
 			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
 			$conditionResponse = Parent::executeGetRequest($conditionUrl);
 			$conditions = json_decode($conditionResponse, true);
-
-			//TODO: Remove when necessary - current equipment create page is not utilizing below logic
-			//get userIDs for form dropdown
-//			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
-//			$userResponse = Parent::executeGetRequest($userUrl);
-//			$users = json_decode($userResponse, true);
-//			natcasesort($users);
-
-			//TODO: Remove when necessary - current equipment create page is not utilizing below logic
-			//get projects for form dropdown
-//			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
-//			$projectResponse = Parent::executeGetRequest($projectUrl);
-//			$projects = json_decode($projectResponse, true);
+			
+			//get status for form dropdown
+			$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+			$statusResponse = Parent::executeGetRequest($statusURL);
+			$statuses = json_decode($statusResponse, true);
 
 			if ($model->load(Yii::$app->request->post())){
 				
 				$data =array(
 					'EquipmentName' => $model->EquipmentName,
 					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+					'EquipmentSCNumber' => $model->EquipmentSCNumber,
 					'EquipmentDetails' => $model->EquipmentDetails,
 					'EquipmentType' => $model->EquipmentType,
 					'EquipmentManufacturer' => $model->EquipmentManufacturer,
 					'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
 					'EquipmentCondition' => $model->EquipmentCondition,
+					'EquipmentStatus' => $model->EquipmentStatus,
 					'EquipmentMACID' => $model->EquipmentMACID,
 					'EquipmentModel' => $model->EquipmentModel,
 					'EquipmentColor' => $model->EquipmentColor,
@@ -170,6 +164,7 @@ class EquipmentController extends BaseController
 					'clients' => $clients,
 					'types' => $types,
 					'conditions' => $conditions,
+					'statuses' => $statuses,
 					]);
 			}
 		}
@@ -317,6 +312,11 @@ class EquipmentController extends BaseController
 			$conditionResponse = Parent::executeGetRequest($conditionUrl);
 			$conditions = json_decode($conditionResponse, true);
 			
+			//get status for form dropdown
+			$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+			$statusResponse = Parent::executeGetRequest($statusURL);
+			$statuses = json_decode($statusResponse, true);
+			
 			//get userIDs for form dropdown
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
@@ -333,11 +333,13 @@ class EquipmentController extends BaseController
 				$data =array(
 					'EquipmentName' => $model->EquipmentName,
 					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+					'EquipmentSCNumber' => $model->EquipmentSCNumber,
 					'EquipmentDetails' => $model->EquipmentDetails,
 					'EquipmentType' => $model->EquipmentType,
 					'EquipmentManufacturer' => $model->EquipmentManufacturer,
 					'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
 					'EquipmentCondition' => $model->EquipmentCondition,
+					'EquipmentStatus' => $model->EquipmentStatus,
 					'EquipmentMACID' => $model->EquipmentMACID,
 					'EquipmentModel' => $model->EquipmentModel,
 					'EquipmentColor' => $model->EquipmentColor,
@@ -367,6 +369,7 @@ class EquipmentController extends BaseController
 					'clients' => $clients,
 					'types' => $types,
 					'conditions' => $conditions,
+					'statuses' => $statuses,
 					'users' => $users,
 					'projects' => $projects,
 				]);
