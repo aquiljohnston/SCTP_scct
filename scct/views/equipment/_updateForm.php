@@ -34,6 +34,15 @@ use kartik\datetime\DateTimePicker;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'EquipmentSerialNumber']); ?>
 				</div>
+				<?= Html::activeLabel($model, 'EquipmentSCNumber', [
+					'label'=>'SC Number', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'EquipmentSCNumber',[
+						'showLabels'=>false
+					])->textInput(['placeholder'=>'EquipmentSCNumber']); ?>
+				</div>
 				<?= Html::activeLabel($model, 'EquipmentDetails', [
 					'label'=>'Details', 
 					'class'=>'col-sm-2 control-label'
@@ -78,6 +87,15 @@ use kartik\datetime\DateTimePicker;
 					<?= $form->field($model, 'EquipmentCondition',[
 						'showLabels'=>false
 					])->dropDownList($conditions);  ?>
+				</div>
+				<?= Html::activeLabel($model, 'EquipmentStatus', [
+					'label'=>'Status', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'EquipmentStatus',[
+						'showLabels'=>false
+					])->dropDownList($statuses);  ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentMACID', [
 					'label'=>'MACID', 

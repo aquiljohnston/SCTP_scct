@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				'Name',
 				'Serial Number',
+				//'SC Number',
 				'Details',
 				'Type',
 				'Client Name',

@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		'clients' => $clients,
 		'types' => $types,
 		'conditions' => $conditions,
+		'statuses' => $statuses,
 		'users' => $users,
 		'projects' => $projects,
     ]) ?>
