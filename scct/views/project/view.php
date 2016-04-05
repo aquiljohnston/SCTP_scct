@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectType',
             'ProjectStatus',
             'ProjectClientID',
+			'ProjectState',
             'ProjectStartDate',
             'ProjectEndDate',	
 			'ProjectCreateDate',
