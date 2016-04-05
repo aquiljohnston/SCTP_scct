@@ -321,7 +321,6 @@ class EquipmentController extends BaseController
 			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
 			$userResponse = Parent::executeGetRequest($userUrl);
 			$users = json_decode($userResponse, true);	
-			natcasesort($users);
 
 			//get projects for form dropdown
 			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
