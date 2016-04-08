@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			'UserFirstName',
 			'UserLastName',
+			'ProjectName',
 			'TimeCardStartDate',
 			'TimeCardEndDate',
 			'SumHours',
