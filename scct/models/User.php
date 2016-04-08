@@ -9,7 +9,7 @@ use app\controllers\BaseController;
 /**
  * This is the model class for a user.
  *
- * @property string $UserID
+ * @property integer $UserID
  * @property string $UserName
  * @property string $UserFirstName
  * @property string $UserLastName
@@ -70,8 +70,8 @@ class User extends \yii\base\model implements IdentityInterface
     public function rules()
     {
         return [
-            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreatedBy', 'UserModifiedBy', 'UserCreateDTLTOffset'], 'string'],
-            [['UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset'], 'integer'],
+            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreateDTLTOffset'], 'string'],
+            [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe']
         ];
     }

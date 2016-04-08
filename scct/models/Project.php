@@ -51,8 +51,8 @@ class Project extends \yii\base\model
     {
         return [
             [['ProjectName'], 'required'],
-            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'string'],
-            [['ProjectID', 'ProjectStatus', 'ProjectClientID'], 'integer'],
+            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState'], 'string'],
+            [['ProjectID', 'ProjectStatus', 'ProjectClientID', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'integer'],
             [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe']
         ];
     }
