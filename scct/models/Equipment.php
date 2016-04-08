@@ -64,6 +64,7 @@ class Equipment extends \yii\base\model
 	public $EquipmentCreateDate;
 	public $EquipmentModifiedBy;
 	public $EquipmentModifiedDate;
+	public $EquipmentModificationReason;
 
     /**
      * @inheritdoc
@@ -71,9 +72,9 @@ class Equipment extends \yii\base\model
     public function rules()
     {
         return [
-            [['EquipmentName', 'EquipmentSerialNumber', 'EquipmentSCNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentStatus', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentCreatedByUser', 'EquipmentModifiedBy', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy'], 'string'],
-            [['EquipmentID', 'EquipmentClientID', 'EquipmentAssignedUserID'], 'integer'],
-            [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate', 'EquipmentProjectID'], 'safe']
+			[['EquipmentName', 'EquipmentSerialNumber', 'EquipmentSCNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentStatus', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy', 'EquipmentModificationReason'], 'string'],
+            [['EquipmentID', 'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAssignedUserID', 'EquipmentCreatedByUser', 'EquipmentModifiedBy'], 'integer'],
+            [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate'], 'safe']
         ];
     }
 
@@ -108,6 +109,7 @@ class Equipment extends \yii\base\model
             'EquipmentCreateDate' => 'Equipment Create Date',
             'EquipmentModifiedBy' => 'Equipment Modified By',
             'EquipmentModifiedDate' => 'Equipment Modified Date',
+			'EquipmentModificationReason' => 'Equipment Modification Reason',
         ];
     }
 }
