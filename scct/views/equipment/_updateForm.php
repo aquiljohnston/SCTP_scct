@@ -181,9 +181,17 @@ use kartik\datetime\DateTimePicker;
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
+				<?php if($model["EquipmentAcceptedFlag"] == "Yes"){?>
+				<?php	$model["EquipmentAssignedUserID"] = "Unassigned"; ?>
 					<?= $form->field($model, 'EquipmentAssignedUserID',[
 						'showLabels'=>false
 					])->dropDownList($users);  ?>
+				<?php }else{ ?>
+				<?php	$model["EquipmentAssignedUserID"] = "Unassigned"; ?>
+					<?= $form->field($model, 'EquipmentAssignedUserID',[
+						'showLabels'=>false
+					])->dropDownList($users, array("disabled"=>"disabled"));  ?>
+				<?php }?>
 				</div>
 			</div>
 

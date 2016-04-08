@@ -94,7 +94,11 @@ class HomeController extends BaseController
             'dataProvider' => $equipmentProvider,
         ]);
 
-        return $this -> render('index', ['firstName' => $firstName,
+		//var_dump($timeCardInfo);
+		
+        return $this -> render('index', [
+										 'model' => $timeCardInfo,
+										 'firstName' => $firstName,
                                          'lastName' => $lastName,
                                          'equipmentProvider' => $equipmentProvider,
                                          'timeCardProvider' => $timeCardProvider,

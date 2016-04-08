@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=time-card%2Findex';
-                        return $url;
+						$url = 'index.php?r=time-card%2Findex&id='.$model["Project"];
+						return $url;
                     }
                 }
             ],
