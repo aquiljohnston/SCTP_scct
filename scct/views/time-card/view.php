@@ -22,6 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			// check start date for this timecard.
 			//var_dump("TimeCardStartDate is : ".$model["TimeCardStartDate"]);
 			$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+			if($model["TimeCardApprovedFlag"] === "Yes"){
+				$approve_status = true;
+			}else{
+				$approve_status = false;
+			}
 	?>
 	<p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
@@ -93,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SundayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday', 'disabled' =>$approve_status]) ?>
 		 
 		<?php	if($Total_Hours_Sun != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Sun?></span>
@@ -146,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $MondayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday']) ?>
+		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday', 'disabled' =>$approve_status]) ?>
 
 		<?php	if($Total_Hours_Mon != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Mon?></span>
@@ -198,7 +203,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $TuesdayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday']) ?>
+		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday', 'disabled' =>$approve_status]) ?>
 
 		<?php	if($Total_Hours_Tue != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Tue?></span>
@@ -250,7 +255,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $WednesdayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday']) ?>
+		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday', 'disabled' =>$approve_status]) ?>
 		
 		<?php	if($Total_Hours_Wed != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Wed?></span>
@@ -302,7 +307,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $ThursdayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday']) ?>
+		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday', 'disabled' =>$approve_status]) ?>
 		
 		<?php	if($Total_Hours_Thu != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Thu?></span>
@@ -354,7 +359,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $FridayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday']) ?>
+		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday', 'disabled' =>$approve_status]) ?>
 		
 		<?php	if($Total_Hours_Fri != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Fri?></span>
@@ -406,7 +411,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SaturdayStr ]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday']) ?>
+		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday', 'disabled' =>$approve_status]) ?>
 		
 		<?php	if($Total_Hours_Sat != 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Sat?></span>
