@@ -69,7 +69,7 @@ class LoginController extends BaseController
         // if (!\Yii::$app->user->isGuest) {
         //     return $this->goHome();
         // }
-
+        $loginError = false;
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
             Yii::$app->session->set('token', $user['AuthToken']);
@@ -80,9 +80,16 @@ class LoginController extends BaseController
 			Yii::$app->user->login($userIdentity);
 			Yii::Trace("identity user id: ".Yii::$app->user->getId());
             return $this->redirect('index.php?r=home');
+        } else {
+            if(Yii::$app->request->isPost) {
+                $loginError = true;
+            }
+            // Clear the fields
+            $model = new LoginForm();
         }
         return $this->render('index', [
             'model' => $model,
+            'loginError' => $loginError
         ]);
     }
 

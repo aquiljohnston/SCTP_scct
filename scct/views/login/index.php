@@ -11,8 +11,13 @@ $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login" id="login_header">
-    <h1><?= Html::encode($this->title) ?></h1>
 
+    <h1><?= Html::encode($this->title) ?></h1>
+    <?php if($loginError): ?>
+        <div class="alert alert-warning">
+            Incorrect username or password.
+        </div>
+    <?php endif; ?>
     <p>Please fill out the following fields to login:</p>
 
     <?php $form = ActiveForm::begin([
