@@ -382,7 +382,7 @@ class TimeCardController extends BaseController
 				$mileage_entry_data = array();
 				$data[] = array(
 					'ActivityTitle' => $timeEntryTitle,
-					'ActivityCreatedBy' => $TimeCardTechID,
+					'ActivityCreatedBy' => Yii::$app->session['userID'],
 					'timeEntry' => $time_entry_data,
 					'mileageEntry' => $mileage_entry_data,
 				);
