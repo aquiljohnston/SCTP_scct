@@ -355,6 +355,8 @@ class TimeCardController extends BaseController
 			$activityCode = json_decode($activityCodeResponse, true);	
 			
 			if ($model->load(Yii::$app->request->post())) {
+				//create timeEntryTitle variable 
+				$timeEntryTitle = "timeEntry";
 				// concatenate start time
 				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryStartTime);
 				$TimeEntryStartTimeConcatenate = $TimeEntryStartTimeConcatenate->format('Y-m-d H:i:s');
@@ -363,7 +365,7 @@ class TimeCardController extends BaseController
 				$TimeEntryEndTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryEndTime);
 				$TimeEntryEndTimeConcatenate = $TimeEntryEndTimeConcatenate->format('Y-m-d H:i:s');
 				
-				$data = array(
+				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
 					'TimeEntryDate' => $TimeEntryDate,
@@ -377,14 +379,26 @@ class TimeCardController extends BaseController
 					'TimeEntryModifiedBy' => $model->TimeEntryModifiedBy,
 				);
 				
-				$json_data = json_encode($data);	
+				$mileage_entry_data = array();
+				$data[] = array(
+					'ActivityTitle' => $timeEntryTitle,
+					'ActivityCreatedBy' => $TimeCardTechID,
+					'timeEntry' => $time_entry_data,
+					'mileageEntry' => $mileage_entry_data,
+				);
+				
+				$activity = array(
+					'activity' => $data,
+				);
+				
+				$json_data = json_encode($activity);	
 				
 				// post url
-				$url_send = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fcreate';				
-				$response = Parent::executePostRequest($url_send, $json_data);
-				$obj = json_decode($response, true);
+				$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
+				$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
+				$obj = json_decode($response_activity, true);
 				
-				return $this->redirect(['view', 'id' => $obj["TimeEntryTimeCardID"]]);
+				return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);
 			} else {
 				return $this->render('create_time_entry', [
 					'model' => $model,
