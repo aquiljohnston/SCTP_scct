@@ -20,6 +20,7 @@
         "yiisoft/yii2-swiftmailer": "*",
         "linslin/yii2-curl": "^1.0",
 		"kartik-v/yii2-grid": "@dev",
+		"kartik-v/yii2-krajee-base": "@dev",
 		"kartik-v/yii2-widget-activeform": "@dev",
         "kartik-v/yii2-widget-datepicker": "*",
 		"kartik-v/yii2-widget-timepicker": "*",
