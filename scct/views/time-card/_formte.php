@@ -61,6 +61,16 @@ use kartik\datetime\DateTimePicker;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'TimeEntryComment']); ?>
 				</div>
+
+				<?= Html::activeLabel($activityModel, 'ActivityPayCode', [
+					'label'=>'Activity Pay Code',
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($activityModel, 'ActivityPayCode',[
+						'showLabels'=>false
+					])->dropDownList($activityPayCode); ?>
+				</div>
 				
 				<!--div class="col-sm-4">
 					<?/*= $form->field($model, 'TimeEntryDate')
