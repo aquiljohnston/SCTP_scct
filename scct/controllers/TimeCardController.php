@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Activity;
 use Yii;
 use app\models\TimeCard;
 use app\models\TimeCardSearch;
@@ -339,7 +340,7 @@ class TimeCardController extends BaseController
 		if (Yii::$app->user->can('createTimeCard'))
 		{				  
 			$model = new TimeEntry();
-			
+			$activityModel = new Activity();
 			//generate array for Active Flag dropdown
 			$flag = 
 			[
@@ -352,8 +353,12 @@ class TimeCardController extends BaseController
 			//get clients for form dropdown
 			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
 			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
-			$activityCode = json_decode($activityCodeResponse, true);	
+			$activityCode = json_decode($activityCodeResponse, true);
 			
+			$activityPayCodeUrl = "http://api.southerncrossinc.com/index.php?r=pay-code%2Fget-code-dropdowns";
+			$activityPayCodeResponse = Parent::executeGetRequest($activityPayCodeUrl);
+			$activityPayCode = json_decode($activityPayCodeResponse, true);
+
 			if ($model->load(Yii::$app->request->post())) {
 				//create timeEntryTitle variable 
 				$timeEntryTitle = "timeEntry";
@@ -403,6 +408,8 @@ class TimeCardController extends BaseController
 				return $this->render('create_time_entry', [
 					'model' => $model,
 					'activityCode' => $activityCode,
+					'activityPayCode' => $activityPayCode,
+					'activityModel' => $activityModel
 				]);
 			}
 		}
