@@ -23,7 +23,7 @@ use kartik\datetime\DateTimePicker;
 					'label'=>'Starting Mileage',
 					'class'=>'col-sm-2 control-label'
 				]) ?>
-				<div class="col-sm-2">
+				<div class="col-sm-4">
 					<?= $form->field($model, 'MileageEntryStartingMileage',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Starting Mileage']); ?>
@@ -34,7 +34,7 @@ use kartik\datetime\DateTimePicker;
 					'label'=>'Ending Mileage',
 					'class'=>'col-sm-2 control-label'
 				]) ?>
-				<div class="col-sm-2">
+				<div class="col-sm-4">
 					<?= $form->field($model, 'MileageEntryEndingMileage',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Ending Mileage']); ?>
@@ -64,17 +64,6 @@ use kartik\datetime\DateTimePicker;
 					])->widget(TimePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
 					]); ?>
-				</div>
-
-				<!-- Activity Drop-down Selection -->
-				<?= Html::activeLabel($model, 'MileageEntryActivityID', [
-					'label'=>'Activity Type',
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-4">
-					<?= $form->field($model, 'MileageEntryActivityID',[
-						'showLabels'=>false
-					])->dropDownList($activityCode); ?>
 				</div>
 
 		<!-- Retrieve the User ID that is creating the mileage entry -->

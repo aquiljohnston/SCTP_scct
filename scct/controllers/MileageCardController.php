@@ -36,7 +36,7 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-mileage-cards-current-week";
+			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
 			$response = Parent::executeGetRequest($url);
 			
 			// passing decode data into dataProvider
@@ -342,9 +342,9 @@ class MileageCardController extends BaseController
 					'MileageEntryStartDate' => $MileageEntryStartTimeConcatenate,
 					'MileageEntryEndDate' => $MileageEntryEndTimeConcatenate,
 					'MileageEntryDate' => $mileageCardDate,
-					'MileageEntryType' => $model->MileageEntryType,
+					'MileageEntryType' => '0', //Automatically set the mileage entry type to 0 for BUSINESS - Andre V.
+					'MileageEntryActivityID' => '3', //Automatically set the mileage entry activity type to 3 for PRODUCTION - Andre V.
 					'MileageEntryMileageCardID' => $mileageCardId,
-					'MileageEntryActivityID' => $model->MileageEntryActivityID,
 					'MileageEntryApprovedBy' => $model->MileageEntryApprovedBy,
 					'MileageEntryComment' => $model->MileageEntryComment,
 					'MileageEntryCreatedDate' => $model->MileageEntryCreatedDate,
