@@ -188,6 +188,12 @@ ul > li >a:hover{
 	margin-top: 60px;
 }
 
+#projects_dropdown{
+	 width: 150px; 
+    height: 350px; 
+    overflow: auto; 
+}
+
 /*-----------End body----------*/
 
 /*-----------End body----------*/
