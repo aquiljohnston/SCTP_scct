@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'sortableOptions' => [
 				'itemOptions'=>['class'=>'alert alert-warning'],
 				'connected'=>true,
-				'options' => ['style'=> 'min-height: 50px']
+				'options' => ['style'=> 'min-height: 1000px']
 			],
 			'options' => [
 				'class'=>'form-control',
