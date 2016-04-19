@@ -268,8 +268,19 @@ class ProjectController extends BaseController
 		$userID= $userIDArray[0];
 		Yii::Trace("UserID is ; ". $userID);
 		
-		//get projects by calling API route
+		//get users role
+		$userRole = Yii::$app->authManager->getRolesByUser($userID);
+		$role = current($userRole);
+		
+		if(($role->name) == "Admin")
+		{//route for Admin users
+		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+		}
+		else
+		{//route for non Admin users
 		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-projects&userID=".$userID;
+		}
+		//get projects by calling API route
 		$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
 		
 		//set up response data type
