@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'UserLastName',
 			'MileageStartDate',
 			'MileageEndDate',
-			'MileageCardBusinessMiles',
+			'SumBusinessMiles',
 			'MileageCardApproved',
 
 			['class' => 'yii\grid\ActionColumn',
@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					return ['mileageCardId' => $model["MileageCardID"]/*, 'data-jid'=>$model->job_id*/];
+					return ['mileageCardId' => $model["MileageCardID"], 'approved'=>$model["MileageCardApproved"], 'totalmileage'=>$model["SumBusinessMiles"]];
 				}
 			],
 		],
