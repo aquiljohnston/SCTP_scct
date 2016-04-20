@@ -70,7 +70,6 @@ use kartik\datetime\DateTimePicker;
 						'showLabels'=>false
 					])->dropDownList($clients); ?>
 				</div>
-				<!--TODO: Change to Dropdown when table is implemented-->
 				<?= Html::activeLabel($model, 'ProjectState', [
 					'label'=>'State', 
 					'class'=>'col-sm-2 control-label'
@@ -78,7 +77,7 @@ use kartik\datetime\DateTimePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectState',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectState']); ?>
+					])->dropDownList($states); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectStartDate', [
 					'label'=>'Start Date', 
