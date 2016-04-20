@@ -105,6 +105,11 @@ class ProjectController extends BaseController
 			$clientResponse = Parent::executeGetRequest($clientUrl);
 			$clients = json_decode($clientResponse, true);
 			
+			//get states for form dropdown
+			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+			$stateResponse = Parent::executeGetRequest($stateUrl);
+			$states = json_decode($stateResponse, true);
+			
 			//generate array for Active Flag dropdown
 			$flag = 
 			[
@@ -144,6 +149,7 @@ class ProjectController extends BaseController
 					'model' => $model,
 					'clients' => $clients,
 					'flag' => $flag,
+					'states' => $states,
 					]);
 			}
 		}
@@ -179,6 +185,11 @@ class ProjectController extends BaseController
 			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
 			$clientResponse = Parent::executeGetRequest($clientUrl);
 			$clients = json_decode($clientResponse, true);
+			
+			//get states for form dropdown
+			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+			$stateResponse = Parent::executeGetRequest($stateUrl);
+			$states = json_decode($stateResponse, true);
 			
 			//generate array for Active Flag dropdown
 			$flag = 
@@ -218,6 +229,7 @@ class ProjectController extends BaseController
 					'model' => $model,
 					'clients' => $clients,
 					'flag' => $flag,
+					'states' => $states,
 				]);
 			} 
 		}
