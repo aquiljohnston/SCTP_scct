@@ -17,10 +17,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->UserID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->UserID], [
+        <?= Html::a('Deactivate', ['delete', 'id' => $model->UserID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Are you sure you want to deactivate this user?',
                 'method' => 'delete',
             ],
         ]) ?>

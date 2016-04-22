@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $options = [
                             'title' => Yii::t('yii', 'Delete'),
                             'aria-label' => Yii::t('yii', 'Delete'),
-                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
                             'data-method' => 'Delete',
                             'data-pjax' => '0',
                             ];
