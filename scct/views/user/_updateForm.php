@@ -15,7 +15,7 @@ use kartik\form\ActiveForm;
 				'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
 			]); ?>
 			<div class="form-group kv-fieldset-inline" id="user_mgt_form">
-				<?= Html::activeLabel($model, 'UserName', [
+				<!--<?= Html::activeLabel($model, 'UserName', [
 					'label'=>'Username', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
@@ -23,7 +23,7 @@ use kartik\form\ActiveForm;
 					<?= $form->field($model, 'UserName',[
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'Username']); ?>
-				</div>
+				</div>-->
 				<?= Html::activeLabel($model, 'UserKey', [
 					'label'=>'Password', 
 					'class'=>'col-sm-2 control-label'

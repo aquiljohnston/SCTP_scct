@@ -302,7 +302,8 @@ class UserController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('deleteUser'))
 		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdelete&id='.$id;
+			//calls route to deactivate user account
+			$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdeactivate&userID='.$id;
 			Parent::executeDeleteRequest($url);
 			$this->redirect('/index.php?r=user%2Findex');
 		}
