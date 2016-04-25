@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -13,20 +13,22 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="project-index">
 
     <h3 class="title"><?= Html::encode($this->title)?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
+		'export' => false,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
             //'ProjectID',
-            'ProjectName',
+            [
+				'label' => 'ProjectName',
+				'attribute' => 'ProjectName',
+				'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">' // value="' . $searchModel['name'] . '"
+			],
             'ProjectDescription',
             'ProjectNotes',
             'ProjectType',
@@ -35,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'ProjectStartDate',
             // 'ProjectEndDate',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
         			$url ='index.php?r=project%2Fview&id='.$model["ProjectID"];

@@ -9,7 +9,6 @@ use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
-use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 /**
@@ -17,6 +16,7 @@ use linslin\yii2\curl;
  */
 class ProjectController extends BaseController
 {
+
 
     /**
      * Lists all project models.
@@ -36,20 +36,36 @@ class ProjectController extends BaseController
 			$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 
+			$resultData = json_decode($response, true);
+
+			// http://stackoverflow.com/a/28452101
+			$filteredResultData = array_filter($resultData, function($item) {
+				$nameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
+				if (strlen($nameFilterParam) > 0) {
+					if (stripos($item['ProjectName'], $nameFilterParam) !== false) {
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return true;
+				}
+			});
+
+
+			$nameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
+
+			$searchModel = ['ProjectName' => $nameFilterParam];
+
 			//Passing data to the dataProvider and formating it in an associative array
-			$dataProvider = new ArrayDataProvider
-			([
-				'allModels' => json_decode($response, true),
+			$dataProvider = new ArrayDataProvider([
+				'allModels' => $filteredResultData,
 				'pagination' => [
 					'pageSize' => 100,
 				],
 			]);
-			GridView::widget
-			([
-				'dataProvider' => $dataProvider,
-			]);
 			
-			return $this -> render('index', ['dataProvider' => $dataProvider]);
+			return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
 		}
 		else
 		{
