@@ -292,7 +292,7 @@ class UserController extends BaseController
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDeactivate($id)
     {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -304,7 +304,9 @@ class UserController extends BaseController
 		{
 			//calls route to deactivate user account
 			$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdeactivate&userID='.$id;
-			Parent::executeDeleteRequest($url);
+			//empty body
+			$json_data = "";
+			Parent::executePutRequest($url, $json_data);
 			$this->redirect('/index.php?r=user%2Findex');
 		}
 		else

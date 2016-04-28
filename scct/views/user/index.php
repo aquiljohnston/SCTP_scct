@@ -56,18 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
         			return $url;
         			}
         			if ($action === 'delete') {
-        			$url ='index.php?r=user%2Fdelete&id='.$model["UserID"];											
+        			$url ='index.php?r=user%2FDeactivate&id='.$model["UserID"];											
         			return $url;
         			}
         		},
                 'buttons' => [
                     'delete' => function ($url, $model, $key) {
-                        $url ='/index.php?r=user%2Fdelete&id='.$model["UserID"];       
+                        $url ='/index.php?r=user%2Fdeactivate&id='.$model["UserID"];       
                             $options = [
-                            'title' => Yii::t('yii', 'Delete'),
-                            'aria-label' => Yii::t('yii', 'Delete'),
+                            'title' => Yii::t('yii', 'Deactivate'),
+                            'aria-label' => Yii::t('yii', 'Deactivate'),
                             'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
-                            'data-method' => 'Delete',
+                            'data-method' => 'Put',
                             'data-pjax' => '0',
                             ];
                             return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
