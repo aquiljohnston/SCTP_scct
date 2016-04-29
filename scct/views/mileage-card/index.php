@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'UserLastName',
 			'MileageStartDate',
 			'MileageEndDate',
+			'ProjectName',
 			'SumBusinessMiles',
 			'MileageCardApproved',
 
