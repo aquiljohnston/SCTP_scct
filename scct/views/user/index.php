@@ -22,13 +22,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             //'UserID',
-            'UserName',
-            'UserFirstName',
-            'UserLastName',
+			[
+				'label' => 'UserName',
+				'attribute' => 'UserName',
+				'filter' => '<input class="form-control" name="filterusername" value="' . Html::encode($searchModel['UserName']) . '" type="text">'
+			],
+			[
+            	'label' => 'UserFirstName',
+				'attribute' => 'UserFirstName',
+				'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
+			],
+			[
+				'label' => 'UserLastName',
+				'attribute' => 'UserLastName',
+				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
+			],
             // 'UserEmployeeType',
             // 'UserPhone',
             // 'UserCompanyName',

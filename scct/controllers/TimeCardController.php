@@ -10,12 +10,12 @@ use app\models\TimeEntry;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use yii\web\Request;
 use \DateTime;
 use yii\web\ForbiddenHttpException;
+use yii\base\Model;
 
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
@@ -41,11 +41,14 @@ class TimeCardController extends BaseController
 			//$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
 			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
 			$response = Parent::executeGetRequest($url);
-			
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ProjectName', 'filterprojectname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'TimeCardApprovedFlag', 'filterapproved');
 			// passing decode data into dataProvider
 			$dataProvider = new ArrayDataProvider
 			([
-				'allModels' => json_decode($response, true),
+				'allModels' => $filteredResultData,
 				/*'key' => function (){
 					return md5($model["TimeCardID"]);
 				},*/
@@ -54,18 +57,34 @@ class TimeCardController extends BaseController
 				],
 			]);
 			
-			//set timecardid as id 
+			//set timecardid as id
+			// 
 			$dataProvider->key ='TimeCardID';
-			
 
-			// fill gridview by applying data provider
-			GridView::widget([
-				'dataProvider' => $dataProvider,
-				]);
-				
+			$searchModel = [
+				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
+				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
+				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
+				'TimeCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
+			];
+
+			// Create drop down with current selection pre-selected based on GET variable
+			$approvedInput = '<select class="form-control" name="filterapproved">'
+				. '<option value=""></option><option value="Yes"';
+			if($searchModel['TimeCardApprovedFlag'] == "Yes") {
+				$approvedInput.= " selected";
+			}
+			$approvedInput .= '>Yes</option><option value="No"';
+			if($searchModel['TimeCardApprovedFlag'] == "No") {
+				$approvedInput .= ' selected';
+			}
+			$approvedInput .= '>No</option></select>';
+			
 			//calling index page to pass dataProvider.
 			return $this->render('index', [
-				'dataProvider' => $dataProvider
+				'dataProvider' => $dataProvider,
+				'searchModel' => $searchModel,
+				'approvedInput' => $approvedInput
 			]);
 		}
 		else
@@ -339,7 +358,7 @@ class TimeCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('createTimeCard'))
 		{				  
-			$model = new TimeEntry();
+			$timeEntryModel = new TimeEntry();
 			$activityModel = new Activity();
 			//generate array for Active Flag dropdown
 			$flag = 
@@ -359,35 +378,38 @@ class TimeCardController extends BaseController
 			$activityPayCodeResponse = Parent::executeGetRequest($activityPayCodeUrl);
 			$activityPayCode = json_decode($activityPayCodeResponse, true);
 
-			if ($model->load(Yii::$app->request->post())) {
+			if ($timeEntryModel->load(Yii::$app->request->post()) && $activityModel->load(Yii::$app->request->post())
+				&& $timeEntryModel->validate() && $activityModel->validate()) {
 				//create timeEntryTitle variable 
 				$timeEntryTitle = "timeEntry";
 				// concatenate start time
-				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryStartTime);
+				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate.$timeEntryModel->TimeEntryStartTime);
 				$TimeEntryStartTimeConcatenate = $TimeEntryStartTimeConcatenate->format('Y-m-d H:i:s');
 				
 				// concatenate end time
-				$TimeEntryEndTimeConcatenate = new DateTime($TimeEntryDate.$model->TimeEntryEndTime);
+				$TimeEntryEndTimeConcatenate = new DateTime($TimeEntryDate.$timeEntryModel->TimeEntryEndTime);
 				$TimeEntryEndTimeConcatenate = $TimeEntryEndTimeConcatenate->format('Y-m-d H:i:s');
 				
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
 					'TimeEntryDate' => $TimeEntryDate,
-					'TimeEntryCreateDate' => $model->TimeEntryCreateDate,
-					'TimeEntryModifiedDate' => $model->TimeEntryModifiedDate,
+					'TimeEntryCreateDate' => $timeEntryModel->TimeEntryCreateDate,
+					'TimeEntryModifiedDate' => $timeEntryModel->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $TimeCardTechID,
 					'TimeEntryTimeCardID' => $id,
-					'TimeEntryActivityID' => $model->TimeEntryActivityID,
-					'TimeEntryComment' => $model->TimeEntryComment,
-					'TimeEntryCreatedBy' => $model->TimeEntryCreatedBy,
-					'TimeEntryModifiedBy' => $model->TimeEntryModifiedBy,
+					'TimeEntryActivityID' => $timeEntryModel->TimeEntryActivityID,
+					'TimeEntryComment' => $timeEntryModel->TimeEntryComment,
+					'TimeEntryCreatedBy' => $timeEntryModel->TimeEntryCreatedBy,
+					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
 				);
 				
 				$mileage_entry_data = array();
 				$data[] = array(
 					'ActivityTitle' => $timeEntryTitle,
 					'ActivityCreatedBy' => Yii::$app->session['userID'],
+					'ActivityPayCode' => $activityModel->ActivityPayCode,
+					'ActivityCode' => $activityModel->ActivityCode,
 					'timeEntry' => $time_entry_data,
 					'mileageEntry' => $mileage_entry_data,
 				);
@@ -406,7 +428,7 @@ class TimeCardController extends BaseController
 				return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);
 			} else {
 				return $this->render('create_time_entry', [
-					'model' => $model,
+					'model' => $timeEntryModel,
 					'activityCode' => $activityCode,
 					'activityPayCode' => $activityPayCode,
 					'activityModel' => $activityModel

@@ -35,21 +35,27 @@ class UserController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-active-users";
 			$response = Parent::executeGetRequest($url);
-
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserName', 'filterusername');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'UserFirstName', 'filterfirstname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
+			$firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
+			$lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
+			$searchModel = [
+				'UserName' => $usernameFilterParam,
+				'UserFirstName' => $firstNameFilterParam,
+				'UserLastName' => $lastNameFilterParam
+			];
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider
 			([
-				'allModels' => json_decode($response, true),
+				'allModels' => $filteredResultData,
 				'pagination' => [
 					'pageSize' => 100,
 				],
 			]);
-			GridView::widget
-			([
-				'dataProvider' => $dataProvider,
-			]);
 			
-			return $this -> render('index', ['dataProvider' => $dataProvider]);
+			return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
 		}
 		else
 		{

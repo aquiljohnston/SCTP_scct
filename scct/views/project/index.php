@@ -25,13 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'ProjectID',
             [
-				'label' => 'ProjectName',
+				'label' => 'Project Name',
 				'attribute' => 'ProjectName',
-				'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">' // value="' . $searchModel['name'] . '"
+				'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 			],
             'ProjectDescription',
             'ProjectNotes',
-            'ProjectType',
+			[
+				'label' => 'Project Type',
+				'attribute' => 'ProjectType',
+				'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['ProjectType']) . '" type="text">'
+			],
             // 'ProjectStatus',
             // 'ProjectClientID',
             // 'ProjectStartDate',

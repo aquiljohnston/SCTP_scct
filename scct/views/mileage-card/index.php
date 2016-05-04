@@ -1,7 +1,7 @@
-<?php
+  <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\controllers\MileageCard;
 
 /* @var $this yii\web\View */
@@ -28,18 +28,32 @@ $this->params['breadcrumbs'][] = $this->title;
 	<!-- General Table Layout for displaying Mileage Card Information -->
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
+		'filterModel' => $searchModel,
+		'export' => false,
 		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
+			['class' => 'kartik\grid\SerialColumn'],
 
-			'UserFirstName',
-			'UserLastName',
+			[
+				'label' => 'User First Name',
+				'attribute' => 'UserFirstName',
+				'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
+			],
+			[
+				'label' => 'User Last Name',
+				'attribute' => 'UserLastName',
+				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
+			],
 			'MileageStartDate',
 			'MileageEndDate',
 			'ProjectName',
 			'SumBusinessMiles',
-			'MileageCardApproved',
+			[
+				'label' => 'Approved',
+				'attribute' => 'MileageCardApproved',
+				'filter' => $approvedInput
+			],
 
-			['class' => 'yii\grid\ActionColumn',
+			['class' => 'kartik\grid\ActionColumn',
 				'template' => '{view}',
 				'urlCreator' => function ($action, $model, $key, $index) {
 					if ($action === 'view') {
@@ -49,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				},
 			],
 			[
-				'class' => 'yii\grid\CheckboxColumn',
+				'class' => 'kartik\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
 					return ['mileageCardId' => $model["MileageCardID"], 'approved'=>$model["MileageCardApproved"], 'totalmileage'=>$model["SumBusinessMiles"]];
 				}

@@ -38,26 +38,43 @@ class MileageCardController extends BaseController
 		{
 			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
 			$response = Parent::executeGetRequest($url);
-			
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApproved', 'filterapproved');
+
 			// passing decode data into dataProvider
 			$dataProvider = new ArrayDataProvider
 			([
-				'allModels' => json_decode($response, true),
+				'allModels' => $filteredResultData,
 				'pagination' => [
 					'pageSize' => 100,
-				],
+				]
 			]);
 			//Set Mile Card ID On the JS Call
 			$dataProvider->key ='MileageCardID';
 
-			// fill gridview by applying data provider
-			GridView::widget([
-				'dataProvider' => $dataProvider,
-				]);
+			$searchModel = [
+				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
+				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
+				'MileageCardApproved' => Yii::$app->request->getQueryParam('filterapproved', '')
+			];
+
+			$approvedInput = '<select class="form-control" name="filterapproved">'
+				. '<option value=""></option><option value="Yes"';
+			if($searchModel['MileageCardApproved'] == "Yes") {
+				$approvedInput.= " selected";
+			}
+			$approvedInput .= '>Yes</option><option value="No"';
+			if($searchModel['MileageCardApproved'] == "No") {
+				$approvedInput .= ' selected';
+			}
+			$approvedInput .= '>No</option></select>';
 				
 			//calling index page to pass dataProvider.
 			return $this->render('index', [
-				'dataProvider' => $dataProvider
+				'dataProvider' => $dataProvider,
+				'searchModel' => $searchModel,
+				'approvedInput' => $approvedInput
 			]);
 		}
 		else

@@ -9,7 +9,6 @@ use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
-use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 
@@ -36,21 +35,32 @@ class ClientController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
 			$response = Parent::executeGetRequest($url);
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'ClientName', 'filterclientname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactTitle', 'filtertitle');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactFName', 'filterfname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactMI', 'filtermi');
 
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider
 			([
-				'allModels' => json_decode($response, true),
+				'allModels' => $filteredResultData,
 				'pagination' => [
 					'pageSize' => 100,
 				],
 			]);
-			GridView::widget
-			([
-				'dataProvider' => $dataProvider,
-			]);
+
+			$searchModel = [
+				'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
+				'ClientContactFName' => Yii::$app->request->getQueryParam('filterfname', ''),
+				'ClientContactTitle' => Yii::$app->request->getQueryParam('filtertitle', ''),
+				'ClientContactMI' => Yii::$app->request->getQueryParam('filtermi', ''),
+			];
 			
-			return $this -> render('index', ['dataProvider' => $dataProvider]);
+			
+			return $this -> render('index', [
+				'dataProvider' => $dataProvider,
+				'searchModel' => $searchModel
+			]);
 		}
 		else
 		{
