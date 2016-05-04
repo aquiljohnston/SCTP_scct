@@ -10,10 +10,25 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use linslin\yii2\curl;
 use yii\data\ArrayDataProvider;
-use yii\grid\GridView;
 
 class BaseController extends Controller
 {
+	public function filterColumn($resultData, $column, $param) {
+		// http://stackoverflow.com/a/28452101
+		$filteredResultData = array_filter($resultData, function($item) use ($column, $param) {
+			$nameFilterParam = Yii::$app->request->getQueryParam($param, '');
+			if (strlen($nameFilterParam) > 0) {
+				if (stripos($item[$column], $nameFilterParam) !== false) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		});
+		return $filteredResultData;
+	}
 	public function behaviors()
     {
         return [

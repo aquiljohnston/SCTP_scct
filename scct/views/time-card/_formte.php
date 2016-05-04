@@ -42,12 +42,12 @@ use kartik\datetime\DateTimePicker;
 					]); ?>
 				</div>
 				
-				<?= Html::activeLabel($model, 'TimeEntryActivityID', [
+				<?= Html::activeLabel($activityModel, 'ActivityCode', [
 					'label'=>'Activity Type', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-4">
-					<?= $form->field($model, 'TimeEntryActivityID',[
+					<?= $form->field($activityModel, 'ActivityCode',[
 					'showLabels'=>false
 					])->dropDownList($activityCode); ?>
 				</div>

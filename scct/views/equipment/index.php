@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\controllers\Equipment;
 
 /* @var $this yii\web\View */
@@ -33,19 +33,45 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		<?= GridView::widget([
 			'dataProvider' => $dataProvider,
+			'filterModel' => $searchModel,
+			'export' => false,
 			'columns' => [
-				['class' => 'yii\grid\SerialColumn'],
+				['class' => 'kartik\grid\SerialColumn'],
 
-				'Name',
-				'Serial Number',
+				[
+					'label' => 'Name',
+					'attribute' => 'Name',
+					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['Name']) . '" type="text">'
+				],
+				[
+					'label' => 'Serial Number',
+					'attribute' => 'Serial Number',
+					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['Serial Number']) . '" type="text">'
+				],
 				//'SC Number',
 				'Details',
-				'Type',
-				'Client Name',
-				'Project Name',
-				'Accepted Flag',
+				[
+					'label' => 'Type',
+					'attribute' => 'Type',
+					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['Type']) . '" type="text">'
+				],
+				[
+					'label' => 'Client Name',
+					'attribute' => 'Client Name',
+					'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['Client Name']) . '" type="text">'
+				],
+				[
+					'label' => 'Project Name',
+					'attribute' => 'Project Name',
+					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['Project Name']) . '" type="text">'
+				],
+				[
+					'label' => 'Accepted Flag',
+					'attribute' => 'Accepted Flag',
+					'filter' => $acceptedFilterInput
+				],
 
-				['class' => 'yii\grid\ActionColumn',
+				['class' => 'kartik\grid\ActionColumn',
 
 					'template' => '{view} {update}',
 					'urlCreator' => function ($action, $model, $key, $index) {
@@ -77,7 +103,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					],
 				],
 				[
-					'class' => 'yii\grid\CheckboxColumn',
+					'class' => 'kartik\grid\CheckboxColumn',
 					'checkboxOptions' => function ($model, $key, $index, $column) {
 						return ['equipmentid' => $model["EquipmentID"], 'accepted' =>$model["Accepted Flag"] ];
 					}

@@ -36,27 +36,13 @@ class ProjectController extends BaseController
 			$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 
-			$resultData = json_decode($response, true);
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'ProjectName', 'filtername');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ProjectType', 'filtertype');
 
-			// http://stackoverflow.com/a/28452101
-			$filteredResultData = array_filter($resultData, function($item) {
-				$nameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
-				if (strlen($nameFilterParam) > 0) {
-					if (stripos($item['ProjectName'], $nameFilterParam) !== false) {
-						return true;
-					} else {
-						return false;
-					}
-				} else {
-					return true;
-				}
-			});
-
-
-			$nameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
-
-			$searchModel = ['ProjectName' => $nameFilterParam];
-
+			$searchModel = [
+				'ProjectName' => Yii::$app->request->getQueryParam('filtername', ''),
+				'ProjectType' => Yii::$app->request->getQueryParam('filtertype', '')
+			];
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider([
 				'allModels' => $filteredResultData,

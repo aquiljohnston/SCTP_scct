@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ClientSearch */
@@ -21,15 +21,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
+		'filterModel' => $searchModel,
+		'export' => false,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
             //'ClientID',
-            'ClientName',
-            'ClientContactTitle',
-            'ClientContactFName',
-            'ClientContactMI',
+			[
+				'label' => 'Name',
+				'attribute' => 'ClientName',
+				'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
+			],
+			[
+				'label' => 'Contact Title',
+				'attribute' => 'ClientContactTitle',
+				'filter' => '<input class="form-control" name="filtertitle" value="' . Html::encode($searchModel['ClientContactTitle']) . '" type="text">'
+			],
+			[
+				'label' => 'Contact First Name',
+				'attribute' => 'ClientContactFName',
+				'filter' => '<input class="form-control" name="filterfname" value="' . Html::encode($searchModel['ClientContactFName']) . '" type="text">'
+			],
+			[
+				'label' => 'Contact M.I.',
+				'attribute' => 'ClientContactMI',
+				'filter' => '<input class="form-control" name="filtermi" value="' . Html::encode($searchModel['ClientContactMI']) . '" type="text">'
+			],
             // 'ClientContactLName',
             // 'ClientPhone',
             // 'ClientEmail:email',
@@ -47,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'ClientModifiedDate',
             // 'ClientModifiedBy',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
         			$url ='index.php?r=client%2Fview&id='.$model["ClientID"];

@@ -36,10 +36,44 @@ class EquipmentController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fequipment-view';
 			$response = Parent::executeGetRequest($url);
-			//Passing data to the dataProvider and formating it in an associative array
+			$filteredResultData = $this->filterColumn(json_decode($response, true), 'Name', 'filtername');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'Serial Number', 'filterserialnumber');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'Type', 'filtertype');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'Client Name', 'filterclientname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'Project Name', 'filterprojectname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'Accepted Flag', 'filteraccepted');
+
+
+			$searchModel = [
+				'Name' => Yii::$app->request->getQueryParam('filtername', ''),
+				'Serial Number' => Yii::$app->request->getQueryParam('filterserialnumber', ''),
+				'Type' => Yii::$app->request->getQueryParam('filtertype', ''),
+				'Client Name' => Yii::$app->request->getQueryParam('filterclientname', ''),
+				'Project Name' => Yii::$app->request->getQueryParam('filterprojectname', ''),
+				'Accepted Flag' => Yii::$app->request->getQueryParam('filteraccepted', '')
+			];
+
+			// Create drop down with current selection pre-selected based on GET variable
+			$acceptedFilterInput = '<select class="form-control" name="filteraccepted">'
+			. '<option value=""></option><option value="Yes"';
+			if($searchModel['Accepted Flag'] == "Yes") {
+				$acceptedFilterInput.= " selected";
+			}
+			$acceptedFilterInput .= '>Yes</option><option value="Pending"';
+			if($searchModel['Accepted Flag'] == "Pending") {
+				$acceptedFilterInput .= " selected";
+			}
+			$acceptedFilterInput .= '>Pending</option><option value="No"';
+			if($searchModel['Accepted Flag'] == "No") {
+				$acceptedFilterInput .= ' selected';
+			}
+			$acceptedFilterInput .= '>No</option></select>';
+
+
+			//Passing data to the dataProvider and formatting it in an associative array
 			$dataProvider = new ArrayDataProvider
 			([
-				'allModels' => json_decode($response, true),
+				'allModels' => $filteredResultData,
 				'pagination' => [
 					'pageSize' => 100,
 				],
@@ -48,12 +82,11 @@ class EquipmentController extends BaseController
 			//set equipmentid as id 
 			$dataProvider->key ='EquipmentID';
 			
-			GridView::widget
-			([
+			return $this -> render('index', [
 				'dataProvider' => $dataProvider,
+				'searchModel' => $searchModel,
+				'acceptedFilterInput' => $acceptedFilterInput
 			]);
-			
-			return $this -> render('index', ['dataProvider' => $dataProvider]);
 		}
 		else
 		{

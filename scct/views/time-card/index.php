@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use app\controllers\TimeCard;
@@ -30,18 +30,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
+		'export' => false,
+		'filterModel' => $searchModel,
 		'columns' => [
-			['class' => 'yii\grid\SerialColumn'],
+			['class' => 'kartik\grid\SerialColumn'],
 
-			'UserFirstName',
-			'UserLastName',
-			'ProjectName',
+			[
+				'label' => 'User First Name',
+				'attribute' => 'UserFirstName',
+				'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
+			],
+			[
+				'label' => 'User Last Name',
+				'attribute' => 'UserLastName',
+				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
+			],
+			[
+				'label' => 'Project Name',
+				'attribute' => 'ProjectName',
+				'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
+			],
 			'TimeCardStartDate',
 			'TimeCardEndDate',
 			'SumHours',
-			'TimeCardApprovedFlag',
-
-			['class' => 'yii\grid\ActionColumn',
+			[
+				'label' => 'Approved',
+				'attribute' => 'TimeCardApprovedFlag',
+				'filter' => $approvedInput
+			],
+			['class' => 'kartik\grid\ActionColumn',
 				'template' => '{view}',
 				'urlCreator' => function ($action, $model, $key, $index) {
 					if ($action === 'view') {
@@ -64,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				],
 			],
 			[
-				'class' => 'yii\grid\CheckboxColumn',
+				'class' => 'kartik\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
 					return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
 				}
