@@ -63,7 +63,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'MileageEntryComment',
             'MileageEntryCreateDate',
             'MileageEntryCreatedBy',
-		],
+		
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
+		],		
 	]);	
 	?>
 	<?php Pjax::end();?>
@@ -109,6 +119,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+		
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		],
 	])
 	?>
@@ -155,6 +175,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	<?php Pjax::end();?>
@@ -200,6 +230,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	<?php Pjax::end();?>
@@ -245,6 +285,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	<?php Pjax::end();?>
@@ -290,6 +340,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	<?php Pjax::end();?>
@@ -335,6 +395,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageEntryComment',
 			'MileageEntryCreateDate',
 			'MileageEntryCreatedBy',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	<?php Pjax::end();?>
