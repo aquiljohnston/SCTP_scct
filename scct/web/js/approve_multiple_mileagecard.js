@@ -8,16 +8,16 @@ $(function() {
     var totalMileage;
 
         $('#multiple_mileage_card_approve_btn').prop('disabled', true); //TO DISABLED
-        $("#w1 input[type=checkbox]").click(function(){
-            var pks = $('#w1').yiiGridView('getSelectedRows');
+        $(".kv-row-select input[type=checkbox]").click(function(){
+            var pks = $('#w0').yiiGridView('getSelectedRows');
 
             for(var i=0; i < pks.length; i++){
 
                 //retrieve the approved value for the mileage card based off of current checkbox
-                approved = $("#w1 input[mileagecardid="+pks[i]+"]").attr("approved");
+                approved = $(".kv-row-select input[mileagecardid="+pks[i]+"]").attr("approved");
 
                 //retrieve the total mileage for the mileage card based off of current checkbox
-                totalMileage = $("#w1 input[mileagecardid="+pks[i]+"]").attr("totalworkhours");
+                totalMileage = $(".kv-row-select input[mileagecardid="+pks[i]+"]").attr("totalmileage");
 
                 if((approved == "Yes" || approved == "yes") || totalMileage == 0){
                     approved = "Yes";

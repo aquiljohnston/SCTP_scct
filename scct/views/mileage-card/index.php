@@ -46,10 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			'MileageStartDate',
 			'MileageEndDate',
 			'ProjectName',
-			'SumBusinessMiles',
+			'SumMiles',
 			[
 				'label' => 'Approved',
-				'attribute' => 'MileageCardApproved',
+				'attribute' => 'MileageCardApprovedFlag',
 				'filter' => $approvedInput
 			],
 
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'kartik\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					return ['mileageCardId' => $model["MileageCardID"], 'approved'=>$model["MileageCardApproved"], 'totalmileage'=>$model["SumBusinessMiles"]];
+					return ['mileageCardId' => $model["MileageCardID"], 'approved'=>$model["MileageCardApprovedFlag"], 'totalmileage'=>$model["SumMiles"]];
 				}
 			],
 		],

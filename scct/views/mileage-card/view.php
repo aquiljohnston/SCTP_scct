@@ -19,15 +19,36 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php 
 			$approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model["MileageCardID"]]));
+			echo($model["MileageCardApprovedFlag"]);
+			if($model["MileageCardApprovedFlag"] === "Yes"){
+				$approve_status = true;
+			}else{
+				$approve_status = false;
+			}
+			echo($approve_status ? 'true' : 'false');
 	?>
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Approve', $approveUrl, [
-											 'class' => 'btn btn-primary', 
-											 'data' => [
-														'confirm' => 'Are you sure you want to approve this item?']
-													])?>
-    </p>
+
+		<?php if($approve_status === true || $Total_Mileage_Current_MileageCard == .0){ ?>
+			<?= Html::button('Approve', [
+				'class' => 'btn btn-primary',
+				'disabled' => true,
+				'id' => 'disable_single_approve_btn_id_mileagecard',
+				'data' => [
+					'confirm' => 'Are you sure you want to approve this item?']
+			])?>
+		<?php }else{ ?>
+			<?= Html::a('Approve', $approveUrl, [
+				'class' => 'btn btn-primary',
+				'disabled' => false,
+				'id' => 'enable_single_approve_btn_id_mileagecard',
+				'data' => [
+					'confirm' => 'Are you sure you want to approve this item?']
+			])?>
+		<?php } ?>
+
+	</p>
 	
 	<!--Sunday TableView-->
 	<h2 class="mileage_entry_header">Sunday</h2>
@@ -54,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $SundayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSunday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSunday', 'disabled' => $approve_status]) ?>
 		<?php	if($Total_Mileage_Sun != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sun?></span>
 		<?php	}else{ ?>
@@ -100,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $MondayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonMonday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonMonday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Mon != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Mon?></span>
 		<?php	}else{ ?>
@@ -145,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $TuesdayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonTuesday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonTuesday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Tue != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Tue?></span>
 		<?php	}else{ ?>
@@ -190,7 +211,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $WednesdayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonWednesday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonWednesday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Wed != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Wed?></span>
 		<?php	}else{ ?>
@@ -235,7 +256,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $ThursdayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonThursday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonThursday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Thr != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Thr?></span>
 		<?php	}else{ ?>
@@ -280,7 +301,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $FridayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonFriday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonFriday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Fri != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Fri?></span>
 		<?php	}else{ ?>
@@ -325,7 +346,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$url = urldecode(Url::to(['mileage-card/create-mileage-entry', 'mileageCardId' => $model["MileageCardID"], 'mileageCardTechId' => $model['MileageCardTechID'], 'mileageCardDate' => $SaturdayStr]));
 	?>
 	<p>
-		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSaturday']) ?>
+		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSaturday', 'disabled' =>$approve_status]) ?>
 		<?php	if($Total_Mileage_Sat != 0){ ?>
 			<span class="totalhours"><?php echo "Total mileage is : ".$Total_Mileage_Sat?></span>
 		<?php	}else{ ?>
