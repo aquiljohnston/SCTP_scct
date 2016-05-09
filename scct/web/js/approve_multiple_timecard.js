@@ -5,20 +5,20 @@ $(function() {
 	var flag = "Yes";
 	var totalworkhours = -1;
 	$('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-	$("#w1 input[type=checkbox]").click(function(){
+	$(".kv-row-select input[type=checkbox]").click(function(){
 		var checkApproved = $(this).attr("approved");
 		checkApprovedArray[counter++] = checkApproved;
 
 		//alert("checkApproved is :　"+checkApproved);
-		var model = $(this).attr('model');
-		var pks = $('#w1').yiiGridView('getSelectedRows');
-		//alert("pks length is ：　"+pks);
+		//var model = $(this).attr('model');
+		var pks = $('#w0').yiiGridView('getSelectedRows');
+		//alert("pks length is ：　"+pks.length);
 		for(var i=0; i < pks.length; i++){
 			// get approved value for this timecard
-			flag = $("#w1 input[timecardid="+pks[i]+"]").attr("approved");
+			flag = $(".kv-row-select input[timecardid="+pks[i]+"]").attr("approved");
 			
 			// get totalworkhours for this timecard
-			totalworkhours = $("#w1 input[timecardid="+pks[i]+"]").attr("totalworkhours");
+			totalworkhours = $(".kv-row-select input[timecardid="+pks[i]+"]").attr("totalworkhours");
 			
 			//alert("loop flag is "+flag+" i is : "+i);
 			if(flag == "Yes" || totalworkhours == .0 || flag == "yes"){
