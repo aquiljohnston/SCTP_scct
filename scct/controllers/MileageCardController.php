@@ -40,7 +40,7 @@ class MileageCardController extends BaseController
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApproved', 'filterapproved');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
 			// passing decode data into dataProvider
 			$dataProvider = new ArrayDataProvider
@@ -56,16 +56,16 @@ class MileageCardController extends BaseController
 			$searchModel = [
 				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
 				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
-				'MileageCardApproved' => Yii::$app->request->getQueryParam('filterapproved', '')
+				'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
 			];
 
 			$approvedInput = '<select class="form-control" name="filterapproved">'
 				. '<option value=""></option><option value="Yes"';
-			if($searchModel['MileageCardApproved'] == "Yes") {
+			if($searchModel['MileageCardApprovedFlag'] == "Yes") {
 				$approvedInput.= " selected";
 			}
 			$approvedInput .= '>Yes</option><option value="No"';
-			if($searchModel['MileageCardApproved'] == "No") {
+			if($searchModel['MileageCardApprovedFlag'] == "No") {
 				$approvedInput .= ' selected';
 			}
 			$approvedInput .= '>No</option></select>';
@@ -187,9 +187,19 @@ class MileageCardController extends BaseController
 				// ],
 			]);
 			$Total_Mileage_Sat = $this->TotalMileageCal($Saturdaydata);
-			
+
+			//calculation total miles for this mileage card
+			$Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
+											$Total_Mileage_Mon +
+											$Total_Mileage_Tue +
+											$Total_Mileage_Wed +
+											$Total_Mileage_Thr +
+											$Total_Mileage_Fri +
+											$Total_Mileage_Sat;
+
 			return $this -> render('view', [
 											'model' => json_decode($mileage_card_response, true),
+											'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
 											'dateProvider' => $dateProvider,
 											'SundayProvider' => $SundayProvider,
 											'Total_Mileage_Sun' => $Total_Mileage_Sun,
