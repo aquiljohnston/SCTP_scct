@@ -30,7 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=equipment%2Findex';
+                        $url = 'index.php?filterprojectname='
+                            . $this->context->trimString($model["Project"]) .
+                            "&filterapproved=No&r=equipment%2Findex";
                         return $url;
                     }
                 }
@@ -55,7 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-						$url = 'index.php?r=time-card%2Findex&id='.$model["Project"];
+						$url = 'index.php?filterprojectname='
+                            . $this->context->trimString($model["Project"]) .
+                            "&filterapproved=No&r=time-card%2Findex";
 						return $url;
                     }
                 }
@@ -80,7 +84,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
-                        $url ='index.php?r=mileage-card%2Findex';
+                        $url = 'index.php?filterprojectname='
+                            . $this->context->trimString($model["Project"]) .
+                            "&filterapproved=No&r=mileage-card%2Findex";
                         return $url;
                     }
                 }
