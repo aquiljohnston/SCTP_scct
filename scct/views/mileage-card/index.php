@@ -45,7 +45,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
 			'MileageStartDate',
 			'MileageEndDate',
-			'ProjectName',
+			[
+				'label' => 'Project Name',
+				'attribute' => 'ProjectName',
+				'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
+			],
 			'SumMiles',
 			[
 				'label' => 'Approved',

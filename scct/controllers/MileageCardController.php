@@ -40,6 +40,7 @@ class MileageCardController extends BaseController
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ProjectName', 'filterprojectname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
 			// passing decode data into dataProvider
@@ -56,6 +57,7 @@ class MileageCardController extends BaseController
 			$searchModel = [
 				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
 				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
+				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
 				'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
 			];
 

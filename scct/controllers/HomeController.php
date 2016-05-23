@@ -126,6 +126,17 @@ class HomeController extends BaseController
     }
 
     /**
+     * Base method for
+     *
+     * @param $string - String that will remove all white spaces and replace them with '+' characters in order for the filter functions
+     * to work on the time/mileage card and equipment view pages
+     * @return mixed
+     */
+    public function trimString($string) {
+        return preg_replace('/\s+/', '+', $string);
+    }
+
+    /**
      * Updates an existing home model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
