@@ -517,7 +517,7 @@ class TimeCardController extends BaseController
      * @param string $id
      * @return mixed
      */
-	public function actionDisActive($id){
+	public function actionDeActive($id){
 		//guest redirect
 		if(Yii::$app->user->isGuest){
 			return $this->redirect(['login/login']);

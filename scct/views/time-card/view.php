@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
 			// check start date for this timecard.
 			//var_dump("TimeCardStartDate is : ".$model["TimeCardStartDate"]);
 			$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+			//disactive TimeEntry
+			//$disApproveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
 			if($model["TimeCardApprovedFlag"] === "Yes"){
 				$approve_status = true;
 			}else{
@@ -38,6 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
 												 'data' => [
 															'confirm' => 'Are you sure you want to approve this item?']
 												])?>
+			<?= Html::button('Deactive', [
+												 'class' => 'btn btn-primary', 
+												 'disabled' => true,
+												 'id' => 'deactive_timeEntry_btn',
+												 'data' => [
+															'confirm' => 'Are you sure you want to deactive this item?']
+												])?>									
 		<?php }else{ ?>	
 			<?= Html::a('Approve', $approveUrl, [
 												 'class' => 'btn btn-primary', 
@@ -46,6 +55,13 @@ $this->params['breadcrumbs'][] = $this->title;
 												 'data' => [
 															'confirm' => 'Are you sure you want to approve this item?']
 												])?>
+			<?= Html::button('Deactive', [
+												 'class' => 'btn btn-primary', 
+												 'disabled' => false,
+												 'id' => 'deactive_timeEntry_btn',
+												 'data' => [
+															'confirm' => 'Are you sure you want to deactive this item?']
+												])?>									
 		<?php } ?>											
 	</p>
 
@@ -63,6 +79,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 
 			// [   
 				// 'class' => 'yii\grid\ActionColumn', 
@@ -100,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<p>
 		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday', 'disabled' =>$approve_status]) ?>
 		 
-		<?php	if($Total_Hours_Sun != 0){ ?>
+		<?php	if($Total_Hours_Sun > 0){ ?>
 						<span class="totalhours"><?php echo "Total hours is : ".$Total_Hours_Sun?></span>
 		<?php	}else{ ?>
 						<span class="no_totalhours"></span>
@@ -136,8 +162,17 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		],
-		//'showFooter' => true,
 	])?>
 	
 	<?php Pjax::end();?>
@@ -189,6 +224,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	
@@ -241,6 +286,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	
@@ -293,6 +348,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	
@@ -345,6 +410,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	
@@ -397,6 +472,16 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			
+			[
+				'class' => 'yii\grid\CheckboxColumn',
+				'checkboxOptions' => function ($model, $key, $index, $column) {
+					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+				}
+				/*'pageSummary' => true,
+                'rowSelectedClass' => GridView::TYPE_SUCCESS,
+                'contentOptions'=>['style'=>'width: 0.5%'],*/
+			],
 		]
 	])?>
 	
