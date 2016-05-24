@@ -166,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
@@ -228,7 +228,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
@@ -290,7 +290,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
@@ -352,7 +352,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
@@ -414,7 +414,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
@@ -476,7 +476,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'yii\grid\CheckboxColumn',
 				'checkboxOptions' => function ($model, $key, $index, $column) {
-					//return ['timecardid' => $model["TimeCardID"], 'approved' =>$model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"] ];
+					return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' =>$model["TimeEntryActiveFlag"] ];
 				}
 				/*'pageSummary' => true,
                 'rowSelectedClass' => GridView::TYPE_SUCCESS,
