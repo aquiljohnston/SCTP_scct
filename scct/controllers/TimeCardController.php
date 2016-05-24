@@ -213,6 +213,14 @@ class TimeCardController extends BaseController
 													$Total_Hours_Thu +
 													$Total_Hours_Fri +
 													$Total_Hours_Sat;
+					//set timecardid as id
+					$SundayProvider->key ='TimeEntryID';
+					$MondayProvider->key ='TimeEntryID';
+					$TuesdayProvider->key ='TimeEntryID';
+					$WednesdayProvider->key ='TimeEntryID';
+					$ThursdayProvider->key ='TimeEntryID';
+					$FridayProvider->key ='TimeEntryID';
+					$SaturdayProvider->key ='TimeEntryID';						
 					
 					return $this -> render('view', [
 													'model' => json_decode($time_card_response, true),
@@ -512,37 +520,42 @@ class TimeCardController extends BaseController
 	}
 	
 	/**
-     * disApprove an existing TimeEntry.
-     * If approve is successful, the browser will be redirected to the 'view' page.
+     * deActive an existing TimeEntry.
+     * If deActive is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
      */
-	public function actionDeActive($id){
-		//guest redirect
-		if(Yii::$app->user->isGuest){
-			return $this->redirect(['login/login']);
-		}
-		try{			
-				$cardIDArray[] = $id;
+	public function actionDeactivate(){
+
+		if (Yii::$app->request->isAjax) {
+			
+			try{
 				
-				/*$data = array(
-					'approvedByID' => Yii::$app->session['userID'],
-					'cardIDArray' => $cardIDArray,
-				);*/
-				//empty body
-				$data = "";
-				Yii::Trace("approvedByID is : ".$id);
+				$data = Yii::$app->request->post();					
+				 // loop the data array to get all id's.	
+				foreach ($data as $key) {
+					foreach($key as $keyitem){
+					
+					   $TimeEntryIDArray[] = $keyitem;
+					   Yii::Trace("TimeCardid is ; ". $keyitem);
+					}
+				}
+				
+				$data = array(
+						'deactivatedBy' => Yii::$app->session['userID'],
+						'entryArray' => $TimeEntryIDArray,
+					);		
 				$json_data = json_encode($data);
 				
 				// post url
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fdeactivate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				$obj = json_decode($putResponse, true);
-				$responseTimeCardID = $obj[0]["TimeCardID"];
-				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+					$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fdeactivate';
+					$putResponse = Parent::executePutRequest($putUrl, $json_data);
+					
+					return $this->redirect(['index']);
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
 			}
+		}
 	}
 	
 	/**
