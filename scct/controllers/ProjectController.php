@@ -36,7 +36,8 @@ class ProjectController extends BaseController
 			$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 
-			$filteredResultData = $this->filterColumn(json_decode($response, true), 'ProjectName', 'filtername');
+			
+			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ProjectName', 'filtername');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'ProjectType', 'filtertype');
 
 			$searchModel = [

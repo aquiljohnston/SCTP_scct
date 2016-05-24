@@ -40,7 +40,7 @@ class EquipmentController extends BaseController
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Serial Number', 'filterserialnumber');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Type', 'filtertype');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Client Name', 'filterclientname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'Project Name', 'filterprojectname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'Project Name', 'filterprojectname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Accepted Flag', 'filteraccepted');
 
 
