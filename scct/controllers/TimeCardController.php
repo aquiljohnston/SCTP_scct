@@ -213,7 +213,7 @@ class TimeCardController extends BaseController
 													$Total_Hours_Thu +
 													$Total_Hours_Fri +
 													$Total_Hours_Sat;
-					//set timecardid as id
+					//set TimeEntryID as id
 					$SundayProvider->key ='TimeEntryID';
 					$MondayProvider->key ='TimeEntryID';
 					$TuesdayProvider->key ='TimeEntryID';
