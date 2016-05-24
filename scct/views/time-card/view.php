@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<?= Html::button('Deactive', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => true,
-												 'id' => 'deactive_timeEntry_btn',
+												 'id' => 'deactive_timeEntry_btn_id',
 												 'data' => [
 															'confirm' => 'Are you sure you want to deactive this item?']
 												])?>									
@@ -52,15 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
 												 'class' => 'btn btn-primary', 
 												 'disabled' => false,
 												 'id' => 'enable_single_approve_btn_id_timecard',
-												 'data' => [
-															'confirm' => 'Are you sure you want to approve this item?']
+												/* 'data' => [
+															'confirm' => 'Are you sure you want to approve this item?']*/
 												])?>
 			<?= Html::button('Deactive', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => false,
-												 'id' => 'deactive_timeEntry_btn',
-												 'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']
+												 'id' => 'deactive_timeEntry_btn_id',
+												/* 'data' => [
+															'confirm' => 'Are you sure you want to deactive this item?']*/
 												])?>									
 		<?php } ?>											
 	</p>
