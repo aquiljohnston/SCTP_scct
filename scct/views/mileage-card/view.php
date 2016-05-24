@@ -19,13 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<?php 
 			$approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model["MileageCardID"]]));
-			echo($model["MileageCardApprovedFlag"]);
 			if($model["MileageCardApprovedFlag"] === "Yes"){
 				$approve_status = true;
 			}else{
 				$approve_status = false;
 			}
-			echo($approve_status ? 'true' : 'false');
 	?>
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
