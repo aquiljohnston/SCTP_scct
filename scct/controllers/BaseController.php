@@ -29,6 +29,30 @@ class BaseController extends Controller
 		});
 		return $filteredResultData;
 	}
+
+	public function filterColumnMultiple($resultData, $column, $param) {
+		// http://stackoverflow.com/a/28452101
+		// This code has been modified from its original version. It has been formatted to fit your TV.
+		// (Modified from SA code to handle multiple parameters);
+		$terms = explode("|", Yii::$app->request->getQueryParam($param));
+		$terms = array_map('trim', $terms);
+		if(count($terms)==0) {
+			return $resultData;
+		}
+		$filteredResultData = array_filter($resultData, function($item) use ($column, $terms) {
+			foreach($terms as $term) {
+				if (strlen($term) > 0) {
+					if (stripos($item[$column], $term) !== false) {
+						return true;
+					}
+				} else {
+					return true;
+				}
+			}
+			return false;
+		});
+		return $filteredResultData;
+	}
 	public function behaviors()
     {
         return [

@@ -40,7 +40,7 @@ class MileageCardController extends BaseController
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ProjectName', 'filterprojectname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
 			// passing decode data into dataProvider
