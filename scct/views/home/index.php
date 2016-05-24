@@ -29,10 +29,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
+                    if ($action === 'view' && $model["Project"] === 'Total') {
+                        $url = 'index.php?filterprojectname='
+                            . $this->context->getAllProjects() .
+                            "&filteraccepted=No&r=equipment%2Findex";
+                        return $url;
+                    } else {
                         $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filterapproved=No&r=equipment%2Findex";
+                            "&filteraccepted=No&r=equipment%2Findex";
                         return $url;
                     }
                 }
@@ -56,11 +61,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
-						$url = 'index.php?filterprojectname='
+                    if ($action === 'view' && $model["Project"] === 'Total') {
+                        $url = 'index.php?filterprojectname='
+                            . $this->context->getAllProjects() .
+                            "&filterapproved=No&r=time-card%2Findex";
+                        return $url;
+                    } else {
+                        $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
                             "&filterapproved=No&r=time-card%2Findex";
-						return $url;
+                        return $url;
                     }
                 }
             ],
@@ -83,7 +93,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
+                    if ($action === 'view' && $model["Project"] === 'Total') {
+                        $url = 'index.php?filterprojectname='
+                            . $this->context->getAllProjects() .
+                            "&filterapproved=No&r=mileage-card%2Findex";
+                        return $url;
+                    } else {
                         $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
                             "&filterapproved=No&r=mileage-card%2Findex";

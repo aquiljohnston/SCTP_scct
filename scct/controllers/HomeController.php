@@ -15,6 +15,11 @@ use linslin\yii2\curl;
  */
 class HomeController extends BaseController
 {
+
+    public $equipmentInfo;
+    public $timeCardInfo;
+    public $mileageCardInfo;
+
     public function behaviors()
     {
         return [
@@ -50,40 +55,40 @@ class HomeController extends BaseController
         Yii::trace("Tao".$firstName);
         Yii::trace("Zhang".$lastName);
 
-        $equipmentInfo = [];
-        $timeCardInfo = [];
-        $mileageCardInfo = [];
+        $this->equipmentInfo = [];
+        $this->timeCardInfo = [];
+        $this->mileageCardInfo = [];
 
         try {
             if ($dataProvider["equipment"]!=null) {
-                $equipmentInfo = $dataProvider["equipment"];
+                $this->equipmentInfo = $dataProvider["equipment"];
             }
             if ($dataProvider["timeCards"]!=null) {
-                $timeCardInfo = $dataProvider["timeCards"];
+                $this->timeCardInfo = $dataProvider["timeCards"];
             }
             if ($dataProvider["mileageCards"]!=null) {
-                $mileageCardInfo = $dataProvider["mileageCards"];
+                $this->mileageCardInfo = $dataProvider["mileageCards"];
             }
         } catch(ErrorException $error) {
             //Continue - Unable to retrieve equipment item
         }
 
         $equipmentProvider = new ArrayDataProvider([
-            'allModels' => $equipmentInfo,
+            'allModels' => $this->equipmentInfo,
             'pagination' => [
                 'pageSize' => 10,
             ]
         ]);
 
         $timeCardProvider = new ArrayDataProvider([
-            'allModels' => $timeCardInfo,
+            'allModels' => $this->timeCardInfo,
             'pagination' => [
                 'pageSize' => 10,
             ]
         ]);
 
         $mileageCardProvider = new ArrayDataProvider([
-            'allModels' => $mileageCardInfo,
+            'allModels' => $this->mileageCardInfo,
             'pagination' => [
                 'pageSize' => 10,
             ]
@@ -97,7 +102,7 @@ class HomeController extends BaseController
 		//var_dump($timeCardInfo);
 		
         return $this -> render('index', [
-										 'model' => $timeCardInfo,
+										 'model' => $this->timeCardInfo,
 										 'firstName' => $firstName,
                                          'lastName' => $lastName,
                                          'equipmentProvider' => $equipmentProvider,
@@ -126,7 +131,7 @@ class HomeController extends BaseController
     }
 
     /**
-     * Base method for
+     * Base method for trimming a project when it has spaces to '+' characters in order to search accordingly
      *
      * @param $string - String that will remove all white spaces and replace them with '+' characters in order for the filter functions
      * to work on the time/mileage card and equipment view pages
@@ -134,6 +139,28 @@ class HomeController extends BaseController
      */
     public function trimString($string) {
         return preg_replace('/\s+/', '+', $string);
+    }
+
+    /**
+     * Get all of the projects from the get notifications call. This call is currently based on the projects received from the MileageCard response.
+     * IF this needs to be changed in the future, simply add a parameter into the method to filter which projects need to be searched for
+     *
+     * @return mixed|string - String of all the projects separated by a '|' in order to search for all of the projects on the target index view
+     */
+    public function getAllProjects() {
+        $allProjectsString = '';
+
+        foreach ($this->mileageCardInfo as $value) {
+            if (!($value['Project'] === 'Total')) { // Make sure we do not enter 'Total' into our search for all unapproved item(s)
+                if ($allProjectsString === '') { // The first string does not need to have a '|' character before concatenating the string
+                    $allProjectsString = $this->trimString($value['Project']);
+                } else {
+                    $allProjectsString = $allProjectsString . '|' . $this->trimString($value['Project']);
+                }
+            }
+        }
+
+        return $allProjectsString;
     }
 
     /**
