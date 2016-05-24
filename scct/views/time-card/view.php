@@ -37,15 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
 												 'class' => 'btn btn-primary', 
 												 'disabled' => true,
 												 'id' => 'disable_single_approve_btn_id_timecard',
-												 'data' => [
-															'confirm' => 'Are you sure you want to approve this item?']
+												 /*'data' => [
+															'confirm' => 'Are you sure you want to approve this item?']*/
 												])?>
 			<?= Html::button('Deactive', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => true,
 												 'id' => 'deactive_timeEntry_btn_id',
-												 'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']
+												 /*'data' => [
+															'confirm' => 'Are you sure you want to deactive this item?']*/
 												])?>									
 		<?php }else{ ?>	
 			<?= Html::a('Approve', $approveUrl, [
@@ -79,6 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -162,6 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -224,6 +226,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -286,6 +289,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -348,6 +352,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -410,6 +415,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',
@@ -472,6 +478,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			'TimeEntryCreateDate',
 			'TimeEntryCreatedBy',
 			'TimeEntryHours',
+			'TimeEntryActiveFlag',
 			
 			[
 				'class' => 'yii\grid\CheckboxColumn',

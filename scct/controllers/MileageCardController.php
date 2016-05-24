@@ -198,6 +198,15 @@ class MileageCardController extends BaseController
 											$Total_Mileage_Thr +
 											$Total_Mileage_Fri +
 											$Total_Mileage_Sat;
+			
+			//set MileageEntryID as id
+					$SundayProvider->key ='MileageEntryID';
+					$MondayProvider->key ='MileageEntryID';
+					$TuesdayProvider->key ='MileageEntryID';
+					$WednesdayProvider->key ='MileageEntryID';
+					$ThursdayProvider->key ='MileageEntryID';
+					$FridayProvider->key ='MileageEntryID';
+					$SaturdayProvider->key ='MileageEntryID';		
 
 			return $this -> render('view', [
 											'model' => json_decode($mileage_card_response, true),
@@ -524,6 +533,43 @@ class MileageCardController extends BaseController
 			$obj = json_decode($putResponse, true);
 			$responseMileageCardID = $obj[0]["MileageCardID"];
 			return $this->redirect(['view', 'id' => $responseMileageCardID]);
+	}
+	
+	/**
+	 * deactivate Multiple existing Mileage Card(s)
+	 * If deactivate is successful, the browser will be redirected to the 'view' page.
+	 * @return mixed
+	 */
+	public function actionDeactivate() {
+
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+
+			// loop the data array to get all id's.
+			foreach ($data as $key) {
+				foreach($key as $keyitem){
+
+					$MileageEntryIDArray[] = $keyitem;
+					Yii::Trace("Mileage Card ID is : ". $keyitem);
+				}
+			}
+
+			$data = array(
+				'deactivatedBy' => Yii::$app->session['userID'],
+				'entryArray' => $MileageEntryIDArray,
+			);
+			$json_data = json_encode($data);
+
+			// post url
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-entry%2Fdeactivate';
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			$obj = json_decode($putResponse, true);
+			$responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
+			return $this->redirect(['view', 'id' => $responseMileageCardID]);
+
+		}else{
+			throw new \yii\web\BadRequestHttpException;
+		}
 	}
 
 	/**
