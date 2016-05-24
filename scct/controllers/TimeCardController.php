@@ -548,10 +548,12 @@ class TimeCardController extends BaseController
 				$json_data = json_encode($data);
 				
 				// post url
-					$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fdeactivate';
-					$putResponse = Parent::executePutRequest($putUrl, $json_data);
-					
-					return $this->redirect(['index']);
+				$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fdeactivate';
+				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				$obj = json_decode($putResponse, true);
+				$responseTimeCardID = $obj[0]["TimeEntryTimeCardID"];
+				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
 			}
