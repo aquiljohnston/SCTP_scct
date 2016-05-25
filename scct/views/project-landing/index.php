@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'id' => 'equipmentWidget',
         'dataProvider' => $projectLandingProvider,
+        'bootstrap' => false,
+        'export' => false,
         'layout' => "{items}\n{pager}",
         'caption' => 'All Projects',
 
@@ -24,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectName',
             //'Number of Items',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {

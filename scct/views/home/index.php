@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,13 +19,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'equipmentWidget',
         'dataProvider' => $equipmentProvider,
         'layout' => "{items}\n{pager}",
+        'bootstrap' => false,
+        'export' => false,
         'caption' => 'Unaccepted Equipment',
 
         'columns' => [
             'Project',
             'Number of Items',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
@@ -51,13 +53,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'id'=> 'timeCardWidget',
         'dataProvider' => $timeCardProvider,
         'layout' => "{items}\n{pager}",
-        'caption' => 'Unapproved Time ',
+        'bootstrap' => false,
+        'export' => false,
+        'caption' => 'Unapproved Time Cards',
 
         'columns' => [
             'Project',
             'Number of Items',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
@@ -83,13 +87,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'id'=> 'mileageCardWidget',
         'dataProvider' => $mileageCardProvider,
         'layout' => "{items}\n{pager}",
+        'bootstrap' => false,
+        'export' => false,
         'caption' => 'Unapproved Mileage Cards',
 
         'columns' => [
             'Project',
             'Number of Items',
 
-            ['class' => 'yii\grid\ActionColumn',
+            ['class' => 'kartik\grid\ActionColumn',
                 'header' => 'View',
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {

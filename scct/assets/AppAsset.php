@@ -28,6 +28,7 @@ class AppAsset extends AssetBundle
 		'css/mileagecards.css',
 		'css/projectlanding.css',
 		'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
+		'css/customGridviewStyle.css'
     ];
 	public $cssOptions = [
 		'type' => 'text/css',

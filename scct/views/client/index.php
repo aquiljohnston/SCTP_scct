@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'export' => false,
+		'bootstrap' => false,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
 

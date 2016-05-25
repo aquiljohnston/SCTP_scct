@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\controllers\User;
 
 /* @var $this yii\web\View */
@@ -23,8 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'bootstrap' => false,
+		'export' => false,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
             //'UserID',
 			[
@@ -58,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'UserModifiedDTLTOffset',
             // 'UserInactiveDTLTOffset',
 			
-			['class' => 'yii\grid\ActionColumn',
+			['class' => 'kartik\grid\ActionColumn',
                 'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
         			$url ='index.php?r=user%2Fview&id='.$model["UserID"];
