@@ -112,7 +112,9 @@ class MileageCardController extends BaseController
 			
 			$response = Parent::executeGetRequest($url);
 			$mileage_card_response = Parent::executeGetRequest($mileage_card_url);
+			$model = json_decode($mileage_card_response, true);
 			$dateProvider = json_decode($response, true);
+			$ApprovedFlag = $dateProvider["ApprovedFlag"];
 			$Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
 			$SundayProvider = new ArrayDataProvider([
 				'allModels' => $Sundaydata,
@@ -216,7 +218,8 @@ class MileageCardController extends BaseController
 					$SaturdayProvider->key ='MileageEntryID';		
 
 			return $this -> render('view', [
-											'model' => json_decode($mileage_card_response, true),
+											'model' => $model,
+											'ApprovedFlag' => $ApprovedFlag,
 											'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
 											'dateProvider' => $dateProvider,
 											'SundayProvider' => $SundayProvider,
@@ -621,8 +624,10 @@ class MileageCardController extends BaseController
 	 public function TotalMileageCal($dataProvider){
 		 $Total_Mileages = 0;
 		 foreach($dataProvider as $item){
-			 $Total_Mileages += $item["MileageEntryEndingMileage"] - $item["MileageEntryStartingMileage"];
-			 Yii::Trace("End mileage is: ".$item["MileageEntryEndingMileage"]);
+			 if($item["MileageEntryActiveFlag"] != "Inactive"){
+				 $Total_Mileages += $item["MileageEntryEndingMileage"] - $item["MileageEntryStartingMileage"];
+				 Yii::Trace("End mileage is: ".$item["MileageEntryEndingMileage"]);
+			 }
 		 }
 		 
 		 return number_format ($Total_Mileages, 2);

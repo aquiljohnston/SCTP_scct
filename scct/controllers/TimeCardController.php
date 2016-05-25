@@ -127,7 +127,9 @@ class TimeCardController extends BaseController
 					
 					$response = Parent::executeGetRequest($url);
 					$time_card_response = Parent::executeGetRequest($time_card_url);
+					$model = json_decode($time_card_response, true);
 					$dateProvider = json_decode($response, true);
+					$ApprovedFlag = $dateProvider["ApprovedFlag"];
 					$Sundaydata = $dateProvider["TimeEntries"][0]["Sunday"];
 					$SundayProvider = new ArrayDataProvider([
 						'allModels' => $Sundaydata,
@@ -230,7 +232,8 @@ class TimeCardController extends BaseController
 					$SaturdayProvider->key ='TimeEntryID';						
 					
 					return $this -> render('view', [
-													'model' => json_decode($time_card_response, true),
+													'model' => $model,
+													'ApprovedFlag' => $ApprovedFlag,
 													'Total_Hours_Current_TimeCard' => $Total_Hours_Current_TimeCard,
 													'dateProvider' => $dateProvider,
 													'SundayProvider' => $SundayProvider,
@@ -721,8 +724,10 @@ class TimeCardController extends BaseController
 		try{ 
 				$Total_Work_Hours = 0;
 				foreach($dataProvider as $item){
-					$Total_Work_Hours += $item["TimeEntryMinutes"];
-					Yii::Trace("item minutes is: ".$item["TimeEntryMinutes"]);
+					if($item["TimeEntryActiveFlag"] != "Inactive"){
+						$Total_Work_Hours += $item["TimeEntryMinutes"];
+						Yii::Trace("item minutes is: ".$item["TimeEntryMinutes"]);
+					}
 				}
 				
 				return number_format ($Total_Work_Hours / 60, 2);
