@@ -3,13 +3,14 @@ $(function() {
 	var checkDeActiveArray = [];
 	var counter = 0;
 	var flag = "Yes";
+	var approved = "No"
 	var totalworkhours = -1;
 	$('#deactive_timeEntry_btn_id').prop('disabled', true); //TO DISABLED
 	$(".grid-view input[type=checkbox]").click(function(){
-
-		var checkDeActive = $(this).attr("activeStatus");
-		//checkDeactiveArray[counter++] = checkApproved;
-		//var model = $(this).attr('model');
+		
+		// get approved value for this timecard
+			approved = $(".timecard-view").attr("approved");
+			
 		var pks = $('.grid-view').yiiGridView('getSelectedRows');
 
 		for(var i=0; i < pks.length; i++){
@@ -20,7 +21,7 @@ $(function() {
 			totalworkhours = $(".grid-view input[timeentryid="+pks[i]+"]").attr("totalworkhours");
 			
 			//alert("loop flag is "+flag+" i is : "+i);
-			if(flag == "Inactive" || totalworkhours == .0 || flag == "Inactive"){
+			if(flag == "Inactive" || totalworkhours == .0){
 				flag = "Inactive";
 				break;
 			}else{
@@ -28,7 +29,7 @@ $(function() {
 			}
 		}
 		
-		if (!pks || pks.length != 0 && flag != "Inactive"){
+		if (!pks || pks.length != 0 && flag != "Inactive" && approved != "Yes"){
 				$('#deactive_timeEntry_btn_id').prop('disabled', false); //TO ENABLE
 				
 				// triggered when checkbox selected
