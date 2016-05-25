@@ -41,7 +41,7 @@ class EquipmentController extends BaseController
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Type', 'filtertype');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Client Name', 'filterclientname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'Project Name', 'filterprojectname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'Accepted Flag', 'filteraccepted');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'Accepted Flag', 'filteraccepted');
 
 
 			$searchModel = [
@@ -67,7 +67,11 @@ class EquipmentController extends BaseController
 			if($searchModel['Accepted Flag'] == "No") {
 				$acceptedFilterInput .= ' selected';
 			}
-			$acceptedFilterInput .= '>No</option></select>';
+			$acceptedFilterInput .= '>No</option><option value="Pending|No"';
+			if($searchModel['Accepted Flag'] == "Pending|No") {
+				$acceptedFilterInput .= ' selected';
+			}
+			$acceptedFilterInput .= '>Pending & No</option></select>';
 
 
 			//Passing data to the dataProvider and formatting it in an associative array
