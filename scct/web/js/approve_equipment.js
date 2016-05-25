@@ -4,16 +4,16 @@ $(function() {
 	var flag = "Yes";
 	var totalworkhours = -1;
 	$('#multiple_approve_btn_id_equipment').prop('disabled', true); //TO DISABLED
-	$("#w1 input[type=checkbox]").click(function(){
+	$(".kv-row-select input[type=checkbox]").click(function(){
 		var checkApproved = $(this).attr("accepted");
 
 		//alert("checkApproved is :　"+checkApproved);
 		var model = $(this).attr('model');
-		var pks = $('#w1').yiiGridView('getSelectedRows');
+		var pks = $('#w0').yiiGridView('getSelectedRows');
 		//alert("pks length is ：　"+pks);
 		for(var i=0; i < pks.length; i++){
 			// get approved value for this timecard
-			flag = $("#w1 input[equipmentid="+pks[i]+"]").attr("accepted");
+			flag = $(".kv-row-select input[equipmentid="+pks[i]+"]").attr("accepted");
 			
 			//alert("loop flag is "+flag+" i is : "+i);
 			if(flag == "Yes" || flag == "yes"){
