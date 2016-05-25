@@ -14,13 +14,12 @@ use \DateTime;
 $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="timecard-view">
+<div class="timecard-view" approved = <?php echo $ApprovedFlag; ?>>
 
     <h1><?= Html::encode($this->title) ?></h1>
 
 	<?php 
 			// check start date for this timecard.
-			//var_dump("TimeCardStartDate is : ".$model["TimeCardStartDate"]);
 			$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
 			//disactive TimeEntry
 			//$disApproveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
@@ -40,12 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
 												 /*'data' => [
 															'confirm' => 'Are you sure you want to approve this item?']*/
 												])?>
-			<?= Html::button('Deactive', [
+			<?= Html::button('Deactivate', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => true,
 												 'id' => 'deactive_timeEntry_btn_id',
 												 /*'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']*/
+															'confirm' => 'Are you sure you want to deactivate this item?']*/
 												])?>									
 		<?php }else{ ?>	
 			<?= Html::a('Approve', $approveUrl, [
@@ -55,12 +54,12 @@ $this->params['breadcrumbs'][] = $this->title;
 												/* 'data' => [
 															'confirm' => 'Are you sure you want to approve this item?']*/
 												])?>
-			<?= Html::button('Deactive', [
+			<?= Html::button('Deactivate', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => false,
 												 'id' => 'deactive_timeEntry_btn_id',
 												/* 'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']*/
+															'confirm' => 'Are you sure you want to deactivate this item?']*/
 												])?>									
 		<?php } ?>											
 	</p>

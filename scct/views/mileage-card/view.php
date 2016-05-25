@@ -13,11 +13,12 @@ use yii\widgets\Pjax;
 $this->params['breadcrumbs'][] = ['label' => 'MileageCard', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="mileagecard-view">
+<div class="mileagecard-view" approved = <?php echo $ApprovedFlag; ?> >
 
     <h1><?= Html::encode($this->title) ?></h1>
 
 	<?php 
+			$approved = $ApprovedFlag;
 			$approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model["MileageCardID"]]));
 			if($model["MileageCardApprovedFlag"] === "Yes"){
 				$approve_status = true;
@@ -37,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
 					'confirm' => 'Are you sure you want to approve this item?']*/
 			])?>
 			
-			<?= Html::button('Deactive', [
+			<?= Html::button('Deactivate', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => true,
 												 'id' => 'deactive_mileageEntry_btn_id',
 												 /*'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']*/
+															'confirm' => 'Are you sure you want to deactivate this item?']*/
 												])?>
 		<?php }else{ ?>
 			<?= Html::a('Approve', $approveUrl, [
@@ -53,12 +54,12 @@ $this->params['breadcrumbs'][] = $this->title;
 					'confirm' => 'Are you sure you want to approve this item?']*/
 			])?>
 			
-			<?= Html::button('Deactive', [
+			<?= Html::button('Deactivate', [
 												 'class' => 'btn btn-primary', 
 												 'disabled' => false,
 												 'id' => 'deactive_mileageEntry_btn_id',
 												/* 'data' => [
-															'confirm' => 'Are you sure you want to deactive this item?']*/
+															'confirm' => 'Are you sure you want to deactivate this item?']*/
 												])?>
 		<?php } ?>
 
