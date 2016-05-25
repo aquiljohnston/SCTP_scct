@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="projectlanding-view">
 
-    <h1 class="title"><?= Html::encode($this->title) ?></h3>
+    <h3 class="title"><?= Html::encode($this->title) ?></h3>
 	
 	<p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>

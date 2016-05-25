@@ -1,24 +1,25 @@
-.kv-grid-table tr:nth-child(even) {
-    background: #FFFFFF;
-}
-.kv-grid-table tr:nth-child(odd) {
-    background: #E6F0F6;
+table tr:nth-child(even), .table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #FFFFFF;
 }
 
-.kv-grid-table > thead > tr > th, .kv-grid-table > tbody > tr > th, .kv-grid-table > tfoot > tr > th, .kv-grid-table > thead > tr > td,
-    .kv-grid-table  > tbody > tr > td, .kv-grid-table  > tfoot > tr > td {
+table tr:nth-child(odd), .table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #E6F0F6;
+}
+
+table > thead > tr > th, table > tbody > tr > th, table > tfoot > tr > th, table > thead > tr > td,
+    table > tbody > tr > td, table  > tfoot > tr > td {
     padding: 8px;
     line-height: 1.42857143;
     vertical-align: top;
 }
 
-.kv-grid-table > thead > tr > th, .kv-grid-table > tbody > tr > th, .kv-grid-table > tfoot > tr > th,
+table > thead > tr > th, table > tbody > tr > th, table > tfoot > tr > th,
     .kv-grid-table > thead > tr > td, .kv-grid-table > tbody > tr > td, .kv-grid-table > tfoot > tr > td {
     border: 1px solid #ddd;
 }
 
-.kv-grid-table tbody tr:hover {
-    background-color: rgba(57, 12, 255, 0.25);
+table tbody tr:hover {
+    background-color: rgba(57, 12, 255, 0.25) !important;
 }
 
 .kv-table-caption {
