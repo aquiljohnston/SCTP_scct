@@ -1,0 +1,26 @@
+.kv-grid-table tr:nth-child(even) {
+    background: #FFFFFF;
+}
+.kv-grid-table tr:nth-child(odd) {
+    background: #E6F0F6;
+}
+
+.kv-grid-table > thead > tr > th, .kv-grid-table > tbody > tr > th, .kv-grid-table > tfoot > tr > th, .kv-grid-table > thead > tr > td,
+    .kv-grid-table  > tbody > tr > td, .kv-grid-table  > tfoot > tr > td {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: top;
+}
+
+.kv-grid-table > thead > tr > th, .kv-grid-table > tbody > tr > th, .kv-grid-table > tfoot > tr > th,
+    .kv-grid-table > thead > tr > td, .kv-grid-table > tbody > tr > td, .kv-grid-table > tfoot > tr > td {
+    border: 1px solid #ddd;
+}
+
+.kv-grid-table tbody tr:hover {
+    background-color: rgba(57, 12, 255, 0.25);
+}
+
+.kv-table-caption {
+    background-color: lightblue;
+}
