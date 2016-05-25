@@ -24,7 +24,22 @@ $this->params['breadcrumbs'][] = $this->title;
 				'data' => []
 			])?>
 	</p>
-
+	<?php
+	if($week=="prior") {
+	$priorSelected = "selected";
+	$currentSelected = "";
+	} else {
+	$priorSelected = "";
+	$currentSelected = "selected";
+	}
+	?>
+	<form method="GET">
+		<select name="week" onchange="this.form.submit()">
+			<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+			<option value="current" <?= $currentSelected ?>>Current Week</option>
+		</select>
+		<input type="hidden" name="r" value="mileage-card/index" />
+	</form>
 	<!-- General Table Layout for displaying Mileage Card Information -->
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
