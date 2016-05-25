@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = 'Update';
         'model' => $model,
 		'flag' => $flag,
 		'clientAccounts' => $clientAccounts,
+		'states' => $states,
     ]) ?>
 
 </div>
