@@ -64,12 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($action === 'view' && $model["Project"] === 'Total') {
                         $url = 'index.php?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filterapproved=No&r=time-card%2Findex";
+                            "&filterapproved=No&week=prior&r=time-card%2Findex";
                         return $url;
                     } else {
                         $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filterapproved=No&r=time-card%2Findex";
+                            "&filterapproved=No&week=prior&r=time-card%2Findex";
                         return $url;
                     }
                 }
@@ -96,12 +96,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($action === 'view' && $model["Project"] === 'Total') {
                         $url = 'index.php?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filterapproved=No&r=mileage-card%2Findex";
+                            "&filterapproved=No&week=prior&r=mileage-card%2Findex";
                         return $url;
                     } else {
                         $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filterapproved=No&r=mileage-card%2Findex";
+                            "&filterapproved=No&week=prior&r=mileage-card%2Findex";
                         return $url;
                     }
                 }
