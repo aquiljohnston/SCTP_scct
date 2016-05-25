@@ -28,36 +28,41 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="row">
 		<div class="col-sm-6">
 		<label style="font-size:20px">Unassigned Users</label>
-		<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
-			//'name'=>'Unassigned Users',
-			'items' => $unassignedData,
-			'hideInput' => true,
-			'sortableOptions' => [
-				'connected'=>true,
-				'options' => ['style'=> 'min-height: 50px']
-			],
-			'options' => [
-				'class'=>'form-control',
-				'readonly'=>true
-				]
-		]); ?>
+			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
+				<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
+					//'name'=>'Unassigned Users',
+					'items' => $unassignedData,
+					'hideInput' => true,
+					'sortableOptions' => [
+						'connected'=>true,
+					],
+					'options' => [
+						'class'=>'form-control',
+						'readonly'=>true,
+						'options' => ['style'=> 'min-height: 20pt']
+						]
+				]); ?>
+			</div>
 		</div>
 		<div class="col-sm-6">
 		<label style="font-size:20px">Assigned Users</label>
-		<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
-			'name'=>'Assigned Users',
-			'items' => $assignedData,
-			'hideInput' => true,
-			'sortableOptions' => [
-				'itemOptions'=>['class'=>'alert alert-warning'],
-				'connected'=>true,
-				'options' => ['style'=> 'min-height: 1000px']
-			],
-			'options' => [
-				'class'=>'form-control',
-				'readonly'=>true
-				]
-		]); ?>
+			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
+				<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
+					'name'=>'Assigned Users',
+					'items' => $assignedData,
+					'hideInput' => true,
+					'sortableOptions' => [
+						'itemOptions'=>['class'=>'alert alert-warning'],
+						'connected'=>true,
+						'options' => ['style'=> 'min-height: 20pt']
+
+					],
+					'options' => [
+						'class'=>'form-control',
+						'readonly'=>true
+						]
+				]); ?>
+			</div>
 		</div>
 		</div>
 	
