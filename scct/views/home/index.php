@@ -32,12 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($action === 'view' && $model["Project"] === 'Total') {
                         $url = 'index.php?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filteraccepted=No&r=equipment%2Findex";
+                            "&filteraccepted=Pending|No&r=equipment%2Findex";
                         return $url;
                     } else {
                         $url = 'index.php?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filteraccepted=No&r=equipment%2Findex";
+                            "&filteraccepted=Pending|No&r=equipment%2Findex";
                         return $url;
                     }
                 }

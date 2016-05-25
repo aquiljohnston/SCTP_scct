@@ -24,8 +24,8 @@ use app\controllers\BaseController;
  * @property integer $UserActiveFlag
  * @property string $UserCreatedDate
  * @property string $UserModifiedDate
- * @property string $UserCreatedBy
- * @property string $UserModifiedBy
+ * @property integer $UserCreatedBy
+ * @property integer $UserModifiedBy
  * @property string $UserCreateDTLTOffset
  * @property integer $UserModifiedDTLTOffset
  * @property integer $UserInactiveDTLTOffset

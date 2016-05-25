@@ -122,6 +122,11 @@ class ClientController extends BaseController
 			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
 			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
 			$clientAccounts = json_decode($clientAccountsResponse, true);
+			
+			//get states for form dropdown
+			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+			$stateResponse = Parent::executeGetRequest($stateUrl);
+			$states = json_decode($stateResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post())){
 				
@@ -163,6 +168,7 @@ class ClientController extends BaseController
 					'model' => $model,
 					'flag' => $flag,
 					'clientAccounts' => $clientAccounts,
+					'states' => $states,
 					]);
 			}
 		}
@@ -205,6 +211,11 @@ class ClientController extends BaseController
 			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
 			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
 			$clientAccounts = json_decode($clientAccountsResponse, true);
+			
+			//get states for form dropdown
+			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+			$stateResponse = Parent::executeGetRequest($stateUrl);
+			$states = json_decode($stateResponse, true);
 				  
 			if ($model->load(Yii::$app->request->post()))
 			{
@@ -245,6 +256,7 @@ class ClientController extends BaseController
 					'model' => $model,
 					'flag' => $flag,
 					'clientAccounts' => $clientAccounts,
+					'states' => $states,
 				]);
 			} 
 		}
