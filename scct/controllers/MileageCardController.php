@@ -36,7 +36,13 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
+			// If week is undefined then the current week route will be chosen
+			$week = Yii::$app->request->getQueryParam("week");
+			if($week=="prior") {
+				$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-prior-week-sum-miles";
+			} else {
+				$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
+			}
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
@@ -76,7 +82,8 @@ class MileageCardController extends BaseController
 			return $this->render('index', [
 				'dataProvider' => $dataProvider,
 				'searchModel' => $searchModel,
-				'approvedInput' => $approvedInput
+				'approvedInput' => $approvedInput,
+				'week' => $week
 			]);
 		}
 		else

@@ -40,7 +40,13 @@ class TimeCardController extends BaseController
 					// create curl for restful call.		
 					// get response from api 		
 					//$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
-					$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
+					$week = Yii::$app->request->getQueryParam("week");
+					// If week is undefined then the current week route will be chosen
+					if($week=="prior") {
+						$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-prior";
+					} else {
+						$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
+					}
 					$response = Parent::executeGetRequest($url);
 					$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 					$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
@@ -85,7 +91,8 @@ class TimeCardController extends BaseController
 					return $this->render('index', [
 						'dataProvider' => $dataProvider,
 						'searchModel' => $searchModel,
-						'approvedInput' => $approvedInput
+						'approvedInput' => $approvedInput,
+						'week' => $week
 					]);
 				
 			}catch(ErrorException $e){
