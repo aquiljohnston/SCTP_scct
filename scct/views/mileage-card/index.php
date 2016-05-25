@@ -16,30 +16,30 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 	<!-- Approve Multiple Mileage Card button -->
-	<p id="mileage_card_approve_btn">
-		<?= Html::button('Approve',
+	<div id="mileage_card_approve_btn" style="margin-bottom: 2%; margin-top: 1%;">
+		<?php
+		echo Html::button('Approve',
 			[
 				'class' => 'btn btn-primary multiple_approve_btn',
 				'id' => 'multiple_mileage_card_approve_btn',
 				'data' => []
-			])?>
-	</p>
-	<?php
-	if($week=="prior") {
-	$priorSelected = "selected";
-	$currentSelected = "";
-	} else {
-	$priorSelected = "";
-	$currentSelected = "selected";
-	}
-	?>
-	<form method="GET">
-		<select name="week" onchange="this.form.submit()">
-			<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-			<option value="current" <?= $currentSelected ?>>Current Week</option>
-		</select>
-		<input type="hidden" name="r" value="mileage-card/index" />
-	</form>
+			]);
+		if($week=="prior") {
+			$priorSelected = "selected";
+			$currentSelected = "";
+		} else {
+			$priorSelected = "";
+			$currentSelected = "selected";
+		}
+		?>
+		<form method="GET" style="display: inline;">
+			<select name="week" onchange="this.form.submit()">
+				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+				<option value="current" <?= $currentSelected ?>>Current Week</option>
+			</select>
+			<input type="hidden" name="r" value="mileage-card/index" />
+		</form>
+	</div>
 	<!-- General Table Layout for displaying Mileage Card Information -->
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,

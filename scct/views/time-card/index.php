@@ -17,32 +17,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<h3 class="title"><?= Html::encode($this->title) ?></h3>
 
-	<p id="multiple_time_card_approve_btn">
-		<?= Html::button('Approve',
+	<div id="multiple_time_card_approve_btn">
+		<?php
+		echo Html::button('Approve',
 		[
 			'class' => 'btn btn-primary multiple_approve_btn',
 			'id' => 'multiple_approve_btn_id',
 			'data' => [
                        /*'confirm' => 'Are you sure you want to approve this item?'*/
 					  ]
-		])?>
-	</p>
-	<?php
-	if($week=="prior") {
-		$priorSelected = "selected";
-		$currentSelected = "";
-	} else {
-		$priorSelected = "";
-		$currentSelected = "selected";
-	}
-	?>
-	<form method="GET">
-		<select name="week" onchange="this.form.submit()">
-			<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-			<option value="current" <?= $currentSelected ?>>Current Week</option>
-		</select>
-		<input type="hidden" name="r" value="time-card/index" />
-	</form>
+		]);
+
+		if($week=="prior") {
+			$priorSelected = "selected";
+			$currentSelected = "";
+		} else {
+			$priorSelected = "";
+			$currentSelected = "selected";
+		}
+		?>
+		<form method="GET" style="display: inline;">
+			<select name="week" onchange="this.form.submit()">
+				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+				<option value="current" <?= $currentSelected ?>>Current Week</option>
+			</select>
+			<input type="hidden" name="r" value="time-card/index" />
+		</form>
+	</div>
 
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,
