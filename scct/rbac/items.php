@@ -120,6 +120,10 @@ return [
         'type' => 2,
         'description' => 'Delete project',
     ],
+	 'viewProjectLanding' => [
+        'type' => 2,
+        'description' => 'View the project landing page',
+    ],	
     'Technician' => [
         'type' => 1,
     ],
@@ -151,6 +155,7 @@ return [
             'viewTimeCard',
             'createTimeCard',
             'updateTimeCard',
+			'viewProjectLanding',
         ],
     ],
     'ProjectManager' => [

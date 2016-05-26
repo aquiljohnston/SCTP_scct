@@ -96,7 +96,7 @@ class ProjectLandingController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		//RBAC permissions check
-		if (Yii::$app->user->can('viewProject'))
+		if (Yii::$app->user->can('viewProjectLanding'))
 		{
 			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
 			$response = Parent::executeGetRequest($url);
@@ -117,7 +117,7 @@ class ProjectLandingController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		//RBAC permissions check
-		if (Yii::$app->user->can('viewProject'))
+		if (Yii::$app->user->can('viewProjectLanding'))
 		{
 			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-user-relationships&projectID='.$id;
 			$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
