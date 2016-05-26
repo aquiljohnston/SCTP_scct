@@ -120,7 +120,10 @@ a.desc:after {
 	margin-top: 15px;	
 }
 #top-wrapper{
-	position: absolute;
+	position: fixed;
+	top: 0;
+	background-color: white;
+	z-index: 10;
 }
 .menu, .copyright-section{
 	background-color: #0067A6;
@@ -138,6 +141,9 @@ a.desc:after {
 }
 #non-nav{
 	float:right;
+}
+.container .row{
+    width: 100%;
 }
 #copyright-bar{
 	float: right;
@@ -164,6 +170,7 @@ ul > li >a:hover{
 }
 #adminNav{
 	float:right;
+	padding-right:45px;
 }
 .adminMenu, .middlePrivilegeMenu{
 	background-color: #0067A6;
@@ -189,9 +196,10 @@ ul > li >a:hover{
 }
 
 #projects_dropdown{
-	 width: 150px; 
-    height: 350px; 
-    overflow: auto; 
+	 width: 150px;
+	 height: auto;
+	 max-height:300px;
+	 overflow: auto;
 }
 
 /*-----------End body----------*/
@@ -206,5 +214,9 @@ ul > li >a:hover{
 /*-----------Start footer----------*/
 .copyright-section{
     margin-top: .5%;
+    width: 100%;
+    position: fixed;
+	bottom:0;
+	
 }
 /*-----------End footer----------*/
