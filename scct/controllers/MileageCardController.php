@@ -374,6 +374,8 @@ class MileageCardController extends BaseController
 			$activityCode = json_decode($activityCodeResponse, true);
 
 			if ($model->load(Yii::$app->request->post())) {
+				//create timeEntryTitle variable 
+				$mileageEntryTitle = "mileageEntry";
 
 				//concatenate start time
 				$MileageEntryStartTimeConcatenate = new DateTime($mileageCardDate.$model->MileageEntryStartDate);
@@ -383,7 +385,16 @@ class MileageCardController extends BaseController
 				$MileageEntryEndTimeConcatenate = new DateTime($mileageCardDate.$model->MileageEntryEndDate);
 				$MileageEntryEndTimeConcatenate = $MileageEntryEndTimeConcatenate->format('Y-m-d H:i:s');
 
-				$data = array(
+				// check user input validate StartingMileage and EndingMileage
+				// MileageEntryStartTime and MileageEntryEndTime
+				$startMileageObj = $model->MileageEntryStartingMileage;
+				$endMileageObj = $model->MileageEntryEndingMileage;
+				$CheckStartTime = $MileageEntryStartTimeConcatenate;
+				$CheckEndTime = $MileageEntryEndTimeConcatenate;
+				$startTimeObj = new DateTime($CheckStartTime);
+				$endTimeObj = new DateTime($CheckEndTime);
+				
+				$mileage_entry_data[] = array(
 					'MileageEntryUserID' => $mileageCardTechId,
 					'MileageEntryStartingMileage' => $model->MileageEntryStartingMileage,
 					'MileageEntryEndingMileage' => $model->MileageEntryEndingMileage,
@@ -400,7 +411,33 @@ class MileageCardController extends BaseController
 					'MileageEntryModifiedDate' => $model->MileageEntryModifiedDate,
 					'MileageEntryModifiedBy' => $model->MileageEntryModifiedBy,
 				);
-
+				
+				// check difference between StartingMileage and EndingMileage
+				if($endTimeObj > $startTimeObj && $endMileageObj > $startMileageObj){
+							$time_entry_data = array();
+							$data[] = array(
+								'ActivityTitle' => $mileageEntryTitle,
+								'ActivityCreatedBy' => Yii::$app->session['userID'],
+								'timeEntry' => $time_entry_data,
+								'mileageEntry' => $mileage_entry_data,
+							);
+							
+							$activity = array(
+								'activity' => $data,
+							);
+							
+							$json_data = json_encode($activity);	
+							
+							// post url
+							$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
+							$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
+							$obj = json_decode($response_activity, true);
+							
+							return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);						
+						}else{
+							return $this->redirect(['view', 'id' => $mileageCardId]);
+						}
+				/*
 				$json_data = json_encode($data);
 
 				//Execute the POST call
@@ -408,6 +445,7 @@ class MileageCardController extends BaseController
 				Parent::executePostRequest($url_send, $json_data);
 
 				return $this->redirect(['view', 'id' => $mileageCardId]);
+				*/
 			} else {
 				return $this->render('create_mileage_entry', [
 					'model' => $model,
