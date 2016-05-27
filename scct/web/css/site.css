@@ -95,7 +95,11 @@ a.desc:after {
 }
 
 /*---------Start Header----------*/
-
+#seperator_line {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border-top: 3px solid #000000;
+}
 #login_header{
 	padding-top: 50px;
 }
