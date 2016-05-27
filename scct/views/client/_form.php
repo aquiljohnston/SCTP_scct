@@ -142,7 +142,7 @@ use kartik\form\ActiveForm;
 					])->textInput(['placeholder'=>'ClientTerritory']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ClientActiveFlag', [
-					'label'=>'ActiveFlag', 
+					'label'=>'Status', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
