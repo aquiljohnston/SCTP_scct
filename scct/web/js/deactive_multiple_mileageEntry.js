@@ -18,7 +18,7 @@ $(function() {
 			flag = $(".grid-view input[mileageentryid="+pks[i]+"]").attr("activeStatus");
 			
 			//alert("loop flag is "+flag+" i is : "+i);
-			if(flag == "Inactive" || totalworkhours == .0){
+			if(flag == "Inactive"){
 				flag = "Inactive";
 				break;
 			}else{
@@ -26,8 +26,7 @@ $(function() {
 			}
 		}
 		
-		if (!pks && pks.length != 0 && flag != "Inactive" && approved != "Yes"){
-				alert("approved if "+approved);
+		if (!pks || pks.length != 0 && flag != "Inactive" && approved != "Yes"){
 				$('#deactive_mileageEntry_btn_id').prop('disabled', false); //TO ENABLE
 				
 				// triggered when checkbox selected

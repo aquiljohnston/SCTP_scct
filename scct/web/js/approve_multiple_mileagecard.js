@@ -19,7 +19,7 @@ $(function() {
                 //retrieve the total mileage for the mileage card based off of current checkbox
                 totalMileage = $(".kv-row-select input[mileagecardid="+pks[i]+"]").attr("totalmileage");
 
-                if((approved == "Yes" || approved == "yes") || totalMileage == 0){
+                if((approved == "Yes" || approved == "yes") || totalMileage < 0){
                     approved = "Yes";
                     break;
                 }else{
