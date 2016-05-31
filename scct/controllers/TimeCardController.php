@@ -37,15 +37,28 @@ class TimeCardController extends BaseController
 		if (Yii::$app->user->can('viewTimeCardIndex'))
 		{
 			try{
-					// create curl for restful call.		
-					// get response from api 		
-					//$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-time-cards-current-week";
+					// create curl for restful call.
+					//get user role
+					$userID = Yii::$app->session['userID'];
+					$userRole = Yii::$app->authManager->getRolesByUser($userID);
+					$role = current($userRole);
+					//get week		
 					$week = Yii::$app->request->getQueryParam("week");
-					// If week is undefined then the current week route will be chosen
-					if($week=="prior") {
-						$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-prior";
+					//check role and use appropriate routes
+					if($role->name == "Admin"){	
+						// If week is undefined then the current week route will be chosen
+						if($week=="prior") {
+							$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-prior";
+						} else {
+							$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
+						}
 					} else {
-						$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-card-hours-worked-current";
+						// If week is undefined then the current week route will be chosen
+						if($week=="prior") {
+							$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-by-user-by-project-prior&userID=" . $userID;
+						} else {
+							$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fview-all-by-user-by-project-current&userID=" . $userID;
+						}
 					}
 					$response = Parent::executeGetRequest($url);
 					$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
