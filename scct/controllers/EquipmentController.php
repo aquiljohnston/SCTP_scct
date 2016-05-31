@@ -34,7 +34,16 @@ class EquipmentController extends BaseController
 		if (Yii::$app->user->can('viewEquipmentIndex'))
 		{
 			// Reading the response from the the api and filling the GridView
-			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fequipment-view';
+			//get user role
+			$userID = Yii::$app->session['userID'];
+			$userRole = Yii::$app->authManager->getRolesByUser($userID);
+			$role = current($userRole);
+			//check role and use appropriate route
+			if($role->name == "Admin" || $role->name == "Engineer"){
+				$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fequipment-view';
+			} else {
+				$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview-all-by-user-by-project&userID='. $userID;
+			}
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'Name', 'filtername');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'Serial Number', 'filterserialnumber');
