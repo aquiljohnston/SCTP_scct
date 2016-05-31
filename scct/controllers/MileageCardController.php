@@ -36,12 +36,27 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCardIndex'))
 		{
-			// If week is undefined then the current week route will be chosen
+			//get user role
+			$userID = Yii::$app->session['userID'];
+			$userRole = Yii::$app->authManager->getRolesByUser($userID);
+			$role = current($userRole);
+			//get week
 			$week = Yii::$app->request->getQueryParam("week");
-			if($week=="prior") {
-				$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-prior-week-sum-miles";
+			//check role and use appropriate route
+			if($role->name == "Admin"){	
+				// If week is undefined then the current week route will be chosen
+				if($week=="prior") {
+					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-prior-week-sum-miles";
+				} else {
+					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
+				}
 			} else {
-				$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
+				// If week is undefined then the current week route will be chosen
+				if($week=="prior") {
+					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-by-user-by-project-prior&userID=" . $userID;
+				} else {
+					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-by-user-by-project-current&userID=" . $userID;
+				}
 			}
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
