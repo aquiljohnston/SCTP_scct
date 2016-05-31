@@ -150,15 +150,6 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->dropDownList($flag); ?>
 				</div>
-				<?= Html::activeLabel($model, 'ClientDivisionsFlag', [
-					'label'=>'DivisionsFlag', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'ClientDivisionsFlag',[
-						'showLabels'=>false
-					])->textInput(['placeholder'=>'ClientDivisionsFlag']); ?>
-				</div>
 				<?= Html::activeLabel($model, 'ClientComment', [
 					'label'=>'Comment', 
 					'class'=>'col-sm-2 control-label'
