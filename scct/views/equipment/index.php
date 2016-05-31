@@ -64,7 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
 				[
 					'label' => 'Project Name',
 					'attribute' => 'Project Name',
-					'group'=>true,  // enable grouping
 					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['Project Name']) . '" type="text">'
 				],
 				[

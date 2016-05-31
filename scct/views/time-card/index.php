@@ -66,7 +66,6 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'label' => 'Project Name',
 				'attribute' => 'ProjectName',
-				'group'=>true,  // enable grouping
 				'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 			],
 			'TimeCardStartDate',
