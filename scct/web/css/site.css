@@ -172,6 +172,9 @@ ul > li >a:hover{
 	background-color: #0067A6;
 	color: #FBB03B;
 }
+.dropdown-menu li >a:hover{
+	color:#FBB03B;
+}
 #adminNav{
 	float:right;
 	padding-right:45px;
@@ -224,3 +227,31 @@ ul > li >a:hover{
 	
 }
 /*-----------End footer----------*/
+
+
+
+/*-----------responsive ----------*/
+@media only screen 
+and (max-width : 770px) {
+/*---------Header responsive------*/
+.navbar-default {
+	background-color: #0067A6;
+}
+#adminNav {
+    float: left;
+    width: 100%;
+    margin: 0;
+}
+#projects_dropdown {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent;
+    border: 0;
+}
+#projects_dropdown::-webkit-scrollbar,.navbar-collapse.in::-webkit-scrollbar { 
+    display: none; 
+}
+/*-------End Header responsive------*/
+}
