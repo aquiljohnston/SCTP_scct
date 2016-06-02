@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
-use kartik\datetime\DateTimePicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\project */
@@ -86,12 +86,12 @@ use kartik\datetime\DateTimePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectStartDate',[
 					'showLabels'=>false
-					])->widget(DateTimePicker::classname(),[
+					])->widget(DatePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
 						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
-							'format' => 'yyyy-mm-dd hh:ii:ss'
+							'format' => 'yyyy-mm-dd'
 						]
 					]); ?>
 				</div>
@@ -102,12 +102,12 @@ use kartik\datetime\DateTimePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectEndDate',[
 					'showLabels'=>false
-					])->widget(DateTimePicker::classname(),[
+					])->widget(DatePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
 						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
-							'format' => 'yyyy-mm-dd hh:ii:ss'
+							'format' => 'yyyy-mm-dd'
 						]
 					]); ?>
 				</div>
