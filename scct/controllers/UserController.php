@@ -158,22 +158,26 @@ class UserController extends BaseController
 				$data['UserKey'] = $encodedKey;
 				
 				$json_data = json_encode($data);
-				
-				// post url
-				$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";	
-				$response = Parent::executePostRequest($url, $json_data);
-			
-				$obj = json_decode($response, true);
-				
-				//set auth roles
-				$auth = Yii::$app->authManager;
-				if($userRole = $auth->getRole($obj["UserAppRoleType"]))
-				{
-					$auth->assign($userRole, $obj["UserID"]);
-				}
 
+				try{	
+					// post url
+					$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";	
+					$response = Parent::executePostRequest($url, $json_data);
 				
-				return $this->redirect(['view', 'id' => $obj["UserID"]]);
+					$obj = json_decode($response, true);
+
+					//set auth roles
+					$auth = Yii::$app->authManager;
+					$currentRole = $auth->getRole($obj["UserAppRoleType"]);
+					if($userRole = $currentRole)
+					{
+						$auth->assign($userRole, $obj["UserID"]);
+					}
+					return $this->redirect(['view', 'id' => $obj["UserID"]]);
+					}catch(\Exception $e){
+					throw new \yii\web\HttpException(400, 'The current username is taken, Please use another one.');
+				}
+					
 			}else{
 				return $this->render('create', [
 					'model' => $model,
