@@ -443,10 +443,14 @@ class MileageCardController extends BaseController
 							
 							$json_data = json_encode($activity);	
 							
-							// post url
-							$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
-							$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
-							$obj = json_decode($response_activity, true);
+							try{
+								// post url
+								$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
+								$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
+								$obj = json_decode($response_activity, true);
+							}catch(\Exception $e){
+								throw new \yii\web\HttpException(400, 'The current MileageEntry has been created, please try it again.');
+							}
 							
 							return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);						
 						}else{

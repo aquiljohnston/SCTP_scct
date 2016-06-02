@@ -483,12 +483,16 @@ class TimeCardController extends BaseController
 							
 							$json_data = json_encode($activity);	
 							
-							// post url
-							$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
-							$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
-							$obj = json_decode($response_activity, true);
-							
-							return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);						
+							try{
+								// post url
+								$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
+								$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
+								$obj = json_decode($response_activity, true);
+								
+								return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);	
+							}catch(\Exception $e){
+								throw new \yii\web\HttpException(400, 'The current TimeEntry has been created, please try it again.');
+							}
 						}else{
 							return $this->redirect(['view', 'id' => $id]);
 						}
