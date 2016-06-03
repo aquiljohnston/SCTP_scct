@@ -40,21 +40,21 @@ $this->params['breadcrumbs'][] = $this->title;
 				['class' => 'kartik\grid\SerialColumn'],
 
 				[
-					'label' => 'Name',
-					'attribute' => 'Name',
-					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['Name']) . '" type="text">'
+					'label' => 'EquipmentName',
+					'attribute' => 'EquipmentName',
+					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['EquipmentName']) . '" type="text">'
 				],
 				[
-					'label' => 'Serial Number',
-					'attribute' => 'Serial Number',
-					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['Serial Number']) . '" type="text">'
+					'label' => 'EquipmentSerialNumber',
+					'attribute' => 'EquipmentSerialNumber',
+					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['EquipmentSerialNumber']) . '" type="text">'
 				],
 				//'SC Number',
-				'Details',
+				'EquipmentDetails',
 				[
-					'label' => 'Type',
-					'attribute' => 'Type',
-					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['Type']) . '" type="text">'
+					'label' => 'EquipmentType',
+					'attribute' => 'EquipmentType',
+					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['EquipmentType']) . '" type="text">'
 				],
 				[
 					'label' => 'Client Name',
@@ -67,8 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
 					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['Project Name']) . '" type="text">'
 				],
 				[
-					'label' => 'Accepted Flag',
-					'attribute' => 'Accepted Flag',
+					'label' => 'EquipmentAcceptedFlag',
+					'attribute' => 'EquipmentAcceptedFlag',
 					'filter' => $acceptedFilterInput
 				],
 
@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				[
 					'class' => 'kartik\grid\CheckboxColumn',
 					'checkboxOptions' => function ($model, $key, $index, $column) {
-						return ['equipmentid' => $model["EquipmentID"], 'accepted' =>$model["Accepted Flag"] ];
+						return ['equipmentid' => $model["EquipmentID"], 'accepted' =>$model["EquipmentAcceptedFlag"] ];
 					}
 					/*'pageSummary' => true,
 					'rowSelectedClass' => GridView::TYPE_SUCCESS,
