@@ -87,7 +87,7 @@ use kartik\datetime\DateTimePicker;
 			<div class="form-group">
 				<?= Html::submitButton( 'Submit', ['class' => 'btn btn-success', 'id'=> 'time_card_submit_btn']) ?>
 			</div>
-
     <?php ActiveForm::end(); ?>
+	
 </div>
 
