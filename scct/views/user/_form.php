@@ -7,10 +7,9 @@ use kartik\form\ActiveForm;
 /* @var $model app\models\user */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
 <div class="user-form">
 
-    <?php $form = ActiveForm::begin([
+	<?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_HORIZONTAL,
 				'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
 			]); ?>
@@ -116,10 +115,12 @@ use kartik\form\ActiveForm;
 				</div>
 			</div>	
 
-    <div class="form-group">
-        <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success', 'id'=> 'user_mgt_submit_btn']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
+	<div class="form-group">
+		<?= Html::submitButton( 'Submit', ['class' => 'btn btn-success', 'id'=> 'user_mgt_submit_btn']) ?>
+	</div>
+	<?php ActiveForm::end(); ?>
+	<?php if($duplicateFlag == 1){ ?>
+		<script> alert("Someone already has that username. Try another?"); </script> 
+	<?php } ?>
 </div>
+
