@@ -173,9 +173,20 @@ class UserController extends BaseController
 					{
 						$auth->assign($userRole, $obj["UserID"]);
 					}
-					return $this->redirect(['view', 'id' => $obj["UserID"]]);
+						return $this->redirect(['view', 'id' => $obj["UserID"]]);
 					}catch(\Exception $e){
-					throw new \yii\web\HttpException(400, 'The current username is taken, Please use another one.');
+						
+						// duplicationflag:
+						// 1: yes 0: no						
+						// set duplicateFlag to 1, which means duplication happened.						
+						$duplicateFlag = 1;
+						return $this->render('create', [
+							'model' => $model,
+							'roles' => $roles,
+							'types' => $types,
+							'flag' => $flag,
+							'duplicateFlag' => 1,
+						]);
 				}
 					
 			}else{
@@ -184,6 +195,7 @@ class UserController extends BaseController
 					'roles' => $roles,
 					'types' => $types,
 					'flag' => $flag,
+					'duplicateFlag' => 0,
 				]);
 			}
 		}
