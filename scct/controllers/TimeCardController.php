@@ -134,7 +134,16 @@ class TimeCardController extends BaseController
 		if (Yii::$app->user->can('viewTimeCard'))
 		{
 			try{
-				
+					// set default value 0 to duplicateFlag
+					// duplicationflag:
+					// 1: yes 0: no						
+					// set duplicateFlag to 1, which means duplication happened.
+					
+					$duplicateFlag = 0;
+					if (strpos($id, "yes") == true) {
+						$id = str_replace("yes", "", $id);
+						$duplicateFlag = 1;
+					}				
 					$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview-time-entries&id='.$id;
 					$time_card_url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
 					
@@ -246,6 +255,7 @@ class TimeCardController extends BaseController
 					
 					return $this -> render('view', [
 													'model' => $model,
+													'duplicateFlag' => $duplicateFlag,
 													'ApprovedFlag' => $ApprovedFlag,
 													'Total_Hours_Current_TimeCard' => $Total_Hours_Current_TimeCard,
 													'dateProvider' => $dateProvider,
@@ -491,7 +501,9 @@ class TimeCardController extends BaseController
 								
 								return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);	
 							}catch(\Exception $e){
-								throw new \yii\web\HttpException(400, 'The current TimeEntry has been created, please try it again.');
+								
+								$concatenate_id = $id . "yes";
+								return $this->redirect(['view', 'id' => $concatenate_id]);
 							}
 						}else{
 							return $this->redirect(['view', 'id' => $id]);
@@ -501,7 +513,7 @@ class TimeCardController extends BaseController
 							'model' => $timeEntryModel,
 							'activityCode' => $activityCode,
 							'activityPayCode' => $activityPayCode,
-							'activityModel' => $activityModel
+							'activityModel' => $activityModel,
 						]);
 					}
 			}catch(ErrorException $e){

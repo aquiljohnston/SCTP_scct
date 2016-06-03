@@ -122,136 +122,151 @@ class MileageCardController extends BaseController
 		//RBAC permissions check
 		if (Yii::$app->user->can('viewMileageCard'))
 		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
-			$mileage_card_url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
-			
-			$response = Parent::executeGetRequest($url);
-			$mileage_card_response = Parent::executeGetRequest($mileage_card_url);
-			$model = json_decode($mileage_card_response, true);
-			$dateProvider = json_decode($response, true);
-			$ApprovedFlag = $dateProvider["ApprovedFlag"];
-			$Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
-			$SundayProvider = new ArrayDataProvider([
-				'allModels' => $Sundaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Sun = $this->TotalMileageCal($Sundaydata);
-			
-			$Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
-			$MondayProvider = new ArrayDataProvider([
-				'allModels' => $Mondaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Mon = $this->TotalMileageCal($Mondaydata);
-			
-			$Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
-			$TuesdayProvider = new ArrayDataProvider([
-				'allModels' => $Tuesdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Tue = $this->TotalMileageCal($Tuesdaydata);
-			
-			$Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
-			$WednesdayProvider = new ArrayDataProvider([
-				'allModels' => $Wednesdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Wed = $this->TotalMileageCal($Wednesdaydata);
-			
-			$Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
-			$ThursdayProvider = new ArrayDataProvider([
-				'allModels' => $Thursdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Thr = $this->TotalMileageCal($Thursdaydata);
-			
-			$Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
-			$FridayProvider = new ArrayDataProvider([
-				'allModels' => $Fridaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Fri = $this->TotalMileageCal($Fridaydata);
-			
-			$Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
-			$SaturdayProvider = new ArrayDataProvider([
-				'allModels' => $Saturdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
-			]);
-			$Total_Mileage_Sat = $this->TotalMileageCal($Saturdaydata);
+			try{
+			// set default value 0 to duplicateFlag
+					// duplicationflag:
+					// 1: yes 0: no						
+					// set duplicateFlag to 1, which means duplication happened.
+					
+					$duplicateFlag = 0;
+					if (strpos($id, "yes") == true) {
+						$id = str_replace("yes", "", $id);
+						$duplicateFlag = 1;
+					}		
+					$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
+					$mileage_card_url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
+					
+					$response = Parent::executeGetRequest($url);
+					$mileage_card_response = Parent::executeGetRequest($mileage_card_url);
+					$model = json_decode($mileage_card_response, true);
+					$dateProvider = json_decode($response, true);
+					$ApprovedFlag = $dateProvider["ApprovedFlag"];
+					$Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
+					$SundayProvider = new ArrayDataProvider([
+						'allModels' => $Sundaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Sun = $this->TotalMileageCal($Sundaydata);
+					
+					$Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
+					$MondayProvider = new ArrayDataProvider([
+						'allModels' => $Mondaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Mon = $this->TotalMileageCal($Mondaydata);
+					
+					$Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
+					$TuesdayProvider = new ArrayDataProvider([
+						'allModels' => $Tuesdaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Tue = $this->TotalMileageCal($Tuesdaydata);
+					
+					$Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
+					$WednesdayProvider = new ArrayDataProvider([
+						'allModels' => $Wednesdaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Wed = $this->TotalMileageCal($Wednesdaydata);
+					
+					$Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
+					$ThursdayProvider = new ArrayDataProvider([
+						'allModels' => $Thursdaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Thr = $this->TotalMileageCal($Thursdaydata);
+					
+					$Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
+					$FridayProvider = new ArrayDataProvider([
+						'allModels' => $Fridaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Fri = $this->TotalMileageCal($Fridaydata);
+					
+					$Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
+					$SaturdayProvider = new ArrayDataProvider([
+						'allModels' => $Saturdaydata,
+						'pagination' => [
+							'pageSize' => 10,
+						],
+						// 'sort' => [
+							// 'attributes' => ['id', 'name'],
+						// ],
+					]);
+					$Total_Mileage_Sat = $this->TotalMileageCal($Saturdaydata);
 
-			//calculation total miles for this mileage card
-			$Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
-											$Total_Mileage_Mon +
-											$Total_Mileage_Tue +
-											$Total_Mileage_Wed +
-											$Total_Mileage_Thr +
-											$Total_Mileage_Fri +
-											$Total_Mileage_Sat;
-			
-			//set MileageEntryID as id
-					$SundayProvider->key ='MileageEntryID';
-					$MondayProvider->key ='MileageEntryID';
-					$TuesdayProvider->key ='MileageEntryID';
-					$WednesdayProvider->key ='MileageEntryID';
-					$ThursdayProvider->key ='MileageEntryID';
-					$FridayProvider->key ='MileageEntryID';
-					$SaturdayProvider->key ='MileageEntryID';		
+					//calculation total miles for this mileage card
+					$Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
+													$Total_Mileage_Mon +
+													$Total_Mileage_Tue +
+													$Total_Mileage_Wed +
+													$Total_Mileage_Thr +
+													$Total_Mileage_Fri +
+													$Total_Mileage_Sat;
+					
+					//set MileageEntryID as id
+							$SundayProvider->key ='MileageEntryID';
+							$MondayProvider->key ='MileageEntryID';
+							$TuesdayProvider->key ='MileageEntryID';
+							$WednesdayProvider->key ='MileageEntryID';
+							$ThursdayProvider->key ='MileageEntryID';
+							$FridayProvider->key ='MileageEntryID';
+							$SaturdayProvider->key ='MileageEntryID';		
 
-			return $this -> render('view', [
-											'model' => $model,
-											'ApprovedFlag' => $ApprovedFlag,
-											'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
-											'dateProvider' => $dateProvider,
-											'SundayProvider' => $SundayProvider,
-											'Total_Mileage_Sun' => $Total_Mileage_Sun,
-											'MondayProvider' => $MondayProvider,
-											'Total_Mileage_Mon' => $Total_Mileage_Mon,
-											'TuesdayProvider' => $TuesdayProvider,
-											'Total_Mileage_Tue' => $Total_Mileage_Tue,
-											'WednesdayProvider' => $WednesdayProvider,
-											'Total_Mileage_Wed' => $Total_Mileage_Wed,
-											'ThursdayProvider' => $ThursdayProvider,
-											'Total_Mileage_Thr' => $Total_Mileage_Thr,
-											'FridayProvider' => $FridayProvider,
-											'Total_Mileage_Fri' => $Total_Mileage_Fri,
-											'SaturdayProvider' => $SaturdayProvider,
-											'Total_Mileage_Sat' => $Total_Mileage_Sat,
-									]);
+					return $this -> render('view', [
+													'model' => $model,
+													'duplicateFlag' => $duplicateFlag,
+													'ApprovedFlag' => $ApprovedFlag,
+													'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
+													'dateProvider' => $dateProvider,
+													'SundayProvider' => $SundayProvider,
+													'Total_Mileage_Sun' => $Total_Mileage_Sun,
+													'MondayProvider' => $MondayProvider,
+													'Total_Mileage_Mon' => $Total_Mileage_Mon,
+													'TuesdayProvider' => $TuesdayProvider,
+													'Total_Mileage_Tue' => $Total_Mileage_Tue,
+													'WednesdayProvider' => $WednesdayProvider,
+													'Total_Mileage_Wed' => $Total_Mileage_Wed,
+													'ThursdayProvider' => $ThursdayProvider,
+													'Total_Mileage_Thr' => $Total_Mileage_Thr,
+													'FridayProvider' => $FridayProvider,
+													'Total_Mileage_Fri' => $Total_Mileage_Fri,
+													'SaturdayProvider' => $SaturdayProvider,
+													'Total_Mileage_Sat' => $Total_Mileage_Sat,
+											]);
+			}catch(ErrorException $e){
+				throw new \yii\web\HttpException(400);
+			}						
 		}
 		else
 		{
@@ -448,11 +463,13 @@ class MileageCardController extends BaseController
 								$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';	
 								$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
 								$obj = json_decode($response_activity, true);
+								
+								return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);
 							}catch(\Exception $e){
-								throw new \yii\web\HttpException(400, 'The current MileageEntry has been created, please try it again.');
+								$concatenate_id = $mileageCardId . "yes";
+								return $this->redirect(['view', 'id' => $concatenate_id]);
 							}
-							
-							return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);						
+													
 						}else{
 							return $this->redirect(['view', 'id' => $mileageCardId]);
 						}

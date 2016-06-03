@@ -15,6 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mileagecard-view" approved = <?php echo $ApprovedFlag; ?> >
 
+	<?php if($duplicateFlag == 1){?>
+		<script>alert("The current Mileage Entry already exists, please try again.");</script>
+	<?php }?>
+
     <h1><?= Html::encode($this->title) ?></h1>
 
 	<?php 
