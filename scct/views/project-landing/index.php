@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'bootstrap' => false,
         'export' => false,
         'layout' => "{items}\n{pager}",
-        'caption' => 'All Projects',
+        'caption' => 'My Projects',
 
         'columns' => [
             'ProjectName',
