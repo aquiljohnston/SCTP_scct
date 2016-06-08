@@ -40,34 +40,34 @@ $this->params['breadcrumbs'][] = $this->title;
 				['class' => 'kartik\grid\SerialColumn'],
 
 				[
-					'label' => 'EquipmentName',
+					'label' => 'Equipmen tName',
 					'attribute' => 'EquipmentName',
 					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['EquipmentName']) . '" type="text">'
 				],
 				[
-					'label' => 'EquipmentSerialNumber',
+					'label' => 'Equipment SerialNumber',
 					'attribute' => 'EquipmentSerialNumber',
 					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['EquipmentSerialNumber']) . '" type="text">'
 				],
 				//'SC Number',
 				'EquipmentDetails',
 				[
-					'label' => 'EquipmentType',
+					'label' => 'Equipment Type',
 					'attribute' => 'EquipmentType',
 					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['EquipmentType']) . '" type="text">'
 				],
 				[
 					'label' => 'Client Name',
-					'attribute' => 'Client Name',
-					'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['Client Name']) . '" type="text">'
+					'attribute' => 'ClientName',
+					'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
 				],
 				[
 					'label' => 'Project Name',
-					'attribute' => 'Project Name',
-					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['Project Name']) . '" type="text">'
+					'attribute' => 'ProjectName',
+					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 				],
 				[
-					'label' => 'EquipmentAcceptedFlag',
+					'label' => 'Equipment AcceptedFlag',
 					'attribute' => 'EquipmentAcceptedFlag',
 					'filter' => $acceptedFilterInput
 				],

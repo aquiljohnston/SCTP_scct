@@ -48,8 +48,8 @@ class EquipmentController extends BaseController
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'EquipmentName', 'filtername');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'EquipmentType', 'filtertype');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'Client Name', 'filterclientname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'Project Name', 'filterprojectname');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientName', 'filterclientname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentAcceptedFlag', 'filteraccepted');
 
 
@@ -57,8 +57,8 @@ class EquipmentController extends BaseController
 				'EquipmentName' => Yii::$app->request->getQueryParam('filtername', ''),
 				'EquipmentSerialNumber' => Yii::$app->request->getQueryParam('filterserialnumber', ''),
 				'EquipmentType' => Yii::$app->request->getQueryParam('filtertype', ''),
-				'Client Name' => Yii::$app->request->getQueryParam('filterclientname', ''),
-				'Project Name' => Yii::$app->request->getQueryParam('filterprojectname', ''),
+				'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
+				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
 				'EquipmentAcceptedFlag' => Yii::$app->request->getQueryParam('filteraccepted', '')
 			];
 
