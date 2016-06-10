@@ -30,17 +30,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'UserID',
 			[
-				'label' => 'UserName',
+				'label' => 'Username',
 				'attribute' => 'UserName',
 				'filter' => '<input class="form-control" name="filterusername" value="' . Html::encode($searchModel['UserName']) . '" type="text">'
 			],
 			[
-            	'label' => 'UserFirstName',
+            	'label' => 'First Name',
 				'attribute' => 'UserFirstName',
 				'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
 			],
 			[
-				'label' => 'UserLastName',
+				'label' => 'Last Name',
 				'attribute' => 'UserLastName',
 				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
 			],

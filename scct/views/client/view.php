@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ClientZip4',
             'ClientTerritory',
             'ClientActiveFlag',
-            'ClientDivisionsFlag',
+            //'ClientDivisionsFlag',
             'ClientComment',
             'ClientCreateDate',
             'ClientCreatorUserID',

@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
 				'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
 			],
 			[
-				'label' => 'Contact Title',
-				'attribute' => 'ClientContactTitle',
-				'filter' => '<input class="form-control" name="filtertitle" value="' . Html::encode($searchModel['ClientContactTitle']) . '" type="text">'
+				'label' => 'Client City',
+				'attribute' => 'ClientCity',
+				'filter' => '<input class="form-control" name="filtertitle" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
 			],
 			[
 				'label' => 'Contact First Name',

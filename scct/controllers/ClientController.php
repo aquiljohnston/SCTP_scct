@@ -36,7 +36,7 @@ class ClientController extends BaseController
 			$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'ClientName', 'filterclientname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactTitle', 'filtertitle');
+			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientCity', 'filtertitle');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactFName', 'filterfname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactMI', 'filtermi');
 
@@ -52,7 +52,7 @@ class ClientController extends BaseController
 			$searchModel = [
 				'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
 				'ClientContactFName' => Yii::$app->request->getQueryParam('filterfname', ''),
-				'ClientContactTitle' => Yii::$app->request->getQueryParam('filtertitle', ''),
+				'ClientCity' => Yii::$app->request->getQueryParam('filtertitle', ''),
 				'ClientContactMI' => Yii::$app->request->getQueryParam('filtermi', ''),
 			];
 			

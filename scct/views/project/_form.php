@@ -62,7 +62,7 @@ use kartik\date\DatePicker;
 					])->dropDownList($flag); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
-					'label'=>'ClientID', 
+					'label'=>'Client', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
