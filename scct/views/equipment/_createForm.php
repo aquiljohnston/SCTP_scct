@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
-use kartik\datetime\DateTimePicker;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\equipment */
@@ -143,7 +143,7 @@ use kartik\datetime\DateTimePicker;
 					])->textInput(['placeholder'=>'EquipmentComment']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EquipmentClientID', [
-					'label'=>'Client ID', 
+					'label'=>'Client', 
 					'class'=>'col-sm-2 control-label'
 				]) ?>
 				<div class="col-sm-2">
@@ -158,12 +158,12 @@ use kartik\datetime\DateTimePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'EquipmentAnnualCalibrationDate',[
 					'showLabels'=>false
-					])->widget(DateTimePicker::classname(),[
+					])->widget(DatePicker::classname(),[
 						'options' => ['placeholder' => 'Enter time...'],
 						'readonly' => true,	
 						'pluginOptions' => [
 							'autoclose' => true,
-							'format' => 'yyyy-mm-dd hh:ii:ss'							
+							'format' => 'yyyy-mm-dd'							
 						]
 					]); ?>
 				</div>

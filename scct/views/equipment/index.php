@@ -40,19 +40,19 @@ $this->params['breadcrumbs'][] = $this->title;
 				['class' => 'kartik\grid\SerialColumn'],
 
 				[
-					'label' => 'Equipmen tName',
+					'label' => 'Name',
 					'attribute' => 'EquipmentName',
 					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['EquipmentName']) . '" type="text">'
 				],
 				[
-					'label' => 'Equipment SerialNumber',
+					'label' => 'Serial Number',
 					'attribute' => 'EquipmentSerialNumber',
 					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['EquipmentSerialNumber']) . '" type="text">'
 				],
 				//'SC Number',
 				'EquipmentDetails',
 				[
-					'label' => 'Equipment Type',
+					'label' => 'Type',
 					'attribute' => 'EquipmentType',
 					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['EquipmentType']) . '" type="text">'
 				],
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 				],
 				[
-					'label' => 'Equipment AcceptedFlag',
+					'label' => 'Accepted Flag',
 					'attribute' => 'EquipmentAcceptedFlag',
 					'filter' => $acceptedFilterInput
 				],
