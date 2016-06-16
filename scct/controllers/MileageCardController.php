@@ -42,23 +42,18 @@ class MileageCardController extends BaseController
 			$role = current($userRole);
 			//get week
 			$week = Yii::$app->request->getQueryParam("week");
-			//check role and use appropriate route
-			if($role->name == "Admin"){	
-				// If week is undefined then the current week route will be chosen
-				if($week=="prior") {
-					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-prior-week-sum-miles";
-				} else {
-					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-mileage-cards-current-week-sum-miles";
-				}
-			} else {
-				// If week is undefined then the current week route will be chosen
-				if($week=="prior") {
-					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-by-user-by-project-prior&userID=" . $userID;
-				} else {
-					$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-all-by-user-by-project-current&userID=" . $userID;
-				}
+			///week defaults to current
+			if ($week == "") $week = "current";
+			//set isAdmin based on role
+			if ($role->name == "Admin"){
+				$isAdmin = "true";
+			} else{
+				$isAdmin = "false";
 			}
+			//build url with params
+			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&isAdmin=" . $isAdmin . "&week=" . $week;
 			$response = Parent::executeGetRequest($url);
+
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
@@ -133,7 +128,7 @@ class MileageCardController extends BaseController
 						$id = str_replace("yes", "", $id);
 						$duplicateFlag = 1;
 					}		
-					$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
+					$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-entries&cardID='.$id;
 					$mileage_card_url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
 					
 					$response = Parent::executeGetRequest($url);
@@ -273,115 +268,7 @@ class MileageCardController extends BaseController
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
 		}
     }
-	
-	/**
-     * Displays a single MileageEntry model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionViewTE($id)
-    {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewMileageEntry'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview-mileage-entries&id='.$id;
-			$response = Parent::executeGetRequest($url);
 
-			return $this -> render('view', ['model' => json_decode($response), true]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
-    }
-
-    /**
-     * Creates a new MileageCard model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('createMileageCard'))
-		{
-			$model = new \yii\base\DynamicModel([
-				'MileageCardEmpID', 'MileageCardTechID', 'MileageCardProjectID', 'MileageCardApprovedBy', 
-				'MileageCardCreateDate', 'MileageCardCreatedBy', 'MileageCardModifiedDate', 'MileageCardModifiedBy', 
-				'MileageCardBusinessMiles', 'MileageCardPersonalMiles', 'MileageCardApprovedFlag', 'isNewRecord'
-			]);
-			
-			$model->addRule('MileageCardEmpID', 'integer')
-				  ->addRule('MileageCardTechID', 'integer')
-				  ->addRule('MileageCardProjectID', 'integer')
-				  ->addRule('MileageCardBusinessMiles', 'integer')
-				  ->addRule('MileageCardPersonalMiles', 'integer')
-				  ->addRule('MileageCardApprovedFlag', 'integer')
-				  ->addRule('MileageCardApprovedBy', 'string')
-				  ->addRule('MileageCardCreatedBy', 'string')
-				  ->addRule('MileageCardModifiedBy', 'string')
-				  ->addRule('MileageCardCreateDate', 'safe')
-				  ->addRule('MileageCardModifiedDate', 'safe');
-
-			// create curl object
-			$curl = new curl\Curl();
-			
-			// post url
-			$url_send = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fcreate";
-			
-			if ($model->load(Yii::$app->request->post())) {
-				
-				$data = array(
-					'MileageCardEmpID' => $model->MileageCardEmpID,
-					'MileageCardTechID' => $model->MileageCardTechID,
-					'MileageCardProjectID' => $model->MileageCardProjectID,
-					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
-					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
-					'MileageCardApprovedFlag' => $model->MileageCardApprovedFlag,
-					'MileageCardApprovedBy' => $model->MileageCardApprovedBy,
-					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
-					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
-					'MileageCardCreateDate' => $model->MileageCardCreateDate,
-					'MileageCardModifiedDate' => $model->MileageCardModifiedDate,
-				);
-				
-				$json_data = json_encode($data);		
-				$ch = curl_init($url_send);
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
-				curl_setopt($ch, CURLOPT_POSTFIELDS,$json_data);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Content-Length: ' . strlen($json_data))
-				);			
-				$result = curl_exec($ch);
-				curl_close($ch);
-				//var_dump($result);
-				$obj = (array)json_decode($result,true);
-				//var_dump($obj["MileageCardID"]);
-				return $this->redirect(['view', 'id' => $obj["MileageCardID"]]);
-			} else {
-				return $this->render('create', [
-					'model' => $model,
-				]);
-			}
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
-    }
-	
 	/**
      * Creates a new MileageEntry model.
      * If creation is successful, the browser will be redirected to the 'view' page.
@@ -495,102 +382,6 @@ class MileageCardController extends BaseController
 		}
 	}
 
-
-    /**
-     * Updates an existing MileageCard model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('updateMileageCard'))
-		{
-			$getUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
-
-			$model = new \yii\base\DynamicModel($getResponse);
-			
-			$model->addRule('MileageCardEmpID', 'integer')
-				  ->addRule('MileageCardTechID', 'integer')
-				  ->addRule('MileageCardProjectID', 'integer')
-				  ->addRule('MileageCardBusinessMiles', 'integer')
-				  ->addRule('MileageCardPersonalMiles', 'integer')
-				  ->addRule('MileageCardApprovedFlag', 'integer')
-				  ->addRule('MileageCardApprovedBy', 'string')
-				  ->addRule('MileageCardCreatedBy', 'string')
-				  ->addRule('MileageCardModifiedBy', 'string')
-				  ->addRule('MileageCardCreateDate', 'safe')
-				  ->addRule('MileageCardModifiedDate', 'safe');
-			
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data = array(
-					'MileageCardEmpID' => $model->MileageCardEmpID,
-					'MileageCardTechID' => $model->MileageCardTechID,
-					'MileageCardProjectID' => $model->MileageCardProjectID,
-					'MileageCardBusinessMiles' => $model->MileageCardBusinessMiles,
-					'MileageCardPersonalMiles' => $model->MileageCardPersonalMiles,
-					'MileageCardApprovedFlag' => $model->MileageCardApprovedFlag,
-					'MileageCardApprovedBy' => $model->MileageCardApprovedBy,
-					'MileageCardCreatedBy' => $model->MileageCardCreatedBy,
-					'MileageCardModifiedBy' => $model->MileageCardModifiedBy,
-					'MileageCardCreateDate' => $model->MileageCardCreateDate,
-					'MileageCardModifiedDate' => $model->MileageCardModifiedDate,
-				);
-			
-				$json_data = json_encode($data);
-				
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				
-				$obj = json_decode($putResponse, true);
-				
-			return $this->redirect(['view', 'id' => $obj["MileageCardID"]]);
-			} else {
-				return $this->render('update', [
-					'model' => $model,
-				]);
-			}
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
-    }
-
-    /**
-     * Deletes an existing MileageCard model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('deleteMileageCard'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fdelete&id='.$id;
-			Parent::executeDeleteRequest($url);
-			$this->redirect('/index.php?r=mileage-card%2Findex');
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
-    }
-	
 	/**
      * Approve an existing MileageCard.
      * If approve is successful, the browser will be redirected to the 'view' page.
@@ -612,7 +403,7 @@ class MileageCardController extends BaseController
 			$json_data = json_encode($data);
 			
 			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-mileage-cards';
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 			$obj = json_decode($putResponse, true);
 			$responseMileageCardID = $obj[0]["MileageCardID"];
@@ -682,7 +473,7 @@ class MileageCardController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-mileage-cards';
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-cards';
 			Parent::executePutRequest($putUrl, $json_data);
 
 			return $this->redirect(['index']);
