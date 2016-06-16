@@ -125,7 +125,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$TimeCardStartDate = new DateTime($model["TimeCardStartDate"]);
 			$SundayStr = $TimeCardStartDate->format('Y-m-d');
 			
-			$url = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SundayStr ]));
+			$url = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SundayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday', 'disabled' =>$approve_status]) ?>
@@ -188,7 +188,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$MondayDate = $TimeCardStartDate->modify('+1 day');	
 			$MondayStr = $MondayDate->format('Y-m-d');
 			
-			$Monurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $MondayStr ]));
+			$Monurl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $MondayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday', 'disabled' =>$approve_status]) ?>
@@ -251,7 +251,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$TuesdayDate = $MondayDate->modify('+1 day');	
 			$TuesdayStr = $TuesdayDate->format('Y-m-d');
 			
-			$Tueurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $TuesdayStr ]));
+			$Tueurl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $TuesdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday', 'disabled' =>$approve_status]) ?>
@@ -314,7 +314,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$WednesdayDate = $TuesdayDate->modify('+1 day');	
 			$WednesdayStr = $WednesdayDate->format('Y-m-d');
 			
-			$Wedurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $WednesdayStr ]));
+			$Wedurl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $WednesdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday', 'disabled' =>$approve_status]) ?>
@@ -377,7 +377,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$ThursdayDate = $WednesdayDate->modify('+1 day');	
 			$ThursdayStr = $ThursdayDate->format('Y-m-d');
 			
-			$Thururl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $ThursdayStr ]));
+			$Thururl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $ThursdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday', 'disabled' =>$approve_status]) ?>
@@ -440,7 +440,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$FridayDate = $ThursdayDate->modify('+1 day');	
 			$FridayStr = $FridayDate->format('Y-m-d');
 			
-			$Friurl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $FridayStr ]));
+			$Friurl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $FridayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday', 'disabled' =>$approve_status]) ?>
@@ -503,7 +503,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			$SaturdayDate = $FridayDate->modify('+1 day');	
 			$SaturdayStr = $SaturdayDate->format('Y-m-d');
 			
-			$Saturl = urldecode(Url::to(['time-card/createe', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SaturdayStr ]));
+			$Saturl = urldecode(Url::to(['time-card/create-time-entry', 'id' => $model["TimeCardID"], 'TimeCardTechID' => $model["TimeCardTechID"], 'TimeEntryDate' => $SaturdayStr ]));
 	?>
 	<p>
 		<?= Html::button('Create New', ['value'=>$Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday', 'disabled' =>$approve_status]) ?>
