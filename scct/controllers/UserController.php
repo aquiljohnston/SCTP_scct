@@ -33,7 +33,7 @@ class UserController extends BaseController
 		if (Yii::$app->user->can('viewUserIndex'))
 		{
 			// Reading the response from the the api and filling the GridView
-			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-active-users";
+			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-active";
 			$response = Parent::executeGetRequest($url);
 			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserName', 'filterusername');
 			$filteredResultData = $this->filterColumn($filteredResultData, 'UserFirstName', 'filterfirstname');
