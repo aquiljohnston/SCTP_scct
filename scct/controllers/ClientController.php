@@ -35,10 +35,10 @@ class ClientController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
 			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumn(json_decode($response, true), 'ClientName', 'filterclientname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientCity', 'filtertitle');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactFName', 'filterfname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientContactMI', 'filtermi');
+			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtertitle');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactFName', 'filterfname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactMI', 'filtermi');
 
 			//Passing data to the dataProvider and formating it in an associative array
 			$dataProvider = new ArrayDataProvider

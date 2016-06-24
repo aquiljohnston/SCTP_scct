@@ -54,10 +54,10 @@ class MileageCardController extends BaseController
 			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&isAdmin=" . $isAdmin . "&week=" . $week;
 			$response = Parent::executeGetRequest($url);
 
-			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserFirstName', 'filterfirstname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
 			// passing decode data into dataProvider
 			$dataProvider = new ArrayDataProvider

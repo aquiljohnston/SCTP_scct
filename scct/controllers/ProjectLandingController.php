@@ -71,11 +71,7 @@ class ProjectLandingController extends BaseController
                 'pageSize' => 10,
             ]
         ]);
-
-        GridView::widget
-        ([
-            'dataProvider' => $projectLandingProvider,
-        ]);
+		
 
         return $this -> render('index', [
                                          'projectLandingProvider' => $projectLandingProvider,

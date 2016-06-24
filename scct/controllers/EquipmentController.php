@@ -45,10 +45,10 @@ class EquipmentController extends BaseController
 				$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview-all-by-user-by-project&userID='. $userID;
 			}
 			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumn(json_decode($response, true), 'EquipmentName', 'filtername');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'EquipmentType', 'filtertype');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'ClientName', 'filterclientname');
+			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'EquipmentName', 'filtername');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentType', 'filtertype');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientName', 'filterclientname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
 			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentAcceptedFlag', 'filteraccepted');
 
