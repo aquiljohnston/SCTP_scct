@@ -117,13 +117,6 @@ class UserController extends BaseController
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
 			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-			
 			if ($model->load(Yii::$app->request->post()))
 			{
 				$data = array(
@@ -137,7 +130,7 @@ class UserController extends BaseController
 					'UserAppRoleType' => $model-> UserAppRoleType,
 					'UserComments' => $model-> UserComments,
 					'UserKey' => $model-> UserKey,
-					'UserActiveFlag' => $model-> UserActiveFlag,
+					'UserActiveFlag' => 1,
 					//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
 					//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
 					'UserCreatedBy' =>  Yii::$app->session['userID'],
@@ -184,7 +177,6 @@ class UserController extends BaseController
 							'model' => $model,
 							'roles' => $roles,
 							'types' => $types,
-							'flag' => $flag,
 							'duplicateFlag' => 1,
 						]);
 				}
@@ -194,7 +186,6 @@ class UserController extends BaseController
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
-					'flag' => $flag,
 					'duplicateFlag' => 0,
 				]);
 			}
