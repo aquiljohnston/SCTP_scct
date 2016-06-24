@@ -104,15 +104,6 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->textInput(['placeholder'=>'UserComments']); ?>
 				</div>
-				<?= Html::activeLabel($model, 'UserActiveFlag', [
-					'label'=>'Active Flag', 
-					'class'=>'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-2">
-					<?= $form->field($model, 'UserActiveFlag',[
-						'showLabels'=>false
-					])->dropDownList($flag); ?>
-				</div>
 			</div>	
 
 	<div class="form-group">
