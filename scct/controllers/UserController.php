@@ -35,9 +35,9 @@ class UserController extends BaseController
 			// Reading the response from the the api and filling the GridView
 			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-active";
 			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumn(json_decode($response, true), 'UserName', 'filterusername');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'UserFirstName', 'filterfirstname');
-			$filteredResultData = $this->filterColumn($filteredResultData, 'UserLastName', 'filterlastname');
+			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
+			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
 			$usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
 			$firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
 			$lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
