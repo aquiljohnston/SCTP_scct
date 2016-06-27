@@ -293,7 +293,7 @@ class ProjectController extends BaseController
 		}
 		else
 		{//route for non Admin users
-		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-projects&userID=".$userID;
+		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-projects&userID=".$userID;
 		}
 		//get projects by calling API route
 		$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
