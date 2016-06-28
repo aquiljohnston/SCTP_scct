@@ -24,12 +24,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			$approveUrl = urldecode(Url::to(['equipment/approve', 'id' => $model["EquipmentID"]]));
 		?>
 		<?php if($model['EquipmentAcceptedFlag']=='Yes'){ ?>
-			<?= Html::a('Accept Equipment', $approveUrl, [
+			<?= Html::button('Accept Equipment', [
 				'class' => 'btn btn-primary multiple_approve_btn',
 				'disabled' => true,
 				'id' => 'enable_single_approve_btn_id_equipment',
-				'data' => [
-                           'confirm' => 'Are you sure you want to accept this item?']
 			])?>
 		<?php }else{ ?>
 				<?= Html::a('Accept Equipment', $approveUrl, [
