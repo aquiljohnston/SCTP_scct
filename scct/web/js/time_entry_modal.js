@@ -1,5 +1,10 @@
 $(function(){
 	
+	$('.modal-content').click(function() {
+		console.log("hit submit button");
+		$('#time_card_submit_btn').attr('disabled',true)
+								  .parents('form').submit(); 
+	});
 	// Modal view for Sunday
 	$('#modalButtonSunday').click(function(){
 	// get the click of the create button
