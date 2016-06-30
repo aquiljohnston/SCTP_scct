@@ -275,14 +275,6 @@ class UserController extends BaseController
 				
 				$obj = json_decode($putResponse, true);
 				
-				//set auth role
-				$auth = Yii::$app->authManager;
-				if($userRole = $auth->getRole($obj["UserAppRoleType"]))
-				{
-					$auth->revokeAll($obj["UserID"]);
-					$auth->assign($userRole, $obj["UserID"]);
-				}
-				
 				 return $this->redirect(['view', 'id' => $obj["UserID"]]);
 			} else {
 				return $this->render('update', [
