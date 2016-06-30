@@ -89,5 +89,11 @@ use kartik\datetime\DateTimePicker;
 			</div>
     <?php ActiveForm::end(); ?>
 	
+	<script>
+	$('#time_card_submit_btn').click(function() {
+		$('#time_card_submit_btn').attr('disabled',true)
+								  .parents('form').submit(); 
+	});
+	</script>
 </div>
 
