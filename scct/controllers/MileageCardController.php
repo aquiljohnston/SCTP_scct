@@ -44,14 +44,9 @@ class MileageCardController extends BaseController
 			$week = Yii::$app->request->getQueryParam("week");
 			///week defaults to current
 			if ($week == "") $week = "current";
-			//set isAdmin based on role
-			if ($role->name == "Admin"){
-				$isAdmin = "true";
-			} else{
-				$isAdmin = "false";
-			}
+			
 			//build url with params
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&isAdmin=" . $isAdmin . "&week=" . $week;
+			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&week=" . $week;
 			$response = Parent::executeGetRequest($url);
 
 			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
