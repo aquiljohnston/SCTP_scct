@@ -41,21 +41,13 @@ class ProjectLandingController extends BaseController
             return $this->redirect(['login/login']);
         }
         // Reading the response from the the api and filling the GridView
-        $url = 'http://api.southerncrossinc.com/index.php?r=user%2Fget-projects&userID='.Yii::$app->session['userID'];
+        $url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-all&limitToUser=true';
         $response = Parent::executeGetRequest($url);
 
         //Passing data to the dataProvider and formatting it in an associative array
         $projectProvider = json_decode($response, true);
 
-        /*$firstName = $dataProvider["firstName"];
-        $lastName = $dataProvider["lastName"];
-
-        Yii::trace("Tao".$firstName);
-        Yii::trace("Zhang".$lastName);*/
-
         $projects = [];
-        /*$timeCardInfo = [];
-        $mileageCardInfo = [];*/
 
         try {
             if ($projectProvider!=null) {
@@ -91,18 +83,10 @@ class ProjectLandingController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewProjectLanding'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
+		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			return $this -> render('view', ['model' => json_decode($response), true]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		return $this -> render('view', ['model' => json_decode($response), true]);
     }
 	
 	public function actionAddUser($id)
@@ -112,65 +96,64 @@ class ProjectLandingController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewProjectLanding'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-user-relationships&projectID='.$id;
-			$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
-			$projectResponse = Parent::executeGetRequest($projectUrl);
-			$users = json_decode($response,true);
-			$project = json_decode($projectResponse);
-			
-			//load get data into variables
-			$unassignedData = $users["unassignedUsers"];
-			$assignedData = $users["assignedUsers"];
-			
-			//create model for active form
-			$model = new \yii\base\DynamicModel([
-				'UnassignedUsers', 'AssignedUsers' ]);
-			$model->addRule('UnassignedUsers', 'string')
-					 ->addRule('AssignedUsers',  'string');
-			
-			
+
+		self::requirePermission("projectAddRemoveUsers");
 		
-			if ($model->load(Yii::$app->request->post()))
-			{
-				//prepare arrays for post request
-				//explode strings from active form into arrays
-				$unassignedUsersArray = explode(',',$model->UnassignedUsers);
-				$assignedUsersArray = explode(',',$model->AssignedUsers);
-				//array diff new arrays with arrays previous to submission to get changes
-				$usersAdded = array_diff($assignedUsersArray,array_keys($assignedData));
-				$usersRemoved = array_diff($unassignedUsersArray,array_keys($unassignedData));
-				//load arrays of changes into post data
-				$data = [];
-				$data["usersRemoved"] = $usersRemoved;
-				$data["usersAdded"] = $usersAdded; 
-				
-				//encode data
-				$jsonData = json_encode($data);
-				
-				//set post url
-				$postUrl = 'api.southerncrossinc.com/index.php?r=project%2Fadd-remove-users&projectID='.$id;
-				//execute post request
-				$postResponse = Parent::executePostRequest($postUrl, $jsonData);
-				//refresh page
-				return $this->redirect(['add-user', 'id' => $project->ProjectID]);
-			}
-			else
-			{
-			return $this -> render('add_user', [
-											'project' => $project,
-											'model' => $model,
-											'unassignedData' => $unassignedData,
-											'assignedData' => $assignedData,
-									]);
-			}	
+		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-user-relationships&projectID='.$id;
+		$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+
+		//indirect rbac
+		$response = Parent::executeGetRequest($url);
+		$projectResponse = Parent::executeGetRequest($projectUrl);
+
+
+		$users = json_decode($response,true);
+		$project = json_decode($projectResponse);
+
+		//load get data into variables
+		$unassignedData = $users["unassignedUsers"];
+		$assignedData = $users["assignedUsers"];
+
+		//create model for active form
+		$model = new \yii\base\DynamicModel([
+			'UnassignedUsers', 'AssignedUsers' ]);
+		$model->addRule('UnassignedUsers', 'string')
+				 ->addRule('AssignedUsers',  'string');
+
+
+
+		if ($model->load(Yii::$app->request->post()))
+		{
+			//prepare arrays for post request
+			//explode strings from active form into arrays
+			$unassignedUsersArray = explode(',',$model->UnassignedUsers);
+			$assignedUsersArray = explode(',',$model->AssignedUsers);
+			//array diff new arrays with arrays previous to submission to get changes
+			$usersAdded = array_diff($assignedUsersArray,array_keys($assignedData));
+			$usersRemoved = array_diff($unassignedUsersArray,array_keys($unassignedData));
+			//load arrays of changes into post data
+			$data = [];
+			$data["usersRemoved"] = $usersRemoved;
+			$data["usersAdded"] = $usersAdded;
+
+			//encode data
+			$jsonData = json_encode($data);
+
+			//set post url
+			$postUrl = 'api.southerncrossinc.com/index.php?r=project%2Fadd-remove-users&projectID='.$id;
+			//execute post request
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
+			//refresh page
+			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
 		}
 		else
 		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		return $this -> render('add_user', [
+										'project' => $project,
+										'model' => $model,
+										'unassignedData' => $unassignedData,
+										'assignedData' => $assignedData,
+								]);
 		}
 	}
 

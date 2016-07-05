@@ -29,35 +29,29 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewProjectIndex'))
-		{
-			// Reading the response from the the api and filling the GridView
-			$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
-			$response = Parent::executeGetRequest($url);
 
-			
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ProjectName', 'filtername');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectType', 'filtertype');
+		// Reading the response from the the api and filling the GridView
+		$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			$searchModel = [
-				'ProjectName' => Yii::$app->request->getQueryParam('filtername', ''),
-				'ProjectType' => Yii::$app->request->getQueryParam('filtertype', '')
-			];
-			//Passing data to the dataProvider and formating it in an associative array
-			$dataProvider = new ArrayDataProvider([
-				'allModels' => $filteredResultData,
-				'pagination' => [
-					'pageSize' => 100,
-				],
-			]);
-			
-			return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+
+		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ProjectName', 'filtername');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectType', 'filtertype');
+
+		$searchModel = [
+			'ProjectName' => Yii::$app->request->getQueryParam('filtername', ''),
+			'ProjectType' => Yii::$app->request->getQueryParam('filtertype', '')
+		];
+		//Passing data to the dataProvider and formating it in an associative array
+		$dataProvider = new ArrayDataProvider([
+			'allModels' => $filteredResultData,
+			'pagination' => [
+				'pageSize' => 100,
+			],
+		]);
+
+		return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+
     }
 
     /**
@@ -72,18 +66,10 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewProject'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
+		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			return $this -> render('view', ['model' => json_decode($response), true]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		return $this -> render('view', ['model' => json_decode($response), true]);
     }
 
     /**
@@ -98,67 +84,61 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('createProject'))
-		{
-			$model  = new project();
-				  
-			//get clients for form dropdown
-			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
-			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);
+		self::requirePermission("projectCreate");
+	
+		$model  = new Project();
+			  
+		//get clients for form dropdown
+		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clients = json_decode($clientResponse, true);
+		
+		//get states for form dropdown
+		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$states = json_decode($stateResponse, true);
+		
+		//generate array for Active Flag dropdown
+		$flag = 
+		[
+			1 => "Active",
+			0 => "Inactive",
+		];
+		
+		if ($model->load(Yii::$app->request->post())){
 			
-			//get states for form dropdown
-			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
-			$stateResponse = Parent::executeGetRequest($stateUrl);
-			$states = json_decode($stateResponse, true);
+			$data =array(
+				'ProjectName' => $model->ProjectName,
+				'ProjectDescription' => $model->ProjectDescription,
+				'ProjectNotes' => $model->ProjectNotes,
+				'ProjectType' => $model->ProjectType,
+				'ProjectStatus' => $model->ProjectStatus,
+				'ProjectClientID' => $model->ProjectClientID,
+				'ProjectState' => $model->ProjectState,
+				'ProjectStartDate' => $model->ProjectStartDate,
+				'ProjectEndDate' => $model->ProjectEndDate,
+				'ProjectCreateDate' => $model->ProjectCreateDate,
+				'ProjectCreatedBy' => Yii::$app->session['userID'],
+				'ProjectModifiedDate' => $model->ProjectModifiedDate,
+				'ProjectModifiedBy' => $model->ProjectModifiedBy,
+				);
+
+			$json_data = json_encode($data);
+
+			// post url
+			$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
+			$response = Parent::executePostRequest($url, $json_data);
 			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-			
-			if ($model->load(Yii::$app->request->post())){
-				
-				$data =array(
-					'ProjectName' => $model->ProjectName,
-					'ProjectDescription' => $model->ProjectDescription,
-					'ProjectNotes' => $model->ProjectNotes,
-					'ProjectType' => $model->ProjectType,
-					'ProjectStatus' => $model->ProjectStatus,
-					'ProjectClientID' => $model->ProjectClientID,
-					'ProjectState' => $model->ProjectState,
-					'ProjectStartDate' => $model->ProjectStartDate,
-					'ProjectEndDate' => $model->ProjectEndDate,
-					'ProjectCreateDate' => $model->ProjectCreateDate,
-					'ProjectCreatedBy' => Yii::$app->session['userID'],
-					'ProjectModifiedDate' => $model->ProjectModifiedDate,
-					'ProjectModifiedBy' => $model->ProjectModifiedBy,
-					);
+			$obj = json_decode($response, true);
 
-				$json_data = json_encode($data);
-
-				// post url
-				$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
-				$response = Parent::executePostRequest($url, $json_data);
-				
-				$obj = json_decode($response, true);
-
-				return $this->redirect(['view', 'id' => $obj["ProjectID"]]);
-			}else {
-				return $this->render('create',[
-					'model' => $model,
-					'clients' => $clients,
-					'flag' => $flag,
-					'states' => $states,
-					]);
-			}
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			return $this->redirect(['view', 'id' => $obj["ProjectID"]]);
+		}else {
+			return $this->render('create',[
+				'model' => $model,
+				'clients' => $clients,
+				'flag' => $flag,
+				'states' => $states,
+				]);
 		}
     }
 
@@ -175,70 +155,63 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('updateProject'))
-		{
-			$getUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
- 
-			$model  = new project();
-			$model->attributes = $getResponse;
-				  
-			//get clients for form dropdown
-			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
-			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);
-			
-			//get states for form dropdown
-			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
-			$stateResponse = Parent::executeGetRequest($stateUrl);
-			$states = json_decode($stateResponse, true);
-			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-				  
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data =array(
-					'ProjectName' => $model->ProjectName,
-					'ProjectDescription' => $model->ProjectDescription,
-					'ProjectNotes' => $model->ProjectNotes,
-					'ProjectType' => $model->ProjectType,
-					'ProjectStatus' => $model->ProjectStatus,
-					'ProjectClientID' => $model->ProjectClientID,
-					'ProjectState' => $model->ProjectState,
-					'ProjectStartDate' => $model->ProjectStartDate,
-					'ProjectEndDate' => $model->ProjectEndDate,
-					'ProjectCreateDate' => $model->ProjectCreateDate,
-					'ProjectCreatedBy' => $model->ProjectCreatedBy,
-					'ProjectModifiedDate' => $model->ProjectModifiedDate,
-					'ProjectModifiedBy' => Yii::$app->session['userID'],
-					);
+		self::requirePermission("projectUpdate");
+		$getUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-				$json_data = json_encode($data);
-				
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				
-				$obj = json_decode($putResponse, true);
-				
-				return $this->redirect(['view', 'id' => $model["ProjectID"]]);
-			} else {
-				return $this->render('update', [
-					'model' => $model,
-					'clients' => $clients,
-					'flag' => $flag,
-					'states' => $states,
-				]);
-			} 
-		}
-		else
+		$model  = new Project();
+		$model->attributes = $getResponse;
+			  
+		//get clients for form dropdown
+		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clients = json_decode($clientResponse, true);
+		
+		//get states for form dropdown
+		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$states = json_decode($stateResponse, true);
+		
+		//generate array for Active Flag dropdown
+		$flag = 
+		[
+			1 => "Active",
+			0 => "Inactive",
+		];
+			  
+		if ($model->load(Yii::$app->request->post()))
 		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			$data =array(
+				'ProjectName' => $model->ProjectName,
+				'ProjectDescription' => $model->ProjectDescription,
+				'ProjectNotes' => $model->ProjectNotes,
+				'ProjectType' => $model->ProjectType,
+				'ProjectStatus' => $model->ProjectStatus,
+				'ProjectClientID' => $model->ProjectClientID,
+				'ProjectState' => $model->ProjectState,
+				'ProjectStartDate' => $model->ProjectStartDate,
+				'ProjectEndDate' => $model->ProjectEndDate,
+				'ProjectCreateDate' => $model->ProjectCreateDate,
+				'ProjectCreatedBy' => $model->ProjectCreatedBy,
+				'ProjectModifiedDate' => $model->ProjectModifiedDate,
+				'ProjectModifiedBy' => Yii::$app->session['userID'],
+				);
+
+			$json_data = json_encode($data);
+			
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			$obj = json_decode($putResponse, true);
+			
+			return $this->redirect(['view', 'id' => $model["ProjectID"]]);
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+				'clients' => $clients,
+				'flag' => $flag,
+				'states' => $states,
+			]);
 		}
     }
 
@@ -255,85 +228,31 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('deleteProject'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fdelete&id='.$id;
-			Parent::executeDeleteRequest($url);
-			$this->redirect('/index.php?r=project%2Findex');
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url); // indirect rbac
+		$this->redirect('/index.php?r=project%2Findex');
     }
-	
+
 	/**
-     * Get all projects associate with the specific user based on the userID
-     * It will return all projects in json format
-     * @param string $userID
-     * @return mixed
-     */
+	 * Get all projects associate with the specific user based on the userID
+	 * It will return all projects in json format
+	 * @return mixed
+	 * @throws ForbiddenHttpException
+	 * @internal param string $userID
+	 */
     public function actionGetAllProjects()
     {
-		
+
 		if (Yii::$app->request->isAjax) {
-		$data = Yii::$app->request->post();
-		$userIDArray= explode(":", $data['userID']);
-		$userID= $userIDArray[0];
-		Yii::Trace("UserID is ; ". $userID);
-		
-		//get users role
-		$userRole = Yii::$app->authManager->getRolesByUser($userID);
-		$role = current($userRole);
-		
-		if(($role->name) == "Admin")
-		{//route for Admin users
-		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
-		}
-		else
-		{//route for non Admin users
-		$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-projects&userID=".$userID;
-		}
-		//get projects by calling API route
-		$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
-		
-		//set up response data type
-		Yii::$app->response->format = 'json';
-		
-		Yii::Trace("User ID is :　".$projectDropdownResponse);
-		// echo no clients JSON
-        return ['projects' => $projectDropdownResponse];//json_encode($response);
-		//$searchby= $searchby[0];
-		//$search = // your logic;
-		//\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-		}
-		//guest redirect
-		/*if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewProject'))
-		{
-				  
-			//get projects for dropdown menu
-			$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-all-projects&userID=".$userID;
-			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl);
-			//$projectDropdown = json_decode($projectDropdownResponse, true);
+			$data = Yii::$app->request->post();
 			
-			Yii::Trace("!!!!!!!!!!!".$projectDropdownResponse);
-			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
+			$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+			//get projects by calling API route
+			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl); // indirect rbac
+			//set up response data type
+			Yii::$app->response->format = 'json';
+
+			return ['projects' => $projectDropdownResponse];
 		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}*/
-    }
+	}
 }

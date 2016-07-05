@@ -29,38 +29,31 @@ class UserController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewUserIndex'))
-		{
-			// Reading the response from the the api and filling the GridView
-			$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-active";
-			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-			$usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
-			$firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
-			$lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
-			$searchModel = [
-				'UserName' => $usernameFilterParam,
-				'UserFirstName' => $firstNameFilterParam,
-				'UserLastName' => $lastNameFilterParam
-			];
-			//Passing data to the dataProvider and formating it in an associative array
-			$dataProvider = new ArrayDataProvider
-			([
-				'allModels' => $filteredResultData,
-				'pagination' => [
-					'pageSize' => 100,
-				],
-			]);
-			
-			return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+
+		// Reading the response from the the api and filling the GridView
+		$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-active";
+		$response = Parent::executeGetRequest($url); // indirect rbac
+		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
+		$usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
+		$firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
+		$lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
+		$searchModel = [
+			'UserName' => $usernameFilterParam,
+			'UserFirstName' => $firstNameFilterParam,
+			'UserLastName' => $lastNameFilterParam
+		];
+		//Passing data to the dataProvider and formatting it in an associative array
+		$dataProvider = new ArrayDataProvider
+		([
+			'allModels' => $filteredResultData,
+			'pagination' => [
+				'pageSize' => 100,
+			],
+		]);
+
+		return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
     }
 
     /**
@@ -75,18 +68,10 @@ class UserController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewUser'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
+		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			return $this -> render('view', ['model' => json_decode($response), true]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		return $this -> render('view', ['model' => json_decode($response), true]);
     }
 
     /**
@@ -94,107 +79,97 @@ class UserController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+	public function actionCreate()
+	{
 		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
+		if (Yii::$app->user->isGuest) {
 			return $this->redirect(['login/login']);
 		}
-		Yii::Trace("user id: ".Yii::$app->user->getId());
-		//RBAC permissions check
-		if (Yii::$app->user->can('createUser'))
-		{
-			$model = new User();
-			
-			//get App Roles for form dropdown
-			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
-			$rolesResponse = Parent::executeGetRequest($rolesUrl);
-			$roles = json_decode($rolesResponse, true);
-			
-			//get types for form dropdown
-			$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
-			$typeResponse = Parent::executeGetRequest($typeUrl);
-			$types = json_decode($typeResponse, true);
-			
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data = array(
-					'UserName' => $model->UserName,
-					'UserFirstName' => $model-> UserFirstName,
-					'UserLastName' => $model-> UserLastName,
-					'UserEmployeeType' => $model-> UserEmployeeType,
-					'UserPhone' => $model-> UserPhone,
-					'UserCompanyName' => $model-> UserCompanyName,
-					'UserCompanyPhone' => $model-> UserCompanyPhone,
-					'UserAppRoleType' => $model-> UserAppRoleType,
-					'UserComments' => $model-> UserComments,
-					'UserKey' => $model-> UserKey,
-					'UserActiveFlag' => 1,
-					//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
-					//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
-					'UserCreatedBy' =>  Yii::$app->session['userID'],
-					'UserModifiedBy' => $model-> UserModifiedBy,
-					'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
-					'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
-					'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
-					);
-			
-				//iv and secret key of openssl
-				$iv = "abcdefghijklmnop";
-				$secretKey= "sparusholdings12";
-				
-				//encrypt and encode password
-				$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
-				$encodedKey = base64_encode($encryptedKey);
-				
-				$data['UserKey'] = $encodedKey;
-				
-				$json_data = json_encode($data);
+		Yii::Trace("user id: " . Yii::$app->user->getId());
 
-				try{	
-					// post url
-					$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";	
-					$response = Parent::executePostRequest($url, $json_data);
-				
-					$obj = json_decode($response, true);
+		self::requirePermission('userCreate');
+		$model = new User();
 
-					//set auth roles
-					$auth = Yii::$app->authManager;
-					$currentRole = $auth->getRole($obj["UserAppRoleType"]);
-					if($userRole = $currentRole)
-					{
-						$auth->assign($userRole, $obj["UserID"]);
-					}
-						return $this->redirect(['view', 'id' => $obj["UserID"]]);
-					}catch(\Exception $e){
-						
-						// duplicationflag:
-						// 1: yes 0: no						
-						// set duplicateFlag to 1, which means duplication happened.						
-						$duplicateFlag = 1;
-						return $this->render('create', [
-							'model' => $model,
-							'roles' => $roles,
-							'types' => $types,
-							'duplicateFlag' => 1,
-						]);
+		//get App Roles for form dropdown
+		$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+		$rolesResponse = Parent::executeGetRequest($rolesUrl);
+		$roles = json_decode($rolesResponse, true);
+
+		//get types for form dropdown
+		$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+		$typeResponse = Parent::executeGetRequest($typeUrl);
+		$types = json_decode($typeResponse, true);
+
+		if ($model->load(Yii::$app->request->post())) {
+			$data = array(
+				'UserName' => $model->UserName,
+				'UserFirstName' => $model->UserFirstName,
+				'UserLastName' => $model->UserLastName,
+				'UserEmployeeType' => $model->UserEmployeeType,
+				'UserPhone' => $model->UserPhone,
+				'UserCompanyName' => $model->UserCompanyName,
+				'UserCompanyPhone' => $model->UserCompanyPhone,
+				'UserAppRoleType' => $model->UserAppRoleType,
+				'UserComments' => $model->UserComments,
+				'UserKey' => $model->UserKey,
+				'UserActiveFlag' => 1,
+				//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
+				//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
+				'UserCreatedBy' => Yii::$app->session['userID'],
+				'UserModifiedBy' => $model->UserModifiedBy,
+				'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
+				'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
+				'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
+			);
+
+			//iv and secret key of openssl
+			$iv = "abcdefghijklmnop";
+			$secretKey = "sparusholdings12";
+
+			//encrypt and encode password
+			$encryptedKey = openssl_encrypt($data['UserKey'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+			$encodedKey = base64_encode($encryptedKey);
+
+			$data['UserKey'] = $encodedKey;
+
+			$json_data = json_encode($data);
+
+			try {
+				// post url
+				$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";
+				$response = Parent::executePostRequest($url, $json_data);
+
+				$obj = json_decode($response, true);
+
+				//set auth roles
+				$auth = Yii::$app->authManager;
+				$currentRole = $auth->getRole($obj["UserAppRoleType"]);
+				if ($userRole = $currentRole) {
+					$auth->assign($userRole, $obj["UserID"]);
 				}
-					
-			}else{
+				return $this->redirect(['view', 'id' => $obj["UserID"]]);
+			} catch (\Exception $e) {
+
+				// duplicationflag:
+				// 1: yes 0: no
+				// set duplicateFlag to 1, which means duplication happened.
 				return $this->render('create', [
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
-					'duplicateFlag' => 0,
+					'duplicateFlag' => 1,
 				]);
 			}
+
+		} else {
+			return $this->render('create', [
+				'model' => $model,
+				'roles' => $roles,
+				'types' => $types,
+				'duplicateFlag' => 0,
+			]);
 		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
-    }
+	}
 
     /**
      * Updates an existing user model.
@@ -209,86 +184,80 @@ class UserController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('updateUser'))
-		{
-			$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		self::requirePermission("userUpdate");
+		$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			$model = new User();
-			$model->attributes = $getResponse;
-				  
-			//get App Roles for form dropdown
-			$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
-			$rolesResponse = Parent::executeGetRequest($rolesUrl);
-			$roles = json_decode($rolesResponse, true);
-			
-			//get types for form dropdown
-			$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
-			$typeResponse = Parent::executeGetRequest($typeUrl);
-			$types = json_decode($typeResponse, true);
-			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-			
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data = array(
-					'UserName' => $model->UserName,
-					'UserFirstName' => $model-> UserFirstName,
-					'UserLastName' => $model-> UserLastName,
-					'UserEmployeeType' => $model-> UserEmployeeType,
-					'UserPhone' => $model-> UserPhone,
-					'UserCompanyName' => $model-> UserCompanyName,
-					'UserCompanyPhone' => $model-> UserCompanyPhone,
-					'UserAppRoleType' => $model-> UserAppRoleType,
-					'UserComments' => $model-> UserComments,
-					'UserKey' => $model-> UserKey,
-					'UserActiveFlag' => $model-> UserActiveFlag,
-					'UserCreatedDate' => $model-> UserCreatedDate,
-					'UserModifiedDate' => $model-> UserModifiedDate,
-					'UserCreatedBy' => $model-> UserCreatedBy,
-					'UserModifiedBy' =>  Yii::$app->session['userID'],
-					'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
-					'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
-					'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
-					);
-					
-				//iv and secret key of openssl
-				$iv = "abcdefghijklmnop";
-				$secretKey= "sparusholdings12";
-				
-				//encrypt and encode password
-				$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
-				$encodedKey = base64_encode($encryptedKey);
-				
-				$data['UserKey'] = $encodedKey;
-			
-				$json_data = json_encode($data);
-				
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				
-				$obj = json_decode($putResponse, true);
-				
-				 return $this->redirect(['view', 'id' => $obj["UserID"]]);
-			} else {
-				return $this->render('update', [
-					'model' => $model,
-					'roles' => $roles,
-					'types' => $types,
-					'flag' => $flag,
-				]);
-			} 
-		}
-		else
+		$model = new User();
+		$model->attributes = $getResponse;
+
+		//get App Roles for form dropdown
+		$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+		$rolesResponse = Parent::executeGetRequest($rolesUrl);
+		$roles = json_decode($rolesResponse, true);
+
+		//get types for form dropdown
+		$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+		$typeResponse = Parent::executeGetRequest($typeUrl);
+		$types = json_decode($typeResponse, true);
+
+		//generate array for Active Flag dropdown
+		$flag =
+		[
+			1 => "Active",
+			0 => "Inactive",
+		];
+
+		if ($model->load(Yii::$app->request->post()))
 		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			$data = array(
+				'UserName' => $model->UserName,
+				'UserFirstName' => $model-> UserFirstName,
+				'UserLastName' => $model-> UserLastName,
+				'UserEmployeeType' => $model-> UserEmployeeType,
+				'UserPhone' => $model-> UserPhone,
+				'UserCompanyName' => $model-> UserCompanyName,
+				'UserCompanyPhone' => $model-> UserCompanyPhone,
+				'UserAppRoleType' => $model-> UserAppRoleType,
+				'UserComments' => $model-> UserComments,
+				'UserKey' => $model-> UserKey,
+				'UserActiveFlag' => $model-> UserActiveFlag,
+				'UserCreatedDate' => $model-> UserCreatedDate,
+				'UserModifiedDate' => $model-> UserModifiedDate,
+				'UserCreatedBy' => $model-> UserCreatedBy,
+				'UserModifiedBy' =>  Yii::$app->session['userID'],
+				'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
+				'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
+				'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,
+				);
+
+			//iv and secret key of openssl
+			$iv = "abcdefghijklmnop";
+			$secretKey= "sparusholdings12";
+
+			//encrypt and encode password
+			$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+			$encodedKey = base64_encode($encryptedKey);
+
+			$data['UserKey'] = $encodedKey;
+
+			$json_data = json_encode($data);
+
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+
+			$obj = json_decode($putResponse, true);
+
+			 return $this->redirect(['view', 'id' => $obj["UserID"]]);
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+				'roles' => $roles,
+				'types' => $types,
+				'flag' => $flag,
+			]);
 		}
+
     }
 
     /**
@@ -304,19 +273,11 @@ class UserController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('deleteUser'))
-		{
-			//calls route to deactivate user account
-			$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdeactivate&userID='.$id;
-			//empty body
-			$json_data = "";
-			Parent::executePutRequest($url, $json_data);
-			$this->redirect('/index.php?r=user%2Findex');
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		//calls route to deactivate user account
+		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdeactivate&userID='.$id;
+		//empty body
+		$json_data = "";
+		Parent::executePutRequest($url, $json_data); // indirect rbac
+		$this->redirect('/index.php?r=user%2Findex');
     }
 }

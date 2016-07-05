@@ -29,43 +29,37 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewClientIndex'))
-		{
-			// Reading the response from the the api and filling the GridView
-			$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
-			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtertitle');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactFName', 'filterfname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactMI', 'filtermi');
 
-			//Passing data to the dataProvider and formating it in an associative array
-			$dataProvider = new ArrayDataProvider
-			([
-				'allModels' => $filteredResultData,
-				'pagination' => [
-					'pageSize' => 100,
-				],
-			]);
+		// Reading the response from the the api and filling the GridView
+		$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
+		$response = Parent::executeGetRequest($url); // RBAC permissions checked indirectly via this call
+		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtertitle');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactFName', 'filterfname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactMI', 'filtermi');
 
-			$searchModel = [
-				'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
-				'ClientContactFName' => Yii::$app->request->getQueryParam('filterfname', ''),
-				'ClientCity' => Yii::$app->request->getQueryParam('filtertitle', ''),
-				'ClientContactMI' => Yii::$app->request->getQueryParam('filtermi', ''),
-			];
-			
-			
-			return $this -> render('index', [
-				'dataProvider' => $dataProvider,
-				'searchModel' => $searchModel
-			]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		//Passing data to the dataProvider and formating it in an associative array
+		$dataProvider = new ArrayDataProvider
+		([
+			'allModels' => $filteredResultData,
+			'pagination' => [
+				'pageSize' => 100,
+			],
+		]);
+
+		$searchModel = [
+			'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
+			'ClientContactFName' => Yii::$app->request->getQueryParam('filterfname', ''),
+			'ClientCity' => Yii::$app->request->getQueryParam('filtertitle', ''),
+			'ClientContactMI' => Yii::$app->request->getQueryParam('filtermi', ''),
+		];
+
+
+		return $this -> render('index', [
+			'dataProvider' => $dataProvider,
+			'searchModel' => $searchModel
+		]);
+
     }
 
     /**
@@ -80,18 +74,10 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewClient'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
+		$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			return $this -> render('view', ['model' => json_decode($response), true]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		return $this -> render('view', ['model' => json_decode($response), true]);
     }
 
     /**
@@ -106,75 +92,69 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('createClient'))
-		{
-			$model = new client();
-				  
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
+		
+		self::requirePermission("clientCreate");
+		$model = new Client();
+			  
+		//generate array for Active Flag dropdown
+		$flag = 
+		[
+			1 => "Active",
+			0 => "Inactive",
+		];
+		
+		//get clients for form dropdown
+		$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+		$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
+		$clientAccounts = json_decode($clientAccountsResponse, true);
+		
+		//get states for form dropdown
+		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$states = json_decode($stateResponse, true);
+			  
+		if ($model->load(Yii::$app->request->post())) {
 			
-			//get clients for form dropdown
-			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
-			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
-			$clientAccounts = json_decode($clientAccountsResponse, true);
+			$data =array(
+				'ClientAccountID' => $model->ClientAccountID,
+				'ClientName' => $model->ClientName,
+				'ClientContactTitle' => $model->ClientContactTitle,
+				'ClientContactFName' => $model->ClientContactFName,
+				'ClientContactMI' => $model->ClientContactMI,
+				'ClientContactLName' => $model->ClientContactLName,
+				'ClientPhone' => $model->ClientPhone,
+				'ClientEmail' => $model->ClientEmail,
+				'ClientAddr1' => $model->ClientAddr1,
+				'ClientAddr2' => $model->ClientAddr2,
+				'ClientCity' => $model->ClientCity,
+				'ClientState' => $model->ClientState,
+				'ClientZip4' => $model->ClientZip4,
+				'ClientTerritory' => $model->ClientTerritory,
+				'ClientActiveFlag' => $model->ClientActiveFlag,
+				'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
+				'ClientComment' => $model->ClientComment,
+				'ClientCreateDate' => $model->ClientCreateDate,
+				'ClientCreatorUserID' => Yii::$app->session['userID'],
+				'ClientModifiedDate' => $model->ClientModifiedDate,
+				'ClientModifiedBy' => $model->ClientModifiedBy,
+				);
+
+			$json_data = json_encode($data);
+
+			// post url
+			$url= "http://api.southerncrossinc.com/index.php?r=client%2Fcreate";			
+			$response = Parent::executePostRequest($url, $json_data);
 			
-			//get states for form dropdown
-			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
-			$stateResponse = Parent::executeGetRequest($stateUrl);
-			$states = json_decode($stateResponse, true);
-				  
-			if ($model->load(Yii::$app->request->post())){
-				
-				$data =array(
-					'ClientAccountID' => $model->ClientAccountID,
-					'ClientName' => $model->ClientName,
-					'ClientContactTitle' => $model->ClientContactTitle,
-					'ClientContactFName' => $model->ClientContactFName,
-					'ClientContactMI' => $model->ClientContactMI,
-					'ClientContactLName' => $model->ClientContactLName,
-					'ClientPhone' => $model->ClientPhone,
-					'ClientEmail' => $model->ClientEmail,
-					'ClientAddr1' => $model->ClientAddr1,
-					'ClientAddr2' => $model->ClientAddr2,
-					'ClientCity' => $model->ClientCity,
-					'ClientState' => $model->ClientState,
-					'ClientZip4' => $model->ClientZip4,
-					'ClientTerritory' => $model->ClientTerritory,
-					'ClientActiveFlag' => $model->ClientActiveFlag,
-					'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
-					'ClientComment' => $model->ClientComment,
-					'ClientCreateDate' => $model->ClientCreateDate,
-					'ClientCreatorUserID' => Yii::$app->session['userID'],
-					'ClientModifiedDate' => $model->ClientModifiedDate,
-					'ClientModifiedBy' => $model->ClientModifiedBy,
-					);
+			$obj = json_decode($response, true);
 
-				$json_data = json_encode($data);
-
-				// post url
-				$url= "http://api.southerncrossinc.com/index.php?r=client%2Fcreate";			
-				$response = Parent::executePostRequest($url, $json_data);
-				
-				$obj = json_decode($response, true);
-
-				return $this->redirect(['view', 'id' => $obj["ClientID"]]);
-			}else {
-				return $this->render('create',[
-					'model' => $model,
-					'flag' => $flag,
-					'clientAccounts' => $clientAccounts,
-					'states' => $states,
-					]);
-			}
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			return $this->redirect(['view', 'id' => $obj["ClientID"]]);
+		} else {
+			return $this->render('create',[
+				'model' => $model,
+				'flag' => $flag,
+				'clientAccounts' => $clientAccounts,
+				'states' => $states,
+				]);
 		}
     }
 
@@ -191,78 +171,71 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('updateClient'))
-		{
-			$getUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		self::requirePermission("clientUpdate");
+		$getUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
-			$model = new client();
-			$model->attributes = $getResponse;
-				  
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-			
-			//get clients for form dropdown
-			$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
-			$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
-			$clientAccounts = json_decode($clientAccountsResponse, true);
-			
-			//get states for form dropdown
-			$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
-			$stateResponse = Parent::executeGetRequest($stateUrl);
-			$states = json_decode($stateResponse, true);
-				  
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data =array(
-					'ClientAccountID' => $model->ClientAccountID,
-					'ClientName' => $model->ClientName,
-					'ClientContactTitle' => $model->ClientContactTitle,
-					'ClientContactFName' => $model->ClientContactFName,
-					'ClientContactMI' => $model->ClientContactMI,
-					'ClientContactLName' => $model->ClientContactLName,
-					'ClientPhone' => $model->ClientPhone,
-					'ClientEmail' => $model->ClientEmail,
-					'ClientAddr1' => $model->ClientAddr1,
-					'ClientAddr2' => $model->ClientAddr2,
-					'ClientCity' => $model->ClientCity,
-					'ClientState' => $model->ClientState,
-					'ClientZip4' => $model->ClientZip4,
-					'ClientTerritory' => $model->ClientTerritory,
-					'ClientActiveFlag' => $model->ClientActiveFlag,
-					'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
-					'ClientComment' => $model->ClientComment,
-					'ClientCreateDate' => $model->ClientCreateDate,
-					'ClientCreatorUserID' => $model->ClientCreatorUserID,
-					'ClientModifiedDate' => $model->ClientModifiedDate,
-					'ClientModifiedBy' => Yii::$app->session['userID'],
-					);
-
-				$json_data = json_encode($data);
-				
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				
-				$obj = json_decode($putResponse, true);
-				
-				return $this->redirect(['view', 'id' => $model["ClientID"]]);
-			} else {
-				return $this->render('update', [
-					'model' => $model,
-					'flag' => $flag,
-					'clientAccounts' => $clientAccounts,
-					'states' => $states,
-				]);
-			} 
-		}
-		else
+		$model = new Client();
+		$model->attributes = $getResponse;
+			  
+		//generate array for Active Flag dropdown
+		$flag = 
+		[
+			1 => "Active",
+			0 => "Inactive",
+		];
+		
+		//get clients for form dropdown
+		$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+		$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
+		$clientAccounts = json_decode($clientAccountsResponse, true);
+		
+		//get states for form dropdown
+		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$states = json_decode($stateResponse, true);
+			  
+		if ($model->load(Yii::$app->request->post()))
 		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			$data =array(
+				'ClientAccountID' => $model->ClientAccountID,
+				'ClientName' => $model->ClientName,
+				'ClientContactTitle' => $model->ClientContactTitle,
+				'ClientContactFName' => $model->ClientContactFName,
+				'ClientContactMI' => $model->ClientContactMI,
+				'ClientContactLName' => $model->ClientContactLName,
+				'ClientPhone' => $model->ClientPhone,
+				'ClientEmail' => $model->ClientEmail,
+				'ClientAddr1' => $model->ClientAddr1,
+				'ClientAddr2' => $model->ClientAddr2,
+				'ClientCity' => $model->ClientCity,
+				'ClientState' => $model->ClientState,
+				'ClientZip4' => $model->ClientZip4,
+				'ClientTerritory' => $model->ClientTerritory,
+				'ClientActiveFlag' => $model->ClientActiveFlag,
+				'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
+				'ClientComment' => $model->ClientComment,
+				'ClientCreateDate' => $model->ClientCreateDate,
+				'ClientCreatorUserID' => $model->ClientCreatorUserID,
+				'ClientModifiedDate' => $model->ClientModifiedDate,
+				'ClientModifiedBy' => Yii::$app->session['userID'],
+				);
+
+			$json_data = json_encode($data);
+			
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			
+			$obj = json_decode($putResponse, true);
+			
+			return $this->redirect(['view', 'id' => $model["ClientID"]]);
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+				'flag' => $flag,
+				'clientAccounts' => $clientAccounts,
+				'states' => $states,
+			]);
 		}
     }
 
@@ -279,16 +252,8 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('deleteUser'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fdelete&id='.$id;
-			Parent::executeDeleteRequest($url);
-			$this->redirect('/index.php?r=client%2Findex');
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url); //indirect RBAC
+		$this->redirect('/index.php?r=client%2Findex');
     }
 }
