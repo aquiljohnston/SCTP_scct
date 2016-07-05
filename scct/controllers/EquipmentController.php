@@ -30,81 +30,66 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewEquipmentIndex'))
-		{
-			// Reading the response from the the api and filling the GridView
-			//get user role
-			$userID = Yii::$app->session['userID'];
-			$userRole = Yii::$app->authManager->getRolesByUser($userID);
-			$role = current($userRole);
-			//check role and use appropriate route
-			if($role->name == "Admin" || $role->name == "Engineer"){
-				$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fequipment-view';
-			} else {
-				$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview-all-by-user-by-project&userID='. $userID;
-			}
-			$response = Parent::executeGetRequest($url);
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'EquipmentName', 'filtername');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentType', 'filtertype');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientName', 'filterclientname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentAcceptedFlag', 'filteraccepted');
+
+		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fget-equipment';
+
+		$response = Parent::executeGetRequest($url); // Indirect RBAC
+		
+		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'EquipmentName', 'filtername');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentType', 'filtertype');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientName', 'filterclientname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentAcceptedFlag', 'filteraccepted');
 
 
-			$searchModel = [
-				'EquipmentName' => Yii::$app->request->getQueryParam('filtername', ''),
-				'EquipmentSerialNumber' => Yii::$app->request->getQueryParam('filterserialnumber', ''),
-				'EquipmentType' => Yii::$app->request->getQueryParam('filtertype', ''),
-				'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
-				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
-				'EquipmentAcceptedFlag' => Yii::$app->request->getQueryParam('filteraccepted', '')
-			];
+		$searchModel = [
+			'EquipmentName' => Yii::$app->request->getQueryParam('filtername', ''),
+			'EquipmentSerialNumber' => Yii::$app->request->getQueryParam('filterserialnumber', ''),
+			'EquipmentType' => Yii::$app->request->getQueryParam('filtertype', ''),
+			'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
+			'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
+			'EquipmentAcceptedFlag' => Yii::$app->request->getQueryParam('filteraccepted', '')
+		];
 
-			// Create drop down with current selection pre-selected based on GET variable
-			$acceptedFilterInput = '<select class="form-control" name="filteraccepted">'
-			. '<option value=""></option><option value="Yes"';
-			if($searchModel['EquipmentAcceptedFlag'] == "Yes") {
-				$acceptedFilterInput.= " selected";
-			}
-			$acceptedFilterInput .= '>Yes</option><option value="Pending"';
-			if($searchModel['EquipmentAcceptedFlag'] == "Pending") {
-				$acceptedFilterInput .= " selEquipmentAcceptedFlagected";
-			}
-			$acceptedFilterInput .= '>Pending</option><option value="No"';
-			if($searchModel['EquipmentAcceptedFlag'] == "No") {
-				$acceptedFilterInput .= ' selected';
-			}
-			$acceptedFilterInput .= '>No</option><option value="Pending|No"';
-			if($searchModel['EquipmentAcceptedFlag'] == "Pending|No") {
-				$acceptedFilterInput .= ' selected';
-			}
-			$acceptedFilterInput .= '>Pending & No</option></select>';
-
-
-			//Passing data to the dataProvider and formatting it in an associative array
-			$dataProvider = new ArrayDataProvider
-			([
-				'allModels' => $filteredResultData,
-				'pagination' => [
-					'pageSize' => 100,
-				],
-			]);
-			
-			//set equipmentid as id 
-			$dataProvider->key ='EquipmentID';
-			
-			return $this -> render('index', [
-				'dataProvider' => $dataProvider,
-				'searchModel' => $searchModel,
-				'acceptedFilterInput' => $acceptedFilterInput
-			]);
+		// Create drop down with current selection pre-selected based on GET variable
+		$acceptedFilterInput = '<select class="form-control" name="filteraccepted">'
+		. '<option value=""></option><option value="Yes"';
+		if($searchModel['EquipmentAcceptedFlag'] == "Yes") {
+			$acceptedFilterInput.= " selected";
 		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		$acceptedFilterInput .= '>Yes</option><option value="Pending"';
+		if($searchModel['EquipmentAcceptedFlag'] == "Pending") {
+			$acceptedFilterInput .= " selEquipmentAcceptedFlagected";
 		}
+		$acceptedFilterInput .= '>Pending</option><option value="No"';
+		if($searchModel['EquipmentAcceptedFlag'] == "No") {
+			$acceptedFilterInput .= ' selected';
+		}
+		$acceptedFilterInput .= '>No</option><option value="Pending|No"';
+		if($searchModel['EquipmentAcceptedFlag'] == "Pending|No") {
+			$acceptedFilterInput .= ' selected';
+		}
+		$acceptedFilterInput .= '>Pending & No</option></select>';
+
+
+		//Passing data to the dataProvider and formatting it in an associative array
+		$dataProvider = new ArrayDataProvider
+		([
+			'allModels' => $filteredResultData,
+			'pagination' => [
+				'pageSize' => 100,
+			],
+		]);
+		
+		//set equipmentid as id 
+		$dataProvider->key ='EquipmentID';
+		
+		return $this -> render('index', [
+			'dataProvider' => $dataProvider,
+			'searchModel' => $searchModel,
+			'acceptedFilterInput' => $acceptedFilterInput
+		]);
     }
 
     /**
@@ -119,18 +104,10 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewEquipment'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
-			$response = Parent::executeGetRequest($url);
-			
-			return $this -> render('view', ['model' => json_decode($response, true)]);
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
+		$response = Parent::executeGetRequest($url); // indirect RBAC
+		
+		return $this -> render('view', ['model' => json_decode($response, true)]);
     }
 
     /**
@@ -145,79 +122,72 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('createEquipment'))
-		{			
-			$model = new equipment();
+		
+		$model = new Equipment();
 
-			//GET DATA TO FILL FORM DROPDOWNS//
-			//get clients for form dropdown
-			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
-			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);	
+		//GET DATA TO FILL FORM DROPDOWNS//
+		//get clients for form dropdown
+		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clients = json_decode($clientResponse, true);	
 
-			//get types for form dropdown
-			$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
-			$typeResponse = Parent::executeGetRequest($typeUrl);
-			$types = json_decode($typeResponse, true);
+		//get types for form dropdown
+		$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+		$typeResponse = Parent::executeGetRequest($typeUrl);
+		$types = json_decode($typeResponse, true);
+		
+		//get conditions for form dropdown
+		$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+		$conditionResponse = Parent::executeGetRequest($conditionUrl);
+		$conditions = json_decode($conditionResponse, true);
+		
+		//get status for form dropdown
+		$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+		$statusResponse = Parent::executeGetRequest($statusURL);
+		$statuses = json_decode($statusResponse, true);
+
+		if ($model->load(Yii::$app->request->post())){
 			
-			//get conditions for form dropdown
-			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
-			$conditionResponse = Parent::executeGetRequest($conditionUrl);
-			$conditions = json_decode($conditionResponse, true);
-			
-			//get status for form dropdown
-			$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
-			$statusResponse = Parent::executeGetRequest($statusURL);
-			$statuses = json_decode($statusResponse, true);
+			$data =array(
+				'EquipmentName' => $model->EquipmentName,
+				'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+				'EquipmentSCNumber' => $model->EquipmentSCNumber,
+				'EquipmentDetails' => $model->EquipmentDetails,
+				'EquipmentType' => $model->EquipmentType,
+				'EquipmentManufacturer' => $model->EquipmentManufacturer,
+				'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
+				'EquipmentCondition' => $model->EquipmentCondition,
+				'EquipmentStatus' => $model->EquipmentStatus,
+				'EquipmentMACID' => $model->EquipmentMACID,
+				'EquipmentModel' => $model->EquipmentModel,
+				'EquipmentColor' => $model->EquipmentColor,
+				'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
+				'EquipmentComment' => $model->EquipmentComment,
+				'EquipmentClientID' => $model->EquipmentClientID,
+				'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
+				'EquipmentCreateDate' => $model->EquipmentCreateDate,
+				'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
+				'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
+				);
 
-			if ($model->load(Yii::$app->request->post())){
-				
-				$data =array(
-					'EquipmentName' => $model->EquipmentName,
-					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
-					'EquipmentSCNumber' => $model->EquipmentSCNumber,
-					'EquipmentDetails' => $model->EquipmentDetails,
-					'EquipmentType' => $model->EquipmentType,
-					'EquipmentManufacturer' => $model->EquipmentManufacturer,
-					'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
-					'EquipmentCondition' => $model->EquipmentCondition,
-					'EquipmentStatus' => $model->EquipmentStatus,
-					'EquipmentMACID' => $model->EquipmentMACID,
-					'EquipmentModel' => $model->EquipmentModel,
-					'EquipmentColor' => $model->EquipmentColor,
-					'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
-					'EquipmentComment' => $model->EquipmentComment,
-					'EquipmentClientID' => $model->EquipmentClientID,
-					'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
-					'EquipmentCreatedByUser' => Yii::$app->session['userID'],
-					'EquipmentCreateDate' => $model->EquipmentCreateDate,
-					'EquipmentModifiedBy' => $model->EquipmentModifiedBy,
-					'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
-					);
+			$json_data = json_encode($data);
 
-				$json_data = json_encode($data);
+			// post url
+			$url= "http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate";			
+			$response = Parent::executePostRequest($url, $json_data);
+			$obj = json_decode($response, true);
 
-				// post url
-				$url= "http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate";			
-				$response = Parent::executePostRequest($url, $json_data);
-				$obj = json_decode($response, true);
-
-				return $this->redirect(['view', 'id' => $obj["EquipmentID"]]);
-			}else {
-				return $this->render('create',[
-					'model' => $model,
-					'clients' => $clients,
-					'types' => $types,
-					'conditions' => $conditions,
-					'statuses' => $statuses,
-					]);
-			}
+			return $this->redirect(['view', 'id' => $obj["EquipmentID"]]);
+		}else {
+			return $this->render('create',[
+				'model' => $model,
+				'clients' => $clients,
+				'types' => $types,
+				'conditions' => $conditions,
+				'statuses' => $statuses,
+				]);
 		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		
     }
 	
 	/**
@@ -229,6 +199,7 @@ class EquipmentController extends BaseController
 	public function actionApproveMultipleEquipment() {
 		
 		if (Yii::$app->request->isAjax) {
+			self::requirePermission("acceptEquipment");
 			$data = Yii::$app->request->post();
 			
 			 // loop the data array to get all id's.	
@@ -241,7 +212,6 @@ class EquipmentController extends BaseController
 			}
 			
 			$data_approve = array(
-					'acceptedByID' => Yii::$app->session['userID'],
 					'equipmentIDArray' => $EquipmentIDArray,
 				);		
 			$json_data = json_encode($data_approve);
@@ -267,21 +237,20 @@ class EquipmentController extends BaseController
 		if(Yii::$app->user->isGuest){
 			return $this->redirect(['login/login']);
 		}
-			$EquipmentIDArray[0] = $id;
-			
-			$data = array(
-				'acceptedByID' => Yii::$app->session['userID'],
-				'equipmentIDArray' => $EquipmentIDArray,
-			);
-			
-			$json_data_approve = json_encode($data);
-			
-			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data_approve);
-			$obj = json_decode($putResponse, true);
-			$responseEquipmentID = $obj[0]["EquipmentID"];
-			return $this->redirect(['view', 'id' => $responseEquipmentID]);
+		$EquipmentIDArray[0] = $id;
+
+		$data = array(
+			'equipmentIDArray' => $EquipmentIDArray,
+		);
+
+		$json_data_approve = json_encode($data);
+
+		// post url
+		$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+		$putResponse = Parent::executePutRequest($putUrl, $json_data_approve);
+		$obj = json_decode($putResponse, true);
+		$responseEquipmentID = $obj[0]["EquipmentID"];
+		return $this->redirect(['view', 'id' => $responseEquipmentID]);
 	}
 	
 	/**
@@ -333,96 +302,91 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('updateEquipment'))
+
+		self::requirePermission("equipmentUpdate");
+
+		$getUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+
+		$model = new equipment();
+		$model->attributes = $getResponse;
+
+		//GET DATA TO FILL FORM DROPDOWNS//
+		//get clients for form dropdown
+		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clients = json_decode($clientResponse, true);
+
+		//get types for form dropdown
+		$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+		$typeResponse = Parent::executeGetRequest($typeUrl);
+		$types = json_decode($typeResponse, true);
+
+		//get conditions for form dropdown
+		$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+		$conditionResponse = Parent::executeGetRequest($conditionUrl);
+		$conditions = json_decode($conditionResponse, true);
+
+		//get status for form dropdown
+		$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+		$statusResponse = Parent::executeGetRequest($statusURL);
+		$statuses = json_decode($statusResponse, true);
+
+		//get userIDs for form dropdown
+		$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
+		$userResponse = Parent::executeGetRequest($userUrl);
+		$users = json_decode($userResponse, true);
+
+		//get projects for form dropdown
+		$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
+		$projectResponse = Parent::executeGetRequest($projectUrl);
+		$projects = json_decode($projectResponse, true);
+
+		if ($model->load(Yii::$app->request->post()))
 		{
-			$getUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
-				  
-			$model = new equipment();
-			$model->attributes = $getResponse;
-				  
-			//GET DATA TO FILL FORM DROPDOWNS//
-			//get clients for form dropdown
-			$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
-			$clientResponse = Parent::executeGetRequest($clientUrl);
-			$clients = json_decode($clientResponse, true);	
+			$data =array(
+				'EquipmentName' => $model->EquipmentName,
+				'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
+				'EquipmentSCNumber' => $model->EquipmentSCNumber,
+				'EquipmentDetails' => $model->EquipmentDetails,
+				'EquipmentType' => $model->EquipmentType,
+				'EquipmentManufacturer' => $model->EquipmentManufacturer,
+				'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
+				'EquipmentCondition' => $model->EquipmentCondition,
+				'EquipmentStatus' => $model->EquipmentStatus,
+				'EquipmentMACID' => $model->EquipmentMACID,
+				'EquipmentModel' => $model->EquipmentModel,
+				'EquipmentColor' => $model->EquipmentColor,
+				'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
+				'EquipmentComment' => $model->EquipmentComment,
+				'EquipmentClientID' => $model->EquipmentClientID,
+				'EquipmentProjectID' => $model->EquipmentProjectID,
+				'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
+				'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
+				'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
+				'EquipmentCreateDate' => $model->EquipmentCreateDate,
+				'EquipmentModifiedBy' => Yii::$app->session['userID'],
+				'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
+				);
 
-			//get types for form dropdown
-			$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
-			$typeResponse = Parent::executeGetRequest($typeUrl);
-			$types = json_decode($typeResponse, true);
-			
-			//get conditions for form dropdown
-			$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
-			$conditionResponse = Parent::executeGetRequest($conditionUrl);
-			$conditions = json_decode($conditionResponse, true);
-			
-			//get status for form dropdown
-			$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
-			$statusResponse = Parent::executeGetRequest($statusURL);
-			$statuses = json_decode($statusResponse, true);
-			
-			//get userIDs for form dropdown
-			$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
-			$userResponse = Parent::executeGetRequest($userUrl);
-			$users = json_decode($userResponse, true);	
+			$json_data = json_encode($data);
 
-			//get projects for form dropdown
-			$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
-			$projectResponse = Parent::executeGetRequest($projectUrl);
-			$projects = json_decode($projectResponse, true);
-				  
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data =array(
-					'EquipmentName' => $model->EquipmentName,
-					'EquipmentSerialNumber' => $model->EquipmentSerialNumber,
-					'EquipmentSCNumber' => $model->EquipmentSCNumber,
-					'EquipmentDetails' => $model->EquipmentDetails,
-					'EquipmentType' => $model->EquipmentType,
-					'EquipmentManufacturer' => $model->EquipmentManufacturer,
-					'EquipmentManufactureYear' => $model->EquipmentManufactureYear,
-					'EquipmentCondition' => $model->EquipmentCondition,
-					'EquipmentStatus' => $model->EquipmentStatus,
-					'EquipmentMACID' => $model->EquipmentMACID,
-					'EquipmentModel' => $model->EquipmentModel,
-					'EquipmentColor' => $model->EquipmentColor,
-					'EquipmentWarrantyDetail' => $model->EquipmentWarrantyDetail,
-					'EquipmentComment' => $model->EquipmentComment,
-					'EquipmentClientID' => $model->EquipmentClientID,
-					'EquipmentProjectID' => $model->EquipmentProjectID,
-					'EquipmentAnnualCalibrationDate' => $model->EquipmentAnnualCalibrationDate,
-					'EquipmentAssignedUserID' => $model->EquipmentAssignedUserID,
-					'EquipmentCreatedByUser' => $model->EquipmentCreatedByUser,
-					'EquipmentCreateDate' => $model->EquipmentCreateDate,
-					'EquipmentModifiedBy' => Yii::$app->session['userID'],
-					'EquipmentModifiedDate' => $model->EquipmentModifiedDate,
-					);
+			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fupdate&id='.$id;
+			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 
-				$json_data = json_encode($data);
-				
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
-				
-				$obj = json_decode($putResponse, true);
-				
-				return $this->redirect(['view', 'id' => $model["EquipmentID"]]);
-			} else {
-				return $this->render('update', [
-					'model' => $model,
-					'clients' => $clients,
-					'types' => $types,
-					'conditions' => $conditions,
-					'statuses' => $statuses,
-					'users' => $users,
-					'projects' => $projects,
-				]);
-			} 
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+			$obj = json_decode($putResponse, true);
+
+			return $this->redirect(['view', 'id' => $model["EquipmentID"]]);
+		} else {
+			return $this->render('update', [
+				'model' => $model,
+				'clients' => $clients,
+				'types' => $types,
+				'conditions' => $conditions,
+				'statuses' => $statuses,
+				'users' => $users,
+				'projects' => $projects,
+			]);
 		}
     }
 
@@ -439,16 +403,9 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('deleteEquipment'))
-		{
-			$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fdelete&id='.$id;
-			Parent::executeDeleteRequest($url);
-			$this->redirect('/index.php?r=equipment%2Findex');
-		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}
+		
+		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fdelete&id='.$id;
+		Parent::executeDeleteRequest($url);
+		$this->redirect('/index.php?r=equipment%2Findex');
     }
 }

@@ -127,6 +127,10 @@ class BaseController extends Controller
 		{
 			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
 		}
+		else if($httpCode == 403) // Inadequate permissions.
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -159,6 +163,10 @@ class BaseController extends Controller
 		{
 			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
 		}
+		else if($httpCode == 403) // Inadequate permissions.
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -189,8 +197,19 @@ class BaseController extends Controller
 		{
 			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
 		}
+		else if($httpCode == 403) // Inadequate permissions.
+		{
+			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		}
 		curl_close ($curl);
 		
 		return $response;
+	}
+
+	public static function requirePermission($permission) {
+		//API RBAC permissions check
+		//Will throw 403 if current user doesn't have permission
+		self::executeGetRequest("http://api.southerncrossinc.com/index.php?r=permission-check%2Fcheck-permission&permission=$permission");
+		return true;
 	}
 }
