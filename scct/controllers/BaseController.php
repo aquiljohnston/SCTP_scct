@@ -209,7 +209,16 @@ class BaseController extends Controller
 	public static function requirePermission($permission) {
 		//API RBAC permissions check
 		//Will throw 403 if current user doesn't have permission
-		self::executeGetRequest("http://api.southerncrossinc.com/index.php?r=permission-check%2Fcheck-permission&permission=$permission");
+		self::executeGetRequest("http://api.southerncrossinc.com/index.php?r=permissions%2Fcheck-permission&permission=$permission");
 		return true;
+	}
+	
+	public static function can($permission) {
+		try {
+			self::requirePermission($permission);
+			return true;
+		} catch(ForbiddenHttpException $e) {
+			return false;
+		}
 	}
 }

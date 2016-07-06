@@ -50,7 +50,11 @@ class ProjectController extends BaseController
 			],
 		]);
 
-		return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+		return $this -> render('index', [
+			'dataProvider' => $dataProvider,
+			'searchModel' => $searchModel,
+			'canCreateProjects' => self::can("projectCreate")
+		]);
 
     }
 

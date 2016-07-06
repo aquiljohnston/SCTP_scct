@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use app\controllers\ProjectController;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -13,9 +14,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="project-index">
 
     <h3 class="title"><?= Html::encode($this->title)?></h3>
-    <p>
-        <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+		<p>
+			<?php if($canCreateProjects): ?>
+				<?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
+			<?php else: ?>
+				<?= Html::a('Create Project', null, ['class' => 'btn btn-success', 'disabled' => 'disabled']) ?>
+			<?php endif; ?>
+		</p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
