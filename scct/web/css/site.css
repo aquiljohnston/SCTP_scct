@@ -177,7 +177,7 @@ ul > li >a:hover{
 }
 #adminNav{
 	float:right;
-	padding-right:45px;
+	padding-right:3.5%;
 }
 .adminMenu, .middlePrivilegeMenu{
 	background-color: #0067A6;
