@@ -162,6 +162,28 @@ class HomeController extends BaseController
 
         return $allProjectsString;
     }
+	
+	/**
+	 * Get Nav menu Json 
+	 * It will return nav menu in json format
+	 * @return mixed
+	 * @throws ForbiddenHttpException
+	 */
+    public function actionGetNavMenu()
+    {
+
+		if (Yii::$app->request->isAjax) {
+			$data = Yii::$app->request->post();
+			
+			$navMenuUrl = "http://api.southerncrossinc.com/index.php?r=menu%2Fget&projectID=3";
+			//get nav menu by calling API route
+			$mavMenuResponse = Parent::executeGetRequest($navMenuUrl); // indirect rbac
+			//set up response data type
+			Yii::$app->response->format = 'json';
+
+			return ['navMenu' => $mavMenuResponse];
+		}
+	}
 
     /**
      * Updates an existing home model.
