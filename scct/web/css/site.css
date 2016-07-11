@@ -142,6 +142,7 @@ a.desc:after {
 }
 #nav, #middlePrivilegeNav{
 	float:right;
+	margin-right: 2%;
 }
 #non-nav{
 	float:right;
@@ -177,7 +178,7 @@ ul > li >a:hover{
 }
 #adminNav{
 	float:right;
-	padding-right:3.5%;
+	margin-right:2.5%;
 }
 .adminMenu, .middlePrivilegeMenu{
 	background-color: #0067A6;
