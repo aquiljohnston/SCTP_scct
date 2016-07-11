@@ -41,34 +41,12 @@ $(document).ready(function(){
         + "<ul class='nav navbar-nav' id='nonav'></ul>"
         + "</div><div class='clear'></div>");    
     $(".loginMenu").prepend(login_head);
-		
-	/*var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-        + "ADMINISTRATION<b class='caret'></b></a>"
-        + "    <ul class='dropdown-menu' role='menu'>"  
-            + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
-            + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
-            + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
-            + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
-        + "</ul></li>");
-		
-      var nav5 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-          + "ADMINISTRATION<b class='caret'></b></a>"
-          + "    <ul class='dropdown-menu' role='menu'>"  
-			  + "<li><a data-description='Instrument Repair' href='index.php?r=client%2Findex'>Clients</a></li>"
-			  + "<li><a data-description='Instrument Repair' href='index.php?r=project%2Findex'>Projects</a></li>"			
-              + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
-              + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
-              + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
-              + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
-          + "</ul></li>");
-
-    var nav6 = $("<li><a id='home_btn' href='index.php?'>HOME</a></li>");*/
 
 //Ajax call to retrieve all the projects for the project drop-down selection on the main menu
-    var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+    /*var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "PROJECTS<b class='caret'></b></a>"
         + "    <ul href='#' id='projects_dropdown' class='dropdown-menu' role='menu'>"
-		+ "</ul></li>");
+		+ "</ul></li>");*/
 	
 	// gather userID based on user role type
 	var adminID = $(".adminMenu").attr("id");
@@ -87,12 +65,6 @@ $(document).ready(function(){
 		} else {
             userRoleID = defaultID;
         }
-		
-		// $("#nav").prepend(nav1, nav2, nav3, nav4);
-		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		/*$("#middlePrivilegeNav").prepend(nav6, nav7, nav4);
-		$("#adminNav").prepend(nav6, nav7, nav5);
-		$("#nav").prepend(nav6, nav7);*/
 		
 		//setup ajax call to get all project associate with the user
 		$.ajax({
@@ -136,7 +108,8 @@ $(document).ready(function(){
 		function NavBar(data){
 				var str="";
 				var SubNavigationStr = "";
-				var i;
+				var DispatchDropdown = "";
+
 				
 				if (jQuery.isEmptyObject(data)){
 					str="Json array is empty";
@@ -170,31 +143,41 @@ $(document).ready(function(){
 	
 						} 
 						if (data.Modules[0].Dispatch.enabled.toString() !=0){
-							DispatchArray = data.Modules[0].Dispatch.NavigationMenu[0];
+							// get the length of the NavigationMenu
+							DispatchNavigationMenuLength = data.Modules[0].Dispatch.NavigationMenu.length;
 							
-							// clean SubNavigationStr
-							SubNavigationStr = "";
+							for( var j =0; j < DispatchNavigationMenuLength; j++){
 							
-							// get SubNavigationArray  and length of the SubNavigation menu 
-							DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
-							DispatchSubNavigationArray = DispatchArray.SubNavigation;
-							
-							DispatchDropdown = "<li class='dropdown'>"
-													+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-													+ DispatchArray.NavigationName.toString()
-													+"<b class='caret'></b></a>"
-													+ "<ul class='dropdown-menu' role='menu'>"; 
-							
-							for(i = 0; i < DispatchSubNavigationLength; i++){
-								if(DispatchSubNavigationArray[i].enabled.toString() != 0){
-									SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+								DispatchArray = data.Modules[0].Dispatch.NavigationMenu[j];
+								
+								// clean SubNavigationStr
+								SubNavigationStr = "";
+								
+								// if NavigationName is not report
+								if(DispatchArray.NavigationName.toString() != "Reports"){
+								
+									// get SubNavigationArray  and length of the SubNavigation menu 
+									DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
+									DispatchSubNavigationArray = DispatchArray.SubNavigation;
+									
+									DispatchDropdown += "<li class='dropdown'>"
+															+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+															+ DispatchArray.NavigationName.toString()
+															+"<b class='caret'></b></a>"
+															+ "<ul class='dropdown-menu' role='menu'>"; 
+									
+									for(var i = 0; i < DispatchSubNavigationLength; i++){
+										if(DispatchSubNavigationArray[i].enabled.toString() != 0){
+											SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+										}else{
+											continue;
+										}
+									}
+									DispatchDropdown = DispatchDropdown + SubNavigationStr + "</ul></li>";
 								}else{
-									continue;
+									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='index.php?r="+DispatchArray.Url.toString()+"%2Findex'>"+DispatchArray.NavigationName.toString()+"</a></li>";									
 								}
-							}
-							
-							DispatchDropdown = DispatchDropdown + SubNavigationStr + "</ul></li>";
-							
+							}							
 						}				
 						if (data.Modules[0].Home.enabled.toString() !=0){
 							HomeArray = data.Modules[0].Home.NavigationMenu[0];
@@ -204,9 +187,9 @@ $(document).ready(function(){
 						}														
 					}
 					
-					$("#middlePrivilegeNav").prepend(HomeDropdown, nav7, AdminDropdown);
-					$("#adminNav").prepend(HomeDropdown, nav7, AdminDropdown);
-					$("#nav").prepend(HomeDropdown, nav7);
+					$("#middlePrivilegeNav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
+					$("#adminNav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
+					$("#nav").prepend(HomeDropdown, DispatchDropdown);
 			}
 			
 			// assign class to current active link
