@@ -41,27 +41,8 @@ $(document).ready(function(){
         + "<ul class='nav navbar-nav' id='nonav'></ul>"
         + "</div><div class='clear'></div>");    
     $(".loginMenu").prepend(login_head);
-
-    var nav1 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-        + "DASHBOARD<b class='caret'></b></a>"
-        + "    <ul class='dropdown-menu' role='menu'>"                                
-            + "<li><a data-description='Image Animation' href=''>dashboard 1</a></li>"
-            + "<li><a data-description='Image Animation' href=''>dashboard 2</a></li>"
-            + "<li><a data-description='Image Animation' href=''>dashboard 3</a></li>"
-            + "<li><a data-description='Instrument Repair' href=''>dashboard 4</a></li>"
-        + "</ul></li>");
-    var nav2 = $("<li><a href='dispatch.html'>DISPATCH</a></li>");
-    var nav3 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-        + "REPORTS<b class='caret'></b></a>"
-        + "    <ul class='dropdown-menu' role='menu'>"                                
-            + "<li><a data-description='Image Animation' href=''>report 1</a></li>"
-            + "<li><a data-description='Image Animation' href=''>report 2</a></li>"
-            + "<li><a data-description='Image Animation' href=''>report 3</a></li>"
-            + "<li><a data-description='Instrument Repair' href=''>report 4</a></li>"
-        + "</ul></li>");
-
 		
-	var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+	/*var nav4 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "ADMINISTRATION<b class='caret'></b></a>"
         + "    <ul class='dropdown-menu' role='menu'>"  
             + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
@@ -70,47 +51,24 @@ $(document).ready(function(){
             + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
         + "</ul></li>");
 		
-    var nav5 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-        + "ADMINISTRATION<b class='caret'></b></a>"
-        + "    <ul class='dropdown-menu' role='menu'>"  
-			+ "<li><a data-description='Instrument Repair' href='index.php?r=client%2Findex'>Clients</a></li>"
-			+ "<li><a data-description='Instrument Repair' href='index.php?r=project%2Findex'>Projects</a></li>"			
-            + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
-            + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
-            + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
-            + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
-        + "</ul></li>");
+      var nav5 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+          + "ADMINISTRATION<b class='caret'></b></a>"
+          + "    <ul class='dropdown-menu' role='menu'>"  
+			  + "<li><a data-description='Instrument Repair' href='index.php?r=client%2Findex'>Clients</a></li>"
+			  + "<li><a data-description='Instrument Repair' href='index.php?r=project%2Findex'>Projects</a></li>"			
+              + "<li><a data-description='Image Animation' href='index.php?r=user%2Findex'>User Management</a></li>"
+              + "<li><a data-description='Image Animation' href='index.php?r=equipment%2Findex'>Equipment Management</a></li>"
+              + "<li><a data-description='Image Animation' href='index.php?r=time-card%2Findex'>Time Cards</a></li>"
+              + "<li><a data-description='Instrument Repair' href='index.php?r=mileage-card%2Findex'>Mileage Cards</a></li>"
+          + "</ul></li>");
 
-    var nav6 = $("<li><a id='home_btn' href='index.php?'>HOME</a></li>");
+    var nav6 = $("<li><a id='home_btn' href='index.php?'>HOME</a></li>");*/
 
 //Ajax call to retrieve all the projects for the project drop-down selection on the main menu
     var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
         + "PROJECTS<b class='caret'></b></a>"
         + "    <ul href='#' id='projects_dropdown' class='dropdown-menu' role='menu'>"
 		+ "</ul></li>");
-
-    // $("#nav").prepend(nav1, nav2, nav3, nav4);
-		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
-		$("#middlePrivilegeNav").prepend(nav6, nav7, nav4);
-		$("#adminNav").prepend(nav6, nav7, nav5);
-        $("#nav").prepend(nav6, nav7);
-    
-    // assign class to current active link
-    var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
-        
-                                    
-    var listItems = $(".menu .adminMenu .middlePrivilegeMenu li a");
-    listItems.each(function(idx, li) {
-        var product = String($(li)[0]).substring(String($(li)[0]).lastIndexOf('/') + 1);
-        
-        if(url === product) {
-            if(product.substring(0, product.indexOf('#')).length > 0 )            
-                var url2 = "a[href$='"+product.substring(0, product.indexOf('#'))+"']";
-            else
-                var url2 = "a[href$='"+url+"']";
-            $(url2).css({"color": "#FF9E19"});
-        }
-    });  
 	
 	// gather userID based on user role type
 	var adminID = $(".adminMenu").attr("id");
@@ -120,6 +78,8 @@ $(document).ready(function(){
 	
 	if(adminID != null || middlePrivilegeID != null || defaultID != null){
 	
+		var AdminDropdown, DispatchDropdown, HomeDropdown;
+	
 		if(adminID != null){
 			userRoleID = adminID;
 		} else if(middlePrivilegeID != null) {
@@ -127,6 +87,12 @@ $(document).ready(function(){
 		} else {
             userRoleID = defaultID;
         }
+		
+		// $("#nav").prepend(nav1, nav2, nav3, nav4);
+		// $("#adminNav").prepend(nav1, nav2, nav3, nav5);
+		/*$("#middlePrivilegeNav").prepend(nav6, nav7, nav4);
+		$("#adminNav").prepend(nav6, nav7, nav5);
+		$("#nav").prepend(nav6, nav7);*/
 		
 		//setup ajax call to get all project associate with the user
 		$.ajax({
@@ -153,6 +119,112 @@ $(document).ready(function(){
 				alert("Failure getting project list!");
 			}
 		});
+		
+		//Build Table-Driven Navigation Menu
+		$.ajax({
+			type: "GET",
+			url: "index.php?r=home%2Fget-nav-menu",
+			dataType: "json",
+			//data: {id: 3},
+			success: function(data){
+				data = $.parseJSON(data.navMenu);
+				//console.log(JSON.stringify(data, null, 2));
+				NavBar(data);
+			}
+		});
+		
+		function NavBar(data){
+				var str="";
+				var SubNavigationStr = "";
+				var i;
+				
+				if (jQuery.isEmptyObject(data)){
+					str="Json array is empty";
+				}else{
+						// check which module is enabled
+						if (data.Modules[0].CometTracker.enabled.toString() !=0){
+							CometTrackerArray = data.Modules[0].CometTracker.NavigationMenu[0];
+							
+							// clean SubNavigationStr
+							SubNavigationStr = "";
+							
+							// get SubNavigationArray  and length of the SubNavigation menu 
+							CometTrackerSubNavigationLength = CometTrackerArray.SubNavigation.length;
+							CometTrackerSubNavigationArray = CometTrackerArray.SubNavigation;
+							
+							AdminDropdown = "<li class='dropdown'>"
+													+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+													+ CometTrackerArray.NavigationName.toString()
+													+"<b class='caret'></b></a>"
+													+ "<ul class='dropdown-menu' role='menu'>"; 
+											
+							for(i = 0; i < CometTrackerSubNavigationLength; i++){
+								if(CometTrackerSubNavigationArray[i].enabled.toString() != 0){
+									SubNavigationStr += "<li><a data-description='Adminstration Option' href='index.php?r="+CometTrackerSubNavigationArray[i].Url.toString()+"%2Findex'>"+CometTrackerSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+								}else{
+									continue;
+								}
+							}
+							
+							AdminDropdown = AdminDropdown + SubNavigationStr + "</ul></li>";
+	
+						} 
+						if (data.Modules[0].Dispatch.enabled.toString() !=0){
+							DispatchArray = data.Modules[0].Dispatch.NavigationMenu[0];
+							
+							// clean SubNavigationStr
+							SubNavigationStr = "";
+							
+							// get SubNavigationArray  and length of the SubNavigation menu 
+							DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
+							DispatchSubNavigationArray = DispatchArray.SubNavigation;
+							
+							DispatchDropdown = "<li class='dropdown'>"
+													+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+													+ DispatchArray.NavigationName.toString()
+													+"<b class='caret'></b></a>"
+													+ "<ul class='dropdown-menu' role='menu'>"; 
+							
+							for(i = 0; i < DispatchSubNavigationLength; i++){
+								if(DispatchSubNavigationArray[i].enabled.toString() != 0){
+									SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+								}else{
+									continue;
+								}
+							}
+							
+							DispatchDropdown = DispatchDropdown + SubNavigationStr + "</ul></li>";
+							
+						}				
+						if (data.Modules[0].Home.enabled.toString() !=0){
+							HomeArray = data.Modules[0].Home.NavigationMenu[0];
+							
+							HomeDropdown = 	$("<li><a id='home_btn' href='index.php?'>"+HomeArray.NavigationName.toString()+"</a></li>");		
+													
+						}														
+					}
+					
+					$("#middlePrivilegeNav").prepend(HomeDropdown, nav7, AdminDropdown);
+					$("#adminNav").prepend(HomeDropdown, nav7, AdminDropdown);
+					$("#nav").prepend(HomeDropdown, nav7);
+			}
+			
+			// assign class to current active link
+			var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
+				
+											
+			var listItems = $(".menu .adminMenu .middlePrivilegeMenu li a");
+			listItems.each(function(idx, li) {
+				var product = String($(li)[0]).substring(String($(li)[0]).lastIndexOf('/') + 1);
+				
+				if(url === product) {
+					if(product.substring(0, product.indexOf('#')).length > 0 )            
+						var url2 = "a[href$='"+product.substring(0, product.indexOf('#'))+"']";
+					else
+						var url2 = "a[href$='"+url+"']";
+					$(url2).css({"color": "#FF9E19"});
+				}
+			});  	
 	}
 });
 //         $('#nav > ul').not('ul li ul').not('li ul li').children().addClass('current');
