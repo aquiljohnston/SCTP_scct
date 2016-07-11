@@ -109,6 +109,8 @@ $(document).ready(function(){
 				var str="";
 				var SubNavigationStr = "";
 				var DispatchDropdown = "";
+				var HomeDropdown = "";
+				var AdminDropdown = "";
 
 				
 				if (jQuery.isEmptyObject(data)){
