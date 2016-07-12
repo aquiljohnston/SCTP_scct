@@ -327,4 +327,77 @@ class ProjectController extends BaseController
 								]);
 		}
 	}
+	
+	public function actionAddModule($id)
+	{
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['login/login']);
+		}
+
+		self::requirePermission("projectAddRemoveModules");
+		
+		//TODO change urls
+		$moduleUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-project-modules&projectID='.$id;
+		$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+
+		//indirect rbac
+		$moduleResponse = Parent::executeGetRequest($moduleUrl);
+		$projectResponse = Parent::executeGetRequest($projectUrl);
+
+
+		$modules = json_decode($moduleResponse,true);
+		$project = json_decode($projectResponse);
+
+		//load get data into variables
+		//TODO change keys
+		$inactiveData = $modules["unassignedModules"];
+		$activeData = $modules["assignedModules"];
+
+		//create model for active form
+		$model = new \yii\base\DynamicModel([
+			'InactiveModules', 'ActiveModules']);
+		$model
+			->addRule('InactiveModules', 'string')
+			->addRule('ActiveModules',  'string');
+
+
+
+		if ($model->load(Yii::$app->request->post()))
+		{
+			//prepare arrays for post request
+			//explode strings from active form into arrays
+			$deactivatedModulesArray = explode(',',$model->InactiveModules);
+			$activatedModulesArray = explode(',',$model->ActiveModules);
+			//array diff new arrays with arrays previous to submission to get changes
+			$modulesAdded = array_diff($activatedModulesArray,array_keys($activeData));
+			$modulesRemoved = array_diff($deactivatedModulesArray,array_keys($inactiveData));
+			//load arrays of changes into post data
+			$data = [];
+			//TODO change json keys
+			$data["modulesRemoved"] = $modulesRemoved;
+			$data["modulesAdded"] = $modulesAdded;
+
+			//encode data
+			$jsonData = json_encode($data);
+
+			//set post url
+			//TODO change url
+			$postUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fadd-remove-module&projectID='.$id;
+			//execute post request
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
+			//refresh page
+			return $this->redirect(['add-module', 'id' => $project->ProjectID]);
+		}
+		else
+		{
+		return $this -> render('add_module', [
+										'project' => $project,
+										'model' => $model,
+										'inactiveData' => $inactiveData,
+										'activeData' => $activeData,
+								]);
+		}
+	}
 }

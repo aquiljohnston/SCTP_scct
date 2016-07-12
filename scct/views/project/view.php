@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
 		<?= Html::a('Add/Remove Users', ['add-user', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
+		<?= Html::a('Add/Remove Modules', ['add-module', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= DetailView::widget([

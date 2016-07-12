@@ -8,12 +8,12 @@ use kartik\sortinput\SortableInput;
 /* @var $project app\models\project */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Add Users to' . ' ' . $project->ProjectName;
+$this->title = 'Add Modules to' . ' ' . $project->ProjectName;
 $this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $project->ProjectID, 'url' => ['view', 'id' => $project->ProjectID]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="project-add-user">
+<div class="project-add-module">
 
     <h1 class="title"><?= Html::encode($this->title) ?></h1>
 
@@ -27,29 +27,29 @@ $this->params['breadcrumbs'][] = $this->title;
 			]); ?>
 		<div class="row">
 		<div class="col-sm-6">
-		<label style="font-size:20px">Unassigned Users</label>
+		<label style="font-size:20px">Inactive Modules</label>
 			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
-				<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
-					//'name'=>'Unassigned Users',
-					'items' => $unassignedData,
+				<?= $form->field($model, 'InactiveModules')->widget(SortableInput::classname(),[
+					//'name'=>'Inactive Modules',
+					'items' => $inactiveData,
 					'hideInput' => true,
 					'sortableOptions' => [
 						'connected'=>true,
+						'options' => ['style'=> 'min-height: 20pt']
 					],
 					'options' => [
 						'class'=>'form-control',
 						'readonly'=>true,
-						'options' => ['style'=> 'min-height: 20pt']
 						]
 				]); ?>
 			</div>
 		</div>
 		<div class="col-sm-6">
-		<label style="font-size:20px">Assigned Users</label>
+		<label style="font-size:20px">Active Modules</label>
 			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
-				<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
-					'name'=>'Assigned Users',
-					'items' => $assignedData,
+				<?= $form->field($model, 'ActiveModules')->widget(SortableInput::classname(),[
+					'name'=>'Active Modules',
+					'items' => $activeData,
 					'hideInput' => true,
 					'sortableOptions' => [
 						'itemOptions'=>['class'=>'alert alert-warning'],
