@@ -111,6 +111,7 @@ $(document).ready(function(){
 				var DispatchDropdown = "";
 				var HomeDropdown = "";
 				var AdminDropdown = "";
+				var dropdownFlag = 0;
 
 
 				if (jQuery.isEmptyObject(data)){
@@ -161,21 +162,29 @@ $(document).ready(function(){
 									// get SubNavigationArray  and length of the SubNavigation menu
 									DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
 									DispatchSubNavigationArray = DispatchArray.SubNavigation;
-
-									DispatchDropdown += "<li class='dropdown'>"
+									
+									if(DispatchSubNavigationLength > 0){
+										DispatchDropdown += "<li class='dropdown'>"
 															+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
 															+ DispatchArray.NavigationName.toString()
 															+"<b class='caret'></b></a>"
-															+ "<ul class='dropdown-menu' role='menu'>";
-
-									for(var i = 0; i < DispatchSubNavigationLength; i++){
-										if(DispatchSubNavigationArray[i].enabled.toString() != 0){
-											SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
-										}else{
-											continue;
+															//+ "<ul class='dropdown-menu' role='menu'>";
+									
+										for(var i = 0; i < DispatchSubNavigationLength; i++){
+											if(DispatchSubNavigationArray[i].enabled.toString() != 0){
+												dropdownFlag = 1;
+												SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+											}else{
+												continue;
+											}
 										}
-									}
-									DispatchDropdown = DispatchDropdown + SubNavigationStr + "</ul></li>";
+										if(dropdownFlag == 1){
+											DispatchDropdown = DispatchDropdown + "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
+										}else{
+											DispatchDropdown = DispatchDropdown + SubNavigationStr + "</li>";
+										}
+									}	
+									
 								}else{
 									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='index.php?r="+DispatchArray.Url.toString()+"%2Findex'>"+DispatchArray.NavigationName.toString()+"</a></li>";
 								}
