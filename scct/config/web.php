@@ -23,9 +23,6 @@ $config = [
 			//'identityClass' => 'app\controllers\IdentityController',
             'enableAutoLogin' => false,
         ],
-		'authManager' => [
-            'class' => 'yii\rbac\PhpManager',
-        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
