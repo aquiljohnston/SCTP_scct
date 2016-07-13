@@ -53,11 +53,11 @@ $(document).ready(function(){
 	var middlePrivilegeID = $(".middlePrivilegeMenu").attr("id");
 	var defaultID = $(".menu").attr("id");
 	var userRoleID = -1;
-	
+
 	if(adminID != null || middlePrivilegeID != null || defaultID != null){
-	
+
 		var AdminDropdown, DispatchDropdown, HomeDropdown;
-	
+
 		if(adminID != null){
 			userRoleID = adminID;
 		} else if(middlePrivilegeID != null) {
@@ -65,12 +65,12 @@ $(document).ready(function(){
 		} else {
             userRoleID = defaultID;
         }
-		
+
 		//setup ajax call to get all project associate with the user
 		$.ajax({
 			type:"POST",
 			url:"index.php?r=project%2Fget-all-projects",
-			dataType:"json",	
+			dataType:"json",
 			data: {userID: userRoleID},
 			beforeSend: function () {
                         //alert("before send");
@@ -80,7 +80,7 @@ $(document).ready(function(){
 				var Data = $.parseJSON(data.projects);
 				$('#projects_dropdown').empty();
 				$('#projects_dropdown').append('<li><a data-description="All Projects" href="index.php?r=project-landing%2Findex">My Projects</a></li><hr id="seperator_line">');
-				
+
 				$.each(Data, function(i, item){
 					//alert("project name are "+Data[i].ProjectName);
 					//append projec name to the dropdown-menu
@@ -91,7 +91,7 @@ $(document).ready(function(){
 				alert("Failure getting project list!");
 			}
 		});
-		
+
 		//Build Table-Driven Navigation Menu
 		$.ajax({
 			type: "GET",
@@ -104,7 +104,7 @@ $(document).ready(function(){
 				NavBar(data);
 			}
 		});
-		
+
 		function NavBar(data){
 				var str="";
 				var SubNavigationStr = "";
@@ -112,27 +112,27 @@ $(document).ready(function(){
 				var HomeDropdown = "";
 				var AdminDropdown = "";
 
-				
+
 				if (jQuery.isEmptyObject(data)){
 					str="Json array is empty";
 				}else{
 						// check which module is enabled
 						if (data.Modules[0].CometTracker.enabled.toString() !=0){
 							CometTrackerArray = data.Modules[0].CometTracker.NavigationMenu[0];
-							
+
 							// clean SubNavigationStr
 							SubNavigationStr = "";
-							
-							// get SubNavigationArray  and length of the SubNavigation menu 
+
+							// get SubNavigationArray  and length of the SubNavigation menu
 							CometTrackerSubNavigationLength = CometTrackerArray.SubNavigation.length;
 							CometTrackerSubNavigationArray = CometTrackerArray.SubNavigation;
-							
+
 							AdminDropdown = "<li class='dropdown'>"
 													+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
 													+ CometTrackerArray.NavigationName.toString()
 													+"<b class='caret'></b></a>"
-													+ "<ul class='dropdown-menu' role='menu'>"; 
-											
+													+ "<ul class='dropdown-menu' role='menu'>";
+
 							for(i = 0; i < CometTrackerSubNavigationLength; i++){
 								if(CometTrackerSubNavigationArray[i].enabled.toString() != 0){
 									SubNavigationStr += "<li><a data-description='Adminstration Option' href='index.php?r="+CometTrackerSubNavigationArray[i].Url.toString()+"%2Findex'>"+CometTrackerSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
@@ -140,34 +140,34 @@ $(document).ready(function(){
 									continue;
 								}
 							}
-							
+
 							AdminDropdown = AdminDropdown + SubNavigationStr + "</ul></li>";
-	
-						} 
+
+						}
 						if (data.Modules[0].Dispatch.enabled.toString() !=0){
 							// get the length of the NavigationMenu
 							DispatchNavigationMenuLength = data.Modules[0].Dispatch.NavigationMenu.length;
-							
+
 							for( var j =0; j < DispatchNavigationMenuLength; j++){
-							
+
 								DispatchArray = data.Modules[0].Dispatch.NavigationMenu[j];
-								
+
 								// clean SubNavigationStr
 								SubNavigationStr = "";
-								
+
 								// if NavigationName is not report
 								if(DispatchArray.NavigationName.toString() != "Reports"){
-								
-									// get SubNavigationArray  and length of the SubNavigation menu 
+
+									// get SubNavigationArray  and length of the SubNavigation menu
 									DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
 									DispatchSubNavigationArray = DispatchArray.SubNavigation;
-									
+
 									DispatchDropdown += "<li class='dropdown'>"
 															+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
 															+ DispatchArray.NavigationName.toString()
 															+"<b class='caret'></b></a>"
-															+ "<ul class='dropdown-menu' role='menu'>"; 
-									
+															+ "<ul class='dropdown-menu' role='menu'>";
+
 									for(var i = 0; i < DispatchSubNavigationLength; i++){
 										if(DispatchSubNavigationArray[i].enabled.toString() != 0){
 											SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
@@ -177,39 +177,37 @@ $(document).ready(function(){
 									}
 									DispatchDropdown = DispatchDropdown + SubNavigationStr + "</ul></li>";
 								}else{
-									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='index.php?r="+DispatchArray.Url.toString()+"%2Findex'>"+DispatchArray.NavigationName.toString()+"</a></li>";									
+									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='index.php?r="+DispatchArray.Url.toString()+"%2Findex'>"+DispatchArray.NavigationName.toString()+"</a></li>";
 								}
-							}							
-						}				
+							}
+						}
 						if (data.Modules[0].Home.enabled.toString() !=0){
 							HomeArray = data.Modules[0].Home.NavigationMenu[0];
-							
-							HomeDropdown = 	$("<li><a id='home_btn' href='index.php?'>"+HomeArray.NavigationName.toString()+"</a></li>");		
-													
-						}														
+
+							HomeDropdown = 	$("<li><a id='home_btn' href='index.php?'>"+HomeArray.NavigationName.toString()+"</a></li>");
+
+						}
 					}
-					
-					$("#middlePrivilegeNav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
-					$("#adminNav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
-					$("#nav").prepend(HomeDropdown, DispatchDropdown);
+
+					$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
 			}
-			
+
 			// assign class to current active link
 			var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
-				
-											
+
+
 			var listItems = $(".menu .adminMenu .middlePrivilegeMenu li a");
 			listItems.each(function(idx, li) {
 				var product = String($(li)[0]).substring(String($(li)[0]).lastIndexOf('/') + 1);
-				
+
 				if(url === product) {
-					if(product.substring(0, product.indexOf('#')).length > 0 )            
+					if(product.substring(0, product.indexOf('#')).length > 0 )
 						var url2 = "a[href$='"+product.substring(0, product.indexOf('#'))+"']";
 					else
 						var url2 = "a[href$='"+url+"']";
 					$(url2).css({"color": "#FF9E19"});
 				}
-			});  	
+			});
 	}
 });
 //         $('#nav > ul').not('ul li ul').not('li ul li').children().addClass('current');
