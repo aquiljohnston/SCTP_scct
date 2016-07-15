@@ -33,68 +33,57 @@ class MileageCardController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		//RBAC permissions check
-		if (Yii::$app->user->can('viewMileageCardIndex'))
-		{
-			//get user role
-			$userID = Yii::$app->session['userID'];
-			$userRole = Yii::$app->authManager->getRolesByUser($userID);
-			$role = current($userRole);
-			//get week
-			$week = Yii::$app->request->getQueryParam("week");
-			///week defaults to current
-			if ($week == "") $week = "current";
-			
-			//build url with params
-			$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&week=" . $week;
-			$response = Parent::executeGetRequest($url);
+		$userID = Yii::$app->session['userID'];
+		//get week
+		$week = Yii::$app->request->getQueryParam("week");
+		///week defaults to current
+		if ($week == "") $week = "current";
 
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
+		//build url with params
+		$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&week=" . $week;
+		$response = Parent::executeGetRequest($url); // indirect rbac
 
-			// passing decode data into dataProvider
-			$dataProvider = new ArrayDataProvider
-			([
-				'allModels' => $filteredResultData,
-				'pagination' => [
-					'pageSize' => 100,
-				]
-			]);
-			//Set Mile Card ID On the JS Call
-			$dataProvider->key ='MileageCardID';
+		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
-			$searchModel = [
-				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
-				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
-				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
-				'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
-			];
+		// passing decode data into dataProvider
+		$dataProvider = new ArrayDataProvider
+		([
+			'allModels' => $filteredResultData,
+			'pagination' => [
+				'pageSize' => 100,
+			]
+		]);
+		//Set Mile Card ID On the JS Call
+		$dataProvider->key ='MileageCardID';
 
-			$approvedInput = '<select class="form-control" name="filterapproved">'
-				. '<option value=""></option><option value="Yes"';
-			if($searchModel['MileageCardApprovedFlag'] == "Yes") {
-				$approvedInput.= " selected";
-			}
-			$approvedInput .= '>Yes</option><option value="No"';
-			if($searchModel['MileageCardApprovedFlag'] == "No") {
-				$approvedInput .= ' selected';
-			}
-			$approvedInput .= '>No</option></select>';
-				
-			//calling index page to pass dataProvider.
-			return $this->render('index', [
-				'dataProvider' => $dataProvider,
-				'searchModel' => $searchModel,
-				'approvedInput' => $approvedInput,
-				'week' => $week
-			]);
+		$searchModel = [
+			'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
+			'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
+			'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
+			'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
+		];
+
+		$approvedInput = '<select class="form-control" name="filterapproved">'
+			. '<option value=""></option><option value="Yes"';
+		if($searchModel['MileageCardApprovedFlag'] == "Yes") {
+			$approvedInput.= " selected";
 		}
-		else
-		{
-			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+		$approvedInput .= '>Yes</option><option value="No"';
+		if($searchModel['MileageCardApprovedFlag'] == "No") {
+			$approvedInput .= ' selected';
 		}
+		$approvedInput .= '>No</option></select>';
+
+		//calling index page to pass dataProvider.
+		return $this->render('index', [
+			'dataProvider' => $dataProvider,
+			'searchModel' => $searchModel,
+			'approvedInput' => $approvedInput,
+			'week' => $week
+		]);
     }
 
     /**

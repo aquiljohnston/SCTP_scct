@@ -15,6 +15,9 @@ use yii\data\ArrayDataProvider;
 class BaseController extends Controller
 {
 	public function filterColumn($resultData, $column, $param) {
+		if($resultData == null) {
+			return null;
+		}
 		// http://stackoverflow.com/a/28452101
 		$filteredResultData = array_filter($resultData, function($item) use ($column, $param) {
 			$nameFilterParam = Yii::$app->request->getQueryParam($param, '');
@@ -32,6 +35,9 @@ class BaseController extends Controller
 	}
 
 	public function filterColumnMultiple($resultData, $column, $param) {
+		if($resultData == null) {
+			return null;
+		}
 		// http://stackoverflow.com/a/28452101
 		// This code has been modified from its original version. It has been formatted to fit your TV.
 		// (Modified from SA code to handle multiple parameters);

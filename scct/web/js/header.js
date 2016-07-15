@@ -67,7 +67,7 @@ $(document).ready(function(){
         }
 
 		//setup ajax call to get all project associate with the user
-		$.ajax({
+		/*$.ajax({
 			type:"POST",
 			url:"index.php?r=project%2Fget-all-projects",
 			dataType:"json",
@@ -90,7 +90,7 @@ $(document).ready(function(){
 			failure: function () {
 				alert("Failure getting project list!");
 			}
-		});
+		});*/
 
 		//Build Table-Driven Navigation Menu
 		$.ajax({
