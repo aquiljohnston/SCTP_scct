@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\controllers\Equipment;
-
+use app\controllers\BaseController;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EquipmentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -17,11 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 		<p>
-			<?php $userRole = Yii::$app->authManager->getRolesByUser(Yii::$app->session['userID']);?>
-			<?php $role = current($userRole);?>
-			<?php if((($role->name) == "Admin") || (($role->name) == "Engineer")){?>
+			<?php if(BaseController::can('equipmentCreate')): ?>
 				<?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
-			<?php } ?>
+			<?php endif; ?>
 			
 			<?= Html::button('Accept Equipment', [
 				'class' => 'btn btn-primary multiple_approve_btn',

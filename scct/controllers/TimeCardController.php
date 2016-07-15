@@ -40,8 +40,7 @@ class TimeCardController extends BaseController
 			// create curl for restful call.
 			//get user role
 			$userID = Yii::$app->session['userID'];
-			$userRole = Yii::$app->authManager->getRolesByUser($userID);
-			$role = current($userRole);
+			
 			//get week
 			$week = Yii::$app->request->getQueryParam("week");
 			//week defaults to current
