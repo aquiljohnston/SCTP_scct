@@ -33,14 +33,13 @@ class MileageCardController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$userID = Yii::$app->session['userID'];
 		//get week
 		$week = Yii::$app->request->getQueryParam("week");
 		///week defaults to current
 		if ($week == "") $week = "current";
 
 		//build url with params
-		$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&userID=" . $userID . "&week=" . $week;
+		$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&week=" . $week;
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
