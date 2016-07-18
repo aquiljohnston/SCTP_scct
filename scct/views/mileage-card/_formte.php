@@ -74,5 +74,12 @@ use kartik\datetime\DateTimePicker;
     </div>
 
     <?php ActiveForm::end(); ?>
+	
+	<script>
+	$('#mileage_card_submit_btn').click(function() {
+		$('#mileage_card_submit_btn').attr('disabled',true)
+								  .parents('form').submit(); 
+	});
+	</script>
 </div>
 
