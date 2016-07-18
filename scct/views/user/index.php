@@ -44,6 +44,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'UserLastName',
 				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
 			],
+			[
+				'label' => 'Role Type',
+				'attribute' => 'UserAppRoleType',
+				'filter' => '<input class="form-control" name="filterroletype" value="' . Html::encode($searchModel['UserAppRoleType']) . '" type="text">'
+			],
             // 'UserEmployeeType',
             // 'UserPhone',
             // 'UserCompanyName',

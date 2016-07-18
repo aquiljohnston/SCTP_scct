@@ -36,13 +36,16 @@ class UserController extends BaseController
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserAppRoleType', 'filterroletype');
 		$usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
 		$firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
 		$lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
+		$roleTypeFilterParam = Yii::$app->request->getQueryParam('filterroletype', '');
 		$searchModel = [
 			'UserName' => $usernameFilterParam,
 			'UserFirstName' => $firstNameFilterParam,
-			'UserLastName' => $lastNameFilterParam
+			'UserLastName' => $lastNameFilterParam,
+			'UserAppRoleType' => $roleTypeFilterParam
 		];
 		//Passing data to the dataProvider and formatting it in an associative array
 		$dataProvider = new ArrayDataProvider
