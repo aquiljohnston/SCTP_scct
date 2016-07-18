@@ -35,11 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					'hideInput' => true,
 					'sortableOptions' => [
 						'connected'=>true,
+						'options' => ['style'=> 'min-height: 20pt']
 					],
 					'options' => [
 						'class'=>'form-control',
 						'readonly'=>true,
-						'options' => ['style'=> 'min-height: 20pt']
 						]
 				]); ?>
 			</div>
