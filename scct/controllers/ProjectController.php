@@ -122,7 +122,6 @@ class ProjectController extends BaseController
 				'ProjectStartDate' => $model->ProjectStartDate,
 				'ProjectEndDate' => $model->ProjectEndDate,
 				'ProjectCreateDate' => $model->ProjectCreateDate,
-				'ProjectCreatedBy' => Yii::$app->session['userID'],
 				'ProjectModifiedDate' => $model->ProjectModifiedDate,
 				'ProjectModifiedBy' => $model->ProjectModifiedBy,
 				);
