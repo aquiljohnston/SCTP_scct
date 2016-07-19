@@ -23,9 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
 		[
 			'class' => 'btn btn-primary multiple_approve_btn',
 			'id' => 'multiple_approve_btn_id',
-			'data' => [
-                       /*'confirm' => 'Are you sure you want to approve this item?'*/
-					  ]
 		]);
 
 		if($week=="prior") {
@@ -36,6 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			$currentSelected = "selected";
 		}
 		?>
+		
+		<?= Html::button('Export',[
+				'class' => 'btn btn-primary', 
+				'disabled' => true,
+				'id' => 'export_timecard_btn',
+				/*'data' => [
+					'confirm' => 'Are you sure you want to approve this item?']*/
+			])?>
 		<form method="GET" style="display: inline;">
 			<select name="week" onchange="this.form.submit()">
 				<option value="prior" <?= $priorSelected ?>>Prior Week</option>

@@ -34,19 +34,25 @@ $(function() {
 				$('#deactive_timeEntry_btn_id').prop('disabled', false); //TO ENABLE
 				
 				// triggered when checkbox selected
-				$('#deactive_timeEntry_btn_id').click(function(){
-
-					  $.ajax({
-						 type: 'POST',
-						 url: 'index.php?r=time-card/deactivate',
-						 data: {timecardid: pks},
-						  beforeSend: function(  ) {
+				$('#deactive_timeEntry_btn_id').click(function(e){
+					var confirmBox = confirm('Are you sure you want to deactivate this item?');
+					
+					if(confirmBox){
+						$.ajax({
+							type: 'POST',
+							url: 'index.php?r=time-card/deactivate',
+							data: {timecardid: pks},
+							beforeSend: function(  ) {
 							console.log(pks);
-						  },
-						 success: function(data) {
+							},
+							success: function(data) {
 							  $.pjax.reload({container:'.grid-view'});
-						 }
-					  });
+							}
+						});
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}   
 				});
 			}else {
 					$('#deactive_timeEntry_btn_id').prop('disabled', true);
@@ -80,19 +86,25 @@ $(function() {
 				$('#deactive_timeEntry_btn_id').prop('disabled', false); //TO ENABLE
 				
 				// triggered when checkbox selected
-				$('#deactive_timeEntry_btn_id').click(function(){
-
-					  $.ajax({
-						 type: 'POST',
-						 url: 'index.php?r=time-card/deactivate',
-						 data: {timecardid: pks},
-						  beforeSend: function(  ) {
+				$('#deactive_timeEntry_btn_id').click(function(e){
+					var confirmBox = confirm('Are you sure you want to deactivate this item?');
+					
+					if(confirmBox){
+						$.ajax({
+							type: 'POST',
+							url: 'index.php?r=time-card/deactivate',
+							data: {timecardid: pks},
+							beforeSend: function(  ) {
 							console.log(pks);
-						  },
-						 success: function(data) {
+							},
+							success: function(data) {
 							  $.pjax.reload({container:'.grid-view'});
-						 }
-					  });
+							}
+						});
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}  
 				});
 			}else {
 					$('#deactive_timeEntry_btn_id').prop('disabled', true);
