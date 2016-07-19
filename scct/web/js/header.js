@@ -38,8 +38,7 @@ $(document).ready(function(){
 	
 	//login header setting
 	var login_head = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
-        + "<ul class='nav navbar-nav' id='nonav'></ul>"
-        + "</div><div class='clear'></div>");    
+        + "<ul class='nav navbar-nav' id='nonav'></ul>");    
     $(".loginMenu").prepend(login_head);
 
 //Ajax call to retrieve all the projects for the project drop-down selection on the main menu
@@ -104,7 +103,7 @@ $(document).ready(function(){
 			data: {id: PreFixUrl},
 			success: function(data){
 				data = $.parseJSON(data.navMenu);
-				//console.log(JSON.stringify(data, null, 2));
+				console.log(JSON.stringify(data, null, 2));
 				NavBar(data);
 			}
 		});
@@ -200,9 +199,13 @@ $(document).ready(function(){
 							HomeDropdown = 	$("<li><a id='home_btn' href='index.php?'>"+HomeArray.NavigationName.toString()+"</a></li>");
 
 						}
+						if(data.Modules[0].Home.enabled.toString() == data.Modules[0].Dispatch.enabled.toString() == data.Modules[0].CometTracker.enabled.toString() == 0){
+							$("#nav").addClass("blankNavBar");
+							
+						}else{
+								$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);	
+						}
 					}
-
-					$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
 			}
 
 			// assign class to current active link

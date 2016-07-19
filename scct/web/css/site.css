@@ -189,6 +189,9 @@ ul > li >a:hover{
 .title{
 	margin-top: 60px;
 }
+.blankNavBar{
+	height: 50px;
+}
 /*-----------End Header----------*/
 
 /*-----------Start body----------*/
