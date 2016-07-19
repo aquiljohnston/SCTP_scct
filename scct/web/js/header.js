@@ -57,6 +57,10 @@ $(document).ready(function(){
 	if(adminID != null || middlePrivilegeID != null || defaultID != null){
 
 		var AdminDropdown, DispatchDropdown, HomeDropdown;
+		var PreFixUrl = window.location.hostname;
+		
+		// get prefix of current project
+		PreFixUrl = PreFixUrl.replace(".southerncrossinc.com", "");
 
 		if(adminID != null){
 			userRoleID = adminID;
@@ -97,7 +101,7 @@ $(document).ready(function(){
 			type: "GET",
 			url: "index.php?r=home%2Fget-nav-menu",
 			dataType: "json",
-			//data: {id: 3},
+			data: {id: PreFixUrl},
 			success: function(data){
 				data = $.parseJSON(data.navMenu);
 				//console.log(JSON.stringify(data, null, 2));
