@@ -6,6 +6,12 @@ $(function() {
 
     var approved;
     var totalMileage;
+		
+		// disable single approve button once user clicked it
+		$('#enable_single_approve_btn_id_mileagecard').click(function(e) {
+			$(this).addClass('disabled');
+			//alert("hit approve mileage");
+		});
 
         $('#multiple_mileage_card_approve_btn').prop('disabled', true); //TO DISABLED
         $(".kv-row-select input[type=checkbox]").click(function(){
@@ -30,17 +36,25 @@ $(function() {
             if (!pks || pks.length != 0 && approved != "Yes"){
                 $('#multiple_mileage_card_approve_btn').prop('disabled', false); //TO ENABLE
 
+				 
                 // triggered when checkbox selected
-                $('#multiple_mileage_card_approve_btn').click(function(){
-
-                    $.ajax({
-                        type: 'POST',
-                        url: 'index.php?r=mileage-card/approve-multiple',
-                        data: {mileageCardId: pks},
-                        success: function(data) {
-                            $.pjax.reload({container:'#w0'});
-                        }
-                    });
+                $('#multiple_mileage_card_approve_btn').click(function(e){
+				//$(document).on("click", "#multiple_mileage_card_approve_btn", function(){
+				var confirmBox = confirm('Are you sure ?');
+					if(confirmBox){
+						
+						$.ajax({
+							type: 'POST',
+							url: 'index.php?r=mileage-card/approve-multiple',
+							data: {mileageCardId: pks},
+							success: function(data) {
+								$.pjax.reload({container:'#w0'});
+							}
+						});
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}
                 });
             }else {
                 $('#multiple_mileage_card_approve_btn').prop('disabled', true);
