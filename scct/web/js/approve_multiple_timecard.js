@@ -40,15 +40,21 @@ $(function() {
 				
 				// triggered when checkbox selected
 				$('#multiple_approve_btn_id').click(function(){
+				var confirmBox = confirm('Are you sure you want to approve this item?');
+					if(confirmBox){
 
-					  $.ajax({
-						 type: 'POST',
-						 url: 'index.php?r=time-card/approve-multiple',
-						 data: {timecardid: pks},
-						 success: function(data) {
-							  $.pjax.reload({container:'#w0'});
-						 }
-					  });
+						$.ajax({
+							type: 'POST',
+							url: 'index.php?r=time-card/approve-multiple',
+							data: {timecardid: pks},
+							success: function(data) {
+								$.pjax.reload({container:'#w0'});
+							}
+						});
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}  
 				});
 			}else {
 					$('#multiple_approve_btn_id').prop('disabled', true);

@@ -39,8 +39,7 @@ $(function() {
 				 
                 // triggered when checkbox selected
                 $('#multiple_mileage_card_approve_btn').click(function(e){
-				//$(document).on("click", "#multiple_mileage_card_approve_btn", function(){
-				var confirmBox = confirm('Are you sure ?');
+				var confirmBox = confirm('Are you sure you want to approve this item?');
 					if(confirmBox){
 						
 						$.ajax({

@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'class' => 'btn btn-primary multiple_approve_btn',
 				'id' => 'multiple_mileage_card_approve_btn',
-				'data' => []
 			]);
 		if($week=="prior") {
 			$priorSelected = "selected";
