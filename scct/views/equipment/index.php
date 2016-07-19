@@ -24,8 +24,6 @@ $this->params['breadcrumbs'][] = $this->title;
 			<?= Html::button('Accept Equipment', [
 				'class' => 'btn btn-primary multiple_approve_btn',
 				'id' => 'multiple_approve_btn_id_equipment',
-				'data' => [
-                           'confirm' => 'Are you sure you want to accept this item?']
 			])?>
 		</p>
 

@@ -29,15 +29,21 @@ $(function() {
 				
 				// triggered when checkbox selected
 				$('#multiple_approve_btn_id_equipment').click(function(){
-
-					  $.ajax({
-						 type: 'POST',
-						 url: 'index.php?r=equipment/approve-multiple-equipment',
-						 data: {equipmentid: pks},
-						 success: function(data) {
-							  $.pjax.reload({container:'#w0'});
-						 }
-					  });
+				var confirmBox = confirm('Are you sure you want to approve this item?');
+					if(confirmBox){
+					
+						$.ajax({
+							type: 'POST',
+							url: 'index.php?r=equipment/approve-multiple-equipment',
+							data: {equipmentid: pks},
+							success: function(data) {
+								$.pjax.reload({container:'#w0'});
+							}
+						});
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					}   
 				});
 			}else {
 					$('#multiple_approve_btn_id_equipment').prop('disabled', true);
@@ -68,7 +74,9 @@ $(function() {
 				$('#multiple_approve_btn_id_equipment').prop('disabled', false); //TO ENABLE
 				
 				// triggered when checkbox selected
-				$('#multiple_approve_btn_id_equipment').click(function(){
+				$('#multiple_approve_btn_id_equipment').click(function(e){
+				var confirmBox = confirm('Are you sure you want to approve this item?');
+					if(confirmBox){
 
 					  $.ajax({
 						 type: 'POST',
@@ -78,6 +86,10 @@ $(function() {
 							  $.pjax.reload({container:'#w0'});
 						 }
 					  });
+					}else{
+						e.stopImmediatePropagation();
+						e.preventDefault();
+					} 
 				});
 			}else {
 					$('#multiple_approve_btn_id_equipment').prop('disabled', true);
