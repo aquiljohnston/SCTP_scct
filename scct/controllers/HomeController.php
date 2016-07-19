@@ -43,7 +43,7 @@ class HomeController extends BaseController
             return $this->redirect(['login/login']);
         }
         // Reading the response from the the api and filling the GridView
-        $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications&userID='.Yii::$app->session['userID'];
+        $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications';
         $response = Parent::executeGetRequest($url);
 
         //Passing data to the dataProvider and formatting it in an associative array
