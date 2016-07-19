@@ -13,6 +13,7 @@ use Yii;
  * @property string $ProjectNotes
  * @property string $ProjectType
  * @property integer $ProjectStatus
+ * @property string $ProjectUrlPrefix
  * @property integer $ProjectClientID
  * @property integer $ProjectState
  * @property string $ProjectStartDate
@@ -35,6 +36,7 @@ class Project extends \yii\base\model
 	public $ProjectNotes;
 	public $ProjectType;
 	public $ProjectStatus;
+	public $ProjectUrlPrefix;
 	public $ProjectClientID;
 	public $ProjectState;
 	public $ProjectStartDate;
@@ -51,7 +53,7 @@ class Project extends \yii\base\model
     {
         return [
             [['ProjectName'], 'required'],
-            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState'], 'string'],
+            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix'], 'string'],
             [['ProjectID', 'ProjectStatus', 'ProjectClientID', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'integer'],
             [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe']
         ];
@@ -69,6 +71,7 @@ class Project extends \yii\base\model
             'ProjectNotes' => 'Project Notes',
             'ProjectType' => 'Project Type',
             'ProjectStatus' => 'Project Status',
+			'ProjectUrlPrefix' => 'Project Url Prefix',
             'ProjectClientID' => 'Project Client ID',
 			'ProjectState' => 'Project State',
             'ProjectStartDate' => 'Project Start Date',

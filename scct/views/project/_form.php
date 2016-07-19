@@ -61,6 +61,15 @@ use kartik\date\DatePicker;
 						'showLabels'=>false
 					])->dropDownList($flag); ?>
 				</div>
+				<?= Html::activeLabel($model, 'ProjectUrlPrefix', [
+					'label'=>'Url Prefix', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'ProjectUrlPrefix',[
+						'showLabels'=>false
+					])->textInput(['placeholder'=>'ProjectUrlPrefix']); ?>
+				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
 					'label'=>'Client', 
 					'class'=>'col-sm-2 control-label'
