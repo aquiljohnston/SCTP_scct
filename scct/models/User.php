@@ -163,11 +163,13 @@ class User extends \yii\base\model implements IdentityInterface
 	{
 		$url = 'api.southerncrossinc.com/index.php?r=user%2Fget-me';
 		$response = BaseController::executeGetRequest($url);
-		Yii::trace("Identity check: " . $response);
 		$decodedResponse = json_decode($response, true);
-		$identityAttributes = $decodedResponse["User"];
 		$userIdentity = new User();
-		$userIdentity->attributes = $identityAttributes;
+		if (array_key_exists("User",$decodedResponse))
+		{
+			$identityAttributes = $decodedResponse["User"];
+			$userIdentity->attributes = $identityAttributes;
+		}
 		
 		return $userIdentity;
     }
