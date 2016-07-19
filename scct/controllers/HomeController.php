@@ -169,15 +169,16 @@ class HomeController extends BaseController
 	 * @return mixed
 	 * @throws ForbiddenHttpException
 	 */
-    public function actionGetNavMenu()
+    public function actionGetNavMenu($id)
     {
 
 		if (Yii::$app->request->isAjax) {
 			$data = Yii::$app->request->post();
 			
-			$navMenuUrl = "http://api.southerncrossinc.com/index.php?r=menu%2Fget&projectID=3";
+			$navMenuUrl = "http://api.southerncrossinc.com/index.php?r=menu%2Fget&project=".$id;
 			//get nav menu by calling API route
 			$mavMenuResponse = Parent::executeGetRequest($navMenuUrl); // indirect rbac
+			
 			//set up response data type
 			Yii::$app->response->format = 'json';
 
