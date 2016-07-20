@@ -300,10 +300,6 @@ class MileageCardController extends BaseController
 				'MileageEntryMileageCardID' => $mileageCardId,
 				'MileageEntryApprovedBy' => $model->MileageEntryApprovedBy,
 				'MileageEntryComment' => $model->MileageEntryComment,
-				'MileageEntryCreatedDate' => $model->MileageEntryCreatedDate,
-				'MileageEntryCreatedBy' => $model->MileageEntryCreatedBy,
-				'MileageEntryModifiedDate' => $model->MileageEntryModifiedDate,
-				'MileageEntryModifiedBy' => $model->MileageEntryModifiedBy,
 			);
 
 			// check difference between StartingMileage and EndingMileage
