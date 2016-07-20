@@ -18,6 +18,12 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 	</p>
 
+	<?php if($createFailed): ?>
+		<div class="alert alert-warning">
+			One or more of the fields below are invalid.
+		</div>
+	<?php endif; ?>
+
     <?= $this->render('_form', [
         'model' => $model,
 		'flag' => $flag,

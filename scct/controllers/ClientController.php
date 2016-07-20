@@ -137,17 +137,29 @@ class ClientController extends BaseController
 
 			// post url
 			$url= "http://api.southerncrossinc.com/index.php?r=client%2Fcreate";			
-			$response = Parent::executePostRequest($url, $json_data);
 			
+			$response = Parent::executePostRequest($url, $json_data);
 			$obj = json_decode($response, true);
+			if(array_key_exists("ClientID", $obj)) {
+				return $this->redirect(['view', 'id' => $obj["ClientID"]]);
+			} else {
+				return $this->render('create',[
+					'model' => $model,
+					'flag' => $flag,
+					'clientAccounts' => $clientAccounts,
+					'states' => $states,
+					'createFailed' => true
+				]);
+			}
+			
 
-			return $this->redirect(['view', 'id' => $obj["ClientID"]]);
 		} else {
 			return $this->render('create',[
 				'model' => $model,
 				'flag' => $flag,
 				'clientAccounts' => $clientAccounts,
 				'states' => $states,
+				'createFailed' => false
 				]);
 		}
     }
