@@ -58,13 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'UserLastName',
 				'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
 			],
-			'MileageStartDate',
-			'MileageEndDate',
 			[
 				'label' => 'Project Name',
 				'attribute' => 'ProjectName',
 				'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 			],
+			'MileageStartDate',
+			'MileageEndDate',
 			'SumMiles',
 			[
 				'label' => 'Approved',

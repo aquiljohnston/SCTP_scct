@@ -34,9 +34,8 @@ class ClientController extends BaseController
 		$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
 		$response = Parent::executeGetRequest($url); // RBAC permissions checked indirectly via this call
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtertitle');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactFName', 'filterfname');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientContactMI', 'filtermi');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtercity');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientState', 'filterstate');
 
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider
@@ -49,9 +48,8 @@ class ClientController extends BaseController
 
 		$searchModel = [
 			'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
-			'ClientContactFName' => Yii::$app->request->getQueryParam('filterfname', ''),
-			'ClientCity' => Yii::$app->request->getQueryParam('filtertitle', ''),
-			'ClientContactMI' => Yii::$app->request->getQueryParam('filtermi', ''),
+			'ClientCity' => Yii::$app->request->getQueryParam('filtercity', ''),
+			'ClientState' => Yii::$app->request->getQueryParam('filterstate', ''),
 		];
 
 

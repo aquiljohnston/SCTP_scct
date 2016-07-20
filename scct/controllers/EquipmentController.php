@@ -37,6 +37,7 @@ class EquipmentController extends BaseController
 		
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'EquipmentName', 'filtername');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentSerialNumber', 'filterserialnumber');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentSCNumber', 'filterscnumber');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'EquipmentType', 'filtertype');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientName', 'filterclientname');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
@@ -46,6 +47,7 @@ class EquipmentController extends BaseController
 		$searchModel = [
 			'EquipmentName' => Yii::$app->request->getQueryParam('filtername', ''),
 			'EquipmentSerialNumber' => Yii::$app->request->getQueryParam('filterserialnumber', ''),
+			'EquipmentSCNumber' => Yii::$app->request->getQueryParam('filterscnumber', ''),
 			'EquipmentType' => Yii::$app->request->getQueryParam('filtertype', ''),
 			'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
 			'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),

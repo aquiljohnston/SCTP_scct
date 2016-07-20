@@ -37,10 +37,12 @@ class ProjectController extends BaseController
 
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ProjectName', 'filtername');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectType', 'filtertype');
+		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectState', 'filterstate');
 
 		$searchModel = [
 			'ProjectName' => Yii::$app->request->getQueryParam('filtername', ''),
-			'ProjectType' => Yii::$app->request->getQueryParam('filtertype', '')
+			'ProjectType' => Yii::$app->request->getQueryParam('filtertype', ''),
+			'ProjectState' => Yii::$app->request->getQueryParam('filterstate', '')
 		];
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
