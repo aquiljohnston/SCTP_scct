@@ -130,14 +130,22 @@ class ProjectController extends BaseController
 				);
 
 			$json_data = json_encode($data);
+			try{
+				// post url
+				$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
+				$response = Parent::executePostRequest($url, $json_data);
+				
+				$obj = json_decode($response, true);
 
-			// post url
-			$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
-			$response = Parent::executePostRequest($url, $json_data);
-			
-			$obj = json_decode($response, true);
-
-			return $this->redirect(['view', 'id' => $obj["ProjectID"]]);
+				return $this->redirect(['view', 'id' => $obj["ProjectID"]]);
+			} catch (\Exception $e) {
+				return $this->render('create', [
+					'model' => $model,
+					'clients' => $clients,
+					'flag' => $flag,
+					'states' => $states,
+				]);
+			}
 		}else {
 			return $this->render('create',[
 				'model' => $model,
@@ -205,13 +213,21 @@ class ProjectController extends BaseController
 				);
 
 			$json_data = json_encode($data);
-			
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
-			$putResponse = Parent::executePutRequest($putUrl, $json_data);
-			
-			$obj = json_decode($putResponse, true);
-			
-			return $this->redirect(['view', 'id' => $model["ProjectID"]]);
+			try {
+				$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
+				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				
+				$obj = json_decode($putResponse, true);
+				
+				return $this->redirect(['view', 'id' => $model["ProjectID"]]);
+			} catch (\Exception $e) {
+				return $this->render('update', [
+					'model' => $model,
+					'clients' => $clients,
+					'flag' => $flag,
+					'states' => $states,
+				]);
+			}
 		} else {
 			return $this->render('update', [
 				'model' => $model,

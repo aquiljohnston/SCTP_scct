@@ -96,7 +96,7 @@ use kartik\date\DatePicker;
 					<?= $form->field($model, 'ProjectStartDate',[
 					'showLabels'=>false
 					])->widget(DatePicker::classname(),[
-						'options' => ['placeholder' => 'Enter time...'],
+						'options' => ['placeholder' => 'Enter date...'],
 						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
@@ -112,7 +112,7 @@ use kartik\date\DatePicker;
 					<?= $form->field($model, 'ProjectEndDate',[
 					'showLabels'=>false
 					])->widget(DatePicker::classname(),[
-						'options' => ['placeholder' => 'Enter time...'],
+						'options' => ['placeholder' => 'Enter date...'],
 						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
