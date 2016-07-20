@@ -36,34 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'label' => 'Client City',
 				'attribute' => 'ClientCity',
-				'filter' => '<input class="form-control" name="filtertitle" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
+				'filter' => '<input class="form-control" name="filtercity" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
 			],
 			[
-				'label' => 'Contact First Name',
-				'attribute' => 'ClientContactFName',
-				'filter' => '<input class="form-control" name="filterfname" value="' . Html::encode($searchModel['ClientContactFName']) . '" type="text">'
+				'label' => 'Client State',
+				'attribute' => 'ClientState',
+				'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ClientState']) . '" type="text">'
 			],
-			[
-				'label' => 'Contact M.I.',
-				'attribute' => 'ClientContactMI',
-				'filter' => '<input class="form-control" name="filtermi" value="' . Html::encode($searchModel['ClientContactMI']) . '" type="text">'
-			],
-            // 'ClientContactLName',
-            // 'ClientPhone',
-            // 'ClientEmail:email',
-            // 'ClientAddr1',
-            // 'ClientAddr2',
-            // 'ClientCity',
-            // 'ClientState',
-            // 'ClientZip4',
-            // 'ClientTerritory',
-            // 'ClientActiveFlag',
-            // 'ClientDivisionsFlag',
-            // 'ClientComment',
-            // 'ClientCreateDate',
-            // 'ClientCreatorUserID',
-            // 'ClientModifiedDate',
-            // 'ClientModifiedBy',
+
 
             ['class' => 'kartik\grid\ActionColumn',
 			'template' => '{view} {update}',

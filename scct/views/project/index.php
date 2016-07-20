@@ -35,17 +35,18 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'ProjectName',
 				'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
 			],
-            'ProjectDescription',
-            'ProjectNotes',
 			[
 				'label' => 'Project Type',
 				'attribute' => 'ProjectType',
 				'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['ProjectType']) . '" type="text">'
 			],
-            // 'ProjectStatus',
-            // 'ProjectClientID',
-            // 'ProjectStartDate',
-            // 'ProjectEndDate',
+			[
+				'label' => 'Project State',
+				'attribute' => 'ProjectState',
+				'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ProjectState']) . '" type="text">'
+			],
+            'ProjectStartDate',
+            'ProjectEndDate',
 
             ['class' => 'kartik\grid\ActionColumn',
 				'urlCreator' => function ($action, $model, $key, $index) {

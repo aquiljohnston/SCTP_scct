@@ -41,16 +41,19 @@ $this->params['breadcrumbs'][] = $this->title;
 					'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['EquipmentName']) . '" type="text">'
 				],
 				[
+					'label' => 'Type',
+					'attribute' => 'EquipmentType',
+					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['EquipmentType']) . '" type="text">'
+				],
+				[
 					'label' => 'Serial Number',
 					'attribute' => 'EquipmentSerialNumber',
 					'filter' => '<input class="form-control" name="filterserialnumber" value="' . Html::encode($searchModel['EquipmentSerialNumber']) . '" type="text">'
 				],
-				//'SC Number',
-				'EquipmentDetails',
 				[
-					'label' => 'Type',
-					'attribute' => 'EquipmentType',
-					'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['EquipmentType']) . '" type="text">'
+					'label' => 'SC Number',
+					'attribute' => 'EquipmentSCNumber',
+					'filter' => '<input class="form-control" name="filterscnumber" value="' . Html::encode($searchModel['EquipmentSCNumber']) . '" type="text">'
 				],
 				[
 					'label' => 'Client Name',
