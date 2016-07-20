@@ -118,8 +118,8 @@ class UserController extends BaseController
 				'UserActiveFlag' => 1,
 				//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
 				//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
-				'UserCreatedBy' => Yii::$app->session['userID'],
-				'UserModifiedBy' => $model->UserModifiedBy,
+				//'UserCreatedBy' => Yii::$app->session['userID'],
+				//'UserModifiedBy' => $model->UserModifiedBy,
 				'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
 				'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
 				'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
@@ -221,8 +221,6 @@ class UserController extends BaseController
 				'UserActiveFlag' => $model-> UserActiveFlag,
 				'UserCreatedDate' => $model-> UserCreatedDate,
 				'UserModifiedDate' => $model-> UserModifiedDate,
-				'UserCreatedBy' => $model-> UserCreatedBy,
-				'UserModifiedBy' =>  Yii::$app->session['userID'],
 				'UserCreateDTLTOffset' => $model-> UserCreateDTLTOffset,
 				'UserModifiedDTLTOffset' => $model-> UserModifiedDTLTOffset,
 				'UserInactiveDTLTOffset' => $model-> UserInactiveDTLTOffset,

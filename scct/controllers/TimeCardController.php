@@ -324,13 +324,11 @@ class TimeCardController extends BaseController
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
 					'TimeEntryDate' => $TimeEntryDate,
-					'TimeEntryCreateDate' => $timeEntryModel->TimeEntryCreateDate,
 					'TimeEntryModifiedDate' => $timeEntryModel->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $TimeCardTechID,
 					'TimeEntryTimeCardID' => $id,
 					'TimeEntryActivityID' => $timeEntryModel->TimeEntryActivityID,
 					'TimeEntryComment' => $timeEntryModel->TimeEntryComment,
-					'TimeEntryCreatedBy' => $timeEntryModel->TimeEntryCreatedBy,
 					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
 				);
 

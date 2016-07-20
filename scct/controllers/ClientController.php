@@ -130,11 +130,7 @@ class ClientController extends BaseController
 				'ClientTerritory' => $model->ClientTerritory,
 				'ClientActiveFlag' => $model->ClientActiveFlag,
 				'ClientDivisionsFlag' => $model->ClientDivisionsFlag,
-				'ClientComment' => $model->ClientComment,
-				'ClientCreateDate' => $model->ClientCreateDate,
-				'ClientCreatorUserID' => Yii::$app->session['userID'],
-				'ClientModifiedDate' => $model->ClientModifiedDate,
-				'ClientModifiedBy' => $model->ClientModifiedBy,
+				'ClientComment' => $model->ClientComment
 				);
 
 			$json_data = json_encode($data);
