@@ -31,7 +31,7 @@ class EquipmentController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 
-		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fget-equipment';
+		$url = 'equipment%2Fget-equipment';
 
 		$response = Parent::executeGetRequest($url); // Indirect RBAC
 		
@@ -106,7 +106,7 @@ class EquipmentController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
+		$url = 'equipment%2Fview&id='.$id;
 		$response = Parent::executeGetRequest($url); // indirect RBAC
 		
 		return $this -> render('view', ['model' => json_decode($response, true)]);
@@ -129,22 +129,22 @@ class EquipmentController extends BaseController
 
 		//GET DATA TO FILL FORM DROPDOWNS//
 		//get clients for form dropdown
-		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientUrl = "client%2Fget-client-dropdowns";
 		$clientResponse = Parent::executeGetRequest($clientUrl);
 		$clients = json_decode($clientResponse, true);	
 
 		//get types for form dropdown
-		$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+		$typeUrl = "equipment-type%2Fget-type-dropdowns";
 		$typeResponse = Parent::executeGetRequest($typeUrl);
 		$types = json_decode($typeResponse, true);
 		
 		//get conditions for form dropdown
-		$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+		$conditionUrl = "equipment-condition%2Fget-condition-dropdowns";
 		$conditionResponse = Parent::executeGetRequest($conditionUrl);
 		$conditions = json_decode($conditionResponse, true);
 		
 		//get status for form dropdown
-		$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+		$statusURL = "equipment-status%2Fget-status-dropdowns";
 		$statusResponse = Parent::executeGetRequest($statusURL);
 		$statuses = json_decode($statusResponse, true);
 
@@ -175,7 +175,7 @@ class EquipmentController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$url= "http://api.southerncrossinc.com/index.php?r=equipment%2Fcreate";			
+			$url= "equipment%2Fcreate";
 			$response = Parent::executePostRequest($url, $json_data);
 			$obj = json_decode($response, true);
 
@@ -219,7 +219,7 @@ class EquipmentController extends BaseController
 			$json_data = json_encode($data_approve);
 			
 			// post url
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+				$putUrl = 'equipment%2Faccept-equipment';
 				$putResponse = Parent::executePutRequest($putUrl, $json_data);
 				
 				return $this->redirect(['index']);
@@ -248,7 +248,7 @@ class EquipmentController extends BaseController
 		$json_data_approve = json_encode($data);
 
 		// post url
-		$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+		$putUrl = 'equipment%2Faccept-equipment';
 		$putResponse = Parent::executePutRequest($putUrl, $json_data_approve);
 		$obj = json_decode($putResponse, true);
 		$responseEquipmentID = $obj[0]["EquipmentID"];
@@ -282,7 +282,7 @@ class EquipmentController extends BaseController
 		$json_data = json_encode($data);
 		
 		// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Faccept-equipment';
+			$putUrl = 'equipment%2Faccept-equipment';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 			
 			return $this->redirect(['index']);
@@ -307,7 +307,7 @@ class EquipmentController extends BaseController
 
 		self::requirePermission("equipmentUpdate");
 
-		$getUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fview&id='.$id;
+		$getUrl = 'equipment%2Fview&id='.$id;
 		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
 		$model = new equipment();
@@ -315,32 +315,32 @@ class EquipmentController extends BaseController
 
 		//GET DATA TO FILL FORM DROPDOWNS//
 		//get clients for form dropdown
-		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientUrl = "client%2Fget-client-dropdowns";
 		$clientResponse = Parent::executeGetRequest($clientUrl);
 		$clients = json_decode($clientResponse, true);
 
 		//get types for form dropdown
-		$typeUrl = "http://api.southerncrossinc.com/index.php?r=equipment-type%2Fget-type-dropdowns";
+		$typeUrl = "equipment-type%2Fget-type-dropdowns";
 		$typeResponse = Parent::executeGetRequest($typeUrl);
 		$types = json_decode($typeResponse, true);
 
 		//get conditions for form dropdown
-		$conditionUrl = "http://api.southerncrossinc.com/index.php?r=equipment-condition%2Fget-condition-dropdowns";
+		$conditionUrl = "equipment-condition%2Fget-condition-dropdowns";
 		$conditionResponse = Parent::executeGetRequest($conditionUrl);
 		$conditions = json_decode($conditionResponse, true);
 
 		//get status for form dropdown
-		$statusURL = "http://api.southerncrossinc.com/index.php?r=equipment-status%2Fget-status-dropdowns";
+		$statusURL = "equipment-status%2Fget-status-dropdowns";
 		$statusResponse = Parent::executeGetRequest($statusURL);
 		$statuses = json_decode($statusResponse, true);
 
 		//get userIDs for form dropdown
-		$userUrl = "http://api.southerncrossinc.com/index.php?r=user%2Fget-user-dropdowns";
+		$userUrl = "user%2Fget-user-dropdowns";
 		$userResponse = Parent::executeGetRequest($userUrl);
 		$users = json_decode($userResponse, true);
 
 		//get projects for form dropdown
-		$projectUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-project-dropdowns";
+		$projectUrl = "project%2Fget-project-dropdowns";
 		$projectResponse = Parent::executeGetRequest($projectUrl);
 		$projects = json_decode($projectResponse, true);
 
@@ -373,7 +373,7 @@ class EquipmentController extends BaseController
 
 			$json_data = json_encode($data);
 
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fupdate&id='.$id;
+			$putUrl = 'equipment%2Fupdate&id='.$id;
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 
 			$obj = json_decode($putResponse, true);
@@ -406,7 +406,7 @@ class EquipmentController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		
-		$url = 'http://api.southerncrossinc.com/index.php?r=equipment%2Fdelete&id='.$id;
+		$url = 'equipment%2Fdelete&id='.$id;
 		Parent::executeDeleteRequest($url);
 		$this->redirect('/index.php?r=equipment%2Findex');
     }

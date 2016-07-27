@@ -103,7 +103,7 @@ class LoginController extends BaseController
 		
 		Yii::$app->user->logout();
 		
-		$url = 'http://api.southerncrossinc.com/index.php?r=login%2Fuser-logout&userID='.$id;
+		$url = 'login%2Fuser-logout&userID='.$id;
 		$response = Parent::executeGetRequest($url);
 		
         return $this->redirect(['login']);

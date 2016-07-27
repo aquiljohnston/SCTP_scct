@@ -31,7 +31,7 @@ class UserController extends BaseController
 		}
 
 		// Reading the response from the the api and filling the GridView
-		$url = "http://api.southerncrossinc.com/index.php?r=user%2Fget-active";
+		$url = "user%2Fget-active";
 		$response = Parent::executeGetRequest($url); // indirect rbac
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
@@ -71,7 +71,7 @@ class UserController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$url = 'user%2Fview&id='.$id;
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
@@ -94,12 +94,12 @@ class UserController extends BaseController
 		$model = new User();
 
 		//get App Roles for form dropdown
-		$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+		$rolesUrl = "app-roles%2Fget-roles-dropdowns";
 		$rolesResponse = Parent::executeGetRequest($rolesUrl);
 		$roles = json_decode($rolesResponse, true);
 
 		//get types for form dropdown
-		$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+		$typeUrl = "employee-type%2Fget-type-dropdowns";
 		$typeResponse = Parent::executeGetRequest($typeUrl);
 		$types = json_decode($typeResponse, true);
 
@@ -139,7 +139,7 @@ class UserController extends BaseController
 
 			try {
 				// post url
-				$url = "http://api.southerncrossinc.com/index.php?r=user%2Fcreate";
+				$url = "user%2Fcreate";
 				$response = Parent::executePostRequest($url, $json_data);
 
 				$obj = json_decode($response, true);
@@ -182,19 +182,19 @@ class UserController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		self::requirePermission("userUpdate");
-		$getUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fview&id='.$id;
+		$getUrl = 'user%2Fview&id='.$id;
 		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
 		$model = new User();
 		$model->attributes = $getResponse;
 
 		//get App Roles for form dropdown
-		$rolesUrl = "http://api.southerncrossinc.com/index.php?r=app-roles%2Fget-roles-dropdowns";
+		$rolesUrl = "app-roles%2Fget-roles-dropdowns";
 		$rolesResponse = Parent::executeGetRequest($rolesUrl);
 		$roles = json_decode($rolesResponse, true);
 
 		//get types for form dropdown
-		$typeUrl = "http://api.southerncrossinc.com/index.php?r=employee-type%2Fget-type-dropdowns";
+		$typeUrl = "employee-type%2Fget-type-dropdowns";
 		$typeResponse = Parent::executeGetRequest($typeUrl);
 		$types = json_decode($typeResponse, true);
 
@@ -238,7 +238,7 @@ class UserController extends BaseController
 
 			$json_data = json_encode($data);
 
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=user%2Fupdate&id='.$id;
+			$putUrl = 'user%2Fupdate&id='.$id;
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 
 			$obj = json_decode($putResponse, true);
@@ -269,7 +269,7 @@ class UserController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		//calls route to deactivate user account
-		$url = 'http://api.southerncrossinc.com/index.php?r=user%2Fdeactivate&userID='.$id;
+		$url = 'user%2Fdeactivate&userID='.$id;
 		//empty body
 		$json_data = "";
 		Parent::executePutRequest($url, $json_data); // indirect rbac

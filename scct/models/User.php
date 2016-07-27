@@ -161,7 +161,7 @@ class User extends \yii\base\model implements IdentityInterface
 	//identity interface methods
     public static function findIdentity($id)
 	{
-		$url = 'api.southerncrossinc.com/index.php?r=user%2Fget-me';
+		$url = 'user%2Fget-me';
 		$response = BaseController::executeGetRequest($url);
 		$decodedResponse = json_decode($response, true);
 		$userIdentity = new User();
@@ -176,7 +176,7 @@ class User extends \yii\base\model implements IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-		$url = 'api.southerncrossinc.com/index.php?r=auth%2Fget-user-by-token&token='.$token;
+		$url = 'auth%2Fget-user-by-token&token='.$token;
 		$response = BaseController::executeGetRequest($url);
 		$identityAttributes = json_decode($response, true);
 		$userIdentity = new User();
@@ -199,7 +199,7 @@ class User extends \yii\base\model implements IdentityInterface
 
     public function validateAuthKey($authKey)
     {
-		$url = 'api.southerncrossinc.com/index.php?r=auth%2Fvalidate-auth-key&token='.$authKey;
+		$url = 'auth%2Fvalidate-auth-key&token='.$authKey;
 		$response = BaseController::executeGetRequest($url);
 		return $response;
     }

@@ -31,7 +31,7 @@ class ProjectController extends BaseController
 		}
 
 		// Reading the response from the the api and filling the GridView
-		$url = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+		$url = "project%2Fget-all";
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 
@@ -72,7 +72,7 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$url = 'project%2Fview&id='.$id;
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
@@ -95,12 +95,12 @@ class ProjectController extends BaseController
 		$model  = new Project();
 			  
 		//get clients for form dropdown
-		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientUrl = "client%2Fget-client-dropdowns";
 		$clientResponse = Parent::executeGetRequest($clientUrl);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateUrl = "state-code%2Fget-code-dropdowns";
 		$stateResponse = Parent::executeGetRequest($stateUrl);
 		$states = json_decode($stateResponse, true);
 		
@@ -132,7 +132,7 @@ class ProjectController extends BaseController
 			$json_data = json_encode($data);
 			try{
 				// post url
-				$url= "http://api.southerncrossinc.com/index.php?r=project%2Fcreate";			
+				$url= "project%2Fcreate";
 				$response = Parent::executePostRequest($url, $json_data);
 				
 				$obj = json_decode($response, true);
@@ -170,19 +170,19 @@ class ProjectController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		self::requirePermission("projectUpdate");
-		$getUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$getUrl = 'project%2Fview&id='.$id;
 		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
 		$model  = new Project();
 		$model->attributes = $getResponse;
 			  
 		//get clients for form dropdown
-		$clientUrl = "http://api.southerncrossinc.com/index.php?r=client%2Fget-client-dropdowns";
+		$clientUrl = "client%2Fget-client-dropdowns";
 		$clientResponse = Parent::executeGetRequest($clientUrl);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateUrl = "state-code%2Fget-code-dropdowns";
 		$stateResponse = Parent::executeGetRequest($stateUrl);
 		$states = json_decode($stateResponse, true);
 		
@@ -214,7 +214,7 @@ class ProjectController extends BaseController
 
 			$json_data = json_encode($data);
 			try {
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fupdate&id='.$id;
+				$putUrl = 'project%2Fupdate&id='.$id;
 				$putResponse = Parent::executePutRequest($putUrl, $json_data);
 				
 				$obj = json_decode($putResponse, true);
@@ -251,7 +251,7 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fdelete&id='.$id;
+		$url = 'project%2Fdelete&id='.$id;
 		Parent::executeDeleteRequest($url); // indirect rbac
 		$this->redirect('/index.php?r=project%2Findex');
     }
@@ -269,7 +269,7 @@ class ProjectController extends BaseController
 		if (Yii::$app->request->isAjax) {
 			$data = Yii::$app->request->post();
 			
-			$projectDropdownUrl = "http://api.southerncrossinc.com/index.php?r=project%2Fget-all";
+			$projectDropdownUrl = "project%2Fget-all";
 			//get projects by calling API route
 			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl); // indirect rbac
 			//set up response data type
@@ -289,8 +289,8 @@ class ProjectController extends BaseController
 
 		self::requirePermission("projectAddRemoveUsers");
 		
-		$url = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-user-relationships&projectID='.$id;
-		$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$url = 'project%2Fget-user-relationships&projectID='.$id;
+		$projectUrl = 'project%2Fview&id='.$id;
 
 		//indirect rbac
 		$response = Parent::executeGetRequest($url);
@@ -358,8 +358,8 @@ class ProjectController extends BaseController
 		self::requirePermission("projectAddRemoveModules");
 		
 		//TODO change urls
-		$moduleUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fget-project-modules&projectID='.$id;
-		$projectUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fview&id='.$id;
+		$moduleUrl = 'project%2Fget-project-modules&projectID='.$id;
+		$projectUrl = 'project%2Fview&id='.$id;
 
 		//indirect rbac
 		$moduleResponse = Parent::executeGetRequest($moduleUrl);
@@ -403,7 +403,7 @@ class ProjectController extends BaseController
 
 			//set post url
 			//TODO change url
-			$postUrl = 'http://api.southerncrossinc.com/index.php?r=project%2Fadd-remove-module&projectID='.$id;
+			$postUrl = 'project%2Fadd-remove-module&projectID='.$id;
 			//execute post request
 			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
 			//refresh page

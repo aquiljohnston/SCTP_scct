@@ -43,7 +43,7 @@ class HomeController extends BaseController
             return $this->redirect(['login/login']);
         }
         // Reading the response from the the api and filling the GridView
-        $url = 'http://api.southerncrossinc.com/index.php?r=notification%2Fget-notifications';
+        $url = 'notification%2Fget-notifications';
         $response = Parent::executeGetRequest($url);
 
         //Passing data to the dataProvider and formatting it in an associative array
@@ -175,7 +175,7 @@ class HomeController extends BaseController
 		if (Yii::$app->request->isAjax) {
 			$data = Yii::$app->request->post();
 			
-			$navMenuUrl = "http://api.southerncrossinc.com/index.php?r=menu%2Fget&project=".$id;
+			$navMenuUrl = "menu%2Fget&project=".$id;
 			//get nav menu by calling API route
 			$mavMenuResponse = Parent::executeGetRequest($navMenuUrl); // indirect rbac
 			

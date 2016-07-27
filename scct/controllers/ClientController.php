@@ -31,7 +31,7 @@ class ClientController extends BaseController
 		}
 
 		// Reading the response from the the api and filling the GridView
-		$url = "http://api.southerncrossinc.com/index.php?r=client%2Fget-all";
+		$url = "client%2Fget-all";
 		$response = Parent::executeGetRequest($url); // RBAC permissions checked indirectly via this call
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtercity');
@@ -72,7 +72,7 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+		$url = 'client%2Fview&id='.$id;
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
@@ -102,12 +102,12 @@ class ClientController extends BaseController
 		];
 		
 		//get clients for form dropdown
-		$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+		$clientAccountsUrl = "client-accounts%2Fget-client-account-dropdowns";
 		$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
 		$clientAccounts = json_decode($clientAccountsResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateUrl = "state-code%2Fget-code-dropdowns";
 		$stateResponse = Parent::executeGetRequest($stateUrl);
 		$states = json_decode($stateResponse, true);
 			  
@@ -136,7 +136,7 @@ class ClientController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$url= "http://api.southerncrossinc.com/index.php?r=client%2Fcreate";			
+			$url= "client%2Fcreate";
 			
 			$response = Parent::executePostRequest($url, $json_data);
 			$obj = json_decode($response, true);
@@ -178,7 +178,7 @@ class ClientController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 		self::requirePermission("clientUpdate");
-		$getUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fview&id='.$id;
+		$getUrl = 'client%2Fview&id='.$id;
 		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
 
 		$model = new Client();
@@ -192,12 +192,12 @@ class ClientController extends BaseController
 		];
 		
 		//get clients for form dropdown
-		$clientAccountsUrl = "http://api.southerncrossinc.com/index.php?r=client-accounts%2Fget-client-account-dropdowns";
+		$clientAccountsUrl = "client-accounts%2Fget-client-account-dropdowns";
 		$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
 		$clientAccounts = json_decode($clientAccountsResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "http://api.southerncrossinc.com/index.php?r=state-code%2Fget-code-dropdowns";
+		$stateUrl = "state-code%2Fget-code-dropdowns";
 		$stateResponse = Parent::executeGetRequest($stateUrl);
 		$states = json_decode($stateResponse, true);
 			  
@@ -229,7 +229,7 @@ class ClientController extends BaseController
 
 			$json_data = json_encode($data);
 			
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=client%2Fupdate&id='.$id;
+			$putUrl = 'client%2Fupdate&id='.$id;
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 			
 			$obj = json_decode($putResponse, true);
@@ -258,7 +258,7 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'http://api.southerncrossinc.com/index.php?r=client%2Fdelete&id='.$id;
+		$url = 'client%2Fdelete&id='.$id;
 		Parent::executeDeleteRequest($url); //indirect RBAC
 		$this->redirect('/index.php?r=client%2Findex');
     }
