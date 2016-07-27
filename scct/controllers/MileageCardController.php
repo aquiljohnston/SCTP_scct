@@ -39,7 +39,7 @@ class MileageCardController extends BaseController
 		if ($week == "") $week = "current";
 
 		//build url with params
-		$url = "http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-cards&week=" . $week;
+		$url = "mileage-card%2Fget-cards&week=" . $week;
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
@@ -109,8 +109,8 @@ class MileageCardController extends BaseController
 					$id = str_replace("yes", "", $id);
 					$duplicateFlag = 1;
 				}
-				$url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fget-entries&cardID='.$id;
-				$mileage_card_url = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fview&id='.$id;
+				$url = 'mileage-card%2Fget-entries&cardID='.$id;
+				$mileage_card_url = 'mileage-card%2Fview&id='.$id;
 
 				//Indirect RBAC checks
 				$response = Parent::executeGetRequest($url);
@@ -263,7 +263,7 @@ class MileageCardController extends BaseController
 		$model = new MileageEntry();
 
 		//GET DATA TO FILL FORM DROPDOWNS
-		$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
+		$activityCodeUrl = "activity-code%2Fget-code-dropdowns";
 		$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
 		$activityCode = json_decode($activityCodeResponse, true);
 
@@ -320,7 +320,7 @@ class MileageCardController extends BaseController
 
 						try{
 							// post url
-							$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';
+							$url_send_activity = 'activity%2Fcreate';
 							$response_activity= Parent::executePostRequest($url_send_activity, $json_data);
 							$obj = json_decode($response_activity, true);
 
@@ -337,7 +337,7 @@ class MileageCardController extends BaseController
 			$json_data = json_encode($data);
 
 			//Execute the POST call
-			$url_send = "http://api.southerncrossinc.com/index.php?r=mileage-entry%2Fcreate";
+			$url_send = "mileage-entry%2Fcreate";
 			Parent::executePostRequest($url_send, $json_data);
 
 			return $this->redirect(['view', 'id' => $mileageCardId]);
@@ -370,7 +370,7 @@ class MileageCardController extends BaseController
 		$json_data = json_encode($data);
 		
 		// post url
-		$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-cards';
+		$putUrl = 'mileage-card%2Fapprove-cards';
 		$putResponse = Parent::executePutRequest($putUrl, $json_data);  // indirect RBAC
 		$obj = json_decode($putResponse, true);
 		$responseMileageCardID = $obj[0]["MileageCardID"];
@@ -403,7 +403,7 @@ class MileageCardController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-entry%2Fdeactivate';
+			$putUrl = 'mileage-entry%2Fdeactivate';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
 			$obj = json_decode($putResponse, true);
 			$responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
@@ -439,7 +439,7 @@ class MileageCardController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=mileage-card%2Fapprove-cards';
+			$putUrl = 'mileage-card%2Fapprove-cards';
 			Parent::executePutRequest($putUrl, $json_data); //indirect rbac
 
 			return $this->redirect(['index']);

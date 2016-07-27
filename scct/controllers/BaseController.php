@@ -14,6 +14,9 @@ use yii\data\ArrayDataProvider;
 
 class BaseController extends Controller
 {
+
+    const VERSION = "1.0";
+
 	public function filterColumn($resultData, $column, $param) {
 		if($resultData == null) {
 			return null;
@@ -71,10 +74,15 @@ class BaseController extends Controller
             ],
         ];
     }
-	
-	//function generates and executes a "GET" request and returns the response
+
+    public static function prependURL($path) {
+        return "http://api.southerncrossinc.com/index.php?r=$path";
+    }
+
+    //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url)
 	{
+        $url = self::prependURL($url);
 		//set headers
 		$headers = array(
 			'X-Client:CometTracker',
@@ -109,6 +117,7 @@ class BaseController extends Controller
 	//function generates and executes a "POST" request and returns the response
     public static function executePostRequest($url, $postData)
 	{
+        $url = self::prependURL($url);
 		//set headers
 		$headers = array(
 			'X-Client:CometTracker',
@@ -145,6 +154,7 @@ class BaseController extends Controller
 	//function generates and executes a "PUT" request and returns the response
 	public static function executePutRequest($url, $putData)
 	{
+        $url = self::prependURL($url);
 		//set headers
 		$headers = array(
 			'X-Client:CometTracker',
@@ -181,6 +191,7 @@ class BaseController extends Controller
 	//function generates and executes a "Delete" request and returns the response
 	public static function executeDeleteRequest($url)
 	{
+        $url = self::prependURL($url);
 		//set headers
 		$headers = array(
 			'X-Client:CometTracker',
@@ -215,7 +226,7 @@ class BaseController extends Controller
 	public static function requirePermission($permission) {
 		//API RBAC permissions check
 		//Will throw 403 if current user doesn't have permission
-		self::executeGetRequest("http://api.southerncrossinc.com/index.php?r=permissions%2Fcheck-permission&permission=$permission");
+		self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission");
 		return true;
 	}
 	

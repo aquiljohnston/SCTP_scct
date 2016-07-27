@@ -47,7 +47,7 @@ class TimeCardController extends BaseController
 			if ($week == "") $week = "current";
 
 			//build url with params
-			$url = "http://api.southerncrossinc.com/index.php?r=time-card%2Fget-cards&week=" . $week;
+			$url = "time-card%2Fget-cards&week=" . $week;
 			$response = Parent::executeGetRequest($url);
 
 			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
@@ -129,8 +129,8 @@ class TimeCardController extends BaseController
 				$id = str_replace("yes", "", $id);
 				$duplicateFlag = 1;
 			}
-			$url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fget-entries&cardID='.$id;
-			$time_card_url = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fview&id='.$id;
+			$url = 'time-card%2Fget-entries&cardID='.$id;
+			$time_card_url = 'time-card%2Fview&id='.$id;
 
 			$response = Parent::executeGetRequest($url); // rbac check
 			$time_card_response = Parent::executeGetRequest($time_card_url); // rbac check
@@ -290,11 +290,11 @@ class TimeCardController extends BaseController
 
 			//GET DATA TO FILL FORM DROPDOWNS//
 			//get clients for form dropdown
-			$activityCodeUrl = "http://api.southerncrossinc.com/index.php?r=activity-code%2Fget-code-dropdowns";
+			$activityCodeUrl = "activity-code%2Fget-code-dropdowns";
 			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
 			$activityCode = json_decode($activityCodeResponse, true);
 
-			$activityPayCodeUrl = "http://api.southerncrossinc.com/index.php?r=pay-code%2Fget-code-dropdowns";
+			$activityPayCodeUrl = "pay-code%2Fget-code-dropdowns";
 			$activityPayCodeResponse = Parent::executeGetRequest($activityPayCodeUrl);
 			$activityPayCode = json_decode($activityPayCodeResponse, true);
 
@@ -352,7 +352,7 @@ class TimeCardController extends BaseController
 
 					try {
 						// post url
-						$url_send_activity = 'http://api.southerncrossinc.com/index.php?r=activity%2Fcreate';
+						$url_send_activity = 'activity%2Fcreate';
 						$response_activity = Parent::executePostRequest($url_send_activity, $json_data);
 						$obj = json_decode($response_activity, true);
 
@@ -398,7 +398,7 @@ class TimeCardController extends BaseController
 			$json_data = json_encode($data);
 
 			// post url
-			$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-cards';
+			$putUrl = 'time-card%2Fapprove-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
@@ -437,7 +437,7 @@ class TimeCardController extends BaseController
 				$json_data = json_encode($data);
 				
 				// post url
-				$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-entry%2Fdeactivate';
+				$putUrl = 'time-entry%2Fdeactivate';
 				$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
 				$obj = json_decode($putResponse, true);
 				$responseTimeCardID = $obj[0]["TimeEntryTimeCardID"];
@@ -477,7 +477,7 @@ class TimeCardController extends BaseController
 				$json_data = json_encode($data);
 				
 				// post url
-					$putUrl = 'http://api.southerncrossinc.com/index.php?r=time-card%2Fapprove-cards';
+					$putUrl = 'time-card%2Fapprove-cards';
 					$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
 					
 					return $this->redirect(['index']);
