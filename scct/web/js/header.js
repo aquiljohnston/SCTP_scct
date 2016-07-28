@@ -1,5 +1,7 @@
 $(document).ready(function(){
     
+	$('#loading').hide();
+	
     var head = $("<a href='index.php?r=home'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
@@ -101,9 +103,16 @@ $(document).ready(function(){
 			url: "index.php?r=home%2Fget-nav-menu",
 			dataType: "json",
 			data: {id: PreFixUrl},
+			beforeSend: function() {
+				 $('#loading').show();
+			  },
+			  complete: function(){
+				 $('#loading').hide();
+			  },
 			success: function(data){
+			$('#loading').hide();
 				data = $.parseJSON(data.navMenu);
-				console.log(JSON.stringify(data, null, 2));
+				//console.log(JSON.stringify(data, null, 2));
 				NavBar(data);
 			}
 		});
