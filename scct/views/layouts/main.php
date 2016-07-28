@@ -24,7 +24,8 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
+	<div id="loading">
+	</div>
 	<div class="wrap">
 		<!--start-header-->
 		<div class="header navbar-fixed-top" id="top-wrapper">
