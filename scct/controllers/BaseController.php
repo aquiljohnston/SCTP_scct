@@ -15,8 +15,9 @@ use yii\data\ArrayDataProvider;
 class BaseController extends Controller
 {
 
-    const VERSION = "1.0";
-
+    const VERSION = "v1";
+    const XClient = "apidev";
+    
 	public function filterColumn($resultData, $column, $param) {
 		if($resultData == null) {
 			return null;
@@ -76,7 +77,8 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path) {
-        return "http://api.southerncrossinc.com/index.php?r=$path";
+        return "http://apidev.southerncrossinc.com/index.php?r=" . self::VERSION . "%2F$path";
+        //return "http://localhost:9090/index.php?r=" . self::VERSION . "%2F$path";
     }
 
     //function generates and executes a "GET" request and returns the response
@@ -85,7 +87,7 @@ class BaseController extends Controller
         $url = self::prependURL($url);
 		//set headers
 		$headers = array(
-			'X-Client:CometTracker',
+			'X-Client:' . self::XClient,
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -103,7 +105,7 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+			Parent::redirect("/index.php?r=login%2Fuser-logout");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -120,7 +122,7 @@ class BaseController extends Controller
         $url = self::prependURL($url);
 		//set headers
 		$headers = array(
-			'X-Client:CometTracker',
+			'X-Client:' . self::XClient,
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
@@ -140,7 +142,7 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+			Parent::redirect("/index.php?r=login%2Fuser-logout");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -157,7 +159,7 @@ class BaseController extends Controller
         $url = self::prependURL($url);
 		//set headers
 		$headers = array(
-			'X-Client:CometTracker',
+			'X-Client:' . self::XClient,
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
@@ -177,7 +179,7 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+			Parent::redirect("/index.php?r=login%2Fuser-logout");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -194,7 +196,7 @@ class BaseController extends Controller
         $url = self::prependURL($url);
 		//set headers
 		$headers = array(
-			'X-Client:CometTracker',
+			'X-Client:' . self::XClient,
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -212,7 +214,7 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("http://scct.southerncrossinc.com/index.php?r=login%2Fuser-logout");
+			Parent::redirect("/index.php?r=login%2Fuser-logout");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{

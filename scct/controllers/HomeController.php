@@ -45,15 +45,11 @@ class HomeController extends BaseController
         // Reading the response from the the api and filling the GridView
         $url = 'notification%2Fget-notifications';
         $response = Parent::executeGetRequest($url);
-
         //Passing data to the dataProvider and formatting it in an associative array
         $dataProvider = json_decode($response, true);
 
         $firstName = $dataProvider["firstName"];
         $lastName = $dataProvider["lastName"];
-
-        Yii::trace("Tao".$firstName);
-        Yii::trace("Zhang".$lastName);
 
         $this->equipmentInfo = [];
         $this->timeCardInfo = [];
@@ -175,7 +171,7 @@ class HomeController extends BaseController
 		if (Yii::$app->request->isAjax) {
 			$data = Yii::$app->request->post();
 			
-			$navMenuUrl = "menu%2Fget&project=".$id;
+			$navMenuUrl = "menu%2Fget&project=$id"; //scct"; //Switch for localhost
 			//get nav menu by calling API route
 			$mavMenuResponse = Parent::executeGetRequest($navMenuUrl); // indirect rbac
 			
