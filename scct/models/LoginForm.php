@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use app\controllers\BaseController;
+use Faker\Provider\Base;
 use Yii;
 use yii\base\Model;
 use linslin\yii2\curl;
@@ -81,7 +83,8 @@ class LoginForm extends Model
     {
         if ($this->_user === false) {
             // Authenticate using the SCAPI 
-            $url = "http://api.southerncrossinc.com//index.php?r=login%2Fuser-login";
+            //$url = "http://apidev.southerncrossinc.com/index.php?r=v1%2Flogin%2Fuser-login";
+            $url = BaseController::prependURL("login%2Fuser-login");
             $secretKey = 'sparusholdings12';
             $iv = 'abcdefghijklmnop';
             $pass = openssl_encrypt($this->password,  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
@@ -97,7 +100,7 @@ class LoginForm extends Model
             curl_setopt($curl, CURLOPT_POSTFIELDS,$json_data);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-				'X-Client:CometTracker',
+				'X-Client:' . BaseController::XClient,
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($json_data))
             );
