@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	 <?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_VERTICAL,
 				'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
+                'options' => ['id' => 'projectAdduserform']
 			]); ?>
 		<div class="row">
 		<div class="col-sm-6">
@@ -67,8 +68,8 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	
 	<div class="form-group" id="">
-       <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success']) ?>
-	   <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>
     </div>
-	
+    <?php ActiveForm::end(); ?>
 </div>
