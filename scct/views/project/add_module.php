@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	 <?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_VERTICAL,
 				'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
+                'options' => ['id' => 'projectAddModuleform']
 			]); ?>
 		<div class="row">
 		<div class="col-sm-6">
@@ -67,8 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	
 	<div class="form-group" id="">
-       <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success']) ?>
-	   <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <!-- Taken from commit a09e6b8d7fed3035d888ade56ffd0e1a623f4c00 on PGE-Web -->
+        <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddModuleSubmitBtn']) ?>
+        <?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddModuleResetBtn']) ?>
     </div>
 	
 </div>

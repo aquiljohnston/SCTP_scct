@@ -330,7 +330,7 @@ class ProjectController extends BaseController
 			$jsonData = json_encode($data);
 
 			//set post url
-			$postUrl = 'api.southerncrossinc.com/index.php?r=project%2Fadd-remove-users&projectID='.$id;
+			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
 			//execute post request
 			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
 			//refresh page
