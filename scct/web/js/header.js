@@ -1,7 +1,7 @@
 $(document).ready(function(){
     
 	$('#loading').hide();
-    var baseUrl = "http://scct.southerncrosslighthouse.com/";
+    var baseUrl = "http://scct.southerncrossinc.com/";
     if (window.location.hostname.indexOf('local')>=0) {
         baseUrl = "http://"+window.location.hostname+":" + window.location.port + "/";
     }
