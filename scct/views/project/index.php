@@ -51,21 +51,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'kartik\grid\ActionColumn',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
-        			$url ='index.php?r=project%2Fview&id='.$model["ProjectID"];
+        			$url ='/project/view?id='.$model["ProjectID"];
         			return $url;
         			}
         			if ($action === 'update') {
-        			$url ='index.php?r=project%2Fupdate&id='.$model["ProjectID"];
+        			$url ='/project/update?id='.$model["ProjectID"];
         			return $url;
         			}
         			if ($action === 'delete') {
-        			$url ='index.php?r=project%2Fdelete&id='.$model["ProjectID"];											
+        			$url ='/project/delete?id='.$model["ProjectID"];
         			return $url;
         			}
         		},
                 'buttons' => [
                     'delete' => function ($url, $model, $key) {
-                        $url ='/index.php?r=project%2Fdelete&id='.$model["ProjectID"];       
+                        $url ='/project/delete?id='.$model["ProjectID"];
                             $options = [
                             'title' => Yii::t('yii', 'Delete'),
                             'aria-label' => Yii::t('yii', 'Delete'),

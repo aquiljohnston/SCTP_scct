@@ -49,11 +49,11 @@ $this->params['breadcrumbs'][] = $this->title;
 			'template' => '{view} {update}',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
-        			$url ='index.php?r=client%2Fview&id='.$model["ClientID"];
+        			$url ='/client/view?id='.$model["ClientID"];
         			return $url;
         			}
         			if ($action === 'update') {
-        			$url ='index.php?r=client%2Fupdate&id='.$model["ClientID"];
+        			$url = '/client/update?id='.$model["ClientID"];
         			return $url;
         			}
         		},

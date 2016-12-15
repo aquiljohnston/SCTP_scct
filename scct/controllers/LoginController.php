@@ -55,7 +55,7 @@ class LoginController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}else{
-			return $this->redirect('index.php?r=home');
+			return $this->redirect(['home/index']);
 		}
 
         // $model = new LoginForm();
@@ -67,7 +67,7 @@ class LoginController extends BaseController
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
-				return $this->redirect('index.php?r=home');
+				return $this->redirect(['home/index']);
 		}else{
 
 			$loginError = false;
@@ -80,7 +80,7 @@ class LoginController extends BaseController
 				$userIdentity->UserID = $user['AuthUserID'];
 				Yii::$app->user->login($userIdentity);
 				Yii::Trace("identity user id: ".Yii::$app->user->getId());
-				return $this->redirect('index.php?r=home');
+				return $this->redirect(['home/index']);
 			} else {
 				if(Yii::$app->request->isPost) {
 					$loginError = true;
@@ -106,6 +106,6 @@ class LoginController extends BaseController
 		$url = 'login%2Fuser-logout&userID='.$id;
 		$response = Parent::executeGetRequest($url);
 		
-        return $this->redirect(['login']);
+        return $this->redirect(['login/index']);
     }
 }

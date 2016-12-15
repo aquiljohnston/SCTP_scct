@@ -31,14 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view' && $model["Project"] === 'Total') {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/equipment/index?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filteraccepted=Pending|No&r=equipment%2Findex";
+                            "&filteraccepted=Pending|No";
                         return $url;
                     } else {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/equipment/index?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filteraccepted=Pending|No&r=equipment%2Findex";
+                            "&filteraccepted=Pending|No";
                         return $url;
                     }
                 }
@@ -65,14 +65,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view' && $model["Project"] === 'Total') {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/time-card/index?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filterapproved=No&week=prior&r=time-card%2Findex";
+                            "&filterapproved=No&week=prior";
                         return $url;
                     } else {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/time-card/index?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filterapproved=No&week=prior&r=time-card%2Findex";
+                            "&filterapproved=No&week=prior";
                         return $url;
                     }
                 }
@@ -99,14 +99,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{view}',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view' && $model["Project"] === 'Total') {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/mileage-card/index?filterprojectname='
                             . $this->context->getAllProjects() .
-                            "&filterapproved=No&week=prior&r=mileage-card%2Findex";
+                            "&filterapproved=No&week=prior";
                         return $url;
                     } else {
-                        $url = 'index.php?filterprojectname='
+                        $url = '/mileage-card/index?filterprojectname='
                             . $this->context->trimString($model["Project"]) .
-                            "&filterapproved=No&week=prior&r=mileage-card%2Findex";
+                            "&filterapproved=No&week=prior";
                         return $url;
                     }
                 }
