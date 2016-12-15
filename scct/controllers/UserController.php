@@ -99,7 +99,7 @@ class UserController extends BaseController
 		$roles = json_decode($rolesResponse, true);
 
 		//get types for form dropdown
-		$typeUrl = "employee-type%2Fget-type-dropdowns";
+		$typeUrl = "dropdown%2Fget-employee-type-dropdown";
 		$typeResponse = Parent::executeGetRequest($typeUrl);
 		$types = json_decode($typeResponse, true);
 
