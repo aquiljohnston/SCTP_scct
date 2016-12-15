@@ -2,7 +2,7 @@ $(document).ready(function(){
     
 	$('#loading').hide();
 	
-    var head = $("<a href='index.php?r=home'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+    var head = $("<a href='/home/index'><img src='/logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
     var toggleButton =    "<div class='navbar-default navbar-header'>"
@@ -35,7 +35,7 @@ $(document).ready(function(){
 	$(".adminMenu").prepend(adminHead);
 	
 	//set login logo link
-	var sc_logout_logo = $("<a href='index.php?'><img src='logo/sc_logo.png' alt='' height='50' width='300' ></a>");
+	var sc_logout_logo = $("<a href='/'><img src='/logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".sc_logout_logo").prepend(sc_logout_logo);
 	
 	//login header setting
@@ -148,9 +148,9 @@ $(document).ready(function(){
 
 							for(i = 0; i < CometTrackerSubNavigationLength; i++){
 								if(CometTrackerSubNavigationArray[i].enabled.toString() != 0){
-									SubNavigationStr += "<li><a data-description='Adminstration Option' href='index.php?r="+CometTrackerSubNavigationArray[i].Url.toString()+"%2Findex'>"+CometTrackerSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+									SubNavigationStr += "<li><a data-description='Adminstration Option' href='/"+CometTrackerSubNavigationArray[i].Url.toString()+"/index'>"+CometTrackerSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
 								}else{
-									continue;
+									continue; //unnecessary
 								}
 							}
 
@@ -177,7 +177,7 @@ $(document).ready(function(){
 									
 									if(DispatchSubNavigationLength > 0){
 										DispatchDropdown += "<li class='dropdown'>"
-															+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+															+"<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
 															+ DispatchArray.NavigationName.toString()
 															+"<b class='caret'></b></a>"
 															//+ "<ul class='dropdown-menu' role='menu'>";
@@ -185,7 +185,7 @@ $(document).ready(function(){
 										for(var i = 0; i < DispatchSubNavigationLength; i++){
 											if(DispatchSubNavigationArray[i].enabled.toString() != 0){
 												dropdownFlag = 1;
-												SubNavigationStr += "<li><a data-description='Dispatch Option' href='index.php?r="+DispatchSubNavigationArray[i].Url.toString()+"%2Findex'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
+												SubNavigationStr += "<li><a data-description='Dispatch Option' href='/"+DispatchSubNavigationArray[i].Url.toString()+"/index'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
 											}else{
 												continue;
 											}
@@ -198,14 +198,14 @@ $(document).ready(function(){
 									}	
 									
 								}else{
-									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='index.php?r="+DispatchArray.Url.toString()+"%2Findex'>"+DispatchArray.NavigationName.toString()+"</a></li>";
+									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='/"+DispatchArray.Url.toString()+"/index'>"+DispatchArray.NavigationName.toString()+"</a></li>";
 								}
 							}
 						}
 						if (data.Modules[0].Home.enabled.toString() !=0){
 							HomeArray = data.Modules[0].Home.NavigationMenu[0];
 
-							HomeDropdown = 	$("<li><a id='home_btn' href='index.php?'>"+HomeArray.NavigationName.toString()+"</a></li>");
+							HomeDropdown = 	$("<li><a id='home_btn' href='/'>"+HomeArray.NavigationName.toString()+"</a></li>");
 
 						}
 						if(data.Modules[0].Home.enabled.toString() == data.Modules[0].Dispatch.enabled.toString() == data.Modules[0].CometTracker.enabled.toString() == 0){
