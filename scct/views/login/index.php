@@ -50,3 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
         Ref. code <code>app\models\User::$users</code>.-->
     </div>
 </div>
+
+<script type="text/javascript">
+    localStorage.clear();
+</script>

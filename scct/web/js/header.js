@@ -1,7 +1,10 @@
 $(document).ready(function(){
     
 	$('#loading').hide();
-	
+    var baseUrl = "http://scct.southerncrosslighthouse.com/";
+    if (window.location.hostname.indexOf('local')>=0) {
+        baseUrl = "http://"+window.location.hostname+":" + window.location.port + "/";
+    }
     var head = $("<a href='/home/index'><img src='/logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
@@ -71,51 +74,34 @@ $(document).ready(function(){
             userRoleID = defaultID;
         }
 
-		//setup ajax call to get all project associate with the user
-		/*$.ajax({
-			type:"POST",
-			url:"index.php?r=project%2Fget-all-projects",
-			dataType:"json",
-			data: {userID: userRoleID},
-			beforeSend: function () {
-                        //alert("before send");
-                    },
-			success: function(data){
-				//alert("success to get projects! "+data.projects);
-				var Data = $.parseJSON(data.projects);
-				$('#projects_dropdown').empty();
-				$('#projects_dropdown').append('<li><a data-description="All Projects" href="index.php?r=project-landing%2Findex">My Projects</a></li><hr id="seperator_line">');
+        //Build Table-Driven Navigation Menu
+        if (localStorage.getItem('scct-navbar-saved') != "true") {
+            $.ajax({
+                type: "GET",
+                url: baseUrl + "home/get-nav-menu",
+                dataType: "json",
+                data: {id: PreFixUrl},
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+                complete: function () {
+                    $('#loading').hide();
+                },
+                success: function (data) {
+                    $('#loading').hide();
+                    data = $.parseJSON(data.navMenu);
+                    //console.log(JSON.stringify(data, null, 2));
+                    NavBar(data);
+                }
+            });
+        } else {
+            if (localStorage.getItem('navbar-blank') == "true") {
+                $("#nav").addClass("blankNavBar");
+            } else {
+                $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
+            }
 
-				$.each(Data, function(i, item){
-					//alert("project name are "+Data[i].ProjectName);
-					//append projec name to the dropdown-menu
-					$('#projects_dropdown').append('<li><a data-description="SubProject" href="index.php?r=project-landing%2Fview&id='+Data[i].ProjectID+'">'+Data[i].ProjectName+'</a></li>');
-				});
-			},
-			failure: function () {
-				alert("Failure getting project list!");
-			}
-		});*/
-
-		//Build Table-Driven Navigation Menu
-		$.ajax({
-			type: "GET",
-			url: "/home/get-nav-menu",
-			dataType: "json",
-			data: {id: PreFixUrl},
-			beforeSend: function() {
-				 $('#loading').show();
-			  },
-			  complete: function(){
-				 $('#loading').hide();
-			  },
-			success: function(data){
-			$('#loading').hide();
-				data = $.parseJSON(data.navMenu);
-				//console.log(JSON.stringify(data, null, 2));
-				NavBar(data);
-			}
-		});
+        }
 
 		function NavBar(data){
 				var str="";
@@ -205,16 +191,17 @@ $(document).ready(function(){
 						if (data.Modules[0].Home.enabled.toString() !=0){
 							HomeArray = data.Modules[0].Home.NavigationMenu[0];
 
-							HomeDropdown = 	$("<li><a id='home_btn' href='/'>"+HomeArray.NavigationName.toString()+"</a></li>");
-
+							HomeDropdown = 	"<li><a id='home_btn' href='/'>"+HomeArray.NavigationName.toString()+"</a></li>";
 						}
 						if(data.Modules[0].Home.enabled.toString() == data.Modules[0].Dispatch.enabled.toString() == data.Modules[0].CometTracker.enabled.toString() == 0){
 							$("#nav").addClass("blankNavBar");
-							
+							localStorage.setItem("scct-navbar-bar-blank", true);
 						}else{
-								$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);	
+							$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
+                            localStorage.setItem('scct-navbar-data', HomeDropdown + DispatchDropdown + AdminDropdown);
 						}
 					}
+        			localStorage.setItem('scct-navbar-saved', 'true');
 			}
 
 			// assign class to current active link
