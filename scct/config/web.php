@@ -43,6 +43,15 @@ $config = [
             ],
         ],
         //'db' => require(__DIR__ . '/db.php'),
+        'urlManager' => [
+			'class' => 'yii\web\UrlManager',
+			'enablePrettyUrl' => true,
+			'showScriptName' => false,
+			'enableStrictParsing' => false,
+			'rules' => [
+				// your rules go here
+			],
+		]
     ],
 	'modules' => [
         'dispatch' => [

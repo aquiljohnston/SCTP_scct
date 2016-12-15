@@ -100,7 +100,7 @@ $(document).ready(function(){
 		//Build Table-Driven Navigation Menu
 		$.ajax({
 			type: "GET",
-			url: "index.php?r=home%2Fget-nav-menu",
+			url: "/home/get-nav-menu",
 			dataType: "json",
 			data: {id: PreFixUrl},
 			beforeSend: function() {
