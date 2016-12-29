@@ -76,6 +76,7 @@ $(document).ready(function(){
 
         //Build Table-Driven Navigation Menu
         if (localStorage.getItem('scct-navbar-saved') != "true") {
+            $("#nav").addClass("blankNavBar");
             $.ajax({
                 type: "GET",
                 url: baseUrl + "home/get-nav-menu",
@@ -194,10 +195,13 @@ $(document).ready(function(){
 							HomeDropdown = 	"<li><a id='home_btn' href='/'>"+HomeArray.NavigationName.toString()+"</a></li>";
 						}
 						if(data.Modules[0].Home.enabled.toString() == data.Modules[0].Dispatch.enabled.toString() == data.Modules[0].CometTracker.enabled.toString() == 0){
-							$("#nav").addClass("blankNavBar");
+							// Change: Automatically set blankNavBar class when loading page.
+							// We don't need to do it again.
 							localStorage.setItem("scct-navbar-bar-blank", true);
 						}else{
-							$("#nav").prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
+							var nav = $("#nav");
+                            nav.removeClass("blankNavBar"); // Added for loading, now we remove.
+							nav.prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
                             localStorage.setItem('scct-navbar-data', HomeDropdown + DispatchDropdown + AdminDropdown);
 						}
 					}
