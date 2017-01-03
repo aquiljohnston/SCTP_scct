@@ -1,10 +1,6 @@
 $(document).ready(function(){
     
 	$('#loading').hide();
-    var baseUrl = "http://scct.southerncrossinc.com/";
-    if (window.location.hostname.indexOf('local')>=0) {
-        baseUrl = "http://"+window.location.hostname+":" + window.location.port + "/";
-    }
     var head = $("<a href='/home/index'><img src='/logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".logo").prepend(head);
 
@@ -79,7 +75,7 @@ $(document).ready(function(){
             $("#nav").addClass("blankNavBar");
             $.ajax({
                 type: "GET",
-                url: baseUrl + "home/get-nav-menu",
+                url: "/home/get-nav-menu",
                 dataType: "json",
                 data: {id: PreFixUrl},
                 beforeSend: function () {
