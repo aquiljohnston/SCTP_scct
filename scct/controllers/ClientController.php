@@ -251,15 +251,15 @@ class ClientController extends BaseController
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionDeactivate($id)
     {
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'client%2Fdelete&id='.$id;
-		Parent::executeDeleteRequest($url); //indirect RBAC
-		$this->redirect('/index.php?r=client%2Findex');
+		$url = 'client%2Fdeactivate&id='.$id;
+		Parent::executePostRequest($url, ""); //indirect RBAC
+		$this->redirect(['client/index']);
     }
 }
