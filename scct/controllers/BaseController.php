@@ -105,7 +105,8 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-			Parent::redirect("/login/user-logout");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -142,7 +143,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("/login/user-logout");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -179,7 +181,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("/login/user-logout");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -214,7 +217,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-			Parent::redirect("/login/user-logout");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
