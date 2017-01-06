@@ -60,7 +60,11 @@ $(document).ready(function(){
 		var PreFixUrl = window.location.hostname;
 		
 		// get prefix of current project
-		PreFixUrl = PreFixUrl.replace(".southerncrossinc.com", "");
+		PreFixUrl = PreFixUrl.split(".");
+		PreFixUrl = PreFixUrl[0];
+		if(PreFixUrl === "localhost") {
+			PreFixUrl = "scct"; // for localhost
+		}
 
 		if(adminID != null){
 			userRoleID = adminID;
