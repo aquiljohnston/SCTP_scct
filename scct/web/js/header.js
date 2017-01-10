@@ -162,16 +162,19 @@ $(document).ready(function(){
 							DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
 							DispatchSubNavigationArray = DispatchArray.SubNavigation;
 
+							// get tab name, if tab is disable not showing
+							//var tabName = DispatchArray.enabled.toString() != 0 ? DispatchArray.NavigationName.toString() : "";
 							if (DispatchSubNavigationLength > 0) {
+								if (DispatchArray.enabled.toString() == 0)
+									continue;
+
 								DispatchDropdown += "<li class='dropdown'>"
 									+ "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
 									+ DispatchArray.NavigationName.toString()
 									+ "<b class='caret'></b></a>"
 								//+ "<ul class='dropdown-menu' role='menu'>";
 
-								// todo: check enabled flag for Dashboard menu
 								if (DispatchArray.NavigationName.toString() == "Dashboard" && DispatchArray.enabled.toString() != 0){
-									//if (DispatchArray.NavigationName.toString() == "Dashboard") {
 									for (var i = 0; i < DispatchSubNavigationLength; i++) {
 										if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
 											dropdownFlag = 1;
@@ -180,19 +183,17 @@ $(document).ready(function(){
 											continue;
 										}
 									}
-								} else {
-									// todo: check enabled flag for Dispatch menu
-									if (DispatchArray.enabled.toString() != 0){
-										for (var i = 0; i < DispatchSubNavigationLength; i++) {
-											if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
-												dropdownFlag = 1;
-												var dispatchModule = DispatchSubNavigationArray[i].SubNavigationName.toString().toLowerCase();
-												SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[0].Url.toString() + "/" + dispatchModule + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
-											} else {
-												continue;
-											}
+								}
+								if (DispatchArray.NavigationName.toString() == "Dispatch" && DispatchArray.enabled.toString() != 0){
+									for (var i = 0; i < DispatchSubNavigationLength; i++) {
+										if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
+											dropdownFlag = 1;
+											var dispatchModule = DispatchSubNavigationArray[i].SubNavigationName.toString().toLowerCase();
+											SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[0].Url.toString() + "/" + dispatchModule + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
+										} else {
+											continue;
 										}
-									} //end of enabled flag check
+									}
 								}
 								if (dropdownFlag == 1) {
 									DispatchDropdown = DispatchDropdown + "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
@@ -211,7 +212,6 @@ $(document).ready(function(){
 
 				if (data.Modules[0].Home.enabled.toString() != 0) {
 					HomeArray = data.Modules[0].Home.NavigationMenu[0];
-					// todo: check if home enabled flag
 					if (HomeArray.enabled.toString() != 0){
 						HomeDropdown = $("<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>");
 						var HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
