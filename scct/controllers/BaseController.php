@@ -244,4 +244,27 @@ class BaseController extends Controller
 			return false;
 		}
 	}
+
+    /**
+     * Get Nav menu Json
+     * It will return nav menu in json format
+     * @return mixed
+     * @throws ForbiddenHttpException
+     */
+    public function actionGetNavMenu($id)
+    {
+
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post();
+
+            $navMenuUrl = "menu%2Fget&project=$id"; //scct"; //Switch for localhost
+            //get nav menu by calling API route
+            $mavMenuResponse = self::executeGetRequest($navMenuUrl); // indirect rbac
+
+            //set up response data type
+            Yii::$app->response->format = 'json';
+
+            return ['navMenu' => $mavMenuResponse];
+        }
+    }
 }
