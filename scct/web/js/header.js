@@ -79,7 +79,7 @@ $(document).ready(function(){
             $("#nav").addClass("blankNavBar");
             $.ajax({
                 type: "GET",
-                url: "/home/get-nav-menu",
+                url: "/base/get-nav-menu",
                 dataType: "json",
                 data: {id: PreFixUrl},
                 beforeSend: function () {
@@ -104,109 +104,148 @@ $(document).ready(function(){
 
         }
 
-		function NavBar(data){
-				var str="";
-				var SubNavigationStr = "";
-				var DispatchDropdown = "";
-				var HomeDropdown = "";
-				var AdminDropdown = "";
-				var dropdownFlag = 0;
+		function NavBar(data) {
+			var str = "";
+			var SubNavigationStr = "";
+			var DispatchDropdown = "";
+			var HomeDropdown = "";
+			var AdminDropdown = "";
+			var dropdownFlag = 0;
+			var baseUrl = "/";
+			if (jQuery.isEmptyObject(data)) {
+				str = "Json array is empty";
+			} else {
+				// check which module is enabled
+				if (data.Modules[0].CometTracker.enabled.toString() != 0) {
+					CometTrackerArray = data.Modules[0].CometTracker.NavigationMenu[0];
 
+					// clean SubNavigationStr
+					SubNavigationStr = "";
 
-				if (jQuery.isEmptyObject(data)){
-					str="Json array is empty";
-				}else{
-						// check which module is enabled
-						if (data.Modules[0].CometTracker.enabled.toString() !=0){
-							CometTrackerArray = data.Modules[0].CometTracker.NavigationMenu[0];
+					// get SubNavigationArray  and length of the SubNavigation menu
+					CometTrackerSubNavigationLength = CometTrackerArray.SubNavigation.length;
+					CometTrackerSubNavigationArray = CometTrackerArray.SubNavigation;
 
-							// clean SubNavigationStr
-							SubNavigationStr = "";
+					AdminDropdown = "<li class='dropdown'>"
+						+ "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+						+ CometTrackerArray.NavigationName.toString()
+						+ "<b class='caret'></b></a>"
+						+ "<ul class='dropdown-menu' role='menu'>";
+
+					for (i = 0; i < CometTrackerSubNavigationLength; i++) {
+						if (CometTrackerSubNavigationArray[i].enabled.toString() != 0) {
+							SubNavigationStr += "<li><a data-description='Adminstration Option' href='" + baseUrl + CometTrackerSubNavigationArray[i].Url.toString() + "'>" + CometTrackerSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
+						} else {
+							continue;
+						}
+					}
+
+					AdminDropdown = AdminDropdown + SubNavigationStr + "</ul></li>";
+
+				}
+
+				if (data.Modules[0].Dispatch.enabled.toString() != 0) {
+					// get the length of the NavigationMenu
+					DispatchNavigationMenuLength = data.Modules[0].Dispatch.NavigationMenu.length;
+
+					for (var j = 0; j < DispatchNavigationMenuLength; j++) {
+
+						DispatchArray = data.Modules[0].Dispatch.NavigationMenu[j];
+
+						// clean SubNavigationStr
+						SubNavigationStr = "";
+
+						// if NavigationName is not report
+						if (DispatchArray.NavigationName.toString() != "Reports") {
 
 							// get SubNavigationArray  and length of the SubNavigation menu
-							CometTrackerSubNavigationLength = CometTrackerArray.SubNavigation.length;
-							CometTrackerSubNavigationArray = CometTrackerArray.SubNavigation;
+							DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
+							DispatchSubNavigationArray = DispatchArray.SubNavigation;
 
-							AdminDropdown = "<li class='dropdown'>"
-													+"<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-													+ CometTrackerArray.NavigationName.toString()
-													+"<b class='caret'></b></a>"
-													+ "<ul class='dropdown-menu' role='menu'>";
+							if (DispatchSubNavigationLength > 0) {
+								DispatchDropdown += "<li class='dropdown'>"
+									+ "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+									+ DispatchArray.NavigationName.toString()
+									+ "<b class='caret'></b></a>"
+								//+ "<ul class='dropdown-menu' role='menu'>";
 
-							for(i = 0; i < CometTrackerSubNavigationLength; i++){
-								if(CometTrackerSubNavigationArray[i].enabled.toString() != 0){
-									SubNavigationStr += "<li><a data-description='Adminstration Option' href='/"+CometTrackerSubNavigationArray[i].Url.toString()+"/index'>"+CometTrackerSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
-								}else{
-									continue; //unnecessary
-								}
-							}
-
-							AdminDropdown = AdminDropdown + SubNavigationStr + "</ul></li>";
-
-						}
-						if (data.Modules[0].Dispatch.enabled.toString() !=0){
-							// get the length of the NavigationMenu
-							DispatchNavigationMenuLength = data.Modules[0].Dispatch.NavigationMenu.length;
-
-							for( var j =0; j < DispatchNavigationMenuLength; j++){
-
-								DispatchArray = data.Modules[0].Dispatch.NavigationMenu[j];
-
-								// clean SubNavigationStr
-								SubNavigationStr = "";
-
-								// if NavigationName is not report
-								if(DispatchArray.NavigationName.toString() != "Reports"){
-
-									// get SubNavigationArray  and length of the SubNavigation menu
-									DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
-									DispatchSubNavigationArray = DispatchArray.SubNavigation;
-									
-									if(DispatchSubNavigationLength > 0){
-										DispatchDropdown += "<li class='dropdown'>"
-															+"<a href='#' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-															+ DispatchArray.NavigationName.toString()
-															+"<b class='caret'></b></a>"
-															//+ "<ul class='dropdown-menu' role='menu'>";
-									
-										for(var i = 0; i < DispatchSubNavigationLength; i++){
-											if(DispatchSubNavigationArray[i].enabled.toString() != 0){
+								// todo: check enabled flag for Dashboard menu
+								if (DispatchArray.NavigationName.toString() == "Dashboard" && DispatchArray.enabled.toString() != 0){
+									//if (DispatchArray.NavigationName.toString() == "Dashboard") {
+									for (var i = 0; i < DispatchSubNavigationLength; i++) {
+										if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
+											dropdownFlag = 1;
+											SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[i].Url.toString() + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
+										} else {
+											continue;
+										}
+									}
+								} else {
+									// todo: check enabled flag for Dispatch menu
+									if (DispatchArray.enabled.toString() != 0){
+										for (var i = 0; i < DispatchSubNavigationLength; i++) {
+											if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
 												dropdownFlag = 1;
-												SubNavigationStr += "<li><a data-description='Dispatch Option' href='/"+DispatchSubNavigationArray[i].Url.toString()+"/index'>"+DispatchSubNavigationArray[i].SubNavigationName.toString()+"</a></li>";
-											}else{
+												var dispatchModule = DispatchSubNavigationArray[i].SubNavigationName.toString().toLowerCase();
+												SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[0].Url.toString() + "/" + dispatchModule + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
+											} else {
 												continue;
 											}
 										}
-										if(dropdownFlag == 1){
-											DispatchDropdown = DispatchDropdown + "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
-										}else{
-											DispatchDropdown = DispatchDropdown + SubNavigationStr + "</li>";
-										}
-									}	
-									
-								}else{
-									DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='/"+DispatchArray.Url.toString()+"/index'>"+DispatchArray.NavigationName.toString()+"</a></li>";
+									} //end of enabled flag check
+								}
+								if (dropdownFlag == 1) {
+									DispatchDropdown = DispatchDropdown + "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
+								} else {
+									DispatchDropdown = DispatchDropdown + SubNavigationStr + "</li>";
 								}
 							}
-						}
-						if (data.Modules[0].Home.enabled.toString() !=0){
-							HomeArray = data.Modules[0].Home.NavigationMenu[0];
 
-							HomeDropdown = 	"<li><a id='home_btn' href='/'>"+HomeArray.NavigationName.toString()+"</a></li>";
-						}
-						if(data.Modules[0].Home.enabled.toString() == data.Modules[0].Dispatch.enabled.toString() == data.Modules[0].CometTracker.enabled.toString() == 0){
-							// Change: Automatically set blankNavBar class when loading page.
-							// We don't need to do it again.
-							localStorage.setItem("scct-navbar-bar-blank", true);
-						}else{
-							var nav = $("#nav");
-                            nav.removeClass("blankNavBar"); // Added for loading, now we remove.
-							nav.prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
-                            localStorage.setItem('scct-navbar-data', HomeDropdown + DispatchDropdown + AdminDropdown);
+						} else {
+							if (DispatchArray.enabled.toString() != 0) {
+								DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='" + baseUrl + DispatchArray.Url.toString() + "'>" + DispatchArray.NavigationName.toString() + "</a></li>";
+							}
 						}
 					}
-        			localStorage.setItem('scct-navbar-saved', 'true');
+				}
+
+				if (data.Modules[0].Home.enabled.toString() != 0) {
+					HomeArray = data.Modules[0].Home.NavigationMenu[0];
+					// todo: check if home enabled flag
+					if (HomeArray.enabled.toString() != 0){
+						HomeDropdown = $("<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>");
+						var HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
+					} //end of home enabled flag check
+				}
+				if ((data.Modules[0].Home.enabled.toString() == 0)
+					&& (data.Modules[0].Dispatch.enabled.toString() == 0)
+					&& (data.Modules[0].CometTracker.enabled.toString() == 0)) {
+
+					localStorage.setItem('pge-navbar-blank', 'true');
+				} else {
+					var nav = $("#nav");
+					nav.removeClass("blankNavBar");
+					if (data.Modules[0].Dispatch.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
+						nav.prepend(DispatchDropdown, AdminDropdown);
+
+						localStorage.setItem('pge-navbar-data', DispatchDropdown + AdminDropdown);
+					}else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
+						nav.prepend(HomeDropdown, AdminDropdown);
+
+						localStorage.setItem('pge-navbar-data', HomeDropdownStr + AdminDropdown);
+					}else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].Dispatch.enabled.toString() != 0){
+						nav.prepend(HomeDropdown, DispatchDropdown);
+
+						localStorage.setItem('pge-navbar-data', HomeDropdownStr + DispatchDropdown);
+					}else {
+						nav.prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
+
+						localStorage.setItem('pge-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
+					}
+				}
 			}
+			localStorage.setItem('pge-navbar-saved', 'true');
+		}
 
 			// assign class to current active link
 			var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
