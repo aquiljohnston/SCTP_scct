@@ -27,6 +27,9 @@ class TimeCardController extends BaseController
     /**
      * Lists all TimeCard models.
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\HttpException
      */
     public function actionIndex()
     {
@@ -66,8 +69,37 @@ class TimeCardController extends BaseController
 				],
 			]);
 
+            // Sorting TimeCard table
+            $dataProvider->sort = [
+                'attributes' => [
+                    'UserFirstName' => [
+                        'asc' => ['UserFirstName' => SORT_ASC],
+                        'desc' => ['UserFirstName' => SORT_DESC]
+                    ],
+                    'UserLastName' => [
+                        'asc' => ['UserLastName' => SORT_ASC],
+                        'desc' => ['UserLastName' => SORT_DESC]
+                    ],
+                    'ProjectName' => [
+                        'asc' => ['ProjectName' => SORT_ASC],
+                        'desc' => ['ProjectName' => SORT_DESC]
+                    ],
+                    'TimeCardStartDate' => [
+                        'asc' => ['TimeCardStartDate' => SORT_ASC],
+                        'desc' => ['TimeCardStartDate' => SORT_DESC]
+                    ],
+                    'TimeCardEndDate' => [
+                        'asc' => ['TimeCardEndDate' => SORT_ASC],
+                        'desc' => ['TimeCardEndDate' => SORT_DESC]
+                    ],
+                    'SumHours' => [
+                        'asc' => ['SumHours' => SORT_ASC],
+                        'desc' => ['SumHours' => SORT_DESC]
+                    ]
+                ]
+            ];
+
 			//set timecardid as id
-			//
 			$dataProvider->key = 'TimeCardID';
 
 			$searchModel = [
@@ -108,6 +140,7 @@ class TimeCardController extends BaseController
     /**
      * Displays a single TimeCard model.
      * @param string $id
+     * @throws \yii\web\HttpException
      * @return mixed
      */
     public function actionView($id)
