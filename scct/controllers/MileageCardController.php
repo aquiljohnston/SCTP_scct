@@ -55,6 +55,37 @@ class MileageCardController extends BaseController
 				'pageSize' => 100,
 			]
 		]);
+
+        // Sorting MileageCard table
+        $dataProvider->sort = [
+            'attributes' => [
+                'UserFirstName' => [
+                    'asc' => ['UserFirstName' => SORT_ASC],
+                    'desc' => ['UserFirstName' => SORT_DESC]
+                ],
+                'UserLastName' => [
+                    'asc' => ['UserLastName' => SORT_ASC],
+                    'desc' => ['UserLastName' => SORT_DESC]
+                ],
+                'ProjectName' => [
+                    'asc' => ['ProjectName' => SORT_ASC],
+                    'desc' => ['ProjectName' => SORT_DESC]
+                ],
+                'MileageStartDate' => [
+                    'asc' => ['MileageStartDate' => SORT_ASC],
+                    'desc' => ['MileageStartDate' => SORT_DESC]
+                ],
+                'MileageEndDate' => [
+                    'asc' => ['MileageEndDate' => SORT_ASC],
+                    'desc' => ['MileageEndDate' => SORT_DESC]
+                ],
+                'SumMiles' => [
+                    'asc' => ['SumMiles' => SORT_ASC],
+                    'desc' => ['SumMiles' => SORT_DESC]
+                ]
+            ]
+        ];
+
 		//Set Mile Card ID On the JS Call
 		$dataProvider->key ='MileageCardID';
 
