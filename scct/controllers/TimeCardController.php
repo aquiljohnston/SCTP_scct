@@ -8,6 +8,7 @@ use app\models\TimeCard;
 use app\models\TimeCardSearch;
 use app\models\TimeEntry;
 use app\controllers\BaseController;
+use yii\data\Pagination;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -31,34 +32,64 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex()
+    public function actionIndex($recordNumber = null)
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
+        //guest redirect
+        if (Yii::$app->user->isGuest)
+        {
+            return $this->redirect(['login/login']);
+        }
 
-		try {
-			// create curl for restful call.
-			//get user role
-			$userID = Yii::$app->session['userID'];
-			
-			//get week
-			$week = Yii::$app->request->getQueryParam("week");
-			//week defaults to current
-			if ($week == "") $week = "current";
+        try {
+            // create curl for restful call.
+            //get user role
+            $userID = Yii::$app->session['userID'];
 
-			//build url with params
-			$url = "time-card%2Fget-cards&week=" . $week;
-			$response = Parent::executeGetRequest($url);
+            $model = new \yii\base\DynamicModel([
+                'pagesize'
+            ]);
+            $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
-			$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserFirstName', 'filterfirstname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-			$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'TimeCardApprovedFlag', 'filterapproved');
-			// passing decode data into dataProvider
-			$dataProvider = new ArrayDataProvider
+            // check if type was post, if so, get value from $model
+            if ($model->load(Yii::$app->request->post())) {
+                Yii::trace("pagesize: " . $model->pagesize);
+                $timeCardPageSizeParams = $model->pagesize;
+            } else {
+                if (isset($_GET['per-page'])) {
+                    $timeCardPageSizeParams = $_GET['per-page'];
+                    Yii::trace("Post per-page: " . $_GET['per-page']);
+                } else {
+                    $timeCardPageSizeParams = 10;
+                }
+            }
+
+            if (isset($_GET['timeCardPage'])) {
+                $page = $_GET['timeCardPage'];
+                Yii::trace("Post timeCardPage: " . $_GET['timeCardPage']);
+            }else {
+                $page = 1;
+            }
+
+            //get week
+            if (isset($_POST['week'])) {
+                $week = $_POST['week'];
+                Yii::trace("Post week: " . $_POST['week']);
+            } else {
+                $week = "current";
+            }
+
+            //build url with params
+            $url = "time-card%2Fget-cards&week=" . $week ."&listPerPage=" . $timeCardPageSizeParams . "&page=" . $page;
+            $response = Parent::executeGetRequest($url);
+            $response = json_decode($response, true);
+            $assets = $response['assets'];
+
+            $filteredResultData = $this->filterColumnMultiple($assets, 'UserFirstName', 'filterfirstname');
+            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
+            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
+            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'TimeCardApprovedFlag', 'filterapproved');
+            // passing decode data into dataProvider
+            $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $filteredResultData,
 				/*'key' => function (){
@@ -99,42 +130,49 @@ class TimeCardController extends BaseController
                 ]
             ];
 
-			//set timecardid as id
-			$dataProvider->key = 'TimeCardID';
+            //set timecardid as id
+            $dataProvider->key = 'TimeCardID';
 
-			$searchModel = [
+            $searchModel = [
 				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
 				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
 				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
 				'TimeCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
 			];
 
-			// Create drop down with current selection pre-selected based on GET variable
-			$approvedInput = '<select class="form-control" name="filterapproved">'
+            // Create drop down with current selection pre-selected based on GET variable
+            $approvedInput = '<select class="form-control" name="filterapproved">'
 				. '<option value=""></option><option value="Yes"';
-			if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
-				$approvedInput .= " selected";
-			}
-			$approvedInput .= '>Yes</option><option value="No"';
-			if ($searchModel['TimeCardApprovedFlag'] == "No") {
-				$approvedInput .= ' selected';
-			}
-			$approvedInput .= '>No</option></select>';
+            if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
+                $approvedInput .= " selected";
+            }
+            $approvedInput .= '>Yes</option><option value="No"';
+            if ($searchModel['TimeCardApprovedFlag'] == "No") {
+                $approvedInput .= ' selected';
+            }
+            $approvedInput .= '>No</option></select>';
 
-			//calling index page to pass dataProvider.
-			return $this->render('index', [
-				'dataProvider' => $dataProvider,
-				'searchModel' => $searchModel,
-				'approvedInput' => $approvedInput,
-				'week' => $week
-			]);
-		} catch(ForbiddenHttpException $e) {
-			throw $e;
-		} catch(ErrorException $e) {
-			throw new \yii\web\HttpException(400);
-		} catch(Exception $e) {
-			throw new ServerErrorHttpException;
-		}
+            // set pages to dispatch table
+            $pages = new Pagination($response['pages']);
+
+            //calling index page to pass dataProvider.
+            return $this->render('index', [
+                'dataProvider' => $dataProvider,
+                'searchModel' => $searchModel,
+                'approvedInput' => $approvedInput,
+                'week' => $week,
+                'model' => $model,
+                'timeCardPageSizeParams' => $timeCardPageSizeParams,
+                'pages' => $pages
+            ]);
+
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException;
+        }
     }
 
     /**
@@ -297,11 +335,15 @@ class TimeCardController extends BaseController
 		}
     }
 
-	/**
-	 * Creates a new TimeEntry model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
+    /**
+     * Creates a new TimeEntry model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $id
+     * @param $TimeCardTechID
+     * @param $TimeEntryDate
+     * @return mixed
+     * @throws \yii\web\HttpException
+     */
 	public function actionCreateTimeEntry($id, $TimeCardTechID, $TimeEntryDate)
 	{
 		//guest redirect
@@ -410,12 +452,13 @@ class TimeCardController extends BaseController
 			throw new \yii\web\HttpException(400);
 		}
 	}
-	
+
     /**
      * Approve an existing TimeEntry.
      * If approve is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
+     * @throws \yii\web\HttpException
      */
 	public function actionApprove($id){
 		//guest redirect
@@ -440,12 +483,14 @@ class TimeCardController extends BaseController
 			throw new \yii\web\HttpException(400);
 		}
 	}
-	
-	/**
+
+    /**
      * Deactivate an existing TimeEntry.
      * If deactivate is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
      * @return mixed
+     * @throws \yii\web\HttpException
+     * @internal param string $id
+     *
      */
 	public function actionDeactivate(){
 
@@ -481,12 +526,15 @@ class TimeCardController extends BaseController
 			}
 		}
 	}
-	
-	/**
+
+    /**
      * Approve Multiple existing TimeCard.
      * If approve is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
      * @return mixed
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\HttpException
+     * @internal param string $id
+     *
      */
 	public function actionApproveMultiple() {
 		
@@ -521,10 +569,12 @@ class TimeCardController extends BaseController
 			  throw new \yii\web\BadRequestHttpException;
 		}
 	}
-	
-	/**
+
+    /**
      * Calculate total work hours
+     * @param $dataProvider
      * @return total work hours
+     * @throws \yii\web\HttpException
      */
 	 public function TotalHourCal($dataProvider){
 		try{ 
