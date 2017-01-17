@@ -74,3 +74,12 @@
 div[id^=modalContent] #loading {
 	display: none;
 }
+#timeCardPageSizeLabel{
+	float: right;
+}
+#weekSelection{
+	margin-top: 1%;
+}
+.RecordsPerPageLabel{
+	float: right;
+}

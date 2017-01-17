@@ -45,7 +45,8 @@ class AppAsset extends AssetBundle
 		'js/approve_equipment.js',
 		'js/deactive_multiple_timeEntry.js',
 		'js/deactive_multiple_mileageEntry.js',
-        'js/project.js'
+        'js/project.js',
+        'js/time_card.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
