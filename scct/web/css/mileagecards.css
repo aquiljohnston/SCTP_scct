@@ -1,18 +1,34 @@
-#mileage_card_form{
-	margin-right: 9%;
+#mileage_card_form {
+    margin-right: 9%;
     margin-top: 3%;
 }
-#mileage_card_submit_btn{
-	margin-top: 2%;
-	margin-left: 1%;
+
+#mileage_card_submit_btn {
+    margin-top: 2%;
+    margin-left: 1%;
 }
+
 .white_space {
-	margin-top: 3%;
+    margin-top: 3%;
 }
+
 div[id^=modalContent] .container {
-	padding: 10px 15px 20px;
+    padding: 10px 15px 20px;
 }
+
 div[id^=modalContent] .wrap #top-wrapper {
-	display: none;
+    display: none;
+}
+
+#mileageCardPageSizeLabel {
+    float: right;
+}
+
+#mileageCardWeekSelection {
+    margin-top: 1%;
+}
+
+.RecordsPerPageLabel {
+    float: right;
 }
 
