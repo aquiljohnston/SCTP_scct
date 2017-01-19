@@ -104,16 +104,17 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 					'filter' => $approvedInput
 				],
 				['class' => 'kartik\grid\ActionColumn',
-					'template' => '{view}',
+					'template' => '{view}', // does not include delete
 					'urlCreator' => function ($action, $model, $key, $index) {
 						if ($action === 'view') {
-							$url ='index.php?r=time-card%2Fview&id='.$model["TimeCardID"];
+							$url ='/time-card/view?id='.$model["TimeCardID"];
 							return $url;
 						}
 					},
 					'buttons' => [
+                        // Currently unused due to template string above
 						'delete' => function ($url, $model, $key) {
-							$url ='/index.php?r=time-card%2Fdelete&id='.$model["TimeCardID"];
+							$url ='/time-card/delete?id='.$model["TimeCardID"];
 							$options = [
 								'title' => Yii::t('yii', 'Delete'),
 								'aria-label' => Yii::t('yii', 'Delete'),
