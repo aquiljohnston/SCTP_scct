@@ -41,6 +41,8 @@ class TimeEntry extends \yii\base\model
 	public $TimeEntryModifiedDate;
 	public $TimeEntryModifiedBy;
 
+	//Taken from database
+	const MAX_COMMENT_LENGTH = 255;
     /**
      * @inheritdoc
      */
@@ -49,7 +51,7 @@ class TimeEntry extends \yii\base\model
         return [
             [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
             [['TimeEntryID', 'TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'integer'],
-            [['TimeEntryComment'], 'string']
+            [['TimeEntryComment'], 'string', 'max' => self::MAX_COMMENT_LENGTH]
         ];
     }
 
