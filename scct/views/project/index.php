@@ -49,6 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectEndDate',
 
             ['class' => 'kartik\grid\ActionColumn',
+                'template'=>'{view} {update} {deactivate}',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
         			$url ='/project/view?id='.$model["ProjectID"];
@@ -58,19 +59,19 @@ $this->params['breadcrumbs'][] = $this->title;
         			$url ='/project/update?id='.$model["ProjectID"];
         			return $url;
         			}
-        			if ($action === 'delete') {
-        			$url ='/project/delete?id='.$model["ProjectID"];
+        			if ($action === 'deactivate') {
+        			$url ='/project/deactivate?id='.$model["ProjectID"];
         			return $url;
         			}
         		},
                 'buttons' => [
-                    'delete' => function ($url, $model, $key) {
-                        $url ='/project/delete?id='.$model["ProjectID"];
+                    'deactivate' => function ($url, $model, $key) {
+                        $url ='/project/deactivate?id='.$model["ProjectID"];
                             $options = [
-                            'title' => Yii::t('yii', 'Delete'),
-                            'aria-label' => Yii::t('yii', 'Delete'),
-                            'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                            'data-method' => 'Delete',
+                            'title' => Yii::t('yii', 'Deactivate'),
+                            'aria-label' => Yii::t('yii', 'Deactivate'),
+                            'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this item?'),
+                            'data-method' => 'Post',
                             'data-pjax' => '0',
                             ];
                             return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);

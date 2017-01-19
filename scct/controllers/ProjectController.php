@@ -218,14 +218,24 @@ class ProjectController extends BaseController
 				$putResponse = Parent::executePutRequest($putUrl, $json_data);
 				
 				$obj = json_decode($putResponse, true);
-				
-				return $this->redirect(['view', 'id' => $model["ProjectID"]]);
+                if(isset($obj["status"]) && $obj["status"] == 400) {
+                    return $this->render('update', [
+                        'model' => $model,
+                        'clients' => $clients,
+                        'flag' => $flag,
+                        'states' => $states,
+                        'updateFailed' => true
+                    ]);
+                } else {
+				    return $this->redirect(['view', 'id' => $model["ProjectID"]]);
+                }
 			} catch (\Exception $e) {
 				return $this->render('update', [
 					'model' => $model,
 					'clients' => $clients,
 					'flag' => $flag,
 					'states' => $states,
+                    'updateFailed' => true
 				]);
 			}
 		} else {
@@ -234,27 +244,30 @@ class ProjectController extends BaseController
 				'clients' => $clients,
 				'flag' => $flag,
 				'states' => $states,
+                'updateFailed' => false
 			]);
 		}
     }
 
     /**
-     * Deletes an existing project model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * Deactivates an existing project model.
+     * If deactivation is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
      */
-    public function actionDelete($id)
+
+    public function actionDeactivate($id)
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
-		$url = 'project%2Fdelete&id='.$id;
-		Parent::executeDeleteRequest($url); // indirect rbac
-		$this->redirect('/index.php?r=project%2Findex');
+        //guest redirect
+        if (Yii::$app->user->isGuest)
+        {
+            return $this->redirect(['login/login']);
+        }
+        $url = 'project%2Fdeactivate&id='.$id;
+        Parent::executePostRequest($url, ""); //indirect RBAC
+        $this->redirect(['project/index']);
     }
+
 
 	/**
 	 * Get all projects associate with the specific user based on the userID
@@ -419,4 +432,6 @@ class ProjectController extends BaseController
 								]);
 		}
 	}
+
+
 }

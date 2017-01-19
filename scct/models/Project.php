@@ -46,16 +46,31 @@ class Project extends \yii\base\model
 	public $ProjectModifiedDate;
 	public $ProjectModifiedBy;
 
+	// Constants defined to avoid "magic numbers"
+    // Constant values taken from the database definition
+    const MAX_NAME_LENGTH = 100;
+    const MAX_DESCRIPTION_LENGTH = 255;
+    const MAX_NOTES_LENGTH = 255;
+    const MAX_TYPE_LENGTH = 50;
+    const MAX_STATE_LENGTH = 25;
+    const MAX_PREFIX_LENGTH = 10;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['ProjectName'], 'required'],
+            [['ProjectName', 'ProjectUrlPrefix'], 'required'],
             [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix'], 'string'],
             [['ProjectID', 'ProjectStatus', 'ProjectClientID', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'integer'],
-            [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe']
+            [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe'],
+            ['ProjectUrlPrefix', 'string', 'max' => self::MAX_PREFIX_LENGTH],
+            ['ProjectName', 'string', 'max' => self::MAX_NAME_LENGTH],
+            ['ProjectDescription', 'string', 'max' => self::MAX_DESCRIPTION_LENGTH],
+            ['ProjectNotes', 'string', 'max' => self::MAX_NOTES_LENGTH],
+            ['ProjectType', 'string', 'max' => self::MAX_TYPE_LENGTH],
+            ['ProjectState', 'string', 'max' => self::MAX_STATE_LENGTH]
         ];
     }
 
