@@ -99,7 +99,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'template' => '{view}',
                         'urlCreator' => function ($action, $model, $key, $index) {
                             if ($action === 'view') {
-                                $url = 'index.php?r=mileage-card%2Fview&id=' . $model["MileageCardID"];
+                                $url = '/mileage-card/view?id=' . $model["MileageCardID"];
                                 return $url;
                             }
                         },
