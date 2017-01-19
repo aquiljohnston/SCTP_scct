@@ -63,7 +63,17 @@ class User extends \yii\base\model implements IdentityInterface
 	public $UserCreateDTLTOffset;
 	public $UserModifiedDTLTOffset;
 	public $UserInactiveDTLTOffset;
-	
+
+	const MAX_NAME_LENGTH = 100;
+	const MAX_FIRST_NAME_LENGTH = 50;
+	const MAX_LAST_NAME_LENGTH = 50;
+	const MAX_EMPLOYEE_TYPE_LENGTH = 50;
+	const MAX_PHONE_LENGTH = 20;
+	const MAX_COMPANY_NAME_LENGTH = 100;
+	const MAX_COMPANY_PHONE_LENGTH = 14;
+	const MAX_APP_ROLE_TYPE_LENGTH = 50;
+	const MAX_COMMENTS_LENGTH = 250;
+	const MAX_KEY_LENGTH = 75;
     /**
      * @inheritdoc
      */
@@ -72,7 +82,17 @@ class User extends \yii\base\model implements IdentityInterface
         return [
             [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreateDTLTOffset'], 'string'],
             [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
-            [['UserCreatedDate', 'UserModifiedDate'], 'safe']
+            [['UserCreatedDate', 'UserModifiedDate'], 'safe'],
+            ['UserName', 'string', 'max' => self::MAX_NAME_LENGTH],
+            ['UserFirstName', 'string', 'max' => self::MAX_FIRST_NAME_LENGTH],
+            ['UserLastName', 'string', 'max' => self::MAX_LAST_NAME_LENGTH],
+            ['UserEmployeeType', 'string', 'max' => self::MAX_EMPLOYEE_TYPE_LENGTH],
+            ['UserPhone', 'string', 'max' => self::MAX_PHONE_LENGTH],
+            ['UserCompanyName', 'string', 'max' => self::MAX_COMPANY_NAME_LENGTH],
+            ['UserCompanyPhone', 'string', 'max' => self::MAX_COMPANY_PHONE_LENGTH],
+            ['UserAppRoleType', 'string', 'max' => self::MAX_APP_ROLE_TYPE_LENGTH],
+            ['UserComments', 'string', 'max' => self::MAX_COMMENTS_LENGTH],
+            ['UserKey', 'string', 'max' => self::MAX_KEY_LENGTH]
         ];
     }
 

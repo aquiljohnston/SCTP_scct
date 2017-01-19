@@ -66,6 +66,24 @@ class Equipment extends \yii\base\model
 	public $EquipmentModifiedDate;
 	public $EquipmentModificationReason;
 
+
+	const MAX_NAME_LENGTH = 100;
+	const MAX_SERIAL_NUMBER_LENGTH = 50;
+	const MAX_SC_NUMBER_LENGTH = 50;
+	const MAX_DETAILS_LENGTH = 100;
+	const MAX_TYPE_LENGTH = 100;
+	const MAX_MANUFACTURER_LENGTH = 100;
+	const MAX_MANUFACTURE_YEAR_LENGTH = 4; // TODO: Increase this before 10,000 AD
+    const MAX_CONDITION_LENGTH = 100;
+    const MAX_STATUS_LENGTH = 50;
+    const MAX_MACID_LENGTH = 100;
+    const MAX_MODEL_LENGTH = 100;
+    const MAX_COLOR_LENGTH = 50;
+    const MAX_WARRANTY_DETAIL_LENGTH = 100;
+    const MAX_COMMENT_LENGTH = 100;
+    const MAX_ANNUAL_CALIBRATION_STATUS_LENGTH = 10;
+    const MAX_MODIFICATION_REASON_LENGTH = 250;
+
     /**
      * @inheritdoc
      */
@@ -74,7 +92,23 @@ class Equipment extends \yii\base\model
         return [
 			[['EquipmentName', 'EquipmentSerialNumber', 'EquipmentSCNumber', 'EquipmentDetails', 'EquipmentType', 'EquipmentManufacturer', 'EquipmentManufactureYear', 'EquipmentCondition', 'EquipmentStatus', 'EquipmentMACID', 'EquipmentModel', 'EquipmentColor', 'EquipmentWarrantyDetail', 'EquipmentComment', 'EquipmentAcceptedFlag', 'EquipmentAcceptedBy', 'EquipmentModificationReason'], 'string'],
             [['EquipmentID', 'EquipmentClientID', 'EquipmentProjectID', 'EquipmentAssignedUserID', 'EquipmentCreatedByUser', 'EquipmentModifiedBy'], 'integer'],
-            [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate'], 'safe']
+            [['EquipmentAnnualCalibrationDate', 'EquipmentCreateDate', 'EquipmentModifiedDate'], 'safe'],
+            ['EquipmentName', 'string', 'max' => self::MAX_NAME_LENGTH],
+            ['EquipmentSerialNumber', 'string', 'max' => self::MAX_SERIAL_NUMBER_LENGTH],
+            ['EquipmentSCNumber', 'string', 'max' => self::MAX_SC_NUMBER_LENGTH],
+            ['EquipmentDetails', 'string', 'max' => self::MAX_DETAILS_LENGTH],
+            ['EquipmentType', 'string', 'max' => self::MAX_TYPE_LENGTH],
+            ['EquipmentManufacturer', 'string', 'max' => self::MAX_MANUFACTURER_LENGTH],
+            ['EquipmentManufactureYear', 'string', 'max' => self::MAX_MANUFACTURE_YEAR_LENGTH],
+            ['EquipmentCondition', 'string', 'max' => self::MAX_CONDITION_LENGTH],
+            ['EquipmentStatus', 'string', 'max' => self::MAX_STATUS_LENGTH],
+            ['EquipmentMACID', 'string', 'max' => self::MAX_MACID_LENGTH],
+            ['EquipmentModel', 'string', 'max' => self::MAX_MODEL_LENGTH],
+            ['EquipmentColor', 'string', 'max' => self::MAX_COLOR_LENGTH],
+            ['EquipmentWarrantyDetail', 'string', 'max' => self::MAX_WARRANTY_DETAIL_LENGTH],
+            ['EquipmentComment', 'string', 'max' => self::MAX_COMMENT_LENGTH],
+            ['EquipmentAnnualCalibrationStatus', 'string', 'max' => self::MAX_ANNUAL_CALIBRATION_STATUS_LENGTH],
+            ['EquipmentModificationReason', 'string', 'max' => self::MAX_MODIFICATION_REASON_LENGTH]
         ];
     }
 
