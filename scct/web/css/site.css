@@ -228,7 +228,7 @@ ul > li >a:hover{
     width: 100%;
     position: fixed;
 	bottom:0;
-	
+	z-index:3;
 }
 /*-----------End footer----------*/
 
