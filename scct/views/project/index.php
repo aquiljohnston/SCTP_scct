@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectEndDate',
 
             ['class' => 'kartik\grid\ActionColumn',
-                'template'=>'{view} {update} {deactivate}',
+                'template'=>'{view} {update}',
 				'urlCreator' => function ($action, $model, $key, $index) {
         			if ($action === 'view') {
         			$url ='/project/view?id='.$model["ProjectID"];

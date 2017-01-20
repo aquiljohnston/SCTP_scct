@@ -17,13 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Update', ['update', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->ProjectID], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'delete',
-            ],
-        ]) ?>
 		<?= Html::a('Add/Remove Users', ['add-user', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
 		<?= Html::a('Add/Remove Modules', ['add-module', 'id' => $model->ProjectID], ['class' => 'btn btn-primary']) ?>
     </p>
