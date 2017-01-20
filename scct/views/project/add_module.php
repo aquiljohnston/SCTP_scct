@@ -72,5 +72,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddModuleSubmitBtn']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddModuleResetBtn']) ?>
     </div>
+    <?php ActiveForm::end(); ?>
 	
 </div>
