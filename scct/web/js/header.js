@@ -221,30 +221,30 @@ $(document).ready(function(){
 					&& (data.Modules[0].Dispatch.enabled.toString() == 0)
 					&& (data.Modules[0].CometTracker.enabled.toString() == 0)) {
 
-					localStorage.setItem('pge-navbar-blank', 'true');
+					localStorage.setItem('scct-navbar-blank', 'true');
 				} else {
 					var nav = $("#nav");
 					nav.removeClass("blankNavBar");
 					if (data.Modules[0].Dispatch.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
 						nav.prepend(DispatchDropdown, AdminDropdown);
 
-						localStorage.setItem('pge-navbar-data', DispatchDropdown + AdminDropdown);
+						localStorage.setItem('scct-navbar-data', DispatchDropdown + AdminDropdown);
 					}else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
 						nav.prepend(HomeDropdown, AdminDropdown);
 
-						localStorage.setItem('pge-navbar-data', HomeDropdownStr + AdminDropdown);
+						localStorage.setItem('scct-navbar-data', HomeDropdownStr + AdminDropdown);
 					}else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].Dispatch.enabled.toString() != 0){
 						nav.prepend(HomeDropdown, DispatchDropdown);
 
-						localStorage.setItem('pge-navbar-data', HomeDropdownStr + DispatchDropdown);
+						localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown);
 					}else {
 						nav.prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
 
-						localStorage.setItem('pge-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
+						localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
 					}
 				}
 			}
-			localStorage.setItem('pge-navbar-saved', 'true');
+			localStorage.setItem('scct-navbar-saved', 'true');
 		}
 
 			// assign class to current active link
