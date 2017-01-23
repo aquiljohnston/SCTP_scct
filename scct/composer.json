@@ -25,6 +25,8 @@
         "kartik-v/yii2-widget-datepicker": "*",
 		"kartik-v/yii2-widget-timepicker": "*",
 		"kartik-v/yii2-widget-datetimepicker": "*",
+		"kartik-v/yii2-widgets": "*",
+		"kartik-v/yii2-widget-spinner": "@dev",
         "kartik-v/yii2-sortable-input": "*"
     },
     "require-dev": {
