@@ -73,24 +73,34 @@
 .no_totalhours {
     float: right;
 }
-
-#multiple_time_card_approve_btn {
-    margin-bottom: 2%;
-    margin-top: 1%;
+#timeCardGridViewContainer,#timecard_filter{
+	position:relative;
+	width:100%;
+	float:left;
+}
+#timecard_filter span{
+	width:auto;
+}
+#multiple_time_card_approve_btn{
+	margin-right:2%;
 }
 
 div[id^=modalContent] #loading {
     display: none;
 }
-
-#timeCardPageSizeLabel {
-    float: right;
+#timeCardDropdownContainer{
+	float:right;
+	width:auto;
 }
-
+.timecard-index h3{
+	margin-bottom:0px;
+}
 #weekSelection {
     margin-top: 1%;
 }
-
-.RecordsPerPageLabel {
-    float: right;
+#timeCardDropdownContainer label{
+	padding-right:0;
+}
+#timeCardDropdownContainer .form-control{
+	padding:6px 10px;
 }

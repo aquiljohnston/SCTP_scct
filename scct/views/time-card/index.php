@@ -19,54 +19,56 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 <div class="timecard-index">
 
 	<h3 class="title"><?= Html::encode($this->title) ?></h3>
+	<div ="timecard_filter">
+		<span id="multiple_time_card_approve_btn">
+			<?php
+			echo Html::button('Approve',
+			[
+				'class' => 'btn btn-primary multiple_approve_btn',
+				'id' => 'multiple_approve_btn_id',
+			]);
 
-	<div id="multiple_time_card_approve_btn">
-		<?php
-		echo Html::button('Approve',
-		[
-			'class' => 'btn btn-primary multiple_approve_btn',
-			'id' => 'multiple_approve_btn_id',
-		]);
-
-		if($week=="prior") {
-			$priorSelected = "selected";
-			$currentSelected = "";
-		} else {
-			$priorSelected = "";
-			$currentSelected = "selected";
-		}
-		?>
-		
-		<?= Html::button('Export',[
-				'class' => 'btn btn-primary', 
-				'disabled' => true,
-				'id' => 'export_timecard_btn',
-				/*'data' => [
-					'confirm' => 'Are you sure you want to approve this item?']*/
-			])?>
-		<div id="timeCardDropdownContainer">
+			if($week=="prior") {
+				$priorSelected = "selected";
+				$currentSelected = "";
+			} else {
+				$priorSelected = "";
+				$currentSelected = "selected";
+			}
+			?>
+			
+			<?= Html::button('Export',[
+					'class' => 'btn btn-primary', 
+					'disabled' => true,
+					'id' => 'export_timecard_btn',
+					/*'data' => [
+						'confirm' => 'Are you sure you want to approve this item?']*/
+				])?>
+		</span>
+		<span>
+			<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
+				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+				<option value="current" <?= $currentSelected ?>>Current Week</option>
+			</select>
+			<input type="hidden" name="r" value="time-card/index" />
+		</span>
+		<span id="timeCardDropdownContainer">
 
 			<?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_HORIZONTAL,
-				'formConfig' => ['labelSpan' => 4, 'deviceSize' => ActiveForm::SIZE_SMALL],
+				'formConfig' => ['labelSpan' =>7,'deviceSize' => ActiveForm::SIZE_SMALL],
 				'method' => 'post',
 				'options' => [
 					'id' => 'TimeCardForm',
 				]
 
 			]); ?>
-				<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
-					<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-					<option value="current" <?= $currentSelected ?>>Current Week</option>
-				</select>
-				<input type="hidden" name="r" value="time-card/index" />
 				<label id="timeCardPageSizeLabel">
-					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label(''); ?>
-					<span class="RecordsPerPageLabel">Records Per Page</span>
+					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
 				</label>
-			<input id="pageNumber" type="hidden" name="pageNumber" value="1" />
+				<input id="pageNumber" type="hidden" name="pageNumber" value="1" />
 			<?php ActiveForm::end(); ?>
-		</div>
+		</span>
 	</div>
 	<div id="timeCardGridViewContainer">
 		<div id="timeCardGV" class="timeCardForm">
