@@ -10,9 +10,6 @@ $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="home-index">
-    
-    <h3 id="homeHeader">Hello, <?=$firstName; $lastName;?></h3>
-
     <!-- Table for Unaccepted Equipment -->
     <?= GridView::widget([
         'id' => 'equipmentWidget',
