@@ -40,7 +40,7 @@ $(function() {
 					if(confirmBox){
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=time-card/deactivate',
+							url: '/time-card/deactivate',
 							data: {timecardid: pks},
 							beforeSend: function(  ) {
 							console.log(pks);
@@ -92,7 +92,7 @@ $(function() {
 					if(confirmBox){
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=time-card/deactivate',
+							url: '/time-card/deactivate',
 							data: {timecardid: pks},
 							beforeSend: function(  ) {
 							console.log(pks);

@@ -408,6 +408,6 @@ class EquipmentController extends BaseController
 		
 		$url = 'equipment%2Fdelete&id='.$id;
 		Parent::executeDeleteRequest($url);
-		$this->redirect('/index.php?r=equipment%2Findex');
+		$this->redirect('/equipment/index');
     }
 }

@@ -76,21 +76,21 @@ $this->params['breadcrumbs'][] = $this->title;
 					'template' => '{view} {update}',
 					'urlCreator' => function ($action, $model, $key, $index) {
 						if ($action === 'view') {
-							$url ='index.php?r=equipment%2Fview&id='.$model["EquipmentID"];
+							$url ='/equipment/view?id='.$model["EquipmentID"];
 							return $url;
 						}
 						if ($action === 'update') {
-							$url ='index.php?r=equipment%2Fupdate&id='.$model["EquipmentID"];
+							$url ='/equipment/update?id='.$model["EquipmentID"];
 							return $url;
 						}
 						if ($action === 'delete') {
-							$url ='index.php?r=equipment%2Fdelete&id='.$model["EquipmentID"];
+							$url ='/equipment/delete?id='.$model["EquipmentID"];
 							return $url;
 						}
 					},
 					'buttons' => [
 						'delete' => function ($url, $model, $key) {
-							$url ='/index.php?r=equipment%2Fdelete&id='.$model["EquipmentID"];
+							$url ='/equipment/delete?id='.$model["EquipmentID"];
 							$options = [
 								'title' => Yii::t('yii', 'Delete'),
 								'aria-label' => Yii::t('yii', 'Delete'),

@@ -35,7 +35,7 @@ $(function() {
 					if(confirmBox){
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=mileage-card/deactivate',
+							url: '/mileage-card/deactivate',
 							data: {timecardid: pks},
 							beforeSend: function(  ) {
 								console.log(pks);
@@ -84,7 +84,7 @@ $(function() {
 						if(confirmBox){
 							$.ajax({
 							type: 'POST',
-							url: 'index.php?r=mileage-card/deactivate',
+							url: '/mileage-card/deactivate',
 							data: {timecardid: pks},
 							beforeSend: function(  ) {
 								console.log(pks);
