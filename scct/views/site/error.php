@@ -25,3 +25,10 @@ $this->title = $name;
     </p>
 
 </div>
+<?php /* this is a dirty, dirty hack and should be replaced with something more substantial */ ?>
+<script type="text/javascript">
+    var redirect = <?php if(strpos($this->title, '401' ) !== false) echo "true"; else echo "false"; ?>;
+    if(redirect) {
+        window.location.href="/login/user-logout";
+    }
+</script>
