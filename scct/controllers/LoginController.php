@@ -9,6 +9,7 @@ use app\controllers\BaseController;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use linslin\yii2\curl;
+use yii\web\UnauthorizedHttpException;
 
 class LoginController extends BaseController
 {
@@ -50,13 +51,16 @@ class LoginController extends BaseController
 
     public function actionIndex()
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}else{
-			return $this->redirect(['home/index']);
-		}
+        //guest redirect
+        try {
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['login/login']);
+            } else {
+                return $this->redirect(['home/index']);
+            }
+		} catch (UnauthorizedHttpException $exception) {
+            return $this->redirect(['login/login']);
+        }
 
         // $model = new LoginForm();
         // return $this->render('index', [
@@ -66,7 +70,12 @@ class LoginController extends BaseController
 
     public function actionLogin()
     {
-        if (!\Yii::$app->user->isGuest) {
+        try {
+            $isGuest = \Yii::$app->user->isGuest;
+        } catch (UnauthorizedHttpException $exception) {
+            $isGuest = true;
+        }
+        if (!$isGuest) {
 				return $this->redirect(['home/index']);
 		}else{
 
@@ -101,11 +110,14 @@ class LoginController extends BaseController
 		Yii::Trace("User Logout.");
 		$id = Yii::$app->session['userID'];
 		
-		Yii::$app->user->logout();
-		
-		$url = 'login%2Fuser-logout&userID='.$id;
-		$response = Parent::executeGetRequest($url);
-		
+		try {
+		    Yii::$app->user->logout();
+            $url = 'login%2Fuser-logout&userID='.$id;
+            $response = Parent::executeGetRequest($url);
+        } catch(\Exception $exception) {
+            // This is reached when the user is logging out with an expired token.
+		}
+
         return $this->redirect(['login/index']);
     }
 }
