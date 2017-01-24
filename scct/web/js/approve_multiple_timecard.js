@@ -45,7 +45,7 @@ $(function() {
 
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=time-card/approve-multiple',
+							url: '/time-card/approve-multiple',
 							data: {timecardid: pks},
 							success: function(data) {
 								$.pjax.reload({container:'#w0'});

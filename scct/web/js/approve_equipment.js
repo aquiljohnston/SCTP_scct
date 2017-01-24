@@ -34,7 +34,7 @@ $(function() {
 					
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=equipment/approve-multiple-equipment',
+							url: '/equipment/approve-multiple-equipment',
 							data: {equipmentid: pks},
 							success: function(data) {
 								$.pjax.reload({container:'#w0'});
@@ -80,7 +80,7 @@ $(function() {
 
 					  $.ajax({
 						 type: 'POST',
-						 url: 'index.php?r=equipment/approve-multiple-equipment',
+						 url: '/equipment/approve-multiple-equipment',
 						 data: {equipmentid: pks},
 						 success: function(data) {
 							  $.pjax.reload({container:'#w0'});

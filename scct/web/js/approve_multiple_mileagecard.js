@@ -44,7 +44,7 @@ $(function() {
 						
 						$.ajax({
 							type: 'POST',
-							url: 'index.php?r=mileage-card/approve-multiple',
+							url: '/mileage-card/approve-multiple',
 							data: {mileageCardId: pks},
 							success: function(data) {
 								$.pjax.reload({container:'#w0'});

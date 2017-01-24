@@ -273,6 +273,6 @@ class UserController extends BaseController
 		//empty body
 		$json_data = "";
 		Parent::executePutRequest($url, $json_data); // indirect rbac
-		$this->redirect('/index.php?r=user%2Findex');
+		$this->redirect('/userindex');
     }
 }
