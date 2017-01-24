@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use kartik\widgets\Spinner;
 
 AppAsset::register($this);
 ?>
@@ -23,9 +24,11 @@ AppAsset::register($this);
     <?php $this->head() ?>
 </head>
 <body>
-<?php $this->beginBody() ?>
-	<div id="loading">
+	<div id="loading">		
+		<div id="loading-image"><?= Spinner::widget(['preset' => 'medium', 'color' => 'black']);?></div>
+		<div class="clearfix"></div>
 	</div>
+<?php $this->beginBody() ?>
 	<div class="wrap">
 		<!--start-header-->
 		<div class="header navbar-fixed-top" id="top-wrapper">
@@ -48,6 +51,7 @@ AppAsset::register($this);
 					
 				</div>
 			<?php }else{?>
+			    <div id="UserInfo">Welcome, <?php echo Yii::$app->session['UserFirstName'];?><?php echo" "?><?php echo Yii::$app->session['UserLastName'];?></div>
 				<div class="logout">
 					<input type='button' value='LOGOUT' id='logout_btn'>
 				</div>
@@ -86,4 +90,5 @@ AppAsset::register($this);
 <?php $this->endBody() ?>
 </body>
 </html>
+
 <?php $this->endPage() ?>
