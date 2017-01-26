@@ -47,7 +47,8 @@ class AppAsset extends AssetBundle
 		'js/deactive_multiple_mileageEntry.js',
         'js/project.js',
         'js/time_card.js',
-        'js/mileage_card.js'
+        'js/mileage_card.js',
+        'js/equipment.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
