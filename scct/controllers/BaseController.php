@@ -15,9 +15,11 @@ use yii\web\UnauthorizedHttpException;
 
 class BaseController extends Controller
 {
-
+    // VERSION contains the string for the SCAPI version that one wishes to target.
     const VERSION = "v1";
+    // XCLIENT corresponds to constants in SCAPI that indicate which database to point to.
     const XClient = "apidev";
+
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
 
 	public function filterColumn($resultData, $column, $param) {
@@ -79,7 +81,11 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path) {
+	    //Point to the API that the website should use.
+
+        //API DEV
         return "http://apidev.southerncrossinc.com/index.php?r=" . self::VERSION . "%2F$path";
+        //Local API
         //return "http://localhost:9090/index.php?r=" . self::VERSION . "%2F$path";
     }
 

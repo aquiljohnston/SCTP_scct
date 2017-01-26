@@ -57,6 +57,7 @@ class Equipment extends \yii\base\model
 	public $EquipmentClientID;
 	public $EquipmentProjectID;
 	public $EquipmentAnnualCalibrationDate;
+	public $EquipmentAnnualCalibrationStatus;
 	public $EquipmentAssignedUserID;
 	public $EquipmentAcceptedFlag;
 	public $EquipmentAcceptedBy;
