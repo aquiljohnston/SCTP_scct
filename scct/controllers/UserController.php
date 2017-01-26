@@ -6,12 +6,15 @@ use Yii;
 use app\models\user;
 use app\models\UserSearch;
 use app\controllers\BaseController;
+use yii\data\Pagination;
+use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use linslin\yii2\curl;
 use yii\data\ArrayDataProvider;
 use yii\grid\GridView;
 use yii\web\ForbiddenHttpException;
+use yii\base\Model;
 
 /**
  * UserController implements the CRUD actions for user model.
@@ -30,9 +33,36 @@ class UserController extends BaseController
 			return $this->redirect(['login/login']);
 		}
 
+		$model = new \yii\base\DynamicModel([
+			'pagesize'
+		]);
+		$model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+
+		// check if type was post, if so, get value from $model
+		if ($model->load(Yii::$app->request->post())) {
+			Yii::trace("pagesize: " . $model->pagesize);
+			$userPageSizeParams = $model->pagesize;
+		} else {
+			if (isset($_GET['per-page'])) {
+				$userPageSizeParams = $_GET['per-page'];
+				Yii::trace("Post per-page: " . $_GET['per-page']);
+			} else {
+				$userPageSizeParams = 10;
+			}
+		}
+
+		if (isset($_GET['userPage'])) {
+			$page = $_GET['userPage'];
+			Yii::trace("Post userPage: " . $_GET['userPage']);
+		}else {
+			$page = 1;
+		}
+
+		
 		// Reading the response from the the api and filling the GridView
-		$url = "user%2Fget-active";
+		$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
 		$response = Parent::executeGetRequest($url); // indirect rbac
+			
 		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'UserName', 'filterusername');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
 		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
@@ -55,8 +85,20 @@ class UserController extends BaseController
 				'pageSize' => 100,
 			],
 		]);
-
-		return $this -> render('index', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+		
+		 //set UserID as id
+        $dataProvider->key = 'UserID';
+		
+		// set pages to User table
+        $pages = new Pagination($response['pages']);
+		
+		return $this -> render('index', [
+			'dataProvider' => $dataProvider, 
+			'searchModel' => $searchModel,
+			'model' => $model,
+			'userPageSizeParams' => $userPageSizeParams,
+			'pages' => $pages
+		]);
     }
 
     /**
