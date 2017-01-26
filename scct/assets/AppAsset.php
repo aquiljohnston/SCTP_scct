@@ -48,7 +48,8 @@ class AppAsset extends AssetBundle
         'js/project.js',
         'js/time_card.js',
         'js/mileage_card.js',
-        'js/equipment.js'
+        'js/equipment.js',
+        'js/user.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

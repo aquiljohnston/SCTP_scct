@@ -2,7 +2,11 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 use app\controllers\User;
+use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
+use kartik\form\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
@@ -10,17 +14,35 @@ use app\controllers\User;
 
 $this->title = 'User Management';
 $this->params['breadcrumbs'][] = $this->title;
+$pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 ?>
 <div class="user-index">
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+	<div id="UserDropdownContainer">
 
+		<?php $form = ActiveForm::begin([
+			'type' => ActiveForm::TYPE_HORIZONTAL,
+			'formConfig' => ['labelSpan' =>7,'deviceSize' => ActiveForm::SIZE_SMALL],
+			'method' => 'post',
+			'options' => [
+				'id' => 'UserForm',
+			]
+
+		]); ?>
+			<label id="UserPageSizeLabel">
+				<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
+			</label>
+			<input id="pageNumber" type="hidden" name="pageNumber" value="1" />
+		<?php ActiveForm::end(); ?>
+	</div>
+	<?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
     <?= GridView::widget([
+		'id' => 'userForm',
         'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
 		'bootstrap' => false,
@@ -96,5 +118,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 		],
     ]); ?>
-
+	<div id="userPagination">
+		<?php
+		// display pagination
+		echo LinkPager::widget([
+			'pagination' => $pages,
+		]);
+		?>
+	</div>
+	<div class="GridviewTotalNumber">
+		<?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
+	</div>
+	<?php Pjax::end() ?>
 </div>
