@@ -1,8 +1,25 @@
-#equipment_form{
-	margin-right: 9%;
-    margin-top: 3%;
+.equipment_filter,#equipmentGridViewContainer{
+	position:relative;
+	float:left;
+	width:100%;
+}
+#euqipmentButtons{
+	position:relative;
+	float:left;
+	width:30%;
 }
 #equipment_submit_btn{
 	margin-top: 2%;
 	margin-left: 1%;
+}
+#equipmentDropdownContainer{
+	position:relative;
+	float:right;
+	width:auto;
+}
+#equipmentDropdownContainer label{
+	padding-right:0;
+}
+#equipmentDropdownContainer .form-control{
+	padding:6px 10px;
 }
