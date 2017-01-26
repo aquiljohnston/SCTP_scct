@@ -21,7 +21,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="equipment_filter">
-        <p>
+        <div id="euqipmentButtons">
             <?php if (BaseController::can('equipmentCreate')): ?>
                 <?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
             <?php endif; ?>
@@ -30,8 +30,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 'class' => 'btn btn-primary multiple_approve_btn',
                 'id' => 'multiple_approve_btn_id_equipment',
             ]) ?>
-        </p>
-        <span id="equipmentDropdownContainer">
+        </div>
+        <div id="equipmentDropdownContainer">
 
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -44,10 +44,10 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             ]); ?>
             <label id="equipmentPageSizeLabel">
 					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $equipmentPageSizeParams, 'id' => 'equipmentPageSize'])->label("Records Per Page"); ?>
-				</label>
-				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+			</label>
+			<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
             <?php ActiveForm::end(); ?>
-		</span>
+		</div>
     </div>
     <div id="equipmentGridViewContainer">
         <div id="equipmentGV" class="equipmentForm">
