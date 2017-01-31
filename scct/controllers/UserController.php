@@ -114,7 +114,7 @@ class UserController extends BaseController
 				'UserCompanyPhone' => $model->UserCompanyPhone,
 				'UserAppRoleType' => $model->UserAppRoleType,
 				'UserComments' => $model->UserComments,
-				'UserKey' => $model->UserKey,
+				'UserPassword' => $model->UserPassword,
 				'UserActiveFlag' => 1,
 				//'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
 				//'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
@@ -130,10 +130,10 @@ class UserController extends BaseController
 			$secretKey = "sparusholdings12";
 
 			//encrypt and encode password
-			$encryptedKey = openssl_encrypt($data['UserKey'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
-			$encodedKey = base64_encode($encryptedKey);
+			$encryptedPassword = openssl_encrypt($data['UserPassword'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+			$encodedPassword = base64_encode($encryptedPassword);
 
-			$data['UserKey'] = $encodedKey;
+			$data['UserPassword'] = $encodedPassword;
 
 			$json_data = json_encode($data);
 
@@ -217,7 +217,7 @@ class UserController extends BaseController
 				'UserCompanyPhone' => $model-> UserCompanyPhone,
 				'UserAppRoleType' => $model-> UserAppRoleType,
 				'UserComments' => $model-> UserComments,
-				'UserKey' => $model-> UserKey,
+				'UserPassword' => $model-> UserPassword,
 				'UserActiveFlag' => $model-> UserActiveFlag,
 				'UserCreatedDate' => $model-> UserCreatedDate,
 				'UserModifiedDate' => $model-> UserModifiedDate,
@@ -231,16 +231,15 @@ class UserController extends BaseController
 			$secretKey= "sparusholdings12";
 
 			//encrypt and encode password
-			$encryptedKey = openssl_encrypt($data['UserKey'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+			$encryptedKey = openssl_encrypt($data['UserPassword'],  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
 			$encodedKey = base64_encode($encryptedKey);
 
-			$data['UserKey'] = $encodedKey;
+			$data['UserPassword'] = $encodedKey;
 
 			$json_data = json_encode($data);
 
 			$putUrl = 'user%2Fupdate&id='.$id;
 			$putResponse = Parent::executePutRequest($putUrl, $json_data);
-
 			$obj = json_decode($putResponse, true);
 
 			 return $this->redirect(['view', 'id' => $obj["UserID"]]);

@@ -54,7 +54,7 @@ class User extends \yii\base\model implements IdentityInterface
 	public $UserCompanyPhone;
 	public $UserAppRoleType;
 	public $UserComments;
-	public $UserKey;
+	public $UserPassword;
 	public $UserActiveFlag;
 	public $UserCreatedDate;
 	public $UserModifiedDate;
@@ -112,7 +112,7 @@ class User extends \yii\base\model implements IdentityInterface
             'UserCompanyPhone' => 'User Company Phone',
             'UserAppRoleType' => 'User App Role Type',
             'UserComments' => 'User Comments',
-            'UserKey' => 'User Key',
+            'UserPassword' => 'User Password',
             'UserActiveFlag' => 'User Active Flag',
             'UserCreatedDate' => 'User Created Date',
             'UserModifiedDate' => 'User Modified Date',
