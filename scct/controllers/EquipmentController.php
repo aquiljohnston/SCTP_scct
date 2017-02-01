@@ -110,7 +110,7 @@ class EquipmentController extends BaseController
             ([
                 'allModels' => $filteredResultData,
                 'pagination' => [
-                    //'pageSize' => 100,
+                    'pageSize' => 100,
                 ],
             ]);
 
