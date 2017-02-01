@@ -1,5 +1,5 @@
 $(function () {
-    var jqUserDropDowns = $('#equipmentDropdownContainer');
+    var jqUserDropDowns = $('#userDropdownContainer');
     var jqUserPageSize = jqUserDropDowns.find('#userPageSize');
 
     jqUserPageSize.on('change', function (event) {
@@ -10,7 +10,7 @@ $(function () {
 
     $(document).off('click', "#UserPagination ul li a").on('click', "#UserPagination ul li a", function () {
         $('#loading').show();
-        $('#equipmentGridview').on('pjax:success', function () {
+        $('#userGridview').on('pjax:success', function () {
             $('#loading').hide();
         });
     });
