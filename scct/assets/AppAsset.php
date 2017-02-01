@@ -19,40 +19,41 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
-		'css/clients.css',
-		'css/home.css',
-		'css/projects.css',
-		'css/user.css',
-		'css/equipments.css',
-		'css/timecards.css',
-		'css/mileagecards.css',
-		'css/projectlanding.css',
-		'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
-		'css/customGridviewStyle.css',
-		'css/customSortableInputStyle.css'
+        'css/clients.css',
+        'css/home.css',
+        'css/projects.css',
+        'css/user.css',
+        'css/equipments.css',
+        'css/timecards.css',
+        'css/mileagecards.css',
+        'css/projectlanding.css',
+        'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
+        'css/customGridviewStyle.css',
+        'css/customSortableInputStyle.css'
     ];
-	public $cssOptions = [
-		'type' => 'text/css',
-	];
+    public $cssOptions = [
+        'type' => 'text/css',
+    ];
     public $js = [
-		'js/header.js',
-		'js/footer.js',
-		'js/logout_btn.js',
-		'js/time_entry_modal.js',
-		'js/mileage_entry_modal.js',
-		'js/approve_multiple_timecard.js',
-		'js/approve_multiple_mileagecard.js',
-		'js/approve_equipment.js',
-		'js/deactive_multiple_timeEntry.js',
-		'js/deactive_multiple_mileageEntry.js',
+        'js/header.js',
+        'js/footer.js',
+        'js/logout_btn.js',
+        'js/time_entry_modal.js',
+        'js/mileage_entry_modal.js',
+        'js/approve_multiple_timecard.js',
+        'js/approve_multiple_mileagecard.js',
+        'js/approve_equipment.js',
+        'js/deactive_multiple_timeEntry.js',
+        'js/deactive_multiple_mileageEntry.js',
         'js/project.js',
         'js/time_card.js',
         'js/mileage_card.js',
-        'js/equipment.js'
+        'js/equipment.js',
+        'js/user.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
-		'yii\bootstrap\BootstrapPluginAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
     ];
 }

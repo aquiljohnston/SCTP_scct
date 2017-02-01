@@ -1,8 +1,31 @@
-#user_mgt_form{
-	margin-right: 9%;
+#user_mgt_form {
+    margin-right: 9%;
     margin-top: 3%;
 }
-#user_mgt_submit_btn{
-	margin-top: 2%;
-	margin-left: 1%;
+
+#user_mgt_submit_btn {
+    margin-top: 2%;
+    margin-left: 1%;
+}
+
+.user_filter, #userGridViewContainer {
+    position: relative;
+    float: left;
+    width: 100%;
+}
+
+#userButtons {
+    position: relative;
+    float: left;
+    width: 30%;
+}
+
+#userDropdownContainer {
+    position: relative;
+    float: right;
+    width: auto;
+}
+
+#userDropdownContainer label {
+    padding-right: 0;
 }
