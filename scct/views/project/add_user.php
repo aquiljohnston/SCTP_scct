@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="row">
 		<div class="col-sm-6">
 		<label style="font-size:20px">Unassigned Users</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
 				<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
 					//'name'=>'Unassigned Users',
 					'items' => $unassignedData,
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="col-sm-6">
 		<label style="font-size:20px">Assigned Users</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div style="height: 450pt; overflow: auto; margin-bottom: 50px;">
 				<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
 					'name'=>'Assigned Users',
 					'items' => $assignedData,
