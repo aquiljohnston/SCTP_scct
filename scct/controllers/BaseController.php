@@ -15,8 +15,12 @@ use yii\web\UnauthorizedHttpException;
 
 class BaseController extends Controller
 {
+
     // VERSION contains the string for the SCAPI version that one wishes to target.
-    const VERSION = "v1";
+    const VERSION_1 = "v1";
+    const VERSION_2 = "v2";
+    const DEFAULT_VERSION = self::VERSION_1;
+
     // XCLIENT corresponds to constants in SCAPI that indicate which database to point to.
     const XClient = "apidev";
 
@@ -49,7 +53,9 @@ class BaseController extends Controller
 		// http://stackoverflow.com/a/28452101
 		// This code has been modified from its original version. It has been formatted to fit your TV.
 		// (Modified from SA code to handle multiple parameters);
+        // We split by a pipe delimiter in order to allow multiple search terms.
 		$terms = explode("|", Yii::$app->request->getQueryParam($param));
+		// Trim whitespace from every item
 		$terms = array_map('trim', $terms);
 		if(count($terms)==0) {
 			return $resultData;
@@ -80,19 +86,19 @@ class BaseController extends Controller
         ];
     }
 
-    public static function prependURL($path) {
+    public static function prependURL($path, $version = self::DEFAULT_VERSION) {
 	    //Point to the API that the website should use.
 
         //API DEV
-        return "http://apidev.southerncrossinc.com/index.php?r=" . self::VERSION . "%2F$path";
+        return "http://apidev.southerncrossinc.com/index.php?r=" . $version . "%2F$path";
         //Local API
-        //return "http://localhost:9090/index.php?r=" . self::VERSION . "%2F$path";
+        //return "http://localhost:9090/index.php?r=" . $version . "%2F$path";
     }
 
     //function generates and executes a "GET" request and returns the response
-	public static function executeGetRequest($url)
+	public static function executeGetRequest($url, $version = self::DEFAULT_VERSION)
 	{
-        $url = self::prependURL($url);
+        $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::XClient,
@@ -127,9 +133,9 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "POST" request and returns the response
-    public static function executePostRequest($url, $postData)
+    public static function executePostRequest($url, $postData, $version = self::DEFAULT_VERSION)
 	{
-        $url = self::prependURL($url);
+        $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::XClient,
@@ -166,9 +172,9 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "PUT" request and returns the response
-	public static function executePutRequest($url, $putData)
+	public static function executePutRequest($url, $putData, $version = self::DEFAULT_VERSION)
 	{
-        $url = self::prependURL($url);
+        $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::XClient,
@@ -205,9 +211,9 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "Delete" request and returns the response
-	public static function executeDeleteRequest($url)
+	public static function executeDeleteRequest($url, $version = self::DEFAULT_VERSION)
 	{
-        $url = self::prependURL($url);
+        $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::XClient,
