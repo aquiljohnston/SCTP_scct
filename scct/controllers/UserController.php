@@ -318,10 +318,10 @@ class UserController extends BaseController
             return $this->redirect(['login/login']);
         }
         //calls route to deactivate user account
-        $url = 'user%2Fdeactivate&userID=' . $id;
+        $url = 'user%2Fdeactivate&userID=' . urlencode($id);
         //empty body
         $json_data = "";
         Parent::executePutRequest($url, $json_data); // indirect rbac
-        $this->redirect('/userindex');
+        $this->redirect('/user/');
     }
 }
