@@ -1,7 +1,7 @@
 $(function(){
-    var jqTCGridViewContainer = $('#timeCardGridViewContainer');
+    var jqTimeCardFilter = $('#timecard_filter');
     var jqTCDropDowns = $('#timeCardDropdownContainer');
-    var jqWeekSelection = jqTCDropDowns.find('#weekSelection');
+    var jqWeekSelection = jqTimeCardFilter.find('#weekSelection');
     var jqTCPageSize = jqTCDropDowns.find('#timeCardPageSize');
 
 

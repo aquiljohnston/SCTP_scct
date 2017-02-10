@@ -18,49 +18,49 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-	
-	<div id="mileage_card_filter">
-    <!-- Approve Multiple Mileage Card button -->
-		<span id="mileage_card_approve_btn">
+
+    <div id="mileage_card_filter">
+        <!-- Approve Multiple Mileage Card button -->
+        <span id="mileage_card_approve_btn">
 			<?php
-			echo Html::button('Approve',
-				[
-					'class' => 'btn btn-primary multiple_approve_btn',
-					'id' => 'multiple_mileage_card_approve_btn',
-				]);
-			if ($week == "prior") {
-				$priorSelected = "selected";
-				$currentSelected = "";
-			} else {
-				$priorSelected = "";
-				$currentSelected = "selected";
-			}
-			?>
+            echo Html::button('Approve',
+                [
+                    'class' => 'btn btn-primary multiple_approve_btn',
+                    'id' => 'multiple_mileage_card_approve_btn',
+                ]);
+            if ($week == "prior") {
+                $priorSelected = "selected";
+                $currentSelected = "";
+            } else {
+                $priorSelected = "";
+                $currentSelected = "selected";
+            }
+            ?>
 		</span>
-		<span>
+        <span id="mileageCardDropdownContainer" style="float:right;width:auto;">
+			<?php $form = ActiveForm::begin([
+                'type' => ActiveForm::TYPE_HORIZONTAL,
+                'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+                'method' => 'post',
+                'options' => [
+                    'id' => 'MileageCardForm',
+                ]
+            ]); ?>
+            <span>
 			<select name="week" id="mileageCardWeekSelection">
 				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-				<option value="current" <?= $currentSelected ?>>Current Week</option>
+			<option value="current" <?= $currentSelected ?>>Current Week</option>
 			</select>
 			<input type="hidden" name="r" value="mileage-card/index"/>
 		</span>
-		<span id="mileageCardDropdownContainer" style="float:right;width:auto;">
-			<?php $form = ActiveForm::begin([
-				'type' => ActiveForm::TYPE_HORIZONTAL,
-				'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-				'method' => 'post',
-				'options' => [
-					'id' => 'MileageCardForm',
-				]
-			]); ?>
 				<label id="mileageCardPageSizeLabel">
 					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
 				</label>
 				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
-			<?php ActiveForm::end(); ?>
+            <?php ActiveForm::end(); ?>
 		</span>
-	</div>
-	<!-- General Table Layout for displaying Mileage Card Information -->
+    </div>
+    <!-- General Table Layout for displaying Mileage Card Information -->
     <div id="mileageCardGridViewContainer">
         <div id="mileageCardGV" class="mileageCardForm">
             <?php Pjax::begin(['id' => 'mileageCardGridview', 'timeout' => false]) ?>

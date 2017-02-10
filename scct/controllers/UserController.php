@@ -34,15 +34,19 @@ class UserController extends BaseController
         try {
 
             $model = new \yii\base\DynamicModel([
-                'pagesize'
+                'filter', 'pagesize'
             ]);
-            $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            $model->addRule('filter', 'string', ['max' => 32])
+                ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->post())) {
                 Yii::trace("pagesize: " . $model->pagesize);
                 $userPageSizeParams = $model->pagesize;
+                $filter = $model->filter;
             } else {
+                $filter = "";
+
                 if (isset($_GET['per-page'])) {
                     $userPageSizeParams = $_GET['per-page'];
                     Yii::trace("Post per-page: " . $_GET['per-page']);
@@ -59,8 +63,9 @@ class UserController extends BaseController
             }
 
             //build url with params
-            $url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
-            $response = Parent::executeGetRequest($url);
+            $url = "user%2Fget-active&filter=" . urlencode($filter) . "&listPerPage=" . $userPageSizeParams . "&page=" . $page;
+            //$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
+            $response = Parent::executeGetRequest($url, 'v2');
             $response = json_decode($response, true);
             $assets = $response['assets'];
 
@@ -95,6 +100,7 @@ class UserController extends BaseController
                 'searchModel' => $searchModel,
                 'model' => $model,
                 'pages' => $pages,
+                'filter' => $filter,
                 'userPageSizeParams' => $userPageSizeParams
             ]);
 
@@ -312,10 +318,10 @@ class UserController extends BaseController
             return $this->redirect(['login/login']);
         }
         //calls route to deactivate user account
-        $url = 'user%2Fdeactivate&userID=' . $id;
+        $url = 'user%2Fdeactivate&userID=' . urlencode($id);
         //empty body
         $json_data = "";
         Parent::executePutRequest($url, $json_data); // indirect rbac
-        $this->redirect('/userindex');
+        $this->redirect('/user/');
     }
 }

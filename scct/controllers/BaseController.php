@@ -17,10 +17,14 @@ class BaseController extends Controller
 {
 
     // VERSION contains the string for the SCAPI version that one wishes to target.
-    const VERSION_1 = "v1";
-    const VERSION_2 = "v2";
-    const DEFAULT_VERSION = self::VERSION_1;
+    const API_VERSION_1 = "v1";
+    const API_VERSION_2 = "v2";
+    const DEFAULT_VERSION = self::API_VERSION_1;
 
+    const API_SERVER_LOCALHOST = 0; // arbitrary number
+    const API_SERVER_APIDEV = 1; // arbitrary number (can't be equal to other API_SERVER constant values)
+
+    const TARGET_API_SERVER = self::API_SERVER_LOCALHOST; //TODO: Detect this setting with a config file or environment scanning (i.e. domain detection)
     // XCLIENT corresponds to constants in SCAPI that indicate which database to point to.
     const XClient = "apidev";
 
@@ -87,12 +91,13 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path, $version = self::DEFAULT_VERSION) {
-	    //Point to the API that the website should use.
+	    //STOP! To modify which server is targeted, change the constant "TARGET_API_SERVER" at the top of the class
+        if(self::TARGET_API_SERVER == self::API_SERVER_APIDEV) {
+            return "http://apidev.southerncrossinc.com/index.php?r=" . $version . "%2F$path";
+        } else if(self::TARGET_API_SERVER == self::API_SERVER_LOCALHOST) {
+            return "http://localhost:9090/index.php?r=" . $version . "%2F$path";
+        }
 
-        //API DEV
-        return "http://apidev.southerncrossinc.com/index.php?r=" . $version . "%2F$path";
-        //Local API
-        //return "http://localhost:9090/index.php?r=" . $version . "%2F$path";
     }
 
     //function generates and executes a "GET" request and returns the response
