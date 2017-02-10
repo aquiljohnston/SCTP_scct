@@ -1,7 +1,7 @@
 $(function(){
-    var jqMCGridViewContainer = $('#mileageCardGridViewContainer');
+    var jqMileageCardFilter = $('#mileage_card_filter');
     var jqMCDropDowns = $('#mileageCardDropdownContainer');
-    var jqWeekSelection = jqMCDropDowns.find('#mileageCardWeekSelection');
+    var jqWeekSelection = jqMileageCardFilter.find('#mileageCardWeekSelection');
     var jqMCPageSize = jqMCDropDowns.find('#mileageCardPageSize');
 
 
