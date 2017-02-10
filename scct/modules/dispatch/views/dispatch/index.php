@@ -1,10 +1,39 @@
-<div class="dispatch-dispatch-index">
-	<h1 style="margin-top:3%">Dispatch Module has been added successfully</h1>
-    <p>
-        This is the dispatch index view.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
+<?php
+$this->title = 'Dispatch';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="dispatch-dispatch">
+
+    <?= \kartik\grid\GridView::widget([
+        'id' => 'dispatchGV',
+        'dataProvider' => $dataProvider, // Sent from DispatchController.php
+        'export' => false,
+        'caption' => 'Dispatch',
+        'columns' => [
+            [
+                'label' => 'Division',
+                'attribute' => 'division',
+                'value' => function ($model) {
+                    return $model['Division'];
+                }
+            ],
+            [
+                'label' => 'MapGrid',
+                'attribute' => 'mapgrid',
+                'value' => function ($model) {
+                    return $model['MapGrid'];
+                }
+            ],
+            [
+                'label' => 'Compliance Date',
+                'attribute' => 'complianceDate',
+                'value' => function ($model) {
+                    return $model['ComplianceStartDate'] . "<br/>" . $model['ComplianceEndDate'];
+                }
+            ]
+        ]
+
+    ]);
+
+    ?>
 </div>
