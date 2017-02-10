@@ -19,13 +19,23 @@ class BaseController extends Controller
     // VERSION contains the string for the SCAPI version that one wishes to target.
     const API_VERSION_1 = "v1";
     const API_VERSION_2 = "v2";
+
+    // arbitrary numbers (can't be equal to each other)
+    // the numbers are prime for no reason whatsoever
+    const API_SERVER_LOCALHOST = 1;
+    const API_SERVER_DEV = 2;
+    const API_SERVER_STAGE = 3;
+    const API_SERVER_PRODUCTION = 7;
+
+    /*
+     * Modify these constants in order to set up your SCCT install.
+     */
+    // Legacy support. Version 1 calls do not specify which version to use, so we use a default value.
     const DEFAULT_VERSION = self::API_VERSION_1;
-
-    const API_SERVER_LOCALHOST = 0; // arbitrary number
-    const API_SERVER_APIDEV = 1; // arbitrary number (can't be equal to other API_SERVER constant values)
-
+    // Pick the server you want to target. See constants above.
     const TARGET_API_SERVER = self::API_SERVER_LOCALHOST; //TODO: Detect this setting with a config file or environment scanning (i.e. domain detection)
-    // XCLIENT corresponds to constants in SCAPI that indicate which database to point to.
+    // X-Client corresponds to constants in SCAPI that indicate which database to point to.
+    // It is sent in the header of api calls
     const XClient = "apidev";
 
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
@@ -91,11 +101,16 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path, $version = self::DEFAULT_VERSION) {
-	    //STOP! To modify which server is targeted, change the constant "TARGET_API_SERVER" at the top of the class
-        if(self::TARGET_API_SERVER == self::API_SERVER_APIDEV) {
-            return "http://apidev.southerncrossinc.com/index.php?r=" . $version . "%2F$path";
+	    //STOP!
+        //To modify which server is targeted, change the constant "TARGET_API_SERVER" at the top of the class
+        if(self::TARGET_API_SERVER == self::API_SERVER_PRODUCTION) {
+            return "http://api.southerncrossinc.com/index.php?r=$version%2F$path";
+        } else if(self::TARGET_API_SERVER == self::API_SERVER_STAGE) {
+            return "http://apistage.southerncrossinc.com/index.php?r=$version%2F$path";
+        } else if(self::TARGET_API_SERVER == self::API_SERVER_DEV) {
+            return "http://apidev.southerncrossinc.com/index.php?r=$version%2F$path";
         } else if(self::TARGET_API_SERVER == self::API_SERVER_LOCALHOST) {
-            return "http://localhost:9090/index.php?r=" . $version . "%2F$path";
+            return "http://localhost:9090/index.php?r=$version%2F$path";
         }
 
     }
