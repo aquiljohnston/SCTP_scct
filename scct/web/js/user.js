@@ -15,6 +15,13 @@ $(function () {
         });
     });
 
+    $('#filterContent').keypress(function(e) {
+        if(e.which == 13) {
+            reloadGridView();
+            e.preventDefault();
+        }
+    });
+
     function reloadGridView() {
         var form = jqUserDropDowns.find("#UserForm");
         if (form.find(".has-error").length) {
