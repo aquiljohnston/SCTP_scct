@@ -32,6 +32,9 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     'id' => 'UserForm',
                 ]
             ]); ?>
+            <div id="filterContent" class="dropdowntitle">
+                <?= $form->field($model, 'filter')->textInput(['value' => $filter])->label('Search'); ?>
+            </div>
             <label id="userPageSizeLabel">
                 <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
             </label>
