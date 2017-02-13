@@ -5,7 +5,8 @@
 
 #mileage_card_submit_btn {
     margin-top: 2%;
-    margin-left: 1%;
+    margin-right: 2%;
+	float:right;
 }
 
 .white_space {
@@ -13,32 +14,39 @@
 }
 
 div[id^=modalContent] .container {
-    padding: 10px 15px 20px;
+    padding: 10px 15px 0px;
 }
 
 div[id^=modalContent] .wrap #top-wrapper {
     display: none;
 }
 #mileageCardWeekSelection {
-    margin-top: 1%;
-}
-.mileage-index h3{
-	margin-bottom:0px;
+    margin-top: 7%;
 }
 #mileageCardGridViewContainer,#mileage_card_filter{
 	position:relative;
 	width:100%;
 	float:left;
 }
-#mileage_card_filter span{
-	width:auto;
-}
 #mileage_card_approve_btn{
-	margin-right:2%;
+	padding-left:0;
+}
+#mileageCardDropdownContainer{
+	padding-right:0;
+}
+#mileageCardWeekContainer{
+	float:left;
+}
+#mileageCardPageSizeContainer{
+	float:right;
 }
 #mileageCardDropdownContainer label{
 	padding-right:0;
 }
 #mileageCardDropdownContainer .form-control{
 	padding:6px 10px;
+}
+#mileageCardGridview .kv-grid-container{
+	max-height:59vh;
+	overflow-y:auto;
 }

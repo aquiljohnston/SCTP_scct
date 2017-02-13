@@ -15,17 +15,23 @@
 }
 
 #userButtons {
-    position: relative;
-    float: left;
-    width: 30%;
+	float:left;
+    width: 5%;
 }
-
 #userDropdownContainer {
-    position: relative;
     float: right;
-    width: auto;
+    width: 95%;
 }
-
 #userDropdownContainer label {
     padding-right: 0;
+}
+#filterContent{
+	float:left;
+}
+#userPageSizeLabel{
+	float:right;
+}
+#userGridview .kv-grid-container{
+	max-height:59vh;
+	overflow-y:auto;
 }

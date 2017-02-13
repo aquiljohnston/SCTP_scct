@@ -20,7 +20,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <div id="timecard_filter">
-		<span id="multiple_time_card_approve_btn">
+		<div id="multiple_time_card_approve_btn"  class="col-sm-3 col-md-2 col-lg-2">
 			<?php
             echo Html::button('Approve',
                 [
@@ -44,8 +44,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 /*'data' => [
                     'confirm' => 'Are you sure you want to approve this item?']*/
             ]) ?>
-		</span>
-        <span id="timeCardDropdownContainer">
+		</div>
+        <div id="timeCardDropdownContainer"  class="col-sm-9 col-md-10 col-lg-10">
 
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -56,19 +56,21 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 ]
 
             ]); ?>
-            <span>
-			<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
-				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-			<option value="current" <?= $currentSelected ?>>Current Week</option>
-                </select>
-                <input type="hidden" name="r" value="time-card/index"/>
-		</span>
+            <div id="timeCardWeekContainer">
+				<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
+					<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+					<option value="current" <?= $currentSelected ?>>Current Week</option>
+				</select>
+					<input type="hidden" name="r" value="time-card/index"/>
+			</div>
+			<div id="timeCardPageSizeLabelContainer">
 				<label id="timeCardPageSizeLabel">
 					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
 				</label>
 				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+			</div>
             <?php ActiveForm::end(); ?>
-		</span>
+		</div>
     </div>
     <div id="timeCardGridViewContainer">
         <div id="timeCardGV" class="timeCardForm">

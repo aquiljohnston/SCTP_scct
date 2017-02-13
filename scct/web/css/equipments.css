@@ -6,7 +6,7 @@
 #euqipmentButtons{
 	position:relative;
 	float:left;
-	width:30%;
+	width:auto;
 }
 #equipment_submit_btn{
 	margin-top: 2%;
@@ -22,4 +22,8 @@
 }
 #equipmentDropdownContainer .form-control{
 	padding:6px 10px;
+}
+#equipmentGridview .kv-grid-container{
+	max-height:59vh;
+	overflow-y:auto;
 }
