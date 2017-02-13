@@ -51,10 +51,10 @@ AppAsset::register($this);
 					
 				</div>
 			<?php }else{?>
-			    <div id="UserInfo">Welcome, <?php echo Yii::$app->session['UserFirstName'];?><?php echo" "?><?php echo Yii::$app->session['UserLastName'];?></div>
 				<div class="logout">
 					<input type='button' value='LOGOUT' id='logout_btn'>
 				</div>
+			    <div id="UserInfo">Welcome, <?php echo Yii::$app->session['UserFirstName'];?><?php echo" "?><?php echo Yii::$app->session['UserLastName'];?></div>
 			<?php }?>
 			</div>
 			<div class="container">

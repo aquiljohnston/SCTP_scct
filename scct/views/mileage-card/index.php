@@ -21,7 +21,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 
     <div id="mileage_card_filter">
         <!-- Approve Multiple Mileage Card button -->
-        <span id="mileage_card_approve_btn">
+        <div id="mileage_card_approve_btn" class="col-sm-2 col-md-1 col-lg-1">
 			<?php
             echo Html::button('Approve',
                 [
@@ -36,8 +36,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 $currentSelected = "selected";
             }
             ?>
-		</span>
-        <span id="mileageCardDropdownContainer" style="float:right;width:auto;">
+		</div>
+        <div id="mileageCardDropdownContainer" class="col-sm-10 col-md-11 col-lg-11">
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
@@ -46,19 +46,21 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     'id' => 'MileageCardForm',
                 ]
             ]); ?>
-            <span>
-			<select name="week" id="mileageCardWeekSelection">
-				<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-			<option value="current" <?= $currentSelected ?>>Current Week</option>
-			</select>
-			<input type="hidden" name="r" value="mileage-card/index"/>
-		</span>
+            <div id="mileageCardWeekContainer">
+				<select name="week" id="mileageCardWeekSelection">
+					<option value="prior" <?= $priorSelected ?>>Prior Week</option>
+				<option value="current" <?= $currentSelected ?>>Current Week</option>
+				</select>
+				<input type="hidden" name="r" value="mileage-card/index"/>
+			</div>
+			<div id="mileageCardPageSizeContainer">
 				<label id="mileageCardPageSizeLabel">
 					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
 				</label>
 				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+			</div>
             <?php ActiveForm::end(); ?>
-		</span>
+		</div>
     </div>
     <!-- General Table Layout for displaying Mileage Card Information -->
     <div id="mileageCardGridViewContainer">

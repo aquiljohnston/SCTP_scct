@@ -110,11 +110,13 @@ a.desc:after {
 }
 .sc_logout_logo {
 	margin-bottom: .5%;
+	margin-left:1%;
 }
 #UserInfo{
-	position: fixed;
-    right: 10%;
-    top: 35px;
+	position: relative;
+	float:right;
+    margin-right:20px;
+	margin-top:23px;
 	z-index:45;
 }
 #logout_btn{
@@ -219,6 +221,9 @@ ul > li >a:hover{
 	 max-height:300px;
 	 overflow: auto;
 }
+.modal{
+	margin-top:10%;
+}
 
 /*-----------End body----------*/
 
@@ -265,7 +270,7 @@ ul > li >a:hover{
 
 /*-----------responsive ----------*/
 @media only screen 
-and (max-width : 770px) {
+and (max-width : 870px) {
 /*---------Header responsive------*/
 .navbar-default {
 	background-color: #0067A6;
