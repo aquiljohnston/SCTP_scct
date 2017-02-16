@@ -66,7 +66,7 @@ class BaseController extends Controller
 		}
 		// http://stackoverflow.com/a/28452101
 		// This code has been modified from its original version. It has been formatted to fit your TV.
-		// (Modified from SA code to handle multiple parameters);
+		// (Modified from SO code to handle multiple parameters);
         // We split by a pipe delimiter in order to allow multiple search terms.
 		$terms = explode("|", Yii::$app->request->getQueryParam($param));
 		// Trim whitespace from every item
@@ -112,7 +112,26 @@ class BaseController extends Controller
         } else if(self::TARGET_API_SERVER == self::API_SERVER_LOCALHOST) {
             return "http://localhost:9090/index.php?r=$version%2F$path";
         }
+    }
 
+    public static function urlPrefix()
+    {
+        $url = explode(".", $_SERVER['SERVER_NAME']);
+
+        // if the servername contains the string local in the name ( localhost or apidev.local )
+        // or it is in a local class of IPs
+        if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
+                ||  $_SERVER['SERVER_NAME'] === '0.0.0.0'
+                || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
+        )
+        {
+            $prefix = "apidev";
+        }
+        else {
+            $prefix = $url[0];
+        }
+
+        return $prefix;
     }
 
     //function generates and executes a "GET" request and returns the response
@@ -121,7 +140,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::XClient,
+			'X-Client:' . self::urlPrefix(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -158,7 +177,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::XClient,
+			'X-Client:' . self::urlPrefix(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
@@ -197,7 +216,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::XClient,
+			'X-Client:' . self::urlPrefix(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
@@ -236,7 +255,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::XClient,
+			'X-Client:' . self::urlPrefix(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -267,12 +286,22 @@ class BaseController extends Controller
 		return $response;
 	}
 
-	public static function requirePermission($permission) {
-		//API RBAC permissions check
-		//Will throw 403 if current user doesn't have permission
-		self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission");
-		return true;
-	}
+    // Universal Permission Check
+    public static function requirePermission($permission) {
+        //API RBAC permissions check
+        //Will throw 403 if current user doesn't have permission
+        // Modify this commented out code to work with your specific client
+        // See PermissionDictionary.php
+        /*
+        if (PermissionDictionary::permissionIsPGE($permission)) {
+            self::executeGetRequest("pge%2Fpge-permissions%2Fcheck-permission&permission=$permission");
+        } else */ if (PermissionDictionary::permissionIsCT($permission)) {
+            self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission");
+        } else {
+            throw new ForbiddenHttpException();
+        }
+        return true;
+    }
 	
 	public static function can($permission) {
 		try {
