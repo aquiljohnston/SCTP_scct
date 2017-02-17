@@ -1,6 +1,11 @@
 .dispatch-dispatch{
-	margin-top:5%;
+	margin-top:6vh;
 }
 #dispatchGV{
 	width:60%;
+	float:left;
+}
+#surveyorsGV{
+	width:38%;
+	float:right;
 }
