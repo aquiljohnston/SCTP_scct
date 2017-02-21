@@ -47,6 +47,19 @@ div[id^=modalContent] .wrap #top-wrapper {
 	padding:6px 10px;
 }
 #mileageCardGridview .kv-grid-container{
-	max-height:59vh;
+	max-height:58vh;
 	overflow-y:auto;
+}
+/*responsive css* for table*/
+@media only screen 
+and (min-width : 1360px) {
+#mileageCardGridview .kv-grid-container{
+	max-height:40vh;
+}
+}
+@media only screen 
+and (min-width : 1900px) {
+#mileageCardGridview .kv-grid-container{
+	max-height:65vh;
+}
 }

@@ -58,8 +58,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             ]); ?>
             <div id="timeCardWeekContainer">
 				<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
-					<option value="prior" <?= $priorSelected ?>>Prior Week</option>
-					<option value="current" <?= $currentSelected ?>>Current Week</option>
+					<option value="prior" <?= $priorSelected ?> >Prior Week</option>
+					<option value="current" <?= $currentSelected ?> >Current Week</option>
 				</select>
 					<input type="hidden" name="r" value="time-card/index"/>
 			</div>

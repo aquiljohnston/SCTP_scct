@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		Modal::end();
 	?>
-	<br />     
+	<br>     
 
 	<!--Monday TableView-->
 	<h2 class="mileage_entry_header">Monday</h2>
@@ -181,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 
 	<!--Tuesday TableView-->
 	<h2 class="mileage_entry_header">Tuesday</h2>
@@ -237,7 +237,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 
 	<!--Wednesday TableView-->
 	<h2 class="mileage_entry_header">Wednesday</h2>
@@ -293,7 +293,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 
 	<!--Thursday TableView-->
 	<h2 class="mileage_entry_header">Thursday</h2>
@@ -349,7 +349,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 	
 	<!--Friday TableView-->
 	<h2 class="mileage_entry_header">Friday</h2>
@@ -405,7 +405,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 	
 	<!--Saturday TableView-->
 	<h2 class="mileage_entry_header">Saturday</h2>
@@ -461,6 +461,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	Modal::end();
 	?>
-	<br />
+	<br>
 
 </div>
