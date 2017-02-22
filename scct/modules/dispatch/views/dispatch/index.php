@@ -8,6 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'dispatchGV',
         'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
         'export' => false,
+        'pjax' => true,
         'caption' => 'Dispatch',
         'columns' => [
             [
@@ -19,14 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => 'Dispatch to',
-                'attribute' => 'inspector',
-                'format' => 'html',
-                'value' => function($model) {
-                    return "Dispatch dropdown here";
-                }
-            ],
-            [
                 'label' => 'Compliance Date',
                 'attribute' => 'complianceDate',
                 'format' => 'html',
@@ -35,14 +28,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => 'View Assets',
-                'attribute' => 'viewassets',
-
-
-            ],
-            [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
+                'header' => 'View<br/>Assets',
                 'urlCreator' => function ($action, $model, $key, $index) {
                     if ($action === 'view') {
                         $url ='/dispatch/assets?id='.$model['MapGrid']; //TODO: change to correct identifier.
@@ -50,6 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     return "";
                 }
+            ],
+            [
+                'class' => 'kartik\grid\CheckboxColumn'
             ]
         ]
 
@@ -61,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'surveyorsGV',
         'dataProvider' => $surveyorsDataProvider, // Sent from DispatchController.php
         'export' => false,
+        'pjax' => true,
         'caption' => 'Surveyors',
         'columns' => [
                 [
