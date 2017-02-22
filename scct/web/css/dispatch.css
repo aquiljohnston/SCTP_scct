@@ -1,5 +1,5 @@
-.dispatch-dispatch{
-	margin-top:6vh;
+.dispatch-dispatch,.dispatch-assigned,.dispatch-assets{
+	margin-top:60px;
 }
 #dispatchGV{
 	width:60%;
@@ -8,4 +8,11 @@
 #surveyorsGV{
 	width:38%;
 	float:right;
+}
+#assignedGV{
+	width:100%;
+	float:left;
+}
+#dispatchAssetsBackButton{
+	margin-bottom:5px;
 }
