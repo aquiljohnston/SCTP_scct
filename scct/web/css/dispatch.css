@@ -1,4 +1,5 @@
-.dispatch-dispatch,.dispatch-assigned,.dispatch-assets{
+/*dispatch css*/
+.dispatch,.dispatch-assigned,.dispatch-assets{
 	margin-top:60px;
 }
 #dispatchGV{
@@ -9,10 +10,26 @@
 	width:38%;
 	float:right;
 }
+#dispatchAssetsBackButton{
+	margin-bottom:5px;
+}
+.dispatch #dispatchButton,.dispatch-assigned  #addSurveyorsButton{
+	position:fixed;
+	bottom: 60px;
+	right: 20px;
+	z-index:42;	
+}
+/*dispatch css ends*/
+
+/*assigned css*/
 #assignedGV{
 	width:100%;
 	float:left;
 }
-#dispatchAssetsBackButton{
-	margin-bottom:5px;
+.dispatch-assigned #unAssignButton{
+	position:fixed;
+	bottom: 60px;
+	right: 180px;
+	z-index:42;	
 }
+/*assigned css ends*/
