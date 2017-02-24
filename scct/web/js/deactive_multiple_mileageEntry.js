@@ -54,7 +54,7 @@ $(function() {
 				}
 	});
 	
-	$(".grid-view input[type=checkbox]").click(function(){
+	$(".mileagecard-view input[type=checkbox]").click(function(){
 
 		var pks = $('.grid-view').yiiGridView('getSelectedRows');
 		

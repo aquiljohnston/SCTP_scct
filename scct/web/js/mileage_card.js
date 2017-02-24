@@ -19,10 +19,13 @@ $(function(){
 
     $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function () {
         $('#loading').show();
-        $('#mileageCardGridview').on('pjax:success', function () {
-            $('#loading').hide();
-        });
     });
+    // Take this out of onclick so it doesn't get stacked up
+    $('#mileageCardGridview').on('pjax:success', function () {
+        $('#loading').hide();
+        applyOnClickListeners();
+    });
+
     
     function reloadGridView() {
         var form = jqMCDropDowns.find("#MileageCardForm");
@@ -38,6 +41,7 @@ $(function(){
             timeout: 99999
         }).done(function () {
             $('#loading').hide();
+            applyOnClickListeners();
         });
     }
 });

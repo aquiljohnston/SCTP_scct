@@ -5,6 +5,7 @@ namespace app\modules\dispatch\controllers;
 use InspectionRequest;
 use Yii;
 use yii\data\ArrayDataProvider;
+use yii\web\Response;
 
 /**
  * Created by PhpStorm.
@@ -14,7 +15,8 @@ use yii\data\ArrayDataProvider;
  */
 
 class DispatchController extends \app\controllers\BaseController {
-    public function actionIndex() {
+    public function actionIndex()
+    {
         // Verify logged in
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['login/login']);
@@ -54,5 +56,15 @@ class DispatchController extends \app\controllers\BaseController {
 
         ]);
 
+    }
+
+    public function actionPost() {
+        $data = [
+            'status' => 'Not implemented'
+        ];
+        $response = Yii::$app->response;
+        $response->format = Response::FORMAT_JSON;
+        $response->data = $data;
+        return $response;
     }
 }
