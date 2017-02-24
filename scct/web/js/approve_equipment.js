@@ -50,12 +50,12 @@ $(function() {
 				}
 	});
 	
-	$(".kv-row-select input[type=checkbox]").click(function(){
+	$("#GridViewForEquipment .kv-row-select input[type=checkbox]").click(function(){
 		var checkApproved = $(this).attr("accepted");
 
 		//alert("checkApproved is :　"+checkApproved);
 		var model = $(this).attr('model');
-		var pks = $('#w0').yiiGridView('getSelectedRows');
+		var pks = $('#GridViewForEquipment').yiiGridView('getSelectedRows');
 		//alert("pks length is ：　"+pks);
 		for(var i=0; i < pks.length; i++){
 			// get approved value for this timecard
