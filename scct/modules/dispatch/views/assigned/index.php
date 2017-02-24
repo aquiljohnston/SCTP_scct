@@ -4,10 +4,10 @@ use yii\bootstrap\Html;
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="dispatch-dispatch">
+<div class="dispatch-assigned">
 
     <?= \kartik\grid\GridView::widget([
-        'id' => 'dispatchGV',
+        'id' => 'assignedGV',
         'dataProvider' => $assignedDataProvider, // Sent from DispatchController.php
         'export' => false,
         'pjax' => true,
