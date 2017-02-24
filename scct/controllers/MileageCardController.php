@@ -16,6 +16,7 @@ use yii\web\Request;
 use yii\web\ForbiddenHttpException;
 use \DateTime;
 use yii\data\Pagination;
+use yii\web\Response;
 
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
@@ -522,9 +523,25 @@ class MileageCardController extends BaseController
 
             // post url
             $putUrl = 'mileage-card%2Fapprove-cards';
-            Parent::executePutRequest($putUrl, $json_data); //indirect rbac
-
-            return $this->redirect(['index']);
+            $apiResponse = parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2); //indirect rbac
+            $json_response_data = json_decode($apiResponse, true);
+            //create response
+            $response =  Yii::$app->response;
+            $response -> format = Response::FORMAT_JSON;
+            if($json_response_data['success']) {
+                $data = [];
+                $data['cards'] = $json_response_data['cards'];
+                $data['status'] = "200 Success";
+                $data['success'] = true;
+                $response->data = $data;
+            } else {
+                $data = [];
+                $data['cards'] = null;
+                $data['status'] = "400 Bad Request";
+                $data['success'] = false;
+                $response->data = $data;
+            }
+            return $response;
         } else {
             throw new \yii\web\BadRequestHttpException;
         }

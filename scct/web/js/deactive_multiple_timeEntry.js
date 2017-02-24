@@ -59,7 +59,7 @@ $(function() {
 				}
 		
 	});
-	$(".grid-view input[type=checkbox]").click(function(){
+	$(".timecard-view input[type=checkbox]").click(function(){
 		
 		// get approved value for this timecard
 		approved = $(".timecard-view").attr("approved");

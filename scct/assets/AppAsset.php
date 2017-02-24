@@ -29,7 +29,8 @@ class AppAsset extends AssetBundle
         'css/projectlanding.css',
         'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
         'css/customGridviewStyle.css',
-        'css/customSortableInputStyle.css'
+        'css/customSortableInputStyle.css',
+        'css/dispatch.css'
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -49,7 +50,8 @@ class AppAsset extends AssetBundle
         'js/time_card.js',
         'js/mileage_card.js',
         'js/equipment.js',
-        'js/user.js'
+        'js/user.js',
+        'js/dispatch.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
