@@ -9,17 +9,22 @@ use Yii;
  *
  * @property integer $TimeEntryID
  * @property integer $TimeEntryUserID
- * @property string $TimeEntryStartTime
- * @property string $TimeEntryEndTime
- * @property string $TimeEntryDate
+ * @property string  $TimeEntryStartTime
+ * @property string  $TimeEntryEndTime
+ * @property string  $TimeEntryWeekDay
+ * @property string  $TimeEntryDate
+ * @property string  $TimeEntryActiveFlag
+ * @property string  $TimeEntryHours
  * @property integer $TimeEntryMinutes
- * @property string $TimeEntryTimeCardID
+ * @property integer $TimeEntryTimeCardID
+ * @property integer $TimeCardFK
  * @property integer $TimeEntryActivityID
- * @property string $TimeEntryComment
- * @property string $TimeEntryCreateDate
- * @property string $TimeEntryCreatedBy
- * @property string $TimeEntryModifiedDate
- * @property string $TimeEntryModifiedBy
+ * @property string  $TimeEntryComment
+ * @property string  $TimeEntryArchiveFlag
+ * @property string  $TimeEntryCreateDate
+ * @property string  $TimeEntryCreatedBy
+ * @property string  $TimeEntryModifiedDate
+ * @property string  $TimeEntryModifiedBy
  *
  * @property ActivityTb $timeEntryActivity
  * @property TimeCardTb $timeEntryTimeCard
@@ -31,18 +36,21 @@ class TimeEntry extends \yii\base\model
 	public $TimeEntryUserID;
 	public $TimeEntryStartTime;
 	public $TimeEntryEndTime;
+	public $TimeEntryWeekDay;
 	public $TimeEntryDate;
+	public $TimeEntryActiveFlag;
+	public $TimeEntryHours;
 	public $TimeEntryMinutes;
 	public $TimeEntryTimeCardID;
+	public $TimeCardFK;
 	public $TimeEntryActivityID;
 	public $TimeEntryComment;
+	public $TimeEntryArchiveFlag;
 	public $TimeEntryCreateDate;
 	public $TimeEntryCreatedBy;
 	public $TimeEntryModifiedDate;
 	public $TimeEntryModifiedBy;
 
-	//Taken from database
-	const MAX_COMMENT_LENGTH = 255;
     /**
      * @inheritdoc
      */
@@ -50,8 +58,8 @@ class TimeEntry extends \yii\base\model
     {
         return [
             [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
-            [['TimeEntryID', 'TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'integer'],
-            [['TimeEntryComment'], 'string', 'max' => self::MAX_COMMENT_LENGTH]
+            [['TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeCardFK'], 'integer'],
+            [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryWeekDay', 'TimeEntryHours', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
         ];
     }
 
@@ -66,10 +74,15 @@ class TimeEntry extends \yii\base\model
             'TimeEntryStartTime' => 'Time Entry Start Time',
             'TimeEntryEndTime' => 'Time Entry End Time',
             'TimeEntryDate' => 'Time Entry Date',
+			'TimeEntryWeekDay' => 'Time Entry Week Day',
+			'TimeEntryActiveFlag' => 'Time Entry Active Flag',
+			'TimeEntryHours' => 'Time Entry Hours',
 			'TimeEntryMinutes' => 'Time Entry Minutes',
             'TimeEntryTimeCardID' => 'Time Entry Time Card ID',
+			'TimeCardFK' => 'Time Card FK',
             'TimeEntryActivityID' => 'Time Entry Activity ID',
             'TimeEntryComment' => 'Time Entry Comment',
+			'TimeEntryArchiveFlag' => 'Time Entry Archive Flag',
             'TimeEntryCreateDate' => 'Time Entry Create Date',
             'TimeEntryCreatedBy' => 'Time Entry Created By',
             'TimeEntryModifiedDate' => 'Time Entry Modified Date',

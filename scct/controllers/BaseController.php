@@ -19,6 +19,7 @@ class BaseController extends Controller
     // VERSION contains the string for the SCAPI version that one wishes to target.
     const API_VERSION_1 = "v1";
     const API_VERSION_2 = "v2";
+	const DATE_FORMAT = 'Y-m-d H:i:s';
 
     // arbitrary numbers (can't be equal to each other)
     // the numbers are prime for no reason whatsoever
@@ -334,4 +335,23 @@ class BaseController extends Controller
             return ['navMenu' => $mavMenuResponse];
         }
     }
+	
+	//returns a date time in the const format
+	public function getDate()
+	{
+		return date(SELF::DATE_FORMAT);
+	}
+	
+	//type: type of data the UID will be associated with such as User, breadcrumb, activty, etc.
+	public static function generateUID($type)
+	{
+		//generate random number
+		$random = rand(10000000, 99999999);
+		
+		//get current date time in format YmdHis
+		$date = date("YmdHis");
+		
+		//concat values into string and return the resulting UID
+		return "{$type}_{$random}_{$date}_WEB";
+	}
 }
