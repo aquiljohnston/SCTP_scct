@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\User;
+use app\models\Activity;
+use app\models\TimeEntry;
 use yii\filters\AccessControl;
 use app\controllers\BaseController;
 use yii\filters\VerbFilter;
@@ -51,68 +53,72 @@ class LoginController extends BaseController
 
     public function actionIndex()
     {
-        //guest redirect
-        try {
-            if (Yii::$app->user->isGuest) {
-                return $this->redirect(['login/login']);
-            } else {
-                return $this->redirect(['home/index']);
-            }
+		try {
+			$isGuest = \Yii::$app->user->isGuest;
 		} catch (UnauthorizedHttpException $exception) {
-            return $this->redirect(['login/login']);
-        }
-
-        // $model = new LoginForm();
-        // return $this->render('index', [
-        //     'model' => $model,
-        // ]);
-    }
-
-    public function actionLogin()
-    {
-        try {
-            $isGuest = \Yii::$app->user->isGuest;
-        } catch (UnauthorizedHttpException $exception) {
-            $isGuest = true;
-        }
-        if (!$isGuest) {
-				return $this->redirect(['home/index']);
-		}else{
-
+			$isGuest = true;
+		}
+		if (!$isGuest) {
+			return $this->redirect(['home/index']);
+		}else{	
 			$loginError = false;
 			$model = new LoginForm();
-			if ($model->load(Yii::$app->request->post()) && $user = $model->login()) {
-				Yii::$app->session->set('token', $user['AuthToken']);
-				Yii::$app->session->set('userID', $user['AuthUserID']);
-				Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
-				Yii::$app->session->set('UserLastName', $user['UserLastName']);
-				Yii::Trace("session user id: ".Yii::$app->session['userID']);
-				$userIdentity = new User();
-				$userIdentity->UserID = $user['AuthUserID'];
-				Yii::$app->user->login($userIdentity);
-				Yii::Trace("identity user id: ".Yii::$app->user->getId());
-				return $this->redirect(['home/index']);
-			} else {
-				if(Yii::$app->request->isPost) {
+			$geoLocationData = [];
+					
+			if($postData = Yii::$app->request->post())		
+			{
+				$model->username = $postData['username'];
+				$model->password = $postData['password'];
+				$geoLocationData = $postData['GeoData'];
+						
+				if ($user = $model->login()) {	
+					//set session variables			
+					Yii::$app->session->set('token', $user['AuthToken']);
+					Yii::$app->session->set('userID', $user['AuthUserID']);
+					Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
+					Yii::$app->session->set('UserLastName', $user['UserLastName']);
+					//get users time card and store in session data
+					$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
+					$userTimeCard = json_decode($timeCardResponse, true);
+					if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
+					{
+						Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
+					}
+					
+					$userIdentity = new User();
+					$userIdentity->UserID = $user['AuthUserID'];
+				
+					//call function to create/send login activity
+					self::logActivity('WebLoginActivity', $geoLocationData);
+					
+					Yii::$app->user->login($userIdentity);
+					return $this->redirect(['home/index']);
+					//return $this->redirect('home');
+				} else {
 					$loginError = true;
 				}
 				// Clear the fields
 				$model = new LoginForm();
-			}
+				return $this->renderAjax('index', [
+					'model' => $model,
+					'loginError' => $loginError
+				]);	
+			};	
 			return $this->render('index', [
 				'model' => $model,
 				'loginError' => $loginError
-			]);
-			
+			]);	
 		}	
-    }
+	}
 
     public function actionUserLogout()
     {	
-		Yii::Trace("User Logout.");
 		$id = Yii::$app->session['userID'];
 		
 		try {
+			//call function to create/send logout activity
+			self::logActivity('WebLogoutActivity');
+			
 		    Yii::$app->user->logout();
             $url = 'login%2Fuser-logout&userID='.$id;
             $response = Parent::executeGetRequest($url);
@@ -122,4 +128,71 @@ class LoginController extends BaseController
 
         return $this->redirect(['login/index']);
     }
+	
+	public static function logActivity($activityTitle, $geoLocationData=null)
+	{
+		//create models
+		$activity = new Activity();
+		$timeEntry = new TimeEntry();
+		
+		//populate activity data
+		$activity->ActivityUID = BaseController::generateUID($activityTitle);
+		$activity->ActivityStartTime = BaseController::getDate();
+		$activity->ActivityEndTime = BaseController::getDate();
+		$activity->ActivitySrcDTLT = BaseController::getDate();
+		$activity->ActivityTitle = $activityTitle;
+		$activity->ActivityCreateDate = BaseController::getDate();
+		$activity->ActivityCreatedUserUID = Yii::$app->session['userID'];
+		$activity->ActivityAppVersion = 'Web_' . BaseController::DEFAULT_VERSION;
+		$activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . BaseController::DEFAULT_VERSION;
+		//loop and format geolocation data
+		if(is_array($geoLocationData))
+		{
+			/*
+			Geo Location Data Key
+			0 => 'Latitude'
+			1 => 'Longitude'
+			2 => 'Accuracy'
+			3 => 'Altitude'
+			4 => 'AltitudeAccuracy'
+			5 => 'Heading'
+			6 => 'Speed'
+			7 => 'Timestamp'       
+			*/
+			$activity->ActivityLatitude = $geoLocationData[0];
+			$activity->ActivityLongitude = $geoLocationData[1];
+			$activity->ActivityFixQuality = $geoLocationData[2];
+			$activity->ActivityAltitudemetersAboveMeanSeaLevel = $geoLocationData[3];
+			$activity->ActivityBearing = $geoLocationData[5];
+			$activity->ActivitySpeed = $geoLocationData[6];
+			$activity->ActivityGPSTime = $geoLocationData[7];
+		}
+		else
+		{
+			$activity->ActivityComments = $geoLocationData;
+		}
+		
+		//populate timeEntry data
+		$timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
+		$timeEntry->TimeEntryStartTime = BaseController::getDate();
+		$timeEntry->TimeEntryEndTime = BaseController::getDate();
+		$timeEntry->TimeEntryActiveFlag = 1;
+		$timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
+		$timeEntry->TimeEntryCreateDate = BaseController::getDate();
+		$timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
+		
+		//build post json
+		$postData = [];
+		$activityArray = [];
+		$timeEntryArray = [];
+		
+		//populate post data
+		$timeEntryArray[] = $timeEntry;
+		$activity['timeEntry'] = $timeEntryArray;
+		$activityArray[] = $activity;
+		$postData['activity'] = $activityArray;
+		
+		//execute post request
+		$response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData));
+	}
 }

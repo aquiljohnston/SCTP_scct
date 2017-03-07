@@ -6,6 +6,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use yii\widgets\Pjax;
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;
@@ -20,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
     <p>Please fill out the following fields to login:</p>
 
+	<?php yii\widgets\Pjax::begin(['id' => 'loginForm']) ?>
     <?php $form = ActiveForm::begin([
         'id' => 'login-form',
         'options' => ['class' => 'form-horizontal'],
@@ -29,28 +31,87 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['placeholder'=>'Username']) ?>
+        <?= $form->field($model, 'username')->textInput(['placeholder'=>'Username', 'id' => 'username']) ?>
 
-        <?= $form->field($model, 'password')->passwordInput(['placeholder'=>'Password']) ?>
-
-        <?= $form->field($model, 'rememberMe')->checkbox([
-            'template' => "<div class=\"col-sm-offset-1 col-sm-6 col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-sm-offset-1 col-sm-8 col-lg-8\">{error}</div>",
-        ]) ?>
+        <?= $form->field($model, 'password')->passwordInput(['placeholder'=>'Password', 'id' => 'password']) ?>
 
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">
-                <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <?= Html::button('Login', ['class' => 'btn btn-primary', 'name' => 'login-button', 'id' => 'loginButton', 'onclick' => 'getLocation(event);']) ?>
             </div>
         </div>
 
     <?php ActiveForm::end(); ?>
-
-    <!--<div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        Ref. code <code>app\models\User::$users</code>.
-    </div>-->
+	<?php yii\widgets\Pjax::end();?>
 </div>
 
 <script type="text/javascript">
-    localStorage.clear();
+	localStorage.clear();
+
+	var geoLocationKeys = [];
+	var geoLocationData = [];
+	var geoLocationError = "";
+
+	function getLocation() {	
+		if (navigator.geolocation) {		
+				navigator.geolocation.getCurrentPosition(showPosition, showError);
+		} else { 
+			geoLocationError = "Geolocation is not supported by this browser.";
+		}
+	}
+	
+	function showPosition(position) {
+		//create array of geo location data
+		geoLocationData.push(position.coords.latitude);
+		geoLocationData.push(position.coords.longitude);
+		geoLocationData.push(position.coords.accuracy);
+		geoLocationData.push(position.coords.altitude);
+		geoLocationData.push(position.coords.altitudeAccuracy);
+		geoLocationData.push(position.coords.heading);
+		geoLocationData.push(position.coords.speed);
+		geoLocationData.push(position.timestamp);
+		
+		//send geolocation data
+		$.pjax.reload({
+			url: '/login',
+			data: {GeoData: geoLocationData, 
+				   username: $('#username').val(),
+				   password: $('#password').val()
+					
+				},
+			container: "#loginForm",	
+			type: 'POST',
+			timeout: 99999
+		});
+	}
+
+	function showError(error) {
+		switch(error.code) {
+			case error.PERMISSION_DENIED:
+				geoLocationError = "User denied the request for Geolocation."
+				break;
+			case error.POSITION_UNAVAILABLE:
+				geoLocationError = "Location information is unavailable."
+				break;
+			case error.TIMEOUT:
+				geoLocationError = "The request to get user location timed out."
+				break;
+			case error.UNKNOWN_ERROR:
+				geoLocationError = "An unknown error occurred."
+				break;
+		}
+		
+		//send error message
+		$.pjax.reload({
+			url: '/login',
+			data: {GeoData: geoLocationError, 
+				   username: $('#username').val(),
+				   password: $('#password').val()
+					
+				},
+			container: "#loginForm",	
+			type: 'POST',
+			timeout: 99999
+		});
+	}
 </script>

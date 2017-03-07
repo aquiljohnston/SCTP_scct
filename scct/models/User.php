@@ -19,8 +19,7 @@ use app\controllers\BaseController;
  * @property string $UserCompanyPhone
  * @property string $UserAppRoleType
  * @property string $UserComments
- * @property string $UserKey
- * @property string $Password 
+ * @property string $UserPassword 
  * @property integer $UserActiveFlag
  * @property string $UserCreatedDate
  * @property string $UserModifiedDate
