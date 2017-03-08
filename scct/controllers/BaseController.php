@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\dictionaries\PermissionDictionary;
 use Yii;
 use app\models\user;
 use app\models\UserSearch;
@@ -337,7 +338,7 @@ class BaseController extends Controller
     }
 	
 	//returns a date time in the const format
-	public function getDate()
+	public static function getDate()
 	{
 		return date(SELF::DATE_FORMAT);
 	}
