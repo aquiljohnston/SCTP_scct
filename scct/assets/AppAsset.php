@@ -30,6 +30,7 @@ class AppAsset extends AssetBundle
         'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
         'css/customGridviewStyle.css',
         'css/customSortableInputStyle.css',
+        'css/login.css',
         'css/dispatch.css'
     ];
     public $cssOptions = [

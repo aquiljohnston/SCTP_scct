@@ -161,9 +161,9 @@ a.desc:after {
 }
 #copyright-bar{
 	float: right;
-	height: 50px;
+	height: 30px;
 	text-align: right;
-	padding-top: 18px;
+	padding-top: 5px;
 	color: #FFFFFF;
 	font-family: 'Roboto', sans-serif;
 	font-weight: 100;
@@ -224,7 +224,15 @@ ul > li >a:hover{
 .modal{
 	margin-top:10%;
 }
-
+.pagination{
+	float:right;
+}
+.GridviewTotalNumber{
+	position: fixed;
+    bottom: 45px;
+    left: 2%;
+    z-index: 42;
+}
 /*-----------End body----------*/
 
 /*-----------End body----------*/
@@ -235,12 +243,22 @@ ul > li >a:hover{
 /*-----------End body----------*/
 
 /*-----------Start footer----------*/
+.footerabove {
+    position: fixed;
+    bottom: 30px;	
+	left:0;
+    width: 100%;
+    height: 50px;
+    background-color: #E6F0F5;
+    z-index: 40;
+    opacity: 1;
+}
 .copyright-section{
     margin-top: .5%;
     width: 100%;
     position: fixed;
 	bottom:0;
-	z-index:3;
+	z-index:40;
 }
 /*-----------End footer----------*/
 
