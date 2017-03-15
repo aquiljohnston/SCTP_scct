@@ -89,8 +89,20 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'attribute' => 'ProjectName',
                         'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
                     ],
-                    'MileageStartDate',
-                    'MileageEndDate',
+                    [
+                        'label' => 'Start Date',
+                        'attribute' => 'MileageStartDate',
+                        'value' => function($model) {
+                            return date("m/d/Y", strtotime($model['MileageStartDate']));
+                        }
+                    ],
+                    [
+                        'label' => 'End Date',
+                        'attribute' => 'MileageEndDate',
+                        'value' => function($model) {
+                            return date("m/d/Y", strtotime($model['MileageEndDate']));
+                        }
+                    ],
                     'SumMiles',
                     [
                         'label' => 'Approved',

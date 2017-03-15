@@ -99,8 +99,20 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'attribute' => 'ProjectName',
                         'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
                     ],
-                    'TimeCardStartDate',
-                    'TimeCardEndDate',
+                    [
+                            'label' => 'Start Date',
+                            'attribute' => 'TimeCardStartDate',
+                            'value' => function($model) {
+                                return date("m/d/Y", strtotime($model['TimeCardStartDate']));
+                            }
+                    ],
+                    [
+                        'label' => 'End Date',
+                        'attribute' => 'TimeCardEndDate',
+                        'value' => function($model) {
+                            return date("m/d/Y", strtotime($model['TimeCardEndDate']));
+                        }
+                    ],
                     'SumHours',
                     [
                         'label' => 'Approved',
