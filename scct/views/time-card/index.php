@@ -14,14 +14,17 @@ use kartik\form\ActiveForm;
 $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
+$this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
+        'week' => $week
+    ]);
 ?>
 
 <div class="timecard-index">
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <div id="timecard_filter">
-		<div id="multiple_time_card_approve_btn"  class="col-sm-3 col-md-2 col-lg-2">
-			<?php
+        <div id="multiple_time_card_approve_btn" class="col-sm-3 col-md-2 col-lg-2">
+            <?php
             echo Html::button('Approve',
                 [
                     'class' => 'btn btn-primary multiple_approve_btn',
@@ -36,18 +39,17 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 $currentSelected = "selected";
             }
             ?>
+            <?php
+            if ($pages->totalCount > 0) {
+                ?>
+                <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
+                   href="<?= $this->params['download_url']; ?>">Export</a>
+            <?php } ?>
 
-            <?= Html::button('Export', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'export_timecard_btn',
-                /*'data' => [
-                    'confirm' => 'Are you sure you want to approve this item?']*/
-            ]) ?>
-		</div>
-        <div id="timeCardDropdownContainer"  class="col-sm-9 col-md-10 col-lg-10">
+        </div>
+        <div id="timeCardDropdownContainer" class="col-sm-9 col-md-10 col-lg-10">
 
-			<?php $form = ActiveForm::begin([
+            <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
                 'method' => 'post',
@@ -57,20 +59,20 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 
             ]); ?>
             <div id="timeCardWeekContainer">
-				<select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
-					<option value="prior" <?= $priorSelected ?> >Prior Week</option>
-					<option value="current" <?= $currentSelected ?> >Current Week</option>
-				</select>
-					<input type="hidden" name="r" value="time-card/index"/>
-			</div>
-			<div id="timeCardPageSizeLabelContainer">
-				<label id="timeCardPageSizeLabel">
-					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
-				</label>
-				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
-			</div>
+                <select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
+                <option value="prior" <?= $priorSelected ?> >Prior Week</option>
+                <option value="current" <?= $currentSelected ?> >Current Week</option>
+                </select>
+                <input type="hidden" name="r" value="time-card/index"/>
+            </div>
+            <div id="timeCardPageSizeLabelContainer">
+                <label id="timeCardPageSizeLabel">
+                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
+                </label>
+                <input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+            </div>
             <?php ActiveForm::end(); ?>
-		</div>
+        </div>
     </div>
     <div id="timeCardGridViewContainer">
         <div id="timeCardGV" class="timeCardForm">
@@ -100,16 +102,16 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
                     ],
                     [
-                            'label' => 'Start Date',
-                            'attribute' => 'TimeCardStartDate',
-                            'value' => function($model) {
-                                return date("m/d/Y", strtotime($model['TimeCardStartDate']));
-                            }
+                        'label' => 'Start Date',
+                        'attribute' => 'TimeCardStartDate',
+                        'value' => function ($model) {
+                            return date("m/d/Y", strtotime($model['TimeCardStartDate']));
+                        }
                     ],
                     [
                         'label' => 'End Date',
                         'attribute' => 'TimeCardEndDate',
-                        'value' => function($model) {
+                        'value' => function ($model) {
                             return date("m/d/Y", strtotime($model['TimeCardEndDate']));
                         }
                     ],

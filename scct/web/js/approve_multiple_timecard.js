@@ -19,7 +19,7 @@ $(function () {
 
         //alert("checkApproved is :　"+checkApproved);
         //var model = $(this).attr('model');
-        var pks = $('#w0').yiiGridView('getSelectedRows');
+        var pks = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         //alert("pks length is ：　"+pks.length);
         for (var i = 0; i < pks.length; i++) {
             // get approved value for this timecard
@@ -50,7 +50,7 @@ $(function () {
                         url: '/time-card/approve-multiple',
                         data: {timecardid: pks},
                         success: function (data) {
-                            $.pjax.reload({container: '#w0'});
+                            $.pjax.reload({container: '#GridViewForTimeCard'});
                         }
                     });
                 } else {
@@ -58,10 +58,8 @@ $(function () {
                     e.preventDefault();
                 }
             });
-            $('#export_timecard_btn').prop('disabled', false); //TO ENABLE
         } else {
             $('#multiple_approve_btn_id').prop('disabled', true);
-            $('#export_timecard_btn').prop('disabled', true);
         }
     });
 
