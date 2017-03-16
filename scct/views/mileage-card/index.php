@@ -13,6 +13,9 @@ use kartik\form\ActiveForm;
 $this->title = 'Mileage Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
+$this->params['download_url'] = '/mileage-card/download-mileage-card-data?'.http_build_query([
+        'week' => $week
+    ]);
 ?>
 <div class="mileage-index">
 
@@ -36,7 +39,10 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 $currentSelected = "selected";
             }
             ?>
-		</div>
+            <?php if ($pages->totalCount > 0){?>
+                <a id="export_mileagecard_btn" class="btn btn-primary" target="_blank" href="<?= $this->params['download_url'];?>">Export</a>
+		    <?php } ?>
+        </div>
         <div id="mileageCardDropdownContainer" class="col-sm-10 col-md-11 col-lg-11">
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,

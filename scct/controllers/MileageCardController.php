@@ -548,6 +548,47 @@ class MileageCardController extends BaseController
     }
 
     /**
+     * Get MileageCard History Data
+     * @return \yii\web\Response
+     * @throws ForbiddenHttpException
+     */
+    public function actionDownloadMileageCardData() {
+        try {
+            Yii::trace("get called");
+            // check if user has permission
+            //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
+
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['login/login']);
+            }
+
+            $model = new \yii\base\DynamicModel([
+                'week'
+            ]);
+            $model->addRule('week', 'string', ['max' => 32]);
+
+            $week = "current";
+
+            if ($model->load(Yii::$app->request->queryParams,'')) {
+                $week = $model->week;
+            }
+
+            $url = 'mileage-card%2Fget-mileage-cards-history-data&' . http_build_query([
+                    'week' => $week
+                ]);
+
+            header('Content-Disposition: attachment; filename="mileagecard_history_'.date('Y-m-d_h_i_s').'.csv"');
+            $this->requestAndOutputCsv($url);
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (\Exception $e) {
+            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            // Yii::$app->runAction('login/user-logout');
+        }
+    }
+
+    /**
      * Calculate total work hours
      * @return total work hours
      */
@@ -562,5 +603,21 @@ class MileageCardController extends BaseController
         }
 
         return number_format($Total_Mileages, 2);
+    }
+
+    /**
+     * Export TimeCard Table To Excel File
+     * @param $url
+     */
+    public function requestAndOutputCsv($url){
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        $fp = fopen('php://temp','w');
+        header('Content-Type: text/csv;charset=UTF-8');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        Parent::executeGetRequestToStream($url,$fp);
+        rewind($fp);
+        echo stream_get_contents($fp);
+        fclose($fp);
     }
 }
