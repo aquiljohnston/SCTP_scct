@@ -172,6 +172,62 @@ class BaseController extends Controller
 		
 		return $response;
 	}
+
+    //function generates and executes a "GET" request and places the response in the stream/filepointer given by $fp
+    public static function executeGetRequestToStream($url, $fp=null, $token = null)
+    {
+        if($token === null) {
+            $token = Yii::$app->session['token'];
+        }
+        if (null==$fp) {
+            throw new Exception('Invalid file pointer');
+        }
+
+        $url = self::prependURL($url);
+        $prefix = self::urlPrefix();
+        //set headers
+        $headers = array(
+            'X-Client:'.$prefix,
+            'Accept:application/json',
+            'Content-Type:application/json',
+            'Authorization: Basic '. base64_encode($token.': ')
+        );
+
+        //init new curl
+        $curl = curl_init();
+        //set curl options
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FILE, $fp);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 180);
+//        curl_setopt($curl, CURLOPT_WRITE, $fp);
+        //execute curl
+        curl_exec ($curl);
+        //check authorization, logout and redirect to login if unauthorized
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        Yii::trace("HTTP CODE: $httpCode");
+        if($httpCode == 401) // Not authenticated
+        {
+            //should be able to check response for error message at this point if we end up having more unauthorized cases
+            $url = '/login/user-logout';
+            Yii::$app->getResponse()->redirect($url)->send();
+        }
+        else if($httpCode == 403) // Inadequate permissions.
+        {
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        }
+        else if ($httpCode == 400) // Bad Request
+        {
+            throw new BadRequestHttpException('You sent an invalid request.');
+        }
+        else if ($httpCode === 0 || $httpCode === null) {
+            throw new \Exception('Most probably the request timed out');
+        }
+        curl_close ($curl);
+//        fclose($fp); if we were to close it here we would not be able to read the contents
+    }
 	
 	//function generates and executes a "POST" request and returns the response
     public static function executePostRequest($url, $postData, $version = self::DEFAULT_VERSION)
@@ -330,6 +386,7 @@ class BaseController extends Controller
             //get nav menu by calling API route
             $mavMenuResponse = self::executeGetRequest($navMenuUrl); // indirect rbac
 
+            Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
             //set up response data type
             Yii::$app->response->format = 'json';
 
