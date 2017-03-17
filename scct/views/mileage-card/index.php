@@ -24,7 +24,7 @@ $this->params['download_url'] = '/mileage-card/download-mileage-card-data?'.http
 
     <div id="mileage_card_filter">
         <!-- Approve Multiple Mileage Card button -->
-        <div id="mileage_card_approve_btn" class="col-sm-2 col-md-1 col-lg-1">
+        <div id="mileage_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
 			<?php
             echo Html::button('Approve',
                 [
@@ -43,7 +43,7 @@ $this->params['download_url'] = '/mileage-card/download-mileage-card-data?'.http
                 <a id="export_mileagecard_btn" class="btn btn-primary" target="_blank" href="<?= $this->params['download_url'];?>">Export</a>
 		    <?php } ?>
         </div>
-        <div id="mileageCardDropdownContainer" class="col-sm-10 col-md-11 col-lg-11">
+        <div id="mileageCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],

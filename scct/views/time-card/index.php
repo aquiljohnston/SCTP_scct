@@ -23,7 +23,7 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <div id="timecard_filter">
-        <div id="multiple_time_card_approve_btn" class="col-sm-3 col-md-2 col-lg-2">
+        <div id="multiple_time_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
             <?php
             echo Html::button('Approve',
                 [
@@ -47,7 +47,7 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
             <?php } ?>
 
         </div>
-        <div id="timeCardDropdownContainer" class="col-sm-9 col-md-10 col-lg-10">
+        <div id="timeCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
 
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
