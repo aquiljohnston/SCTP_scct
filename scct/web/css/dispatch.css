@@ -15,7 +15,7 @@
 }
 .dispatch #dispatchButton,.dispatch-assigned  #addSurveyorsButton{
 	position:fixed;
-	bottom: 60px;
+	bottom: 32px;
 	right: 20px;
 	z-index:42;	
 }
@@ -28,7 +28,7 @@
 }
 .dispatch-assigned #unAssignButton{
 	position:fixed;
-	bottom: 60px;
+	bottom: 32px;
 	right: 180px;
 	z-index:42;	
 }

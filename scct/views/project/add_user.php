@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="row">
 		<div class="col-sm-6">
 		<label style="font-size:20px">Unassigned Users</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div class="projectAddUserForms">
 				<?= $form->field($model, 'UnassignedUsers')->widget(SortableInput::classname(),[
 					//'name'=>'Unassigned Users',
 					'items' => $unassignedData,
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="col-sm-6">
 		<label style="font-size:20px">Assigned Users</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div class="projectAddUserForms">
 				<?= $form->field($model, 'AssignedUsers')->widget(SortableInput::classname(),[
 					'name'=>'Assigned Users',
 					'items' => $assignedData,
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		</div>
 	
-	<div class="form-group" id="">
+	<div class="form-group">
         <?= Html::submitButton( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
         <?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>
     </div>

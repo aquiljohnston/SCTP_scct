@@ -98,13 +98,13 @@
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 .login_logo {
-	margin-top:6%;
+	margin-top:3%;
 }
 #login-form,#loginLoading {
 	margin-top:1%;
 }
 #loginbox{
-	top:100px;
+	top:90px;
 }
 }
 /*-----------css for the 1366*768 resolution ends---------------*/ 
@@ -113,6 +113,9 @@
 @media only screen and (min-width: 1900px) {
 .login_logo {
 	margin-top:12%;
+}
+#loginbox{
+	top:100px;
 }
 }
 /*-----------css for the 1920*1028 resolution ends---------------*/

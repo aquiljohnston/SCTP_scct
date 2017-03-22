@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<!--Monday TableView-->
 	<h2 class="mileage_entry_header">Monday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'MondayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $MondayProvider,
 		'columns' => [
@@ -185,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<!--Tuesday TableView-->
 	<h2 class="mileage_entry_header">Tuesday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'TuesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $TuesdayProvider,
 		'columns' => [
@@ -241,7 +241,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<!--Wednesday TableView-->
 	<h2 class="mileage_entry_header">Wednesday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'WednesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $WednesdayProvider,
 		'columns' => [
@@ -297,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 	<!--Thursday TableView-->
 	<h2 class="mileage_entry_header">Thursday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'ThursdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $ThursdayProvider,
 		'columns' => [
@@ -353,7 +353,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<!--Friday TableView-->
 	<h2 class="mileage_entry_header">Friday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'FridayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $FridayProvider,
 		'columns' => [
@@ -409,7 +409,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	<!--Saturday TableView-->
 	<h2 class="mileage_entry_header">Saturday</h2>
-	<?php Pjax::begin(); ?>
+	<?php Pjax::begin(['id'=>'SaturdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SaturdayProvider,
 		'columns' => [
