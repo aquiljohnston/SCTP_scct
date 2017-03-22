@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div class="row">
 		<div class="col-sm-6">
 		<label style="font-size:20px">Inactive Modules</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div class="projectAddModuleForms">
 				<?= $form->field($model, 'InactiveModules')->widget(SortableInput::classname(),[
 					//'name'=>'Inactive Modules',
 					'items' => $inactiveData,
@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="col-sm-6">
 		<label style="font-size:20px">Active Modules</label>
-			<div style="height: 440pt; overflow: auto; margin-bottom: 10px;">
+			<div class="projectAddModuleForms">
 				<?= $form->field($model, 'ActiveModules')->widget(SortableInput::classname(),[
 					'name'=>'Active Modules',
 					'items' => $activeData,

@@ -32,6 +32,21 @@
 	float:right;
 }
 #userGridview .kv-grid-container{
-	max-height:59vh;
+	max-height:60vh;
 	overflow-y:auto;
 }
+/*css for the 1366*768 resolution*/
+@media only screen and (min-width: 1360px) {
+#userGridview .kv-grid-container{
+	max-height: 44vh;
+}
+}
+/*-----------css for the 1366*768 resolution ends---------------*/ 
+
+/*-----------css for the 1920*1028 resolution---------------*/
+@media only screen and (min-width: 1900px) {
+#userGridview .kv-grid-container{
+	max-height: 65vh;
+}
+}
+/*-----------css for the 1920*1028 resolution ends---------------*/
