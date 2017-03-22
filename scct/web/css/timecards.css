@@ -106,11 +106,24 @@ div[id^=modalContent] #loading {
 	max-height:58vh;
 	overflow:auto;
 }
+/*timeCard view page*/
+.timecard-view table{
+	margin-bottom:0px;
+}
+.timecard-view p{
+	margin-top:10px;
+}
+#SundayEntry,#MondayEntry,#TuesdayEntry,#WednesdayEntry,#ThursdayEntry,#FridayEntry,#SaturdayEntry{
+	overflow:auto;
+}
+.timecard-view .footerabove{
+	display:none;
+}
 /*responsive css* for table*/
 @media only screen 
 and (min-width : 1360px) {
 #GridViewForTimeCard{
-	max-height:40vh;
+	max-height:44vh;
 }
 }
 @media only screen 
