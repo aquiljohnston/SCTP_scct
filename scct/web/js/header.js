@@ -112,6 +112,7 @@ $(document).ready(function(){
 			var AdminDropdown = "";
 			var dropdownFlag = 0;
 			var baseUrl = "/";
+			var HomeDropdownStr = "";
 			if (jQuery.isEmptyObject(data)) {
 				str = "Json array is empty";
 			} else {
@@ -214,7 +215,7 @@ $(document).ready(function(){
 					HomeArray = data.Modules[0].Home.NavigationMenu[0];
 					if (HomeArray.enabled.toString() != 0){
 						HomeDropdown = $("<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>");
-						var HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
+						HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
 					} //end of home enabled flag check
 				}
 				if ((data.Modules[0].Home.enabled.toString() == 0)
