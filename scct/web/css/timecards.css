@@ -113,8 +113,12 @@ div[id^=modalContent] #loading {
 .timecard-view p{
 	margin-top:10px;
 }
-#SundayEntry,#MondayEntry,#TuesdayEntry,#WednesdayEntry,#ThursdayEntry,#FridayEntry,#SaturdayEntry{
-	overflow:auto;
+.timecard-view .grid-view .kv-thead-float{
+	z-index: 2 !important;
+}
+.timecard-view .grid-view .kv-grid-wrapper{
+	height:auto;
+	max-height:30vh;
 }
 .timecard-view .footerabove{
 	display:none;

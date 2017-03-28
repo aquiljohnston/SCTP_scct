@@ -199,9 +199,7 @@ class MileageCardController extends BaseController
             $Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
             $SundayProvider = new ArrayDataProvider([
                 'allModels' => $Sundaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -211,9 +209,7 @@ class MileageCardController extends BaseController
             $Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
             $MondayProvider = new ArrayDataProvider([
                 'allModels' => $Mondaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -223,9 +219,7 @@ class MileageCardController extends BaseController
             $Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
             $TuesdayProvider = new ArrayDataProvider([
                 'allModels' => $Tuesdaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -235,9 +229,7 @@ class MileageCardController extends BaseController
             $Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
             $WednesdayProvider = new ArrayDataProvider([
                 'allModels' => $Wednesdaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -247,9 +239,7 @@ class MileageCardController extends BaseController
             $Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
             $ThursdayProvider = new ArrayDataProvider([
                 'allModels' => $Thursdaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -259,9 +249,7 @@ class MileageCardController extends BaseController
             $Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
             $FridayProvider = new ArrayDataProvider([
                 'allModels' => $Fridaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],
@@ -271,9 +259,7 @@ class MileageCardController extends BaseController
             $Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
             $SaturdayProvider = new ArrayDataProvider([
                 'allModels' => $Saturdaydata,
-                'pagination' => [
-                    'pageSize' => 10,
-                ],
+                'pagination' => false,
                 // 'sort' => [
                 // 'attributes' => ['id', 'name'],
                 // ],

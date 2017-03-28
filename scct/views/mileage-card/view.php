@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
@@ -74,6 +74,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'SundayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SundayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -131,6 +134,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'MondayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $MondayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -188,6 +194,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'TuesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $TuesdayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -244,6 +253,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'WednesdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $WednesdayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -300,6 +312,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'ThursdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $ThursdayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -356,6 +371,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'FridayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $FridayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
@@ -412,6 +430,9 @@ $this->params['breadcrumbs'][] = $this->title;
 	<?php Pjax::begin(['id'=>'SaturdayEntry']); ?>
 	<?= GridView::widget([
 		'dataProvider' => $SaturdayProvider,
+		'floatHeader' => true,
+		'floatOverflowContainer' => true,
+		'export' => false,
 		'columns' => [
 			'MileageEntryStartingMileage',
 			'MileageEntryEndingMileage',
