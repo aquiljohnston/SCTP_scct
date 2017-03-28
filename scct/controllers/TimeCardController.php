@@ -212,9 +212,7 @@ class TimeCardController extends BaseController
 			$Sundaydata = $dateProvider["TimeEntries"][0]["Sunday"];
 			$SundayProvider = new ArrayDataProvider([
 				'allModels' => $Sundaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+				'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -224,9 +222,7 @@ class TimeCardController extends BaseController
 			$Mondaydata = $dateProvider["TimeEntries"][0]["Monday"];
 			$MondayProvider = new ArrayDataProvider([
 				'allModels' => $Mondaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -236,9 +232,7 @@ class TimeCardController extends BaseController
 			$Tuesdaydata = $dateProvider["TimeEntries"][0]["Tuesday"];
 			$TuesdayProvider = new ArrayDataProvider([
 				'allModels' => $Tuesdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -248,9 +242,7 @@ class TimeCardController extends BaseController
 			$Wednesdaydata = $dateProvider["TimeEntries"][0]["Wednesday"];
 			$WednesdayProvider = new ArrayDataProvider([
 				'allModels' => $Wednesdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -260,9 +252,7 @@ class TimeCardController extends BaseController
 			$Thursdaydata = $dateProvider["TimeEntries"][0]["Thursday"];
 			$ThursdayProvider = new ArrayDataProvider([
 				'allModels' => $Thursdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -272,9 +262,7 @@ class TimeCardController extends BaseController
 			$Fridaydata = $dateProvider["TimeEntries"][0]["Friday"];
 			$FridayProvider = new ArrayDataProvider([
 				'allModels' => $Fridaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],
@@ -284,9 +272,7 @@ class TimeCardController extends BaseController
 			$Saturdaydata = $dateProvider["TimeEntries"][0]["Saturday"];
 			$SaturdayProvider = new ArrayDataProvider([
 				'allModels' => $Saturdaydata,
-				'pagination' => [
-					'pageSize' => 10,
-				],
+                'pagination' => false,
 				// 'sort' => [
 					// 'attributes' => ['id', 'name'],
 				// ],

@@ -52,8 +52,12 @@ div[id^=modalContent] .wrap #top-wrapper {
 .mileagecard-view p{
 	margin-top:10px;
 }
-#SundayEntry,#MondayEntry,#TuesdayEntry,#WednesdayEntry,#ThursdayEntry,#FridayEntry,#SaturdayEntry{
-	overflow:auto;
+.mileagecard-view .grid-view .kv-thead-float{
+	z-index: 2 !important;
+}
+.mileagecard-view .grid-view .kv-grid-wrapper{
+	height:auto;
+	max-height:30vh;
 }
 .mileagecard-view .footerabove{
 	display:none;
