@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     $approved = $ApprovedFlag;
-    $approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model["MileageCardID"]]));
+    $approveUrl = urldecode(Url::to(['mileage-card/approve', 'id' => $model['MileageCardID']]));
     if ($model["MileageCardApprovedFlag"] === "Yes") {
         $approve_status = true;
     } else {
@@ -75,15 +75,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $SundayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
-
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
             [
                 'class' => 'yii\grid\CheckboxColumn',
                 'checkboxOptions' => function ($model, $key, $index, $column) {
@@ -119,14 +142,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $MondayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -163,14 +210,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $TuesdayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -206,14 +277,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $WednesdayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -249,14 +344,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $ThursdayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -292,14 +411,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $FridayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
@@ -335,14 +478,38 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $SaturdayProvider,
         'columns' => [
-            'MileageEntryStartingMileage',
-            'MileageEntryEndingMileage',
-            'MileageEntryStartDate',
-            'MileageEntryEndDate',
-            'MileageEntryComment',
-            'MileageEntryCreateDate',
-            'MileageEntryCreatedBy',
-            'MileageEntryActiveFlag',
+            [
+                'attribute' => 'MileageEntryStartingMileage',
+                'label' => 'StartingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryEndingMileage',
+                'label' => 'EndingMileage'
+            ],
+            [
+                'attribute' => 'MileageEntryStartDate',
+                'label' => 'StartDate'
+            ],
+            [
+                'attribute' => 'MileageEntryEndDate',
+                'label' => 'EndDate'
+            ],
+            [
+                'attribute' => 'MileageEntryComment',
+                'label' => 'Comment'
+            ],
+            [
+                'attribute' => 'MileageEntryCreateDate',
+                'label' => 'CreateDate'
+            ],
+            [
+                'attribute' => 'MileageEntryCreatedBy',
+                'label' => 'CreatedBy'
+            ],
+            [
+                'attribute' => 'MileageEntryActiveFlag',
+                'label' => 'ActiveFlag'
+            ],
 
             [
                 'class' => 'yii\grid\CheckboxColumn',
