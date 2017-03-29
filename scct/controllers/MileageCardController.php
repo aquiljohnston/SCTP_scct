@@ -328,6 +328,9 @@ class MileageCardController extends BaseController
     /**
      * Creates a new MileageEntry model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $mileageCardId
+     * @param $mileageCardTechId
+     * @param $mileageCardDate
      * @return mixed
      */
     public function actionCreateMileageEntry($mileageCardId, $mileageCardTechId, $mileageCardDate)
