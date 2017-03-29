@@ -12,6 +12,49 @@ use yii\widgets\Pjax;
 $this->title = 'Mileage Entry';
 $this->params['breadcrumbs'][] = ['label' => 'MileageCard', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$gridViewColumnList = [
+    [
+        'attribute' => 'MileageEntryStartingMileage',
+        'label' => 'Starting Mileage'
+    ],
+    [
+        'attribute' => 'MileageEntryEndingMileage',
+        'label' => 'Ending Mileage'
+    ],
+    [
+        'attribute' => 'MileageEntryStartDate',
+        'label' => 'Start Date'
+    ],
+    [
+        'attribute' => 'MileageEntryEndDate',
+        'label' => 'End Date'
+    ],
+    [
+        'attribute' => 'MileageEntryComment',
+        'label' => 'Comment'
+    ],
+    [
+        'attribute' => 'MileageEntryCreateDate',
+        'label' => 'Created Date'
+    ],
+    [
+        'attribute' => 'MileageEntryCreatedBy',
+        'label' => 'CreatedBy'
+    ],
+    [
+        'attribute' => 'MileageEntryActiveFlag',
+        'label' => 'Active Flag'
+    ],
+    [
+        'class' => 'yii\grid\CheckboxColumn',
+        'checkboxOptions' => function ($model, $key, $index, $column) {
+            return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
+        }
+        /*'pageSummary' => true,
+        'rowSelectedClass' => GridView::TYPE_SUCCESS,
+        'contentOptions'=>['style'=>'width: 0.5%'],*/
+    ],
+];
 ?>
 <div class="mileagecard-view" approved= <?php echo $ApprovedFlag; ?>>
 
@@ -74,49 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Sunday</h2>
     <?= GridView::widget([
         'dataProvider' => $SundayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ],
+        'columns' => $gridViewColumnList
     ]);
     ?>
     <?php
@@ -141,50 +142,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Monday</h2>
     <?= GridView::widget([
         'dataProvider' => $MondayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ],
+        'columns' => $gridViewColumnList
     ])
     ?>
     <?php
@@ -209,50 +167,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Tuesday</h2>
     <?= GridView::widget([
         'dataProvider' => $TuesdayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridViewColumnList
     ]) ?>
     <?php
     // get current Mileage Card's Date
@@ -276,50 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Wednesday</h2>
     <?= GridView::widget([
         'dataProvider' => $WednesdayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridViewColumnList
     ]) ?>
     <?php
     // get current Mileage Card's Date
@@ -343,50 +215,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Thursday</h2>
     <?= GridView::widget([
         'dataProvider' => $ThursdayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridViewColumnList
     ]) ?>
     <?php
     // get current Mileage Card's Date
@@ -410,50 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Friday</h2>
     <?= GridView::widget([
         'dataProvider' => $FridayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridViewColumnList
     ]) ?>
     <?php
     // get current Mileage Card's Date
@@ -477,50 +263,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h2 class="mileage_entry_header">Saturday</h2>
     <?= GridView::widget([
         'dataProvider' => $SaturdayProvider,
-        'columns' => [
-            [
-                'attribute' => 'MileageEntryStartingMileage',
-                'label' => 'StartingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryEndingMileage',
-                'label' => 'EndingMileage'
-            ],
-            [
-                'attribute' => 'MileageEntryStartDate',
-                'label' => 'StartDate'
-            ],
-            [
-                'attribute' => 'MileageEntryEndDate',
-                'label' => 'EndDate'
-            ],
-            [
-                'attribute' => 'MileageEntryComment',
-                'label' => 'Comment'
-            ],
-            [
-                'attribute' => 'MileageEntryCreateDate',
-                'label' => 'CreateDate'
-            ],
-            [
-                'attribute' => 'MileageEntryCreatedBy',
-                'label' => 'CreatedBy'
-            ],
-            [
-                'attribute' => 'MileageEntryActiveFlag',
-                'label' => 'ActiveFlag'
-            ],
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridViewColumnList
     ]) ?>
     <?php
     // get current Mileage Card's Date
