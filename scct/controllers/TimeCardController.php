@@ -432,7 +432,7 @@ class TimeCardController extends BaseController
 
 					$json_data = json_encode($activity);
 
-					//try {
+					try {
 						// post url
 						$url_send_activity = 'activity%2Fcreate';
 						$response_activity = Parent::executePostRequest($url_send_activity, $json_data);
@@ -443,12 +443,12 @@ class TimeCardController extends BaseController
                             //'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]
                         ]);*/
 
-						//return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"], 'AjaxRender' => true]);
-					/*} catch (\Exception $e) {
+						return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"], 'AjaxRender' => true]);
+					} catch (\Exception $e) {
 
 						$concatenate_id = $id . "yes";
 						return $this->redirect(['view', 'id' => $concatenate_id]);
-					}*/
+					}
 				} else {
 					return $this->redirect(['view', 'id' => $id]);
 				}
