@@ -147,7 +147,19 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
                     [
                         'class' => 'kartik\grid\CheckboxColumn',
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            return ['timecardid' => $model["TimeCardID"], 'approved' => $model["TimeCardApprovedFlag"], 'totalworkhours' => $model["SumHours"]];
+                            // Disable if already approved or SumHours is 0
+                            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
+                                || $model["SumHours"] == "0";
+                            $result = [
+                                'timecardid' => $model["TimeCardID"],
+                                'approved' => $model["TimeCardApprovedFlag"],
+                                'totalworkhours' => $model["SumHours"]
+                            ];
+                            if($disabledBoolean) {
+                                $result['disabled'] = 'true';
+                            }
+
+                            return $result;
                         }
                         /*'pageSummary' => true,
                         'rowSelectedClass' => GridView::TYPE_SUCCESS,
