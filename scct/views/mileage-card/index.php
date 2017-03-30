@@ -128,7 +128,18 @@ $this->params['download_url'] = '/mileage-card/download-mileage-card-data?'.http
                     [
                         'class' => 'kartik\grid\CheckboxColumn',
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            return ['mileageCardId' => $model["MileageCardID"], 'approved' => $model["MileageCardApprovedFlag"], 'totalmileage' => $model["SumMiles"]];
+                            // Disable if already approved or SumHours is 0
+                            $disabledBoolean = strtoupper($model["MileageCardApprovedFlag"]) == "YES";
+                            $result = [
+                                    'mileageCardId' => $model["MileageCardID"],
+                                    'approved' => $model["MileageCardApprovedFlag"],
+                                    'totalmileage' => $model["SumMiles"]
+                            ];
+                            if($disabledBoolean) {
+                                $result['disabled'] = 'true';
+                            }
+
+                            return $result;
                         }
                     ],
                 ],

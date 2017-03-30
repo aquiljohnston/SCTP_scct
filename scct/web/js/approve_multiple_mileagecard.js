@@ -80,20 +80,13 @@ function applyOnClickListeners() {
 }
 
 
-function disableApprovedCheckboxes() {
-    $(".kv-row-select input").each(function() {
-        if ($(this).attr("approved").toUpperCase() == "YES") {
-            $(this).prop('disabled', true);
-        }
-    });
-}
+
 
 $(function () {
 
     var approved;
     var totalMileage;
     applyOnClickListeners();
-    disableApprovedCheckboxes();
     // this doesn't need to be done more than once because there is no pjax on the page this is on.
 
     // disable single approve button once user clicked it
