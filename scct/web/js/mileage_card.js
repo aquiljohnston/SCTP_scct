@@ -24,11 +24,6 @@ $(function(){
         event.preventDefault();
         return false;
     });
-    // Take this out of onclick so it doesn't get stacked up
-    $('#mileageCardGridview').on('pjax:success', function () {
-        $('#loading').hide();
-        applyOnClickListeners();
-    });
 
     
     function reloadGridView() {
@@ -43,9 +38,14 @@ $(function(){
             container: '#mileageCardGridview', // id to update content
             data: form.serialize(),
             timeout: 99999
-        }).done(function () {
+        });
+        $('#mileageCardGridview').on('pjax:success', function () {
             $('#loading').hide();
             applyOnClickListeners();
+        });
+        $('#mileageCardGridview').on('pjax:error', function () {
+            $('#loading').hide();
+            location.reload();
         });
     }
 });
