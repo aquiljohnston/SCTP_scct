@@ -17,8 +17,12 @@ $(function(){
         return false;
     });
 
-    $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function () {
-        $('#loading').show();
+    $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function (event) {
+        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+        $('#mileageCardPageNumber').val(page);
+        reloadGridView();
+        event.preventDefault();
+        return false;
     });
     // Take this out of onclick so it doesn't get stacked up
     $('#mileageCardGridview').on('pjax:success', function () {
@@ -34,7 +38,7 @@ $(function(){
         }
         $('#loading').show();
         $.pjax.reload({
-            type: 'POST',
+            type: 'GET',
             url: form.attr("action"),
             container: '#mileageCardGridview', // id to update content
             data: form.serialize(),
