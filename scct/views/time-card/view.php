@@ -12,6 +12,46 @@ use yii\widgets\Pjax;
 $this->title = 'Time Entry';
 $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
+$gridviewColumnList = [
+	[
+		'attribute' =>'TimeEntryStartTime',
+		'label' => 'Start Time'
+	],
+	[
+		'attribute' => 'TimeEntryEndTime',
+		'label' => 'End Time'
+	],
+	[
+		'attribute' => 'TimeEntryDate',
+		'label' => 'Entry Date'
+	],
+	[
+		'attribute' => 'TimeEntryComment',
+		'label' => 'Comment'
+	],
+	[
+		'attribute' => 'TimeEntryCreateDate',
+		'label' => 'Creat Date'
+	],
+	[
+		'attribute' => 'TimeEntryCreateBy',
+		'label' => 'Created By'
+	],
+	[
+		'attribute' => 'TimeEntryHours',
+		'label' => 'Hours'
+	],
+	[
+		'attribute' => 'TimeEntryActiveFlag',
+		'label' => 'Active Flag'
+	],			
+	[
+		'class' => 'yii\grid\CheckboxColumn',
+		'checkboxOptions' => function ($model, $key, $index, $column) {
+			return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
+		}
+	],
+];
 ?>
 <div class="timecard-view" approved= <?php echo $ApprovedFlag; ?>>
 
@@ -72,48 +112,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Sunday</h2>
     <?= GridView::widget([
         'dataProvider' => $SundayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-
-            // [
-            // 'class' => 'yii\grid\ActionColumn',
-            // 'template' => '{view} {update}',
-            // 'headerOptions' => ['width' => '5%', 'class' => 'activity-view-link',],
-            // 'contentOptions' => ['class' => 'padding-left-5px'],
-
-            // 'buttons' => [
-            // 'view' => function ($url, $model, $key) {
-            // return Html::a('<span class="glyphicon glyphicon-eye-open"></span>','#', [
-            // 'id' => 'activity-view-link',
-            // 'title' => Yii::t('yii', 'View'),
-            // 'data-toggle' => 'modal',
-            // 'data-target' => '#activity-modal',
-            // 'data-id' => $key,
-            // 'data-pjax' => '0',
-
-            // ]);
-            // },
-            // ],
-            // ],
-
-        ],
+        'columns' => $gridviewColumnList
     ]); ?>
     <?php
     // get current TimeCard's Date
@@ -137,26 +136,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Monday</h2>
     <?= GridView::widget([
         'dataProvider' => $MondayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ],
+		'columns' => $gridviewColumnList
     ]) ?>
     <?php
     // get Monday's date for current TimeCard
@@ -193,26 +173,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Tuesday</h2>
     <?= GridView::widget([
         'dataProvider' => $TuesdayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridviewColumnList
     ]) ?>
 
     <?php
@@ -238,26 +199,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Wednesday</h2>
     <?= GridView::widget([
         'dataProvider' => $WednesdayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridviewColumnList
     ]) ?>
 
     <?php
@@ -283,26 +225,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Thursday</h2>
     <?= GridView::widget([
         'dataProvider' => $ThursdayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridviewColumnList
     ]) ?>
     <?php
     // get Thursday's date for current TimeCard
@@ -327,26 +250,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
     <h2 class="time_entry_header">Friday</h2>
     <?= GridView::widget([
         'dataProvider' => $FridayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridviewColumnList
     ]) ?>
     <?php
     // get Friday's date for current TimeCard
@@ -372,26 +276,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Time Cards', 'url' => ['index']];
 
     <?= GridView::widget([
         'dataProvider' => $SaturdayProvider,
-        'columns' => [
-            'TimeEntryStartTime',
-            'TimeEntryEndTime',
-            'TimeEntryDate',
-            'TimeEntryComment',
-            'TimeEntryCreateDate',
-            'TimeEntryCreatedBy',
-            'TimeEntryHours',
-            'TimeEntryActiveFlag',
-
-            [
-                'class' => 'yii\grid\CheckboxColumn',
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
-                }
-                /*'pageSummary' => true,
-                'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                'contentOptions'=>['style'=>'width: 0.5%'],*/
-            ],
-        ]
+        'columns' => $gridviewColumnList
     ]) ?>
 
     <?php
