@@ -72,7 +72,7 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['login/login']);
 		}
-		$url = 'project%2Fview&id='.$id;
+		$url = "project%2Fview&joinNames=true&id=$id";
 		$response = Parent::executeGetRequest($url); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
