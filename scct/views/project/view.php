@@ -36,9 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectStartDate',
             'ProjectEndDate',	
 			'ProjectCreateDate',
-			'ProjectCreatedBy',
+			[
+                'label' => 'Created By',
+                'value' => function($model, $widget) {
+                    return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);;
+                },
+                'format' => 'html'
+            ],
 			'ProjectModifiedDate',
-			'ProjectModifiedBy',
+            [
+                'label' => 'Last Modified By',
+                'value' => function($model, $widget) {
+                    return Html::a($model->ModifiedUserName, ['user/view', 'id' => $model->ModifiedUserID]);;
+                },
+                'format' => 'html'
+            ],
 			
         ],
     ]) ?>
