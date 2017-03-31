@@ -31,13 +31,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'ProjectType',
             'ProjectStatus',
             'ProjectUrlPrefix',
-            'ProjectClientID',
+            [
+                'label' => 'Project Client',
+                'value' => function($model, $widget) {
+                    return Html::a($model->ClientName, ['client/view', 'id' => $model->ProjectClientID]);;
+                },
+                'format' => 'html'
+            ],
 			'ProjectState',
             'ProjectStartDate',
             'ProjectEndDate',	
 			'ProjectCreateDate',
 			[
-                'label' => 'Created By',
+                'label' => 'Project Created By',
                 'value' => function($model, $widget) {
                     return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);;
                 },
@@ -45,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 			'ProjectModifiedDate',
             [
-                'label' => 'Last Modified By',
+                'label' => 'Project Last Modified By',
                 'value' => function($model, $widget) {
                     return Html::a($model->ModifiedUserName, ['user/view', 'id' => $model->ModifiedUserID]);;
                 },
