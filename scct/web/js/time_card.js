@@ -12,16 +12,18 @@ $(function(){
     });
 
     jqTCPageSize.on('change', function (event) {
+        $('#timeCardPageNumber').val(1);
         reloadGridView();
         event.preventDefault();
         return false;
     });
 
-    $(document).off('click', "#TCPagination ul li a").on('click', "#TCPagination ul li a", function () {
-        $('#loading').show();
-        $('#timeCardGridview').on('pjax:success', function () {
-            $('#loading').hide();
-        });
+    $(document).off('click', "#TCPagination ul li a").on('click', "#TCPagination ul li a", function (event) {
+        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+        $('#timeCardPageNumber').val(page);
+        reloadGridView();
+        event.preventDefault();
+        return false;
     });
     
     function reloadGridView() {
@@ -31,13 +33,19 @@ $(function(){
         }
         $('#loading').show();
         $.pjax.reload({
-            type: 'POST',
+            type: 'GET',
             url: form.attr("action"),
             container: '#timeCardGridview', // id to update content
             data: form.serialize(),
             timeout: 99999
-        }).done(function () {
+        });
+        $('#timeCardGridview').on('pjax:success', function () {
             $('#loading').hide();
+            applyOnClickListeners();
+        });
+        $('#timeCardGridview').on('pjax:error', function () {
+            $('#loading').hide();
+            location.reload();
         });
     }
 });

@@ -52,31 +52,25 @@ class TimeCardController extends BaseController
             $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
             // check if type was post, if so, get value from $model
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->queryParams)) {
                 Yii::trace("pagesize: " . $model->pagesize);
                 $timeCardPageSizeParams = $model->pagesize;
             } else {
-                if (isset($_GET['per-page'])) {
-                    $timeCardPageSizeParams = $_GET['per-page'];
-                    Yii::trace("Post per-page: " . $_GET['per-page']);
-                } else {
                     $timeCardPageSizeParams = 10;
-                }
             }
 
-            if (isset($_GET['timeCardPage'])) {
-                $page = $_GET['timeCardPage'];
-                Yii::trace("Post timeCardPage: " . $_GET['timeCardPage']);
-            }else {
+            //check current page at
+            if (isset(Yii::$app->request->queryParams['timeCardPageNumber'])){
+                $page = Yii::$app->request->queryParams['timeCardPageNumber'];
+            } else {
                 $page = 1;
             }
 
             //get week
-            if (isset($_POST['week'])) {
-                $week = $_POST['week'];
-                Yii::trace("Post week: " . $_POST['week']);
+            if (isset(Yii::$app->request->queryParams['weekTimeCard'])){
+                $week = Yii::$app->request->queryParams['weekTimeCard'];
             } else {
-                $week = "current";
+                $week = 'current';
             }
 
             //build url with params
