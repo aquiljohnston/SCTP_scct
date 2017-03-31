@@ -59,17 +59,16 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
 
             ]); ?>
             <div id="timeCardWeekContainer">
-                <select name="week" id="weekSelection"<!--onchange="this.form.submit()-->">
+                <select name="weekTimeCard" id="weekSelection"<!--onchange="this.form.submit()-->">
                 <option value="prior" <?= $priorSelected ?> >Prior Week</option>
                 <option value="current" <?= $currentSelected ?> >Current Week</option>
                 </select>
-                <input type="hidden" name="r" value="time-card/index"/>
             </div>
             <div id="timeCardPageSizeLabelContainer">
                 <label id="timeCardPageSizeLabel">
                     <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
                 </label>
-                <input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+                <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
             </div>
             <?php ActiveForm::end(); ?>
         </div>
