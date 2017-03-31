@@ -12,6 +12,7 @@ $(function(){
     });
 
     jqMCPageSize.on('change', function (event) {
+        $('#mileageCardPageNumber').val(1);
         reloadGridView();
         event.preventDefault();
         return false;
