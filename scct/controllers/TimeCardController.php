@@ -52,31 +52,25 @@ class TimeCardController extends BaseController
             $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
             // check if type was post, if so, get value from $model
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->queryParams)) {
                 Yii::trace("pagesize: " . $model->pagesize);
                 $timeCardPageSizeParams = $model->pagesize;
             } else {
-                if (isset($_GET['per-page'])) {
-                    $timeCardPageSizeParams = $_GET['per-page'];
-                    Yii::trace("Post per-page: " . $_GET['per-page']);
-                } else {
                     $timeCardPageSizeParams = 10;
-                }
             }
 
-            if (isset($_GET['timeCardPage'])) {
-                $page = $_GET['timeCardPage'];
-                Yii::trace("Post timeCardPage: " . $_GET['timeCardPage']);
-            }else {
+            //check current page at
+            if (isset(Yii::$app->request->queryParams['timeCardPageNumber'])){
+                $page = Yii::$app->request->queryParams['timeCardPageNumber'];
+            } else {
                 $page = 1;
             }
 
             //get week
-            if (isset($_POST['week'])) {
-                $week = $_POST['week'];
-                Yii::trace("Post week: " . $_POST['week']);
+            if (isset(Yii::$app->request->queryParams['weekTimeCard'])){
+                $week = Yii::$app->request->queryParams['weekTimeCard'];
             } else {
-                $week = "current";
+                $week = 'current';
             }
 
             //build url with params
@@ -331,7 +325,7 @@ class TimeCardController extends BaseController
      * @return mixed
      * @throws \yii\web\HttpException
      */
-	public function actionCreateTimeEntry($id, $TimeCardTechID, $TimeEntryDate)
+	public function actionCreateTimeEntry($id = null, $TimeCardTechID = null, $TimeEntryDate = null)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest) {
@@ -342,6 +336,8 @@ class TimeCardController extends BaseController
 
 			$timeEntryModel = new TimeEntry();
 			$activityModel = new Activity();
+            //$id = "";
+            //$TimeCardTechID = "";
 			//generate array for Active Flag dropdown
 			$flag =
 				[
@@ -361,8 +357,8 @@ class TimeCardController extends BaseController
 			$activityPayCode = json_decode($activityPayCodeResponse, true);
 
 			if ($timeEntryModel->load(Yii::$app->request->post()) && $activityModel->load(Yii::$app->request->post())
-				&& $timeEntryModel->validate() && $activityModel->validate()
-			) {
+				&& $timeEntryModel->validate() && $activityModel->validate())
+			{
 				//create timeEntryTitle variable
 				$timeEntryTitle = "timeEntry";
 				// concatenate start time
@@ -381,6 +377,8 @@ class TimeCardController extends BaseController
 				//$interval = $datetimeObj1->diff($datetimeObj2);
 				//$dateTimeDiff = $interval->format('%R%a');
 
+                Yii::trace("ID is : ".$id);
+                Yii::trace("TimeCardTechID: ".$TimeCardTechID);
 
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
@@ -393,6 +391,8 @@ class TimeCardController extends BaseController
 					'TimeEntryComment' => $timeEntryModel->TimeEntryComment,
 					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
 				);
+
+                Yii::trace("TIMEENTRYDATA: ".json_encode($time_entry_data));
 
 				// check difference between startTime and endTime
 				if ($endTimeObj > $startTimeObj) {
@@ -416,9 +416,14 @@ class TimeCardController extends BaseController
 						// post url
 						$url_send_activity = 'activity%2Fcreate';
 						$response_activity = Parent::executePostRequest($url_send_activity, $json_data);
+                        Yii::trace("RESPONSE ACTIVITY".$response_activity);
 						$obj = json_decode($response_activity, true);
 
-						return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]]);
+                        /*return $this->renderAjax('view',[
+                            //'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]
+                        ]);*/
+
+						return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"], 'AjaxRender' => true]);
 					} catch (\Exception $e) {
 
 						$concatenate_id = $id . "yes";

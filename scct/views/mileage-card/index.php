@@ -47,23 +47,22 @@ $this->params['download_url'] = '/mileage-card/download-mileage-card-data?'.http
 			<?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-                'method' => 'post',
+                'method' => 'get',
                 'options' => [
                     'id' => 'MileageCardForm',
                 ]
             ]); ?>
             <div id="mileageCardWeekContainer">
-				<select name="week" id="mileageCardWeekSelection">
+				<select name="weekMileageCard" id="mileageCardWeekSelection">
 					<option value="prior" <?= $priorSelected ?> >Prior Week</option>
 				<option value="current" <?= $currentSelected ?> >Current Week</option>
 				</select>
-				<input type="hidden" name="r" value="mileage-card/index"/>
 			</div>
 			<div id="mileageCardPageSizeContainer">
 				<label id="mileageCardPageSizeLabel">
 					<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
 				</label>
-				<input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
+				<input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
 			</div>
             <?php ActiveForm::end(); ?>
 		</div>

@@ -12,18 +12,18 @@ $(function(){
     });
 
     jqMCPageSize.on('change', function (event) {
+        $('#mileageCardPageNumber').val(1);
         reloadGridView();
         event.preventDefault();
         return false;
     });
 
-    $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function () {
-        $('#loading').show();
-    });
-    // Take this out of onclick so it doesn't get stacked up
-    $('#mileageCardGridview').on('pjax:success', function () {
-        $('#loading').hide();
-        applyOnClickListeners();
+    $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function (event) {
+        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+        $('#mileageCardPageNumber').val(page);
+        reloadGridView();
+        event.preventDefault();
+        return false;
     });
 
     
@@ -34,14 +34,19 @@ $(function(){
         }
         $('#loading').show();
         $.pjax.reload({
-            type: 'POST',
+            type: 'GET',
             url: form.attr("action"),
             container: '#mileageCardGridview', // id to update content
             data: form.serialize(),
             timeout: 99999
-        }).done(function () {
+        });
+        $('#mileageCardGridview').on('pjax:success', function () {
             $('#loading').hide();
             applyOnClickListeners();
+        });
+        $('#mileageCardGridview').on('pjax:error', function () {
+            $('#loading').hide();
+            location.reload();
         });
     }
 });

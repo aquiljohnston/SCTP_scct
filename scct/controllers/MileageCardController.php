@@ -7,6 +7,7 @@ use app\models\MileageCard;
 use app\models\MileageCardSearch;
 use app\models\MileageEntry;
 use app\controllers\BaseController;
+use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
@@ -42,32 +43,25 @@ class MileageCardController extends BaseController
             ]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
-            // check if type was post, if so, get value from $model
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->queryParams)) {
                 Yii::trace("pagesize: " . $model->pagesize);
                 $mileageCardPageSizeParams = $model->pagesize;
             } else {
-                if (isset($_GET['per-page'])) {
-                    $mileageCardPageSizeParams = $_GET['per-page'];
-                    Yii::trace("Post per-page: " . $_GET['per-page']);
-                } else {
-                    $mileageCardPageSizeParams = 10;
-                }
+                $mileageCardPageSizeParams = 10;
             }
 
-            if (isset($_GET['mileageCardPage'])) {
-                $page = $_GET['mileageCardPage'];
-                Yii::trace("Post mileageCardPage: " . $_GET['mileageCardPage']);
+            //check current page at
+            if (isset(Yii::$app->request->queryParams['mileageCardPageNumber'])){
+                $page = Yii::$app->request->queryParams['mileageCardPageNumber'];
             } else {
                 $page = 1;
             }
 
             //get week
-            if (isset($_POST['week'])) {
-                $week = $_POST['week'];
-                Yii::trace("Post week: " . $_POST['week']);
+            if (isset(Yii::$app->request->queryParams['weekMileageCard'])){
+                $week = Yii::$app->request->queryParams['weekMileageCard'];
             } else {
-                $week = "current";
+                $week = 'current';
             }
 
             //build url with params
@@ -85,9 +79,7 @@ class MileageCardController extends BaseController
             $dataProvider = new ArrayDataProvider
             ([
                 'allModels' => $filteredResultData,
-                'pagination' => [
-                    'pageSize' => 100,
-                ]
+                'pagination' => false
             ]);
 
             // Sorting MileageCard table
@@ -314,6 +306,9 @@ class MileageCardController extends BaseController
     /**
      * Creates a new MileageEntry model.
      * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $mileageCardId
+     * @param $mileageCardTechId
+     * @param $mileageCardDate
      * @return mixed
      */
     public function actionCreateMileageEntry($mileageCardId, $mileageCardTechId, $mileageCardDate)
@@ -420,26 +415,31 @@ class MileageCardController extends BaseController
      * If approve is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
+     * @throws Exception redirect user to the current mileage entry page
      */
     public function actionApprove($id)
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+        try {
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['login/login']);
+            }
+            $cardIDArray[] = $id;
+
+            $data = array(
+                'cardIDArray' => $cardIDArray,
+            );
+            $json_data = json_encode($data);
+
+            // post url
+            $putUrl = 'mileage-card%2Fapprove-cards';
+            $putResponse = Parent::executePutRequest($putUrl, $json_data);  // indirect RBAC
+            $obj = json_decode($putResponse, true);
+            $responseMileageCardID = $obj[0]["MileageCardID"];
+            return $this->redirect(['view', 'id' => $responseMileageCardID]);
+        } catch (\Exception $e){
+            return $this->redirect(['view', 'id' => $id]);
         }
-        $cardIDArray[] = $id;
-
-        $data = array(
-            'cardIDArray' => $cardIDArray,
-        );
-        $json_data = json_encode($data);
-
-        // post url
-        $putUrl = 'mileage-card%2Fapprove-cards';
-        $putResponse = Parent::executePutRequest($putUrl, $json_data);  // indirect RBAC
-        $obj = json_decode($putResponse, true);
-        $responseMileageCardID = $obj[0]["MileageCardID"];
-        return $this->redirect(['view', 'id' => $responseMileageCardID]);
     }
 
     /**
@@ -447,37 +447,41 @@ class MileageCardController extends BaseController
      * If deactivate is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @throws \yii\web\BadRequestHttpException
+     * @throws Exception redirect user to mileage card index page
      */
     public function actionDeactivate()
     {
+        try {
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
 
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+                // loop the data array to get all id's.
+                foreach ($data as $key) {
+                    foreach ($key as $keyitem) {
 
-            // loop the data array to get all id's.
-            foreach ($data as $key) {
-                foreach ($key as $keyitem) {
-
-                    $MileageEntryIDArray[] = $keyitem;
-                    Yii::Trace("Mileage Card ID is : " . $keyitem);
+                        $MileageEntryIDArray[] = $keyitem;
+                        Yii::Trace("Mileage Card ID is : " . $keyitem);
+                    }
                 }
+
+                $data = array(
+                    'deactivatedBy' => Yii::$app->session['userID'],
+                    'entryArray' => $MileageEntryIDArray,
+                );
+                $json_data = json_encode($data);
+
+                // post url
+                $putUrl = 'mileage-entry%2Fdeactivate';
+                $putResponse = Parent::executePutRequest($putUrl, $json_data);
+                $obj = json_decode($putResponse, true);
+                $responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
+                return $this->redirect(['view', 'id' => $responseMileageCardID]);
+
+            } else {
+                throw new \yii\web\BadRequestHttpException;
             }
-
-            $data = array(
-                'deactivatedBy' => Yii::$app->session['userID'],
-                'entryArray' => $MileageEntryIDArray,
-            );
-            $json_data = json_encode($data);
-
-            // post url
-            $putUrl = 'mileage-entry%2Fdeactivate';
-            $putResponse = Parent::executePutRequest($putUrl, $json_data);
-            $obj = json_decode($putResponse, true);
-            $responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
-            return $this->redirect(['view', 'id' => $responseMileageCardID]);
-
-        } else {
-            throw new \yii\web\BadRequestHttpException;
+        } catch (\Exception $e){
+            return $this->redirect(['index']);
         }
     }
 
@@ -486,50 +490,54 @@ class MileageCardController extends BaseController
      * If approve is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @throws \yii\web\BadRequestHttpException
+     * @throws Exception redirect user to mileage card index page
      */
     public function actionApproveMultiple()
     {
+        try {
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
 
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+                // loop the data array to get all id's.
+                foreach ($data as $key) {
+                    foreach ($key as $keyitem) {
 
-            // loop the data array to get all id's.
-            foreach ($data as $key) {
-                foreach ($key as $keyitem) {
-
-                    $MileageCardIDArray[] = $keyitem;
-                    Yii::Trace("Mileage Card ID is : " . $keyitem);
+                        $MileageCardIDArray[] = $keyitem;
+                        Yii::Trace("Mileage Card ID is : " . $keyitem);
+                    }
                 }
-            }
 
-            $data = array(
-                'cardIDArray' => $MileageCardIDArray,
-            );
-            $json_data = json_encode($data);
+                $data = array(
+                    'cardIDArray' => $MileageCardIDArray,
+                );
+                $json_data = json_encode($data);
 
-            // post url
-            $putUrl = 'mileage-card%2Fapprove-cards';
-            $apiResponse = parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2); //indirect rbac
-            $json_response_data = json_decode($apiResponse, true);
-            //create response
-            $response =  Yii::$app->response;
-            $response -> format = Response::FORMAT_JSON;
-            if($json_response_data['success']) {
-                $data = [];
-                $data['cards'] = $json_response_data['cards'];
-                $data['status'] = "200 Success";
-                $data['success'] = true;
-                $response->data = $data;
+                // post url
+                $putUrl = 'mileage-card%2Fapprove-cards';
+                $apiResponse = parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2); //indirect rbac
+                $json_response_data = json_decode($apiResponse, true);
+                //create response
+                $response = Yii::$app->response;
+                $response->format = Response::FORMAT_JSON;
+                if ($json_response_data['success']) {
+                    $data = [];
+                    $data['cards'] = $json_response_data['cards'];
+                    $data['status'] = "200 Success";
+                    $data['success'] = true;
+                    $response->data = $data;
+                } else {
+                    $data = [];
+                    $data['cards'] = null;
+                    $data['status'] = "400 Bad Request";
+                    $data['success'] = false;
+                    $response->data = $data;
+                }
+                return $response;
             } else {
-                $data = [];
-                $data['cards'] = null;
-                $data['status'] = "400 Bad Request";
-                $data['success'] = false;
-                $response->data = $data;
+                throw new \yii\web\BadRequestHttpException;
             }
-            return $response;
-        } else {
-            throw new \yii\web\BadRequestHttpException;
+        } catch (\Exception $e){
+            return $this->redirect(['index']);
         }
     }
 
