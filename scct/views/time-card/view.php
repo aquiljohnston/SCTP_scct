@@ -34,7 +34,7 @@ $gridviewColumnList = [
         'label' => 'Creat Date'
     ],
     [
-        'attribute' => 'TimeEntryCreateBy',
+        'attribute' => 'TimeEntryCreatedBy',
         'label' => 'Created By'
     ],
     [

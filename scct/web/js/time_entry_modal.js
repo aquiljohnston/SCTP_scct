@@ -17,11 +17,13 @@ $(function () {
     });
 
     // Modal view for Monday
-    $('#modalButtonMonday').click(function () {
+    $('#modalButtonMonday').click(function (event) {
         // get the click of the create button
         $('#modalMonday').modal('show')
             .find('#modalContentMonday')
             .load($(this).attr('value'));
+        event.preventDefault();
+        return false;
     });
     $('#modalMonday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
@@ -29,63 +31,73 @@ $(function () {
     });
 
     // Modal view for Tuesday
-    $('#modalButtonTuesday').click(function () {
+    $('#modalButtonTuesday').click(function (event) {
         // get the click of the create button
         $('#modalTuesday').modal('show')
             .find('#modalContentTuesday')
             .load($(this).attr('value'));
+        event.preventDefault();
+        return false;
     });
     $('#modalTuesday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
-        location.reload(true);
+        //location.reload(true);
     });
 
     // Modal view for Wednesday
-    $('#modalButtonWednesday').click(function () {
+    $('#modalButtonWednesday').click(function (event) {
         // get the click of the create button
         $('#modalWednesday').modal('show')
             .find('#modalContentWednesday')
             .load($(this).attr('value'));
+        event.preventDefault();
+        return false;
     });
     $('#modalWednesday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
-        location.reload(true);
+        //location.reload(true);
     });
 
     // Modal view for Thursday
-    $('#modalButtonThursday').click(function () {
+    $('#modalButtonThursday').click(function (event) {
         // get the click of the create button
         $('#modalThursday').modal('show')
             .find('#modalContentThursday')
             .load($(this).attr('value'));
-    })
+        event.preventDefault();
+        return false;
+    });
     $('#modalThursday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
-        location.reload(true);
+        //location.reload(true);
     });
 
     // Modal view for Friday
-    $('#modalButtonFriday').click(function () {
+    $('#modalButtonFriday').click(function (event) {
         // get the click of the create button
         $('#modalFriday').modal('show')
             .find('#modalContentFriday')
             .load($(this).attr('value'));
+        event.preventDefault();
+        return false;
     });
     $('#modalFriday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
-        location.reload(true);
+        //location.reload(true);
     });
 
     // Modal view for Saturday
-    $('#modalButtonSaturday').click(function () {
+    $('#modalButtonSaturday').click(function (event) {
         // get the click of the create button
         $('#modalSaturday').modal('show')
             .find('#modalContentSaturday')
             .load($(this).attr('value'));
+        event.preventDefault();
+        return false;
     });
     $('#modalSaturday').on('hidden.bs.modal', function (e) {
         // reload page when modal closed
-        location.reload(true);
+        //location.reload(true);
     });
 });
 
