@@ -5,7 +5,6 @@ $this->title = 'Assets';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="dispatch-assets">
-	This is the page for viewing assets with id <?= $id ?>.
 
 	<?= Html::a('Back', ['/dispatch/dispatch'], ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsBackButton']) ?>
 
@@ -14,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'dataProvider' => $assetsDataProvider, // Sent from DispatchController.php
 		'export' => false,
 		'pjax' => true,
-		'caption' => 'Surveyors',
+		'caption' => "Assets for $id",
 		'columns' => [
 			[
 				'label' => 'Lat/Long',
