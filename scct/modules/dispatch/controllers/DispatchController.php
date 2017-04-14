@@ -70,6 +70,9 @@ class DispatchController extends \app\controllers\BaseController
             // set pages to surveyors table
             $surveyorTablePages = new Pagination($surveyorsResponse['pages']);*/
 
+            //todo: check permission to dipatch work
+            $can = 1;
+
             if (Yii::$app->request->isAjax) {
                 return $this->render('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
@@ -77,6 +80,7 @@ class DispatchController extends \app\controllers\BaseController
                     'model' => $model,
                     'divisionList' => $divisionList,
                     'complianceDateParams' => $complianceDateParams,
+                    'can' => $can,
                 ]);
             } else {
                 return $this->render('index', [
@@ -85,6 +89,7 @@ class DispatchController extends \app\controllers\BaseController
                     'model' => $model,
                     'divisionList' => $divisionList,
                     'complianceDateParams' => $complianceDateParams,
+                    'can' => $can,
                 ]);
             }
         } catch (ForbiddenHttpException $e) {

@@ -11,7 +11,6 @@ $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="dispatch">
-
     <div id="dispatchTab">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="dispatch-dropDownList-form">
@@ -123,7 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>-->
             <?php Pjax::end() ?>
         </div>
-
         <div id="dispatchSurveyorsContainer">
             <?php Pjax::begin(['id' => 'dispatchSurveyorsGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
@@ -172,15 +170,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php Pjax::end() ?>
         </div>
     </div>
-    <?php /*Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) */?><!--
-    <div id="dispatchButton">
-        <?php /*if ($can != 0) { */?>
-            <?php /*echo Html::button('DISPATCH', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); */?>
-        <?php /*} else {
+    <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+        <?php if ($can != 0) { ?>
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
+        <?php } else {
             echo "";
-        } */?>
-    </div>
-    --><?php /*Pjax::end() */?>
+        } ?>
+    <?php Pjax::end() ?>
 
     <!-- The Modal -->
     <div id="dispatch-message" class="modal" style="display:none">
