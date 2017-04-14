@@ -1,35 +1,243 @@
 /*dispatch css*/
-.dispatch,.dispatch-assigned,.dispatch-assets{
-	margin-top:60px;
+.dispatch, .dispatch-assigned, .dispatch-assets {
+    margin-top: 60px;
 }
-#dispatchGV{
-	width:60%;
-	float:left;
-}
-#surveyorsGV{
-	width:38%;
-	float:right;
-}
-#dispatchAssetsBackButton{
-	margin-bottom:5px;
-}
-.dispatch #dispatchButton,.dispatch-assigned  #addSurveyorsButton{
-	position:fixed;
-	bottom: 32px;
-	right: 20px;
-	z-index:42;	
-}
-/*dispatch css ends*/
 
+#dispatchGV {
+    width: 100%;
+    float: left;
+}
+
+#surveyorsGV {
+    width: 100%;
+    float: right;
+}
+
+#dispatchAssetsBackButton {
+    margin-bottom: 5px;
+}
+
+.dispatch #dispatchButton, .dispatch-assigned #addSurveyorsButton {
+    position: fixed;
+    bottom: 32px;
+    right: 20px;
+    z-index: 42;
+}
+
+/*pending changes start*/
+#dispatchTab{
+    position: fixed;
+    float:left;
+    width: 98%;
+    background-color: #E6F0F6;
+    z-index: 3;
+    border-bottom:1px solid black;
+}
+#dispatchTab h3{
+    padding-left:1%;
+}
+#dispatchGridViewContainer{
+    position:relative;
+    float:left;
+    width:100%;
+    margin-top: 15%;
+}
+#dispatch-dropDownList-form .dropdowntitle{
+    position:relative;
+    float:left;
+    width:40%;
+    padding-right:5px;
+    color:#0067a6;
+}
+#dispatch-dropDownList-form label{
+    margin-bottom:0px;
+}
+#dispatchUnassignedTable{
+    position:relative;
+    float:left;
+    width:72%;
+    margin-right:0.5%;
+}
+#dispatchUnassignedTable .table-responsive {
+    margin-top:0px;
+    width:99%;
+    margin-left:1%;
+    overflow: auto;
+    max-height: 530px;
+}
+#dispatchSurveyorsGridview .table-responsive{
+    max-height:500px;
+    overflow:auto;
+}
+#dispatch-dropDownList-form{
+    width:99%;
+    margin-left:1%;
+    position:relative;
+    float:left;
+}
+#dispatchUnassignedTableDropdown{
+    position:relative;
+    float:left;
+    width:72%;
+    margin-right:1%;
+}
+#dispatchUnassignedTableDropdown .dropdowntitle{
+    width:17%;
+}
+#unAssignedPageSizeLabel,#dispatchSurveyorPageSizeLabel{
+    float:right;
+    margin-right:2%;
+}
+#unAssignedPageSizeLabel span,#dispatchSurveyorPageSizeLabel span,#dispatchUnassignedTableDropdown #filtertitle span{
+    color:#0067a6;
+    float:left;
+    margin-top:27px;
+    margin-right:10px;
+}
+#unAssignedPageSizeLabel .form-group ,#dispatchSurveyorPageSizeLabel .form-group,#dispatchUnassignedTableDropdown #filtertitle .form-group {
+    float:right;
+}
+#dispatchUnassignedTableDropdown .compliancemonth{
+    width:19%;
+}
+#dispatchUnassignedTableDropdown #filtertitle{
+    float:right;
+    margin-right:2%;
+}
+#dispatchSurveyorTableDropdown{
+    position:relative;
+    float:left;
+    width:25.5%;
+}
+#dispatchUnassignedTableClearFilterButton,#dispatchSurveyorTableClearFilterButton{
+    margin-top:25px;
+    width:32px;
+    cursor:pointer;
+}
+#dispatchUnassignedTable .pagination{
+    margin:20px 23% 10px 23%;
+}
+#dispatchSurveyorsContainer{
+    position:relative;
+    float:left;
+    width:27%;
+}
+#dispatchSurveyorsContainer tr{
+    background-color:white !important;
+}
+#dispatchSurveyorsContainer td{
+    border:0px;
+}
+#dispatchSurveyorTableDropdown #surveyorsfiltertitle{
+    width:46%;
+}
+#dispatchAssignedButton{
+    position:relative;
+    float:left;
+    width:8%;
+    padding-left:1%;
+    margin-top:20%;
+}
+#dispatchButton{
+    position:fixed;
+    bottom: 37px;
+    right: 20px;
+    z-index:42;
+}
+#SurveyorGridviewTotalNumber{
+    position: fixed;
+    bottom: 45px;
+    left: 74%;
+    z-index: 42;
+}
+/*Pending changes pop-up missing modal*/
+#dispatch-message .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: 400px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+#dispatch-message .modal-body {
+    position:relative;
+    float:left;
+    width:100%;
+    padding: 5px 16px;
+    margin:15px 0;
+    background-color:white;
+}
+.dispatchModalbtn{
+    padding:10px 0;
+}
+#dispatch-message .dispatchModalbtn{
+    position:relative;
+    float:right;
+    width:30%;
+    color:#0067a6;
+}
+.dispatchModalbtn .btn{
+    background-color:white;
+}
+/*Pending changes pop-up missing modal ends*/
+
+/*-----------css for the 1360*768 resolution---------------*/
+@media only screen and (min-width: 1300px) {
+    #dispatchGridViewContainer{
+        margin-top:10%;
+    }
+    #dispatchUnassignedTable .table-responsive {
+        max-height: 350px;
+    }
+    #dispatchSurveyorsGridview .table-responsive{
+        max-height:210px;
+    }
+    #dispatchUnassignedTable .pagination{
+        margin:5px 23%;
+    }
+}
+/*-----------css for the 1360*768 resolution ends---------------*/
+
+/*-----------css for the 1920*1028 resolution---------------*/
+@media only screen and (min-width: 1900px) {
+    #dispatchGridViewContainer{
+        margin-top:10%;
+    }
+    #dispatchUnassignedTable .table-responsive {
+        max-height: 700px;
+    }
+    #dispatchSurveyorsGridview .table-responsive{
+        max-height:710px;
+    }
+    #dispatchSurveyorsContainer{
+        width:26.5%;
+    }
+    #dispatchUnassignedTable{
+        margin-right:1%;
+    }
+    #dispatchUnassignedTable .pagination{
+        margin:20px 23% 10px 23%;
+    }
+}
+/*-----------css for the 1920*1028 resolution ends---------------*/
+
+/*pending changes end*/
+
+/*dispatch css ends*/
 /*assigned css*/
 #assignedGV{
-	width:100%;
-	float:left;
+    width:100%;
+    float:left;
 }
 .dispatch-assigned #unAssignButton{
-	position:fixed;
-	bottom: 32px;
-	right: 180px;
-	z-index:42;	
+    position:fixed;
+    bottom: 32px;
+    right: 180px;
+    z-index:42;
 }
 /*assigned css ends*/
