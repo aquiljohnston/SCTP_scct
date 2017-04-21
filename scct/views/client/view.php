@@ -48,9 +48,25 @@ $this->params['breadcrumbs'][] = $this->title;
             //'ClientDivisionsFlag',
             'ClientComment',
             'ClientCreateDate',
-            'ClientCreatorUserID',
+            [
+                'label' => 'Client Created By',
+                'value' => function($model, $widget) {
+                    return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);;
+                },
+                'format' => 'html'
+            ],
             'ClientModifiedDate',
-            'ClientModifiedBy',
+            [
+                'label' => 'Client Last Modified By',
+                'value' => function($model, $widget) {
+                    if($model->ModifiedUserID != 0) {
+                        return Html::a($model->ModifiedUserName, ['user/view', 'id' => $model->ModifiedUserID]);;
+                    } else {
+                        return "Not modified since created";
+                    }
+                },
+                'format' => 'html'
+            ],
         ],
     ]) ?>
 
