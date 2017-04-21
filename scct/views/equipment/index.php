@@ -133,6 +133,19 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             return ['equipmentid' => $model["EquipmentID"], 'accepted' => $model["EquipmentAcceptedFlag"]];
+                        },
+                        'checkboxOptions' => function ($model, $key, $index, $column) {
+                            // Disable if already approved or SumHours is 0
+                            $disabledBoolean = strtoupper($model["EquipmentAcceptedFlag"]) == "YES";
+                            $result = [
+                                'equipmentid' => $model["EquipmentID"],
+                                'accepted' => $model["EquipmentAcceptedFlag"]
+                            ];
+                            if($disabledBoolean) {
+                                $result['disabled'] = 'true';
+                            }
+
+                            return $result;
                         }
                         /*'pageSummary' => true,
                         'rowSelectedClass' => GridView::TYPE_SUCCESS,
