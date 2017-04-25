@@ -31,7 +31,8 @@ class AppAsset extends AssetBundle
         'css/customGridviewStyle.css',
         'css/customSortableInputStyle.css',
         'css/login.css',
-        'css/dispatch.css'
+        'css/dispatch.css',
+        'css/assigned.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
