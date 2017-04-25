@@ -1,0 +1,247 @@
+/*assigned css*/
+#assignedGV {
+    width: 100%;
+    float: left;
+}
+
+/*updated css */
+#assignedDropdownContainer {
+    position: fixed;
+    float: left;
+    width: 98%;
+    background-color: #E6F0F6;
+    z-index: 3;
+    border-bottom: 1px solid black;
+    padding-left: 1%;
+}
+
+#assignedDropdownTitlesContainer {
+    position: relative;
+    float: left;
+    width: 85%;
+}
+
+#assignedSearchContainer {
+    position: relative;
+    float: right;
+    width: 13%;
+    margin-right: 2%;
+}
+
+#assignedDropdownTitlesContainer .dropdowntitle {
+    position: relative;
+    float: left;
+    width: 13%;
+    padding-right: 5px;
+    color: #0067a6;
+}
+
+#Assigned-dropDownList-form lable {
+    margin-bottom: 0px;
+}
+
+#Assigned-dropDownList-form .help-block {
+    margin-top: 0px;
+    margin-bottom: 5px;
+}
+
+#assignedSearchContainer .dropdowntitle {
+    float: left;
+    width: 80%;
+    color: #0067a6;
+}
+
+#AssignedPageSizeLabel {
+    float: right;
+    margin-right: 2%;
+    margin-bottom: 0px;
+}
+
+#AssignedPageSizeLabel span {
+    position: fixed;
+    right: 8%;
+    right: 8%;
+    color: #0067a6;
+    margin-top: -35px;
+}
+
+#assignedCleanFilterButton, #assignedSearchCleanFilterButton, #SurveyorModalCleanFilterButton, #leakLogSearchClearFilterButton {
+    margin-top: 25px;
+    width: 32px;
+    cursor: pointer;
+}
+
+#assginedGridViewContainer {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-top: 14.5%;
+    overflow-x: hidden;
+}
+
+#assignedTable .table-responsive {
+    max-height: 550px;
+    overflow-y: auto;
+    width: 99%;
+    margin: 0 auto;
+}
+
+.dispatch-assigned #assiunassignedButton {
+    position: fixed;
+    bottom: 33px;
+    right: 180px;
+    z-index: 42;
+}
+
+.dispatch-assigned #addSurveyorButton {
+    position: fixed;
+    bottom: 33px;
+    right: 20px;
+    z-index: 42;
+}
+
+#assignedPagination .pagination {
+    margin: 5px 0 0 0;
+}
+
+/*add surveyor modal page*/
+#addSurveyorModal .container {
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+#modalAddSurveyor #loading, #modalAddSurveyor .footerabove, #modalAddSurveyor .header, #modalAddSurveyor .logout {
+    display: none;
+}
+
+#assignedaddsurveyordialogtitle {
+    position: relative;
+    float: left;
+    width: 80%;
+    margin: 0 10%;
+}
+
+#assignedaddsurveyordialogtitle .dropdowntitle {
+    position: relative;
+    float: left;
+    width: 40%;
+    padding-right: 1%;
+}
+
+#modalAddSurveyor #w0-container {
+    max-height: 400px;
+    margin-top: 0;
+}
+
+#addSurveyorsGridview #w1-container {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 98%;
+    margin: 0 1%;
+}
+
+#addSurveyorModal .modal-content {
+    width: 90%;
+    margin: 0 5%;
+}
+
+#addSurveyorsDispatchBtn {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/*unassigned dialog css*/
+#unassigned-message .modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    width: 400px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+/* @-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+} */
+
+@keyframes animatetop {
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
+}
+
+#unassigned-message .modal-header {
+    padding: 2px 16px;
+}
+
+#unassigned-message .modal-body {
+    position: relative;
+    float: left;
+    width: 100%;
+    padding: 2px 16px;
+    background-color: white;
+}
+
+.unassignedbtn {
+    padding: 10px 0;
+}
+
+#unassigned-message .unassignedbtn {
+    position: relative;
+    float: right;
+    width: 30%;
+    color: #0067a6;
+}
+
+/*unassigned dialog css end*/
+
+/*-----------css for the 1360*768 resolution---------------*/
+@media only screen and (min-width: 1300px) {
+    #assginedGridViewContainer {
+        margin-top: 10%;
+    }
+
+    #assignedTable .table-responsive {
+        max-height: 265px;
+    }
+
+    #assignedTable .table-responsive {
+        width: 99.5%;
+    }
+
+    #addSurveyorsGridview #w1-container {
+        max-height: 220px;
+    }
+}
+
+/*-----------css for the 1360*768 resolution ends---------------*/
+
+/*-----------css for the 1920*1028 resolution---------------*/
+@media only screen and (min-width: 1900px) {
+    #assginedGridViewContainer {
+        margin-top: 10%;
+    }
+
+    #assignedTable .table-responsive {
+        max-height: 710px;
+    }
+
+    #addSurveyorsGridview #w1-container {
+        max-height: 500px;
+    }
+}
+
+/*-----------css for the 1920*1028 resolution ends---------------*/
+
+/*assigned css ends*/
