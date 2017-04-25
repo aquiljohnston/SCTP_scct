@@ -120,8 +120,9 @@ class LoginController extends BaseController
 			self::logActivity('WebLogoutActivity');
 			
 		    Yii::$app->user->logout();
-            $url = 'login%2Fuser-logout&userID='.$id;
-            $response = Parent::executeGetRequest($url);
+            $url = 'login%2Fuser-logout';
+            $version = "v2";
+            $response = Parent::executeGetRequest($url, $version);
         } catch(UnauthorizedHttpException $exception) {
             // This is reached when the user is logging out with an expired token.
 		}

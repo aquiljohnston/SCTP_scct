@@ -114,6 +114,12 @@ class BaseController extends Controller
         } else if(self::TARGET_API_SERVER == self::API_SERVER_LOCALHOST) {
             return "http://localhost:9090/index.php?r=$version%2F$path";
         }
+
+        // Check Endpoint Version
+        if ($version == SELF::API_VERSION_2)
+            return "http://apidev.southerncrossinc.com/index.php?r=" . self::API_VERSION_2 . "%2F$path";
+        else
+            return "http://apidev.southerncrossinc.com/index.php?r=" . self::API_VERSION_1 . "%2F$path";
     }
 
     public static function urlPrefix()
