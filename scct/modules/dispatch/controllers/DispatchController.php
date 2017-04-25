@@ -70,7 +70,7 @@ class DispatchController extends \app\controllers\BaseController
             // set pages to surveyors table
             $surveyorTablePages = new Pagination($surveyorsResponse['pages']);*/
 
-            //todo: check permission to dipatch work
+            //todo: check permission to dispatch work
             $can = 1;
 
             if (Yii::$app->request->isAjax) {
