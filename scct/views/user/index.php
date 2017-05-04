@@ -14,6 +14,75 @@ use kartik\form\ActiveForm;
 $this->title = 'User Management';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
+$column = [
+
+    //'UserID',
+    [
+        'label' => 'Username',
+        'attribute' => 'UserName',
+        'filter' => '<input class="form-control" name="filterusername" value="' . Html::encode($searchModel['UserName']) . '" type="text">'
+    ],
+    [
+        'label' => 'First Name',
+        'attribute' => 'UserFirstName',
+        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
+    ],
+    [
+        'label' => 'Last Name',
+        'attribute' => 'UserLastName',
+        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
+    ],
+    [
+        'label' => 'Role Type',
+        'attribute' => 'UserAppRoleType',
+        'filter' => '<input class="form-control" name="filterroletype" value="' . Html::encode($searchModel['UserAppRoleType']) . '" type="text">'
+    ],
+    // 'UserEmployeeType',
+    // 'UserPhone',
+    // 'UserCompanyName',
+    // 'UserCompanyPhone',
+    // 'UserAppRoleType',
+    // 'UserComments',
+    // 'UserKey',
+    // 'UserActiveFlag',
+    // 'UserCreatedDate',
+    // 'UserModifiedDate',
+    // 'UserCreatedBy',
+    // 'UserModifiedBy',
+    // 'UserCreateDTLTOffset',
+    // 'UserModifiedDTLTOffset',
+    // 'UserInactiveDTLTOffset',
+
+    ['class' => 'kartik\grid\ActionColumn',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view') {
+                $url = '/user/view?id=' . $model["UserID"];
+                return $url;
+            }
+            if ($action === 'update') {
+                $url = '/user/update?id=' . $model["UserID"];
+                return $url;
+            }
+            if ($action === 'delete') {
+                $url = '/user/Deactivate?id=' . $model["UserID"];
+                return $url;
+            }
+        },
+        'buttons' => [
+            'delete' => function ($url, $model, $key) {
+                $url = '/user/deactivate?id=' . $model["UserID"];
+                $options = [
+                    'title' => Yii::t('yii', 'Deactivate'),
+                    'aria-label' => Yii::t('yii', 'Deactivate'),
+                    'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
+                    'data-method' => 'Put',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+            },
+        ]
+    ],
+];
 ?>
 <div class="user-index">
 
@@ -49,81 +118,13 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 'export' => false,
                 'pjax' => true,
                 'summary' => '',
-                'columns' => [
-
-                    //'UserID',
-                    [
-                        'label' => 'Username',
-                        'attribute' => 'UserName',
-                        'filter' => '<input class="form-control" name="filterusername" value="' . Html::encode($searchModel['UserName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'First Name',
-                        'attribute' => 'UserFirstName',
-                        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'Last Name',
-                        'attribute' => 'UserLastName',
-                        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'Role Type',
-                        'attribute' => 'UserAppRoleType',
-                        'filter' => '<input class="form-control" name="filterroletype" value="' . Html::encode($searchModel['UserAppRoleType']) . '" type="text">'
-                    ],
-                    // 'UserEmployeeType',
-                    // 'UserPhone',
-                    // 'UserCompanyName',
-                    // 'UserCompanyPhone',
-                    // 'UserAppRoleType',
-                    // 'UserComments',
-                    // 'UserKey',
-                    // 'UserActiveFlag',
-                    // 'UserCreatedDate',
-                    // 'UserModifiedDate',
-                    // 'UserCreatedBy',
-                    // 'UserModifiedBy',
-                    // 'UserCreateDTLTOffset',
-                    // 'UserModifiedDTLTOffset',
-                    // 'UserInactiveDTLTOffset',
-
-                    ['class' => 'kartik\grid\ActionColumn',
-                        'urlCreator' => function ($action, $model, $key, $index) {
-                            if ($action === 'view') {
-                                $url = '/user/view?id=' . $model["UserID"];
-                                return $url;
-                            }
-                            if ($action === 'update') {
-                                $url = '/user/update?id=' . $model["UserID"];
-                                return $url;
-                            }
-                            if ($action === 'delete') {
-                                $url = '/user/Deactivate?id=' . $model["UserID"];
-                                return $url;
-                            }
-                        },
-                        'buttons' => [
-                            'delete' => function ($url, $model, $key) {
-                                $url = '/user/deactivate?id=' . $model["UserID"];
-                                $options = [
-                                    'title' => Yii::t('yii', 'Deactivate'),
-                                    'aria-label' => Yii::t('yii', 'Deactivate'),
-                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
-                                    'data-method' => 'Put',
-                                    'data-pjax' => '0',
-                                ];
-                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
-                            },
-                        ]
-                    ],
-                ],
+                'columns' => $column
             ]); ?>
             <div id="UserPagination">
                 <?php
-                    echo LinkPager::widget([
-                        'pagination' => $pages,
-                    ]);
+                echo LinkPager::widget([
+                    'pagination' => $pages,
+                ]);
                 ?>
             </div>
             <div class="GridviewTotalNumber">

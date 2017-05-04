@@ -9,6 +9,39 @@ use kartik\grid\GridView;
 
 $this->title = 'Clients';
 $this->params['breadcrumbs'][] = $this->title;
+$column = [
+    ['class' => 'kartik\grid\SerialColumn'],
+
+    //'ClientID',
+    [
+        'label' => 'Name',
+        'attribute' => 'ClientName',
+        'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
+    ],
+    [
+        'label' => 'Client City',
+        'attribute' => 'ClientCity',
+        'filter' => '<input class="form-control" name="filtercity" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
+    ],
+    [
+        'label' => 'Client State',
+        'attribute' => 'ClientState',
+        'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ClientState']) . '" type="text">'
+    ],
+    ['class' => 'kartik\grid\ActionColumn',
+        'template' => '{view} {update}',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view') {
+                $url = '/client/view?id=' . $model["ClientID"];
+                return $url;
+            }
+            if ($action === 'update') {
+                $url = '/client/update?id=' . $model["ClientID"];
+                return $url;
+            }
+        },
+    ],
+];
 ?>
 <div class="client-index">
 
@@ -21,44 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-		'filterModel' => $searchModel,
-		'export' => false,
-		'bootstrap' => false,
-        'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
-
-            //'ClientID',
-			[
-				'label' => 'Name',
-				'attribute' => 'ClientName',
-				'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
-			],
-			[
-				'label' => 'Client City',
-				'attribute' => 'ClientCity',
-				'filter' => '<input class="form-control" name="filtercity" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
-			],
-			[
-				'label' => 'Client State',
-				'attribute' => 'ClientState',
-				'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ClientState']) . '" type="text">'
-			],
-
-
-            ['class' => 'kartik\grid\ActionColumn',
-			'template' => '{view} {update}',
-				'urlCreator' => function ($action, $model, $key, $index) {
-        			if ($action === 'view') {
-        			$url ='/client/view?id='.$model["ClientID"];
-        			return $url;
-        			}
-        			if ($action === 'update') {
-        			$url = '/client/update?id='.$model["ClientID"];
-        			return $url;
-        			}
-        		},
-			],
-        ],
+        'filterModel' => $searchModel,
+        'export' => false,
+        'bootstrap' => false,
+        'columns' => $column
     ]); ?>
 
 </div>
