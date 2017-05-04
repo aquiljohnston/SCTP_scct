@@ -17,6 +17,87 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
         'week' => $week
     ]);
+$column = [
+    [
+        'label' => 'User First Name',
+        'attribute' => 'UserFirstName',
+        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
+    ],
+    [
+        'label' => 'User Last Name',
+        'attribute' => 'UserLastName',
+        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
+    ],
+    [
+        'label' => 'Project Name',
+        'attribute' => 'ProjectName',
+        'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
+    ],
+    [
+        'label' => 'Start Date',
+        'attribute' => 'TimeCardStartDate',
+        'value' => function ($model) {
+            return date("m/d/Y", strtotime($model['TimeCardStartDate']));
+        }
+    ],
+    [
+        'label' => 'End Date',
+        'attribute' => 'TimeCardEndDate',
+        'value' => function ($model) {
+            return date("m/d/Y", strtotime($model['TimeCardEndDate']));
+        }
+    ],
+    'SumHours',
+    [
+        'label' => 'Approved',
+        'attribute' => 'TimeCardApprovedFlag',
+        'filter' => $approvedInput
+    ],
+    ['class' => 'kartik\grid\ActionColumn',
+        'template' => '{view}', // does not include delete
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view') {
+                $url = '/time-card/view?id=' . $model["TimeCardID"];
+                return $url;
+            }
+        },
+        'buttons' => [
+            // Currently unused due to template string above
+            'delete' => function ($url, $model, $key) {
+                $url = '/time-card/delete?id=' . $model["TimeCardID"];
+                $options = [
+                    'title' => Yii::t('yii', 'Delete'),
+                    'aria-label' => Yii::t('yii', 'Delete'),
+                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                    'data-method' => 'Delete',
+                    'data-pjax' => '0',
+                ];
+                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+            },
+        ],
+    ],
+    [
+        'class' => 'kartik\grid\CheckboxColumn',
+        'checkboxOptions' => function ($model, $key, $index, $column) {
+            // Disable if already approved or SumHours is 0
+            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
+                || $model["SumHours"] == "0";
+            $result = [
+                'timecardid' => $model["TimeCardID"],
+                'approved' => $model["TimeCardApprovedFlag"],
+                'totalworkhours' => $model["SumHours"]
+            ];
+            if ($disabledBoolean) {
+                $result['disabled'] = 'true';
+            }
+
+            return $result;
+        }
+        /*'pageSummary' => true,
+        'rowSelectedClass' => GridView::TYPE_SUCCESS,
+        'contentOptions'=>['style'=>'width: 0.5%'],*/
+    ],
+];
 ?>
 
 <div class="timecard-index">
@@ -84,87 +165,7 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
                 'filterModel' => $searchModel,
                 'pjax' => true,
                 'summary' => '',
-                'columns' => [
-                    [
-                        'label' => 'User First Name',
-                        'attribute' => 'UserFirstName',
-                        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'User Last Name',
-                        'attribute' => 'UserLastName',
-                        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'Project Name',
-                        'attribute' => 'ProjectName',
-                        'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
-                    ],
-                    [
-                        'label' => 'Start Date',
-                        'attribute' => 'TimeCardStartDate',
-                        'value' => function ($model) {
-                            return date("m/d/Y", strtotime($model['TimeCardStartDate']));
-                        }
-                    ],
-                    [
-                        'label' => 'End Date',
-                        'attribute' => 'TimeCardEndDate',
-                        'value' => function ($model) {
-                            return date("m/d/Y", strtotime($model['TimeCardEndDate']));
-                        }
-                    ],
-                    'SumHours',
-                    [
-                        'label' => 'Approved',
-                        'attribute' => 'TimeCardApprovedFlag',
-                        'filter' => $approvedInput
-                    ],
-                    ['class' => 'kartik\grid\ActionColumn',
-                        'template' => '{view}', // does not include delete
-                        'urlCreator' => function ($action, $model, $key, $index) {
-                            if ($action === 'view') {
-                                $url = '/time-card/view?id=' . $model["TimeCardID"];
-                                return $url;
-                            }
-                        },
-                        'buttons' => [
-                            // Currently unused due to template string above
-                            'delete' => function ($url, $model, $key) {
-                                $url = '/time-card/delete?id=' . $model["TimeCardID"];
-                                $options = [
-                                    'title' => Yii::t('yii', 'Delete'),
-                                    'aria-label' => Yii::t('yii', 'Delete'),
-                                    'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                    'data-method' => 'Delete',
-                                    'data-pjax' => '0',
-                                ];
-                                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
-                            },
-                        ],
-                    ],
-                    [
-                        'class' => 'kartik\grid\CheckboxColumn',
-                        'checkboxOptions' => function ($model, $key, $index, $column) {
-                            // Disable if already approved or SumHours is 0
-                            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
-                                || $model["SumHours"] == "0";
-                            $result = [
-                                'timecardid' => $model["TimeCardID"],
-                                'approved' => $model["TimeCardApprovedFlag"],
-                                'totalworkhours' => $model["SumHours"]
-                            ];
-                            if($disabledBoolean) {
-                                $result['disabled'] = 'true';
-                            }
-
-                            return $result;
-                        }
-                        /*'pageSummary' => true,
-                        'rowSelectedClass' => GridView::TYPE_SUCCESS,
-                        'contentOptions'=>['style'=>'width: 0.5%'],*/
-                    ],
-                ],
+                'columns' => $column
             ]); ?>
             <div id="TCPagination">
                 <?php
