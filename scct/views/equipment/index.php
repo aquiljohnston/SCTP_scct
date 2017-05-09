@@ -113,7 +113,7 @@ $column = [
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="equipment_filter">
-        <div id="euqipmentButtons">
+        <div id="equipmentButtons">
             <?php if (BaseController::can('equipmentCreate')): ?>
                 <?= Html::a('Create Equipment', ['create'], ['class' => 'btn btn-success']) ?>
             <?php endif; ?>
