@@ -81,6 +81,7 @@ class User extends \yii\base\model implements IdentityInterface
         return [
             [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreateDTLTOffset'], 'string'],
             [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
+            ['UserPassword', 'string'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe'],
             ['UserName', 'string', 'max' => self::MAX_NAME_LENGTH],
             ['UserFirstName', 'string', 'max' => self::MAX_FIRST_NAME_LENGTH],
