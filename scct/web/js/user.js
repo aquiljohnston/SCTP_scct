@@ -15,7 +15,7 @@ $(function () {
         });
     });
 
-    $('#filterContent').keypress(function(e) {
+    $('#dynamicmodel-filter').keypress(function(e) {
         if(e.which == 13) {
             reloadGridView();
             e.preventDefault();
@@ -28,11 +28,12 @@ $(function () {
             return false;
         }
         $('#loading').show();
+        var data = form.serialize();
         $.pjax.reload({
-            type: 'POST',
+            type: 'GET',
             url: form.attr("action"),
             container: '#userGridview', // id to update content
-            data: form.serialize(),
+            data: data,
             timeout: 99999
         }).done(function () {
             $('#loading').hide();

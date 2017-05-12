@@ -105,6 +105,9 @@ $column = [
             <label id="userPageSizeLabel">
                 <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
             </label>
+            <label id="userFilter">
+                <?= $form->field($model, 'filter')->label("Search"); ?>
+            </label>
             <?php ActiveForm::end(); ?>
         </div>
     </div>
