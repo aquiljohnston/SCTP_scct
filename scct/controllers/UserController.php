@@ -40,17 +40,17 @@ class UserController extends BaseController
                 ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
             // check if type was post, if so, get value from $model
-            if ($model->load(Yii::$app->request->post())) {
+            if ($model->load(Yii::$app->request->get())) {
+
                 Yii::trace("pagesize: " . $model->pagesize);
                 $userPageSizeParams = $model->pagesize;
-                $filter = $model->filter;
+                $filterParam = $model->filter;
             } else {
-                $filter = "";
-
                 if (isset($_GET['per-page'])) {
                     $userPageSizeParams = $_GET['per-page'];
                     Yii::trace("Post per-page: " . $_GET['per-page']);
                 } else {
+                    $filterParam = ""; //I'm not sure why this works -- Done to clear filter param when empty and searching via Gridview
                     $userPageSizeParams = 10;
                 }
             }
@@ -61,22 +61,19 @@ class UserController extends BaseController
             } else {
                 $page = 1;
             }
-
-            //build url with params
-            $url = "user%2Fget-active&filter=" . urlencode($filter) . "&listPerPage=" . $userPageSizeParams . "&page=" . $page;
-            //$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
-            $response = Parent::executeGetRequest($url, 'v2');
-            $response = json_decode($response, true);
-            $assets = $response['assets'];
-
-            $filteredResultData = $this->filterColumnMultiple($assets, 'UserName', 'filterusername');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserFirstName', 'filterfirstname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserAppRoleType', 'filterroletype');
             $usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
             $firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
             $lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
             $roleTypeFilterParam = Yii::$app->request->getQueryParam('filterroletype', '');
+            //build url with params
+            $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($userPageSizeParams)
+                . "&page=" . urlencode($page) . "&filterusername=" . urlencode($usernameFilterParam)
+                . "&filterfirstname=" . urlencode($firstNameFilterParam) . "&filterlastname=" . urlencode($lastNameFilterParam)
+                . "&filterroletype=" . urlencode($roleTypeFilterParam);
+            //$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
+            $response = Parent::executeGetRequest($url, 'v2');
+            $response = json_decode($response, true);
+            $assets = $response['assets'];
             $searchModel = [
                 'UserName' => $usernameFilterParam,
                 'UserFirstName' => $firstNameFilterParam,
@@ -86,7 +83,7 @@ class UserController extends BaseController
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = new ArrayDataProvider
             ([
-                'allModels' => $filteredResultData,
+                'allModels' => $assets,
                 'pagination' => [
                     'pageSize' => 100,
                 ],
@@ -100,7 +97,7 @@ class UserController extends BaseController
                 'searchModel' => $searchModel,
                 'model' => $model,
                 'pages' => $pages,
-                'filter' => $filter,
+                'filter' => $filterParam,
                 'userPageSizeParams' => $userPageSizeParams
             ]);
 
