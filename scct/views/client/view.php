@@ -50,21 +50,23 @@ $this->params['breadcrumbs'][] = $this->title;
             'ClientCreateDate',
             [
                 'label' => 'Client Created By',
-                'value' => function($model, $widget) {
-                    return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);;
-                },
+                'attribute' => 'CreatedUserName',
+                'value' => call_user_func(function($model) {
+                        return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);
+                }, $model),
                 'format' => 'html'
             ],
             'ClientModifiedDate',
             [
                 'label' => 'Client Last Modified By',
-                'value' => function($model, $widget) {
+                'attribute' => 'ModifiedUserName',
+                'value' => call_user_func(function($model) {
                     if($model->ModifiedUserID != 0) {
                         return Html::a($model->ModifiedUserName, ['user/view', 'id' => $model->ModifiedUserID]);;
                     } else {
                         return "Not modified since created";
                     }
-                },
+                }, $model),
                 'format' => 'html'
             ],
         ],
