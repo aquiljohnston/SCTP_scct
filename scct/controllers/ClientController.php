@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Client;
 use Yii;
 use yii\data\Pagination;
 use yii\data\ArrayDataProvider;
