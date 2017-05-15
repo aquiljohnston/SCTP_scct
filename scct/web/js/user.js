@@ -15,7 +15,7 @@ $(function () {
         });
     });
 
-    $('#dynamicmodel-filter').keypress(function(e) {
+    $('#userFilter #dynamicmodel-filter').keypress(function(e) {
         if(e.which == 13) {
             reloadGridView();
             e.preventDefault();

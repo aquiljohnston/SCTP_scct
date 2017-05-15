@@ -1,7 +1,9 @@
 <?php
 
+use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ClientSearch */
@@ -51,6 +53,21 @@ $column = [
     <p>
         <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+
+    <?php $form = ActiveForm::begin([
+        'type' => ActiveForm::TYPE_HORIZONTAL,
+        'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+        'method' => 'get',
+        'action' => Url::to(['client/index']),
+        'options' => [
+            'id' => 'ClientForm',
+        ]
+    ]); ?>
+
+    <label id="clientFilter">
+        <?= $form->field($model, 'filter')->textInput(['value' => $filter ])->label("Search"); ?>
+    </label>
+    <?php ActiveForm::end(); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
