@@ -71,7 +71,7 @@ class UserController extends BaseController
                 . "&filterfirstname=" . urlencode($firstNameFilterParam) . "&filterlastname=" . urlencode($lastNameFilterParam)
                 . "&filterroletype=" . urlencode($roleTypeFilterParam);
             //$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
-            $response = Parent::executeGetRequest($url, 'v2');
+            $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
             $searchModel = [

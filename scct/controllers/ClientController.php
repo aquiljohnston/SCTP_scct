@@ -3,14 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\client;
-use app\models\ClientSearch;
-use app\controllers\BaseController;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\ForbiddenHttpException;
+use yii\data\Pagination;
 use yii\data\ArrayDataProvider;
-use linslin\yii2\curl;
 
 /**
  * ClientController implements the CRUD actions for client model.
@@ -24,39 +18,81 @@ class ClientController extends BaseController
      */
     public function actionIndex()
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
+        //guest redirect
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['login/login']);
+        }
+        $model = new \yii\base\DynamicModel([
+            'filter', 'pagesize'
+        ]);
+        $model->addRule('filter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
-		// Reading the response from the the api and filling the GridView
-		$url = "client%2Fget-all";
-		$response = Parent::executeGetRequest($url); // RBAC permissions checked indirectly via this call
-		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ClientName', 'filterclientname');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientCity', 'filtercity');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ClientState', 'filterstate');
+        $filterParam = "";
+        // check if type was get, if so, get value from $model
+        if ($model->load(Yii::$app->request->get())) {
+            //$userPageSizeParams = $model->pagesize;
+            $filterParam = $model->filter;
+            $userPageSizeParams = $model->pagesize;
+        } else {
+            $userPageSizeParams = 10;
+        }
+        //Determine which page to show
+        if (isset($_GET['userPage'])) {
+            $page = $_GET['userPage'];
+        } else {
+            $page = 1;
+        }
 
-		//Passing data to the dataProvider and formating it in an associative array
-		$dataProvider = new ArrayDataProvider
-		([
-			'allModels' => $filteredResultData,
-			'pagination' => [
-				'pageSize' => 100,
-			],
-		]);
+        $nameFilterParam = Yii::$app->request->getQueryParam('filterclientname', '');
+        $cityFilterParam = Yii::$app->request->getQueryParam('filtercityname', '');
+        $stateFilterParam = Yii::$app->request->getQueryParam('filterstatename', '');
 
-		$searchModel = [
-			'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
-			'ClientCity' => Yii::$app->request->getQueryParam('filtercity', ''),
-			'ClientState' => Yii::$app->request->getQueryParam('filterstate', ''),
-		];
+        $url = "client%2Fget-all&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($userPageSizeParams)
+            . "&page=" . urlencode($page) . "&filterclientname=" . urlencode($nameFilterParam)
+            . "&filtercityname=" . urlencode($cityFilterParam) . "&filterstatename=" . urlencode($stateFilterParam);
+        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // RBAC permissions checked indirectly via this call
+        $response = json_decode($response, true);
+        $assets = $response['assets'];
+        $searchModel = [
+            'ClientName' => $nameFilterParam,
+            'City' => $cityFilterParam,
+            'State' => $stateFilterParam
+        ];
+        //Passing data to the dataProvider and formating it in an associative array
+        $dataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $assets,
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
 
+        $searchModel = [
+            'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
+            'ClientCity' => Yii::$app->request->getQueryParam('filtercity', ''),
+            'ClientState' => Yii::$app->request->getQueryParam('filterstate', ''),
+        ];
+        //Passing data to the dataProvider and formatting it in an associative array
+        $dataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $assets,
+            'pagination' => [
+                'pageSize' => 100,
+            ],
+        ]);
 
-		return $this -> render('index', [
-			'dataProvider' => $dataProvider,
-			'searchModel' => $searchModel
-		]);
+        //set pages
+        $pages = new Pagination($response['pages']);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'model' => $model,
+            'pages' => $pages,
+            'filter' => $filterParam,
+            'userPageSizeParams' => $userPageSizeParams
+        ]);
 
     }
 
