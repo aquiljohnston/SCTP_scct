@@ -2,6 +2,7 @@
 
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
+use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 
@@ -76,5 +77,14 @@ $column = [
         'bootstrap' => false,
         'columns' => $column
     ]); ?>
-
+    <div id="UserPagination">
+        <?php
+        echo LinkPager::widget([
+            'pagination' => $pages,
+        ]);
+        ?>
+    </div>
+    <div class="GridviewTotalNumber">
+        <?php echo "Showing " . ($pages->offset + 1) . " to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
+    </div>
 </div>
