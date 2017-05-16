@@ -24,29 +24,50 @@ class ProjectController extends BaseController
      */
     public function actionIndex()
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['login/login']);
-		}
+        //guest redirect
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['login/login']);
+        }
+
+        $model = new \yii\base\DynamicModel([
+            'filter', 'pagesize'
+        ]);
+        $model->addRule('filter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+
+        // check if type was post, if so, get value from $model
+        if ($model->load(Yii::$app->request->get())) {
+
+            $listPerPageParam = $model->pagesize;
+            $filterParam = $model->filter;
+        } else {
+            $listPerPageParam = 10;
+            $filterParam = "";
+        }
+
+
+        $pageParam = Yii::$app->request->getQueryParam('page', '');
+        $projectNameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
+        $stateFilterParam = Yii::$app->request->getQueryParam('filterstate', '');
+        $typeFilterParam = Yii::$app->request->getQueryParam('filtertype', '');
 
 		// Reading the response from the the api and filling the GridView
-		$url = "project%2Fget-all";
-		$response = Parent::executeGetRequest($url); // indirect rbac
+		$url = "project%2Fget-all&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
+                . "&page=" . urlencode($pageParam) . "&filterprojectname=" . urlencode($projectNameFilterParam)
+                . "&filtertype=" . urlencode($typeFilterParam) . "&filterstate=" . urlencode($stateFilterParam);
+		$response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
 
 
-		$filteredResultData = $this->filterColumnMultiple(json_decode($response, true), 'ProjectName', 'filtername');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectType', 'filtertype');
-		$filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectState', 'filterstate');
+		$resultData = json_decode($response, true);
 
 		$searchModel = [
-			'ProjectName' => Yii::$app->request->getQueryParam('filtername', ''),
-			'ProjectType' => Yii::$app->request->getQueryParam('filtertype', ''),
-			'ProjectState' => Yii::$app->request->getQueryParam('filterstate', '')
+			'ProjectName' => $projectNameFilterParam,
+			'ProjectType' => $typeFilterParam,
+			'ProjectState' => $stateFilterParam
 		];
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
-			'allModels' => $filteredResultData,
+			'allModels' => $resultData,
 			'pagination' => [
 				'pageSize' => 100,
 			],
@@ -55,7 +76,8 @@ class ProjectController extends BaseController
 		return $this -> render('index', [
 			'dataProvider' => $dataProvider,
 			'searchModel' => $searchModel,
-			'canCreateProjects' => self::can("projectCreate")
+			'canCreateProjects' => self::can("projectCreate"),
+            'model' => $model
 		]);
 
     }

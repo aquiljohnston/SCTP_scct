@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\controllers\ProjectController;
+use kartik\form\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -86,6 +88,21 @@ $column = [
             <?= Html::a('Create Project', null, ['class' => 'btn btn-success', 'disabled' => 'disabled']) ?>
         <?php endif; ?>
     </p>
+    <div id="projectSearchContainer">
+        <?php $form = ActiveForm::begin([
+            'type' => ActiveForm::TYPE_HORIZONTAL,
+            'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+            'method' => 'get',
+            'action' => Url::to(['project/index']),
+            'options' => [
+                'id' => 'UserForm',
+            ]
+        ]); ?>
+        <label id="projectFilter">
+            <?= $form->field($model, 'filter')->label("Search"); ?>
+        </label>
+        <?php ActiveForm::end(); ?>
+    </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
