@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use app\controllers\User;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
@@ -96,10 +96,11 @@ $column = [
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-                'method' => 'post',
+                'method' => 'get',
                 'options' => [
                     'id' => 'UserForm',
-                ]
+                ],
+                'action' => Url::to(['user/index'])
             ]); ?>
 
             <label id="userPageSizeLabel">
@@ -108,6 +109,7 @@ $column = [
             <label id="userFilter">
                 <?= $form->field($model, 'filter')->label("Search"); ?>
             </label>
+            <input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="1" />
             <?php ActiveForm::end(); ?>
         </div>
     </div>
