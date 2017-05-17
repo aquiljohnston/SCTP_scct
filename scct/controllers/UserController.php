@@ -39,38 +39,31 @@ class UserController extends BaseController
             $model->addRule('filter', 'string', ['max' => 32])
                 ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
-            // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->get())) {
 
-                Yii::trace("pagesize: " . $model->pagesize);
-                $userPageSizeParams = $model->pagesize;
+                $listPerPageParam = $model->pagesize;
                 $filterParam = $model->filter;
             } else {
-                if (isset($_GET['per-page'])) {
-                    $userPageSizeParams = $_GET['per-page'];
-                    Yii::trace("Post per-page: " . $_GET['per-page']);
-                } else {
-                    $filterParam = ""; //I'm not sure why this works -- Done to clear filter param when empty and searching via Gridview
-                    $userPageSizeParams = 10;
-                }
+                $listPerPageParam = 10;
+                $filterParam = "";
             }
 
-            if (isset($_GET['userPage'])) {
-                $page = $_GET['userPage'];
-                Yii::trace("Post userPage: " . $_GET['userPage']);
+            if (isset(Yii::$app->request->queryParams['UserManagementPageNumber'])) {
+                $page = intval(Yii::$app->request->queryParams['UserManagementPageNumber']);
             } else {
                 $page = 1;
             }
+
             $usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
             $firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
             $lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
             $roleTypeFilterParam = Yii::$app->request->getQueryParam('filterroletype', '');
             //build url with params
-            $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($userPageSizeParams)
+            $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
                 . "&page=" . urlencode($page) . "&filterusername=" . urlencode($usernameFilterParam)
                 . "&filterfirstname=" . urlencode($firstNameFilterParam) . "&filterlastname=" . urlencode($lastNameFilterParam)
                 . "&filterroletype=" . urlencode($roleTypeFilterParam);
-            //$url = "user%2Fget-active&listPerPage=" . $userPageSizeParams . "&page=" . $page;
+            Yii::trace("User index url: $url");
             $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -98,7 +91,7 @@ class UserController extends BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'filter' => $filterParam,
-                'userPageSizeParams' => $userPageSizeParams
+                'userPageSizeParams' => $listPerPageParam
             ]);
 
         } catch (ForbiddenHttpException $e) {
