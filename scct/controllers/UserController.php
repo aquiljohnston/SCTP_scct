@@ -54,25 +54,14 @@ class UserController extends BaseController
                 $page = 1;
             }
 
-            $usernameFilterParam = Yii::$app->request->getQueryParam('filterusername', '');
-            $firstNameFilterParam = Yii::$app->request->getQueryParam('filterfirstname', '');
-            $lastNameFilterParam = Yii::$app->request->getQueryParam('filterlastname', '');
-            $roleTypeFilterParam = Yii::$app->request->getQueryParam('filterroletype', '');
+            //todo: http_build_query()
             //build url with params
             $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
-                . "&page=" . urlencode($page) . "&filterusername=" . urlencode($usernameFilterParam)
-                . "&filterfirstname=" . urlencode($firstNameFilterParam) . "&filterlastname=" . urlencode($lastNameFilterParam)
-                . "&filterroletype=" . urlencode($roleTypeFilterParam);
+                . "&page=" . urlencode($page);
             Yii::trace("User index url: $url");
             $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
-            $searchModel = [
-                'UserName' => $usernameFilterParam,
-                'UserFirstName' => $firstNameFilterParam,
-                'UserLastName' => $lastNameFilterParam,
-                'UserAppRoleType' => $roleTypeFilterParam
-            ];
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = new ArrayDataProvider
             ([
@@ -87,11 +76,11 @@ class UserController extends BaseController
 
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
                 'model' => $model,
                 'pages' => $pages,
                 'filter' => $filterParam,
-                'userPageSizeParams' => $listPerPageParam
+                'userPageSizeParams' => $listPerPageParam,
+                'page' => $page
             ]);
 
         } catch (ForbiddenHttpException $e) {
