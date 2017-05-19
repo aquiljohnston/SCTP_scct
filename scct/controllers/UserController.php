@@ -311,7 +311,7 @@ class UserController extends BaseController
         $url = 'user%2Fdeactivate&userID=' . urlencode($id);
         //empty body
         $json_data = "";
-        Parent::executePutRequest($url, $json_data); // indirect rbac
+        Parent::executePutRequest($url, $json_data, BaseController::API_VERSION_2); // indirect rbac
         $this->redirect('/user/');
     }
 }
