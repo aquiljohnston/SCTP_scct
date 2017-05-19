@@ -20,22 +20,18 @@ $column = [
     [
         'label' => 'Username',
         'attribute' => 'UserName',
-        'filter' => '<input class="form-control" name="filterusername" value="' . Html::encode($searchModel['UserName']) . '" type="text">'
     ],
     [
         'label' => 'First Name',
         'attribute' => 'UserFirstName',
-        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
     ],
     [
         'label' => 'Last Name',
         'attribute' => 'UserLastName',
-        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
     ],
     [
         'label' => 'Role Type',
         'attribute' => 'UserAppRoleType',
-        'filter' => '<input class="form-control" name="filterroletype" value="' . Html::encode($searchModel['UserAppRoleType']) . '" type="text">'
     ],
     // 'UserEmployeeType',
     // 'UserPhone',
@@ -109,7 +105,7 @@ $column = [
             <label id="userFilter">
                 <?= $form->field($model, 'filter')->label("Search"); ?>
             </label>
-            <input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="1" />
+            <input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
             <?php ActiveForm::end(); ?>
         </div>
     </div>
@@ -118,10 +114,9 @@ $column = [
             <?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
                 'bootstrap' => false,
                 'export' => false,
-                'pjax' => true,
+                'pjax' => false,
                 'summary' => '',
                 'columns' => $column
             ]); ?>

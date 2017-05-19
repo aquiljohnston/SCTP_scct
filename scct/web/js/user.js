@@ -15,12 +15,7 @@ $(function () {
         });
     });
 
-    $('#userFilter #dynamicmodel-filter').keypress(function(e) {
-        if(e.which == 13) {
-            reloadGridView();
-            e.preventDefault();
-        }
-    });
+
 
     function reloadGridView() {
         var form = jqUserDropDowns.find("#UserForm");
@@ -42,20 +37,29 @@ $(function () {
 
     userManagementPaginationListener();
 });
+function firePageChangeHandler(event, page) {
+    $('#UserManagementPageNumber').val(page);
+    var form = $('#UserForm');
+    $('#loading').show();
+    $.pjax.reload({
+        container: "#userGridview",
+        timeout: 99999,
+        url: form.attr("action"),
+        type: "get",
+        data: form.serialize()
+    });
+    event.preventDefault();
+}
+
 function userManagementPaginationListener() {
     $(document).off('click', '#UserPagination .pagination li a').on('click', '#UserPagination .pagination li a', function (event) {
-        event.preventDefault();
-        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
-        $('#UserManagementPageNumber').val(page);
-        var form = $('#UserForm');
-        $('#loading').show();
-        $.pjax.reload({
-            container: "#userGridview",
-            timeout: 99999,
-            url: form.attr("action"),
-            type: "get",
-            data: form.serialize()
-        });
+        // Shift by one to 1-index instead of 0-index.
+        firePageChangeHandler(event, $(this).data('page') + 1); //TODO: Can we simply this while still sending event parameter?
+    });
+    $('#userFilter #dynamicmodel-filter').keypress(function(event) {
+        if(event.which == 13) {
+            firePageChangeHandler(event, 1);
+        }
     });
     $('#userGridview').on('pjax:success', function (event, data, status, xhr, options) {
         $('#loading').hide();
