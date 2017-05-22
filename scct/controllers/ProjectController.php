@@ -6,6 +6,7 @@ use Yii;
 use app\models\project;
 use app\models\ProjectSearch;
 use app\controllers\BaseController;
+use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
@@ -44,30 +45,26 @@ class ProjectController extends BaseController
             $listPerPageParam = 10;
             $filterParam = "";
         }
+        
 
-
-        $pageParam = Yii::$app->request->getQueryParam('page', '');
-        $projectNameFilterParam = Yii::$app->request->getQueryParam('filtername', '');
-        $stateFilterParam = Yii::$app->request->getQueryParam('filterstate', '');
-        $typeFilterParam = Yii::$app->request->getQueryParam('filtertype', '');
+        $pageParam = Yii::$app->request->getQueryParam('userPage', '');
 
 		// Reading the response from the the api and filling the GridView
-		$url = "project%2Fget-all&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
-                . "&page=" . urlencode($pageParam) . "&filterprojectname=" . urlencode($projectNameFilterParam)
-                . "&filtertype=" . urlencode($typeFilterParam) . "&filterstate=" . urlencode($stateFilterParam);
+        $url = "project%2Fget-all&"
+            . http_build_query(
+                [
+                    'filter' => $filterParam,
+                    'listPerPage' => $listPerPageParam,
+                    "page" => $pageParam
+                ]);
 		$response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
 
-
+        Yii::trace("Response from ProjectController: $response");
 		$resultData = json_decode($response, true);
-
-		$searchModel = [
-			'ProjectName' => $projectNameFilterParam,
-			'ProjectType' => $typeFilterParam,
-			'ProjectState' => $stateFilterParam
-		];
+        $pages = new Pagination($resultData['pages']);
 		//Passing data to the dataProvider and formating it in an associative array
 		$dataProvider = new ArrayDataProvider([
-			'allModels' => $resultData,
+			'allModels' => $resultData['assets'],
 			'pagination' => [
 				'pageSize' => 100,
 			],
@@ -75,9 +72,9 @@ class ProjectController extends BaseController
 
 		return $this -> render('index', [
 			'dataProvider' => $dataProvider,
-			'searchModel' => $searchModel,
 			'canCreateProjects' => self::can("projectCreate"),
-            'model' => $model
+            'model' => $model,
+            'pages' => $pages
 		]);
 
     }

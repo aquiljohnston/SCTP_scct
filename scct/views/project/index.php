@@ -20,17 +20,14 @@ $column = [
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
-        'filter' => '<input class="form-control" name="filtername" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
     ],
     [
         'label' => 'Project Type',
         'attribute' => 'ProjectType',
-        'filter' => '<input class="form-control" name="filtertype" value="' . Html::encode($searchModel['ProjectType']) . '" type="text">'
     ],
     [
         'label' => 'Project State',
         'attribute' => 'ProjectState',
-        'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ProjectState']) . '" type="text">'
     ],
     [
         'label' => 'Start Date',
@@ -106,7 +103,6 @@ $column = [
     </div>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'export' => false,
         'bootstrap' => false,
         'columns' => $column
