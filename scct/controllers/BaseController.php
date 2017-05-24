@@ -22,74 +22,24 @@ class BaseController extends Controller
     const API_VERSION_2 = "v2";
 	const DATE_FORMAT = 'Y-m-d H:i:s';
 
-    // arbitrary numbers (can't be equal to each other)
-    // the numbers are prime for no reason whatsoever
-    const API_SERVER_LOCALHOST = 1;
-    const API_SERVER_DEV = 2;
-    const API_SERVER_STAGE = 3;
-    const API_SERVER_PRODUCTION = 7;
+    //strings to be matched against url prefix, except prod which will be when no match occurs.
+    const SERVER_LOCALHOST = 'local';
+    const SERVER_DEV = 'dev';
+    const SERVER_STAGE = 'stage';
+	//prod has no additional distinguishing characters
+    const SERVER_PRODUCTION = '';
+	
+	//api url for different environments
+	const API_LOCAL_URL = 'http://localhost:8080/index.php?r=';
+	const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
+	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
+	const API_PROD_URL = 'http://api.southerncrossinc.com/index.php?r=';
 
-    /*
-     * Modify these constants in order to set up your SCCT install.
-     */
     // Legacy support. Version 1 calls do not specify which version to use, so we use a default value.
     const DEFAULT_VERSION = self::API_VERSION_1;
-    // Pick the server you want to target. See constants above.
-    const TARGET_API_SERVER = self::API_SERVER_LOCALHOST; //TODO: Detect this setting with a config file or environment scanning (i.e. domain detection)
-    // X-Client corresponds to constants in SCAPI that indicate which database to point to.
-    // It is sent in the header of api calls
-    const XClient = "apidev";
 
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
 
-	public function filterColumn($resultData, $column, $param) {
-		if($resultData == null) {
-			return null;
-		}
-		// http://stackoverflow.com/a/28452101
-		$filteredResultData = array_filter($resultData, function($item) use ($column, $param) {
-			$nameFilterParam = Yii::$app->request->getQueryParam($param, '');
-			if (strlen($nameFilterParam) > 0) {
-				if (stripos($item[$column], $nameFilterParam) !== false) {
-					return true;
-				} else {
-					return false;
-				}
-			} else {
-				return true;
-			}
-		});
-		return $filteredResultData;
-	}
-
-	public function filterColumnMultiple($resultData, $column, $param) {
-		if($resultData == null) {
-			return null;
-		}
-		// http://stackoverflow.com/a/28452101
-		// This code has been modified from its original version. It has been formatted to fit your TV.
-		// (Modified from SO code to handle multiple parameters);
-        // We split by a pipe delimiter in order to allow multiple search terms.
-		$terms = explode("|", Yii::$app->request->getQueryParam($param));
-		// Trim whitespace from every item
-		$terms = array_map('trim', $terms);
-		if(count($terms)==0) {
-			return $resultData;
-		}
-		$filteredResultData = array_filter($resultData, function($item) use ($column, $terms) {
-			foreach($terms as $term) {
-				if (strlen($term) > 0) {
-					if (stripos($item[$column], $term) !== false) {
-						return true;
-					}
-				} else {
-					return true;
-				}
-			}
-			return false;
-		});
-		return $filteredResultData;
-	}
 	public function behaviors()
     {
         return [
@@ -103,43 +53,42 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path, $version = self::DEFAULT_VERSION) {
-	    //STOP!
-        //To modify which server is targeted, change the constant "TARGET_API_SERVER" at the top of the class
-        if(self::TARGET_API_SERVER == self::API_SERVER_PRODUCTION) {
-            return "http://api.southerncrossinc.com/index.php?r=$version%2F$path";
-        } else if(self::TARGET_API_SERVER == self::API_SERVER_STAGE) {
-            return "http://apistage.southerncrossinc.com/index.php?r=$version%2F$path";
-        } else if(self::TARGET_API_SERVER == self::API_SERVER_DEV) {
-            return "http://apidev.southerncrossinc.com/index.php?r=$version%2F$path";
-        } else if(self::TARGET_API_SERVER == self::API_SERVER_LOCALHOST) {
-            return "http://localhost:9090/index.php?r=$version%2F$path";
+		$prefix = self::urlPrefix();
+	    //check if url prefix contains api target
+        if(strpos($prefix, self::SERVER_LOCALHOST) !== false) {
+            return self::API_LOCAL_URL . "$version%2F$path";
+		} else if(strpos($prefix, self::SERVER_DEV) !== false) {
+            return self::API_DEV_URL . "$version%2F$path";
+        } else if(strpos($prefix, self::SERVER_STAGE) !== false){
+            return self::API_STAGE_URL . "$version%2F$path";
+        } else {
+			//if not distinguishing characters are present defaults to production
+			return self::API_PROD_URL . "$version%2F$path";
         }
-
-        // Check Endpoint Version
-        if ($version == SELF::API_VERSION_2)
-            return "http://apidev.southerncrossinc.com/index.php?r=" . self::API_VERSION_2 . "%2F$path";
-        else
-            return "http://apidev.southerncrossinc.com/index.php?r=" . self::API_VERSION_1 . "%2F$path";
     }
 
+	//pull url prefix to determine environment 
     public static function urlPrefix()
     {
         $url = explode(".", $_SERVER['SERVER_NAME']);
-
-        // if the servername contains the string local in the name ( localhost or apidev.local )
-        // or it is in a local class of IPs
+		return $url[0];
+    }
+	
+	//get xclient value based on url prefix
+	public static function getXClient()
+    {
+        //if the servername contains the string local in the name ( localhost or apidev.local )
+        //or it is in a local class of IPs
         if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
                 ||  $_SERVER['SERVER_NAME'] === '0.0.0.0'
                 || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
         )
         {
-            $prefix = "apidev";
+            return "apidev";
         }
         else {
-            $prefix = $url[0];
+            self::urlPrefix();
         }
-
-        return $prefix;
     }
 
     //function generates and executes a "GET" request and returns the response
@@ -148,7 +97,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::urlPrefix(),
+			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -190,7 +139,7 @@ class BaseController extends Controller
         }
 
         $url = self::prependURL($url);
-        $prefix = self::urlPrefix();
+        $prefix = self::getXClient();
         //set headers
         $headers = array(
             'X-Client:'.$prefix,
@@ -241,7 +190,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::urlPrefix(),
+			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
@@ -280,7 +229,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::urlPrefix(),
+			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
@@ -319,7 +268,7 @@ class BaseController extends Controller
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
-			'X-Client:' . self::urlPrefix(),
+			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
@@ -350,6 +299,55 @@ class BaseController extends Controller
 		return $response;
 	}
 
+	public function filterColumn($resultData, $column, $param) {
+		if($resultData == null) {
+			return null;
+		}
+		// http://stackoverflow.com/a/28452101
+		$filteredResultData = array_filter($resultData, function($item) use ($column, $param) {
+			$nameFilterParam = Yii::$app->request->getQueryParam($param, '');
+			if (strlen($nameFilterParam) > 0) {
+				if (stripos($item[$column], $nameFilterParam) !== false) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return true;
+			}
+		});
+		return $filteredResultData;
+	}
+
+	public function filterColumnMultiple($resultData, $column, $param) {
+		if($resultData == null) {
+			return null;
+		}
+		// http://stackoverflow.com/a/28452101
+		// This code has been modified from its original version. It has been formatted to fit your TV.
+		// (Modified from SO code to handle multiple parameters);
+        // We split by a pipe delimiter in order to allow multiple search terms.
+		$terms = explode("|", Yii::$app->request->getQueryParam($param));
+		// Trim whitespace from every item
+		$terms = array_map('trim', $terms);
+		if(count($terms)==0) {
+			return $resultData;
+		}
+		$filteredResultData = array_filter($resultData, function($item) use ($column, $terms) {
+			foreach($terms as $term) {
+				if (strlen($term) > 0) {
+					if (stripos($item[$column], $term) !== false) {
+						return true;
+					}
+				} else {
+					return true;
+				}
+			}
+			return false;
+		});
+		return $filteredResultData;
+	}
+	
     // Universal Permission Check
     public static function requirePermission($permission) {
         //API RBAC permissions check
