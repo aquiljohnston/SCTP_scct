@@ -7,6 +7,17 @@ $config = [
     'defaultRoute' => 'login',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
+	'on beforeRequest' => function ($event) {
+        if(!Yii::$app->request->isSecureConnection){
+            // add some filter/exemptions if needed ..
+            $url = Yii::$app->request->getAbsoluteUrl();
+            if (!strpos($url,"local")) {
+                $url = str_replace('http://', 'https://', $url);
+                Yii::$app->getResponse()->redirect($url);
+                Yii::$app->end();
+            }
+        }
+    },
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

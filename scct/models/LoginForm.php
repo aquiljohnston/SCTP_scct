@@ -103,7 +103,7 @@ class LoginForm extends Model
             curl_setopt($curl, CURLOPT_POSTFIELDS,$json_data);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-				'X-Client:' . BaseController::XClient,
+				'X-Client:' . BaseController::getXClient(),
                 'Content-Type: application/json',
                 'Content-Length: ' . strlen($json_data))
             );
