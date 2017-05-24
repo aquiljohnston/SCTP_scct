@@ -278,7 +278,6 @@ table{
    background-color: #fff;
    z-index: 99;
    text-align: center;
-   background-image: url('../logo/loading.gif');
 }
 #loading-image {
     position: absolute;
