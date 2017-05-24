@@ -35,7 +35,7 @@ class MileageCardController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         try {
             $model = new \yii\base\DynamicModel([
@@ -165,7 +165,7 @@ class MileageCardController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         try {
@@ -315,7 +315,7 @@ class MileageCardController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         //RBAC Check
         self::requirePermission("mileageEntryCreate");
@@ -422,7 +422,7 @@ class MileageCardController extends BaseController
         try {
             //guest redirect
             if (Yii::$app->user->isGuest) {
-                return $this->redirect(['login/login']);
+                return $this->redirect(['/login']);
             }
             $cardIDArray[] = $id;
 
@@ -554,7 +554,7 @@ class MileageCardController extends BaseController
 
             //guest redirect
             if (Yii::$app->user->isGuest) {
-                return $this->redirect(['login/login']);
+                return $this->redirect(['/login']);
             }
 
             $model = new \yii\base\DynamicModel([

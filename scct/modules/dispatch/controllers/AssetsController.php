@@ -14,7 +14,7 @@ class AssetsController extends \app\controllers\BaseController {
     public function actionIndex($id)
     {
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         $getUrl = "assets%2Fget&id=$id";

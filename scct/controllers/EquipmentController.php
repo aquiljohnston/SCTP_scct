@@ -30,7 +30,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         try {
 
@@ -146,7 +146,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         $url = 'equipment%2Fview&id=' . $id;
         $response = Parent::executeGetRequest($url); // indirect RBAC
@@ -163,7 +163,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         $model = new Equipment();
@@ -280,7 +280,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         $EquipmentIDArray[0] = $id;
 
@@ -345,7 +345,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         self::requirePermission("equipmentUpdate");
@@ -444,7 +444,7 @@ class EquipmentController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         $url = 'equipment%2Fdelete&id=' . $id;

@@ -21,7 +21,7 @@ class ClientController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         $model = new \yii\base\DynamicModel([
             'filter', 'pagesize'
@@ -106,7 +106,7 @@ class ClientController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		$url = 'client%2Fview&joinNames=true&id='.$id;
 		$response = Parent::executeGetRequest($url); // indirect rbac
@@ -124,7 +124,7 @@ class ClientController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		
 		self::requirePermission("clientCreate");
@@ -211,7 +211,7 @@ class ClientController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		self::requirePermission("clientUpdate");
 		$getUrl = 'client%2Fview&id='.$id;
@@ -292,7 +292,7 @@ class ClientController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		$url = 'client%2Fdeactivate&id='.$id;
 		Parent::executePostRequest($url, ""); //indirect RBAC

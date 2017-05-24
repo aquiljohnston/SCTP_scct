@@ -29,7 +29,7 @@ class UserController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         try {
 
@@ -101,7 +101,7 @@ class UserController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         $url = 'user%2Fview&id=' . $id;
         $response = Parent::executeGetRequest($url); // indirect rbac
@@ -118,7 +118,7 @@ class UserController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         Yii::Trace("user id: " . Yii::$app->user->getId());
 
@@ -210,7 +210,7 @@ class UserController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         self::requirePermission("userUpdate");
         $getUrl = 'user%2Fview&id=' . $id;
@@ -294,7 +294,7 @@ class UserController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         //calls route to deactivate user account
         $url = 'user%2Fdeactivate&userID=' . urlencode($id);

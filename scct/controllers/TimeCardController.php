@@ -38,7 +38,7 @@ class TimeCardController extends BaseController
         //guest redirect
         if (Yii::$app->user->isGuest)
         {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         try {
@@ -181,7 +181,7 @@ class TimeCardController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 
 		try{
@@ -329,7 +329,7 @@ class TimeCardController extends BaseController
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest) {
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		self::requirePermission("timeEntryCreate");
 		try {
@@ -455,7 +455,7 @@ class TimeCardController extends BaseController
 	public function actionApprove($id){
 		//guest redirect
 		if(Yii::$app->user->isGuest){
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		
 		try{			
@@ -575,7 +575,7 @@ class TimeCardController extends BaseController
 
             //guest redirect
             if (Yii::$app->user->isGuest) {
-                return $this->redirect(['login/login']);
+                return $this->redirect(['/login']);
             }
 
             $model = new \yii\base\DynamicModel([

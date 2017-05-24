@@ -28,7 +28,7 @@ class DispatchController extends \app\controllers\BaseController
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {
-                return $this->redirect(['login/login']);
+                return $this->redirect(['/login']);
             }
             /*$filterModel = new InspectionRequest();
             // Retrieve data
