@@ -27,7 +27,7 @@ class ProjectController extends BaseController
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         $model = new \yii\base\DynamicModel([
@@ -89,7 +89,7 @@ class ProjectController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		$url = "project%2Fview&joinNames=true&id=$id";
 		$response = Parent::executeGetRequest($url); // indirect rbac
@@ -107,7 +107,7 @@ class ProjectController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		self::requirePermission("projectCreate");
 	
@@ -186,7 +186,7 @@ class ProjectController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 		self::requirePermission("projectUpdate");
 		$getUrl = 'project%2Fview&id='.$id;
@@ -280,7 +280,7 @@ class ProjectController extends BaseController
         //guest redirect
         if (Yii::$app->user->isGuest)
         {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         $url = 'project%2Fdeactivate&id='.$id;
         Parent::executePostRequest($url, ""); //indirect RBAC
@@ -316,7 +316,7 @@ class ProjectController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 
 		self::requirePermission("projectAddRemoveUsers");
@@ -384,7 +384,7 @@ class ProjectController extends BaseController
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
-			return $this->redirect(['login/login']);
+			return $this->redirect(['/login']);
 		}
 
 		self::requirePermission("projectAddRemoveModules");

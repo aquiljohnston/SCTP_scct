@@ -9,7 +9,7 @@ class AssignedController extends \app\controllers\BaseController {
     public function actionIndex() {
         // Verify logged in
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
 
         $model = new \yii\base\DynamicModel([

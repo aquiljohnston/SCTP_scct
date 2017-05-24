@@ -40,7 +40,7 @@ class HomeController extends BaseController
     {
 		 //guest redirect
         if (Yii::$app->user->isGuest) {
-            return $this->redirect(['login/login']);
+            return $this->redirect(['/login']);
         }
         // Reading the response from the the api and filling the GridView
         $url = 'notification%2Fget-notifications';
