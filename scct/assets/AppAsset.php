@@ -27,7 +27,7 @@ class AppAsset extends AssetBundle
         'css/timecards.css',
         'css/mileagecards.css',
         'css/projectlanding.css',
-        'http://fonts.googleapis.com/css?family=Roboto:400,100,300',
+        'https://fonts.googleapis.com/css?family=Roboto:400,100,300',
         'css/customGridviewStyle.css',
         'css/customSortableInputStyle.css',
         'css/login.css',

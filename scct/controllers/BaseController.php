@@ -87,13 +87,13 @@ class BaseController extends Controller
             return "apidev";
         }
         else {
-            self::urlPrefix();
+            return self::urlPrefix();
         }
     }
 
     //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url, $version = self::DEFAULT_VERSION)
-	{
+	{		
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
