@@ -1,3 +1,4 @@
+// Refer the modal in dispatch page
 $('#dispatchButton').click(function () {
     /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
     var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
@@ -25,6 +26,36 @@ $('#dispatchButton').click(function () {
             "IRUID[]": [IRUIDArr]
         });
 });
+
+// Refer the modal in assigned page
+$('#addSurveyor').click(function () {
+    /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
+     var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
+     $.ajax({
+     type: 'POST',
+     url: '/dispatch/dispatch/post',
+     data: {InspectionRequestUID: pks, UserUID: pks_surveyors},
+     beforeSend: function () {
+     $('#loading').show();
+     },
+     complete: function () {
+     window.location = window.location; // ?
+     $('#dispatchActiveForm').submit().done(function () {
+     $('#loading').hide();
+     });
+     }
+     });*/
+    var MapPlatArr = [];
+    var IRUIDArr = [];
+    console.log("clicked");
+    $('#addSurveyorModal').modal('show')
+        .find('#modalAddSurveyor')
+        .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
+            "mapplat[]": [MapPlatArr],
+            "IRUID[]": [IRUIDArr]
+        });
+});
+
 $(function () {
     //$("#dispatchButton").prop('disabled', true);
 });
