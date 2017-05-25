@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
@@ -124,11 +125,13 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
     <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-        <?php if ($can != 0) { ?>
-            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
+    <div id="addSurveyorButtonDispatch">
+    <?php if ($can != 0) { ?>
+            <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
         <?php } else {
             echo "";
         } ?>
+        </div>
     <?php Pjax::end() ?>
 
     <!-- The Modal -->
@@ -147,6 +150,17 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 
     </div>
+
+    <?php
+
+    Modal::begin([
+        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+        'id' => 'addSurveyorModal',
+    ]);
+    echo "<div id='modalAddSurveyor'>Loading...</div>";
+    Modal::end();
+    ?>
+
     <div id="dialog-dispatch" title="Dispatch" style="display:none">
         <p>Dispatched Successfully.</p>
     </div>
