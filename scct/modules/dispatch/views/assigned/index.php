@@ -120,6 +120,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
         <?php Pjax::end() ?>
     </div>
     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
+    <div id="addSurveyorButtonDispatch">
     <?php if ($canUnassign != 0) { ?>
         <div id="assiunassignedButton">
             <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary', 'id' => 'UnassignedButton']); ?>
@@ -134,6 +135,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
     <?php } else {
         echo "";
     } ?>
+        <div>
     <?php Pjax::end() ?>
 
     <!-- The Modal -->
@@ -167,6 +169,17 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
     <div id="dialog-unassign" title="Unassign" style="display:none;">
         <p>Unassigned successfully.</p>
     </div>
+
+    <?php
+
+    Modal::begin([
+        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+        'id' => 'addSurveyorModal',
+    ]);
+    echo "<div id='modalAddSurveyor'>Loading...</div>";
+    Modal::end();
+    ?>
+
     <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
         <p>New surveyor(s) has been added successfully.</p>
     </div>

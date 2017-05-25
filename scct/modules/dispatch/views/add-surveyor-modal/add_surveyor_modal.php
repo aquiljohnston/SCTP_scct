@@ -183,6 +183,9 @@ use kartik\form\ActiveForm;
     }
 
     // set trigger for search box in the add surveyor modal
+    $(document).ready(function() {
+        $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
+    });
     /*$(document).ready(function() {
         var MapPlatArr = [];
         var IRUIDArr = [];
