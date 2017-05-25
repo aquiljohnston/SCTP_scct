@@ -1,6 +1,6 @@
 /*dispatch css*/
 .dispatch, .dispatch-assigned, .dispatch-assets {
-    margin-top: 60px;
+    margin-top: 2%;
 }
 
 #dispatchGV {
@@ -56,7 +56,7 @@
 #dispatchUnassignedTable{
     position:relative;
     float:left;
-    width:72%;
+    width:100%;
     margin-right:0.5%;
 }
 #dispatchUnassignedTable .table-responsive {
@@ -190,7 +190,7 @@
 /*-----------css for the 1360*768 resolution---------------*/
 @media only screen and (min-width: 1300px) {
     #dispatchGridViewContainer{
-        margin-top:10%;
+        margin-top:9%;
     }
     #dispatchUnassignedTable .table-responsive {
         max-height: 350px;

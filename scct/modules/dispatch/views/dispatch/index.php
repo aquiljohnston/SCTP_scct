@@ -122,53 +122,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>-->
             <?php Pjax::end() ?>
         </div>
-        <div id="dispatchSurveyorsContainer">
-            <?php Pjax::begin(['id' => 'dispatchSurveyorsGridview', 'timeout' => false]) ?>
-            <?= GridView::widget([
-                'id' => 'surveyorsGV',
-                'dataProvider' => $surveyorsDataProvider, // Sent from DispatchController.php
-                'export' => false,
-                'pjax' => true,
-                'floatHeader'  => true,
-                'columns' => [
-                    [
-                        'class' => 'kartik\grid\CheckboxColumn'
-                    ],
-                    [
-                        'label' => 'Name',
-                        'attribute' => 'name',
-                        'value' => function ($model) {
-                            return $model['Name'];
-                        }
-                    ],
-                    [
-                        'label' => 'Division',
-                        'format' => 'html',
-                        'value' => function ($model) {
-                            return $model['Division'];
-                        }
-                    ]
-                ],
-                'beforeHeader'=>[
-                [
-                    'columns'=>[
-                        ['content'=>'Surveyors', 'options'=>['colspan'=>12, 'class'=>'kv-table-caption text-center']],
-                    ],
-                ]
-            ],
-            ]); ?>
-            <!--<div id="surveyorTablePagination">
-                <?php
-/*                    // display pagination
-                    echo LinkPager::widget([
-                        'pagination' => $surveyorTablePages,
-                    ]);*/?>
-            </div>
-            <div id="SurveyorGridviewTotalNumber">
-                <?php /*echo "Showing " . ($surveyorTablePages->offset + 1) . "  to " . ($surveyorTablePages->offset + $surveyorTablePages->getPageSize()) . " of " . $surveyorTablePages->totalCount . " entries"; */?>
-            </div>-->
-            <?php Pjax::end() ?>
-        </div>
     </div>
     <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
         <?php if ($can != 0) { ?>
