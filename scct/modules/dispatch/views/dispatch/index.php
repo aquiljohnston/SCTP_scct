@@ -27,18 +27,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="workcenter dropdowntitle">
                     <?php // workCenter Dropdown
-                    echo $form->field($model, 'complianceDate')->widget(DepDrop::classname(), [
-                        'options' => ['id' => 'dispatch-complianceDate-id'],
-                        'data' => [$complianceDateParams => $complianceDateParams],
+                    echo $form->field($model, 'workcenter')->dropDownList($workCenterList, ['id' => 'dispatch-workcenter-id'])->label('Work Center');
+                    /*echo $form->field($model, 'workcenter')->widget(DepDrop::classname(), [
+                        'options' => ['id' => 'dispatch-workcenter-id'],
+                        //'data' => [$complianceDateParams => $complianceDateParams],
                         'pluginOptions' => [
                             'initialize' => true,
-                            'depends' => ['dispatch-division-id'],
+                            'depends' => ['dispatch-workcenter-id'],
                             'placeholder' => 'Select..',
-                            'url' => Url::to(['dispatch/getcompliancedate'])
+                            //'url' => Url::to(['dispatch/getcompliancedate'])
                         ]
-                    ])->label('Work Center'); ?>
-                    <input type="hidden" name="isNewWorkCenterUpdate" id="isNewWorkCenterUpdate" value="false">
+                    ])->label('Work Center'); */?>
                 </div>
+                <input type="hidden" name="isNewWorkCenterUpdate" id="isNewWorkCenterUpdate" value="false">
                 <input id="UnassignedTableRecordsUpdate" type="hidden" name="UnassignedTableRecordsUpdate"
                        value="false">
                 <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchUnassignedTableClearFilterButton']) */?>
@@ -71,32 +72,36 @@ $this->params['breadcrumbs'][] = $this->title;
                 'floatHeader'=>true,
                 'columns' => [
                     [
-                        'label' => 'Division',
-                        'attribute' => 'division',
+                        'label' => 'ClientWorkOrderID',
+                        'attribute' => 'ClientWorkOrderID',
                         'format' => 'html',
-                        'value' => function ($model) {
+                        /*'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                        }
+                        }*/
                     ],
                     [
-                        'label' => 'Compliance Date',
-                        'attribute' => 'complianceDate',
+                        'label' => 'CreatedBy',
+                        'attribute' => 'CreatedBy',
                         'format' => 'html',
-                        'value' => function ($model) {
+                        /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }
+                        }*/
+                    ],
+                    [
+                        'label' => 'CreatedDateTime',
+                        'attribute' => 'CreatedDateTime',
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
-                        'urlCreator' => function ($action, $model, $key, $index) {
+                        /*'urlCreator' => function ($action, $model, $key, $index) {
                             if ($action === 'view') {
                                 $url = '/dispatch/assets?id=' . $model['MapGrid']; //TODO: change to correct identifier.
                                 return $url;
                             }
                             return "";
-                        }
+                        }*/
                     ],
                     [
                         'header' => 'Add Surveyor',

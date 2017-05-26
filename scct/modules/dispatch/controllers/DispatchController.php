@@ -8,6 +8,7 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use yii\data\Pagination;
 
 /**
  * Created by PhpStorm.
@@ -21,54 +22,41 @@ class DispatchController extends \app\controllers\BaseController
     {
         try {
             $model = new \yii\base\DynamicModel([
-                'division', 'complianceDate'
+                'division', 'workcenter',
             ]);
             $model->addRule('division', 'string', ['max' => 32])
-                ->addRule('complianceDate', 'string', ['max' => 32]);
+                ->addRule('workcenter', 'string', ['max' => 32]);
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
-            /*$filterModel = new InspectionRequest();
-            // Retrieve data
-            if ($filterModel->load(Yii::$app->request->post())) {
-                // We have filter variables
-            } else {
 
-            }*/
-            $getUrl = 'dispatch%2Fget&division=&filter=';
-            $data = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-            $data = $data["Maps"];
-            // Filter data
-            //todo
-            $filterData = $data;
+            // check if division, mapplat, workcenter, surveytype, compliancemonth is posted
+            //if (Yii::$app->request->isAjax){
+            if ($model->load(Yii::$app->request->post())) {
+                //todo: set posted value to model
+            }else{
+                //todo: set default value to model
+            }
+            $getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
+            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
+            $dispatchData = $getDispatchDataResponse['assets'];
 
-            //Surveyors
-            $getSurveyorsUrl = 'dispatch%2Fget-surveyors';
-            $surveyorsData = json_decode(Parent::executeGetRequest($getSurveyorsUrl, self::API_VERSION_2), true);
-            $surveyorsData = $surveyorsData['users'];
             // Put data in data provider
             // render page
             $dispatchDataProvider = new ArrayDataProvider
             ([
-                'allModels' => $filterData,
+                'allModels' => $dispatchData,
                 'pagination' => false,
             ]);
-            $surveyorsDataProvider = new ArrayDataProvider([
-                'allModels' => $surveyorsData,
-                'pagination' => false
-            ]);
-            //todo: use temporary value
-            $divisionList = [];
-            $complianceDateParams = '';
 
             //todo: set paging on both tables
-            /*// set pages to dispatch table
-            $pages = new Pagination($response['pages']);
-
-            // set pages to surveyors table
-            $surveyorTablePages = new Pagination($surveyorsResponse['pages']);*/
+            // set pages to dispatch table
+            $pages = new Pagination($getDispatchDataResponse['pages']);
+            $divisionList = [];
+            $workCenterList = [];
 
             //todo: check permission to dispatch work
             $can = 1;
@@ -76,20 +64,20 @@ class DispatchController extends \app\controllers\BaseController
             if (Yii::$app->request->isAjax) {
                 return $this->render('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
-                    'surveyorsDataProvider' => $surveyorsDataProvider,
                     'model' => $model,
-                    'divisionList' => $divisionList,
-                    'complianceDateParams' => $complianceDateParams,
                     'can' => $can,
+                    'pages' => $pages,
+                    'divisionList' => $divisionList,
+                    'workCenterList' => $workCenterList,
                 ]);
             } else {
                 return $this->render('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
-                    'surveyorsDataProvider' => $surveyorsDataProvider,
                     'model' => $model,
-                    'divisionList' => $divisionList,
-                    'complianceDateParams' => $complianceDateParams,
                     'can' => $can,
+                    'pages' => $pages,
+                    'divisionList' => $divisionList,
+                    'workCenterList' => $workCenterList,
                 ]);
             }
         } catch (ForbiddenHttpException $e) {
