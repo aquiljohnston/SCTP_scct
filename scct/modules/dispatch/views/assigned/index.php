@@ -144,52 +144,50 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
         <?php } else {
             echo "";
         } ?>
-        <div>
-            <?php Pjax::end() ?>
+    </div>
+    <?php Pjax::end() ?>
+</div>
 
-            <!-- The Modal -->
-            <div id="unassigned-message" class="modal">
-                <!-- Modal content -->·
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3>Do you want to<br>un-assign the selected surveyors?</h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Press confirm to continue to un-assign <br> the selected surveyors. </p>
-                        <div id="unassignedConfirmButton" class="unassignedbtn">
-                            <?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
-                        </div>
-                        <div id="unassignedCancelButton" class="unassignedbtn">
-                            <?php echo Html::button('Cancel', ['class' => 'btn', 'id' => 'unassignedCancelBtn']); ?>
-                        </div>
-                    </div>
+    <!-- The Modal -->
+    <div id="unassigned-message" class="modal">
+        <!-- Modal content -->·
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Do you want to<br>un-assign the selected surveyors?</h3>
+            </div>
+            <div class="modal-body">
+                <p>Press confirm to continue to un-assign <br> the selected surveyors. </p>
+                <div id="unassignedConfirmButton" class="unassignedbtn">
+                    <?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
                 </div>
-
-            </div>
-            <?php
-
-            Modal::begin([
-                'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
-                'id' => 'addSurveyorModal',
-            ]);
-            echo "<div id='modalAddSurveyor'>Loading...</div>";
-            Modal::end();
-            ?>
-            <div id="dialog-unassign" title="Unassign" style="display:none;">
-                <p>Unassigned successfully.</p>
-            </div>
-
-            <?php
-
-            Modal::begin([
-                'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
-                'id' => 'addSurveyorModal',
-            ]);
-            echo "<div id='modalAddSurveyor'>Loading...</div>";
-            Modal::end();
-            ?>
-
-            <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
-                <p>New surveyor(s) has been added successfully.</p>
+                <div id="unassignedCancelButton" class="unassignedbtn">
+                    <?php echo Html::button('Cancel', ['class' => 'btn', 'id' => 'unassignedCancelBtn']); ?>
+                </div>
             </div>
         </div>
+    </div>
+    <?php
+        Modal::begin([
+            'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+            'id' => 'addSurveyorModal',
+        ]);
+        echo "<div id='modalAddSurveyor'>Loading...</div>";
+        Modal::end();
+    ?>
+    <div id="dialog-unassign" title="Unassign" style="display:none;">
+        <p>Unassigned successfully.</p>
+    </div>
+
+    <?php
+        Modal::begin([
+            'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+            'id' => 'addSurveyorModal',
+        ]);
+        echo "<div id='modalAddSurveyor'>Loading...</div>";
+        Modal::end();
+    ?>
+    <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
+        <p>New surveyor(s) has been added successfully.</p>
+    </div>
+
+
