@@ -75,6 +75,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     [
                         'label' => 'Division',
                         'attribute' => 'division',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
@@ -83,6 +85,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     [
                         'label' => 'Compliance Date',
                         'attribute' => 'complianceDate',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
@@ -101,7 +105,16 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         }
                     ],
                     [
-                        'class' => 'kartik\grid\CheckboxColumn'
+                        'class' => 'kartik\grid\CheckboxColumn',
+                        'contentOptions' => ['class' => 'Add'],
+                        'checkboxOptions' => function ($model, $key, $index, $column) {
+                            if ($model['WorkQueueStatus'] != 100) {
+                                return ['disabled' => true];
+                            } else {
+                                //todo: append information needed to un-assign user
+                                return;
+                            }
+                        }
                     ]
                 ]
             ]); ?>
@@ -120,25 +133,28 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
         <?php Pjax::end() ?>
     </div>
     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
-    <?php if ($canUnassign != 0) { ?>
-        <div id="assiunassignedButton">
-            <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary', 'id' => 'UnassignedButton']); ?>
-        </div>
-    <?php } else {
-        echo "";
-    } ?>
-    <?php if ($canAddSurveyor != 0) { ?>
-        <div id="addSurveyorButton">
-            <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary', 'id' => 'addSurveyor']); ?>
-        </div>
-    <?php } else {
-        echo "";
-    } ?>
+    <div id="addSurveyorButtonDispatch">
+        <?php if ($canUnassign != 0) { ?>
+            <div id="assiunassignedButton">
+                <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary', 'id' => 'UnassignedButton']); ?>
+            </div>
+        <?php } else {
+            echo "";
+        } ?>
+        <?php if ($canAddSurveyor != 0) { ?>
+            <div id="addSurveyorButton">
+                <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary', 'id' => 'addSurveyor']); ?>
+            </div>
+        <?php } else {
+            echo "";
+        } ?>
+    </div>
     <?php Pjax::end() ?>
+</div>
 
     <!-- The Modal -->
     <div id="unassigned-message" class="modal">
-        <!-- Modal content -->
+        <!-- Modal content -->·
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Do you want to<br>un-assign the selected surveyors?</h3>
@@ -153,21 +169,29 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 </div>
             </div>
         </div>
-
     </div>
     <?php
-
-    Modal::begin([
-        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
-        'id' => 'addSurveyorModal',
-    ]);
-    echo "<div id='modalAddSurveyor'>Loading...</div>";
-    Modal::end();
+        Modal::begin([
+            'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+            'id' => 'addSurveyorModal',
+        ]);
+        echo "<div id='modalAddSurveyor'>Loading...</div>";
+        Modal::end();
     ?>
     <div id="dialog-unassign" title="Unassign" style="display:none;">
         <p>Unassigned successfully.</p>
     </div>
+
+    <?php
+        Modal::begin([
+            'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+            'id' => 'addSurveyorModal',
+        ]);
+        echo "<div id='modalAddSurveyor'>Loading...</div>";
+        Modal::end();
+    ?>
     <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
         <p>New surveyor(s) has been added successfully.</p>
     </div>
-</div>
+
+

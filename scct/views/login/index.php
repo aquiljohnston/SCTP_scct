@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<?= $form->field($model, 'username')->textInput(['placeholder'=>'Username', 'id' => 'username']) ?>
 
-				<?= $form->field($model, 'password')->passwordInput(['placeholder'=>'Password', 'id' => 'password', 'onkeyup' => 'enterKeyPress(event);']) ?>
+				<?= $form->field($model, 'password')->passwordInput(['placeholder'=>'Password', 'id' => 'password'/*, 'onkeypress' => 'enterKeyPress(event);'*/]) ?>
 				
 				<?php if($loginError): ?>
 				<div class="alert alert-warning">
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				<?php endif; ?>
 				<div class="form-group">
 					<div class="col-lg-12">
-						<?= Html::button('Login', ['class' => 'btn btn-primary', 'name' => 'login-button', 'id' => 'loginButton', 'onclick' => 'getLocation();']) ?>
+						<?= Html::button('Login', ['class' => 'btn btn-primary', 'name' => 'login-button', 'id' => 'loginButton', 'onclick' => 'PostLoginForm();']) ?>
 					</div>
 				</div>
 			<?php ActiveForm::end(); ?>
@@ -60,7 +60,35 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>-->
 </div>
 <script type="text/javascript">
-	localStorage.clear();
+	$('#password').enterKey(function () {
+		alert('Enter!');
+	});
+
+	function PostLoginForm() {
+		var form = $('login-form');
+		$.pjax.reload({
+			url: form.attr('action'),
+			data: {
+
+				username: $('#username').val(),
+				password: $('#password').val()
+			},
+			container: "#loginForm",
+			type: 'POST',
+			timeout: 99999
+		});
+	}
+
+	function enterKeyPress(event){
+		var x = event.keyCode;
+		if(x == 13 && keyPressed == 0 ) {
+			PostLoginForm();
+			keyPressed++;
+			window.setTimeout(function() { keyPressed = 0; }, 3000 );
+		}
+	}
+
+	/*localStorage.clear();
 
 	var geoLocationKeys = [];
 	var geoLocationData = [];
@@ -139,5 +167,5 @@ $this->params['breadcrumbs'][] = $this->title;
 			type: 'POST',
 			timeout: 99999
 		});		
-	}
+	}*/
 </script>

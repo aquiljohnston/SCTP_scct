@@ -1,5 +1,6 @@
+// Refer the modal in dispatch page
 $('#dispatchButton').click(function () {
-    var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
+    /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
     var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
     $.ajax({
         type: 'POST',
@@ -14,10 +15,49 @@ $('#dispatchButton').click(function () {
                 $('#loading').hide();
             });
         }
-    });
+    });*/
+    var MapPlatArr = [];
+    var IRUIDArr = [];
+    console.log("clicked");
+    $('#addSurveyorModal').modal('show')
+        .find('#modalAddSurveyor')
+        .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
+            "mapplat[]": [MapPlatArr],
+            "IRUID[]": [IRUIDArr]
+        });
 });
+
+// Refer the modal in assigned page
+$('#addSurveyor').click(function () {
+    /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
+     var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
+     $.ajax({
+     type: 'POST',
+     url: '/dispatch/dispatch/post',
+     data: {InspectionRequestUID: pks, UserUID: pks_surveyors},
+     beforeSend: function () {
+     $('#loading').show();
+     },
+     complete: function () {
+     window.location = window.location; // ?
+     $('#dispatchActiveForm').submit().done(function () {
+     $('#loading').hide();
+     });
+     }
+     });*/
+    var MapPlatArr = [];
+    var IRUIDArr = [];
+    console.log("clicked");
+    $('#addSurveyorModal').modal('show')
+        .find('#modalAddSurveyor')
+        .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
+            "mapplat[]": [MapPlatArr],
+            "IRUID[]": [IRUIDArr]
+        });
+});
+
 $(function () {
-    $("#dispatchButton").prop('disabled', true);
+    //$("#dispatchButton").prop('disabled', true);
 });
 $('.dispatch input[type=checkbox]').click(function () {
     // This Section for Dispatch page Dispatch Function
@@ -33,46 +73,6 @@ $('.dispatch input[type=checkbox]').click(function () {
         $('#dispatchButton').prop('disabled', true);
     }
 });
-
-// BULK DELETE
-/*$(function () {
-    $('#dialog-dispatch').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
-    $('.dispatch_btn').prop('disabled', true); //TO DISABLED
-    $(document).off('click', '.DispatchSurveyors input[type=checkbox]').on('click', '.DispatchSurveyors input[type=checkbox]', function () {
-
-        var checkApproved = $(this).attr("approved");
-        var pks = $('#dispatchUnassignedGridview #dispatchGV').yiiGridView('getSelectedRows');
-        var pks_surveyors = $('#dispatchSurveyorsGridview #surveyorsGV').yiiGridView('getSelectedRows');
-        console.log("unassign: " + pks.length);
-        console.log("surveyor: " + pks_surveyors.length);
-
-        if ((!pks || pks.length != 0) && (!pks_surveyors || pks_surveyors.length != 0)) {
-            $('.dispatch_btn').prop('disabled', false); //TO ENABLE
-        } else {
-            $('.dispatch_btn').prop('disabled', true);
-        }
-    });
-
-    $(document).off('click', '.Dispatch input[type=checkbox]').on('click', '.Dispatch input[type=checkbox]', function () {
-        var checkApproved = $(this).attr("approved");
-        var pks = $('#dispatchUnassignedGridview #dispatchGV').yiiGridView('getSelectedRows');
-        var pks_surveyors = $('#dispatchSurveyorsGridview #surveyor').yiiGridView('getSelectedRows');
-        console.log("unassign: " + pks.length);
-        console.log("surveyor: " + pks_surveyors.length);
-
-        if ((!pks || pks.length != 0) && (!pks_surveyors || pks_surveyors.length != 0)) {
-            $('.dispatch_btn').prop('disabled', false); //TO ENABLE
-        } else {
-            $('.dispatch_btn').prop('disabled', true);
-        }
-    });
-
-    // triggered when checkbox selected
-    $(document).off('click', '.dispatch_btn').on('click', '.dispatch_btn', function (e) {
-        dispatchButtonListener();
-        e.preventDefault();
-    });
-});*/
 
 function dispatchButtonListener() {
 

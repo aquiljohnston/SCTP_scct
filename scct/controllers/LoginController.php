@@ -63,13 +63,13 @@ class LoginController extends BaseController
 		}else{	
 			$loginError = false;
 			$model = new LoginForm();
-			$geoLocationData = [];
+			//$geoLocationData = [];
 					
 			if($postData = Yii::$app->request->post())		
 			{
 				$model->username = $postData['username'];
 				$model->password = $postData['password'];
-				$geoLocationData = $postData['GeoData'];
+				//$geoLocationData = $postData['GeoData'];
 						
 				if ($user = $model->login()) {	
 					//set session variables			
@@ -89,7 +89,7 @@ class LoginController extends BaseController
 					$userIdentity->UserID = $user['AuthUserID'];
 				
 					//call function to create/send login activity
-					self::logActivity('WebLoginActivity', $geoLocationData);
+					//self::logActivity('WebLoginActivity', $geoLocationData);
 					
 					Yii::$app->user->login($userIdentity);
 					return $this->redirect(['home/index']);
