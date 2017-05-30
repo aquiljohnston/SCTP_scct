@@ -680,31 +680,8 @@ $(function () {
 
         /*export to data to file with user specified name*/
         $("#export").click(function (e) {
-            //downloadReportData();
             ConvertToCSV(displayedResults.columns, displayedResults.data);
         });
-
-        // download report data
-        // todo: need to look into this way to export report data
-        function downloadReportData() {//
-            var starVal = null, endVal = null;
-            var parameters = $('#reportsDropdown').find(":selected").attr('id').split('-');
-            if (isVisible(beginDate) && isVisible(endDate)) {
-                starVal = $('#datePickerBeginDate').val();
-                endVal = $('#datePickerEndDate').val();
-            } else {
-                starVal = $('#datePickerBeginDateView').val();
-                endVal = $('#datePickerEndDateView').val();
-            }
-            var parmDateOverride = isVisible(parmDropdown) ? $('#parmDropdown').val() : null;
-            var userLogin = isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null;
-
-            var parmDateOverrideCheck = parmDateOverride != null ? 1 : 0;
-            var userLoginCheck = userLoginCheck != null ? 1 : 0;
-
-            var parmVar = parmDateOverrideCheck > userLoginCheck ? parmDateOverride : userLogin;
-        }
-
 
         $('#viewReportButton').click(function () {
             $('#loading').show();
