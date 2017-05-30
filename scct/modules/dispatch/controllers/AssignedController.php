@@ -19,6 +19,7 @@ class AssignedController extends \app\controllers\BaseController {
             ->addRule('workcenter', 'string', ['max' => 32])
             ->addRule('pagesize', 'string', ['max' => 32]);
 
+        //$getUrl = 'dispatch%2Fget-assigned';
         $getUrl = 'assigned%2Fget';
         $data = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
         $data = $data["Maps"];
