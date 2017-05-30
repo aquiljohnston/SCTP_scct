@@ -12,6 +12,7 @@ $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="dispatch">
+    <div id="blue-header">
     <div id="dispatchTab">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="dispatch-dropDownList-form">
@@ -45,7 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchUnassignedTableClearFilterButton']) */?>
             </div>
 
-            <!--<div id="dispatchSurveyorTableDropdown">
+
+                <!--<div id="dispatchSurveyorTableDropdown">
                 <div id="surveyorWorkcenter" class="dropdowntitle">
                     <?php /*// surveyorWorkcenter Dropdown
                     echo $form->field($model, 'surveyorWorkcenter')->dropDownList($surveyorWorkCenterList, ['id' => 'dispatch-surveyorWorkcenter-id'])->label('Work Center'); */ ?>
@@ -56,11 +58,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <input id="SurveyorTableRecordsUpdate" type="hidden" name="SurveyorTableRecordsUpdate" value="false">
                 <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSurveyorTableClearFilterButton']) */ ?>
             </div>-->
-            <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-            <input id="dispatchSurveyorPageNumber" type="hidden" name="dispatchSurveyorPageNumber" value="1"/>
-            <?php ActiveForm::end(); ?>
+                <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
+                <input id="dispatchSurveyorPageNumber" type="hidden" name="dispatchSurveyorPageNumber" value="1"/>
+                <?php ActiveForm::end(); ?>
+            </div>
         </div>
     </div>
+
+
     <div id="dispatchGridViewContainer">
         <div id="dispatchUnassignedTable">
             <?php Pjax::begin(['id' => 'dispatchUnassignedGridview', 'timeout' => false]) ?>
@@ -70,6 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'export' => false,
                 'pjax' => true,
                 'floatHeader'=>true,
+                'summary' => '',
                 'columns' => [
                     [
                         'label' => 'ClientWorkOrderID',
@@ -131,7 +137,8 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
     <div id="addSurveyorButtonDispatch">
-    <?php if ($can != 0) { ?>
+
+        <?php if ($can != 0) { ?>
             <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
         <?php } else {
             echo "";
@@ -170,3 +177,5 @@ $this->params['breadcrumbs'][] = $this->title;
         <p>Dispatched Successfully.</p>
     </div>
 </div>
+
+
