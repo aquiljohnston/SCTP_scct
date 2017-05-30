@@ -75,6 +75,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     [
                         'label' => 'Division',
                         'attribute' => 'division',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
@@ -83,6 +85,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     [
                         'label' => 'Compliance Date',
                         'attribute' => 'complianceDate',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
