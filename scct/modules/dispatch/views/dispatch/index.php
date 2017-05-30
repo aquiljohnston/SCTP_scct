@@ -80,6 +80,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'label' => 'ClientWorkOrderID',
                         'attribute' => 'ClientWorkOrderID',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         /*'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
@@ -88,6 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'label' => 'CreatedBy',
                         'attribute' => 'CreatedBy',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
@@ -96,6 +100,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'label' => 'CreatedDateTime',
                         'attribute' => 'CreatedDateTime',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
