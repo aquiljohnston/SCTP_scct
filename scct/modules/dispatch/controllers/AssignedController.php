@@ -74,6 +74,8 @@ class AssignedController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
 
+        $assignedDataProvider->key = 'MapGrid';
+
         if (Yii::$app->request->isAjax) {
             return $this->render('index', [
                 'assignedDataProvider' => $assignedDataProvider,
