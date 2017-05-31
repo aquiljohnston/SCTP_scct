@@ -65,11 +65,15 @@ use kartik\form\ActiveForm;
             ],
             [
                 'label' => 'Name',
-                'attribute' => 'Name'
+                'attribute' => 'Name',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
             [
                 'label' => 'User Name',
-                'attribute' => 'UserName'
+                'attribute' => 'UserName',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
         ],
     ]); ?>
