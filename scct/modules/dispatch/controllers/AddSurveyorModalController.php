@@ -14,7 +14,7 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
      */
     public function actionAddSurveyorModal()
     {
-        try {
+        //try {
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
@@ -26,14 +26,11 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
                 ->addRule('modalSearch', 'string', ['max' => 32]);
 
             if (Yii::$app->request->post()) {
-                Yii::trace("ADD SURVEYOR MODAL CALLED");
-                $MapPlatArr = [];
-                $IRUIDArr = [];
                 $workCenterFilterVal = "";
                 $searchFilterVal = "";
-
                 $data = Yii::$app->request->post();
 
+                //todo: need to review if we need those filter, otherwise should be removed
                 /*if (!empty($data["mapplat"])) {
                     foreach ($data["mapplat"] as $key) {
                         $MapPlatArr[] = $key;
@@ -47,27 +44,22 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
 
                 if (!empty($data["workCenterFilterVal"])) {
                     $workCenterFilterVal = $data["workCenterFilterVal"];
-                }
+                }*/
                 if (!empty($data["searchFilterVal"])) {
                     $searchFilterVal = $data["searchFilterVal"];
-                }*/
+                }
 
                 //todo: need to be replaced with API route
                 // Reading the response from the the api and filling the surveyorGridView
-                /*$surveyorUrl = 'pge%2Fdispatch%2Fget-surveyors&filter=' . $searchFilterVal . '&workCenter=' . $workCenterFilterVal;
-                Yii::trace("surveyors " . $surveyorUrl);
-                $surveyorsResponse = Parent::executeGetRequest($surveyorUrl); // indirect rbac
-
-                Yii::trace("Surveyors response " . $surveyorsResponse);
-                $surveyorsResponse = json_decode($surveyorsResponse, true);
-
-                // get surveyorWorkCenter from the api and filling surveyorWorkCenter dropdown
-                $surveyorWorkCenterUrl = 'pge%2Fdropdown%2Fget-user-work-center-dropdown';
-                $surveyorWorkCenterResponse = Parent::executeGetRequest($surveyorWorkCenterUrl); // indirect rbac
-                $surveyorWorkCenterList = json_decode($surveyorWorkCenterResponse, true);*/
+                $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+                        'filter' => $searchFilterVal,
+                    ]);
+                //$surveyorUrl = 'pge%2Fdispatch%2Fget-surveyors&filter=' . $searchFilterVal . '&workCenter=' . $workCenterFilterVal;
+                Yii::trace("surveyors " . $getUrl);
+                $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+                Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
 
                 //todo: delete hard code value
-                $surveyorsResponse['users'] = [];
                 $surveyorWorkCenterList = [];
 
                 $dataProvider = new ArrayDataProvider
@@ -76,15 +68,11 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
                     'pagination' => false,
                 ]);
 
-                //if (!empty($surveyorsResponse['UserUID'])) {
-                $dataProvider->key = 'UserUID';
-                //}
+                $dataProvider->key = 'UserID';
 
                 return $this->render('add_surveyor_modal', [
                     'addSurveyorsDataProvider' => $dataProvider,
                     'surveyorWorkCenterList' => $surveyorWorkCenterList,
-                    /*'MapPlat' => $MapPlatArr,
-                    'IRUID' => $IRUIDArr,*/
                     'model' => $model,
                     'searchFilterVal' => $searchFilterVal,
                     'workCenterFilterVal' => $workCenterFilterVal,
@@ -92,14 +80,14 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        }catch(ForbiddenHttpException $e)
+        /*}catch(ForbiddenHttpException $e)
         {
             throw new ForbiddenHttpException;
         }
         catch(\Exception $e)
         {
             Yii::$app->runAction('login/user-logout');
-        }
+        }*/
 
     }
 }
