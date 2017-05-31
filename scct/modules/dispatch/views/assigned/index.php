@@ -122,12 +122,12 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'contentOptions' => ['class' => 'unassignCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            if ($model['WorkQueueStatus'] != 100) {
+                            /*if ($model['WorkQueueStatus'] != 100) {
                                 return ['disabled' => true];
                             } else {
                                 //todo: append information needed to un-assign user
                                 return ['AssignedUserID' => $model['AssignedUserID'], 'disabled' => false ];
-                            }
+                            }*/
                         }
                     ]
                 ]
