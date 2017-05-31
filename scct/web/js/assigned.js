@@ -1,9 +1,38 @@
-// BULK DELETE
+/**
+ * Created by tzhang on 5/31/2017.
+ */
 $(function () {
+
+    // Unassign Table Pagination default listener
+    /*function AssignedPaginationListener() {
+        $(document).off('click', '#unassignedTablePagination .pagination li a').on('click', '#unassignedTablePagination .pagination li a', function (event) {
+            event.preventDefault();
+            var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+            $('#dispatchPageNumber').val(page);
+            var form = $("#dispatchActiveForm");
+            $('#loading').show();
+            $.pjax.reload({
+                container: "#dispatchUnassignedGridview",
+                timeout: 99999,
+                url: form.attr("action"),
+                type: "post",
+                data: form.serialize()
+            }).done(function () {
+                //resetDispatchButton();
+            });
+            $('#dispatchUnassignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
+                $('#loading').hide();
+            });
+            $('#dispatchUnassignedGridview').on('pjax:error', function (event, data, status, xhr, options) {
+                //window.location.reload();
+                console.log("Error");
+            });
+        });
+    }*/
 
     $('#UnassignedButton').prop('disabled', false); //TO DISABLED
     /*$('#dialog-unassign').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
-    $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});*/
+     $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});*/
 
     unassignCheckboxListener();
 });
@@ -62,4 +91,3 @@ function unassignCheckboxListener() {
         }
     });
 }
-	 
