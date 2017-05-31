@@ -15,42 +15,72 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 ?>
 <div class="dispatch-assigned">
     <div id="assignedDropdownContainer">
+
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
+
         <div id="Assigned-dropDownList-form">
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
                 //'method' => 'get',
                 'options' => ['id' => 'AssignForm', 'data-pjax' => true],
             ]); ?>
+            <div class="row">
+                <div class="col-lg-9 col-md-9 col-xs-9">
+                     <div id="assignedDropdownTitlesContainer">
+                    <div class="division dropdowntitle col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <?php // division Dropdown
+                        if (!empty($divisionDefaultVal)) {
+                            $model->division = $divisionDefaultVal;
+                        }
+                        echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'Assigned-division-id']); ?>
+                    </div>
+                    <div class="workcenter dropdowntitle col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <?php // workCenter Dropdown
+                        if ((!empty($workCenterDefaultVal)))
+                            $workCenterParams = $workCenterDefaultVal;
+                        echo $form->field($model, 'workcenter')->widget(DepDrop::classname(), [
+                            'options' => ['id' => 'Assigned-workcenter-id'],
+                            'data' => [$workCenterParams => $workCenterParams],
+                            'pluginOptions' => [
+                                'initialize' => true,
+                                'depends' => ['Assigned-division-id'],
+                                'placeholder' => 'Select...',
+                                'url' => Url::to(['assigned/getworkcenter'])
+                            ]
+                        ]);
 
-            <div id="assignedDropdownTitlesContainer">
-                <div class="division dropdowntitle">
-                    <?php // division Dropdown
-                    if (!empty($divisionDefaultVal)) {
-                        $model->division = $divisionDefaultVal;
-                    }
-                    echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'Assigned-division-id']); ?>
+                        ?>
+                    </div>
                 </div>
-                <div class="workcenter dropdowntitle">
-                    <?php // workCenter Dropdown
-                    if ((!empty($workCenterDefaultVal)))
-                        $workCenterParams = $workCenterDefaultVal;
-                    echo $form->field($model, 'workcenter')->widget(DepDrop::classname(), [
-                        'options' => ['id' => 'Assigned-workcenter-id'],
-                        'data' => [$workCenterParams => $workCenterParams],
-                        'pluginOptions' => [
-                            'initialize' => true,
-                            'depends' => ['Assigned-division-id'],
-                            'placeholder' => 'Select...',
-                            'url' => Url::to(['assigned/getworkcenter'])
-                        ]
-                    ]); ?>
+                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                        <label style="color: #0067a6; margin-bottom: 7px;"></label>
+                        <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
+
+                        <?php if ($canUnassign != 0) { ?>
+                            <div id="assiunassignedButton">
+                                <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary',
+                                    'id' => 'UnassignedButton']); ?>
+
+                            </div>
+                        <?php } else {
+                            echo "";
+                        } ?>
+                        <?php Pjax::end() ?>
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-3 col-xs-3">
+                    <span id="AssignedPageSizeLabel">
+    <!--                    <span>Records Per Page</span>-->
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                            ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
+                            ->label('Records Per Page',[
+                                    'class' =>'recordsPerPage'
+                            ] ); ?>
+
+                    </span>
                 </div>
             </div>
-            <label id="AssignedPageSizeLabel">
-                <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])->label(''); ?>
-                <span>Records Per Page</span>
-            </label>
             <input id="AssignedTableRecordsUpdate" type="hidden" name="AssignedTableRecordsUpdate" value="no"/>
             <input id="pageNumber" type="hidden" name="pageNumber" value="1"/>
             <?php ActiveForm::end(); ?>
@@ -132,25 +162,18 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
         </div>
         <?php Pjax::end() ?>
     </div>
-    <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
-    <div id="addSurveyorButtonDispatch">
-        <?php if ($canUnassign != 0) { ?>
-            <div id="assiunassignedButton">
-                <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary', 'id' => 'UnassignedButton']); ?>
-            </div>
-        <?php } else {
-            echo "";
-        } ?>
-        <?php if ($canAddSurveyor != 0) { ?>
-            <div id="addSurveyorButton">
-                <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary', 'id' => 'addSurveyor']); ?>
-            </div>
-        <?php } else {
-            echo "";
-        } ?>
-    </div>
-    <?php Pjax::end() ?>
-</div>
+<!--    --><?php //Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
+<!--    -->
+<!--        --><?php //if ($canUnassign != 0) { ?>
+<!--            <div id="assiunassignedButton">-->
+<!--                --><?php //echo Html::button('UNASSIGN', ['class' => 'btn btn-primary btn-sm', 'id' => 'UnassignedButton']); ?>
+<!---->
+<!--            </div>-->
+<!--        --><?php //} else {
+//            echo "";
+//        } ?>
+<!--    --><?php //Pjax::end() ?>
+
 
     <!-- The Modal -->
     <div id="unassigned-message" class="modal">
