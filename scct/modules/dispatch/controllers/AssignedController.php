@@ -46,8 +46,8 @@ class AssignedController extends \app\controllers\BaseController
 
         $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
                 'filter' => $assignedFilterParams,
-                'page' => $pageAt,
-                'listPerPage' => $assignedPageSizeParams
+                'listPerPage' => $assignedPageSizeParams,
+                'page' => $pageAt
             ]);
         $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
         $assignedData = $getAssignedDataResponse['assets'];
