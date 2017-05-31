@@ -27,11 +27,6 @@ use kartik\form\ActiveForm;
             // 500 internal server error ->'data-pjax' => true,
             //'action' => ['/dispatch/add-surveyor-modal'],
         ]); ?>
-
-        <div id="surveyorWorkcenter" class="dropdowntitle">
-            <?php // surveyorWorkcenter Dropdown
-            echo $form->field($model, 'surveyorWorkcenter')->dropDownList($surveyorWorkCenterList, ['id'=>'assigned-surveyorWorkcenter-id', 'value' => $workCenterFilterVal])->label('Work Center');  ?>
-        </div>
         <div class="addsurveryContainer">
             <div id="addsurveyorSearchcontainer" class="dropdowntitle">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'addSurveyorSearch', 'placeholder'=>'Search'])->label('Surveyor / Inspector'); ?>
@@ -64,23 +59,18 @@ use kartik\form\ActiveForm;
                 'contentOptions' => ['class' => 'AddSurveyor'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($addSurveyorsDataProvider)) {
-                        return ['UserUID' => $model["UserUID"]];
+                        return ['UserID' => $model["UserID"]];
                     }
                 },
             ],
             [
                 'label' => 'Name',
-                'attribute' => 'UserFullName'
+                'attribute' => 'Name'
             ],
             [
-                'label' => 'LANID',
-                'attribute' => 'UserLANID'
+                'label' => 'User Name',
+                'attribute' => 'UserName'
             ],
-            [
-                'label' => 'Work Center',
-                'attribute' => 'WorkCenter'
-            ],
-
         ],
     ]); ?>
 
