@@ -34,6 +34,13 @@ $(function () {
     /*$('#dialog-unassign').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
      $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});*/
 
+    //dispatchUnassignedContainer Seachfilter listener
+    $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+            reloadAssignedGridView();
+        }
+    });
     unassignCheckboxListener();
 });
 
@@ -89,5 +96,26 @@ function unassignCheckboxListener() {
         } else {
             $('#UnassignedButton').prop('disabled', true);
         }
+    });
+}
+
+function reloadAssignedGridView() {
+    var jqAssignedDropDowns = $('#assignedDropdownContainer');
+    var form = jqAssignedDropDowns.find("#AssignForm");
+    if (form.find(".has-error").length) {
+        return false;
+    }
+    $('#loading').show();
+    $.pjax.reload({
+        type: 'GET',
+        url: form.attr("action"),
+        container: '#assignedGridview', // id to update content
+        data: form.serialize(),
+        timeout: 99999
+    }).done(function () {
+        $('#loading').hide();
+        $('#addSurveyor').prop('disabled', true);
+        $('#UnassignedButton').prop('disabled', true);
+        unassignCheckboxListener();
     });
 }
