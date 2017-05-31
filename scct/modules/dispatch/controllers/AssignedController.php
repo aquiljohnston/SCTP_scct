@@ -6,8 +6,10 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 
-class AssignedController extends \app\controllers\BaseController {
-    public function actionIndex() {
+class AssignedController extends \app\controllers\BaseController
+{
+    public function actionIndex()
+    {
         // Verify logged in
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
@@ -17,8 +19,8 @@ class AssignedController extends \app\controllers\BaseController {
             'division', 'assignedfilter', 'pagesize'
         ]);
         $model->addRule('division', 'string', ['max' => 32])
-              ->addRule('assignedfilter', 'string', ['max' => 32])
-              ->addRule('pagesize', 'string', ['max' => 32]);
+            ->addRule('assignedfilter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);
 
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
@@ -133,33 +135,36 @@ class AssignedController extends \app\controllers\BaseController {
                 Yii::trace("call Unassign");
                 //try{
                 $data = Yii::$app->request->post();
-                // loop the data array to get all id's.
+                // loop the data array to get all MapGrid's.
                 //Yii::trace("unassignWorkQueue ".json_encode($data["AssignedWorkQueueUID"]));
-                foreach ($data["AssignedWorkQueueUID"] as $key) {
+                foreach ($data["MapGrid"] as $key) {
 
-                    Yii::Trace("unAssignedWorkQueueUIDis ; " . $key);
-                    $unassignArr[] = $key;
+                    Yii::Trace("MapGrid ; " . $key);
+                    $mapGridArr[] = $key;
+                }
+                // loop the data array to get all assignedUserID's.
+                foreach ($data["AssignedUserID"] as $key) {
+                    Yii::Trace("AssignedUserID ; " . $key);
+                    $assignedUserIDs[] = $key;
                 }
 
                 $data = array(
-                    'Unassign' => $unassignArr,
+                    'MapGrid' => $mapGridArr,
+                    'AssignedUserID' => $assignedUserIDs,
                 );
                 $json_data = json_encode($data);
 
                 // post url
-                $deleteUrl = 'pge%2Fdispatch%2Funassign';
-                $deleteResponse = Parent::executePutRequest($deleteUrl, $json_data); // indirect rbac
+                $deleteUrl = 'dispatch%2Funassign';
+                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data); // indirect rbac
                 Yii::trace("unassignputResponse " . $deleteResponse);
 
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        }catch(ForbiddenHttpException $e)
-        {
+        } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             Yii::$app->runAction('login/user-logout');
         }
     }
