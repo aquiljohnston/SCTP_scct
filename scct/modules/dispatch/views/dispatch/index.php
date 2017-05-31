@@ -10,56 +10,39 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
+$pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 ?>
 <div class="dispatch">
     <div id="blue-header">
-    <div id="dispatchTab">
-        <h3 class="title"><?= Html::encode($this->title) ?></h3>
-        <div id="dispatch-dropDownList-form">
-            <?php $form = ActiveForm::begin([
-                'type' => ActiveForm::TYPE_VERTICAL,
-                'method' => 'get',
-                'options' => ['id' => 'dispatchAcForm']
-            ]); ?>
-            <div id="dispatchUnassignedTableDropdown">
-                <div class="division dropdowntitle">
-                    <?php // division Dropdown
-                    echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'dispatch-division-id'])->label('Division'); ?>
+        <div id="dispatchTab">
+            <h3 class="title"><?= Html::encode($this->title) ?></h3>
+            <div id="dispatch-dropDownList-form">
+                <?php $form = ActiveForm::begin([
+                    'type' => ActiveForm::TYPE_VERTICAL,
+                    'method' => 'get',
+                    'options' => ['id' => 'dispatchAcForm']
+                ]); ?>
+                <div id="dispatchUnassignedTableDropdown">
+                    <div class="division dropdowntitle">
+                        <?php // division Dropdown
+                        echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'dispatch-division-id'])->label('Division'); ?>
+                    </div>
+                    <div id="dispatchSearchContainer">
+                        <div id="filtertitle" class="dropdowntitle">
+                            <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
+                        </div>
+                        <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton']) */?>
+                    </div>
+                    <div class="col-lg-3 col-md-3 col-xs-3">
+                    <span id="dispatchPageSizeLabel">
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                            ->label('Records Per Page', [
+                                'class' => 'recordsPerPage'
+                            ]); ?>
+                    </span>
+                    </div>
                 </div>
-                <div class="workcenter dropdowntitle">
-                    <?php // workCenter Dropdown
-                    echo $form->field($model, 'workcenter')->dropDownList($workCenterList, ['id' => 'dispatch-workcenter-id'])->label('Work Center');
-                    /*echo $form->field($model, 'workcenter')->widget(DepDrop::classname(), [
-                        'options' => ['id' => 'dispatch-workcenter-id'],
-                        //'data' => [$complianceDateParams => $complianceDateParams],
-                        'pluginOptions' => [
-                            'initialize' => true,
-                            'depends' => ['dispatch-workcenter-id'],
-                            'placeholder' => 'Select..',
-                            //'url' => Url::to(['dispatch/getcompliancedate'])
-                        ]
-                    ])->label('Work Center'); */?>
-                </div>
-                <input type="hidden" name="isNewWorkCenterUpdate" id="isNewWorkCenterUpdate" value="false">
-                <input id="UnassignedTableRecordsUpdate" type="hidden" name="UnassignedTableRecordsUpdate"
-                       value="false">
-                <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchUnassignedTableClearFilterButton']) */?>
-            </div>
-
-
-                <!--<div id="dispatchSurveyorTableDropdown">
-                <div id="surveyorWorkcenter" class="dropdowntitle">
-                    <?php /*// surveyorWorkcenter Dropdown
-                    echo $form->field($model, 'surveyorWorkcenter')->dropDownList($surveyorWorkCenterList, ['id' => 'dispatch-surveyorWorkcenter-id'])->label('Work Center'); */ ?>
-                </div>
-                <div id="surveyorsfiltertitle" class="dropdowntitle">
-                    <? /*= $form->field($model, 'surveyorsfilter')->textInput(['value' => $surveyorsFileter, 'id' => 'dispatchsurveyorsFilter', 'placeholder' => 'Search'])->label('Surveyor / Inspector'); */ ?>
-                </div>
-                <input id="SurveyorTableRecordsUpdate" type="hidden" name="SurveyorTableRecordsUpdate" value="false">
-                <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSurveyorTableClearFilterButton']) */ ?>
-            </div>-->
-                <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-                <input id="dispatchSurveyorPageNumber" type="hidden" name="dispatchSurveyorPageNumber" value="1"/>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
@@ -74,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
                 'export' => false,
                 'pjax' => true,
-                'floatHeader'=>true,
+                //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
@@ -120,24 +103,24 @@ $this->params['breadcrumbs'][] = $this->title;
                         'class' => 'kartik\grid\CheckboxColumn'
                     ]
                 ],
-                'beforeHeader'=>[
+                'beforeHeader' => [
                     [
-                        'columns'=>[
-                            ['content'=>'Dispatch', 'options'=>['colspan'=>12, 'class'=>'kv-table-caption text-center']],
+                        'columns' => [
+                            ['content' => 'Dispatch', 'options' => ['colspan' => 12, 'class' => 'kv-table-caption text-center']],
                         ],
                     ]
                 ],
             ]); ?>
-            <!--<div id="unassignedTablePagination">
+            <div id="unassignedTablePagination">
                 <?php
-/*                   // display pagination
-                    echo LinkPager::widget([
-                        'pagination' => $dispatchTablePages,
-                    ]);*/?>
+               // display pagination
+                echo LinkPager::widget([
+                    'pagination' => $pages,
+                ]); ?>
             </div>
             <div class="GridviewTotalNumber">
-                <?php /*echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; */?>
-            </div>-->
+                <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries";  ?>
+            </div>
             <?php Pjax::end() ?>
         </div>
     </div>
@@ -149,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php } else {
             echo "";
         } ?>
-        </div>
+    </div>
     <?php Pjax::end() ?>
 
     <!-- The Modal -->

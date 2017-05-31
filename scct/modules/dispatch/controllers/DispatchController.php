@@ -10,12 +10,6 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
 
-/**
- * Created by PhpStorm.
- * User: jpatton
- * Date: 1/31/2017
- * Time: 2:22 PM
- */
 class DispatchController extends \app\controllers\BaseController
 {
     public function actionIndex()
@@ -25,21 +19,42 @@ class DispatchController extends \app\controllers\BaseController
                 'division', 'workcenter',
             ]);
             $model->addRule('division', 'string', ['max' => 32])
-                ->addRule('workcenter', 'string', ['max' => 32]);
+                ->addRule('dispatchfilter', 'string', ['max' => 32])
+                ->addRule('pagesize', 'string', ['max' => 32]);
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
 
-            // check if division, mapplat, workcenter, surveytype, compliancemonth is posted
-            //if (Yii::$app->request->isAjax){
-            if ($model->load(Yii::$app->request->post())) {
-                //todo: set posted value to model
-            }else{
-                //todo: set default value to model
+            //check request
+            if ($model->load(Yii::$app->request->queryParams)) {
+
+                Yii::trace("division " . $model->division);
+                Yii::trace("dispatchfilter " . $model->dispatchfilter);
+                Yii::trace("pagesize " . $model->pagesize);
+                $divisionParams = $model->division;
+                $dispatchPageSizeParams = $model->pagesize;
+                $dispatchFilterParams = $model->dispatchfilter;
+            } else {
+                $divisionParams = "";
+                $dispatchPageSizeParams = 10;
+                $dispatchFilterParams = "";
             }
-            $getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
+
+            // get the page number for assigned table
+            if (isset($_GET['userPage'])) {
+                $pageAt = $_GET['userPage'];
+            } else {
+                $pageAt = 1;
+            }
+
+            $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+                    'filter' => $dispatchFilterParams,
+                    'listPerPage' => $dispatchPageSizeParams,
+                    'page' => $pageAt,
+                ]);
+            //$getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
             $dispatchData = $getDispatchDataResponse['assets'];
@@ -69,6 +84,8 @@ class DispatchController extends \app\controllers\BaseController
                     'pages' => $pages,
                     'divisionList' => $divisionList,
                     'workCenterList' => $workCenterList,
+                    'dispatchFilterParams' => $dispatchFilterParams,
+                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             } else {
                 return $this->render('index', [
@@ -78,6 +95,8 @@ class DispatchController extends \app\controllers\BaseController
                     'pages' => $pages,
                     'divisionList' => $divisionList,
                     'workCenterList' => $workCenterList,
+                    'dispatchFilterParams' => $dispatchFilterParams,
+                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             }
         } catch (ForbiddenHttpException $e) {
