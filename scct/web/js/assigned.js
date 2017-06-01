@@ -60,12 +60,13 @@ $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', f
 });
 
 function unassignButtonListener() {
-    var pks = $("#assignedGridview #assign").yiiGridView('getSelectedRows');
+    var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
+    console.log("Checked Rows " + pks);
     var form = $("#AssignForm");
     $('#loading').show();
     $.ajax({
         url: '/dispatch/assigned/unassign',
-        data: {MapGrid: pks, AssignedUserID: assignedUserIDArr},
+        data: {MapGrid: pks, AssignedToIDs: getAssignedUserIDs()},
         type: 'POST',
         beforeSend: function () {
             $('#loading').show();
@@ -74,7 +75,7 @@ function unassignButtonListener() {
         $.pjax.reload({
             container: '#assignedGridview',
             timeout: 99999,
-            type: 'POST',
+            type: 'GET',
             url: form.attr("action"),
             data: form.serialize()
         });
@@ -93,7 +94,7 @@ function unassignButtonListener() {
 
 function unassignCheckboxListener() {
     $(".unassignCheckbox input[type=checkbox]").click(function () {
-        var pks = $("#assignedGridview #assign").yiiGridView('getSelectedRows');
+        var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (!pks || pks.length != 0) {
             $('#UnassignedButton').prop('disabled', false); //TO ENABLE
         } else {
@@ -121,4 +122,15 @@ function reloadAssignedGridView() {
         $('#UnassignedButton').prop('disabled', true);
         unassignCheckboxListener();
     });
+}
+
+function getAssignedUserIDs() {
+    var pks = $('#assignedGV').yiiGridView('getSelectedRows');
+    //alert("pks length is ：　"+pks.length);
+    var AssignedToIDs = [];
+    for(var i=0; i < pks.length; i++){
+        // get assignedUserID associate with current MapGrid
+        AssignedToIDs[i] = $(".kv-row-select input[MapGrid="+pks[i]+"]").attr("AssignedToID");
+    }
+    return AssignedToIDs;
 }
