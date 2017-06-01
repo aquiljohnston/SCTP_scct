@@ -14,7 +14,7 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
      */
     public function actionAddSurveyorModal()
     {
-        //try {
+        try {
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
@@ -80,14 +80,14 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        /*}catch(ForbiddenHttpException $e)
+        }catch(ForbiddenHttpException $e)
         {
             throw new ForbiddenHttpException;
         }
         catch(\Exception $e)
         {
             Yii::$app->runAction('login/user-logout');
-        }*/
+        }
 
     }
 }
