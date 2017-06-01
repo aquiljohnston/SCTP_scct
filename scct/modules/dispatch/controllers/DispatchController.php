@@ -16,7 +16,7 @@ class DispatchController extends \app\controllers\BaseController
     {
         try {
             $model = new \yii\base\DynamicModel([
-                'division', 'workcenter',
+                'division', 'dispatchfilter', 'pagesize'
             ]);
             $model->addRule('division', 'string', ['max' => 32])
                 ->addRule('dispatchfilter', 'string', ['max' => 32])
@@ -77,7 +77,7 @@ class DispatchController extends \app\controllers\BaseController
             $can = 1;
 
             if (Yii::$app->request->isAjax) {
-                return $this->render('index', [
+                return $this->renderAjax('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
                     'model' => $model,
                     'can' => $can,
@@ -102,7 +102,7 @@ class DispatchController extends \app\controllers\BaseController
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
-            //Yii::$app->runAction('login/user-logout');
+            Yii::$app->runAction('login/user-logout');
         }
     }
 

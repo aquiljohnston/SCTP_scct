@@ -19,8 +19,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             <div id="dispatch-dropDownList-form">
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_VERTICAL,
-                    'method' => 'get',
-                    'options' => ['id' => 'dispatchAcForm']
+                    'options' => ['id' => 'dispatchActiveForm']
                 ]); ?>
                 <div id="dispatchUnassignedTableDropdown">
                     <div class="division dropdowntitle">
