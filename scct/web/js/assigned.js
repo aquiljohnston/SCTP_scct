@@ -41,6 +41,9 @@ $(function () {
             reloadAssignedGridView();
         }
     });
+    $(document).off('change', '#assignPageSize').on('change', '#assignPageSize', function () {
+        reloadAssignedGridView();
+    });
     unassignCheckboxListener();
 });
 
