@@ -135,30 +135,14 @@ class AssignedController extends \app\controllers\BaseController
         try {
             if (Yii::$app->request->isAjax) {
                 Yii::trace("call Unassign");
-                //try{
                 $data = Yii::$app->request->post();
-                // loop the data array to get all MapGrid's.
-                //Yii::trace("unassignWorkQueue ".json_encode($data["AssignedWorkQueueUID"]));
-                foreach ($data["MapGrid"] as $key) {
-
-                    Yii::Trace("MapGrid ; " . $key);
-                    $mapGridArr[] = $key;
-                }
-                // loop the data array to get all assignedUserID's.
-                foreach ($data["AssignedUserID"] as $key) {
-                    Yii::Trace("AssignedUserID ; " . $key);
-                    $assignedUserIDs[] = $key;
-                }
-
-                $data = array(
-                    'MapGrid' => $mapGridArr,
-                    'AssignedUserID' => $assignedUserIDs,
-                );
+                $data = self::GenerateUnassignedData($data['MapGrid'], $data['AssignedToIDs']);
                 $json_data = json_encode($data);
+                Yii::trace("Unassigned Data: ".$json_data);
 
                 // post url
                 $deleteUrl = 'dispatch%2Funassign';
-                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data); // indirect rbac
+                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, self::API_VERSION_2); // indirect rbac
                 Yii::trace("unassignputResponse " . $deleteResponse);
 
             } else {
@@ -169,5 +153,18 @@ class AssignedController extends \app\controllers\BaseController
         } catch (\Exception $e) {
             Yii::$app->runAction('login/user-logout');
         }
+    }
+
+    public function GenerateUnassignedData(array $mapGridArr, array $assignedToIDs){
+        $unassignedArr = [];
+        for ($i = 0; $i < count($mapGridArr); $i++){
+            $data = array(
+                'MapGrid' => $mapGridArr[$i],
+                'AssignedUserID' => $assignedToIDs[$i],
+            );
+            array_push($unassignedArr, $data);
+        }
+        $unassignedArr['data'] = $unassignedArr;
+        return $unassignedArr;
     }
 }

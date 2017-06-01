@@ -107,6 +107,36 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         }*/
                     ],
                     [
+                        'label' => 'Assigned To',
+                        'attribute' => 'AssignedTo',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                        'format' => 'html',
+                        /*'value' => function ($model) {
+                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
+                        }*/
+                    ],
+                    [
+                        'label' => 'InspectionType',
+                        'attribute' => 'InspectionType',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                        'format' => 'html',
+                        /*'value' => function ($model) {
+                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
+                        }*/
+                    ],
+                    [
+                        'label' => 'Assigned By',
+                        'attribute' => 'AssignedBy',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                        'format' => 'html',
+                        /*'value' => function ($model) {
+                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
+                        }*/
+                    ],
+                    [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
@@ -122,12 +152,11 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'contentOptions' => ['class' => 'unassignCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            /*if ($model['WorkQueueStatus'] != 100) {
+                            if ($model['WorkQueueStatus'] != 100) {
                                 return ['disabled' => true];
                             } else {
-                                //todo: append information needed to un-assign user
-                                return ['AssignedUserID' => $model['AssignedUserID'], 'disabled' => false ];
-                            }*/
+                                return ['AssignedToID' => $model['AssignedToID'],'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                            }
                         }
                     ]
                 ]
