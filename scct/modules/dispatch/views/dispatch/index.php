@@ -59,6 +59,27 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
+                    /*[
+                        'class' => 'kartik\grid\ExpandRowColumn',
+                        'expandAllTitle' => 'Expand all',
+                        'collapseTitle' => 'Collapse all',
+                        'expandIcon'=>'<span class="glyphicon glyphicon-expand"></span>',
+                        'value' => function ($model,$key,$index,$column)
+                        {
+                            return GridView::ROW_COLLAPSED;
+                        },
+
+                        'detail' => function ($model,$key,$index,$column){
+                            $searchModel = new CreateBookingsSearch();
+                            $searchModel->booking_id = $model ->id;
+                            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+                            return Yii::$app->controller->renderPartial('_expandrowview.php',[
+                                'searchModel' => $searchModel,
+                                'dataProvider' => $dataProvider,
+                            ]);
+                        },
+                    ],*/
                     [
                         'label' => 'ClientWorkOrderID',
                         'attribute' => 'ClientWorkOrderID',
@@ -99,7 +120,14 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     ],
                     [
                         'header' => 'Add Surveyor',
-                        'class' => 'kartik\grid\CheckboxColumn'
+                        'class' => 'kartik\grid\CheckboxColumn',
+                        'contentOptions' => ['class' => 'dispatchCheckbox'],
+                        'checkboxOptions' => function ($model, $key, $index, $column) {
+                            if ($model['SectionNumber'] == null)
+                                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                            else
+                                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                        }
                     ]
                 ],
                 'beforeHeader' => [

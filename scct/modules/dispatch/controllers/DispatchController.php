@@ -14,7 +14,7 @@ class DispatchController extends \app\controllers\BaseController
 {
     public function actionIndex()
     {
-        try {
+        //try {
             $model = new \yii\base\DynamicModel([
                 'division', 'dispatchfilter', 'pagesize'
             ]);
@@ -67,6 +67,8 @@ class DispatchController extends \app\controllers\BaseController
                 'pagination' => false,
             ]);
 
+            $dispatchDataProvider->key = 'MapGrid';
+
             //todo: set paging on both tables
             // set pages to dispatch table
             $pages = new Pagination($getDispatchDataResponse['pages']);
@@ -99,11 +101,11 @@ class DispatchController extends \app\controllers\BaseController
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             }
-        } catch (ForbiddenHttpException $e) {
+        /*} catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-        }
+        }*/
     }
 
     public function actionPost()
@@ -118,7 +120,7 @@ class DispatchController extends \app\controllers\BaseController
     }
 
     // get workCenter dependent dropdown list
-    public function actionGetworkcenter()
+    /*public function actionGetworkcenter()
     {
 
         if (isset($_POST['depdrop_parents'])) {
@@ -135,7 +137,7 @@ class DispatchController extends \app\controllers\BaseController
             }
         }
         echo json_encode(['output' => '', 'selected' => '']);
-    }
+    }*/
 
     /**
      * Dispatch function
@@ -143,11 +145,11 @@ class DispatchController extends \app\controllers\BaseController
      */
     public function actionDispatch()
     {
-        try {
+        //try {
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
                 // Indicate that Ajax request sent from dispatch page
-                if (!empty($data["InspectionRequestUID"])) {
+                /*if (!empty($data["InspectionRequestUID"])) {
                     Yii::trace("dispatchdata " . json_encode($data["InspectionRequestUID"]));
                     foreach ($data["InspectionRequestUID"] as $key) {
                         //foreach($key as $keyitem){
@@ -194,26 +196,48 @@ class DispatchController extends \app\controllers\BaseController
                             $dispatchArray[] = $individualItem;
                         }
                     }
+                }*/
+                //$dispatchData = [];
+                if ($data['SectionNumber'][0] == 000){
+                    $sectionNumber = null;
+                    $dispatchMapArr = [];
+                    $dispatchMap = array(
+                        'MapGrid' => $data['MapGrid'][0],
+                        'AssignedUserID' => $data['AssignedUserID'][0],
+                    );
+                    array_push($dispatchMapArr, $dispatchMap);
+                    $dispatchData = array(
+                        'dispatchMap' => $dispatchMapArr,
+                    );
+                }
+                else{
+                    $sectionNumber = $data['SectionNumber'][0];
+                    $dispatchSectionArr = [];
+                    $dispatchSection = array(
+                        'MapGrid' => $data['MapGrid'],
+                        'AssignedUserID' => $data['AssignedUserID'][0],
+                        'SectionNumber' => $sectionNumber,//$data['SectionNumber'][0],
+                    );
+                    array_push($dispatchSectionArr, $dispatchSection);
+                    $dispatchData = array(
+                        'dispatchSection' => $dispatchSectionArr,
+                    );
                 }
 
-                $data = array(
-                    'SourceID' => 'WEB',
-                    'Assignments' => $dispatchArray,
-                );
-                $json_data = json_encode($data);
+                $json_data = json_encode($dispatchData);
 
+                Yii::trace("DISPATCH DATA: ".$json_data);
                 // post url
-                // TODO UPDATE PUT URL TO DISPATCH WORK
-                $putUrl = 'pge%2Fdispatch%2Fdispatch';
-                $putResponse = Parent::executePostRequest($putUrl, $json_data); // indirect rbac
+                $putUrl = 'dispatch%2Fdispatch';
+                $putResponse = Parent::executePostRequest($putUrl, $json_data, self::API_VERSION_2); // indirect rbac
                 Yii::trace("dispatchputResponse " . $putResponse);
 
             }
-        } catch (ForbiddenHttpException $e) {
+        /*} catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-        }
+        }*/
     }
 
     /**
@@ -238,5 +262,18 @@ class DispatchController extends \app\controllers\BaseController
             $workCenterDefaultVal = $divisionDefaultSelection[0]['WorkCenter'];
         }
         return array($ErrorMsg, $divisionDefaultVal, $workCenterDefaultVal);
+    }
+
+    public function GenerateUnassignedData(array $mapGridArr, array $assignedToIDs){
+        $unassignedArr = [];
+        for ($i = 0; $i < count($mapGridArr); $i++){
+            $data = array(
+                'MapGrid' => $mapGridArr[$i],
+                'AssignedUserID' => $assignedToIDs[$i],
+            );
+            array_push($unassignedArr, $data);
+        }
+        $unassignedArr['data'] = $unassignedArr;
+        return $unassignedArr;
     }
 }
