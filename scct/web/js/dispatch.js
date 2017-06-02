@@ -1,5 +1,5 @@
 $(function () {
-    //$("#dispatchButton").prop('disabled', true);
+    $("#dispatchButton").prop('disabled', true);
 
     // dispatch filter listener
     $(document).off('keypress', '#dispatchFilter').on('keypress', '#dispatchFilter', function (e) {
@@ -34,7 +34,10 @@ $(function () {
          });*/
         var MapPlatArr = [];
         var IRUIDArr = [];
-        console.log("clicked");
+        /*console.log($("#dispatchUnassignedGridview #dispatchGV").yiiGridView('getSelectedRows'));*/
+        MapGrid = $("#dispatchUnassignedGridview #dispatchGV").yiiGridView('getSelectedRows');
+        SectionNumber = $("#dispatchUnassignedGridview #dispatchGV input[MapGrid=" + MapGrid + "]").attr("SectionNumber");
+        //console.log("get section number: "+SectionNumber);
         $('#addSurveyorModal').modal('show')
             .find('#modalAddSurveyor')
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
@@ -44,8 +47,8 @@ $(function () {
     });
 
     // Refer the modal in assigned page
-    $('#addSurveyor').click(function () {
-        /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
+    /*$('#addSurveyor').click(function () {
+        /!*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
          var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
          $.ajax({
          type: 'POST',
@@ -60,7 +63,7 @@ $(function () {
          $('#loading').hide();
          });
          }
-         });*/
+         });*!/
         var MapPlatArr = [];
         var IRUIDArr = [];
         console.log("clicked");
@@ -70,35 +73,33 @@ $(function () {
                 "mapplat[]": [MapPlatArr],
                 "IRUID[]": [IRUIDArr]
             });
-    });
-    $('.dispatch input[type=checkbox]').click(function () {
-        // This Section for Dispatch page Dispatch Function
-        var checkApproved = $(this).attr("approved");
-        var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
-        var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
-        console.log("unassign: " + pks.length);
-        console.log("surveyor: " + pks_surveyors.length);
+    });*/
 
-        if ((!pks || pks.length != 0) && (!pks_surveyors || pks_surveyors.length != 0)) {
-            $('#dispatchButton').prop('disabled', false); //TO ENABLE
-        } else {
-            $('#dispatchButton').prop('disabled', true);
-        }
+    // set constrains: user can only dispatch one map to one surveyor at a time
+    $('.dispatchCheckbox input[type=checkbox]').click(function () {
+        var pks = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
+        //console.log(pks);
+        if (pks.length == 1){
+            $("#dispatchButton").prop('disabled', false);
+        }else
+            $("#dispatchButton").prop('disabled', true);
     });
 });
 
 function dispatchButtonListener() {
 
-    var pks = $('#dispatchUnassignedGridview #dispatchGV').yiiGridView('getSelectedRows');
+    var pks_dispatch = $('#dispatchUnassignedGridview #dispatchGV').yiiGridView('getSelectedRows');
     var pks_surveyors = $('#dispatchSurveyorsGridview #surveyor').yiiGridView('getSelectedRows');
+    var sectionNumber = $(".kv-row-select input[SectionNumber=" + pks_dispatch + "]").attr("SectionNumber");
     var form = $("#dispatchActiveForm");
+
     $('#loading').show();
     $('#UnassignedTableRecordsUpdate').val(true);
     $('#SurveyorTableRecordsUpdate').val(true);
     $.ajax({
         timeout: 99999,
         url: '/dispatch/dispatch/dispatch',
-        data: {InspectionRequestUID: pks, UserUID: pks_surveyors},
+        data: {MapGrid: pks_dispatch, AssignedUserID: pks_surveyors, SectionNumber: sectionNumber},
         type: 'POST'
     }).done(function () {
         $.pjax.reload({
@@ -108,8 +109,9 @@ function dispatchButtonListener() {
             url: form.attr("action"),
             data: form.serialize()
         });
+        $('#loading').hide();
         $('#dispatchUnassignedGridview').on('pjax:success', function () {
-            $.pjax.reload({
+            /*$.pjax.reload({
                 container: '#dispatchSurveyorsGridview',
                 timeout: 99999,
                 type: 'POST',
@@ -117,13 +119,11 @@ function dispatchButtonListener() {
                 data: form.serialize()
             });
             $('#dispatchSurveyorsGridview').on('pjax:success', function () {
-                $('#UnassignedTableRecordsUpdate').val(false);
-                $('#SurveyorTableRecordsUpdate').val(false);
                 $('#loading').hide();
             });
             $('#dispatchSurveyorsGridview').on('pjax:error', function (e) {
                 e.preventDefault();
-            });
+            });*/
         });
         $('#dispatchUnassignedGridview').on('pjax:error', function (e) {
             e.preventDefault();
