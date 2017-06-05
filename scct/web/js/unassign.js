@@ -2,8 +2,8 @@
 $(function () {
 
     $('#UnassignedButton').prop('disabled', false); //TO DISABLED
-    $('#dialog-unassign').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
-    $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
+    /*$('#dialog-unassign').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
+    $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});*/
 
     unassignCheckboxListener();
 });
@@ -21,20 +21,17 @@ $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', f
 });
 
 function unassignButtonListener() {
-    $('#AssignedTableRecordsUpdate').val(true);
     var pks = $("#assignedGridview #assign").yiiGridView('getSelectedRows');
     var form = $("#AssignForm");
     $('#loading').show();
     $.ajax({
         url: '/dispatch/assigned/unassign',
-        data: {AssignedWorkQueueUID: pks},
+        data: {MapGrid: pks, AssignedUserID: assignedUserIDArr},
         type: 'POST',
         beforeSend: function () {
             $('#loading').show();
         }
     }).done(function () {
-        var MapPlatArr = [];
-        var IRUIDArr = [];
         $.pjax.reload({
             container: '#assignedGridview',
             timeout: 99999,
@@ -43,10 +40,8 @@ function unassignButtonListener() {
             data: form.serialize()
         });
         $('#assignedGridview').on('pjax:success', function () {
-            $('#AssignedTableRecordsUpdate').val(false);
             $('#loading').hide();
             unassignCheckboxListener();
-            resetAddSurveyorButton(MapPlatArr, IRUIDArr);
         });
         $('#assignedGridview').on('pjax:error', function (e) {
             e.preventDefault();
@@ -58,7 +53,7 @@ function unassignButtonListener() {
 }
 
 function unassignCheckboxListener() {
-    $(".Unassign input[type=checkbox]").click(function () {
+    $(".unassignCheckbox input[type=checkbox]").click(function () {
         var pks = $("#assignedGridview #assign").yiiGridView('getSelectedRows');
         if (!pks || pks.length != 0) {
             $('#UnassignedButton').prop('disabled', false); //TO ENABLE
