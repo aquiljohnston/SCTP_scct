@@ -33,6 +33,7 @@ class AppAsset extends AssetBundle
         'css/login.css',
         'css/dispatch.css',
         'css/assigned.css',
+        'css/reports.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
