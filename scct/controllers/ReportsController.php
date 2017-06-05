@@ -45,8 +45,8 @@ class ReportsController extends BaseController
     public function actionBuildDropDown(){
 
         // Reading the response from the the api and filling the report drop down
-        $reportsUrl = 'pge%2Freports%2Fget-report-drop-down';
-        $reportsUrlListResponse = Parent::executeGetRequest($reportsUrl); // indirect rbac
+        $reportsUrl = 'reports%2Fget-report-drop-down';
+        $reportsUrlListResponse = Parent::executeGetRequest($reportsUrl, self::API_VERSION_2); // indirect rbac
         $reportsList = $reportsUrlListResponse;//json_decode($reportsUrlListResponse, true);
         echo $reportsList;
     }
@@ -57,7 +57,7 @@ class ReportsController extends BaseController
      */
     public function actionView()
     {
-        $data = self::executeGetRequest("pge%2Freports%2Fget-stub");
+        $data = self::executeGetRequest("reports%2Fget-stub", self::API_VERSION_2);
         $data = json_decode($data);
         return $this -> render('view', [
                 'data' => $data
@@ -74,7 +74,7 @@ class ReportsController extends BaseController
         try {
 
             // post url
-            $url = 'pge%2Freports%2Fget-report-export-data&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
+            $url = 'reports%2Fget-report-export-data&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
             Yii::trace("GetReportDataURL: ".$url);
             header('Content-Disposition: attachment; filename="report_'.date('Y-m-d_h_i_s').'.csv"');
             $this->requestAndOutputCsv($url);
@@ -97,9 +97,9 @@ class ReportsController extends BaseController
     public function actionGetReports(){
         try {
             // post url
-            $url = 'pge%2Freports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
+            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
             Yii::trace("reportUrl " . $url);
-            $response = Parent::executeGetRequest($url);
+            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
             echo $response;
 
@@ -123,7 +123,7 @@ class ReportsController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp);
+        Parent::executeGetRequestToStream($url,$fp, self::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
@@ -137,8 +137,8 @@ class ReportsController extends BaseController
     public function actionGetParmDropDown(){
         if (isset($_POST['ReportName'])){
             // Reading the response from the the api and filling Parm Drop Down
-            $getParmDropDownUrl = 'pge%2Freports%2Fget-parm-dropdown&spName='.urlencode($_POST['ReportName']);
-            $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl); // indirect rbac
+            $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&spName='.urlencode($_POST['ReportName']);
+            $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, self::API_VERSION_2); // indirect rbac
             $ParmDropDownList = $getParmDropDownResponse;//json_decode($reportsUrlListResponse, true);
             echo $ParmDropDownList;
         }else{
