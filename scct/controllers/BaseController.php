@@ -129,7 +129,7 @@ class BaseController extends Controller
 	}
 
     //function generates and executes a "GET" request and places the response in the stream/filepointer given by $fp
-    public static function executeGetRequestToStream($url, $fp=null, $token = null)
+    public static function executeGetRequestToStream($url, $fp=null, $version = self::DEFAULT_VERSION, $token = null)
     {
         if($token === null) {
             $token = Yii::$app->session['token'];
@@ -138,7 +138,7 @@ class BaseController extends Controller
             throw new Exception('Invalid file pointer');
         }
 
-        $url = self::prependURL($url);
+        $url = self::prependURL($url, $version);
         $prefix = self::getXClient();
         //set headers
         $headers = array(
