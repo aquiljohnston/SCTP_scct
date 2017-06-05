@@ -388,9 +388,9 @@ class BaseController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
-            $navMenuUrl = "menu%2Fget&project=$id"; //scct"; //Switch for localhost
+            $navMenuUrl = "menu%2Fget";//Switch for localhost
             //get nav menu by calling API route
-            $mavMenuResponse = self::executeGetRequest($navMenuUrl); // indirect rbac
+            $mavMenuResponse = self::executeGetRequest($navMenuUrl, self::API_VERSION_2); // indirect rbac
 
             Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
             //set up response data type
