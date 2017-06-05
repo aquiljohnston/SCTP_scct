@@ -90,7 +90,7 @@ $(document).ready(function () {
                 },
                 success: function (data) {
                     $('#loading').hide();
-                    data = $.parseJSON(data.navMenu);
+                    //data = $.parseJSON(data.navMenu);
                     //console.log(JSON.stringify(data, null, 2));
                     NavBar(data);
                 }
