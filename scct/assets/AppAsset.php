@@ -57,7 +57,10 @@ class AppAsset extends AssetBundle
         'js/user.js',
         //'js/unassign.js',
         'js/dispatch.js',
-        'js/assigned.js'
+        'js/assigned.js',
+        'js/reports.js',
+        '//cdn.datatables.net/1.10.12/js/jquery.dataTables.js',
+        '//code.jquery.com/ui/1.12.1/jquery-ui.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

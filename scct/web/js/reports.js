@@ -384,7 +384,7 @@ $(function () {
             },
             success: function (data) {
                 $('#loading').hide();
-                console.log(JSON.stringify(data));
+                //console.log(JSON.stringify(data));
                 var results = JSON.parse(data);
                 $.each(results.reports, function (i, obj) {
                     var option = document.createElement("option");
