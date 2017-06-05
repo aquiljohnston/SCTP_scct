@@ -1,0 +1,54 @@
+#reportsContainer .containerByDropdown{
+	position: fixed;
+	padding:0 1%;
+	width:100%;
+	margin-top:25px;
+}
+.reportsDropdown{
+	margin-bottom:5px;
+}
+#reportsdropdown{
+	padding-left:1%;
+}
+#reportsdropdown  .dropDownList-form{
+	margin-top:2%;
+}
+#reportsFilterForm h4{
+    color: #0067a6;
+}
+#reportsFilterForm .dropdowntitle{
+	width:16%;
+	position:relative;
+	float:left;
+	padding-right:20px;
+}
+#reportsFilterForm #summarytitle{
+	margin-top: -40px;
+} 
+#reportsFilterForm  #SummaryInfo{
+	margin-top:15px;
+	color:black;
+}
+#reportTable_wrapper .dataTables_scrollBody{
+	max-height:520px;
+	height:auto;
+	
+}
+#reports-page .footerabove{
+	display:none;
+} 
+/*-----------css for the 1360*768 resolution---------------*/
+@media only screen and (min-width: 1300px) {
+#reportTable_wrapper .dataTables_scrollBody{
+	max-height:230px;	
+}
+}
+/*-----------css for the 1360*768 resolution ends---------------*/ 
+
+/*-----------css for the 1920*1028 resolution---------------*/
+@media only screen and (min-width: 1900px) {
+#reportTable_wrapper .dataTables_scrollBody{
+	max-height:710px;
+}
+}
+/*-----------css for the 1920*1028 resolution ends---------------*/
