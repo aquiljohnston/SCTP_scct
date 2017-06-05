@@ -263,7 +263,7 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "Delete" request and returns the response
-	public static function executeDeleteRequest($url, $version = self::DEFAULT_VERSION)
+	public static function executeDeleteRequest($url, $putData, $version = self::DEFAULT_VERSION)
 	{
         $url = self::prependURL($url, $version);
 		//set headers
@@ -271,6 +271,7 @@ class BaseController extends Controller
 			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
+            'Content-Length: ' . strlen($putData),
 			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
 			);
 		//init new curl
@@ -279,6 +280,7 @@ class BaseController extends Controller
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "DELETE");
+        curl_setopt($curl, CURLOPT_POSTFIELDS,$putData);
 		curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 		//execute delete
 		$response = curl_exec ($curl);
@@ -386,9 +388,9 @@ class BaseController extends Controller
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
-            $navMenuUrl = "menu%2Fget&project=$id"; //scct"; //Switch for localhost
+            $navMenuUrl = "menu%2Fget";//Switch for localhost
             //get nav menu by calling API route
-            $mavMenuResponse = self::executeGetRequest($navMenuUrl); // indirect rbac
+            $mavMenuResponse = self::executeGetRequest($navMenuUrl, self::API_VERSION_2); // indirect rbac
 
             Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
             //set up response data type

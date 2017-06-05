@@ -27,11 +27,6 @@ use kartik\form\ActiveForm;
             // 500 internal server error ->'data-pjax' => true,
             //'action' => ['/dispatch/add-surveyor-modal'],
         ]); ?>
-
-        <div id="surveyorWorkcenter" class="dropdowntitle">
-            <?php // surveyorWorkcenter Dropdown
-            echo $form->field($model, 'surveyorWorkcenter')->dropDownList($surveyorWorkCenterList, ['id'=>'assigned-surveyorWorkcenter-id', 'value' => $workCenterFilterVal])->label('Work Center');  ?>
-        </div>
         <div class="addsurveryContainer">
             <div id="addsurveyorSearchcontainer" class="dropdowntitle">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'addSurveyorSearch', 'placeholder'=>'Search'])->label('Surveyor / Inspector'); ?>
@@ -49,6 +44,7 @@ use kartik\form\ActiveForm;
         'enablePushState' => false  ]) ?>
 
     <?= GridView::widget([
+        'id' =>'surveyorGV',
         'dataProvider' => $addSurveyorsDataProvider,
         'export' => false,
         'pjax' =>true,
@@ -64,23 +60,22 @@ use kartik\form\ActiveForm;
                 'contentOptions' => ['class' => 'AddSurveyor'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($addSurveyorsDataProvider)) {
-                        return ['UserUID' => $model["UserUID"]];
+                        return ['UserID' => $model["UserID"]];
                     }
                 },
             ],
             [
                 'label' => 'Name',
-                'attribute' => 'UserFullName'
+                'attribute' => 'Name',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'label' => 'LANID',
-                'attribute' => 'UserLANID'
+                'label' => 'User Name',
+                'attribute' => 'UserName',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
-            [
-                'label' => 'Work Center',
-                'attribute' => 'WorkCenter'
-            ],
-
         ],
     ]); ?>
 
@@ -91,7 +86,7 @@ use kartik\form\ActiveForm;
 </div>
 <script type="text/javascript">
 
-    function enableDisableControls(enabled, IRUIDArr)
+    function enableDisableControls(enabled, MapGrid, SectionNumber)
     {
         console.log("enableDisableControls Called");
         $(".kv-row-select input[type=checkbox]").prop('disabled', !enabled);
@@ -100,24 +95,18 @@ use kartik\form\ActiveForm;
         $('#addSurveyorButton').prop('disabled', !enabled); 
         $('#assigned-surveyorWorkcenter-id').prop('disabled', !enabled);
         $('#addSurveyorSearch').prop('disabled', !enabled);
-        resetButtonState(IRUIDArr); // make check enable / disable dispatch button
+        resetButtonState(MapGrid, SectionNumber); // make check enable / disable dispatch button
     }
 
-    function resetButtonState(IRUIDArr)
+    function resetButtonState(mapGrid, sectionNumber)
     {
-        console.log("resetButtonState Called");
-        for (var i = 0; i < IRUIDArr.length; i++){
-            console.log("IRUID length is "+IRUIDArr[i]);
-        }
-
-        var add_surveyor_pks = 0;
         $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
         $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
 
         $(".AddSurveyor input[type=checkbox]").click(function () {
-            add_surveyor_pks = $("#addSurveyorsGridview #w1").yiiGridView('getSelectedRows');
-            console.log(add_surveyor_pks.length);
-            if (add_surveyor_pks.length > 0) {
+            assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            console.log(assignedUserID.length);
+            if (assignedUserID.length == 1) {
                 $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
                 $('#addSurveyorModal').prop('disabled', false); //TO DISABLED
 
@@ -127,40 +116,36 @@ use kartik\form\ActiveForm;
         });
 
         $('.modalDispatchBtn').click(function () {
-            $('#AssignedTableRecordsUpdate').val(true);
-            var form = $("#AssignForm");
-            if (!add_surveyor_pks || add_surveyor_pks.length != 0) {
+            var form = $("#dispatchActiveForm");
+            if (!assignedUserID || assignedUserID.length == 1) {
                 // Ajax post request to dispatch action
+                console.log("mapgrid: "+mapGrid+"sectionnumber "+sectionNumber+"assigneduserid: "+assignedUserID);
                 $.ajax({
                     timeout: 99999,
                     url: '/dispatch/dispatch/dispatch',
-                    data: { UserUID: add_surveyor_pks, IRUID: IRUIDArr },
+                    data: { MapGrid: mapGrid, AssignedUserID: assignedUserID, SectionNumber: sectionNumber },
                     type: 'POST',
                     beforeSend: function () {
                         $('#addSurveyorModal').modal("toggle");
                         $('#loading').show();
+                        console.log("mapgrid: "+mapGrid+"assigneduserid: "+assignedUserID+"sectionnumber "+sectionNumber);
                     }
                 }).done(function () {
-                    $( '#dialog-add-surveyor' ).prop('display', true);
-                    $( '#dialog-add-surveyor' ).dialog("open");
+                    /*$( '#dialog-add-surveyor' ).prop('display', true);
+                    $( '#dialog-add-surveyor' ).dialog("open");*/
                     $.pjax.reload({
-                        container:'#assignedGridview',
+                        container:'#dispatchUnassignedGridview',
                         timeout: 99999,
-                        type: 'POST',
+                        type: 'GET',
                         url: form.attr("action"),
                         data: form.serialize()
                     });
-                    $('#assignedGridview').on('pjax:success', function() {
+                    $('#dispatchUnassignedGridview').on('pjax:success', function() {
                         console.log("Pjax success");
-                        var MapPlatArr = [];
-                        var IRUIDArr = [];
-                        $('#addSurveyor').prop('disabled', true);
-                        resetAddSurveyorButton(MapPlatArr, IRUIDArr);
-                        unassignCheckboxListener();
-                        $('#AssignedTableRecordsUpdate').val(true);
+                        $("#dispatchButton").prop('disabled', true);
                         $('#loading').hide();
                     });
-                    $('#assignedGridview').on('pjax:error', function(e) {
+                    $('#dispatchUnassignedGridview').on('pjax:error', function(e) {
                         e.preventDefault();
                     });
                 });
@@ -184,46 +169,27 @@ use kartik\form\ActiveForm;
 
     // set trigger for search box in the add surveyor modal
     $(document).ready(function() {
+        console.log("about to call");
         $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-    });
-    /*$(document).ready(function() {
-        var MapPlatArr = [];
-        var IRUIDArr = [];
-        var pks = $("#assignedGridview #assign").yiiGridView('getSelectedRows');
 
-        if (pks != 0){
-            var IRUIDCounter = 0;
-            var MapPlatCounter = 0;
-            for (var i = 0; i < pks.length; i++) {
-                if (MapPlatArr[MapPlatCounter] != $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("mapplat")){
-                    MapPlatArr[MapPlatCounter] = $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("mapplat");
-                    MapPlatCounter++;
-                }
-                if (IRUIDArr[IRUIDCounter] != $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("IRUID")){
-                    IRUIDArr[IRUIDCounter] = $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("IRUID");
-                    IRUIDCounter++;
-                }
-                continue;
-            }
-        } else {
-            return false;
-        }
-        $('#addSurveyorSearch').keydown(function(event){
+        /*var MapGrid = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
+        var SectionNumber = $("#dispatchUnassignedGridview input[MapGrid=" + this.MapGrid + "]").attr("SectionNumber");*/
+        //var AssignedUserID = $("#addSurveyorsGridview #SurveyorGV").yiiGridView('getSelectedRows');
+
+        //console.log("mapgrid: "+MapGrid+" sectionnumber "+SectionNumber);
+        /*$('#addSurveyorSearch').keydown(function(event){
             if(event.keyCode == 13) {
                 event.preventDefault();
-                var workCenterFilterVal = $('#assigned-surveyorWorkCenter-id').val();
-                var searchFilterVal = $('#addSurveyorSearch').val();
-
                 $.pjax.reload({
                     type: 'POST',
                     url: '/dispatch/assigned/add-surveyor-modal',
                     container: '#addSurveyorsGridviewPJAX', // id to update content
-                    data: {"mapplat": MapPlatArr,"IRUID": IRUIDArr, "workCenterFilterVal": workCenterFilterVal, "searchFilterVal": searchFilterVal},
+                    data: {MapGrid: MapGrid, AssignedUserID: SectionNumber, SectionNumber: AssignedUserID},
                     timeout: 99999
-                }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, IRUIDArr); });
+                }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, MapGrid, SectionNumber, AssignedUserID); });
             }
-        });
-        $('#assigned-surveyorWorkcenter-id').change(function() {
+        });*/
+        /*$('#assigned-surveyorWorkcenter-id').change(function() {
             /!*var MapPlatArr = [];
              var IRUIDArr = [];
              var pks = $("#assignedGridview #w1").yiiGridView('getSelectedRows');
@@ -256,14 +222,13 @@ use kartik\form\ActiveForm;
                 data: {"mapplat": MapPlatArr,"IRUID": IRUIDArr, "workCenterFilterVal": workCenterFilterVal, "searchFilterVal": searchFilterVal},
                 timeout: 99999
             }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, IRUIDArr); });
-        });
-        resetButtonState(IRUIDArr);
-        //addPaginationListener(IRUIDArr);
-	});*/
+        });*/
+        resetButtonState(MapGrid, SectionNumber);
+	});
 	
     //SurveyorModal CleanFilterButton listener
     $('#SurveyorModalCleanFilterButton').click(function () {
-        $("#assigned-surveyorWorkcenter-id").val("");
+        //$("#assigned-surveyorWorkcenter-id").val("");
         $("#addSurveyorSearch").val("");
     });
 </script>
