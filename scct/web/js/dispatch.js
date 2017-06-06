@@ -86,54 +86,6 @@ $(function () {
     });
 });
 
-function dispatchButtonListener() {
-
-    var pks_dispatch = $('#dispatchUnassignedGridview #dispatchGV').yiiGridView('getSelectedRows');
-    var pks_surveyors = $('#dispatchSurveyorsGridview #surveyor').yiiGridView('getSelectedRows');
-    var sectionNumber = $(".kv-row-select input[SectionNumber=" + pks_dispatch + "]").attr("SectionNumber");
-    var form = $("#dispatchActiveForm");
-
-    $('#loading').show();
-    $('#UnassignedTableRecordsUpdate').val(true);
-    $('#SurveyorTableRecordsUpdate').val(true);
-    $.ajax({
-        timeout: 99999,
-        url: '/dispatch/dispatch/dispatch',
-        data: {MapGrid: pks_dispatch, AssignedUserID: pks_surveyors, SectionNumber: sectionNumber},
-        type: 'POST'
-    }).done(function () {
-        $.pjax.reload({
-            container: '#dispatchUnassignedGridview',
-            timeout: 99999,
-            type: 'POST',
-            url: form.attr("action"),
-            data: form.serialize()
-        });
-        $('#loading').hide();
-        $('#dispatchUnassignedGridview').on('pjax:success', function () {
-            /*$.pjax.reload({
-                container: '#dispatchSurveyorsGridview',
-                timeout: 99999,
-                type: 'POST',
-                url: form.attr("action"),
-                data: form.serialize()
-            });
-            $('#dispatchSurveyorsGridview').on('pjax:success', function () {
-                $('#loading').hide();
-            });
-            $('#dispatchSurveyorsGridview').on('pjax:error', function (e) {
-                e.preventDefault();
-            });*/
-        });
-        $('#dispatchUnassignedGridview').on('pjax:error', function (e) {
-            e.preventDefault();
-        });
-    });
-
-    // disable dispatch button again
-    $('.dispatch_btn').prop('disabled', true); //TO DISABLED
-}
-
 function reloadDispatchGridView() {
     var jqDispatchDropDowns = $('#dispatchTab');
     var form = jqDispatchDropDowns.find("#dispatchActiveForm");

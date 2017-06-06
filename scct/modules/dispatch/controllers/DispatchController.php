@@ -14,11 +14,13 @@ class DispatchController extends \app\controllers\BaseController
 {
     public function actionIndex()
     {
-        //try {
+        try {
             $model = new \yii\base\DynamicModel([
-                'division', 'dispatchfilter', 'pagesize'
+                'division', 'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
             ]);
             $model->addRule('division', 'string', ['max' => 32])
+                ->addRule('mapgridfilter', 'string', ['max' => 32])
+                ->addRule('sectionnumberfilter', 'string', ['max' => 32])
                 ->addRule('dispatchfilter', 'string', ['max' => 32])
                 ->addRule('pagesize', 'string', ['max' => 32]);
 
@@ -33,13 +35,19 @@ class DispatchController extends \app\controllers\BaseController
                 Yii::trace("division " . $model->division);
                 Yii::trace("dispatchfilter " . $model->dispatchfilter);
                 Yii::trace("pagesize " . $model->pagesize);
+                Yii::trace("mapgridfilter " . $model->mapgridfilter);
+                Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
                 $divisionParams = $model->division;
                 $dispatchPageSizeParams = $model->pagesize;
                 $dispatchFilterParams = $model->dispatchfilter;
+                $dispatchMapGridSelectedParams = $model->mapgridfilter;
+                $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
             } else {
                 $divisionParams = "";
                 $dispatchPageSizeParams = 10;
                 $dispatchFilterParams = "";
+                $dispatchMapGridSelectedParams = "";
+                $dispatchSectionNumberSelectedParams = "";
             }
 
             // get the page number for assigned table
@@ -49,7 +57,9 @@ class DispatchController extends \app\controllers\BaseController
                 $pageAt = 1;
             }
 
-            $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+            $getUrl = 'dispatch%2Fget&' . http_build_query([
+                    'mapGridSelected' => $dispatchMapGridSelectedParams,
+                    'sectionNumberSelected' => $dispatchSectionNumberSelectedParams,
                     'filter' => $dispatchFilterParams,
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
@@ -57,7 +67,7 @@ class DispatchController extends \app\controllers\BaseController
             //$getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
-            $dispatchData = $getDispatchDataResponse['assets'];
+            $dispatchData = $getDispatchDataResponse['mapGrids'];
 
             // Put data in data provider
             // render page
@@ -101,11 +111,11 @@ class DispatchController extends \app\controllers\BaseController
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             }
-        /*} catch (ForbiddenHttpException $e) {
+        } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-        }*/
+        }
     }
 
     public function actionPost()
