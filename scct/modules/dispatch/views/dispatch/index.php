@@ -81,8 +81,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         },
                     ],*/
                     [
-                        'label' => 'ClientWorkOrderID',
-                        'attribute' => 'ClientWorkOrderID',
+                        'label' => 'Map Grid',
+                        'attribute' => 'MapGrid',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
@@ -91,8 +91,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         }*/
                     ],
                     [
-                        'label' => 'CreatedBy',
-                        'attribute' => 'CreatedBy',
+                        'label' => 'Compliance Start',
+                        'attribute' => 'ComplianceStart',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
@@ -101,8 +101,14 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         }*/
                     ],
                     [
-                        'label' => 'CreatedDateTime',
-                        'attribute' => 'CreatedDateTime',
+                        'label' => 'Compliance End',
+                        'attribute' => 'ComplianceEnd',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                    ],
+                    [
+                        'label' => 'Available Work Order',
+                        'attribute' => 'AvailableWorkOrderCount',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
@@ -123,7 +129,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'contentOptions' => ['class' => 'dispatchCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            if ($model['SectionNumber'] == null)
+                            if (empty($model['SectionNumber']))
                                 return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
                             else
                                 return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
