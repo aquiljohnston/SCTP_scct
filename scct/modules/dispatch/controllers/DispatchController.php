@@ -58,12 +58,19 @@ class DispatchController extends \app\controllers\BaseController
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
             $dispatchData = $getDispatchDataResponse['assets'];
+            $dispatchSectionData = $getDispatchDataResponse['assets'];
 
             // Put data in data provider
             // render page
             $dispatchDataProvider = new ArrayDataProvider
             ([
                 'allModels' => $dispatchData,
+                'pagination' => false,
+            ]);
+            // dispatch section data provider
+            $dispatchSectionDataProvider = new ArrayDataProvider
+            ([
+                'allModels' => $dispatchSectionData,
                 'pagination' => false,
             ]);
 
@@ -106,6 +113,106 @@ class DispatchController extends \app\controllers\BaseController
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
         }*/
+    }
+
+    /**
+     * render expandable section row
+     * @return string|Response
+     */
+    public function actionViewSection(){
+        $model = new \yii\base\DynamicModel([
+            'division', 'dispatchfilter', 'pagesize'
+        ]);
+        $model->addRule('division', 'string', ['max' => 32])
+            ->addRule('dispatchfilter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);
+
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        //check request
+        if ($model->load(Yii::$app->request->queryParams)) {
+
+            Yii::trace("division " . $model->division);
+            Yii::trace("dispatchfilter " . $model->dispatchfilter);
+            Yii::trace("pagesize " . $model->pagesize);
+            $divisionParams = $model->division;
+            $dispatchPageSizeParams = $model->pagesize;
+            $dispatchFilterParams = $model->dispatchfilter;
+        } else {
+            $divisionParams = "";
+            $dispatchPageSizeParams = 10;
+            $dispatchFilterParams = "";
+        }
+
+        // get the page number for assigned table
+        if (isset($_GET['userPage'])) {
+            $pageAt = $_GET['userPage'];
+        } else {
+            $pageAt = 1;
+        }
+
+        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+                'filter' => $dispatchFilterParams,
+                'listPerPage' => $dispatchPageSizeParams,
+                'page' => $pageAt,
+            ]);
+        //$getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
+        $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
+        $dispatchData = $getDispatchDataResponse['assets'];
+        $dispatchSectionData = $getDispatchDataResponse['assets'];
+
+        // Put data in data provider
+        // render page
+        $dispatchDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $dispatchData,
+            'pagination' => false,
+        ]);
+        // dispatch section data provider
+        $dispatchSectionDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $dispatchSectionData,
+            'pagination' => false,
+        ]);
+
+        $dispatchDataProvider->key = 'MapGrid';
+
+        //todo: set paging on both tables
+        // set pages to dispatch table
+        $pages = new Pagination($getDispatchDataResponse['pages']);
+        $divisionList = [];
+        $workCenterList = [];
+
+        //todo: check permission to dispatch work
+        $can = 1;
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_section-expand', [
+                'dispatchDataProvider' => $dispatchDataProvider,
+                'model' => $model,
+                'can' => $can,
+                'pages' => $pages,
+                'divisionList' => $divisionList,
+                'workCenterList' => $workCenterList,
+                'dispatchFilterParams' => $dispatchFilterParams,
+                'dispatchPageSizeParams' => $dispatchPageSizeParams,
+            ]);
+        } else {
+            return $this->render('_section-expand', [
+                'dispatchDataProvider' => $dispatchDataProvider,
+                'model' => $model,
+                'can' => $can,
+                'pages' => $pages,
+                'divisionList' => $divisionList,
+                'workCenterList' => $workCenterList,
+                'dispatchFilterParams' => $dispatchFilterParams,
+                'dispatchPageSizeParams' => $dispatchPageSizeParams,
+            ]);
+        }
     }
 
     public function actionPost()

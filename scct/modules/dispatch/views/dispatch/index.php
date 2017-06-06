@@ -59,27 +59,29 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
-                    /*[
+                    [
                         'class' => 'kartik\grid\ExpandRowColumn',
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
                         'expandIcon'=>'<span class="glyphicon glyphicon-expand"></span>',
                         'value' => function ($model,$key,$index,$column)
                         {
+                            /*if ($model['sectionCount'] == null){
+                                return GridView::ROW_NONE;
+                            }*/
                             return GridView::ROW_COLLAPSED;
                         },
 
-                        'detail' => function ($model,$key,$index,$column){
-                            $searchModel = new CreateBookingsSearch();
+                        'detailUrl' => Url::to(['dispatch/view-section'])
+                            /*$searchModel = new CreateBookingsSearch();
                             $searchModel->booking_id = $model ->id;
                             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
                             return Yii::$app->controller->renderPartial('_expandrowview.php',[
                                 'searchModel' => $searchModel,
                                 'dataProvider' => $dataProvider,
-                            ]);
-                        },
-                    ],*/
+                            ]);*/
+                    ],
                     [
                         'label' => 'ClientWorkOrderID',
                         'attribute' => 'ClientWorkOrderID',
