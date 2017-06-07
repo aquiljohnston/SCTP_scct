@@ -76,9 +76,9 @@ $(function () {
     });*/
 
     // set constrains: user can only dispatch one map to one surveyor at a time
-    $('.dispatchCheckbox input[type=checkbox]').click(function () {
+    $(document).off('click', '.dispatchCheckbox input[type=checkbox]').on('click', '.dispatchCheckbox input[type=checkbox]', function (){
         var pks = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
-        //console.log(pks);
+        console.log(pks);
         if (pks.length == 1){
             $("#dispatchButton").prop('disabled', false);
         }else
