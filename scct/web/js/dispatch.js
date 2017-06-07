@@ -46,42 +46,13 @@ $(function () {
             });
     });
 
-    // Refer the modal in assigned page
-    /*$('#addSurveyor').click(function () {
-        /!*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
-         var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
-         $.ajax({
-         type: 'POST',
-         url: '/dispatch/dispatch/post',
-         data: {InspectionRequestUID: pks, UserUID: pks_surveyors},
-         beforeSend: function () {
-         $('#loading').show();
-         },
-         complete: function () {
-         window.location = window.location; // ?
-         $('#dispatchActiveForm').submit().done(function () {
-         $('#loading').hide();
-         });
-         }
-         });*!/
-        var MapPlatArr = [];
-        var IRUIDArr = [];
-        console.log("clicked");
-        $('#addSurveyorModal').modal('show')
-            .find('#modalAddSurveyor')
-            .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
-                "mapplat[]": [MapPlatArr],
-                "IRUID[]": [IRUIDArr]
-            });
-    });*/
-
     // set constrains: user can only dispatch one map to one surveyor at a time
-    $(document).off('click', '.dispatchCheckbox input[type=checkbox]').on('click', '.dispatchCheckbox input[type=checkbox]', function (){
+    $(document).off('click', '.dispatchCheckbox input[type=checkbox]').on('click', '.dispatchCheckbox input[type=checkbox]', function () {
         var pks = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
         console.log(pks);
-        if (pks.length == 1){
+        if (pks.length == 1) {
             $("#dispatchButton").prop('disabled', false);
-        }else
+        } else
             $("#dispatchButton").prop('disabled', true);
     });
 });
@@ -102,5 +73,15 @@ function reloadDispatchGridView() {
     }).done(function () {
         $('#loading').hide();
     });
+}
+
+// Asset modal view
+function ViewAssetClicked(url) {
+    console.log("View Asset clicked!");
+    console.log(url);
+    // get the click of the create button
+    $('#assetModal').modal('show')
+        .find('#viewAssetModalContent').load(url);
+    $(".modal-backdrop.in").css({'opacity': 0});
 }
 
