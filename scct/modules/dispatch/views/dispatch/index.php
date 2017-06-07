@@ -30,7 +30,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         <div id="filtertitle" class="dropdowntitle">
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
                         </div>
-                        <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton']) */?>
+                        <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton']) */ ?>
                     </div>
                     <div class="col-lg-3 col-md-3 col-xs-3">
                     <span id="dispatchPageSizeLabel">
@@ -63,9 +63,8 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\ExpandRowColumn',
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
-                        'expandIcon'=>'<span class="glyphicon glyphicon-expand"></span>',
-                        'value' => function ($model,$key,$index,$column)
-                        {
+                        'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
+                        'value' => function ($model, $key, $index, $column) {
                             /*if ($model['sectionCount'] == null){
                                 return GridView::ROW_NONE;
                             }*/
@@ -73,14 +72,14 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         },
 
                         'detailUrl' => Url::to(['dispatch/view-section'])
-                            /*$searchModel = new CreateBookingsSearch();
-                            $searchModel->booking_id = $model ->id;
-                            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                        /*$searchModel = new CreateBookingsSearch();
+                        $searchModel->booking_id = $model ->id;
+                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-                            return Yii::$app->controller->renderPartial('_expandrowview.php',[
-                                'searchModel' => $searchModel,
-                                'dataProvider' => $dataProvider,
-                            ]);*/
+                        return Yii::$app->controller->renderPartial('_expandrowview.php',[
+                            'searchModel' => $searchModel,
+                            'dataProvider' => $dataProvider,
+                        ]);*/
                     ],
                     [
                         'label' => 'Map Grid',
@@ -118,13 +117,13 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
-                        /*'urlCreator' => function ($action, $model, $key, $index) {
-                            if ($action === 'view') {
-                                $url = '/dispatch/assets?id=' . $model['MapGrid']; //TODO: change to correct identifier.
+                        'urlCreator' => function ($action, $model, $key, $index) {
+                            /*if ($action === 'view') {
+                                $url = '/dispatch/view-asset?id=' . $model['MapGrid']; //TODO: change to correct identifier.
                                 return $url;
                             }
-                            return "";
-                        }*/
+                            return "";*/
+                        }
                     ],
                     [
                         'header' => 'Add Surveyor',
@@ -132,9 +131,9 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'contentOptions' => ['class' => 'dispatchCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if (empty($model['SectionNumber']))
-                                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false];
                             else
-                                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];
                         }
                     ]
                 ],
@@ -148,13 +147,13 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             ]); ?>
             <div id="unassignedTablePagination">
                 <?php
-               // display pagination
+                // display pagination
                 echo LinkPager::widget([
                     'pagination' => $pages,
                 ]); ?>
             </div>
             <div class="GridviewTotalNumber">
-                <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries";  ?>
+                <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
             </div>
             <?php Pjax::end() ?>
         </div>

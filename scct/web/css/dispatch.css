@@ -91,10 +91,7 @@
 }
 #dispatchUnassignedTable .table-responsive {
     margin-top:0px;
-    /*width:99%;*/
-    /*margin-left:1%;*/
-    overflow: auto;
-    max-height: 530px;
+    width:99%;
 }
 #dispatchSurveyorsGridview .table-responsive{
     max-height:500px;

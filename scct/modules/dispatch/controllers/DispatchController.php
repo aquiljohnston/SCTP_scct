@@ -64,9 +64,8 @@ class DispatchController extends \app\controllers\BaseController
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            //$getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
+            Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
 
@@ -124,12 +123,12 @@ class DispatchController extends \app\controllers\BaseController
      * render expandable section row
      * @return string|Response
      */
-    public function actionViewSection(){
+    public function actionViewSection()
+    {
         $model = new \yii\base\DynamicModel([
-            'division', 'dispatchfilter', 'pagesize'
+            'sectionfilter', 'pagesize'
         ]);
-        $model->addRule('division', 'string', ['max' => 32])
-            ->addRule('dispatchfilter', 'string', ['max' => 32])
+        $model->addRule('sectionfilter', 'string', ['max' => 32])
             ->addRule('pagesize', 'string', ['max' => 32]);
 
         // Verify logged in
@@ -140,16 +139,13 @@ class DispatchController extends \app\controllers\BaseController
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
 
-            Yii::trace("division " . $model->division);
-            Yii::trace("dispatchfilter " . $model->dispatchfilter);
+            Yii::trace("sectionfilter " . $model->sectionfilter);
             Yii::trace("pagesize " . $model->pagesize);
-            $divisionParams = $model->division;
-            $dispatchPageSizeParams = $model->pagesize;
-            $dispatchFilterParams = $model->dispatchfilter;
+            $sectionPageSizeParams = $model->pagesize;
+            $sectionFilterParams = $model->sectionfilter;
         } else {
-            $divisionParams = "";
-            $dispatchPageSizeParams = 10;
-            $dispatchFilterParams = "";
+            $sectionPageSizeParams = 10;
+            $sectionFilterParams = "";
         }
 
         // get the page number for assigned table
@@ -158,98 +154,126 @@ class DispatchController extends \app\controllers\BaseController
         } else {
             $pageAt = 1;
         }
+        // get the key to generate section table
+        if (isset($_POST['expandRowKey']))
+            $mapGridSelected = $_POST['expandRowKey'];
+        else
+            $mapGridSelected = "";
 
-        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
-                'filter' => $dispatchFilterParams,
-                'listPerPage' => $dispatchPageSizeParams,
+        $getUrl = 'dispatch%2Fget&' . http_build_query([
+                'mapGridSelected' => $mapGridSelected,
+                'filter' => $sectionFilterParams,
+                'listPerPage' => $sectionPageSizeParams,
                 'page' => $pageAt,
             ]);
-        //$getUrl = 'dispatch%2Fget&filter=YORK&listPerPage=10&page=1';
-        $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("DISPATCH DATA: ".json_encode($getDispatchDataResponse));
-        $dispatchData = $getDispatchDataResponse['assets'];
-        $dispatchSectionData = $getDispatchDataResponse['assets'];
+
+        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
+        $sectionData = $getSectionDataResponse['sections'];
 
         // Put data in data provider
-        // render page
-        $dispatchDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $dispatchData,
-            'pagination' => false,
-        ]);
         // dispatch section data provider
-        $dispatchSectionDataProvider = new ArrayDataProvider
+        $sectionDataProvider = new ArrayDataProvider
         ([
-            'allModels' => $dispatchSectionData,
+            'allModels' => $sectionData,
             'pagination' => false,
         ]);
 
-        $dispatchDataProvider->key = 'MapGrid';
+        $sectionDataProvider->key = 'SectionNumber';
 
-        //todo: set paging on both tables
         // set pages to dispatch table
-        $pages = new Pagination($getDispatchDataResponse['pages']);
-        $divisionList = [];
-        $workCenterList = [];
+        $pages = new Pagination($getSectionDataResponse['pages']);
 
         //todo: check permission to dispatch work
         $can = 1;
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
-                'dispatchDataProvider' => $dispatchDataProvider,
+                'sectionDataProvider' => $sectionDataProvider,
                 'model' => $model,
                 'can' => $can,
                 'pages' => $pages,
-                'divisionList' => $divisionList,
-                'workCenterList' => $workCenterList,
-                'dispatchFilterParams' => $dispatchFilterParams,
-                'dispatchPageSizeParams' => $dispatchPageSizeParams,
+                'sectionFilterParams' => $sectionFilterParams,
+                'sectionPageSizeParams' => $sectionPageSizeParams,
             ]);
         } else {
             return $this->render('_section-expand', [
-                'dispatchDataProvider' => $dispatchDataProvider,
+                'sectionDataProvider' => $sectionDataProvider,
                 'model' => $model,
                 'can' => $can,
                 'pages' => $pages,
-                'divisionList' => $divisionList,
-                'workCenterList' => $workCenterList,
-                'dispatchFilterParams' => $dispatchFilterParams,
-                'dispatchPageSizeParams' => $dispatchPageSizeParams,
+                'sectionFilterParams' => $sectionFilterParams,
+                'sectionPageSizeParams' => $sectionPageSizeParams,
             ]);
         }
     }
 
-    public function actionPost()
+    /**
+     * render asset modal
+     * @return string|Response
+     */
+    public function actionViewAsset($id)
     {
-        $data = [
-            'status' => 'Not implemented'
-        ];
-        $response = Yii::$app->response;
-        $response->format = Response::FORMAT_JSON;
-        $response->data = $data;
-        return $response;
-    }
+        Yii::trace("CALL VIEW ASSET");
+        $model = new \yii\base\DynamicModel([
+            'surveyor', 'assetID'
+        ]);
+        $model->addRule('surveyor', 'string', ['max' => 32])
+            ->addRule('assetID', 'string', ['max' => 32]);
 
-    // get workCenter dependent dropdown list
-    /*public function actionGetworkcenter()
-    {
-
-        if (isset($_POST['depdrop_parents'])) {
-            $ids = $_POST['depdrop_parents'];
-            $division_id = empty($ids[0]) ? null : $ids[0];
-            if ($division_id != null) {
-                // get workCenter from the api and filling workCenter dropdown
-                $url = 'pge%2Fdropdown%2Fget-dispatch-work-center-dropdown&division=' . urlencode($division_id);
-                $workCenterListResponse = Parent::executeGetRequest($url); // indirect rbac
-                $workCenterList = json_decode($workCenterListResponse, true);
-
-                echo json_encode(['output' => $workCenterList, 'selected' => '']);
-                return;
-            }
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
         }
-        echo json_encode(['output' => '', 'selected' => '']);
-    }*/
+
+        /*$getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+                'filter' => $dispatchFilterParams,
+                'listPerPage' => $dispatchPageSizeParams,
+                'page' => $pageAt,
+            ]);
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
+
+        // Put data in data provider
+        $assetDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $getAssetDataResponse,
+            'pagination' => false,
+        ]);
+        //$assetDataProvider->key = 'MapGrid';
+
+        //todo: set paging on both tables
+        // set pages to dispatch table
+        $pages = new Pagination($getAssetDataResponse['pages']);
+        $divisionList = [];
+        $workCenterList = [];
+
+        //todo: check permission to dispatch work
+        $can = 1;*/
+
+        $assetDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => [],
+            'pagination' => false,
+        ]);
+        $surveyorList = [];
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_section-expand', [
+                'assetDataProvider' => $assetDataProvider,
+                'model' => $model,
+                //'pages' => $pages,
+                'surveyorList' => $surveyorList,
+            ]);
+        } else {
+            return $this->render('_section-expand', [
+                'assetDataProvider' => $assetDataProvider,
+                'model' => $model,
+                //'pages' => $pages,
+                'surveyorList' => $surveyorList,
+            ]);
+        }
+    }
 
     /**
      * Dispatch function
@@ -257,60 +281,11 @@ class DispatchController extends \app\controllers\BaseController
      */
     public function actionDispatch()
     {
-        //try {
+        try {
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
-                // Indicate that Ajax request sent from dispatch page
-                /*if (!empty($data["InspectionRequestUID"])) {
-                    Yii::trace("dispatchdata " . json_encode($data["InspectionRequestUID"]));
-                    foreach ($data["InspectionRequestUID"] as $key) {
-                        //foreach($key as $keyitem){
 
-                        $InspectionRequestUIDArr[] = $key;
-                        Yii::Trace("InspectionRequestUIDis ; " . $key);
-                        // }
-                    }
-
-                    foreach ($data["UserUID"] as $key) {
-                        //foreach($key as $keyitem){
-
-                        $UserUID[] = $key;
-                        Yii::Trace("UserUIDis ; " . $key);
-                        // }
-                    }
-
-                    foreach ($data["InspectionRequestUID"] as $IR) {
-                        foreach ($data["UserUID"] as $User) {
-                            $individualItem = [];
-                            $individualItem["IR"] = $IR;
-                            $individualItem["User"] = $User;
-                            $dispatchArray[] = $individualItem;
-
-                        }
-                    }
-                } else {
-                    // Indicate that Ajax call sent from Add Surveyor Modal view
-                    foreach ($data["IRUID"] as $key) {
-                        $InspectionRequestUIDArr[] = $key;
-                        Yii::Trace("IRUID ; " . $key);
-                    }
-
-                    foreach ($data["UserUID"] as $key) {
-                        $UserUID[] = $key;
-                        Yii::Trace("UserUIDis ; " . $key);
-                    }
-
-                    foreach ($data["IRUID"] as $IR) {
-                        foreach ($data["UserUID"] as $User) {
-                            $individualItem = [];
-                            $individualItem["IR"] = $IR;
-                            $individualItem["User"] = $User;
-                            $dispatchArray[] = $individualItem;
-                        }
-                    }
-                }*/
-                //$dispatchData = [];
-                if ($data['SectionNumber'][0] == 000){
+                if ($data['SectionNumber'][0] == 000) {
                     $sectionNumber = null;
                     $dispatchMapArr = [];
                     $dispatchMap = array(
@@ -321,8 +296,7 @@ class DispatchController extends \app\controllers\BaseController
                     $dispatchData = array(
                         'dispatchMap' => $dispatchMapArr,
                     );
-                }
-                else{
+                } else {
                     $sectionNumber = $data['SectionNumber'][0];
                     $dispatchSectionArr = [];
                     $dispatchSection = array(
@@ -338,18 +312,18 @@ class DispatchController extends \app\controllers\BaseController
 
                 $json_data = json_encode($dispatchData);
 
-                Yii::trace("DISPATCH DATA: ".$json_data);
+                Yii::trace("DISPATCH DATA: " . $json_data);
                 // post url
                 $putUrl = 'dispatch%2Fdispatch';
                 $putResponse = Parent::executePostRequest($putUrl, $json_data, self::API_VERSION_2); // indirect rbac
                 Yii::trace("dispatchputResponse " . $putResponse);
 
             }
-        /*} catch (ForbiddenHttpException $e) {
+        } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-        }*/
+        }
     }
 
     /**
@@ -376,9 +350,10 @@ class DispatchController extends \app\controllers\BaseController
         return array($ErrorMsg, $divisionDefaultVal, $workCenterDefaultVal);
     }
 
-    public function GenerateUnassignedData(array $mapGridArr, array $assignedToIDs){
+    public function GenerateUnassignedData(array $mapGridArr, array $assignedToIDs)
+    {
         $unassignedArr = [];
-        for ($i = 0; $i < count($mapGridArr); $i++){
+        for ($i = 0; $i < count($mapGridArr); $i++) {
             $data = array(
                 'MapGrid' => $mapGridArr[$i],
                 'AssignedUserID' => $assignedToIDs[$i],
