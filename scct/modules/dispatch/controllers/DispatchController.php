@@ -284,35 +284,9 @@ class DispatchController extends \app\controllers\BaseController
         try {
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
-
-                if ($data['SectionNumber'][0] == 000) {
-                    $sectionNumber = null;
-                    $dispatchMapArr = [];
-                    $dispatchMap = array(
-                        'MapGrid' => $data['MapGrid'][0],
-                        'AssignedUserID' => $data['AssignedUserID'][0],
-                    );
-                    array_push($dispatchMapArr, $dispatchMap);
-                    $dispatchData = array(
-                        'dispatchMap' => $dispatchMapArr,
-                    );
-                } else {
-                    $sectionNumber = $data['SectionNumber'][0];
-                    $dispatchSectionArr = [];
-                    $dispatchSection = array(
-                        'MapGrid' => $data['MapGrid'],
-                        'AssignedUserID' => $data['AssignedUserID'][0],
-                        'SectionNumber' => $sectionNumber,//$data['SectionNumber'][0],
-                    );
-                    array_push($dispatchSectionArr, $dispatchSection);
-                    $dispatchData = array(
-                        'dispatchSection' => $dispatchSectionArr,
-                    );
-                }
-
-                $json_data = json_encode($dispatchData);
-
+                $json_data = json_encode($data);
                 Yii::trace("DISPATCH DATA: " . $json_data);
+
                 // post url
                 $putUrl = 'dispatch%2Fdispatch';
                 $putResponse = Parent::executePostRequest($putUrl, $json_data, self::API_VERSION_2); // indirect rbac
@@ -363,4 +337,5 @@ class DispatchController extends \app\controllers\BaseController
         $unassignedArr['data'] = $unassignedArr;
         return $unassignedArr;
     }
+
 }

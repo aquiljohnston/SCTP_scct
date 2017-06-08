@@ -1,4 +1,8 @@
 $(function () {
+    var dispatchGV = $("#dispatchGV");
+    dispatchMap_MapGrid = [];
+    dispatchSection_SectionNumber = [];
+
     $("#dispatchButton").prop('disabled', true);
 
     // dispatch filter listener
@@ -16,44 +20,57 @@ $(function () {
 
     // Refer the modal in dispatch page
     $('#dispatchButton').click(function () {
-        /*var pks = $('#dispatchGV').yiiGridView('getSelectedRows');
-         var pks_surveyors = $('#surveyorsGV').yiiGridView('getSelectedRows');
-         $.ajax({
-         type: 'POST',
-         url: '/dispatch/dispatch/post',
-         data: {InspectionRequestUID: pks, UserUID: pks_surveyors},
-         beforeSend: function () {
-         $('#loading').show();
-         },
-         complete: function () {
-         window.location = window.location; // ?
-         $('#dispatchActiveForm').submit().done(function () {
-         $('#loading').hide();
-         });
-         }
-         });*/
-        var MapPlatArr = [];
-        var IRUIDArr = [];
-        /*console.log($("#dispatchUnassignedGridview #dispatchGV").yiiGridView('getSelectedRows'));*/
-        MapGrid = $("#dispatchUnassignedGridview #dispatchGV").yiiGridView('getSelectedRows');
-        SectionNumber = $("#dispatchUnassignedGridview #dispatchGV input[MapGrid=" + MapGrid + "]").attr("SectionNumber");
-        //console.log("get section number: "+SectionNumber);
         $('#addSurveyorModal').modal('show')
             .find('#modalAddSurveyor')
-            .load('/dispatch/add-surveyor-modal/add-surveyor-modal', {
-                "mapplat[]": [MapPlatArr],
-                "IRUID[]": [IRUIDArr]
-            });
+            .load('/dispatch/add-surveyor-modal/add-surveyor-modal');
     });
 
     // set constrains: user can only dispatch one map to one surveyor at a time
     $(document).off('click', '.dispatchCheckbox input[type=checkbox]').on('click', '.dispatchCheckbox input[type=checkbox]', function () {
-        var pks = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
-        console.log(pks);
-        if (pks.length == 1) {
+        dispatchMap_MapGrid = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
+        if (dispatchMap_MapGrid.length > 0) {
             $("#dispatchButton").prop('disabled', false);
         } else
             $("#dispatchButton").prop('disabled', true);
+    });
+
+    //checkbox listener on section table
+    $(document).off('click', '.dispatchSectionCheckbox input[type=checkbox]').on('click', '.dispatchSectionCheckbox input[type=checkbox]', function () {
+        dispatchSection_SectionNumber =$("#dispatchUnassignedTable #dispatchSectionGV").yiiGridView('getSelectedRows');
+        // check to see if need to disable/enable add surveyor button
+        if (dispatchMap_MapGrid.length > 0 || dispatchSection_SectionNumber.length > 0){
+            $("#dispatchButton").prop('disabled', false);
+        }else{
+            $("#dispatchButton").prop('disabled', true);
+        }
+        console.log(dispatchSection_SectionNumber);
+    });
+
+    //before expand section table, deselect all checkboxes from map table
+    dispatchGV.on('kvexprow.beforeLoad.kvExpandRowColumn', function (event, ind, key, extra, state) {
+        console.log('before expand row');
+    });
+
+    //expandable row column listener
+    //$(document).off('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV").on('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV", function () {
+    dispatchGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
+        console.log('Toggled expand row');
+        //var isCheckDisabled = $('.dispatchCheckbox input[type=checkbox]').is(':disabled');
+        var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
+        if (isCheckDisabled){
+            $(this).find("[data-key='"+key+"']").find('.dispatchCheckbox input[type=checkbox]').prop('disabled', false);
+        }else{
+            $(this).find("[data-key='"+key+"']").find('.dispatchCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
+            dispatchMap_MapGrid =$("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
+        }
+        console.log("dispatchMap_MapGrid: " +dispatchMap_MapGrid.length);
+
+        //check to see if need to disable/enable add surveyor button
+        if (dispatchMap_MapGrid.length > 0){
+            $("#dispatchButton").prop('disabled', false);
+        }else {
+            $("#dispatchButton").prop('disabled', true);
+        }
     });
 });
 
@@ -83,5 +100,39 @@ function ViewAssetClicked(url) {
     $('#assetModal').modal('show')
         .find('#viewAssetModalContent').load(url);
     $(".modal-backdrop.in").css({'opacity': 0});
+}
+
+// Generate Dispatch Map Array;
+function getDispatchMapArray(dispatchMap_MapGrid, assignedUserID) {
+    var mapGridArray = [];
+    if (dispatchMap_MapGrid.length > 0){
+        for (var i = 0; i < dispatchMap_MapGrid.length; i++){
+            mapGridArray.push({
+                MapGrid: dispatchMap_MapGrid[i],
+                AssignedUserID: assignedUserID
+            })
+        }
+        return mapGridArray;
+    }else{
+        return null
+    }
+}
+
+// Generate Dispatch Section Array;
+function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) {
+    var dispatchSectionArray = [];
+    if (dispatchSection_SectionNumber.length > 0) {
+        for (var i = 0; i < dispatchSection_SectionNumber.length; i++) {
+            var MapGrid = $("#dispatchUnassignedGridview #dispatchSectionGV input[SectionNumber=" + dispatchSection_SectionNumber[i] + "]").attr("MapGrid");
+            dispatchSectionArray.push({
+                MapGrid: MapGrid,
+                SectionNumber: dispatchSection_SectionNumber[i],
+                AssignedUserID: assignedUserID
+            });
+        }
+        return dispatchSectionArray;
+    }else{
+        return null;
+    }
 }
 
