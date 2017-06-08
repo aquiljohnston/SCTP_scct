@@ -95,16 +95,18 @@ use kartik\form\ActiveForm;
         $('#addSurveyorButton').prop('disabled', !enabled); 
         $('#assigned-surveyorWorkcenter-id').prop('disabled', !enabled);
         $('#addSurveyorSearch').prop('disabled', !enabled);
-        resetButtonState(MapGrid, SectionNumber); // make check enable / disable dispatch button
+        resetButtonState(); // make check enable / disable dispatch button
     }
 
-    function resetButtonState(mapGrid, sectionNumber)
+    function resetButtonState()
     {
         $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
         $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
 
         $(".AddSurveyor input[type=checkbox]").click(function () {
             assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            dispatchMapData = getDispatchMapArray(dispatchMap_MapGrid, assignedUserID[0]);
+            dispatchSectionData = getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID[0]);
             console.log(assignedUserID.length);
             if (assignedUserID.length == 1) {
                 $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
@@ -119,20 +121,17 @@ use kartik\form\ActiveForm;
             var form = $("#dispatchActiveForm");
             if (!assignedUserID || assignedUserID.length == 1) {
                 // Ajax post request to dispatch action
-                console.log("mapgrid: "+mapGrid+"sectionnumber "+sectionNumber+"assigneduserid: "+assignedUserID);
                 $.ajax({
                     timeout: 99999,
                     url: '/dispatch/dispatch/dispatch',
-                    data: { MapGrid: mapGrid, AssignedUserID: assignedUserID, SectionNumber: sectionNumber },
+                    data: {dispatchMap: dispatchMapData, dispatchSection: dispatchSectionData},
+                    //data: { MapGrid: mapGrid, AssignedUserID: assignedUserID, SectionNumber: sectionNumber },
                     type: 'POST',
                     beforeSend: function () {
                         $('#addSurveyorModal').modal("toggle");
                         $('#loading').show();
-                        console.log("mapgrid: "+mapGrid+"assigneduserid: "+assignedUserID+"sectionnumber "+sectionNumber);
                     }
                 }).done(function () {
-                    /*$( '#dialog-add-surveyor' ).prop('display', true);
-                    $( '#dialog-add-surveyor' ).dialog("open");*/
                     $.pjax.reload({
                         container:'#dispatchUnassignedGridview',
                         timeout: 99999,
@@ -171,12 +170,6 @@ use kartik\form\ActiveForm;
     $(document).ready(function() {
         console.log("about to call");
         $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-
-        /*var MapGrid = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
-        var SectionNumber = $("#dispatchUnassignedGridview input[MapGrid=" + this.MapGrid + "]").attr("SectionNumber");*/
-        //var AssignedUserID = $("#addSurveyorsGridview #SurveyorGV").yiiGridView('getSelectedRows');
-
-        //console.log("mapgrid: "+MapGrid+" sectionnumber "+SectionNumber);
         /*$('#addSurveyorSearch').keydown(function(event){
             if(event.keyCode == 13) {
                 event.preventDefault();
@@ -189,46 +182,11 @@ use kartik\form\ActiveForm;
                 }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, MapGrid, SectionNumber, AssignedUserID); });
             }
         });*/
-        /*$('#assigned-surveyorWorkcenter-id').change(function() {
-            /!*var MapPlatArr = [];
-             var IRUIDArr = [];
-             var pks = $("#assignedGridview #w1").yiiGridView('getSelectedRows');
-             var workCenterFilterVal = $(this).val();
-             var searchFilterVal = $('#addSurveyorSearch').val();
-
-             if (pks != 0){
-             var IRUIDCounter = 0;
-             var MapPlatCounter = 0;
-             for (var i = 0; i < pks.length; i++) {
-             if (MapPlatArr[MapPlatCounter] != $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("mapplat")){
-             MapPlatArr[MapPlatCounter] = $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("mapplat");
-             MapPlatCounter++;
-             }
-             if (IRUIDArr[IRUIDCounter] != $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("IRUID")){
-             IRUIDArr[IRUIDCounter] = $(".Add input[AssignedWorkQueueUID=" + pks[i] + "]").attr("IRUID");
-             IRUIDCounter++;
-             }
-             continue;
-             }
-             } else {
-             return false;
-             }*!/
-            var workCenterFilterVal = $(this).val();
-            var searchFilterVal = $('#addSurveyorSearch').val();
-            $.pjax.reload({
-                type: 'POST',
-                url: '/dispatch/assigned/add-surveyor-modal',
-                container: '#addSurveyorsGridviewPJAX', // id to update content
-                data: {"mapplat": MapPlatArr,"IRUID": IRUIDArr, "workCenterFilterVal": workCenterFilterVal, "searchFilterVal": searchFilterVal},
-                timeout: 99999
-            }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, IRUIDArr); });
-        });*/
-        resetButtonState(MapGrid, SectionNumber);
+        resetButtonState();
 	});
 	
     //SurveyorModal CleanFilterButton listener
     $('#SurveyorModalCleanFilterButton').click(function () {
-        //$("#assigned-surveyorWorkcenter-id").val("");
         $("#addSurveyorSearch").val("");
     });
 </script>

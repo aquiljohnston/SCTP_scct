@@ -17,6 +17,7 @@ use yii\bootstrap\Modal;
     <?= GridView::widget([
         'dataProvider' => $sectionDataProvider,
         'export' => false,
+        'id' => 'dispatchSectionGV',
         'summary' => '',
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
@@ -75,12 +76,12 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'contentOptions' => ['class' => 'dispatchCheckbox'],
+                'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    /*if ($model['SectionNumber'] == null)
-                        return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false];
+                    if (!empty($model))
+                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
                     else
-                        return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];*/
+                        return "";
                 }
             ]
         ],
