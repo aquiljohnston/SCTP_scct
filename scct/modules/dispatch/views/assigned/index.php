@@ -85,16 +85,6 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         }*/
                     ],
                     [
-                        'label' => 'Meter Number',
-                        'attribute' => 'MeterNumber',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
-                        'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
-                    ],
-                    [
                         'label' => 'Assigned To',
                         'attribute' => 'AssignedTo',
                         'headerOptions' => ['class' => 'text-center'],
@@ -120,6 +110,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
+                        'visible' => false
                         /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                         }*/
