@@ -22,25 +22,22 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     'options' => ['id' => 'dispatchActiveForm']
                 ]); ?>
                 <div id="dispatchUnassignedTableDropdown">
-                    <div id="dispatchSearchContainer">
+                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton'])  ?>
+                    <div id="dispatchSearchContainer" class="col-xs-2 col-md-2 col-lg-2" style="float:right">
                         <div id="filtertitle" class="dropdowntitle">
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
                         </div>
-                        <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton']) */ ?>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-xs-3">
-                        <span id="dispatchPageSizeLabel">
-                            <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                                ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
-                                ->label('Records Per Page', [
-                                    'class' => 'recordsPerPage'
-                                ]); ?>
-                        </span>
-                    </div>
-                </div>
+                    <span id="dispatchPageSizeLabel" style="float: right;">
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                            ->label('Records Per Page', [
+                                'class' => 'recordsPerPage'
+                            ]); ?>
+                    </span>
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-                <div id="addSurveyorButtonDispatch" class="col-lg-3 col-md-3 col-xs-3">
+                <div id="addSurveyorButtonDispatch" class="col-xs-2 col-md-2 col-lg-2">
 
                     <?php if ($can != 0) { ?>
                         <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
@@ -49,6 +46,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     } ?>
                 </div>
                 <?php Pjax::end() ?>
+                </div>
             </div>
         </div>
     </div>
