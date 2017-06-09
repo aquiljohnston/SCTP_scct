@@ -80,12 +80,12 @@
     position: relative;
     float: left;
     width: 100%;
-    margin-top: 3%;
+    margin-top: 1%;
     overflow-x: hidden;
 }
 
 #assignedTable .table-responsive {
-    max-height: 550px;
+    max-height: 380px;
     overflow-y: auto;
     width: 100%;
     margin: 0 auto;

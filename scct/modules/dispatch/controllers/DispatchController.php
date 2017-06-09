@@ -16,10 +16,9 @@ class DispatchController extends \app\controllers\BaseController
     {
         try {
             $model = new \yii\base\DynamicModel([
-                'division', 'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
+                'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
             ]);
-            $model->addRule('division', 'string', ['max' => 32])
-                ->addRule('mapgridfilter', 'string', ['max' => 32])
+            $model->addRule('mapgridfilter', 'string', ['max' => 32])
                 ->addRule('sectionnumberfilter', 'string', ['max' => 32])
                 ->addRule('dispatchfilter', 'string', ['max' => 32])
                 ->addRule('pagesize', 'string', ['max' => 32]);
@@ -32,18 +31,15 @@ class DispatchController extends \app\controllers\BaseController
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
 
-                Yii::trace("division " . $model->division);
                 Yii::trace("dispatchfilter " . $model->dispatchfilter);
                 Yii::trace("pagesize " . $model->pagesize);
                 Yii::trace("mapgridfilter " . $model->mapgridfilter);
                 Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
-                $divisionParams = $model->division;
                 $dispatchPageSizeParams = $model->pagesize;
                 $dispatchFilterParams = $model->dispatchfilter;
                 $dispatchMapGridSelectedParams = $model->mapgridfilter;
                 $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
             } else {
-                $divisionParams = "";
                 $dispatchPageSizeParams = 10;
                 $dispatchFilterParams = "";
                 $dispatchMapGridSelectedParams = "";
@@ -83,8 +79,6 @@ class DispatchController extends \app\controllers\BaseController
             //todo: set paging on both tables
             // set pages to dispatch table
             $pages = new Pagination($getDispatchDataResponse['pages']);
-            $divisionList = [];
-            $workCenterList = [];
 
             //todo: check permission to dispatch work
             $can = 1;
@@ -95,8 +89,6 @@ class DispatchController extends \app\controllers\BaseController
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,
-                    'divisionList' => $divisionList,
-                    'workCenterList' => $workCenterList,
                     'dispatchFilterParams' => $dispatchFilterParams,
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
@@ -106,8 +98,6 @@ class DispatchController extends \app\controllers\BaseController
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,
-                    'divisionList' => $divisionList,
-                    'workCenterList' => $workCenterList,
                     'dispatchFilterParams' => $dispatchFilterParams,
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);

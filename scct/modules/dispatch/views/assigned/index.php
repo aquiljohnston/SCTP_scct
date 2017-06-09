@@ -24,49 +24,36 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                 //'method' => 'get',
                 'options' => ['id' => 'AssignForm', 'data-pjax' => true],
             ]); ?>
-            <div class="row">
-                <div class="col-lg-9 col-md-9 col-xs-9">
-                    <div id="assignedDropdownTitlesContainer">
-                        <div class="division dropdowntitle col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                            <?php // division Dropdown
-                            if (!empty($divisionDefaultVal)) {
-                                $model->division = $divisionDefaultVal;
-                            }
-                            echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'Assigned-division-id']); ?>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-                        <label style="color: #0067a6; margin-bottom: 7px;"></label>
-                        <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
-
-                        <?php if ($canUnassign != 0) { ?>
-                            <div id="assiunassignedButton">
-                                <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary',
-                                    'id' => 'UnassignedButton']); ?>
-                            </div>
-                        <?php } else {
-                            echo "";
-                        } ?>
-                        <?php Pjax::end() ?>
-                    </div>
-
+                <div id="assignedDropdownTitlesContainer">
                 </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                    <label style="color: #0067a6; margin-bottom: 7px;"></label>
+                    <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
+
+                    <?php if ($canUnassign != 0) { ?>
+                        <div id="assiunassignedButton">
+                            <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary',
+                                'id' => 'UnassignedButton']); ?>
+                        </div>
+                    <?php } else {
+                        echo "";
+                    } ?>
+                    <?php Pjax::end() ?>
+                </div>
+
                 <div id="assignedSearchContainer">
                     <div id="filtertitle" class="dropdowntitle">
                         <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter'])->label('Search'); ?>
                     </div>
                     <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedSearchCleanFilterButton']) ?>
                 </div>
-                <div class="col-lg-3 col-md-3 col-xs-3">
-                    <span id="AssignedPageSizeLabel">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                            ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
-                            ->label('Records Per Page', [
-                                'class' => 'recordsPerPage'
-                            ]); ?>
-                    </span>
-                </div>
-            </div>
+                <span id="AssignedPageSizeLabel">
+                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                        ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
+                        ->label('Records Per Page', [
+                            'class' => 'recordsPerPage'
+                        ]); ?>
+                </span>
             <?php ActiveForm::end(); ?>
         </div>
     </div>
@@ -77,6 +64,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             <?= GridView::widget([
                 'dataProvider' => $assignedDataProvider,
                 'id' => 'assignedGV',
+                'summary' => false,
                 'pjax' => true,
                 'caption' => 'Assign',
                 'pjaxSettings' => [
