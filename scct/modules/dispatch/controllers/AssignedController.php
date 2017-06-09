@@ -16,23 +16,20 @@ class AssignedController extends \app\controllers\BaseController
         }
 
         $model = new \yii\base\DynamicModel([
-            'division', 'assignedfilter', 'pagesize'
+            'assignedfilter', 'pagesize'
         ]);
-        $model->addRule('division', 'string', ['max' => 32])
-            ->addRule('assignedfilter', 'string', ['max' => 32])
+        $model->addRule('assignedfilter', 'string', ['max' => 32])
             ->addRule('pagesize', 'string', ['max' => 32]);
 
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
 
-            Yii::trace("division " . $model->division);
             Yii::trace("assignedfilter " . $model->assignedfilter);
             Yii::trace("pagesize " . $model->pagesize);
             $divisionParams = $model->division;
             $assignedPageSizeParams = $model->pagesize;
             $assignedFilterParams = $model->assignedfilter;
         } else {
-            $divisionParams = "";
             $assignedPageSizeParams = 10;
             $assignedFilterParams = "";
         }
@@ -51,12 +48,6 @@ class AssignedController extends \app\controllers\BaseController
             ]);
         $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
         $assignedData = $getAssignedDataResponse['assets'];
-
-        // get divisionList from the api and filling division dropdown
-        /*$divisionUrl = 'pge%2Fdropdown%2Fget-assigned-division-dropdown';
-        $divisionListResponse = Parent::executeGetRequest($divisionUrl); // indirect rbac
-        $divisionList = json_decode($divisionListResponse, true);*/
-        $divisionList = [];
 
         //todo: check permission to un-assign work
         $canUnassign = 1;
@@ -81,7 +72,6 @@ class AssignedController extends \app\controllers\BaseController
                 'assignedDataProvider' => $assignedDataProvider,
                 'model' => $model,
                 'pages' => $pages,
-                'divisionList' => $divisionList,
                 'canUnassign' => $canUnassign,
                 'canAddSurveyor' => $canAddSurveyor,
                 'divisionParams' => $divisionParams,
@@ -93,7 +83,6 @@ class AssignedController extends \app\controllers\BaseController
                 'assignedDataProvider' => $assignedDataProvider,
                 'model' => $model,
                 'pages' => $pages,
-                'divisionList' => $divisionList,
                 'canUnassign' => $canUnassign,
                 'canAddSurveyor' => $canAddSurveyor,
                 'divisionParams' => $divisionParams,
@@ -102,28 +91,6 @@ class AssignedController extends \app\controllers\BaseController
             ]);
         }
     }
-
-    //todo: need to see if dependent dropdown list is needed
-    // get workCenter dependent dropdown list
-    /*public function actionGetworkcenter()
-    {
-        $out = [];
-        if (isset($_POST['depdrop_parents'])) {
-            $ids = $_POST['depdrop_parents'];
-            $division_id = empty($ids[0]) ? null : $ids[0];
-            if ($division_id != null) {
-                // get workCenter from the api and filling workCenter dropdown
-                $url = 'pge%2Fdropdown%2Fget-assigned-work-center-dropdown&division=' . urlencode($division_id);
-                $workCenterListResponse = Parent::executeGetRequest($url); // indirect rbac
-                Yii::trace("workcenterassign " . $workCenterListResponse);
-                $workCenterList = json_decode($workCenterListResponse, true);
-
-                echo json_encode(['output' => $workCenterList, 'selected' => '']);
-                return;
-            }
-        }
-        echo json_encode(['output' => '', 'selected' => '']);
-    }*/
 
     /**
      * Unassign work function

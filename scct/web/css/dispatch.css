@@ -14,7 +14,7 @@
     padding-left: 1%;
 }
 #dispatchUnassignedTable{
-    height: 333px;
+    height: 430px;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -41,7 +41,7 @@
     margin-bottom: 5px;
 }
 
-.dispatch #dispatchButton, .dispatch-assigned #addSurveyorsButton {
+.dispatch .dispatch-assigned #addSurveyorsButton {
     position: fixed;
     bottom: 32px;
     right: 20px;
@@ -167,10 +167,11 @@
     margin-top:20%;
 }
 #dispatchButton{
-    position:fixed;
+    /*position:fixed;
     bottom: 37px;
     right: 20px;
-    z-index:42;
+    z-index:42;*/
+    margin-top: 6%;
 }
 #SurveyorGridviewTotalNumber{
     position: fixed;

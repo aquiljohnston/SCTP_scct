@@ -22,10 +22,6 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                     'options' => ['id' => 'dispatchActiveForm']
                 ]); ?>
                 <div id="dispatchUnassignedTableDropdown">
-                    <div class="division dropdowntitle">
-                        <?php // division Dropdown
-                        echo $form->field($model, 'division')->dropDownList($divisionList, ['id' => 'dispatch-division-id'])->label('Division'); ?>
-                    </div>
                     <div id="dispatchSearchContainer">
                         <div id="filtertitle" class="dropdowntitle">
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
@@ -33,16 +29,26 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
                         <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton']) */ ?>
                     </div>
                     <div class="col-lg-3 col-md-3 col-xs-3">
-                    <span id="dispatchPageSizeLabel">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
-                            ->label('Records Per Page', [
-                                'class' => 'recordsPerPage'
-                            ]); ?>
-                    </span>
+                        <span id="dispatchPageSizeLabel">
+                            <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                                ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                                ->label('Records Per Page', [
+                                    'class' => 'recordsPerPage'
+                                ]); ?>
+                        </span>
                     </div>
                 </div>
                 <?php ActiveForm::end(); ?>
+                <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+                <div id="addSurveyorButtonDispatch" class="col-lg-3 col-md-3 col-xs-3">
+
+                    <?php if ($can != 0) { ?>
+                        <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
+                    <?php } else {
+                        echo "";
+                    } ?>
+                </div>
+                <?php Pjax::end() ?>
             </div>
         </div>
     </div>
@@ -158,16 +164,6 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             <?php Pjax::end() ?>
         </div>
     </div>
-    <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-    <div id="addSurveyorButtonDispatch">
-
-        <?php if ($can != 0) { ?>
-            <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
-        <?php } else {
-            echo "";
-        } ?>
-    </div>
-    <?php Pjax::end() ?>
 
     <!-- The Modal -->
     <div id="dispatch-message" class="modal" style="display:none">
