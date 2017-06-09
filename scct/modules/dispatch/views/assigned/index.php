@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
 ?>
 <div class="dispatch-assigned">
-    <div id="assignedDropdownContainer">
+    <div id="assignedDropdownContainer" style="height: 105px;">
 
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
 
@@ -26,7 +26,7 @@ $pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
             ]); ?>
                 <div id="assignedDropdownTitlesContainer">
                 </div>
-                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <div class="col-xs-1 col-md-1 col-lg-1" style="margin-left: 65%">
                     <label style="color: #0067a6; margin-bottom: 7px;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
 
