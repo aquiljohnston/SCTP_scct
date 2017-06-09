@@ -47,13 +47,14 @@ $(function () {
     });
 
     //before expand section table, deselect all checkboxes from map table
-    dispatchGV.on('kvexprow.beforeLoad.kvExpandRowColumn', function (event, ind, key, extra, state) {
+    $(document).off('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV").on('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV", function (event, ind, key, extra, state) {
+    //dispatchGV.on('kvexprow.beforeLoad.kvExpandRowColumn', function (event, ind, key, extra, state) {
         console.log('before expand row');
     });
 
     //expandable row column listener
-    //$(document).off('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV").on('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV", function () {
-    dispatchGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
+    $(document).off('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV").on('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV", function (event, ind, key, extra, state) {
+    //dispatchGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
         //var isCheckDisabled = $('.dispatchCheckbox input[type=checkbox]').is(':disabled');
         var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
