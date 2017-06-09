@@ -619,7 +619,7 @@ $(function () {
                                 dateSelected = true;
                                 toggleVisible([goButton], "inline");
                                 if (exp !== undefined) {
-                                    toggleVisible([exportButton], "inline");
+                                    //toggleVisible([exportButton], "inline");
                                 }
                             }
                             else {
@@ -630,6 +630,7 @@ $(function () {
                     }
                     else { //parmdate != 1, parmbetweendate != 1, parminspector != 1
                         toggleVisible([goButton], "inline");
+                        toggleVisible([beginDateView, endDateView], "none");
                         if (exp !== undefined) {
                             toggleVisible([exportButton], "inline");
                         }
@@ -652,6 +653,7 @@ $(function () {
 
         });
         $('#go').on('click', function () {
+            toggleVisible([exportButton], "");
             if (isVisible(beginDate)) {
                 if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                     dateSelected = true;
