@@ -115,7 +115,7 @@ function getDispatchMapArray(dispatchMap_MapGrid, assignedUserID) {
         }
         return mapGridArray;
     }else{
-        return null
+        return mapGridArray;
     }
 }
 
