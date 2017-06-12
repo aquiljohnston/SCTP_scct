@@ -26,7 +26,6 @@ class AssignedController extends \app\controllers\BaseController
 
             Yii::trace("assignedfilter " . $model->assignedfilter);
             Yii::trace("pagesize " . $model->pagesize);
-            $divisionParams = $model->division;
             $assignedPageSizeParams = $model->pagesize;
             $assignedFilterParams = $model->assignedfilter;
         } else {
