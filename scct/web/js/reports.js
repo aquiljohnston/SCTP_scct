@@ -238,34 +238,36 @@ $(function () {
                     ReportType: parameters[7],
                 },
                 beforeSend: function () {
-                    $('#ajax-busy').show();
+                    $('#loading').show();
                 },
                 success: function (data) {
-                    $('#ajax-busy').hide();
+                    $('#loading').hide();
                     var results = JSON.parse(data);
-                    console.log(results.data);
+                    //console.log(results.data);
                     //console.log(parameters);
-                    //console.log(results);
+                    //console.log(results.data.length);
                     if (oTable != null) {
                         oTable.fnDestroy(); //have to be destory first, then rebuild
                         $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
                     }
 
-                    oTable = $('#reportTable').dataTable({
-                        "pagingType": "full_numbers",
-                        "scrollX": true,
-                        "data": results.data,
-                        "columns": results.columns,
-                        "columnDefs": [
-                            {
-                                /*"targets": [1],
-                                 "visible": false,
-                                 "searchable": false*/
-                            }
-                        ],
-                        "lengthMenu": [10, 25, 50, 100, 250, 500],
-                        "iDisplayLength": 250
-                    });
+                    if (results.data.length > 0) {
+                        oTable = $('#reportTable').dataTable({
+                            "pagingType": "full_numbers",
+                            "scrollX": true,
+                            "data": results.data,
+                            "columns": results.columns,
+                            "columnDefs": [
+                                {
+                                    /*"targets": [1],
+                                     "visible": false,
+                                     "searchable": false*/
+                                }
+                            ],
+                            "lengthMenu": [10, 25, 50, 100, 250, 500],
+                            "iDisplayLength": 250
+                        });
+                    }
 
                     //calculate height
                     $(".dataTable thead").on("click", "th.sorting_asc", function (event) {
@@ -412,6 +414,7 @@ $(function () {
         });
 
         $('#reportsDropdown').on('change', function () {
+            $('#go').prop('disabled', false);
             var selectedReport = $(this).val();
             var parms = reportsToParms[selectedReport];
             var exp = reportsToExports[selectedReport];
@@ -678,6 +681,7 @@ $(function () {
             if (dateSelected) {
                 buildTable();
             }
+            $(this).prop('disabled', true);
         });
 
         /*export to data to file with user specified name*/
