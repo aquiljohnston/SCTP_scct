@@ -311,7 +311,7 @@ class ProjectController extends BaseController
 		}
 	}
 	
-	public function actionAddUser($id)
+	public function actionAddUser($id = null)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -319,30 +319,56 @@ class ProjectController extends BaseController
 			return $this->redirect(['/login']);
 		}
 
+        $filterParam = null;
+
 		self::requirePermission("projectAddRemoveUsers");
-		
-		$url = 'project%2Fget-user-relationships&projectID='.$id;
-		$projectUrl = 'project%2Fview&id='.$id;
-
-		//indirect rbac
-		$response = Parent::executeGetRequest($url);
-		$projectResponse = Parent::executeGetRequest($projectUrl);
-
-
-		$users = json_decode($response,true);
-		$project = json_decode($projectResponse);
-
-		//load get data into variables
-		$unassignedData = $users["unassignedUsers"];
-		$assignedData = $users["assignedUsers"];
 
 		//create model for active form
 		$model = new \yii\base\DynamicModel([
-			'UnassignedUsers', 'AssignedUsers' ]);
+			'UnassignedUsers', 'AssignedUsers', 'filter' ]);
 		$model->addRule('UnassignedUsers', 'string')
-				 ->addRule('AssignedUsers',  'string');
+              ->addRule('AssignedUsers',  'string')
+              ->addRule('filter', 'string', ['max' => 32]);
 
+        // receive get request to filter user list
+        if ($model->load(Yii::$app->request->get())) {
 
+            if (isset($_GET['projectID']))
+                $id = $_GET['projectID'];
+            $filterParam = $model->filter;
+            $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
+            $projectUrl = 'project%2Fview&id='.$id;
+
+            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
+            $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
+
+            $users = json_decode($response,true);
+            $project = json_decode($projectResponse);
+            //load get data into variables
+            $unassignedData = $users["unassignedUsers"];
+            $assignedData = $users["assignedUsers"];
+            return $this -> render('add_user', [
+                'project' => $project,
+                'model' => $model,
+                'unassignedData' => $unassignedData,
+                'assignedData' => $assignedData,
+                'projectFilterParams' => $filterParam
+            ]);
+        }else{
+            $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
+            $projectUrl = 'project%2Fview&id='.$id;
+
+            //indirect rbac
+            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
+            $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
+
+            $users = json_decode($response,true);
+            $project = json_decode($projectResponse);
+
+            //load get data into variables
+            $unassignedData = $users["unassignedUsers"];
+            $assignedData = $users["assignedUsers"];
+        }
 
 		if ($model->load(Yii::$app->request->post()))
 		{
@@ -362,20 +388,19 @@ class ProjectController extends BaseController
 			$jsonData = json_encode($data);
 
 			//set post url
-			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
+			$postUrl = 'project%2Fadd-remove-users&projectID='.$id.'&filter='.$filterParam;
 			//execute post request
 			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
-		}
-		else
-		{
-		return $this -> render('add_user', [
-										'project' => $project,
-										'model' => $model,
-										'unassignedData' => $unassignedData,
-										'assignedData' => $assignedData,
-								]);
+		}else{
+            return $this -> render('add_user', [
+                                            'project' => $project,
+                                            'model' => $model,
+                                            'unassignedData' => $unassignedData,
+                                            'assignedData' => $assignedData,
+                                            'projectFilterParams' => $filterParam
+                                    ]);
 		}
 	}
 	
