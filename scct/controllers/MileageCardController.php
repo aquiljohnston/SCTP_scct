@@ -47,7 +47,7 @@ class MileageCardController extends BaseController
                 Yii::trace("pagesize: " . $model->pagesize);
                 $mileageCardPageSizeParams = $model->pagesize;
             } else {
-                $mileageCardPageSizeParams = 10;
+                $mileageCardPageSizeParams = 50;
             }
 
             //check current page at

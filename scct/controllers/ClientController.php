@@ -30,7 +30,7 @@ class ClientController extends BaseController
             ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
 
         $filterParam = "";
-        $userPageSizeParams = 10;
+        $userPageSizeParams = 50;
         // check if type was get, if so, get value from $model
         if ($model->load(Yii::$app->request->get())) {
             //$userPageSizeParams = $model->pagesize;

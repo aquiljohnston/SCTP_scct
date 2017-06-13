@@ -29,7 +29,7 @@ class AssignedController extends \app\controllers\BaseController
             $assignedPageSizeParams = $model->pagesize;
             $assignedFilterParams = $model->assignedfilter;
         } else {
-            $assignedPageSizeParams = 10;
+            $assignedPageSizeParams = 50;
             $assignedFilterParams = "";
         }
 

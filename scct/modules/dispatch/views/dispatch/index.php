@@ -10,7 +10,7 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
-$pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
+$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div class="dispatch">
     <div id="blue-header">

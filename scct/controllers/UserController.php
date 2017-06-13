@@ -44,7 +44,7 @@ class UserController extends BaseController
                 $listPerPageParam = $model->pagesize;
                 $filterParam = $model->filter;
             } else {
-                $listPerPageParam = 10;
+                $listPerPageParam = 50;
                 $filterParam = "";
             }
 
