@@ -40,7 +40,7 @@ class DispatchController extends \app\controllers\BaseController
                 $dispatchMapGridSelectedParams = $model->mapgridfilter;
                 $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
             } else {
-                $dispatchPageSizeParams = 10;
+                $dispatchPageSizeParams = 50;
                 $dispatchFilterParams = "";
                 $dispatchMapGridSelectedParams = "";
                 $dispatchSectionNumberSelectedParams = "";

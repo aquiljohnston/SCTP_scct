@@ -13,7 +13,7 @@ use kartik\form\ActiveForm;
 
 $this->title = 'User Management';
 $this->params['breadcrumbs'][] = $this->title;
-$pageSize = ["10" => "10", "25" => "25", "50" => "50", "100" => "100"];
+$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $column = [
 
     //'UserID',

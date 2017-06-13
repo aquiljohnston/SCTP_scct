@@ -48,7 +48,7 @@ class EquipmentController extends BaseController
                     $equipmentPageSizeParams = $_GET['per-page'];
                     Yii::trace("Post per-page: " . $_GET['per-page']);
                 } else {
-                    $equipmentPageSizeParams = 10;
+                    $equipmentPageSizeParams = 50;
                 }
             }
 

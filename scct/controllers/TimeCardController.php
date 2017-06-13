@@ -56,7 +56,7 @@ class TimeCardController extends BaseController
                 Yii::trace("pagesize: " . $model->pagesize);
                 $timeCardPageSizeParams = $model->pagesize;
             } else {
-                    $timeCardPageSizeParams = 10;
+                    $timeCardPageSizeParams = 50;
             }
 
             //check current page at
