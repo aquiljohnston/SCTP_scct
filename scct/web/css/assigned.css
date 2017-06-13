@@ -24,9 +24,9 @@
 
 #assignedSearchContainer {
     position: relative;
-    float: right;
+    float: left;
     width: 13%;
-    margin-right: 2%;
+    margin-left: 73%;
 }
 
 #assignedDropdownTitlesContainer .dropdowntitle {
@@ -54,8 +54,8 @@
 
 #AssignedPageSizeLabel {
     float: right;
-    margin-right: 2%;
-    margin-bottom: 0px;
+    margin: -39px auto;
+    width: 10%;
 }
 
 #AssignedPageSizeLabel span {

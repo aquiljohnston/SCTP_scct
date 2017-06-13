@@ -22,19 +22,18 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     'options' => ['id' => 'dispatchActiveForm']
                 ]); ?>
                 <div id="dispatchUnassignedTableDropdown">
-                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dipatchSearchCleanFilterButton'])  ?>
-                    <div id="dispatchSearchContainer" class="col-xs-2 col-md-2 col-lg-2" style="float:right">
+                    <span id="dispatchPageSizeLabel" style="float: right;">
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                            ->label('', [
+                                'class' => 'recordsPerPage'
+                            ]); ?>
+                    </span>
+                    <div id="dispatchSearchContainer" class="col-xs-2 col-md-2 col-lg-2" style="float:left; margin-left: 70%;">
                         <div id="filtertitle" class="dropdowntitle">
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
                         </div>
                     </div>
-                    <span id="dispatchPageSizeLabel" style="float: right;">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
-                            ->label('Records Per Page', [
-                                'class' => 'recordsPerPage'
-                            ]); ?>
-                    </span>
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
                 <div id="addSurveyorButtonDispatch" class="col-xs-2 col-md-2 col-lg-2">

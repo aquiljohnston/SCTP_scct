@@ -26,13 +26,20 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             ]); ?>
                 <div id="assignedDropdownTitlesContainer">
                 </div>
-                <div class="col-xs-1 col-md-1 col-lg-1" style="margin-left: 65%">
+                <span id="AssignedPageSizeLabel">
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                            ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
+                            ->label('Records Per Page', [
+                                'class' => 'recordsPerPage'
+                            ]); ?>
+                </span>
+                <div class="col-xs-1 col-md-1 col-lg-1" style="float: right; margin: 0px auto; width: 11%;">
                     <label style="color: #0067a6; margin-bottom: 7px;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
 
                     <?php if ($canUnassign != 0) { ?>
                         <div id="assiunassignedButton">
-                            <?php echo Html::button('UNASSIGN', ['class' => 'btn btn-primary',
+                            <?php echo Html::button('Remove Surveyor', ['class' => 'btn btn-primary',
                                 'id' => 'UnassignedButton']); ?>
                         </div>
                     <?php } else {
@@ -45,15 +52,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <div id="filtertitle" class="dropdowntitle">
                         <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter'])->label('Search'); ?>
                     </div>
-                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedSearchCleanFilterButton']) ?>
                 </div>
-                <span id="AssignedPageSizeLabel">
-                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                        ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
-                        ->label('Records Per Page', [
-                            'class' => 'recordsPerPage'
-                        ]); ?>
-                </span>
             <?php ActiveForm::end(); ?>
         </div>
     </div>

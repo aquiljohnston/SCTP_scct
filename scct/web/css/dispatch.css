@@ -212,13 +212,18 @@
 }
 #dispatchBtnPjax{
     float: right;
-    margin-top: 1.7%;
+    margin: 25px auto;
+    width: 10.9%;
 }
 #dipatchSearchCleanFilterButton{
     margin-top: 20px;
     width: 32px;
     cursor: pointer;
     float: right;
+}
+#dispatchPageSizeLabel{
+    margin: -39px auto;
+    width: 10%;
 }
 /*Pending changes pop-up missing modal ends*/
 
