@@ -24,8 +24,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 //'method' => 'get',
                 'options' => ['id' => 'AssignForm', 'data-pjax' => true],
             ]); ?>
-                <div id="assignedDropdownTitlesContainer">
-                </div>
                 <span id="AssignedPageSizeLabel">
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                             ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
@@ -195,5 +193,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
         <p>New surveyor(s) has been added successfully.</p>
     </div>
+</div>
 
 

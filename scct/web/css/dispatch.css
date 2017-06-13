@@ -15,7 +15,7 @@
 }
 #dispatchUnassignedTable{
     height: 430px;
-    overflow-y: scroll;
+    overflow-y: hidden;
     overflow-x: hidden;
 }
 .dispatch, .dispatch-assigned, .dispatch-assets {
@@ -25,6 +25,10 @@
 #dispatchGV {
     width: 100%;
     float: left;
+    max-height: 380px;
+    overflow-y: auto;
+    margin: 0 auto;
+    overflow-x: hidden;
 }
 .title{
     margin-top: -5px;
@@ -213,7 +217,7 @@
 #dispatchBtnPjax{
     float: right;
     margin: 25px auto;
-    width: 10.9%;
+    width: 11%;
 }
 #dipatchSearchCleanFilterButton{
     margin-top: 20px;
@@ -224,6 +228,9 @@
 #dispatchPageSizeLabel{
     margin: -39px auto;
     width: 10%;
+}
+#unassignedTablePagination .pagination {
+    margin: 5px 0 0 0;
 }
 /*Pending changes pop-up missing modal ends*/
 
