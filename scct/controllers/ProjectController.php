@@ -92,7 +92,8 @@ class ProjectController extends BaseController
 			return $this->redirect(['/login']);
 		}
 		$url = "project%2Fview&joinNames=true&id=$id";
-		$response = Parent::executeGetRequest($url); // indirect rbac
+		$response = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
+        Yii::trace("VIEW PROJECT : ".$response);
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
     }
@@ -115,12 +116,12 @@ class ProjectController extends BaseController
 			  
 		//get clients for form dropdown
 		$clientUrl = "client%2Fget-client-dropdowns";
-		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
 		$stateUrl = "state-code%2Fget-code-dropdowns";
-		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
@@ -152,7 +153,7 @@ class ProjectController extends BaseController
 			try{
 				// post url
 				$url= "project%2Fcreate";
-				$response = Parent::executePostRequest($url, $json_data);
+				$response = Parent::executePostRequest($url, $json_data, self::API_VERSION_2);
 				
 				$obj = json_decode($response, true);
 
@@ -190,19 +191,19 @@ class ProjectController extends BaseController
 		}
 		self::requirePermission("projectUpdate");
 		$getUrl = 'project%2Fview&id='.$id;
-		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true);
 
 		$model  = new Project();
 		$model->attributes = $getResponse;
 			  
 		//get clients for form dropdown
 		$clientUrl = "client%2Fget-client-dropdowns";
-		$clientResponse = Parent::executeGetRequest($clientUrl);
+		$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
 		$stateUrl = "state-code%2Fget-code-dropdowns";
-		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
@@ -234,7 +235,7 @@ class ProjectController extends BaseController
 			$json_data = json_encode($data);
 			try {
 				$putUrl = 'project%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data);
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
 				
 				$obj = json_decode($putResponse, true);
                 if(isset($obj["status"]) && $obj["status"] == 400) {
@@ -283,7 +284,7 @@ class ProjectController extends BaseController
             return $this->redirect(['/login']);
         }
         $url = 'project%2Fdeactivate&id='.$id;
-        Parent::executePostRequest($url, ""); //indirect RBAC
+        Parent::executePostRequest($url, "", self::API_VERSION_2); //indirect RBAC
         $this->redirect(['project/index']);
     }
 
@@ -303,7 +304,7 @@ class ProjectController extends BaseController
 			
 			$projectDropdownUrl = "project%2Fget-all";
 			//get projects by calling API route
-			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl); // indirect rbac
+			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, self::API_VERSION_2); // indirect rbac
 			//set up response data type
 			Yii::$app->response->format = 'json';
 
@@ -390,7 +391,8 @@ class ProjectController extends BaseController
 			//set post url
 			$postUrl = 'project%2Fadd-remove-users&projectID='.$id.'&filter='.$filterParam;
 			//execute post request
-			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
+            Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
 		}else{
@@ -419,8 +421,8 @@ class ProjectController extends BaseController
 		$projectUrl = 'project%2Fview&id='.$id;
 
 		//indirect rbac
-		$moduleResponse = Parent::executeGetRequest($moduleUrl);
-		$projectResponse = Parent::executeGetRequest($projectUrl);
+		$moduleResponse = Parent::executeGetRequest($moduleUrl, self::API_VERSION_2);
+		$projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
 
 
 		$modules = json_decode($moduleResponse,true);
@@ -462,7 +464,7 @@ class ProjectController extends BaseController
 			//TODO change url
 			$postUrl = 'project%2Fadd-remove-module&projectID='.$id;
 			//execute post request
-			$postResponse = Parent::executePostRequest($postUrl, $jsonData);
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
 			//refresh page
 			return $this->redirect(['add-module', 'id' => $project->ProjectID]);
 		}
