@@ -50,14 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html'
             ],
 			'ProjectModifiedDate',
-            [
-                'label' => 'Project Last Modified By',
-                'value' => function($model, $widget) {
-                    return Html::a($model->ModifiedUserName, ['user/view', 'id' => $model->ModifiedUserID]);;
-                },
-                'format' => 'html'
-            ],
-			
         ],
     ]) ?>
 
