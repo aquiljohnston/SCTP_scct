@@ -4,7 +4,8 @@ $(function(){
         $(this).val('Please wait ...')
             .attr('disabled','disabled');
         $('#projectAddUserResetBtn').attr('disabled','disabled');
-        $('#projectSortableInputForm').submit();
+        addRemoveUser();
+        //$('#projectSortableInputForm').submit();
     });
     $('#projectAddModuleSubmitBtn').on('click',function(){
         $(this).val('Please wait ...')
@@ -37,6 +38,33 @@ function reloadProjectGridView() {
         timeout: 99999
     }).done(function () {
         $('#loading').hide();
+    });
+}
+
+function addRemoveUser() {
+    var jqProjectAddUser = $('.project-add-user');
+    var form = jqProjectAddUser.find("#projectSortableInputForm");
+    if (form.find(".has-error").length) {
+        return false;
+    }
+    $('#loading').show();
+    $.ajax({
+        type: 'POST',
+        url: '/project/add-user',
+        data: form.serialize(),
+        timeout: 99999
+    }).done(function () {
+        var jqProjectAddUser = $('.project-add-user');
+        var form = jqProjectAddUser.find("#projectAdduserform");
+        $.pjax.reload({
+            type: 'GET',
+            url: '/project/add-user',
+            container: '#projectSortableView', // id to update content
+            data: form.serialize(),
+            timeout: 99999
+        }).done(function () {
+            $('#loading').hide();
+        });
     });
 }
 
