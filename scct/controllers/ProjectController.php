@@ -356,6 +356,9 @@ class ProjectController extends BaseController
                 'projectFilterParams' => $filterParam
             ]);
         }else{
+            if (isset($_POST['projectID']))
+                $id = $_POST['projectID'];
+
             $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
             $projectUrl = 'project%2Fview&id='.$id;
 
