@@ -4,7 +4,7 @@ $(function(){
         $(this).val('Please wait ...')
             .attr('disabled','disabled');
         $('#projectAddUserResetBtn').attr('disabled','disabled');
-        $('#projectAdduserform').submit();
+        $('#projectSortableInputForm').submit();
     });
     $('#projectAddModuleSubmitBtn').on('click',function(){
         $(this).val('Please wait ...')

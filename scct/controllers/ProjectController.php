@@ -389,10 +389,9 @@ class ProjectController extends BaseController
 			$jsonData = json_encode($data);
 
 			//set post url
-			$postUrl = 'project%2Fadd-remove-users&projectID='.$id.'&filter='.$filterParam;
+			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
 			//execute post request
 			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
-            Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
 		}else{
