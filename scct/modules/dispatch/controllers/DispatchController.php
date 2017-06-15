@@ -47,8 +47,8 @@ class DispatchController extends \app\controllers\BaseController
             }
 
             // get the page number for assigned table
-            if (isset($_GET['userPage'])) {
-                $pageAt = $_GET['userPage'];
+            if (isset($_GET['dispatchPageNumber']) && $_GET['dispatchTableRecordsUpdate'] != "true") {
+                $pageAt = $_GET['dispatchPageNumber'];
             } else {
                 $pageAt = 1;
             }

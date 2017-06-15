@@ -15,6 +15,7 @@ $(function () {
 
     //page size listener
     $(document).off('change', '#dispatchPageSize').on('change', '#dispatchPageSize', function () {
+        $('#dispatchTableRecordsUpdate').val(true);
         reloadDispatchGridView();
     });
 
@@ -73,6 +74,30 @@ $(function () {
             $("#dispatchButton").prop('disabled', true);
         }
     });
+
+    //pagination listener on dispatch page
+    $(document).off('click', '#unassignedTablePagination .pagination li a').on('click', '#unassignedTablePagination .pagination li a', function (event) {
+        event.preventDefault();
+        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+        $('#dispatchPageNumber').val(page);
+        var form = $("#dispatchActiveForm");
+        $('#loading').show();
+        $.pjax.reload({
+            container: "#dispatchUnassignedGridview",
+            timeout: 99999,
+            url: form.attr("action"),
+            type: "GET",
+            data: form.serialize()
+        }).done(function () {
+        });
+        $('#dispatchUnassignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
+            $('#loading').hide();
+        });
+        $('#dispatchUnassignedGridview').on('pjax:error', function (event, data, status, xhr, options) {
+            //window.location.reload();
+            console.log("Error");
+        });
+    });
 });
 
 function reloadDispatchGridView() {
@@ -89,6 +114,7 @@ function reloadDispatchGridView() {
         data: form.serialize(),
         timeout: 99999
     }).done(function () {
+        $('#dispatchTableRecordsUpdate').val(false);
         $('#loading').hide();
     });
 }
