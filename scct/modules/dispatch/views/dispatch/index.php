@@ -29,8 +29,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 'class' => 'recordsPerPage'
                             ]); ?>
                     </span>
-                    <div id="dispatchSearchContainer" class="col-xs-2 col-md-2 col-lg-2" style="float:left; margin-left: 65%;">
-                        <div id="filtertitle" class="dropdowntitle">
+                    <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3" style="float:left; margin-left: 60%;">
+                        <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
                         </div>
                     </div>

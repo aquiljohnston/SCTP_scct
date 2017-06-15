@@ -173,6 +173,7 @@
     right: 20px;
     z-index:42;*/
     margin-top: 6%;
+    padding: 6px 16px;
 }
 #SurveyorGridviewTotalNumber{
     position: fixed;
@@ -231,6 +232,9 @@
 }
 #unassignedTablePagination .pagination {
     margin: 5px 0 0 0;
+}
+.field-dispatchFilter{
+    width: 100%;
 }
 /*Pending changes pop-up missing modal ends*/
 
