@@ -51,10 +51,12 @@ function addRemoveUser() {
     $.ajax({
         type: 'POST',
         url: '/project/add-user',
+        //container: '#projectSortableView', // id to update content
         data: form.serialize(),
         timeout: 99999
     }).done(function () {
-        var jqProjectAddUser = $('.project-add-user');
+        $('#loading').hide();
+        /*var jqProjectAddUser = $('.project-add-user');
         var form = jqProjectAddUser.find("#projectAdduserform");
         $.pjax.reload({
             type: 'GET',
@@ -64,7 +66,7 @@ function addRemoveUser() {
             timeout: 99999
         }).done(function () {
             $('#loading').hide();
-        });
+        });*/
     });
 }
 
