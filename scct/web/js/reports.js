@@ -604,6 +604,7 @@ $(function () {
                             if ($('#datePickerBeginDateView').val() !== "" && $('#datePickerEndDateView').val() !== "") {
                                 dateSelected = true;
                                 toggleVisible([goButton], "inline");
+                                $('#go').prop('disabled', false);
                                 if (exp !== undefined) {
                                     toggleVisible([exportButton], "inline");
                                 }
@@ -620,6 +621,7 @@ $(function () {
                             }
                             if ($('#datePickerBeginDateView').val() !== "" && $('#datePickerEndDateView').val() !== "") {
                                 dateSelected = true;
+                                $('#go').prop('disabled', false);
                                 toggleVisible([goButton], "inline");
                                 if (exp !== undefined) {
                                     //toggleVisible([exportButton], "inline");
