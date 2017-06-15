@@ -34,6 +34,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
                         </div>
                     </div>
+                    <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
+                    <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
                 <div id="addSurveyorButtonDispatch" class="col-xs-2 col-md-2 col-lg-2">
