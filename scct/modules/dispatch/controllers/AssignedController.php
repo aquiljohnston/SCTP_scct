@@ -34,8 +34,8 @@ class AssignedController extends \app\controllers\BaseController
         }
 
         // get the page number for assigned table
-        if (isset($_GET['userPage'])) {
-            $pageAt = $_GET['userPage'];
+        if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
+            $pageAt = $_GET['assignedPageNumber'];
         } else {
             $pageAt = 1;
         }

@@ -51,6 +51,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter'])->label('Search'); ?>
                     </div>
                 </div>
+            <input id="assignedTableRecordsUpdate" type="hidden" name="assignedTableRecordsUpdate" value="no" />
+            <input id="assignedPageNumber" type="hidden" name="assignedPageNumber" value="1" />
             <?php ActiveForm::end(); ?>
         </div>
     </div>
