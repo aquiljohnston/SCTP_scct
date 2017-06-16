@@ -46,7 +46,7 @@ class AssignedController extends \app\controllers\BaseController
                 'page' => $pageAt
             ]);
         $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        $assignedData = $getAssignedDataResponse['assets'];
+        $assignedData = $getAssignedDataResponse['mapGrids'];
 
         //todo: check permission to un-assign work
         $canUnassign = 1;
@@ -118,6 +118,90 @@ class AssignedController extends \app\controllers\BaseController
             throw new ForbiddenHttpException;
         } catch (\Exception $e) {
             Yii::$app->runAction('login/user-logout');
+        }
+    }
+
+    /**
+     * render expandable section row
+     * @return string|Response
+     */
+    public function actionViewSection()
+    {
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        $model = new \yii\base\DynamicModel([
+            'assignedfilter', 'pagesize', 'mapGridSelected'
+        ]);
+        $model->addRule('assignedfilter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32])
+            ->addRule('mapGridSelected', 'string', ['max' => 32]);
+
+        //check request
+        if ($model->load(Yii::$app->request->queryParams)) {
+
+            Yii::trace("assignedfilter " . $model->assignedfilter);
+            Yii::trace("pagesize " . $model->pagesize);
+            $assignedPageSizeParams = $model->pagesize;
+            $assignedFilterParams = $model->assignedfilter;
+            $mapGridSelected = $model->mapGridSelected;
+        } else {
+            $assignedPageSizeParams = 50;
+            $assignedFilterParams = "";
+            $mapGridSelected = "";
+        }
+
+        // get the page number for assigned table
+        if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
+            $pageAt = $_GET['assignedPageNumber'];
+        } else {
+            $pageAt = 1;
+        }
+
+        // get the key to generate section table
+        if (isset($_POST['expandRowKey']))
+            $mapGridSelected = $_POST['expandRowKey'];
+        else
+            $mapGridSelected = "";
+
+        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+                'mapGridSelected' => $mapGridSelected,
+                'filter' => $assignedFilterParams,
+                'listPerPage' => $assignedPageSizeParams,
+                'page' => $pageAt
+            ]);
+        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $sectionData = $getSectionDataResponseResponse['sections'];
+
+        //set paging on assigned table
+        $pages = new Pagination($getSectionDataResponseResponse['pages']);
+
+        $sectionDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $sectionData,
+            'pagination' => false,
+        ]);
+
+        $sectionDataProvider->key = 'MapGrid';
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_section-expand', [
+                'sectionDataProvider' => $sectionDataProvider,
+                'model' => $model,
+                'pages' => $pages,
+                'assignedPageSizeParams' => $assignedPageSizeParams,
+                'assignedFilterParams' => $assignedFilterParams,
+            ]);
+        } else {
+            return $this->render('_section-expand', [
+                'sectionDataProvider' => $sectionDataProvider,
+                'model' => $model,
+                'pages' => $pages,
+                'assignedPageSizeParams' => $assignedPageSizeParams,
+                'assignedFilterParams' => $assignedFilterParams,
+            ]);
         }
     }
 

@@ -74,6 +74,28 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'export' => false,
                 'columns' => [
                     [
+                        'class' => 'kartik\grid\ExpandRowColumn',
+                        'expandAllTitle' => 'Expand all',
+                        'collapseTitle' => 'Collapse all',
+                        'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
+                        'value' => function ($model, $key, $index, $column) {
+                            /*if ($model['sectionCount'] == null){
+                                return GridView::ROW_NONE;
+                            }*/
+                            return GridView::ROW_COLLAPSED;
+                        },
+
+                        'detailUrl' => Url::to(['assigned/view-section'])
+                        /*$searchModel = new CreateBookingsSearch();
+                        $searchModel->booking_id = $model ->id;
+                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+                        return Yii::$app->controller->renderPartial('_expandrowview.php',[
+                            'searchModel' => $searchModel,
+                            'dataProvider' => $dataProvider,
+                        ]);*/
+                    ],
+                    [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
                         'headerOptions' => ['class' => 'text-center'],
@@ -84,8 +106,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }*/
                     ],
                     [
-                        'label' => 'Assigned To',
-                        'attribute' => 'AssignedTo',
+                        'label' => 'Compliance Start',
+                        'attribute' => 'ComplianceStart',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
@@ -94,8 +116,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }*/
                     ],
                     [
-                        'label' => 'InspectionType',
-                        'attribute' => 'InspectionType',
+                        'label' => 'Compliance End',
+                        'attribute' => 'ComplianceEnd',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
@@ -104,8 +126,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }*/
                     ],
                     [
-                        'label' => 'Assigned By',
-                        'attribute' => 'AssignedBy',
+                        'label' => 'Assigned WorkOrder Count',
+                        'attribute' => 'AssignedWorkOrderCount',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
@@ -130,10 +152,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'contentOptions' => ['class' => 'unassignCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            if ($model['WorkQueueStatus'] != 100) {
+                            if (/*$model['WorkQueueStatus'] != 100&&*/ $model['AssignedCount'] == "MANY") {
                                 return ['disabled' => true];
                             } else {
-                                return ['AssignedToID' => $model['AssignedToID'],'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                                return ['AssignedToID' => $model['UIDList'],'MapGrid' => $model['MapGrid'], 'disabled' => false ];
                             }
                         }
                     ]
@@ -150,8 +172,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             <div class="GridviewTotalNumber">
                 <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
             </div>
+            <?php Pjax::end() ?>
         </div>
-        <?php Pjax::end() ?>
     </div>
 
     <!-- The Modal -->
