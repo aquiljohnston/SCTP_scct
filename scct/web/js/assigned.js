@@ -3,6 +3,7 @@
  */
 $(function () {
 
+    var assignedGV = $("#assignedGV");
     // Unassign Table Pagination default listener
     /*function AssignedPaginationListener() {
         $(document).off('click', '#unassignedTablePagination .pagination li a').on('click', '#unassignedTablePagination .pagination li a', function (event) {
@@ -71,6 +72,12 @@ $(function () {
             console.log("Error");
             //window.location.reload(); // Can't leave them stuck
         });
+    });
+
+    //expandable row column listener
+    //$(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
+      assignedGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
+        console.log('Toggled expand row');
     });
 });
 
