@@ -16,7 +16,6 @@
 
 #assignedDropdownTitlesContainer {
     position: relative;
-    /*float: left;*/
     width: 100%;
 }
 
@@ -30,7 +29,6 @@
 #assignedDropdownTitlesContainer .dropdowntitle {
     position: relative;
     float: left;
-    /*width: 35%;*/
     padding-right: 5px;
     color: #0067a6;
 }
@@ -57,10 +55,7 @@
 }
 
 #AssignedPageSizeLabel span {
-    /*position: absolute;*/
-    /*right: 8%;*/
     color: #0067a6;
-    /*margin-top: -35px;*/
     display: inline !important;
 }
 .recordsPerPage{
@@ -127,7 +122,6 @@
     position: relative;
     float: left;
     width: 100%;
-    /*margin: 0 10%;*/
 }
 
 #assignedaddsurveyordialogtitle .dropdowntitle {
@@ -146,7 +140,6 @@
     max-height: 400px;
     overflow-y: auto;
     width: 98%;
-    /*margin: 0 1%;*/
 }
 
 #addSurveyorModal .modal-content {
@@ -218,46 +211,4 @@
 #UnassignedButton{
     width: 110%;
 }
-
-
-
-
-/*-----------css for the 1360*768 resolution---------------*/
-/*@media only screen and (min-width: 1300px) {*/
-    /*#assginedGridViewContainer {*/
-        /*margin-top: 10%;*/
-    /*}*/
-
-    /*#assignedTable .table-responsive {*/
-        /*max-height: 265px;*/
-    /*}*/
-
-    /*#assignedTable .table-responsive {*/
-        /*width: 99.5%;*/
-    /*}*/
-
-    /*#addSurveyorsGridview #w1-container {*/
-        /*max-height: 220px;*/
-    /*}*/
-/*}*/
-
-/*-----------css for the 1360*768 resolution ends---------------*/
-
-/*-----------css for the 1920*1028 resolution---------------*/
-/*@media only screen and (min-width: 1900px) {*/
-    /*#assginedGridViewContainer {*/
-        /*margin-top: 10%;*/
-    /*}*/
-
-    /*#assignedTable .table-responsive {*/
-        /*max-height: 710px;*/
-    /*}*/
-
-    /*#addSurveyorsGridview #w1-container {*/
-        /*max-height: 500px;*/
-    /*}*/
-/*}*/
-
-/*-----------css for the 1920*1028 resolution ends---------------*/
-
 /*assigned css ends*/
