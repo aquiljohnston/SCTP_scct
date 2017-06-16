@@ -64,9 +64,6 @@
 #dispatchTab h3{
     padding-left:1%;
 }
-#blue-header{
-    padding-right:0px !important;
-}
 .summary{
     margin-top: 10px;
 }
@@ -79,8 +76,6 @@
 }
 #dispatch-dropDownList-form .dropdowntitle{
     position:relative;
-    float:left;
-    /*width:40%;*/
     padding-right:5px;
     color:#0067a6;
 }
@@ -109,9 +104,6 @@
     float:left;
     width:100%;
     margin-right:1%;
-}
-#dispatchUnassignedTableDropdown .dropdowntitle{
-    /*width:22%;*/
 }
 #unAssignedPageSizeLabel,#dispatchSurveyorPageSizeLabel{
     float:right;
@@ -143,9 +135,6 @@
     width:32px;
     cursor:pointer;
 }
-#dispatchUnassignedTable .pagination{
-    margin:20px 23% 10px 23%;
-}
 #dispatchSurveyorsContainer{
     position:relative;
     float:left;
@@ -168,10 +157,6 @@
     margin-top:20%;
 }
 #dispatchButton{
-    /*position:fixed;
-    bottom: 37px;
-    right: 20px;
-    z-index:42;*/
     margin-top: 6%;
     padding: 6px 16px;
 }
