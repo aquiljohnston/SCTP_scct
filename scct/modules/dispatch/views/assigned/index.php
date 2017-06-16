@@ -48,7 +48,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
                 <div id="assignedSearchContainer">
                     <div id="filtertitle" class="dropdowntitle">
-                        <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter'])->label('Search'); ?>
+                        <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
                 </div>
             <input id="assignedTableRecordsUpdate" type="hidden" name="assignedTableRecordsUpdate" value="no" />
