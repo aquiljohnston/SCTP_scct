@@ -31,7 +31,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     </span>
                     <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3" style="float:left; margin-left: 60%;">
                         <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
-                            <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter'])->label('Search'); ?>
+                            <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
                         </div>
                     </div>
                     <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
