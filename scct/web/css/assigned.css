@@ -6,13 +6,11 @@
 
 /*updated css */
 #assignedDropdownContainer {
-    /*position: fixed;*/
     float: left;
     width: 100%;
     background-color: #E6F0F6;
     z-index: 3;
     border-bottom: 1px solid black;
-    /*padding-left: 1%;*/
     padding:10px;
 }
 
