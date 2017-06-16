@@ -1,8 +1,6 @@
 /*dispatch css*/
 .dispatch{
-    /*height: 600px;*/
     overflow-y: hidden;
-    /*border: solid;*/
 }
 
 #dispatchTab{
@@ -54,7 +52,6 @@
 
 /*pending changes start*/
 #dispatchTab{
-    /*position: fixed;*/
     float:left;
     width: 100%;
     background-color: #E6F0F6;
@@ -223,54 +220,9 @@
 }
 /*Pending changes pop-up missing modal ends*/
 
-/*-----------css for the 1360*768 resolution---------------*/
-/*@media only screen and (min-width: 1300px) {*/
-/*#dispatchGridViewContainer{*/
-/*margin-top:9%;*/
-/*}*/
-/*#dispatchUnassignedTable .table-responsive {*/
-/*max-height: 350px;*/
-/*}*/
-/*#dispatchSurveyorsGridview .table-responsive{*/
-/*max-height:210px;*/
-/*}*/
-/*#dispatchUnassignedTable .pagination{*/
-/*margin:5px 23%;*/
-/*}*/
-/*}*/
-/*-----------css for the 1360*768 resolution ends---------------*/
-
-/*-----------css for the 1920*1028 resolution---------------*/
-/*@media only screen and (min-width: 1900px) {*/
-/*#dispatchGridViewContainer{*/
-/*!*margin-top:10%;*!*/
-/*}*/
-/*#dispatchUnassignedTable .table-responsive {*/
-/*max-height: 700px;*/
-/*}*/
-/*#dispatchSurveyorsGridview .table-responsive{*/
-/*max-height:710px;*/
-/*}*/
-/*#dispatchSurveyorsContainer{*/
-/*width:26.5%;*/
-/*}*/
-/*#dispatchUnassignedTable{*/
-/*margin-right:1%;*/
-/*}*/
-/*#dispatchUnassignedTable .pagination{*/
-/*margin:20px 23% 10px 23%;*/
-/*}*/
-/*}*/
-/*-----------css for the 1920*1028 resolution ends---------------*/
-
-/*pending changes end*/
-
-/*dispatch css ends*/
-/*assigned css*/
 .dispatch-assigned #unAssignButton{
     position:fixed;
     bottom: 32px;
     right: 180px;
     z-index:42;
 }
-/*assigned css ends*/
