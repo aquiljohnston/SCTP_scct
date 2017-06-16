@@ -267,10 +267,6 @@
 
 /*dispatch css ends*/
 /*assigned css*/
-#assignedGV{
-    width:100%;
-    float:left;
-}
 .dispatch-assigned #unAssignButton{
     position:fixed;
     bottom: 32px;
