@@ -42,8 +42,8 @@ use yii\bootstrap\Modal;
                 }*/
             ],
             [
-                'label' => 'Available WorkOrder',
-                'attribute' => 'AvailableWorkOrderCount',
+                'label' => 'Work Queue Count',
+                'attribute' => 'AssignedWorkQueueCount',
                 //'label' => false,
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
@@ -76,7 +76,7 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Remove User',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
+                'contentOptions' => ['class' => 'assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
                         return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
