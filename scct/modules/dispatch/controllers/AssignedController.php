@@ -46,6 +46,7 @@ class AssignedController extends \app\controllers\BaseController
                 'page' => $pageAt
             ]);
         $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("ASSIGNED DATA: ".json_encode($getAssignedDataResponse));
         $assignedData = $getAssignedDataResponse['mapGrids'];
 
         //todo: check permission to un-assign work
@@ -173,6 +174,7 @@ class AssignedController extends \app\controllers\BaseController
                 'page' => $pageAt
             ]);
         $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("ASSIGNED SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['sections'];
 
         //set paging on assigned table
@@ -184,7 +186,7 @@ class AssignedController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
 
-        $sectionDataProvider->key = 'MapGrid';
+        $sectionDataProvider->key = 'SectionNumber';
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
