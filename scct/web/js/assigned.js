@@ -6,38 +6,10 @@ $(function () {
     var assignedGV = $("#assignedGV");
     var assignedSection_SectionNumber = [];
     var assignedMap_MapGrid = [];
-    // Unassign Table Pagination default listener
-    /*function AssignedPaginationListener() {
-        $(document).off('click', '#unassignedTablePagination .pagination li a').on('click', '#unassignedTablePagination .pagination li a', function (event) {
-            event.preventDefault();
-            var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
-            $('#dispatchPageNumber').val(page);
-            var form = $("#dispatchActiveForm");
-            $('#loading').show();
-            $.pjax.reload({
-                container: "#dispatchUnassignedGridview",
-                timeout: 99999,
-                url: form.attr("action"),
-                type: "post",
-                data: form.serialize()
-            }).done(function () {
-                //resetDispatchButton();
-            });
-            $('#dispatchUnassignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
-                $('#loading').hide();
-            });
-            $('#dispatchUnassignedGridview').on('pjax:error', function (event, data, status, xhr, options) {
-                //window.location.reload();
-                console.log("Error");
-            });
-        });
-    }*/
 
     $('#UnassignedButton').prop('disabled', false); //TO DISABLED
-    /*$('#dialog-unassign').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});
-     $('#dialog-add-surveyor').dialog({autoOpen: false, modal: true, show: "blind", hide: "blind"});*/
 
-    //dispatchUnassignedContainer Seachfilter listener
+    //assigned Seachfilter listener
     $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
@@ -77,17 +49,28 @@ $(function () {
 
     //expandable row column listener
     //$(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
-      assignedGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
+      //assignedGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
+      assignedGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
+        $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
+        assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
+        console.log("assignedMap_MapGrid: " +assignedMap_MapGrid.length);
+
+        //check to see if need to disable/enable add surveyor button
+        if (assignedMap_MapGrid.length > 0){
+          $("#UnassignedButton").prop('disabled', false);
+        }else {
+          $("#UnassignedButton").prop('disabled', true);
+        }
     });
 
-    // set constrains: user can only dispatch one map to one surveyor at a time
+    // set constrains:
     $(document).off('click', '.unassignCheckbox input[type=checkbox]').on('click', '.unassignCheckbox input[type=checkbox]', function () {
         assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (assignedMap_MapGrid.length > 0) {
-            $("#dispatchButton").prop('disabled', false);
+            $("#UnassignedButton").prop('disabled', false);
         } else
-            $("#dispatchButton").prop('disabled', true);
+            $("#UnassignedButton").prop('disabled', true);
         console.log(assignedMap_MapGrid);
     });
 
@@ -105,7 +88,7 @@ $(function () {
     });
 
     if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0)
-        unassignCheckboxListener();
+        unassignCheckboxListener(assignedMap_MapGrid, assignedSection_SectionNumber);
 
     $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', function () {
         console.log(getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber));
@@ -117,19 +100,20 @@ $(function () {
         });
         $('#unassignedConfirmBtn').click(function () {
             $("#unassigned-message").css("display", "none");
-            unassignButtonListener();
+            unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber);
         });
     });
 });
 
-function unassignButtonListener() {
+function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber) {
     var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
     var assignedGV = "assignedGV";
     var assignedSectionGV = "assignedSectionGV";
     var mapGridAssignedUsers = getUIDList(assignedMap_MapGrid, assignedGV);
+    console.log(mapGridAssignedUsers);
     var mapGridSectionAssignedUsers = getUIDList(assignedSection_SectionNumber, assignedSectionGV);
-    unassignMapData = getAssignedMapArray(assignedMap_MapGrid, mapGridAssignedUsers);
-    unassignSectionData = getAssignedSectionArray(assignedSection_SectionNumber, mapGridSectionAssignedUsers);
+    unassignMapData = getAssignedMapArray(assignedMap_MapGrid, mapGridAssignedUsers[0]);
+    unassignSectionData = getAssignedSectionArray(assignedSection_SectionNumber, mapGridSectionAssignedUsers[0]);
     console.log("Checked Rows " + pks);
     var form = $("#AssignForm");
     $('#loading').show();
@@ -158,7 +142,7 @@ function unassignButtonListener() {
         });
     });
 
-    // disable dispatch button again
+    // disable remove surveyor button again
     $('#UnassignedButton').prop('disabled', true); //TO DISABLED
 }
 
@@ -206,7 +190,7 @@ function getAssignedUserIDs() {
     return AssignedToIDs;
 }
 
-// Generate Dispatch Map Array;
+// Generate Assigned Map Array;
 function getAssignedMapArray(assignedMap_MapGrid, assignedUserID) {
     var mapGridArray = [];
     if (assignedMap_MapGrid.length > 0){
@@ -226,14 +210,14 @@ function getAssignedMapArray(assignedMap_MapGrid, assignedUserID) {
 function getUIDList(selectedKeys, gridViewID) {
     var UIDList = [];
     var condition = "";
-    if (gridViewID.equals("assignedGV"))
+    if (gridViewID == "assignedGV")
         condition = "MapGrid=";
     else
         condition = "SectionNumber=";
 
-    if (UIDList.length > 0){
-        for (var i = 0; i < UIDList.length; i++){
-            var UID = $("#assignedGridview "+gridViewID+" input["+condition + selectedKeys[i] + "]").attr("AssignedToID");
+    if (selectedKeys.length > 0){
+        for (var i = 0; i < selectedKeys.length; i++){
+            var UID = $("#assignedGridview #"+gridViewID+" input["+condition + selectedKeys[i] + "]").attr("AssignedToID");
             UIDList.push(UID);
         }
         return UIDList;
@@ -242,21 +226,21 @@ function getUIDList(selectedKeys, gridViewID) {
     }
 }
 
-// Generate Dispatch Section Array;
+// Generate Assigned Section Array;
 function getAssignedSectionArray(assignedSection_SectionNumber, assignedUserID) {
-    var dispatchSectionArray = [];
+    var assignedSectionArray = [];
     if (assignedSection_SectionNumber.length > 0) {
         for (var i = 0; i < assignedSection_SectionNumber.length; i++) {
             var MapGrid = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[i] + "]").attr("MapGrid");
-            dispatchSectionArray.push({
+            assignedSectionArray.push({
                 MapGrid: MapGrid,
                 SectionNumber: assignedSection_SectionNumber[i],
                 AssignedUserID: assignedUserID
             });
         }
-        return dispatchSectionArray;
+        return assignedSectionArray;
     }else{
-        return null;
+        return assignedSectionArray;
     }
 }
 

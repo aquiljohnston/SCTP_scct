@@ -103,7 +103,7 @@ class AssignedController extends \app\controllers\BaseController
             if (Yii::$app->request->isAjax) {
                 Yii::trace("call Unassign");
                 $data = Yii::$app->request->post();
-                $data = self::GenerateUnassignedData($data['MapGrid'], $data['AssignedToIDs']);
+                //$data = self::GenerateUnassignedData($data['MapGrid'], $data['AssignedToIDs']);
                 $json_data = json_encode($data);
                 Yii::trace("Unassigned Data: ".$json_data);
 
