@@ -106,6 +106,19 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }*/
                     ],
                     [
+                        'label' => 'Assigned User(s)',
+                        'attribute' => 'SearchString',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                        'format' => 'html',
+                        'value' => function ($model) {
+                            if ($model['AssignedCount'] == "MANY")
+                                return "MANY";
+                            else
+                                return $model['SearchString'];
+                        }
+                    ],
+                    [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
                         'headerOptions' => ['class' => 'text-center'],
