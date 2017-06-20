@@ -155,7 +155,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             if (/*$model['WorkQueueStatus'] != 100&&*/ $model['AssignedCount'] == "MANY") {
                                 return ['disabled' => true];
                             } else {
-                                return ['AssignedToID' => $model['UIDList'],'MapGrid' => $model['MapGrid'], 'disabled' => false ];
+                                return ['AssignedToID' => $model['UIDList'],'MapGrid' => $model['MapGrid'], 'disabled' => false, 'UserName' => $model['SearchString'] ];
                             }
                         }
                     ]
@@ -184,7 +184,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 <h3>Do you want to<br>un-assign the selected surveyors?</h3>
             </div>
             <div class="modal-body">
-                <p>Press confirm to continue to un-assign <br> the selected surveyors. </p>
+                <p>Press confirm to continue to un-assign <br> <span class="unassignedUserName"></span> . </p>
                 <div id="unassignedConfirmButton" class="unassignedbtn">
                     <?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
                 </div>

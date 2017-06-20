@@ -79,7 +79,7 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
+                        return ['AssignedToID' => $model['UIDList'],'SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']];
                     else
                         return "";
                 }
