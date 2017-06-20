@@ -32,6 +32,19 @@ use yii\bootstrap\Modal;
                 }*/
             ],
             [
+                'label' => 'Assigned User(s)',
+                'attribute' => 'SearchString',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'format' => 'html',
+                'value' => function ($model) {
+                    if ($model['AssignedCount'] == "MANY")
+                        return "MANY";
+                    else
+                        return $model['SearchString'];
+                }
+            ],
+            [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
                 'headerOptions' => ['class' => 'text-center'],
