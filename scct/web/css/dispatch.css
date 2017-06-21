@@ -99,7 +99,7 @@
 #dispatchUnassignedTableDropdown{
     position:relative;
     float:left;
-    width:100%;
+    width:99%;
     margin-right:1%;
 }
 #unAssignedPageSizeLabel,#dispatchSurveyorPageSizeLabel{
@@ -154,8 +154,7 @@
     margin-top:20%;
 }
 #dispatchButton{
-    margin-top: 6%;
-    padding: 6px 16px;
+    width: 110%;
 }
 #SurveyorGridviewTotalNumber{
     position: fixed;
@@ -198,9 +197,6 @@
     background-color:white;
 }
 #dispatchBtnPjax{
-    float: right;
-    margin: 25px auto;
-    width: 11%;
 }
 #dipatchSearchCleanFilterButton{
     margin-top: 20px;
