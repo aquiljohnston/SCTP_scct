@@ -226,3 +226,6 @@
     right: 180px;
     z-index:42;
 }
+.ViewAssetBtn_DispatchMapGrid{
+    cursor: pointer;
+}
