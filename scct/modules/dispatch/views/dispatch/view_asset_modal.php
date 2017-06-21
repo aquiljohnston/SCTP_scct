@@ -21,11 +21,11 @@ use kartik\grid\GridView;
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
         ]); ?>
-        <div class="surveyorDropDownContainer">
+        <!--<div class="surveyorDropDownContainer">
             <div id="surveyorDropdownList" class="dropdowntitle">
-                <?php echo $form->field($model, 'surveyor')->dropDownList($surveyorList, ['id' => 'asset-surveyor-list-id'])->label('Add Surveyor'); ?>
+                <?php /*echo $form->field($model, 'surveyor')->dropDownList($surveyorList, ['id' => 'asset-surveyor-list-id'])->label('Add Surveyor'); */?>
             </div>
-        </div>
+        </div>-->
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
     </div>
@@ -41,35 +41,46 @@ use kartik\grid\GridView;
         'dataProvider' => $assetDataProvider,
         'export' => false,
         'pjax' => true,
+        'summary' => '',
         'columns' => [
-            /*[
+            [
                 'class' => 'kartik\grid\CheckboxColumn',
                 'header' => 'Select',
                 'contentOptions' => ['class' => 'AddSurveyor'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if (!empty($addSurveyorsDataProvider)) {
-                        return ['UserID' => $model["UserID"]];
+                    if (!empty($model)) {
+                        return ['WorkOrderID' => $model["WorkOrderID"]];
                     }
                 },
             ],
             [
-                'label' => 'Name',
-                'attribute' => 'Name',
+                'label' => 'Address',
+                'attribute' => 'HouseNumber',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'format' => 'raw',
+                'value' => function($model){
+                    return $model['HouseNumber'] . " " . $model['Street']. " " .$model['AptSuite']. "<br/>" . $model['City'] . " , " . $model['State'] . " " . $model['Zip'];
+                }
+            ],
+            [
+                'label' => 'Meter Number',
+                'attribute' => 'MeterNumber',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'label' => 'User Name',
-                'attribute' => 'UserName',
+                'label' => 'Account Phone#',
+                'attribute' => 'AccountTelephoneNumber',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-            ],*/
+            ],
         ],
     ]); ?>
 
     <?php Pjax::end() ?>
 </div>
-<div id="assetDispatchButtonContainer">
-    <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary modalDispatchBtn', 'id' => 'assetDispatchButton']); ?>
-</div>
+<!--<div id="assetDispatchButtonContainer">
+    <?php /*echo Html::button('DISPATCH', ['class' => 'btn btn-primary modalDispatchBtn', 'id' => 'assetDispatchButton']); */?>
+</div>-->
 

@@ -48,30 +48,20 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
-            /*[
+            [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
-                        $url = '/dispatch/view-asset?id=' . $model['MapGrid']; //TODO: change to correct identifier.
-                        return $url;
-                    }
-                    return "";
-                }
-            ],*/
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}',
-                'header' => 'View<br/>Assets',
-                /*'buttons' => [
-                    'Images' => function($url, $model) {
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-camera', 'onclick' => "ViewAssetClicked('/dispatch/view-asset?id=" . $model['MapGrid']."')"]);
+                'contentOptions' => [
+                    'class' => 'ViewAssetBtn_DispatchMapGrid'
+                ],
+                'buttons' => [
+                    'view' => function($url, $model) {
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
-                    return '';
-                }*/
+                }
             ],
             [
                 'header' => 'Add Surveyor',

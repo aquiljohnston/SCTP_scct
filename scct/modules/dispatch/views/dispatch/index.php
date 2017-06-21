@@ -118,18 +118,21 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                    [
+                    /*[
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
-                        'urlCreator' => function ($action, $model, $key, $index) {
-                            /*if ($action === 'view') {
-                                $url = '/dispatch/view-asset?id=' . $model['MapGrid']; //TODO: change to correct identifier.
-                                return $url;
+                        'contentOptions' => [
+                            'class' => 'ViewAssetBtn_DispatchMapGrid'
+                        ],
+                        'buttons' => [
+                            'view' => function($url, $model) {
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
                             }
-                            return "";*/
+                        ],
+                        'urlCreator' => function ($action, $model, $key, $index) {
                         }
-                    ],
+                    ],*/
                     [
                         'header' => 'Add Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
@@ -194,6 +197,22 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <div id="dialog-dispatch" title="Dispatch" style="display:none">
         <p>Dispatched Successfully.</p>
     </div>
+
+    <!--View Asset Modal-->
+    <?php
+    Modal::begin([
+        'id' => 'modalViewAsset',
+        'size' => 'modal-m',
+    ]);
+
+    ?>
+    <div id='modalContentViewAsset'>
+        Loading...
+    </div>
+    <?php
+
+    Modal::end();
+    ?>
 </div>
 
 
