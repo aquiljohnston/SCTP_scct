@@ -184,7 +184,7 @@ $(document).ready(function () {
                                     for (var i = 0; i < DispatchSubNavigationLength; i++) {
                                         if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
                                             dropdownFlag = 1;
-                                            SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[i].Url.toString() + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
+                                            SubNavigationStr += "<li><a data-description='Dashboard Option' href='" + baseUrl + DispatchSubNavigationArray[i].Url.toString() + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
                                         } else {
                                             continue;
                                         }
