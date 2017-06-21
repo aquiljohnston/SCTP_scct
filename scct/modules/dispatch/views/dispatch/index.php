@@ -13,7 +13,6 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div class="dispatch">
-    <div id="blue-header">
         <div id="dispatchTab">
             <h3 class="title"><?= Html::encode($this->title) ?></h3>
             <div id="dispatch-dropDownList-form">
@@ -38,8 +37,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-                <div id="addSurveyorButtonDispatch" class="col-xs-2 col-md-2 col-lg-2">
-
+                <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 20px auto;width: 11%;">
                     <?php if ($can != 0) { ?>
                         <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
                     <?php } else {
@@ -50,7 +48,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 </div>
             </div>
         </div>
-    </div>
 
 
     <div id="dispatchGridViewContainer">
