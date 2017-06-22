@@ -22,11 +22,17 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 4.5%'],
+                'value' => function($model){
+                    return "";
+                }
+            ],
+            [
                 'label' => 'Map Grid',
                 'attribute' => 'MapGrid',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-                //'label' => false,
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.3%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                 /*'value' => function ($model) {
                     return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
                 }*/
@@ -34,8 +40,8 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Assigned User(s)',
                 'attribute' => 'SearchString',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.3%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                 'format' => 'html',
                 'value' => function ($model) {
                     if ($model['AssignedCount'] == "MANY")
@@ -47,20 +53,18 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-                //'label' => false,
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 40.8%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 40.8%'],
                 /*'value' => function ($model) {
                     return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                 }*/
             ],
-            [
+            /*[
                 'label' => 'Work Queue Count',
                 'attribute' => 'AssignedWorkQueueCount',
-                //'label' => false,
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-            ],
+            ],*/
             /*[
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
@@ -77,6 +81,8 @@ use yii\bootstrap\Modal;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 8.5%'],
+                'contentOptions' => ['class' => 'text-center'],
                 /*'buttons' => [
                     'Images' => function($url, $model) {
                         return Html::a('', null, ['class' =>'glyphicon glyphicon-camera', 'onclick' => "ViewAssetClicked('/dispatch/view-asset?id=" . $model['MapGrid']."')"]);
@@ -89,7 +95,8 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Remove User',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'contentOptions' => ['class' => 'assignedSectionCheckbox'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden'],
+                'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
                         return ['AssignedToID' => $model['UIDList'],'SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']];

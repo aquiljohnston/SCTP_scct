@@ -75,6 +75,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ExpandRowColumn',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:8%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:8%'],
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
@@ -98,8 +100,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
@@ -108,8 +110,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Assigned User(s)',
                         'attribute' => 'SearchString',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
                         'value' => function ($model) {
                             if ($model['AssignedCount'] == "MANY")
@@ -121,8 +123,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
@@ -131,8 +133,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
@@ -141,8 +143,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Assigned WorkOrder Count',
                         'attribute' => 'AssignedWorkOrderCount',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
                         'visible' => false
                         /*'value' => function ($model) {
@@ -153,6 +155,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'urlCreator' => function ($action, $model, $key, $index) {
                             /*if ($action === 'view') {
                                 $url = '/dispatch/assets?id=' . $model['MapGrid']; //TODO: change to correct identifier.
@@ -162,8 +166,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }
                     ],
                     [
+                        'header' => 'Remove Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
-                        'contentOptions' => ['class' => 'unassignCheckbox'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center unassignCheckbox', 'style' => 'width: 5%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if (/*$model['WorkQueueStatus'] != 100&&*/ $model['AssignedCount'] == "MANY") {
                                 return ['disabled' => true];
