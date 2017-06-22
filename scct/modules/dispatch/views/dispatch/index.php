@@ -24,7 +24,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <span id="dispatchPageSizeLabel" style="float: right;">
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                             ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
-                            ->label('', [
+                            ->label('Records Per Page', [
                                 'class' => 'recordsPerPage'
                             ]); ?>
                     </span>
@@ -37,7 +37,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-                <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 20px auto;width: 11%;">
+                <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
                     <?php if ($can != 0) { ?>
                         <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
                     <?php } else {
@@ -115,7 +115,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                    /*[
+                    [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
@@ -124,12 +124,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         ],
                         'buttons' => [
                             'view' => function($url, $model) {
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
+                                //return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                         }
-                    ],*/
+                    ],
                     [
                         'header' => 'Add Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
