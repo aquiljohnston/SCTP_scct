@@ -22,10 +22,18 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                'label' => 'Map Grid',
+                //'label' => ' ',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
+                'value' => function($model){
+                    return "";
+                }
+            ],
+            [
+                'label' => '',
                 'attribute' => 'MapGrid',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
                 //'label' => false,
                 /*'value' => function ($model) {
                     return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
@@ -34,27 +42,25 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
                 //'label' => false,
                 /*'value' => function ($model) {
                     return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                 }*/
             ],
             [
-                'label' => 'Available WorkOrder',
+                'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
                 //'label' => false,
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
             [
+                'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'header' => 'View<br/>Assets',
-                'contentOptions' => [
-                    'class' => 'ViewAssetBtn_DispatchMapGrid'
-                ],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
@@ -66,6 +72,7 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
