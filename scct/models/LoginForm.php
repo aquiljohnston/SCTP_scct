@@ -87,7 +87,7 @@ class LoginForm extends Model
         if ($this->_user === false) {
             // Authenticate using the SCAPI 
             //$url = "http://apidev.southerncrossinc.com/index.php?r=v1%2Flogin%2Fuser-login";
-            $url = BaseController::prependURL("login%2Fuser-login");
+            $url = BaseController::prependURL("login%2Fuser-login", 'v2');
             $secretKey = 'sparusholdings12';
             $iv = 'abcdefghijklmnop';
             $pass = openssl_encrypt($this->password,  'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
