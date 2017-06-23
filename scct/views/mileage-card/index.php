@@ -20,17 +20,14 @@ $column = [
     [
         'label' => 'User First Name',
         'attribute' => 'UserFirstName',
-        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
     ],
     [
         'label' => 'User Last Name',
         'attribute' => 'UserLastName',
-        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
     ],
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
-        'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
     ],
     [
         'label' => 'Start Date',
@@ -50,7 +47,7 @@ $column = [
     [
         'label' => 'Approved',
         'attribute' => 'MileageCardApprovedFlag',
-        'filter' => $approvedInput
+//        'filter' => $approvedInput
     ],
 
     ['class' => 'kartik\grid\ActionColumn',
@@ -129,6 +126,9 @@ $column = [
                 </label>
                 <input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
             </div>
+            <label id="userFilter">
+                <?= $form->field($model, 'filter')->label("Search"); ?>
+            </label>
             <?php ActiveForm::end(); ?>
         </div>
     </div>
@@ -138,7 +138,7 @@ $column = [
             <?php Pjax::begin(['id' => 'mileageCardGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
+//                'filterModel' => $searchModel,
                 'export' => false,
                 'bootstrap' => false,
                 'pjax' => true,

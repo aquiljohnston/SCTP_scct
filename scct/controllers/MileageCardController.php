@@ -18,6 +18,7 @@ use yii\web\ForbiddenHttpException;
 use \DateTime;
 use yii\data\Pagination;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
@@ -39,15 +40,18 @@ class MileageCardController extends BaseController
         }
         try {
             $model = new \yii\base\DynamicModel([
-                'pagesize'
+                'pagesize',
+                'filter'
             ]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
-
+            $model->addRule('filter', 'string');
             if ($model->load(Yii::$app->request->queryParams)) {
                 Yii::trace("pagesize: " . $model->pagesize);
                 $mileageCardPageSizeParams = $model->pagesize;
+                $filter = $model->filter;
             } else {
                 $mileageCardPageSizeParams = 50;
+                $filter = "";
             }
 
             //check current page at
@@ -65,20 +69,15 @@ class MileageCardController extends BaseController
             }
 
             //build url with params
-            $url = "mileage-card%2Fget-cards&week=" . $week . "&listPerPage=" . $mileageCardPageSizeParams . "&page=" . $page;
-            $response = Parent::executeGetRequest($url); // indirect rbac
+            $url = "mileage-card%2Fget-cards&week=$week&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
+            $response = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
-
-            $filteredResultData = $this->filterColumnMultiple($assets, 'UserFirstName', 'filterfirstname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'MileageCardApprovedFlag', 'filterapproved');
 
             // passing decode data into dataProvider
             $dataProvider = new ArrayDataProvider
             ([
-                'allModels' => $filteredResultData,
+                'allModels' => $assets,
                 'pagination' => false
             ]);
 
@@ -115,23 +114,20 @@ class MileageCardController extends BaseController
             //Set Mile Card ID On the JS Call
             $dataProvider->key = 'MileageCardID';
 
-            $searchModel = [
-                'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
-                'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
-                'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
-                'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
-            ];
-
-            $approvedInput = '<select class="form-control" name="filterapproved">'
-                . '<option value=""></option><option value="Yes"';
-            if ($searchModel['MileageCardApprovedFlag'] == "Yes") {
-                $approvedInput .= " selected";
-            }
-            $approvedInput .= '>Yes</option><option value="No"';
-            if ($searchModel['MileageCardApprovedFlag'] == "No") {
-                $approvedInput .= ' selected';
-            }
-            $approvedInput .= '>No</option></select>';
+//            $searchModel = [
+//                'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
+//            ];
+//
+//            $approvedInput = '<select class="form-control" name="filterapproved">'
+//                . '<option value=""></option><option value="Yes"';
+//            if ($searchModel['MileageCardApprovedFlag'] == "Yes") {
+//                $approvedInput .= " selected";
+//            }
+//            $approvedInput .= '>Yes</option><option value="No"';
+//            if ($searchModel['MileageCardApprovedFlag'] == "No") {
+//                $approvedInput .= ' selected';
+//            }
+//            $approvedInput .= '>No</option></select>';
 
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
@@ -139,8 +135,8 @@ class MileageCardController extends BaseController
             //calling index page to pass dataProvider.
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-                'approvedInput' => $approvedInput,
+//                'searchModel' => $searchModel,
+//                'approvedInput' => $approvedInput,
                 'week' => $week,
                 'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
                 'pages' => $pages,
@@ -151,7 +147,7 @@ class MileageCardController extends BaseController
         } catch (ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch (Exception $e) {
-            throw new ServerErrorHttpException;
+            throw new ServerErrorHttpException();
         }
     }
 
