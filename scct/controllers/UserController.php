@@ -172,7 +172,7 @@ class UserController extends BaseController
             try {
                 // post url
                 $url = "user%2Fcreate";
-                $response = Parent::executePostRequest($url, $json_data);
+                $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
 
                 $obj = json_decode($response, true);
 
