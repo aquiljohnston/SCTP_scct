@@ -53,9 +53,8 @@ class DispatchController extends \app\controllers\BaseController
                 $pageAt = 1;
             }
 
-            $getUrl = 'dispatch%2Fget&' . http_build_query([
+            $getUrl = 'dispatch%2Fget-available&' . http_build_query([
                     'mapGridSelected' => $dispatchMapGridSelectedParams,
-                    'sectionNumberSelected' => $dispatchSectionNumberSelectedParams,
                     'filter' => $dispatchFilterParams,
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
