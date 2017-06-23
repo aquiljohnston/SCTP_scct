@@ -191,19 +191,25 @@ class ProjectController extends BaseController
 		}
 		self::requirePermission("projectUpdate");
 		$getUrl = 'project%2Fview&id='.$id;
-		$getResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true);
+        $getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+        //todo: need to switch to v2 eventually
+        //$getResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true);
 
 		$model  = new Project();
 		$model->attributes = $getResponse;
 			  
 		//get clients for form dropdown
 		$clientUrl = "client%2Fget-client-dropdowns";
-		$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
+        $clientResponse = Parent::executeGetRequest($clientUrl);
+        //todo: need to switch to v2 eventually
+        //$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
 		$stateUrl = "state-code%2Fget-code-dropdowns";
-		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+        //todo: need to switch to v2 eventually
+        $stateResponse = Parent::executeGetRequest($stateUrl);
+        //$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
@@ -235,7 +241,9 @@ class ProjectController extends BaseController
 			$json_data = json_encode($data);
 			try {
 				$putUrl = 'project%2Fupdate&id='.$id;
-				$putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
+                $putResponse = Parent::executePutRequest($putUrl, $json_data);
+                //todo: need to switch to v2 eventually
+                //$putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
 				
 				$obj = json_decode($putResponse, true);
                 if(isset($obj["status"]) && $obj["status"] == 400) {
