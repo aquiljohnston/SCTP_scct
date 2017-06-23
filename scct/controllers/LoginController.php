@@ -92,7 +92,15 @@ class LoginController extends BaseController
 					//self::logActivity('WebLoginActivity', $geoLocationData);
 					
 					Yii::$app->user->login($userIdentity);
-					return $this->redirect(['home/index']);
+					Yii::trace("ProjectLandingPage: " . $user['ProjectLandingPage'] );
+					if($user['ProjectLandingPage'] != null)
+					{
+						return $this->redirect([$user['ProjectLandingPage']]);
+					}
+					else
+					{
+						return $this->redirect(['home/index']);
+					}
 					//return $this->redirect('home');
 				} else {
 					$loginError = true;
