@@ -124,7 +124,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         ],
                         'buttons' => [
                             'view' => function($url, $model) {
-                                //return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {

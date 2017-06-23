@@ -201,7 +201,7 @@ class DispatchController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($mapGridSelected, $sectionNumberSelected)
+    public function actionViewAsset($mapGridSelected = null, $sectionNumberSelected = null)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
@@ -228,7 +228,7 @@ class DispatchController extends \app\controllers\BaseController
             $searchFilterVal = "";
         }
 
-        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+        $getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
                 'sectionNumberSelected' => $sectionNumberSelected,
                 'filter' => $viewAssetFilterParams,
