@@ -40,7 +40,7 @@ class TrackerController extends BaseController
         $url = "dropdown%2Fget-tracker-map-grids";
         $mapGridsResponse = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
         $mapGridsResponse = json_decode($mapGridsResponse, true);
-
+        $mapGridsResponse =  ['select' => 'Select a map...'] + $mapGridsResponse;
         return $this->render("landing", [
             "dropdown" => $mapGridsResponse
         ]);
