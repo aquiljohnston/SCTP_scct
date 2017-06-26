@@ -340,10 +340,11 @@ class ProjectController extends BaseController
               ->addRule('filter', 'string', ['max' => 32]);
 
         // receive get request to filter user list
-        if ($model->load(Yii::$app->request->get())) {
+        if (Yii::$app->request->isAjax) {
 
             if (isset($_GET['projectID']))
                 $id = $_GET['projectID'];
+            $model->load(Yii::$app->request->queryParams);
             $filterParam = $model->filter;
             $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
             $projectUrl = 'project%2Fview&id='.$id;
@@ -408,7 +409,7 @@ class ProjectController extends BaseController
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
 		}else{
-            return $this -> render('add_user', [
+            return $this->render('add_user', [
                                             'project' => $project,
                                             'model' => $model,
                                             'unassignedData' => $unassignedData,

@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Project', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $project->ProjectID, 'url' => ['view', 'id' => $project->ProjectID]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="project-add-user">
+<div class="project-add-user" style="margin-top: 2%;">
     <h1 class="title"><?= Html::encode($this->title) ?></h1>
 
 	<p>
