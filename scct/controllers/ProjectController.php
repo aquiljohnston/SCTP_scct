@@ -340,7 +340,7 @@ class ProjectController extends BaseController
               ->addRule('filter', 'string', ['max' => 32]);
 
         // receive get request to filter user list
-        if (Yii::$app->request->isAjax) {
+        if (Yii::$app->request->get()) {
 
             if (isset($_GET['projectID']))
                 $id = $_GET['projectID'];
@@ -348,6 +348,9 @@ class ProjectController extends BaseController
             $filterParam = $model->filter;
             $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
             $projectUrl = 'project%2Fview&id='.$id;
+
+            Yii::trace("URL: ".$url);
+            Yii::trace("Proejct: ".$projectUrl);
 
             $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
