@@ -104,7 +104,7 @@ class UserController extends BaseController
             return $this->redirect(['/login']);
         }
         $url = 'user%2Fview&id=' . $id;
-        $response = Parent::executeGetRequest($url); // indirect rbac
+        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
 
         return $this->render('view', ['model' => json_decode($response), true]);
     }
