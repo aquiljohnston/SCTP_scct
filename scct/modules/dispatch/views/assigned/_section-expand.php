@@ -82,15 +82,14 @@ use yii\bootstrap\Modal;
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 8.5%'],
-                'contentOptions' => ['class' => 'text-center'],
-                /*'buttons' => [
-                    'Images' => function($url, $model) {
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-camera', 'onclick' => "ViewAssetClicked('/dispatch/view-asset?id=" . $model['MapGrid']."')"]);
+                'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection',],
+                'buttons' => [
+                    'view' => function($url, $model) {
+                        $modalViewAssetAssigned = "#modalViewAssetAssigned";
+                        $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] ."&sectionNumberSelected=" . $model['SectionNumber'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."')"]);
                     }
                 ],
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    return '';
-                }*/
             ],
             [
                 'header' => 'Remove User',
