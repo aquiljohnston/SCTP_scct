@@ -34,6 +34,7 @@ class AppAsset extends AssetBundle
         'css/dispatch.css',
         'css/assigned.css',
         'css/reports.css',
+        'css/tracker.css'
     ];
     public $cssOptions = [
         'type' => 'text/css',
