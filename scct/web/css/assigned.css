@@ -211,4 +211,7 @@
 #UnassignedButton{
     width: 110%;
 }
+.ViewAssetBtn_AssignedMapGrid{
+    cursor: pointer;
+}
 /*assigned css ends*/

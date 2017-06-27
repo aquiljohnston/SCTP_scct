@@ -207,6 +207,86 @@ class AssignedController extends \app\controllers\BaseController
         }
     }
 
+    /**
+     * render asset modal
+     * @return string|Response
+     */
+    public function actionViewAsset($mapGridSelected = null, $sectionNumberSelected = null)
+    {
+        Yii::trace("CALL VIEW ASSET");
+        $model = new \yii\base\DynamicModel([
+            'surveyor', 'assetID'
+        ]);
+        $model->addRule('surveyor', 'string', ['max' => 32])
+            ->addRule('assetID', 'string', ['max' => 32]);
+
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        if ($model->load(Yii::$app->request->queryParams)){
+            //todo: need to remove hard code value
+            $viewAssetFilterParams = "";
+            $viewAssetPageSizeParams = 50;
+            $pageAt = 1;
+            $searchFilterVal = "";
+        }else{
+            $viewAssetFilterParams = "";
+            $viewAssetPageSizeParams = 50;
+            $pageAt = 1;
+            $searchFilterVal = "";
+        }
+
+        $getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
+                'mapGridSelected' => $mapGridSelected,
+                'sectionNumberSelected' => $sectionNumberSelected,
+                'filter' => $viewAssetFilterParams,
+                'listPerPage' => $viewAssetPageSizeParams,
+                'page' => $pageAt,
+            ]);
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
+
+        // Reading the response from the the api and filling the surveyorGridView
+        $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+                'filter' => $searchFilterVal,
+            ]);
+        Yii::trace("surveyors " . $getUrl);
+        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
+
+        // Put data in data provider
+        $assetDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $getAssetDataResponse['assets'],
+            'pagination' => false,
+        ]);
+        $assetDataProvider->key = 'WorkOrderID';
+        $surveyorList = [];
+        $surveyorList = $surveyorsResponse['users'];
+
+        //todo: set paging on both tables
+        // set pages to dispatch table
+        $pages = new Pagination($getAssetDataResponse['pages']);
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('view_asset_modal', [
+                'assetDataProvider' => $assetDataProvider,
+                'model' => $model,
+                //'pages' => $pages,
+                'surveyorList' => $surveyorList,
+            ]);
+        } else {
+            return $this->render('view_asset_modal', [
+                'assetDataProvider' => $assetDataProvider,
+                'model' => $model,
+                //'pages' => $pages,
+                'surveyorList' => $surveyorList,
+            ]);
+        }
+    }
+
     public function GenerateUnassignedData(array $mapGridArr, array $assignedToIDs){
         $unassignedArr = [];
         for ($i = 0; $i < count($mapGridArr); $i++){

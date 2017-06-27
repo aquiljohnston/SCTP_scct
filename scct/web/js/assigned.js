@@ -190,6 +190,16 @@ function getAssignedUserIDs() {
     return AssignedToIDs;
 }
 
+// Asset modal view (not in use; using one in dispatch.js, sharing the same function)
+/*function ViewAssetClicked(url) {
+    console.log("View Asset clicked!");
+    console.log(url);
+    // get the click of the create button
+    $('#assetModal').modal('show')
+        .find('#viewAssetModalContent').load(url);
+    $(".modal-backdrop.in").css({'opacity': 0});
+}*/
+
 // Generate Assigned Map Array;
 function getAssignedMapArray(assignedMap_MapGrid, assignedUserID) {
     var mapGridArray = [];
