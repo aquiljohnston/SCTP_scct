@@ -47,16 +47,19 @@ class TimeCardController extends BaseController
             $userID = Yii::$app->session['userID'];
 
             $model = new \yii\base\DynamicModel([
-                'pagesize'
+                'pagesize',
+                'filter'
             ]);
             $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)) {
-                Yii::trace("pagesize: " . $model->pagesize);
                 $timeCardPageSizeParams = $model->pagesize;
+                $filter = $model->filter;
             } else {
                     $timeCardPageSizeParams = 50;
+                    $filter = "";
             }
 
             //check current page at
@@ -74,19 +77,16 @@ class TimeCardController extends BaseController
             }
 
             //build url with params
-            $url = "time-card%2Fget-cards&week=" . $week ."&listPerPage=" . $timeCardPageSizeParams . "&page=" . $page;
-            $response = Parent::executeGetRequest($url);
+            $url = "time-card%2Fget-cards&filter=$filter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
+            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
 
-            $filteredResultData = $this->filterColumnMultiple($assets, 'UserFirstName', 'filterfirstname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'UserLastName', 'filterlastname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'ProjectName', 'filterprojectname');
-            $filteredResultData = $this->filterColumnMultiple($filteredResultData, 'TimeCardApprovedFlag', 'filterapproved');
+
             // passing decode data into dataProvider
             $dataProvider = new ArrayDataProvider
 			([
-				'allModels' => $filteredResultData,
+				'allModels' => $assets,
 				/*'key' => function (){
                     return md5($model["TimeCardID"]);
                 },*/
@@ -128,24 +128,18 @@ class TimeCardController extends BaseController
             //set timecardid as id
             $dataProvider->key = 'TimeCardID';
 
-            $searchModel = [
-				'UserFirstName' => Yii::$app->request->getQueryParam('filterfirstname', ''),
-				'UserLastName' => Yii::$app->request->getQueryParam('filterlastname', ''),
-				'ProjectName' => Yii::$app->request->getQueryParam('filterprojectname', ''),
-				'TimeCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
-			];
 
             // Create drop down with current selection pre-selected based on GET variable
-            $approvedInput = '<select class="form-control" name="filterapproved">'
-				. '<option value=""></option><option value="Yes"';
-            if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
-                $approvedInput .= " selected";
-            }
-            $approvedInput .= '>Yes</option><option value="No"';
-            if ($searchModel['TimeCardApprovedFlag'] == "No") {
-                $approvedInput .= ' selected';
-            }
-            $approvedInput .= '>No</option></select>';
+//            $approvedInput = '<select class="form-control" name="filterapproved">'
+//				. '<option value=""></option><option value="Yes"';
+//            if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
+//                $approvedInput .= " selected";
+//            }
+//            $approvedInput .= '>Yes</option><option value="No"';
+//            if ($searchModel['TimeCardApprovedFlag'] == "No") {
+//                $approvedInput .= ' selected';
+//            }
+//            $approvedInput .= '>No</option></select>';
 
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
@@ -153,8 +147,8 @@ class TimeCardController extends BaseController
             //calling index page to pass dataProvider.
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
-                'searchModel' => $searchModel,
-                'approvedInput' => $approvedInput,
+                //'searchModel' => $searchModel,
+                //'approvedInput' => $approvedInput,
                 'week' => $week,
                 'model' => $model,
                 'timeCardPageSizeParams' => $timeCardPageSizeParams,
@@ -166,7 +160,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException;
+            throw new ServerErrorHttpException("An unknown error has occurred.");
         }
     }
 
