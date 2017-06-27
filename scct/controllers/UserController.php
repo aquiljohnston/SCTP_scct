@@ -175,10 +175,13 @@ class UserController extends BaseController
                 $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
 
                 $obj = json_decode($response, true);
-
-                return $this->redirect(['view', 'id' => $obj["UserID"]]);
+                if($obj['projectUser'] != false) {
+                    $userId = $obj['projectUser']['UserID'];
+                } else {
+                    $userId = $obj['scctUser']['UserID'];
+                }
+                return $this->redirect(['view', 'id' => $userId]);
             } catch (\Exception $e) {
-
                 // duplicationflag:
                 // 1: yes 0: no
                 // set duplicateFlag to 1, which means duplication happened.
