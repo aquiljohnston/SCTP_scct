@@ -163,11 +163,11 @@ function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) 
     }
 }
 
-// View Asset Modal
-function viewAssetRowClicked(url) {
+// View Asset Modal (Dispatch, Assigned)
+function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset) {
     console.log("View Asset clicked!");
     console.log(url);
-    $('#modalViewAsset').modal('show')
-        .find('#modalContentViewAsset').load(url);
+    $(modalViewAsset).modal('show')
+        .find(modalContentViewAsset).load(url);
 }
 

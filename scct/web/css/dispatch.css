@@ -225,7 +225,7 @@
 .ViewAssetBtn_DispatchMapGrid{
     cursor: pointer;
 }
-#assetsTable #modalViewAsset{
+#assetsTable #modalViewAssetDispatch{
     overflow-y: hidden;
 }
 #assetsTable #assetGV-container{

@@ -156,13 +156,15 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedMapGrid', 'style' => 'width: 5%'],
+                        'buttons' => [
+                            'view' => function($url, $model) {
+                                $modalViewAssetAssigned = "#modalViewAssetAssigned";
+                                $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."')"]);
+                            }
+                        ],
                         'urlCreator' => function ($action, $model, $key, $index) {
-                            /*if ($action === 'view') {
-                                $url = '/dispatch/assets?id=' . $model['MapGrid']; //TODO: change to correct identifier.
-                                return $url;
-                            }*/
-                            return "";
                         }
                     ],
                     [
@@ -236,6 +238,23 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
         <p>New surveyor(s) has been added successfully.</p>
     </div>
+
+    <!--View Asset Modal-->
+    <?php
+    Modal::begin([
+        'header' => '<h4>Assets</h4>',
+        'id' => 'modalViewAssetAssigned',
+        'size' => 'modal-m',
+    ]);
+
+    ?>
+    <div id='modalContentViewAssetAssigned'>
+        Loading...
+    </div>
+    <?php
+
+    Modal::end();
+    ?>
 </div>
 
 

@@ -124,7 +124,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         ],
                         'buttons' => [
                             'view' => function($url, $model) {
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."')"]);
+                                $modalViewAssetDispatch = "#modalViewAssetDispatch";
+                                $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
@@ -199,12 +201,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <?php
     Modal::begin([
         'header' => '<h4>Assets</h4>',
-        'id' => 'modalViewAsset',
+        'id' => 'modalViewAssetDispatch',
         'size' => 'modal-m',
     ]);
 
     ?>
-    <div id='modalContentViewAsset'>
+    <div id='modalContentViewAssetDispatch'>
         Loading...
     </div>
     <?php
