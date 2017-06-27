@@ -21,17 +21,14 @@ $column = [
     [
         'label' => 'User First Name',
         'attribute' => 'UserFirstName',
-        'filter' => '<input class="form-control" name="filterfirstname" value="' . Html::encode($searchModel['UserFirstName']) . '" type="text">'
     ],
     [
         'label' => 'User Last Name',
         'attribute' => 'UserLastName',
-        'filter' => '<input class="form-control" name="filterlastname" value="' . Html::encode($searchModel['UserLastName']) . '" type="text">'
     ],
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
-        'filter' => '<input class="form-control" name="filterprojectname" value="' . Html::encode($searchModel['ProjectName']) . '" type="text">'
     ],
     [
         'label' => 'Start Date',
@@ -51,7 +48,6 @@ $column = [
     [
         'label' => 'Approved',
         'attribute' => 'TimeCardApprovedFlag',
-        'filter' => $approvedInput
     ],
     ['class' => 'kartik\grid\ActionColumn',
         'template' => '{view}', // does not include delete
@@ -133,12 +129,15 @@ $column = [
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
                 'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-                'method' => 'post',
+                'method' => 'get',
                 'options' => [
                     'id' => 'TimeCardForm',
-                ]
-
+                ],
+                'action' => Url::to(['time-card/index'])
             ]); ?>
+            <label id="timeCardFilter">
+                <?= $form->field($model, 'filter')->label("Search"); ?>
+            </label>
             <div id="timeCardWeekContainer">
                 <select name="weekTimeCard" id="weekSelection"<!--onchange="this.form.submit()-->">
                 <option value="prior" <?= $priorSelected ?> >Prior Week</option>
@@ -162,7 +161,7 @@ $column = [
                 'dataProvider' => $dataProvider,
                 'export' => false,
                 'bootstrap' => false,
-                'filterModel' => $searchModel,
+                //'filterModel' => $searchModel,
                 'pjax' => true,
                 'summary' => '',
                 'columns' => $column
