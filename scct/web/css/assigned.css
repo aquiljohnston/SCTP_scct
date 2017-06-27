@@ -214,4 +214,7 @@
 .ViewAssetBtn_AssignedMapGrid{
     cursor: pointer;
 }
+.ViewAssetBtn_AssignedSection{
+    cursor: pointer;
+}
 /*assigned css ends*/
