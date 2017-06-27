@@ -13,9 +13,6 @@ use kartik\grid\GridView;
 
 ?>
 <div id="viewAssetModalContainer">
-    <span class="assetModalHeader">
-        <b>Assets</b>
-    </span>
     <div id="assetDispatchContainer">
         <?php yii\widgets\Pjax::begin(['id' => 'assetDispatchForm']) ?>
         <?php $form = ActiveForm::begin([

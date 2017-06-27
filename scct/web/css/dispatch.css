@@ -225,3 +225,13 @@
 .ViewAssetBtn_DispatchMapGrid{
     cursor: pointer;
 }
+#assetsTable #modalViewAsset{
+    overflow-y: hidden;
+}
+#assetsTable #assetGV-container{
+    overflow-y: scroll; !important;
+    max-height: 400px; !important;
+}
+#viewAssetModalContainer{
+    margin-bottom: 3%;
+}
