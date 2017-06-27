@@ -13,42 +13,41 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div class="dispatch">
-        <div id="dispatchTab">
-            <h3 class="title"><?= Html::encode($this->title) ?></h3>
-            <div id="dispatch-dropDownList-form">
-                <?php $form = ActiveForm::begin([
-                    'type' => ActiveForm::TYPE_VERTICAL,
-                    'options' => ['id' => 'dispatchActiveForm']
-                ]); ?>
-                <div id="dispatchUnassignedTableDropdown">
-                    <span id="dispatchPageSizeLabel" style="float: right;">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                            ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
-                            ->label('Records Per Page', [
-                                'class' => 'recordsPerPage'
-                            ]); ?>
-                    </span>
-                    <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3" style="float:left; margin-left: 60%;">
-                        <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
-                            <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
-                        </div>
+    <div id="dispatchTab">
+        <h3 class="title"><?= Html::encode($this->title) ?></h3>
+        <div id="dispatch-dropDownList-form">
+            <?php $form = ActiveForm::begin([
+                'type' => ActiveForm::TYPE_VERTICAL,
+                'options' => ['id' => 'dispatchActiveForm']
+            ]); ?>
+            <div id="dispatchUnassignedTableDropdown">
+                <span id="dispatchPageSizeLabel" style="float: right;">
+                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                        ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                        ->label('Records Per Page', [
+                            'class' => 'recordsPerPage'
+                        ]); ?>
+                </span>
+                <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3" style="float:left; margin-left: 60%;">
+                    <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
+                        <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
-                    <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-                    <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
-                <?php ActiveForm::end(); ?>
-                <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-                <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
-                    <?php if ($can != 0) { ?>
-                        <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
-                    <?php } else {
-                        echo "";
-                    } ?>
                 </div>
-                <?php Pjax::end() ?>
-                </div>
+                <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
+                <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
+            <?php ActiveForm::end(); ?>
+            <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+            <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
+                <?php if ($can != 0) { ?>
+                    <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
+                <?php } else {
+                    echo "";
+                } ?>
+            </div>
+            <?php Pjax::end() ?>
             </div>
         </div>
-
+    </div>
 
     <div id="dispatchGridViewContainer">
         <div id="dispatchUnassignedTable">
