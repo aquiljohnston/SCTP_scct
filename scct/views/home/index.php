@@ -82,7 +82,7 @@ $mileageCardCol = [
         'layout' => "{items}\n{pager}",
         'bootstrap' => false,
         'export' => false,
-        'caption' => 'Unaccepted Equipment',
+        'caption' => 'Notifications',
 
         'columns' => $equipmentCol
     ]); ?>
