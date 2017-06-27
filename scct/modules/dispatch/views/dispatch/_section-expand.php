@@ -63,7 +63,9 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'buttons' => [
                     'view' => function($url, $model) {
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid'] . "&sectionNumberSelected=" . $model['SectionNumber']."')"]);
+                        $modalViewAssetDispatch = "#modalViewAssetDispatch";
+                        $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
