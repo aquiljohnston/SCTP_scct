@@ -1,0 +1,17 @@
+#notificationTab{
+    float: left;
+    width: 100%;
+    background-color: #E6F0F6;
+    z-index: 3;
+    border-bottom: 1px solid black;
+    margin-bottom: 1%;
+}
+.notification{
+    margin-top: 2%;
+}
+#notificationGridViewContainer{
+    position: relative;
+    float: left;
+    width: 100%;
+    z-index: 1;
+}
