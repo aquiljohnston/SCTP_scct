@@ -8,7 +8,7 @@ use kartik\grid\GridView;
 
 $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
-$equipmentCol = [
+$notificationCol = [
     'Project',
     'Number of Items',
     ['class' => 'kartik\grid\ActionColumn',
@@ -16,12 +16,12 @@ $equipmentCol = [
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view' && $model["Project"] === 'Total') {
-                $url = '/equipment/index?filterprojectname='
+                $url = '/notification/index?filterprojectname='
                     . $this->context->getAllProjects() .
                     "&filteraccepted=Pending|No";
                 return $url;
             } else {
-                $url = '/equipment/index?filterprojectname='
+                $url = '/notification/index?filterprojectname='
                     . $this->context->trimString($model["Project"]) .
                     "&filteraccepted=Pending|No";
                 return $url;
@@ -78,13 +78,13 @@ $mileageCardCol = [
     <!-- Table for Unaccepted Equipment -->
     <?= GridView::widget([
         'id' => 'equipmentWidget',
-        'dataProvider' => $equipmentProvider,
+        'dataProvider' => $notificationProvider,
         'layout' => "{items}\n{pager}",
         'bootstrap' => false,
         'export' => false,
         'caption' => 'Notifications',
 
-        'columns' => $equipmentCol
+        'columns' => $notificationCol
     ]); ?>
 
     <!-- Table for Unapproved Time Cards -->

@@ -16,7 +16,7 @@ use linslin\yii2\curl;
 class HomeController extends BaseController
 {
 
-    public $equipmentInfo;
+    public $notificationInfo;
     public $timeCardInfo;
     public $mileageCardInfo;
 
@@ -44,20 +44,20 @@ class HomeController extends BaseController
         }
         // Reading the response from the the api and filling the GridView
         $url = 'notification%2Fget-notifications';
-        $response = Parent::executeGetRequest($url);
+        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
         //Passing data to the dataProvider and formatting it in an associative array
         $dataProvider = json_decode($response, true);
 
         $firstName = $dataProvider["firstName"];
         $lastName = $dataProvider["lastName"];
 
-        $this->equipmentInfo = [];
+        $this->notificationInfo = [];
         $this->timeCardInfo = [];
         $this->mileageCardInfo = [];
 
         try {
-            if ($dataProvider["equipment"]!=null) {
-                $this->equipmentInfo = $dataProvider["equipment"];
+            if ($dataProvider["notification"]!=null) {
+                $this->notificationInfo = $dataProvider["notification"];
             }
             if ($dataProvider["timeCards"]!=null) {
                 $this->timeCardInfo = $dataProvider["timeCards"];
@@ -69,8 +69,8 @@ class HomeController extends BaseController
             //Continue - Unable to retrieve equipment item
         }
 
-        $equipmentProvider = new ArrayDataProvider([
-            'allModels' => $this->equipmentInfo,
+        $notificationProvider = new ArrayDataProvider([
+            'allModels' => $this->notificationInfo,
             'pagination' => [
                 'pageSize' => 10,
             ]
@@ -92,7 +92,7 @@ class HomeController extends BaseController
 
         GridView::widget
         ([
-            'dataProvider' => $equipmentProvider,
+            'dataProvider' => $notificationProvider,
         ]);
 
 		//var_dump($timeCardInfo);
@@ -101,7 +101,7 @@ class HomeController extends BaseController
 										 'model' => $this->timeCardInfo,
 										 'firstName' => $firstName,
                                          'lastName' => $lastName,
-                                         'equipmentProvider' => $equipmentProvider,
+                                         'notificationProvider' => $notificationProvider,
                                          'timeCardProvider' => $timeCardProvider,
                                          'mileageCardProvider' => $mileageCardProvider]);
     }
