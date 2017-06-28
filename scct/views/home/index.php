@@ -16,14 +16,15 @@ $notificationCol = [
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view' && $model["Project"] === 'Total') {
-                $url = '/notification/index?filterprojectname='
-                    . $this->context->getAllProjects() .
-                    "&filteraccepted=Pending|No";
+                /*$url = '/notification/index?filterprojectname='
+                    . $this->context->getAllProjects();*/
+                $url = '/notification/index';
                 return $url;
             } else {
-                $url = '/notification/index?filterprojectname='
-                    . $this->context->trimString($model["Project"]) .
-                    "&filteraccepted=Pending|No";
+                /*$url = '/notification/index?filterprojectname='
+                    . $this->context->trimString($model["Project"]);
+                return $url;*/
+                $url = '/notification/index';
                 return $url;
             }
         }

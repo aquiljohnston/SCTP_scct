@@ -20,7 +20,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div class="notification">
     <div id="notificationTab">
-        <h3 class="title"><?= Html::encode($this->title) ?></h3>
+        <h3 class="title" style="padding-left: 1%; padding-top: 1%"><?= Html::encode($this->title) ?></h3>
         <div id="notification-dropDownList-form">
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
@@ -39,8 +39,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         <?= $form->field($model, 'notificationfilter')->textInput(['value' => $notificationFilterParams, 'id' => 'notificationFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
                 </div>
-                <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-                <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
+                <input id="notificationPageNumber" type="hidden" name="notificationPageNumber" value="1"/>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
@@ -58,8 +57,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'summary' => '',
                 'columns' => [
                     [
-                        'label' => 'Available Work Order',
-                        'attribute' => 'AvailableWorkOrderCount',
+                        'label' => 'Notification Type',
+                        'attribute' => 'NotificationType',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                    ],
+                    [
+                        'label' => 'Created Date',
+                        'attribute' => 'SrvDTLT',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ]
