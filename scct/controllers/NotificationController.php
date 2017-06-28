@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\dispatch\controllers;
+namespace app\controllers;
 
 use Exception;
 use InspectionRequest;
@@ -25,10 +25,19 @@ class NotificationController extends \app\controllers\BaseController
                 'notificationfilter', 'pagesize',
             ]);
             $model->addRule('notificationfilter', 'string', ['max' => 32])
-                  ->addRule('pagesize', 'string', ['max' => 32]);
+                ->addRule('pagesize', 'string', ['max' => 32]);
 
-            $notificationPageSizeParams = 50;
-            $notificationFilterParams = "";
+            //check request
+            if ($model->load(Yii::$app->request->queryParams)) {
+
+                Yii::trace("notificationfilter " . $model->notificationfilter);
+                Yii::trace("pagesize " . $model->pagesize);
+                $notificationPageSizeParams = $model->pagesize;
+                $notificationFilterParams = $model->notificationfilter;
+            } else {
+                $notificationPageSizeParams = 50;
+                $notificationFilterParams = "";
+            }
 
             // get the page number for assigned table
             if (isset($_GET['notificationPageNumber'])) {
@@ -37,7 +46,7 @@ class NotificationController extends \app\controllers\BaseController
                 $pageAt = 1;
             }
 
-            $getUrl = 'notification%2Fget-notification&' . http_build_query([
+            $getUrl = 'notification%2Fget-notification-landing&' . http_build_query([
                     'filter' => $notificationFilterParams,
                     'listPerPage' => $notificationPageSizeParams,
                     'page' => $pageAt,
@@ -45,7 +54,7 @@ class NotificationController extends \app\controllers\BaseController
             $getNotificationDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("NOTIFICATION DATA: " . json_encode($getNotificationDataResponse));
 
-            $notificationData = $getNotificationDataResponse['mapGrids'];
+            $notificationData = $getNotificationDataResponse['notification'];
 
             // Put data in data provider
             // render page
@@ -56,10 +65,10 @@ class NotificationController extends \app\controllers\BaseController
             ]);
 
             // notification data provider
-            $notificationDataProvider->key = 'MapGrid';
+            $notificationDataProvider->key = 'UserID';
 
             // set pages to notification table
-            $pages = new Pagination($notificationDataProvider['pages']);
+            $pages = new Pagination($getNotificationDataResponse['pages']);
 
 
             if (Yii::$app->request->isAjax) {
