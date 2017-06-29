@@ -22,7 +22,7 @@ use kartik\form\ActiveForm;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'UserName',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'Username']); ?>
+					])->textInput(['placeholder'=>'Username', 'readonly' => true]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'UserPassword', [
 					'label'=>'Password', 
