@@ -7,7 +7,7 @@ use kartik\form\ActiveForm;
 
 ?>
 <div id="assignedaddsurveyordialogtitle">
-    <div id="addSurveyorModalHeader" class="addsurveryContainer"><span class="addsurveryheader"><b>Map/Plat:</b></span>
+    <div id="addSurveyorModalHeader" class="addsurveryContainer">
     <?php
        /* $count = 0;
         if(count($MapPlat) < 2) {
@@ -86,7 +86,7 @@ use kartik\form\ActiveForm;
 </div>
 <script type="text/javascript">
 
-    function enableDisableControls(enabled, MapGrid, SectionNumber)
+    function enableDisableControls(enabled, searchFilterVal)
     {
         console.log("enableDisableControls Called");
         $(".kv-row-select input[type=checkbox]").prop('disabled', !enabled);
@@ -167,23 +167,31 @@ use kartik\form\ActiveForm;
     }
 
     // set trigger for search box in the add surveyor modal
-    $(document).ready(function() {
-        console.log("about to call");
+    $(document).ready(function () {
         $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-        /*$('#addSurveyorSearch').keydown(function(event){
-            if(event.keyCode == 13) {
-                event.preventDefault();
-                $.pjax.reload({
-                    type: 'POST',
-                    url: '/dispatch/assigned/add-surveyor-modal',
-                    container: '#addSurveyorsGridviewPJAX', // id to update content
-                    data: {MapGrid: MapGrid, AssignedUserID: SectionNumber, SectionNumber: AssignedUserID},
-                    timeout: 99999
-                }).done(function () { $("body").css("cursor", "default"); enableDisableControls(true, MapGrid, SectionNumber, AssignedUserID); });
+        $('#addSurveyorSearch').keypress(function (event) {
+            var key = event.which;
+            if (key == 13) {
+                var searchFilterVal = $('#addSurveyorSearch').val();
+                console.log("about to call");
+                console.log("searchFilterVal: " + searchFilterVal);
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    $.pjax.reload({
+                        type: 'POST',
+                        url: '/dispatch/add-surveyor-modal/add-surveyor-modal',
+                        container: '#addSurveyorsGridviewPJAX', // id to update content
+                        data: {searchFilterVal: searchFilterVal},
+                        timeout: 99999
+                    }).done(function () {
+                        $("body").css("cursor", "default");
+                        enableDisableControls(true, searchFilterVal);
+                    });
+                }
             }
-        });*/
+        });
         resetButtonState();
-	});
+    });
 	
     //SurveyorModal CleanFilterButton listener
     $('#SurveyorModalCleanFilterButton').click(function () {

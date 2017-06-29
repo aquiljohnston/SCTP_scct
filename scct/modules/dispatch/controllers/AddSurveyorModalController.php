@@ -44,9 +44,6 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
             $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
             Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
 
-            //todo: delete hard code value
-            $surveyorWorkCenterList = [];
-
             $dataProvider = new ArrayDataProvider
             ([
                 'allModels' => $surveyorsResponse['users'],
@@ -57,7 +54,6 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
 
             return $this->render('add_surveyor_modal', [
                 'addSurveyorsDataProvider' => $dataProvider,
-                'surveyorWorkCenterList' => $surveyorWorkCenterList,
                 'model' => $model,
                 'searchFilterVal' => $searchFilterVal,
                 'workCenterFilterVal' => $workCenterFilterVal,
