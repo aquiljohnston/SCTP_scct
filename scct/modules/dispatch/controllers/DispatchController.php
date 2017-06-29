@@ -54,11 +54,11 @@ class DispatchController extends \app\controllers\BaseController
             }
 
             $getUrl = 'dispatch%2Fget-available&' . http_build_query([
-                    'mapGridSelected' => $dispatchMapGridSelectedParams,
                     'filter' => $dispatchFilterParams,
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
                 ]);
+
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
@@ -149,7 +149,7 @@ class DispatchController extends \app\controllers\BaseController
         else
             $mapGridSelected = "";
 
-        $getUrl = 'dispatch%2Fget&' . http_build_query([
+        $getUrl = 'dispatch%2Fget-available&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
                 'filter' => $sectionFilterParams,
                 'listPerPage' => $sectionPageSizeParams,
