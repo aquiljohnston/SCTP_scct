@@ -217,7 +217,7 @@ class UserController extends BaseController
         }
         self::requirePermission("userUpdate");
         $getUrl = 'user%2Fview&id=' . $id;
-        $getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+        $getResponse = json_decode(Parent::executeGetRequest($getUrl, BaseController::API_VERSION_2), true);
 
         $model = new User();
         $model->attributes = $getResponse;
@@ -272,7 +272,7 @@ class UserController extends BaseController
             $json_data = json_encode($data);
 
             $putUrl = 'user%2Fupdate&id=' . $id;
-            $putResponse = Parent::executePutRequest($putUrl, $json_data);
+            $putResponse = Parent::executePutRequest($putUrl, $json_data, BaseController::API_VERSION_2);
             $obj = json_decode($putResponse, true);
 
             return $this->redirect(['view', 'id' => $obj["UserID"]]);
