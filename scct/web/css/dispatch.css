@@ -235,3 +235,15 @@
 #viewAssetModalContainer{
     margin-bottom: 3%;
 }
+#surveyorGV-container{
+    max-height: 200px;
+}
+#dispatchSurveyorsTable{
+    position: relative;
+    float: left;
+    width: 100%;
+
+}
+#addSurveyorDispatchButton{
+    margin-top: 4%;
+}
