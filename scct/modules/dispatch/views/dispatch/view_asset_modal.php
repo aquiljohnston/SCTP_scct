@@ -72,6 +72,12 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
+            [
+                'label' => 'Attempt Count',
+                'attribute' => 'InspectionAttemptCounter',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
         ],
     ]); ?>
 

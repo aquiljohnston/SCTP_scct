@@ -72,6 +72,20 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
+            [
+                'label' => 'Status',
+                'attribute' => 'WorkQueueStatus',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function($model){
+                    if ($model['WorkQueueStatus'] == 100)
+                        return "Assigned";
+                    elseif ($model['WorkQueueStatus'] == 101)
+                        return "In Progress";
+                    else
+                        return "Completed";
+                }
+            ],
         ],
     ]); ?>
 
