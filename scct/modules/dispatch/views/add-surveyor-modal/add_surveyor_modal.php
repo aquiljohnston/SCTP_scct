@@ -177,24 +177,30 @@ use kartik\form\ActiveForm;
                 console.log("searchFilterVal: " + searchFilterVal);
                 if (event.keyCode == 13) {
                     event.preventDefault();
-                    $.pjax.reload({
-                        type: 'POST',
-                        url: '/dispatch/add-surveyor-modal/add-surveyor-modal',
-                        container: '#addSurveyorsGridviewPJAX', // id to update content
-                        data: {searchFilterVal: searchFilterVal},
-                        timeout: 99999
-                    }).done(function () {
-                        $("body").css("cursor", "default");
-                        enableDisableControls(true, searchFilterVal);
-                    });
+                    reloadAssetsModal(searchFilterVal);
                 }
             }
         });
         resetButtonState();
     });
+
+    function reloadAssetsModal(searchFilterVal) {
+        $.pjax.reload({
+            type: 'POST',
+            url: '/dispatch/add-surveyor-modal/add-surveyor-modal',
+            container: '#addSurveyorsGridviewPJAX', // id to update content
+            data: {searchFilterVal: searchFilterVal},
+            timeout: 99999
+        }).done(function () {
+            $("body").css("cursor", "default");
+            enableDisableControls(true, searchFilterVal);
+        });
+    }
 	
     //SurveyorModal CleanFilterButton listener
     $('#SurveyorModalCleanFilterButton').click(function () {
         $("#addSurveyorSearch").val("");
+        var searchFilterVal = $('#addSurveyorSearch').val();
+        reloadAssetsModal(searchFilterVal);
     });
 </script>
