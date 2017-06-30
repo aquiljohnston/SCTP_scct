@@ -87,7 +87,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             return GridView::ROW_COLLAPSED;
                         },
 
-                        'detailUrl' => Url::to(['assigned/view-section'])
+                        'detailUrl' => Url::to(['assigned/view-section']),
+                        'detailAnimationDuration' => 'fast'
                         /*$searchModel = new CreateBookingsSearch();
                         $searchModel->booking_id = $model ->id;
                         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
