@@ -15,7 +15,7 @@ $notificationCol = [
         'header' => 'View',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model["Project"] === 'Total' && $model['Number of Items'] > 0) {
+            if ($action === 'view' && $model['Number of Items'] > 0) {
                 $url = '/notification/index';
                 return $url;
             } else {
