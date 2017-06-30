@@ -54,7 +54,14 @@ class NotificationController extends \app\controllers\BaseController
             $getNotificationDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
             Yii::trace("NOTIFICATION DATA: " . json_encode($getNotificationDataResponse));
 
-            $notificationData = $getNotificationDataResponse['notification'];
+            if ($getNotificationDataResponse != null) {
+                $notificationData = $getNotificationDataResponse['notification'];
+                // set pages to notification table
+                $pages = new Pagination($getNotificationDataResponse['pages']);
+            }else {
+                $notificationData = [];
+                $pages = new Pagination();
+            }
 
             // Put data in data provider
             // render page
@@ -66,9 +73,6 @@ class NotificationController extends \app\controllers\BaseController
 
             // notification data provider
             $notificationDataProvider->key = 'UserID';
-
-            // set pages to notification table
-            $pages = new Pagination($getNotificationDataResponse['pages']);
 
 
             if (Yii::$app->request->isAjax) {
