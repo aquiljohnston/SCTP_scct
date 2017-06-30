@@ -57,6 +57,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'summary' => '',
                 'columns' => [
                     [
+                        'label' => 'User',
+                        'attribute' => 'User',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                    ],
+                    [
                         'label' => 'Notification Type',
                         'attribute' => 'NotificationType',
                         'headerOptions' => ['class' => 'text-center'],
