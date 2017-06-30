@@ -15,16 +15,11 @@ $notificationCol = [
         'header' => 'View',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model["Project"] === 'Total') {
-                /*$url = '/notification/index?filterprojectname='
-                    . $this->context->getAllProjects();*/
+            if ($action === 'view' && $model["Project"] === 'Total' && $model['Number of Items'] > 0) {
                 $url = '/notification/index';
                 return $url;
             } else {
-                /*$url = '/notification/index?filterprojectname='
-                    . $this->context->trimString($model["Project"]);
-                return $url;*/
-                $url = '/notification/index';
+                $url =  '';
                 return $url;
             }
         }
