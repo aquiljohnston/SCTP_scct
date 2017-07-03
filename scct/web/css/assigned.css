@@ -217,4 +217,18 @@
 .ViewAssetBtn_AssignedSection{
     cursor: pointer;
 }
+.viewAssetsSearchcontainer{
+    position: relative;
+    float: left;
+    width: 40%;
+
+}
+#assetsModalCleanFilterButtonAssigned{
+    margin-top: 21px;
+    width: 35px;
+    cursor: pointer;
+}
+
+
+
 /*assigned css ends*/

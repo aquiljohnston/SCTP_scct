@@ -211,26 +211,28 @@ class AssignedController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
-            'surveyor', 'assetID'
+            'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
         ]);
-        $model->addRule('surveyor', 'string', ['max' => 32])
-            ->addRule('assetID', 'string', ['max' => 32]);
+        $model->addRule('modalSearch', 'string', ['max' => 32])
+            ->addRule('mapGridSelected', 'string', ['max' => 32])
+            ->addRule('sectionNumberSelected', 'string', ['max' => 32]);
 
         // Verify logged in
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
 
-        if ($model->load(Yii::$app->request->queryParams)){
+        if (Yii::$app->request->get()){
             //todo: need to remove hard code value
-            $viewAssetFilterParams = "";
+            $viewAssetFilterParams = $searchFilterVal;
+            $mapGridSelectedParam = $mapGridSelected;
+            $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
-            $searchFilterVal = "";
         }else{
             $viewAssetFilterParams = "";
             $viewAssetPageSizeParams = 50;
@@ -239,8 +241,8 @@ class AssignedController extends \app\controllers\BaseController
         }
 
         $getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
-                'mapGridSelected' => $mapGridSelected,
-                'sectionNumberSelected' => $sectionNumberSelected,
+                'mapGridSelected' => $mapGridSelectedParam,
+                'sectionNumberSelected' => $sectionNumberSelectedParam,
                 'filter' => $viewAssetFilterParams,
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
@@ -248,13 +250,13 @@ class AssignedController extends \app\controllers\BaseController
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
-        // Reading the response from the the api and filling the surveyorGridView
+        /*// Reading the response from the the api and filling the surveyorGridView
         $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
                 'filter' => $searchFilterVal,
             ]);
         Yii::trace("surveyors " . $getUrl);
         $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
-        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
+        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
 
         // Put data in data provider
         $assetDataProvider = new ArrayDataProvider
@@ -263,8 +265,8 @@ class AssignedController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
         $assetDataProvider->key = 'WorkOrderID';
-        $surveyorList = [];
-        $surveyorList = $surveyorsResponse['users'];
+        /*$surveyorList = [];
+        $surveyorList = $surveyorsResponse['users'];*/
 
         //todo: set paging on both tables
         // set pages to dispatch table
@@ -275,14 +277,20 @@ class AssignedController extends \app\controllers\BaseController
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                'surveyorList' => $surveyorList,
+                'searchFilterVal' => $viewAssetFilterParams,
+                //'surveyorList' => $surveyorList,
+                'mapGridSelected' => $mapGridSelectedParam,
+                'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);
         } else {
             return $this->render('view_asset_modal', [
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                'surveyorList' => $surveyorList,
+                'searchFilterVal' => $viewAssetFilterParams,
+                //'surveyorList' => $surveyorList,
+                'mapGridSelected' => $mapGridSelectedParam,
+                'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);
         }
     }
