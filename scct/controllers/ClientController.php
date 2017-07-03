@@ -143,8 +143,8 @@ class ClientController extends BaseController
 		$clientAccounts = json_decode($clientAccountsResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "state-code%2Fget-code-dropdowns";
-		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
+		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 			  
 		if ($model->load(Yii::$app->request->post())) {
@@ -233,8 +233,8 @@ class ClientController extends BaseController
 		$clientAccounts = json_decode($clientAccountsResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "state-code%2Fget-code-dropdowns";
-		$stateResponse = Parent::executeGetRequest($stateUrl);
+		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
+		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 			  
 		if ($model->load(Yii::$app->request->post()))
