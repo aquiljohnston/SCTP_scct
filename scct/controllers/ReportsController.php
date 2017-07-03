@@ -97,7 +97,7 @@ class ReportsController extends BaseController
     public function actionGetReports(){
         try {
             // post url
-            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
+            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
             Yii::trace("reportUrl " . $url);
             $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
@@ -148,14 +148,15 @@ class ReportsController extends BaseController
 
     /**
      * Get Inspector Drop Down
+     * Use vUser view to pop inspector drop down list
      * @return mixed
      * @throws Exception
      */
     public function actionGetInspectorDropDown(){
-        if (isset($_POST['ReportName']) && isset($_POST['BeginDate']) && isset($_POST['EndDate']) && isset($_POST['Parm'])){
+        if (isset($_POST['Parm'])){
             // Reading the response from the the api and filling Inspector Drop Down
-            $getInspectorDropDownUrl = 'pge%2Freports%2Fget-inspector-dropdown&spName='.urlencode($_POST['ReportName']).'&parm='.urlencode($_POST['Parm']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
-            $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl); // indirect rbac
+            $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&viewName=vUsers';
+            $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, BaseController::API_VERSION_2); // indirect rbac
             $InspectorDropDownList = $getInspectorDropDownResponse;
             echo $InspectorDropDownList;
         }else{

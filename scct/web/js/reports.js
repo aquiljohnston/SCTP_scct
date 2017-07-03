@@ -148,10 +148,9 @@ $(function () {
                 type: "POST",
                 url: "reports/get-inspector-drop-down",
                 data: {
-                    ReportName: sp,
-                    //type: "inspectors",
+                    /*ReportName: sp,
                     BeginDate: beginDate || null,
-                    EndDate: endDate || null,
+                    EndDate: endDate || null,*/
                     Parm: parm || null
                 },
                 beforeSend: function () {
@@ -177,7 +176,8 @@ $(function () {
                     $.each(results.inspectors, function (i, obj) {
                         //console.log(obj);
                         var option = document.createElement("option");
-                        option.innerHTML = option.value = obj;
+                        option.innerHTML = obj['displayNameData'];
+                        option.value = obj['userNameData'];
                         inspectorsDropdown.appendChild(option);
                     });
 
@@ -217,6 +217,7 @@ $(function () {
             var userLoginCheck = userLoginCheck != null ? 1 : 0;
 
             var parmVar = parmDateOverrideCheck > userLoginCheck ? parmDateOverride : userLogin;
+            var ParmInspector = $('#inspectorsDropdown').val();
 
             $.ajax({
                 type: "POST",
@@ -234,7 +235,7 @@ $(function () {
                     Parm: parameters[1] || null,
                     ParmBetweenDate: parameters[2],
                     ParmDate: parameters[3],
-                    ParmInspector: parameters[4],
+                    ParmInspector: ParmInspector,
                     ReportType: parameters[7],
                 },
                 beforeSend: function () {
@@ -242,6 +243,7 @@ $(function () {
                 },
                 success: function (data) {
                     $('#loading').hide();
+                    $('#go').prop('disabled', false);
                     var results = JSON.parse(data);
                     //console.log(results.data);
                     //console.log(parameters);
