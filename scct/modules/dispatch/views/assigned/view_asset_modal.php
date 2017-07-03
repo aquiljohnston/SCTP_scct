@@ -78,6 +78,12 @@ use kartik\grid\GridView;
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
+                'label' => 'Attempt Count',
+                'attribute' => 'InspectionAttemptCounter',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
+            [
                 'label' => 'Status',
                 'attribute' => 'WorkQueueStatus',
                 'headerOptions' => ['class' => 'text-center'],
