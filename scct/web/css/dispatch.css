@@ -247,3 +247,8 @@
 #addSurveyorDispatchButton{
     margin-top: 4%;
 }
+#assetsModalCleanFilterButtonDispatch{
+    margin-top: 21px;
+    width: 35px;
+    cursor: pointer;
+}

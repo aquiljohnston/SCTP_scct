@@ -18,11 +18,13 @@ use kartik\grid\GridView;
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
         ]); ?>
-        <!--<div class="surveyorDropDownContainer">
-            <div id="surveyorDropdownList" class="dropdowntitle">
-                <?php /*echo $form->field($model, 'surveyor')->dropDownList($surveyorList, ['id' => 'asset-surveyor-list-id'])->label('Add Surveyor'); */?>
-            </div>
-        </div>-->
+        <div class="viewAssetsSearchcontainer dropdowntitle">
+            <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
+        </div>
+        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButtonDispatch']) ?>
+        <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
+        <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
+        <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
     </div>
@@ -86,4 +88,44 @@ use kartik\grid\GridView;
 <!--<div id="assetDispatchButtonContainer">
     <?php /*echo Html::button('DISPATCH', ['class' => 'btn btn-primary modalDispatchBtn', 'id' => 'assetDispatchButton']); */?>
 </div>-->
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#viewAssetsSearchDispatch').keypress(function (event) {
+            var key = event.which;
+            if (key == 13) {
+                var searchFilterVal = $('#viewAssetsSearchDispatch').val();
+                console.log("about to call");
+                console.log("searchFilterVal: " + searchFilterVal);
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    reloadViewAssetsModalDispatch();
+                }
+            }
+        });
+
+        $('#assetsModalCleanFilterButtonDispatch').on('click', function () {
+            $('#viewAssetsSearchDispatch').val("");
+            reloadViewAssetsModalDispatch();
+        })
+    });
+
+    function reloadViewAssetsModalDispatch() {
+        var form = $('#viewAssetsFormDispatch');
+        var searchFilterVal = $('#viewAssetsSearchDispatch').val() == "/" ? "" : $('#viewAssetsSearchDispatch').val();
+        var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
+        var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+        console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+        $.pjax.reload({
+            type: 'GET',
+            url: '/dispatch/dispatch/view-asset',
+            container: '#assetTablePjax', // id to update content
+            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected},
+            timeout: 99999
+        }).done(function () {
+            $("body").css("cursor", "default");
+            //enableDisableControls(true, searchFilterVal);
+        });
+    }
+</script>
 
