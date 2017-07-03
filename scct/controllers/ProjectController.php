@@ -120,7 +120,7 @@ class ProjectController extends BaseController
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "state-code%2Fget-code-dropdowns";
+		$stateUrl = 'dropdown%2Fget-state-codes-dropdown';
 		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
@@ -206,10 +206,8 @@ class ProjectController extends BaseController
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
-		$stateUrl = "state-code%2Fget-code-dropdowns";
-        //todo: need to switch to v2 eventually
-        $stateResponse = Parent::executeGetRequest($stateUrl);
-        //$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
+        $stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
