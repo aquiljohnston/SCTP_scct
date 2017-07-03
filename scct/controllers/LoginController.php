@@ -78,12 +78,12 @@ class LoginController extends BaseController
 					Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
 					Yii::$app->session->set('UserLastName', $user['UserLastName']);
 					//get users time card and store in session data
-					$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
-					$userTimeCard = json_decode($timeCardResponse, true);
-					if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
-					{
-						Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
-					}
+//					$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
+//					$userTimeCard = json_decode($timeCardResponse, true);
+//					if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
+//					{
+//						Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
+//					}
 					
 					$userIdentity = new User();
 					$userIdentity->UserID = $user['AuthUserID'];

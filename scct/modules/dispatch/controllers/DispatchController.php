@@ -31,10 +31,10 @@ class DispatchController extends \app\controllers\BaseController
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
 
-                Yii::trace("dispatchfilter " . $model->dispatchfilter);
-                Yii::trace("pagesize " . $model->pagesize);
-                Yii::trace("mapgridfilter " . $model->mapgridfilter);
-                Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
+                //Yii::trace("dispatchfilter " . $model->dispatchfilter);
+                //Yii::trace("pagesize " . $model->pagesize);
+                //Yii::trace("mapgridfilter " . $model->mapgridfilter);
+                //Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
                 $dispatchPageSizeParams = $model->pagesize;
                 $dispatchFilterParams = $model->dispatchfilter;
                 $dispatchMapGridSelectedParams = $model->mapgridfilter;
@@ -58,9 +58,8 @@ class DispatchController extends \app\controllers\BaseController
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
                 ]);
-
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
+            //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
 
@@ -157,7 +156,7 @@ class DispatchController extends \app\controllers\BaseController
             ]);
 
         $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
+        //Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
         $sectionData = $getSectionDataResponse['sections'];
 
         // Put data in data provider
