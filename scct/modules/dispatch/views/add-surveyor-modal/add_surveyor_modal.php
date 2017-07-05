@@ -128,7 +128,7 @@ use kartik\form\ActiveForm;
                     //data: { MapGrid: mapGrid, AssignedUserID: assignedUserID, SectionNumber: sectionNumber },
                     type: 'POST',
                     beforeSend: function () {
-                        $('#addSurveyorModal').modal("toggle");
+                        $('#addSurveyorModal').modal("hide");
                         $('#loading').show();
                     }
                 }).done(function () {
