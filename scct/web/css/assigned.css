@@ -229,6 +229,25 @@
     cursor: pointer;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+    #assignedTable .table-responsive {
+        max-height: 580px;
+        overflow-y: auto;
+        width: 100%;
+        margin: 0 auto;
+    }
+}
+
+@media not all and (min-resolution:.001dpcm) { @media {
+
+    #assignedTable .table-responsive {
+        max-height: 580px;
+        overflow-y: auto;
+        width: 100%;
+        margin: 0 auto;
+    }
+}}
 
 
 /*assigned css ends*/
