@@ -15,6 +15,10 @@ class DispatchController extends \app\controllers\BaseController
     public function actionIndex()
     {
         try {
+
+            // Check if user has permission to view dispatch page
+            self::requirePermission("viewDispatch");
+
             $model = new \yii\base\DynamicModel([
                 'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
             ]);
