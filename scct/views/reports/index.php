@@ -42,12 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			<input type="text" id="datePickerBeginDateView" style="float: right;"></div>
 		<div id="endDateView" class="reportsDropdown" style="width: 300px;height:20px;display: block;padding-top:5px;display: none; ">End Date:
 			<input type="text" id="datePickerEndDateView" style="float: right;"></div>
-		<select id="parmDropdown" class="reportsDropdown" style="margin-top:20px; display: none;">
-			<option>Please make a selection</option>
-		</select>
-		<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none;">
-			<option>Please make a selection</option>
-		</select>
+		<div id="dropDownListView" style="width: 430px; height: 20px;padding-top: 20px;display: block;">
+			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
+			<select id="parmDropdown" class="reportsDropdown" style="margin-top:20px; display: none;">
+				<option>Please make a selection</option>
+			</select>
+			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right;">
+				<option>Please make a selection</option>
+			</select>
+		</div>
 
 		<table id="reportTable" style="width:100%;">
 			<thead></thead>

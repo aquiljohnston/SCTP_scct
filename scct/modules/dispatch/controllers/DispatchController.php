@@ -105,6 +105,7 @@ class DispatchController extends \app\controllers\BaseController
                 ]);
             }
         } catch (ForbiddenHttpException $e) {
+            //Yii::$app->runAction('login/user-logout');
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
