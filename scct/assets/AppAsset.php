@@ -35,7 +35,8 @@ class AppAsset extends AssetBundle
         'css/assigned.css',
         'css/reports.css',
         'css/tracker.css',
-        'css/notification.css'
+        'css/notification.css',
+        '//cdn.datatables.net/1.10.12/css/jquery.dataTables.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
