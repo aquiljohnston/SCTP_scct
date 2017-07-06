@@ -10,85 +10,95 @@ class AssignedController extends \app\controllers\BaseController
 {
     public function actionIndex()
     {
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+        try {
+            // Check if user has permission to view dispatch page
+            //self::requirePermission("viewAssigned");
 
-        $model = new \yii\base\DynamicModel([
-            'assignedfilter', 'pagesize'
-        ]);
-        $model->addRule('assignedfilter', 'string', ['max' => 32])
-            ->addRule('pagesize', 'string', ['max' => 32]);
+            // Verify logged in
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
 
-        //check request
-        if ($model->load(Yii::$app->request->queryParams)) {
-
-            Yii::trace("assignedfilter " . $model->assignedfilter);
-            Yii::trace("pagesize " . $model->pagesize);
-            $assignedPageSizeParams = $model->pagesize;
-            $assignedFilterParams = $model->assignedfilter;
-        } else {
-            $assignedPageSizeParams = 50;
-            $assignedFilterParams = "";
-        }
-
-        // get the page number for assigned table
-        if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
-            $pageAt = $_GET['assignedPageNumber'];
-        } else {
-            $pageAt = 1;
-        }
-
-        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
-                'filter' => $assignedFilterParams,
-                'listPerPage' => $assignedPageSizeParams,
-                'page' => $pageAt
+            $model = new \yii\base\DynamicModel([
+                'assignedfilter', 'pagesize'
             ]);
-        $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSIGNED DATA: ".json_encode($getAssignedDataResponse));
-        $assignedData = $getAssignedDataResponse['mapGrids'];
+            $model->addRule('assignedfilter', 'string', ['max' => 32])
+                ->addRule('pagesize', 'string', ['max' => 32]);
 
-        //todo: check permission to un-assign work
-        $canUnassign = 1;
-        $canAddSurveyor = 1;
+            //check request
+            if ($model->load(Yii::$app->request->queryParams)) {
 
-        //todo: set default value or callback value
-        $divisionParams = "";
+                Yii::trace("assignedfilter " . $model->assignedfilter);
+                Yii::trace("pagesize " . $model->pagesize);
+                $assignedPageSizeParams = $model->pagesize;
+                $assignedFilterParams = $model->assignedfilter;
+            } else {
+                $assignedPageSizeParams = 50;
+                $assignedFilterParams = "";
+            }
 
-        //set paging on assigned table
-        $pages = new Pagination($getAssignedDataResponse['pages']);
+            // get the page number for assigned table
+            if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
+                $pageAt = $_GET['assignedPageNumber'];
+            } else {
+                $pageAt = 1;
+            }
 
-        $assignedDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $assignedData,
-            'pagination' => false,
-        ]);
+            $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+                    'filter' => $assignedFilterParams,
+                    'listPerPage' => $assignedPageSizeParams,
+                    'page' => $pageAt
+                ]);
+            $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            Yii::trace("ASSIGNED DATA: " . json_encode($getAssignedDataResponse));
+            $assignedData = $getAssignedDataResponse['mapGrids'];
 
-        $assignedDataProvider->key = 'MapGrid';
+            //todo: check permission to un-assign work
+            $canUnassign = 1;
+            $canAddSurveyor = 1;
 
-        if (Yii::$app->request->isAjax) {
-            return $this->render('index', [
-                'assignedDataProvider' => $assignedDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'canUnassign' => $canUnassign,
-                'canAddSurveyor' => $canAddSurveyor,
-                'divisionParams' => $divisionParams,
-                'assignedPageSizeParams' => $assignedPageSizeParams,
-                'assignedFilterParams' => $assignedFilterParams,
+            //todo: set default value or callback value
+            $divisionParams = "";
+
+            //set paging on assigned table
+            $pages = new Pagination($getAssignedDataResponse['pages']);
+
+            $assignedDataProvider = new ArrayDataProvider
+            ([
+                'allModels' => $assignedData,
+                'pagination' => false,
             ]);
-        } else {
-            return $this->render('index', [
-                'assignedDataProvider' => $assignedDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'canUnassign' => $canUnassign,
-                'canAddSurveyor' => $canAddSurveyor,
-                'divisionParams' => $divisionParams,
-                'assignedPageSizeParams' => $assignedPageSizeParams,
-                'assignedFilterParams' => $assignedFilterParams,
-            ]);
+
+            $assignedDataProvider->key = 'MapGrid';
+
+            if (Yii::$app->request->isAjax) {
+                return $this->render('index', [
+                    'assignedDataProvider' => $assignedDataProvider,
+                    'model' => $model,
+                    'pages' => $pages,
+                    'canUnassign' => $canUnassign,
+                    'canAddSurveyor' => $canAddSurveyor,
+                    'divisionParams' => $divisionParams,
+                    'assignedPageSizeParams' => $assignedPageSizeParams,
+                    'assignedFilterParams' => $assignedFilterParams,
+                ]);
+            } else {
+                return $this->render('index', [
+                    'assignedDataProvider' => $assignedDataProvider,
+                    'model' => $model,
+                    'pages' => $pages,
+                    'canUnassign' => $canUnassign,
+                    'canAddSurveyor' => $canAddSurveyor,
+                    'divisionParams' => $divisionParams,
+                    'assignedPageSizeParams' => $assignedPageSizeParams,
+                    'assignedFilterParams' => $assignedFilterParams,
+                ]);
+            }
+        } catch (ForbiddenHttpException $e) {
+            Yii::$app->runAction('login/user-logout');
+            //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (Exception $e) {
+            Yii::$app->runAction('login/user-logout');
         }
     }
 

@@ -22,8 +22,8 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 4.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 3.1%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 3.1%'],
                 'value' => function($model){
                     return "";
                 }
@@ -40,8 +40,8 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Assigned User(s)',
                 'attribute' => 'SearchString',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.3%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.5%'],
                 'format' => 'html',
                 'value' => function ($model) {
                     if ($model['AssignedCount'] == "MANY")
@@ -53,8 +53,8 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 40.8%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 40.8%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 /*'value' => function ($model) {
                     return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                 }*/
@@ -81,7 +81,7 @@ use yii\bootstrap\Modal;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 8.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 6%'],
                 'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection',],
                 'buttons' => [
                     'view' => function($url, $model) {
