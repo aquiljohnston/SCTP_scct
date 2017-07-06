@@ -6,6 +6,8 @@ use Yii;
 use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use Exception;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
 use linslin\yii2\curl;
@@ -38,73 +40,86 @@ class HomeController extends BaseController
      */
     public function actionIndex()
     {
-		 //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
-        // Reading the response from the the api and filling the GridView
-        $url = 'notification%2Fget-notifications';
-        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
-        //Passing data to the dataProvider and formatting it in an associative array
-        $dataProvider = json_decode($response, true);
-
-        $firstName = $dataProvider["firstName"];
-        $lastName = $dataProvider["lastName"];
-
-        $this->notificationInfo = [];
-        $this->timeCardInfo = [];
-        $this->mileageCardInfo = [];
-
         try {
-            if ($dataProvider["notification"]!=null) {
-                $this->notificationInfo = $dataProvider["notification"];
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
             }
-            if ($dataProvider["timeCards"]!=null) {
-                $this->timeCardInfo = $dataProvider["timeCards"];
+            // Reading the response from the the api and filling the GridView
+            $url = 'notification%2Fget-notifications';
+            $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
+            Yii::trace("USER RESPONSE: ".$response);
+            //Passing data to the dataProvider and formatting it in an associative array
+            $dataProvider = json_decode($response, true);
+
+            if (!empty($dataProvider["firstName"]) && !empty($dataProvider["lastName"])) {
+                $firstName = $dataProvider["firstName"];
+                $lastName = $dataProvider["lastName"];
+            }else{
+                $firstName = "";
+                $lastName = "";
             }
-            if ($dataProvider["mileageCards"]!=null) {
-                $this->mileageCardInfo = $dataProvider["mileageCards"];
+
+            $this->notificationInfo = [];
+            $this->timeCardInfo = [];
+            $this->mileageCardInfo = [];
+
+            try {
+                if ($dataProvider["notification"] != null) {
+                    $this->notificationInfo = $dataProvider["notification"];
+                }
+                if ($dataProvider["timeCards"] != null) {
+                    $this->timeCardInfo = $dataProvider["timeCards"];
+                }
+                if ($dataProvider["mileageCards"] != null) {
+                    $this->mileageCardInfo = $dataProvider["mileageCards"];
+                }
+            } catch (ErrorException $error) {
+                //Continue - Unable to retrieve equipment item
             }
-        } catch(ErrorException $error) {
-            //Continue - Unable to retrieve equipment item
+
+            $notificationProvider = new ArrayDataProvider([
+                'allModels' => $this->notificationInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            $timeCardProvider = new ArrayDataProvider([
+                'allModels' => $this->timeCardInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            $mileageCardProvider = new ArrayDataProvider([
+                'allModels' => $this->mileageCardInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
+            ]);
+
+            GridView::widget
+            ([
+                'dataProvider' => $notificationProvider,
+            ]);
+
+            //var_dump($timeCardInfo);
+
+            return $this->render('index', [
+                'model' => $this->timeCardInfo,
+                'firstName' => $firstName,
+                'lastName' => $lastName,
+                'notificationProvider' => $notificationProvider,
+                'timeCardProvider' => $timeCardProvider,
+                'mileageCardProvider' => $mileageCardProvider]);
+        } catch (ForbiddenHttpException $e) {
+            Yii::$app->runAction('login/user-logout');
+        } catch (Exception $e) {
+            Yii::$app->runAction('login/user-logout');
         }
-
-        $notificationProvider = new ArrayDataProvider([
-            'allModels' => $this->notificationInfo,
-            'pagination' => [
-                'pageSize' => 10,
-            ]
-        ]);
-
-        $timeCardProvider = new ArrayDataProvider([
-            'allModels' => $this->timeCardInfo,
-            'pagination' => [
-                'pageSize' => 10,
-            ]
-        ]);
-
-        $mileageCardProvider = new ArrayDataProvider([
-            'allModels' => $this->mileageCardInfo,
-            'pagination' => [
-                'pageSize' => 10,
-            ]
-        ]);
-
-        GridView::widget
-        ([
-            'dataProvider' => $notificationProvider,
-        ]);
-
-		//var_dump($timeCardInfo);
-		
-        return $this -> render('index', [
-										 'model' => $this->timeCardInfo,
-										 'firstName' => $firstName,
-                                         'lastName' => $lastName,
-                                         'notificationProvider' => $notificationProvider,
-                                         'timeCardProvider' => $timeCardProvider,
-                                         'mileageCardProvider' => $mileageCardProvider]);
     }
+
 
     /**
      * Displays a home model.
