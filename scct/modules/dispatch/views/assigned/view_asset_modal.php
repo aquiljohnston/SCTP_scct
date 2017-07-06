@@ -45,7 +45,7 @@ use kartik\grid\GridView;
         'pjax' => true,
         'summary' => '',
         'columns' => [
-            [
+            /*[
                 'class' => 'kartik\grid\CheckboxColumn',
                 'header' => 'Select',
                 'contentOptions' => ['class' => 'AddSurveyor'],
@@ -54,7 +54,7 @@ use kartik\grid\GridView;
                         return ['WorkOrderID' => $model["WorkOrderID"]];
                     }
                 },
-            ],
+            ],*/
             [
                 'label' => 'Address',
                 'attribute' => 'HouseNumber',

@@ -75,8 +75,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ExpandRowColumn',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:8%'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:8%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:5.1%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:5.1%'],
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
@@ -111,8 +111,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Assigned User(s)',
                         'attribute' => 'SearchString',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                         'format' => 'html',
                         'value' => function ($model) {
                             if ($model['AssignedCount'] == "MANY")
@@ -142,12 +142,11 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }*/
                     ],
                     [
-                        'label' => 'Assigned WorkOrder Count',
-                        'attribute' => 'AssignedWorkOrderCount',
+                        'label' => 'Completed (%)',
+                        'attribute' => 'Percent Completed',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
-                        'visible' => false
                         /*'value' => function ($model) {
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                         }*/
