@@ -160,6 +160,9 @@ $(function () {
                     $('#ajax-busy').hide();
                     var results = JSON.parse(data);
                     toggleVisible([inspectorsDropdown], "block");
+                    toggleVisible([goButton], "inline");
+                    $('#inspectorListHeader').css('display', 'inline');
+
                     var inspectors = []; //userid lastname firstname
 
                     //clear existing dropdown
@@ -170,7 +173,8 @@ $(function () {
                     //build dropdown
                     //added default option to inspector dropdown
                     var firstOption = document.createElement("option");
-                    firstOption.innerHTML = "Please make a selection";
+                    firstOption.innerHTML = "All";
+                    firstOption.value = null;
                     inspectorsDropdown.appendChild(firstOption);
 
                     $.each(results.inspectors, function (i, obj) {
@@ -206,9 +210,12 @@ $(function () {
             if (isVisible(beginDate) && isVisible(endDate)) {
                 starVal = $('#datePickerBeginDate').val();
                 endVal = $('#datePickerEndDate').val();
-            } else {
+            } else if(isVisible(beginDateView) && isVisible(endDateView)) {
                 starVal = $('#datePickerBeginDateView').val();
                 endVal = $('#datePickerEndDateView').val();
+            } else {
+                starVal = null;
+                endVal = null;
             }
             var parmDateOverride = isVisible(parmDropdown) ? $('#parmDropdown').val() : null;
             var userLogin = isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null;
@@ -442,6 +449,7 @@ $(function () {
                 toggleVisible([goButton, exportButton], "none");
             }
 
+            $('#inspectorListHeader').css('display', 'none');
             toggleVisible([beginDate, endDate, selectDate, goButton, exportButton, noSelectionError, noDateError, inspectorsDropdown, selectDateFirstError, parmDropdown], "none");
 
             if (parms) { //parm == 1

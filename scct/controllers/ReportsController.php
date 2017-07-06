@@ -96,8 +96,15 @@ class ReportsController extends BaseController
      */
     public function actionGetReports(){
         try {
+            if ($_POST['ParmVar'] == ""){
+                $ParmInspector = "none";
+            }elseif($_POST['ParmVar'] == "null"){
+                $ParmInspector = null;
+            }else{
+                $ParmInspector = $_POST['ParmVar'];
+            }
             // post url
-            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
+            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
             Yii::trace("reportUrl " . $url);
             $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
