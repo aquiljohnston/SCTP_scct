@@ -360,7 +360,7 @@ class BaseController extends Controller
         if (PermissionDictionary::permissionIsPGE($permission)) {
             self::executeGetRequest("pge%2Fpge-permissions%2Fcheck-permission&permission=$permission");
         } else */ if (PermissionDictionary::permissionIsCT($permission)) {
-            self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission");
+            self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission", self::API_VERSION_2);
         } else {
             throw new ForbiddenHttpException();
         }
