@@ -29,7 +29,10 @@ class ProjectController extends BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
-
+		
+		//Check if user has permission to view project page
+		self::requirePermission("viewProjectMgmt");
+		
         $model = new \yii\base\DynamicModel([
             'filter', 'pagesize'
         ]);

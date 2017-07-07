@@ -24,7 +24,9 @@ class TrackerController extends BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
-
+		
+		//Check if user has permission to tracker page
+		self::requirePermission("viewTracker");
 
         return $this->render('index', []);
     }

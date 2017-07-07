@@ -11,8 +11,8 @@ class AssignedController extends \app\controllers\BaseController
     public function actionIndex()
     {
         try {
-            // Check if user has permission to view dispatch page
-            //self::requirePermission("viewAssigned");
+            //Check if user has permission to view assigned page
+            self::requirePermission("viewAssigned");
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {

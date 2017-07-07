@@ -42,6 +42,8 @@ class TimeCardController extends BaseController
         }
 
         try {
+			//Check if user has permission to view time card page
+			self::requirePermission("viewTimeCardMgmt");
             // create curl for restful call.
             //get user role
             $userID = Yii::$app->session['userID'];

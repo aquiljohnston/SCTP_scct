@@ -23,6 +23,8 @@ class ClientController extends BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
+		//Check if user has permission to view client page
+		self::requirePermission("viewClientMgmt");
         $model = new \yii\base\DynamicModel([
             'filter', 'pagesize'
         ]);

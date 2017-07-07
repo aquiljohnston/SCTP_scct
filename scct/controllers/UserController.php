@@ -32,6 +32,8 @@ class UserController extends BaseController
             return $this->redirect(['/login']);
         }
         try {
+			//Check if user has permission to view user page
+            self::requirePermission("viewUserMgmt");
 
             $model = new \yii\base\DynamicModel([
                 'filter', 'pagesize'
