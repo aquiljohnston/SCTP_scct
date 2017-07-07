@@ -95,6 +95,7 @@ class PermissionDictionary {
         'viewAOC', // View AOC
         'viewDispatch', // View dispatch
         'viewAssigned', // View assigned
+        'viewReportsMenu', // View reports
     ];
 
     private static $scctTemplatePermissions = [
