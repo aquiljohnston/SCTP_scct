@@ -1,4 +1,4 @@
-$(function () {
+function initializeDispatch() {
     var dispatchGV = $("#dispatchGV");
     dispatchMap_MapGrid = [];
     dispatchSection_SectionNumber = [];
@@ -98,7 +98,9 @@ $(function () {
             console.log("Error");
         });
     });
-});
+
+    $('#loading').hide();
+}
 
 function reloadDispatchGridView() {
     var jqDispatchDropDowns = $('#dispatchTab');
@@ -170,4 +172,3 @@ function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset) {
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).load(url);
 }
-
