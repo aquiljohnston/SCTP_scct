@@ -79,4 +79,15 @@ $this->params['breadcrumbs'][] = $this->title;
             $('#loading').hide();
         });
     }
+
+    function enterKeyPress(event) {
+        var x = event.keyCode;
+        if (x === 13) {
+            PostLoginForm();
+            keyPressed++;
+            window.setTimeout(function () {
+                keyPressed = 0;
+            }, 3000);
+        }
+    }
 </script>
