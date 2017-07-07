@@ -30,6 +30,9 @@ class ReportsController extends BaseController
 			return $this->redirect(['/login']);
 		}
 		
+		//Check if user has permission to reports page
+		self::requirePermission("viewReportsMenu");
+		
 		$model = new Report();
 		return $this -> render('index', [
 				'model' => $model,
