@@ -39,6 +39,8 @@ class MileageCardController extends BaseController
             return $this->redirect(['/login']);
         }
         try {
+			//Check if user has permission to view mileage card page
+			self::requirePermission("viewMileageCardMgmt");
             $model = new \yii\base\DynamicModel([
                 'pagesize',
                 'filter'
