@@ -60,15 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>-->
 </div>
 <script type="text/javascript">
-
-    var keyPressed = 0;
-    function enterKeyPress(e) {
-        if (e.keyCode === 13) {
-            e.preventDefault(); // Ensure it is only this code that rusn
-
-            alert("Enter was pressed was presses");
-        }
-    }
+    localStorage.clear(); // Clear out the menus in case the user's session expired and they didn't hit the logout button
 
     function PostLoginForm() {
         var form = $('login-form');
@@ -86,16 +78,5 @@ $this->params['breadcrumbs'][] = $this->title;
         }).done(function () {
             $('#loading').hide();
         });
-    }
-
-    function enterKeyPress(event) {
-        var x = event.keyCode;
-        if (x === 13) {
-            PostLoginForm();
-            keyPressed++;
-            window.setTimeout(function () {
-                keyPressed = 0;
-            }, 3000);
-        }
     }
 </script>
