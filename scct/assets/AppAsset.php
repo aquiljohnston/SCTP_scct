@@ -62,6 +62,7 @@ class AppAsset extends AssetBundle
         'js/assigned.js',
         'js/reports.js',
         'js/notification.js',
+        'js/lightDispatch.js',
         '//cdn.datatables.net/1.10.12/js/jquery.dataTables.js',
         '//code.jquery.com/ui/1.12.1/jquery-ui.js',
     ];
