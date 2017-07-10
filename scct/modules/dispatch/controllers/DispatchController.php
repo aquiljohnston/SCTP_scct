@@ -10,11 +10,13 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
 use yii\web\ServerErrorHttpException;
+use yii\web\View;
 
 class DispatchController extends \app\controllers\BaseController
 {
     public function actionHeavyDispatch()
     {
+
         try {
 
             // Check if user has permission to view dispatch page
@@ -87,6 +89,12 @@ class DispatchController extends \app\controllers\BaseController
             $can = 1;
 
             if (Yii::$app->request->isAjax) {
+                //Prevent CSS from being loaded twice, causing a visual bug
+                Yii::$app->assetManager->bundles = [
+                    'yii\bootstrap\BootstrapPluginAsset' => false,
+                    'yii\bootstrap\BootstrapAsset' => false,
+                    'yii\web\JqueryAsset' => false,
+                ];
                 return $this->renderAjax('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
                     'model' => $model,
