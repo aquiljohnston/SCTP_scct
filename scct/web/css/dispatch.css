@@ -265,11 +265,12 @@
 }*/
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-    /* Safari and Chrome */
-    #dispatchGV{
+
+    /* Safari only override */
+    ::i-block-chrome,#dispatchGV{
         width: 100%;
         float: left;
-        max-height: 580px;
+        max-height: 530px;
         overflow-y: auto;
         margin: 0 auto;
         overflow-x: hidden;
@@ -279,16 +280,24 @@
         overflow-y: hidden;
         overflow-x: hidden;
     }
+    .chrome_only {
+        width: 100%;
+        float: left;
+        max-height: 360px;
+        overflow-y: auto;
+        margin: 0 auto;
+        overflow-x: hidden;
+    }
 }
 
 /* Safari 10.1+ (which is the latest version of Safari at this time) */
 
 @media not all and (min-resolution:.001dpcm) { @media {
 
-    #dispatchGV{
+    ::i-block-chrome,#dispatchGV{
         width: 100%;
         float: left;
-        max-height: 580px;
+        max-height: 530px;
         overflow-y: auto;
         margin: 0 auto;
         overflow-x: hidden;

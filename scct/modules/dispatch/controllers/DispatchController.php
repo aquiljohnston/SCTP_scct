@@ -9,14 +9,11 @@ use yii\data\ArrayDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
-use yii\web\ServerErrorHttpException;
-use yii\web\View;
 
 class DispatchController extends \app\controllers\BaseController
 {
-    public function actionHeavyDispatch()
+    public function actionIndex()
     {
-
         try {
 
             // Check if user has permission to view dispatch page
@@ -118,14 +115,8 @@ class DispatchController extends \app\controllers\BaseController
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-            return "";
         }
     }
-
-    public function actionIndex() {
-        return $this->render('lightDispatch');
-    }
-
 
     /**
      * render expandable section row

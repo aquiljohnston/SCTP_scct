@@ -62,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <script type="text/javascript">
     localStorage.clear(); // Clear out the menus in case the user's session expired and they didn't hit the logout button
 
+    var keyPressed = 0;
     function PostLoginForm() {
         var form = $('login-form');
         $('#loading').show();
