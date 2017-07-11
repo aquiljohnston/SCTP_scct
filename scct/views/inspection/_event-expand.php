@@ -15,9 +15,9 @@ use yii\bootstrap\Modal;
 <div class="allegato-index">
 
     <?= GridView::widget([
-        'dataProvider' => $eventDataProvider,
+        'dataProvider' => $sectionDataProvider,
         'export' => false,
-        'id' => 'inspectionEventGV',
+        'id' => 'inspectionSectionGV',
         'summary' => '',
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
@@ -56,7 +56,7 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
-            /*[
+            [
                 'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
@@ -70,8 +70,8 @@ use yii\bootstrap\Modal;
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
                 }
-            ],*/
-            /*[
+            ],
+            [
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
@@ -82,7 +82,7 @@ use yii\bootstrap\Modal;
                     else
                         return "";
                 }
-            ]*/
+            ]
         ],
     ]); ?>
 
