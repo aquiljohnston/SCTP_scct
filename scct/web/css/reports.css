@@ -36,7 +36,11 @@
 }
 #reports-page .footerabove{
 	display:none;
-} 
+}
+table.dataTable tbody td{
+	word-break: break-all;
+	vertical-align: top;
+}
 /*-----------css for the 1360*768 resolution---------------*/
 @media only screen and (min-width: 1300px) {
 #reportTable_wrapper .dataTables_scrollBody{
