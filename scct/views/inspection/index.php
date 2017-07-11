@@ -65,14 +65,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
                         'detailUrl' => Url::to(['inspection/view-section']),
                         'detailAnimationDuration' => 'fast'
-                        /*$searchModel = new CreateBookingsSearch();
-                        $searchModel->booking_id = $model ->id;
-                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-                        return Yii::$app->controller->renderPartial('_expandrowview.php',[
-                            'searchModel' => $searchModel,
-                            'dataProvider' => $dataProvider,
-                        ]);*/
                     ],
                     [
                         'label' => 'Map Grid',
