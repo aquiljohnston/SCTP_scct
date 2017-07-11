@@ -1,3 +1,4 @@
+navBarLoaded = false;
 $(document).ready(function () {
 
     $('#loading').hide();
@@ -85,14 +86,16 @@ $(document).ready(function () {
                 beforeSend: function () {
                     $('#loading').show();
                 },
-                complete: function () {
-                    $('#loading').hide();
-                },
                 success: function (data) {
-                    $('#loading').hide();
                     data = $.parseJSON(data.navMenu);
                     //console.log(JSON.stringify(data, null, 2));
                     NavBar(data);
+                    navBarLoaded = true;
+                    checkAndProcessDispatchAndNavBarLoading();
+                },
+                error: function () {
+                    //TODO: handle error
+                    console.error("Menu not loaded. Inspect the request for more info.");
                 }
             });
         } else {
@@ -101,6 +104,8 @@ $(document).ready(function () {
             } else {
                 $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
             }
+            navBarLoaded = true;
+            checkAndProcessDispatchAndNavBarLoading();
 
         }
 
