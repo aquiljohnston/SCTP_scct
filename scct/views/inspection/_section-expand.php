@@ -15,7 +15,7 @@ use yii\bootstrap\Modal;
 <div class="allegato-index">
 
     <?= GridView::widget([
-        'dataProvider' => $eventDataProvider,
+        'dataProvider' => $sectionDataProvider,
         'export' => false,
         'id' => 'inspectionEventGV',
         'summary' => '',
@@ -56,21 +56,21 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
-            /*[
+            [
                 'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'buttons' => [
                     'view' => function($url, $model) {
-                        $modalViewAssetInspection = "#modalViewAssetInspection";
-                        $modalContentViewAssetInspection = "#modalContentViewAssetInspection";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/inspection/view-asset?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetInspection ."','".$modalContentViewAssetInspection."')"]);
+                        $modalViewSectionDetailInspection = "#modalViewSectionDetailInspection";
+                        $modalContentViewSectionDetailInspection = "#modalContentViewSectionDetailInspection";
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/inspection/view-section-detail-modal?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewSectionDetailInspection ."','".$modalContentViewSectionDetailInspection."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
                 }
-            ],*/
+            ],
             /*[
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
@@ -85,20 +85,4 @@ use yii\bootstrap\Modal;
             ]*/
         ],
     ]); ?>
-
-    <?php
-    Modal::begin([
-        'id' => 'assetModal',
-        'size' => 'modal-m',
-    ]);
-
-    ?>
-    <div id='viewAssetModalContent'>
-        Loading...
-    </div>
-    <?php
-
-    Modal::end();
-    ?>
-
 </div>

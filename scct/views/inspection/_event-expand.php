@@ -15,7 +15,7 @@ use yii\bootstrap\Modal;
 <div class="allegato-index">
 
     <?= GridView::widget([
-        'dataProvider' => $sectionDataProvider,
+        'dataProvider' => $eventDataProvider,
         'export' => false,
         'id' => 'inspectionSectionGV',
         'summary' => '',

@@ -138,22 +138,23 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
-    <!--View Asset Modal-->
+    <!--View Section Detail Modal-->
     <?php
     Modal::begin([
         'header' => '<h4>Inspection</h4>',
-        'id' => 'modalViewAssetInspection',
-        'size' => 'modal-m',
+        'id' => 'modalViewSectionDetailInspection',
+        'size' => 'modal-lg',
     ]);
 
     ?>
-    <div id='modalContentViewAssetInspection'>
+    <div id='modalContentViewSectionDetailInspection'>
         Loading...
     </div>
     <?php
 
     Modal::end();
     ?>
+
 </div>
 
 

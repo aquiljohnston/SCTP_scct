@@ -20,11 +20,11 @@ class InspectionController extends \app\controllers\BaseController
             //self::requirePermission("viewDispatch");
 
             $model = new \yii\base\DynamicModel([
-                'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
+                'inspectionfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
             ]);
             $model->addRule('mapgridfilter', 'string', ['max' => 32])
                 ->addRule('sectionnumberfilter', 'string', ['max' => 32])
-                ->addRule('dispatchfilter', 'string', ['max' => 32])
+                ->addRule('inspectionfilter', 'string', ['max' => 32])
                 ->addRule('pagesize', 'string', ['max' => 32]);
 
             // Verify logged in
@@ -35,73 +35,67 @@ class InspectionController extends \app\controllers\BaseController
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
 
-                //Yii::trace("dispatchfilter " . $model->dispatchfilter);
-                //Yii::trace("pagesize " . $model->pagesize);
-                //Yii::trace("mapgridfilter " . $model->mapgridfilter);
-                //Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
-                $dispatchPageSizeParams = $model->pagesize;
-                $dispatchFilterParams = $model->dispatchfilter;
-                $dispatchMapGridSelectedParams = $model->mapgridfilter;
-                $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
+                $inspectionPageSizeParams = $model->pagesize;
+                $inspectionFilterParams = $model->inspectionfilter;
+                $inspectionMapGridSelectedParams = $model->mapgridfilter;
             } else {
-                $dispatchPageSizeParams = 50;
-                $dispatchFilterParams = "";
-                $dispatchMapGridSelectedParams = "";
-                $dispatchSectionNumberSelectedParams = "";
+                $inspectionPageSizeParams = 50;
+                $inspectionFilterParams = "";
+                $inspectionMapGridSelectedParams = "";
             }
 
             // get the page number for assigned table
-            if (isset($_GET['dispatchPageNumber']) && $_GET['dispatchTableRecordsUpdate'] != "true") {
-                $pageAt = $_GET['dispatchPageNumber'];
+            if (isset($_GET['inspectionPageNumber']) && $_GET['inspectionTableRecordsUpdate'] != "true") {
+                $pageAt = $_GET['inspectionPageNumber'];
             } else {
                 $pageAt = 1;
             }
 
-            $getUrl = 'dispatch%2Fget-available&' . http_build_query([
-                    'filter' => $dispatchFilterParams,
-                    'listPerPage' => $dispatchPageSizeParams,
+            $getUrl = 'inspection%2Fget-map-grids&' . http_build_query([
+                    'mapGridSelected' => $inspectionMapGridSelectedParams,
+                    'filter' => $inspectionFilterParams,
+                    'listPerPage' => $inspectionPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-            //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
+            $getInspectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
 
-            $dispatchData = $getDispatchDataResponse['mapGrids'];
+            $inspectionData = $getInspectionDataResponse['mapGrids'];
 
             // Put data in data provider
             // render page
-            $dispatchDataProvider = new ArrayDataProvider
+            $inspectionDataProvider = new ArrayDataProvider
             ([
-                'allModels' => $dispatchData,
+                'allModels' => $inspectionData,
                 'pagination' => false,
             ]);
             // dispatch section data provider
 
-            $dispatchDataProvider->key = 'MapGrid';
+            $inspectionDataProvider->key = 'MapGrid';
 
             //todo: set paging on both tables
             // set pages to dispatch table
-            $pages = new Pagination($getDispatchDataResponse['pages']);
+            $pages = new Pagination($getInspectionDataResponse['pages']);
 
             //todo: check permission to dispatch work
             $can = 1;
 
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('index', [
-                    'dispatchDataProvider' => $dispatchDataProvider,
+                    'inspectionDataProvider' => $inspectionDataProvider,
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,
-                    'dispatchFilterParams' => $dispatchFilterParams,
-                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
+                    'inspectionFilterParams' => $inspectionFilterParams,
+                    'inspectionPageSizeParams' => $inspectionPageSizeParams,
                 ]);
             } else {
                 return $this->render('index', [
-                    'dispatchDataProvider' => $dispatchDataProvider,
+                    'inspectionDataProvider' => $inspectionDataProvider,
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,
-                    'dispatchFilterParams' => $dispatchFilterParams,
-                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
+                    'inspectionFilterParams' => $inspectionFilterParams,
+                    'inspectionPageSizeParams' => $inspectionPageSizeParams,
                 ]);
             }
         } catch (ForbiddenHttpException $e) {
@@ -153,7 +147,7 @@ class InspectionController extends \app\controllers\BaseController
         else
             $mapGridSelected = "";
 
-        $getUrl = 'dispatch%2Fget-available&' . http_build_query([
+        $getUrl = 'inspection%2Fget-map-grids&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
                 'filter' => $sectionFilterParams,
                 'listPerPage' => $sectionPageSizeParams,
@@ -161,7 +155,6 @@ class InspectionController extends \app\controllers\BaseController
             ]);
 
         $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        //Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
         $sectionData = $getSectionDataResponse['sections'];
 
         // Put data in data provider
@@ -205,7 +198,7 @@ class InspectionController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewSectionDetailModal($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
@@ -222,69 +215,144 @@ class InspectionController extends \app\controllers\BaseController
 
         if (Yii::$app->request->get()){
             //todo: need to remove hard code value
-            $viewAssetFilterParams = $searchFilterVal;
+            $viewSectionDetailFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
         }else{
-            $viewAssetFilterParams = "";
+            $viewSectionDetailFilterParams = "";
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
             $searchFilterVal = "";
         }
 
-        $getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
+        $getUrl = 'inspection%2Fget-inspections&' . http_build_query([
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'filter' => $viewAssetFilterParams,
+                'filter' => $viewSectionDetailFilterParams,
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
-
-        /*// Reading the response from the the api and filling the surveyorGridView
-        $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
-                'filter' => $searchFilterVal,
-            ]);
-        Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
-        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
+        $getSectionDetailDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("SECTION DETAIL DATA: ".json_encode($getSectionDetailDataResponse));
+        self::$sectionDetailData = $getSectionDetailDataResponse['inspections'];
 
         // Put data in data provider
-        $assetDataProvider = new ArrayDataProvider
+        $sectionDetailDataProvider = new ArrayDataProvider
         ([
-            'allModels' => $getAssetDataResponse['assets'],
+            'allModels' => $getSectionDetailDataResponse['inspections'],
             'pagination' => false,
         ]);
-        $assetDataProvider->key = 'WorkOrderID';
-        /*$surveyorList = [];
-        $surveyorList = $surveyorsResponse['users'];*/
+        $sectionDetailDataProvider->key = 'InspectionID';
 
-        //todo: set paging on both tables
         // set pages to dispatch table
-        $pages = new Pagination($getAssetDataResponse['pages']);
+        $pages = new Pagination($getSectionDetailDataResponse['pages']);
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
+            return $this->renderAjax('view_detail_modal', [
+                'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                //'surveyorList' => $surveyorList,
-                'searchFilterVal' => $viewAssetFilterParams,
+                'searchFilterVal' => $viewSectionDetailFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);
         } else {
-            return $this->render('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
+            return $this->render('view_detail_modal', [
+                'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                'searchFilterVal' => $viewAssetFilterParams,
-                //'surveyorList' => $surveyorList,
+                'searchFilterVal' => $viewSectionDetailFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+            ]);
+        }
+    }
+
+    /**
+     * render expandable event row
+     * @return string|Response
+     */
+    public function actionViewEvent($mapGridSelected = null, $sectionNumberSelected = null)
+    {
+        $model = new \yii\base\DynamicModel([
+            'eventfilter', 'pagesize'
+        ]);
+        $model->addRule('eventfilter', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);
+
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        //check request
+        if ($model->load(Yii::$app->request->queryParams)) {
+
+            Yii::trace("eventfilter " . $model->eventfilter);
+            Yii::trace("pagesize " . $model->pagesize);
+            $eventPageSizeParams = $model->pagesize;
+            $eventFilterParams = $model->eventfilter;
+        } else {
+            $eventPageSizeParams = 10;
+            $eventFilterParams = "";
+        }
+
+        // get the page number for assigned table
+        if (isset($_GET['userPage'])) {
+            $pageAt = $_GET['userPage'];
+        } else {
+            $pageAt = 1;
+        }
+        // get the key to generate event table
+        if (isset($_POST['expandRowKey']))
+            $inspectionID = $_POST['expandRowKey'];
+        else
+            $inspectionID = "";
+
+        $getUrl = 'inspection%2Fget-inspections&' . http_build_query([
+                'mapGridSelected' => $mapGridSelected,
+                'sectionNumberSelected' => $sectionNumberSelected,
+                'inspectionID' => $inspectionID,
+                'page' => $pageAt,
+            ]);
+        $getEventDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $eventData = $getEventDataResponse['events'];
+
+        // Put data in data provider
+        // dispatch event data provider
+        $eventDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $eventData,
+            'pagination' => false,
+        ]);
+
+        $eventDataProvider->key = 'InspectionID';
+
+        // set pages to dispatch table
+        $pages = new Pagination($getEventDataResponse['pages']);
+
+        //todo: check permission to dispatch work
+        $can = 1;
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_event-expand', [
+                'eventDataProvider' => $eventDataProvider,
+                'model' => $model,
+                'can' => $can,
+                'pages' => $pages,
+                'eventFilterParams' => $eventFilterParams,
+                'eventPageSizeParams' => $eventPageSizeParams,
+            ]);
+        } else {
+            return $this->render('_event-expand', [
+                'eventDataProvider' => $eventDataProvider,
+                'model' => $model,
+                'can' => $can,
+                'pages' => $pages,
+                'eventFilterParams' => $eventFilterParams,
+                'eventPageSizeParams' => $eventPageSizeParams,
             ]);
         }
     }
