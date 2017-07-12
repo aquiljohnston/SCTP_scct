@@ -99,6 +99,21 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
+                        'header' => 'View Asset',
+                        'class' => 'kartik\grid\ActionColumn',
+                        'template' => '{view}',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                        'buttons' => [
+                            'view' => function($url, $model) {
+                                $modalViewSectionDetailInspection = "#modalViewSectionDetailInspection";
+                                $modalContentViewSectionDetailInspection = "#modalContentViewSectionDetailInspection";
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/inspection/view-section-detail-modal?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected="."','".$modalViewSectionDetailInspection ."','".$modalContentViewSectionDetailInspection."')"]);
+                            }
+                        ],
+                        'urlCreator' => function ($action, $model, $key, $index) {
+                        }
+                    ],
+                    /*[
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
@@ -114,7 +129,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                         }
-                    ]
+                    ]*/
                 ],
                 'beforeHeader' => [
                     [
