@@ -276,6 +276,9 @@ ul > li > a:hover {
 table {
     width: 100%;
 }
+.glyphicon{
+    cursor: pointer;
+}
 
 /*-----------End body----------*/
 
