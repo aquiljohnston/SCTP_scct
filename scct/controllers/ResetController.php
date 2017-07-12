@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 
 class ResetController extends BaseController
@@ -27,6 +28,7 @@ class ResetController extends BaseController
      */
     public function actionIndex()
     {
+        throw new NotFoundHttpException("Page not found.");
 		//create a new dynamic model for form fields
 		$model = new \yii\base\DynamicModel([
 			'UserName', 'Password', 'NewPassword' 
