@@ -8,7 +8,7 @@ use kartik\form\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="user-form">
+<div class="user-form" style="max-height: 400px;overflow-y: auto;overflow-x: hidden;">
 
     <?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_HORIZONTAL,
