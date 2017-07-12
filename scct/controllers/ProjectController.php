@@ -350,8 +350,8 @@ class ProjectController extends BaseController
             $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
             $projectUrl = 'project%2Fview&id='.$id;
 
-            Yii::trace("URL: ".$url);
-            Yii::trace("Proejct: ".$projectUrl);
+            //Yii::trace("URL: ".$url);
+            //Yii::trace("Proejct: ".$projectUrl);
 
             $response = Parent::executeGetRequest($url, self::API_VERSION_2);
             $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
@@ -394,8 +394,8 @@ class ProjectController extends BaseController
 			$unassignedUsersArray = explode(',',$model->UnassignedUsers);
 			$assignedUsersArray = explode(',',$model->AssignedUsers);
 			//array diff new arrays with arrays previous to submission to get changes
-			$usersAdded = array_diff($assignedUsersArray,array_keys($assignedData));
-			$usersRemoved = array_diff($unassignedUsersArray,array_keys($unassignedData));
+			$usersAdded = array_values(array_diff($assignedUsersArray,array_keys($assignedData)));
+			$usersRemoved = array_values(array_diff($unassignedUsersArray,array_keys($unassignedData)));
 			//load arrays of changes into post data
 			$data = [];
 			$data["usersRemoved"] = $usersRemoved;
@@ -403,13 +403,13 @@ class ProjectController extends BaseController
 
 			//encode data
 			$jsonData = json_encode($data);
-            Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
+            //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
 			//set post url
 			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
-            Yii::trace("ADD USER URL: ".$postUrl);
+            //Yii::trace("ADD USER URL: ".$postUrl);
 			//execute post request
 			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
-            Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
+            //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
 		}else{

@@ -1,3 +1,4 @@
+navBarLoaded = false;
 $(document).ready(function () {
 
     $('#loading').hide();
@@ -74,9 +75,7 @@ $(document).ready(function () {
             userRoleID = defaultID;
         }
 
-        //Build Table-Driven Navigation Menu
-        if (localStorage.getItem('scct-navbar-saved') != "true") {
-            $("#nav").addClass("blankNavBar");
+        function ajaxLoadNavBar() {
             $.ajax({
                 type: "GET",
                 url: "/base/get-nav-menu",
@@ -85,23 +84,46 @@ $(document).ready(function () {
                 beforeSend: function () {
                     $('#loading').show();
                 },
-                complete: function () {
-                    $('#loading').hide();
-                },
                 success: function (data) {
-                    $('#loading').hide();
                     data = $.parseJSON(data.navMenu);
                     //console.log(JSON.stringify(data, null, 2));
                     NavBar(data);
+                    navBarLoaded = true;
+                    checkAndProcessDispatchAndNavBarLoading();
+                },
+                error: function () {
+                    //TODO: handle error
+                    console.error("Menu not loaded. Inspect the request for more info.");
                 }
             });
-        } else {
-            if (localStorage.getItem('navbar-blank') == "true") {
-                $("#nav").addClass("blankNavBar");
-            } else {
-                $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
-            }
+        }
 
+        function isLocalStorageNameSupported() {
+            var testKey = 'testOfLocalStorageSupport', storage = window.localStorage;
+            try {
+                storage.setItem(testKey, '1');
+                storage.removeItem(testKey);
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
+        if(isLocalStorageNameSupported()) {
+            //Build Table-Driven Navigation Menu
+            if (localStorage.getItem('scct-navbar-saved') != "true") {
+                $("#nav").addClass("blankNavBar");
+                ajaxLoadNavBar();
+            } else {
+                if (localStorage.getItem('navbar-blank') == "true") {
+                    $("#nav").addClass("blankNavBar");
+                } else {
+                    $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
+                }
+                navBarLoaded = true;
+                checkAndProcessDispatchAndNavBarLoading();
+            }
+        } else {
+            ajaxLoadNavBar();
         }
 
         function NavBar(data) {
@@ -226,8 +248,9 @@ $(document).ready(function () {
                 if ((data.Modules[0].Home.enabled.toString() == 0)
                     && (data.Modules[0].Dispatch.enabled.toString() == 0)
                     && (data.Modules[0].CometTracker.enabled.toString() == 0)) {
-
-                    localStorage.setItem('scct-navbar-blank', 'true');
+                    if(isLocalStorageNameSupported()) {
+                        localStorage.setItem('scct-navbar-blank', 'true');
+                    }
                 } else {
                     var nav = $("#nav");
                     nav.removeClass("blankNavBar");
@@ -240,28 +263,15 @@ $(document).ready(function () {
                     if (HomeDropdownStr.length !== 0) {
                         nav.prepend(HomeDropdownStr);
                     }
-                    localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
+                    if(isLocalStorageNameSupported()) {
+                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
+                    }
 
-                    /*if (data.Modules[0].Dispatch.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
-                     nav.prepend(DispatchDropdown, AdminDropdown);
-
-                     localStorage.setItem('scct-navbar-data', DispatchDropdown + AdminDropdown);
-                     }else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].CometTracker.enabled.toString() != 0) {
-                     nav.prepend(HomeDropdown, AdminDropdown);
-
-                     localStorage.setItem('scct-navbar-data', HomeDropdownStr + AdminDropdown);
-                     }else if (data.Modules[0].Home.enabled.toString() != 0 && data.Modules[0].Dispatch.enabled.toString() != 0){
-                     nav.prepend(HomeDropdown, DispatchDropdown);
-
-                     localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown);
-                     }else {
-                     nav.prepend(HomeDropdown, DispatchDropdown, AdminDropdown);
-
-                     localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
-                     }*/
                 }
             }
-            localStorage.setItem('scct-navbar-saved', 'true');
+            if(isLocalStorageNameSupported()) {
+                localStorage.setItem('scct-navbar-saved', 'true');
+            }
         }
 
         // assign class to current active link
@@ -282,6 +292,3 @@ $(document).ready(function () {
         });
     }
 });
-//         $('#nav > ul').not('ul li ul').not('li ul li').children().addClass('current');
-//         $(this).closest('li').addClass('current');
-//No newline at end of file
