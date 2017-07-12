@@ -236,7 +236,6 @@ class InspectionController extends \app\controllers\BaseController
             ]);
         $getSectionDetailDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
         Yii::trace("SECTION DETAIL DATA: ".json_encode($getSectionDetailDataResponse));
-        self::$sectionDetailData = $getSectionDetailDataResponse['inspections'];
 
         // Put data in data provider
         $sectionDetailDataProvider = new ArrayDataProvider
