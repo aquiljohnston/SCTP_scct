@@ -135,7 +135,7 @@ $(document).ready(function () {
             var dropdownFlag = 0;
             var baseUrl = "/";
             var HomeDropdownStr = "";
-            var InspectionsDropdown = "";
+            var InspectionsDropdownStr = "";
             if (jQuery.isEmptyObject(data)) {
                 str = "Json array is empty";
             } else {
@@ -268,14 +268,14 @@ $(document).ready(function () {
                     if (DispatchDropdown.length !== 0) {
                         nav.prepend(DispatchDropdown);
                     }
-                    if (InspectionsDropdown.length !== 0) {
-                        nav.prepend(InspectionsDropdown);
+                    if (InspectionsDropdownStr.length !== 0) {
+                        nav.prepend(InspectionsDropdownStr);
                     }
                     if (HomeDropdownStr.length !== 0) {
                         nav.prepend(HomeDropdownStr);
                     }
                     if(isLocalStorageNameSupported()) {
-                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + InspectionsDropdown + DispatchDropdown + AdminDropdown);
+                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + InspectionsDropdownStr + DispatchDropdown + AdminDropdown);
                     }
 
                 }
