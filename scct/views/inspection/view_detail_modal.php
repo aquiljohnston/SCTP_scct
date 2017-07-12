@@ -83,23 +83,38 @@ use yii\helpers\Url;
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'label' => 'Adhoc',
-                'attribute' => 'Adhoc',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'header' => 'Adhoc',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'contentOptions' => ['class' => 'Adhoc'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    if ($model['Adhoc'] == 1)
+                        return ['disabled' => true, 'checked' => true];
+                    else
+                        return ['disabled' => true, 'checked' => false];
+                }
             ],
             [
-                'label' => 'AOC',
-                'attribute' => 'AOC',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'header' => 'AOC',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'contentOptions' => ['class' => 'AOC'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    if ($model['AOC'] == 1)
+                        return ['disabled' => true, 'checked' => true];
+                    else
+                        return ['disabled' => true, 'checked' => false];
+                }
             ],
             [
-                'label' => 'CGE',
-                'attribute' => 'CGE',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-            ],
+                'header' => 'CGE',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'contentOptions' => ['class' => 'CGE'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    if ($model['CGE'] == 1)
+                        return ['disabled' => true, 'checked' => true];
+                    else
+                        return ['disabled' => true, 'checked' => false];
+                }
+            ]
         ],
     ]); ?>
 
