@@ -17,7 +17,7 @@ class InspectionsController extends \app\controllers\BaseController
         try {
 
             // Check if user has permission to view dispatch page
-            //self::requirePermission("viewDispatch");
+            self::requirePermission("viewInspections");
 
             $model = new \yii\base\DynamicModel([
                 'inspectionfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
