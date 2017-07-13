@@ -1,6 +1,6 @@
 <?php
 
-namespace app\controllers;
+namespace app\modules\dispatch\controllers;
 
 use Exception;
 use InspectionRequest;
@@ -10,11 +10,11 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
 
-class InspectionController extends \app\controllers\BaseController
+class InspectionsController extends \app\controllers\BaseController
 {
     public function actionIndex()
     {
-        try {
+        //try {
 
             // Check if user has permission to view dispatch page
             //self::requirePermission("viewDispatch");
@@ -98,12 +98,12 @@ class InspectionController extends \app\controllers\BaseController
                     'inspectionPageSizeParams' => $inspectionPageSizeParams,
                 ]);
             }
-        } catch (ForbiddenHttpException $e) {
+        /*} catch (ForbiddenHttpException $e) {
             //Yii::$app->runAction('login/user-logout');
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
-        }
+        }*/
     }
 
     /**
