@@ -135,7 +135,6 @@ $(document).ready(function () {
             var dropdownFlag = 0;
             var baseUrl = "/";
             var HomeDropdownStr = "";
-            var InspectionsDropdownStr = "";
             if (jQuery.isEmptyObject(data)) {
                 str = "Json array is empty";
             } else {
@@ -246,13 +245,6 @@ $(document).ready(function () {
                         HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
                     } //end of home enabled flag check
                 }
-                if (data.Modules[0].Inspections.enabled.toString() != 0) {
-                    InspectionsArray = data.Modules[0].Inspections.NavigationMenu[0];
-                    if (InspectionsArray.enabled.toString() != 0) {
-                        InspectionsDropdown = $("<li><a id='inspection_btn' href='" + baseUrl + "inspection'>" + InspectionsArray.NavigationName.toString() + "</a></li>");
-                        InspectionsDropdownStr = "<li><a id='inspection_btn' href='" + baseUrl + "inspection'>" + InspectionsArray.NavigationName.toString() + "</a></li>";
-                    } //end of Inspection enabled flag check
-                }
                 if ((data.Modules[0].Home.enabled.toString() == 0)
                     && (data.Modules[0].Dispatch.enabled.toString() == 0)
                     && (data.Modules[0].CometTracker.enabled.toString() == 0)) {
@@ -268,14 +260,11 @@ $(document).ready(function () {
                     if (DispatchDropdown.length !== 0) {
                         nav.prepend(DispatchDropdown);
                     }
-                    if (InspectionsDropdownStr.length !== 0) {
-                        nav.prepend(InspectionsDropdownStr);
-                    }
                     if (HomeDropdownStr.length !== 0) {
                         nav.prepend(HomeDropdownStr);
                     }
                     if(isLocalStorageNameSupported()) {
-                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + InspectionsDropdownStr + DispatchDropdown + AdminDropdown);
+                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
                     }
 
                 }
