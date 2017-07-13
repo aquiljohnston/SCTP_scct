@@ -57,7 +57,8 @@ class BaseController extends Controller
 	    //check if url prefix contains api target
         if(strpos($prefix, self::SERVER_LOCALHOST) !== false) {
             return self::API_LOCAL_URL . "$version%2F$path";
-		} else if(strpos($prefix, self::SERVER_DEV) !== false) {
+		//checks for demo in dev check because name does not follow the standard convention
+		} else if(strpos($prefix, self::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
             return self::API_DEV_URL . "$version%2F$path";
         } else if(strpos($prefix, self::SERVER_STAGE) !== false){
             return self::API_STAGE_URL . "$version%2F$path";
