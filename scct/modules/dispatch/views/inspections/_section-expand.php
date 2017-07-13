@@ -51,7 +51,7 @@ use yii\bootstrap\Modal;
             ],
             [
                 'label' => '',
-                'attribute' => 'AvailableWorkOrderCount',
+                'attribute' => 'TotalInspections',
                 //'label' => false,
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],

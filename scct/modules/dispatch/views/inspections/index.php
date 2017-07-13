@@ -93,8 +93,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
-                        'label' => 'Available Work Order',
-                        'attribute' => 'AvailableWorkOrderCount',
+                        'label' => 'Total Inspections Count',
+                        'attribute' => 'TotalInspections',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
