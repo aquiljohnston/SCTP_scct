@@ -49,10 +49,11 @@ use yii\helpers\Url;
                 'collapseTitle' => 'Collapse all',
                 'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
                 'value' => function ($model, $key, $index, $column) {
-                    /*if ($model['sectionCount'] == null){
-                        return GridView::ROW_NONE;
-                    }*/
+                    if ($model['HasEvents'] == 0){
+                        return "";
+                    }else{
                     return GridView::ROW_COLLAPSED;
+                    }
                 },
 
                 'detailUrl' => Url::to(['inspections/view-event']),
