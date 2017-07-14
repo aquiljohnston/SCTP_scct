@@ -107,7 +107,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'view' => function($url, $model) {
                                 $modalViewSectionDetailInspection = "#modalViewSectionDetailInspection";
                                 $modalContentViewSectionDetailInspection = "#modalContentViewSectionDetailInspection";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/inspections/view-section-detail-modal?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected="."','".$modalViewSectionDetailInspection ."','".$modalContentViewSectionDetailInspection."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-section-detail-modal?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected="."','".$modalViewSectionDetailInspection ."','".$modalContentViewSectionDetailInspection."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {

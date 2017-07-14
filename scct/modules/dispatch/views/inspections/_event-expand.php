@@ -65,7 +65,7 @@ use yii\bootstrap\Modal;
                     'view' => function($url, $model) {
                         $modalViewAssetInspection = "#modalViewAssetInspection";
                         $modalContentViewAssetInspection = "#modalContentViewAssetInspection";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/inspections/view-asset?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetInspection ."','".$modalContentViewAssetInspection."')"]);
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-asset?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetInspection ."','".$modalContentViewAssetInspection."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
