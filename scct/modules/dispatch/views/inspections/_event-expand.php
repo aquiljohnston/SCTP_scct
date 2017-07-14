@@ -22,66 +22,38 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                //'label' => ' ',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
-                'value' => function($model){
-                    return "";
-                }
-            ],
-            [
-                'label' => '',
-                'attribute' => 'MapGrid',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
+                'label' => 'Status',
+                'attribute' => 'StatusDescription',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
                 //'label' => false,
                 /*'value' => function ($model) {
                     return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
                 }*/
             ],
             [
-                'label' => 'Section Number',
-                'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
+                'label' => 'AOC Reason',
+                'attribute' => 'AOCReason',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
                 //'label' => false,
                 /*'value' => function ($model) {
                     return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                 }*/
             ],
             [
-                'label' => '',
-                'attribute' => 'AvailableWorkOrderCount',
+                'label' => 'CGE Reason',
+                'attribute' => 'CGEReason',
                 //'label' => false,
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'header' => 'View Asset',
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                'buttons' => [
-                    'view' => function($url, $model) {
-                        $modalViewAssetInspection = "#modalViewAssetInspection";
-                        $modalContentViewAssetInspection = "#modalContentViewAssetInspection";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-asset?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetInspection ."','".$modalContentViewAssetInspection."')"]);
-                    }
-                ],
-                'urlCreator' => function ($action, $model, $key, $index) {
-                }
-            ],
-            [
-                'header' => 'Add Surveyor',
-                'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                'contentOptions' => ['class' => 'inspectionSectionCheckbox'],
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if (!empty($model))
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
-                    else
-                        return "";
-                }
+                'label' => 'LeakNumber',
+                'attribute' => 'LeakNumber',
+                //'label' => false,
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ]
         ],
     ]); ?>
