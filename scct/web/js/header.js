@@ -135,6 +135,8 @@ $(document).ready(function () {
             var dropdownFlag = 0;
             var baseUrl = "/";
             var HomeDropdownStr = "";
+            var TrackerArrayDropdownStr = "";
+            var ReportDropdown = "";
             if (jQuery.isEmptyObject(data)) {
                 str = "Json array is empty";
             } else {
@@ -232,10 +234,19 @@ $(document).ready(function () {
 
                         } else {
                             if (DispatchArray.enabled.toString() != 0) {
-                                DispatchDropdown = DispatchDropdown + "<li><a class='dropdown' href='" + baseUrl + DispatchArray.Url.toString() + "'>" + DispatchArray.NavigationName.toString() + "</a></li>";
+                                ReportDropdown = "<li><a class='dropdown' href='" + baseUrl + DispatchArray.Url.toString() + "'>" + DispatchArray.NavigationName.toString() + "</a></li>";
                             }
                         }
                     }
+                }
+
+                if (data.Modules[0].Tracker.enabled.toString() != 0) {
+                    TrackerArray = data.Modules[0].Tracker.NavigationMenu[0];
+                    if (TrackerArray.enabled.toString() != 0) {
+                        TrackerArrayDropdown = $("<li><a id='tracker_btn' href='" + baseUrl + "tracker'>" + TrackerArray.NavigationName.toString() + "</a></li>");
+                        TrackerArrayDropdownStr = "<li><a id='tracker_btn' href='" + baseUrl + "tracker'>" + TrackerArray.NavigationName.toString() + "</a></li>";
+                        TrackerArrayDropdownStr += ReportDropdown;
+                    } //end of tracker enabled flag check
                 }
 
                 if (data.Modules[0].Home.enabled.toString() != 0) {
@@ -247,7 +258,8 @@ $(document).ready(function () {
                 }
                 if ((data.Modules[0].Home.enabled.toString() == 0)
                     && (data.Modules[0].Dispatch.enabled.toString() == 0)
-                    && (data.Modules[0].CometTracker.enabled.toString() == 0)) {
+                    && (data.Modules[0].CometTracker.enabled.toString() == 0)
+                    && (data.Modules[0].Tracker.enabled.toString() == 0)) {
                     if(isLocalStorageNameSupported()) {
                         localStorage.setItem('scct-navbar-blank', 'true');
                     }
@@ -257,6 +269,9 @@ $(document).ready(function () {
                     if (AdminDropdown.length !== 0) {
                         nav.prepend(AdminDropdown);
                     }
+                    if (TrackerArrayDropdownStr.length !== 0) {
+                        nav.prepend(TrackerArrayDropdownStr);
+                    }
                     if (DispatchDropdown.length !== 0) {
                         nav.prepend(DispatchDropdown);
                     }
@@ -264,7 +279,7 @@ $(document).ready(function () {
                         nav.prepend(HomeDropdownStr);
                     }
                     if(isLocalStorageNameSupported()) {
-                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + AdminDropdown);
+                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + TrackerArrayDropdownStr + AdminDropdown);
                     }
 
                 }
