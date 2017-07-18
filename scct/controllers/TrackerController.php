@@ -26,19 +26,8 @@ class TrackerController extends BaseController
         }
 		
 		//Check if user has permission to tracker page
-		self::requirePermission("viewTracker");
-
-        return $this->render('index', []);
-    }
-
-
-    public function actionHistory()
-    {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
-
+		self::requirePermission("viewTrackerMenu");
+		
         $url = "dropdown%2Fget-tracker-map-grids";
         $mapGridsResponse = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
         $mapGridsResponse = json_decode($mapGridsResponse, true);

@@ -97,6 +97,7 @@ class PermissionDictionary {
         'viewAssigned', // View assigned
         'viewReportsMenu', // View reports
         'viewInspections', // view Inspection
+        'viewTrackerMenu', // view Inspection
     ];
 
     private static $scctTemplatePermissions = [

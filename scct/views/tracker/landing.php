@@ -7,7 +7,7 @@
  */
 use yii\bootstrap\Html;
 
-$this->title = 'Tracker History';
+$this->title = 'Tracker';
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
