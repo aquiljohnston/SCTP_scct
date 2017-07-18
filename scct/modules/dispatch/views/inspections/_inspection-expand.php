@@ -62,18 +62,6 @@ $ImageUrl = 'images/';
                 'detailAnimationDuration' => 'fast'
             ],*/
             [
-                'label' => 'MapGrid',
-                'attribute' => 'MapGrid',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center MapGrid'],
-            ],
-            [
-                'label' => 'SectionNumber',
-                'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center SectionNumber'],
-            ],
-            [
                 'label' => 'Inspector',
                 'attribute' => 'Inspector',
                 'headerOptions' => ['class' => 'text-center'],
@@ -113,6 +101,17 @@ $ImageUrl = 'images/';
                 'contentOptions' => ['class' => 'CGE'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if ($model['CGE'] == 1)
+                        return ['disabled' => true, 'checked' => true];
+                    else
+                        return ['disabled' => true, 'checked' => false];
+                }
+            ],
+            [
+                'header' => 'Indication',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'contentOptions' => ['class' => 'Indication'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    if ($model['IsIndicationFlag'] == 1)
                         return ['disabled' => true, 'checked' => true];
                     else
                         return ['disabled' => true, 'checked' => false];
