@@ -12,24 +12,26 @@ use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 
+$ImageUrl = 'images/';
 ?>
-<div id="viewSectionDetailModalContainer">
+<!--<div id="viewSectionDetailModalContainer" xmlns="http://www.w3.org/1999/html">
     <div id="sectionDetailInspectionContainer">
-        <?php yii\widgets\Pjax::begin(['id' => 'sectionDetailInspectionForm']) ?>
-        <?php $form = ActiveForm::begin([
+        <span class="MapGridInfo"> <b>Inspections for <?php /*echo $mapGridSelected." :";*/?></b></span>
+        <?php /*yii\widgets\Pjax::begin(['id' => 'sectionDetailInspectionForm']) */?>
+        <?php /*$form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
-        ]); ?>
+        ]); */?>
         <div class="viewSectionDetailSearchcontainer dropdowntitle">
-            <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewSectionDetailSearchInspection', 'placeholder'=>'Search'])->label(''); ?>
+            <?/*= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewSectionDetailSearchInspection', 'placeholder'=>'Search'])->label(''); */?>
         </div>
-        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'sectionDetailModalCleanFilterButtonInspection']) ?>
-        <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
-        <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
-        <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
-        <?php ActiveForm::end(); ?>
-        <?php yii\widgets\Pjax::end() ?>
+        <?php /*echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'sectionDetailModalCleanFilterButtonInspection']) */?>
+        <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php /*echo $searchFilterVal; */?> />
+        <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php /*echo $mapGridSelected; */?> />
+        <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php /*echo $sectionNumberSelected; */?> />
+        <?php /*ActiveForm::end(); */?>
+        <?php /*yii\widgets\Pjax::end() */?>
     </div>
-</div>
+</div>-->
 <div id="sectionDetailTable">
     <?php Pjax::begin([
         'id' => 'sectionDetailTablePjax',
@@ -43,7 +45,7 @@ use yii\helpers\Url;
         'pjax' => true,
         'summary' => '',
         'columns' => [
-            [
+            /*[
                 'class' => 'kartik\grid\ExpandRowColumn',
                 'expandAllTitle' => 'Expand all',
                 'collapseTitle' => 'Collapse all',
@@ -58,7 +60,7 @@ use yii\helpers\Url;
 
                 'detailUrl' => Url::to(['inspections/view-event']),
                 'detailAnimationDuration' => 'fast'
-            ],
+            ],*/
             [
                 'label' => 'MapGrid',
                 'attribute' => 'MapGrid',
@@ -115,14 +117,42 @@ use yii\helpers\Url;
                     else
                         return ['disabled' => true, 'checked' => false];
                 }
-            ]
+            ],
+            [
+                'attribute' => 'img',
+                'format' => 'raw',
+                'label' => 'Image',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function ($model) {
+                    return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo1Path'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                    //return Html::a('@web/logo/linkIcon.png'/* . $model['img']*/,
+                    //return Html::img('/pathToImage/'/* . $model['img']*/,
+                        //['width' => '20px']);
+                },
+            ],
+            [
+                'header' => 'View Asset',
+                'class' => 'kartik\grid\ActionColumn',
+                'template' => '{view}',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'buttons' => [
+                    'view' => function($url, $model) {
+                        $modalViewEventDetailInspection = "#modalViewEventDetailInspection";
+                        $modalContentViewEventDetailInspection = "#modalContentViewEventDetailInspection";
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-event?inspectionID=".$model['InspectionID']."','".$modalViewEventDetailInspection ."','".$modalContentViewEventDetailInspection."')"]);
+                    }
+                ],
+                'urlCreator' => function ($action, $model, $key, $index) {
+                }
+            ],
         ],
     ]); ?>
 
     <?php Pjax::end() ?>
 </div>
 
-<script type="text/javascript">
+<!--<script type="text/javascript">
     $(document).ready(function () {
         $('#viewSectionDetailSearchInspection').keypress(function (event) {
             var key = event.which;
@@ -176,5 +206,5 @@ use yii\helpers\Url;
             $("body").css("cursor", "default");
         });
     }
-</script>
+</script>-->
 

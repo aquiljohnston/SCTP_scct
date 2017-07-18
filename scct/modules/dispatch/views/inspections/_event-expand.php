@@ -22,8 +22,8 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                'label' => 'Status',
-                'attribute' => 'StatusDescription',
+                'label' => 'Event Type',
+                'attribute' => 'EventType',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 //'label' => false,
@@ -32,8 +32,8 @@ use yii\bootstrap\Modal;
                 }*/
             ],
             [
-                'label' => 'AOC Reason',
-                'attribute' => 'AOCReason',
+                'label' => 'Reason',
+                'attribute' => 'Reason',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 //'label' => false,
@@ -42,15 +42,8 @@ use yii\bootstrap\Modal;
                 }*/
             ],
             [
-                'label' => 'CGE Reason',
-                'attribute' => 'CGEReason',
-                //'label' => false,
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-            ],
-            [
-                'label' => 'LeakNumber',
-                'attribute' => 'LeakNumber',
+                'label' => 'Comments',
+                'attribute' => 'Comments',
                 //'label' => false,
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
