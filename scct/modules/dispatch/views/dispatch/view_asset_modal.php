@@ -43,16 +43,6 @@ use kartik\grid\GridView;
         'summary' => '',
         'columns' => [
             [
-                'class' => 'kartik\grid\CheckboxColumn',
-                'header' => 'Select',
-                'contentOptions' => ['class' => 'AddSurveyor'],
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if (!empty($model)) {
-                        return ['WorkOrderID' => $model["WorkOrderID"]];
-                    }
-                },
-            ],
-            [
                 'label' => 'Address',
                 'attribute' => 'HouseNumber',
                 'headerOptions' => ['class' => 'text-center'],

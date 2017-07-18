@@ -63,7 +63,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             return GridView::ROW_COLLAPSED;
                         },
 
-                        'detailUrl' => Url::to(['inspections/view-section']),
+                        'detailUrl' => Url::to(['inspections/view-inspection']),
                         'detailAnimationDuration' => 'fast'
                     ],
                     [
@@ -98,6 +98,21 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
+                    /*[
+                        'header' => 'View Asset',
+                        'class' => 'kartik\grid\ActionColumn',
+                        'template' => '{view}',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                        'buttons' => [
+                            'view' => function($url, $model) {
+                                $modalViewEventDetailInspection = "#modalViewEventDetailInspection";
+                                $modalContentViewEventDetailInspection = "#modalContentViewEventDetailInspection";
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-event?inspectionID=".$model['InspectionID']."','".$modalViewEventDetailInspection ."','".$modalContentViewEventDetailInspection."')"]);
+                            }
+                        ],
+                        'urlCreator' => function ($action, $model, $key, $index) {
+                        }
+                    ],*/
                     [
                         'header' => 'View Asset',
                         'class' => 'kartik\grid\ActionColumn',
@@ -136,16 +151,16 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
-    <!--View Section Detail Modal-->
+    <!--View Event Detail Modal-->
     <?php
     Modal::begin([
-        'header' => '<h4>Inspection</h4>',
-        'id' => 'modalViewSectionDetailInspection',
+        'header' => '<h4>Event</h4>',
+        'id' => 'modalViewEventDetailInspection',
         'size' => 'modal-lg',
     ]);
 
     ?>
-    <div id='modalContentViewSectionDetailInspection'>
+    <div id='modalContentViewEventDetailInspection'>
         Loading...
     </div>
     <?php

@@ -58,6 +58,7 @@ class InspectionsController extends \app\controllers\BaseController
                     'page' => $pageAt,
                 ]);
             $getInspectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            Yii::trace("INSPECTION INDEX DATA: ".json_encode($getInspectionDataResponse));
 
             $inspectionData = $getInspectionDataResponse['mapGrids'];
 
@@ -198,7 +199,7 @@ class InspectionsController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewSectionDetailModal($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewInspection($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
@@ -215,22 +216,28 @@ class InspectionsController extends \app\controllers\BaseController
 
         if (Yii::$app->request->get()){
             //todo: need to remove hard code value
-            $viewSectionDetailFilterParams = $searchFilterVal;
-            $mapGridSelectedParam = $mapGridSelected;
-            $sectionNumberSelectedParam = $sectionNumberSelected;
+            //$viewSectionDetailFilterParams = $searchFilterVal;
+            //$mapGridSelectedParam = $mapGridSelected;
+            //$sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
         }else{
-            $viewSectionDetailFilterParams = "";
+            //$viewSectionDetailFilterParams = "";
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
-            $searchFilterVal = "";
+            //$searchFilterVal = "";
         }
 
+        // get the key to generate section table
+        if (isset($_POST['expandRowKey']))
+            $mapGridSelected = $_POST['expandRowKey'];
+        else
+            $mapGridSelected = "";
+
         $getUrl = 'inspection%2Fget-inspections&' . http_build_query([
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'filter' => $viewSectionDetailFilterParams,
+                'mapGridSelected' => $mapGridSelected,
+                'sectionNumberSelected' => "",
+                'filter' => "",
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
@@ -249,22 +256,22 @@ class InspectionsController extends \app\controllers\BaseController
         $pages = new Pagination($getSectionDetailDataResponse['pages']);
 
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('view_detail_modal', [
+            return $this->renderAjax('_inspection-expand', [
                 'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                'searchFilterVal' => $viewSectionDetailFilterParams,
+                /*'searchFilterVal' => $viewSectionDetailFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'sectionNumberSelected' => $sectionNumberSelectedParam,*/
             ]);
         } else {
-            return $this->render('view_detail_modal', [
+            return $this->render('_inspection-expand', [
                 'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
                 //'pages' => $pages,
-                'searchFilterVal' => $viewSectionDetailFilterParams,
+                /*'searchFilterVal' => $viewSectionDetailFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'sectionNumberSelected' => $sectionNumberSelectedParam,*/
             ]);
         }
     }
@@ -273,7 +280,7 @@ class InspectionsController extends \app\controllers\BaseController
      * render expandable event row
      * @return string|Response
      */
-    public function actionViewEvent($mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewEvent($inspectionID = null)
     {
         $model = new \yii\base\DynamicModel([
             'eventfilter', 'pagesize'
@@ -304,19 +311,18 @@ class InspectionsController extends \app\controllers\BaseController
         } else {
             $pageAt = 1;
         }
-        // get the key to generate event table
-        if (isset($_POST['expandRowKey']))
-            $inspectionID = $_POST['expandRowKey'];
-        else
-            $inspectionID = "";
 
         $getUrl = 'inspection%2Fget-inspections&' . http_build_query([
-                'mapGridSelected' => $mapGridSelected,
-                'sectionNumberSelected' => $sectionNumberSelected,
+                'mapGridSelected' => "",
+                'sectionNumberSelected' => "",
                 'inspectionID' => $inspectionID,
+                'filter' => $eventFilterParams,
+                'listPserPage' => $eventPageSizeParams,
                 'page' => $pageAt,
             ]);
+        Yii::trace("EVENT URL: ".$getUrl);
         $getEventDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        Yii::trace("EVENT DATA: ".json_encode($getEventDataResponse));
         $eventData = $getEventDataResponse['events'];
 
         // Put data in data provider
