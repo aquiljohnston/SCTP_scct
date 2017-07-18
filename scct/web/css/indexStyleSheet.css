@@ -1,0 +1,75 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: MS Reference Sans Serif,Arial,Calibri,Helvetica;
+    font-size: 100%;
+}
+html{
+    position: relative;
+    min-height: 100%;
+    
+}
+body{
+    margin: 0 0;
+}
+/*
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}*/
+
+#pageContainer {
+    min-height: 100%;
+    position: relative;
+    /*margin-bottom: -40px; /*the height on the footer matches the height of the negative margin on the pageContainer*/
+    margin-top: 180px;
+}
+
+/*set content contains height is height, this is a place holder*/
+#bodyContainer {
+    position: relative;
+    /*margin-top: 70px;*/
+    /*padding-top: 60px;*/
+    min-height: 330px;/*330px because dispatch page can show show header and footer*/
+    height: auto; /*how big the body is going to be set?*/
+   /* padding-left: 50%; /*locate the position in the div which is the content it may need to be removed and do other with a new div*/
+   /* padding-right: 50%;/*locate the position in the div which is the content it may need to be removed and do other with a new div*/
+    width: 100%;
+    background-color: #C0C0C0; /*change the body color to cover the second_level_menu color when the height has a fixed number*/
+}
+
+/*#page{
+    width:90%;
+    margin:0 auto;
+    position:relative;
+}*/
+
+.clearFilter {
+  /*bottom: 135px;
+  position: relative;
+  padding: 0;
+  border: none;
+  background: url('Delete Filter 2020.png') no-repeat;
+  width:20px;
+  height:24px;
+  cursor: pointer;*/
+}
+
+/*
+.clearfooter{
+    height: 40px; /*the height on the footer matches the height of the negative margin on the pageContainer*/
+    /*clear: both;
+}*/
+
+/* hides the spin-button for firefox */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* hides the spin-button for firefox */
+input[type=number] {
+    -moz-appearance:textfield;
+}
