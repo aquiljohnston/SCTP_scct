@@ -124,7 +124,10 @@ $ImageUrl = 'images/';
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 'value' => function ($model) {
-                    return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo1Path'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                    if ($model['Photo1Path'] != null)
+                        return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo1Path'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                    else
+                        return '';
                     //return Html::a('@web/logo/linkIcon.png'/* . $model['img']*/,
                     //return Html::img('/pathToImage/'/* . $model['img']*/,
                         //['width' => '20px']);
