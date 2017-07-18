@@ -6,10 +6,12 @@
  * Time: 2:38 PM
  */
 ?>
-    <!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
-    </script>-->
-<!--<script src="https://js.arcgis.com/3.10/"></script>-->
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBtnxA5IiHSgZ1REfHI_3Hb3zau4p0jnZ4&libraries=places"></script>
+<!--
+*todo: need to switch key depends on the environment
+    Google Map Key For Server -> AIzaSyASmV1lt9mVXyX3lA4J74GNyoO2u3IiGvI
+    Google Map Key For Local  -> AIzaSyBtnxA5IiHSgZ1REfHI_3Hb3zau4p0jnZ4
+-->
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyASmV1lt9mVXyX3lA4J74GNyoO2u3IiGvI&libraries=places"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     <!--Begin page authentication block. Prevents users from accessing unauthorized page through URL-->
