@@ -146,10 +146,24 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'attribute' => 'Percent Completed',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'format' => 'raw',
+                        'value' => function ($model, $key, $index) {
+                            return Html::a(
+                                $model['Percent Completed']."<br> View Map",
+                                ['/../tracker/view-map?mapgrid='.$model['MapGrid']],
+                                ['target'=>'_blank', 'data-pjax'=>"0"]
+                            );
+                        }
+                    ],
+					[
+                        'label' => 'Remaining/Total',
+                        'attribute' => 'Counts',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
+                        'value' => function ($model) {
+                            return $model['Remaining'] . "/" . $model['Total'];
+                        }
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
