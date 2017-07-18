@@ -151,6 +151,16 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                         }*/
                     ],
+					[
+                        'label' => 'Remaining/Total',
+                        'attribute' => 'Counts',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'format' => 'html',
+                        'value' => function ($model) {
+                            return $model['Remaining'] . "/" . $model['Total'];
+                        }
+                    ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',

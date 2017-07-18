@@ -59,6 +59,16 @@ use yii\bootstrap\Modal;
                     return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
                 }*/
             ],
+			[
+				'label' => 'Remaining/Total',
+				'attribute' => 'Counts',
+				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 5%'],
+				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+				'format' => 'html',
+				'value' => function ($model) {
+					return $model['Remaining'] . "/" . $model['Total'];
+				}
+			],
             /*[
                 'label' => 'Work Queue Count',
                 'attribute' => 'AssignedWorkQueueCount',
