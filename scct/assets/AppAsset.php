@@ -38,6 +38,8 @@ class AppAsset extends AssetBundle
         'css/inspection.css',
         'css/notification.css',
         '//cdn.datatables.net/1.10.12/css/jquery.dataTables.css',
+        'css/indexStyleSheet.css',
+        'css/mapStylesheet.css'
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -66,6 +68,12 @@ class AppAsset extends AssetBundle
         'js/lightDispatch.js',
         '//cdn.datatables.net/1.10.12/js/jquery.dataTables.js',
         '//code.jquery.com/ui/1.12.1/jquery-ui.js',
+        'js/geoxml3.js',
+        'js/geoxmlfull_v3.js',
+        //'js/markerclusterer.js',
+        'js/markerclusterer_compiled.js',
+        'js/progressBar.js',
+        '//developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

@@ -47,4 +47,37 @@ class TrackerController extends BaseController
             "dropdown" => $mapGridsResponse
         ]);
     }
+
+    /**
+     * render Google Map view based on selected MapGrid
+     * @param null $mapgrid
+     * @return string|\yii\web\Response
+     */
+    public function actionViewMap($mapgrid = null){
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('mapview', [
+            ]);
+        } else {
+            return $this->render('mapview', [
+            ]);
+        }
+    }
+
+    public function actionGetMapData($mapGrid = null){
+        if ($mapGrid != null){
+            $getUrl = 'map%2Fget&' . http_build_query([
+                    'mapgrid' => $mapGrid
+                ]);
+            $getMapDataResponse = Parent::executeGetRequest($getUrl, self::API_VERSION_2); //indirect RBAC
+            Yii::trace("ASSETS DATA: ".json_encode($getMapDataResponse));
+            echo $getMapDataResponse;
+        }else{
+            echo null;
+        }
+    }
 }
