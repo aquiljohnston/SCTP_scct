@@ -98,36 +98,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                    /*[
-                        'header' => 'View Asset',
-                        'class' => 'kartik\grid\ActionColumn',
-                        'template' => '{view}',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                        'buttons' => [
-                            'view' => function($url, $model) {
-                                $modalViewEventDetailInspection = "#modalViewEventDetailInspection";
-                                $modalContentViewEventDetailInspection = "#modalContentViewEventDetailInspection";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-event?inspectionID=".$model['InspectionID']."','".$modalViewEventDetailInspection ."','".$modalContentViewEventDetailInspection."')"]);
-                            }
-                        ],
-                        'urlCreator' => function ($action, $model, $key, $index) {
-                        }
-                    ],*/
-                    [
-                        'header' => 'View Asset',
-                        'class' => 'kartik\grid\ActionColumn',
-                        'template' => '{view}',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                        'buttons' => [
-                            'view' => function($url, $model) {
-                                $modalViewSectionDetailInspection = "#modalViewSectionDetailInspection";
-                                $modalContentViewSectionDetailInspection = "#modalContentViewSectionDetailInspection";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-section-detail-modal?mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected="."','".$modalViewSectionDetailInspection ."','".$modalContentViewSectionDetailInspection."')"]);
-                            }
-                        ],
-                        'urlCreator' => function ($action, $model, $key, $index) {
-                        }
-                    ],
                 ],
                 'beforeHeader' => [
                     [
