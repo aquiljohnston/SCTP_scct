@@ -74,6 +74,7 @@ class AppAsset extends AssetBundle
         'js/markerclusterer_compiled.js',
         'js/progressBar.js',
         '//developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js',
+        'js/inspection.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
