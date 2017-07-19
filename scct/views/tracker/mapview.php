@@ -445,7 +445,8 @@
                         icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|33FF00|000000"
                         break;
                     default:
-                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FFFFFF|000000"
+                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FF0000|000000"
+                        //icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FFFFFF|000000"
                         break;
                 }
 
@@ -501,7 +502,7 @@
                     '<p><b>Address: </b>' + obj.Address + '</p>' +
                     '<p><b>MapGrid: </b>' + obj.MapGrid + '</p>' +
                     '<p><b>Distance: </b>' + obj.Distance + '</p>' +
-                    '<p><b>Verified: </b>' + obj.Verified + '</p>' +
+                    //'<p><b>Verified: </b>' + obj.Verified + '</p>' +
                     '</div>';
 
                 //Add click listener to marker

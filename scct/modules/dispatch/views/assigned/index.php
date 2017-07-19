@@ -213,7 +213,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
     <!-- The Modal -->
     <div id="unassigned-message" class="modal">
-        <!-- Modal content -->·
+        <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Do you want to<br>un-assign the selected surveyors?</h3>
