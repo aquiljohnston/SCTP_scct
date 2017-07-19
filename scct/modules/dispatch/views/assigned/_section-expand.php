@@ -29,10 +29,10 @@ use yii\bootstrap\Modal;
                 }
             ],
             [
-                'label' => 'Map Grid',
-                'attribute' => 'MapGrid',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.3%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                'label' => 'Section Number',
+                'attribute' => 'SectionNumber',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
                 /*'value' => function ($model) {
                     return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
                 }*/
@@ -51,8 +51,8 @@ use yii\bootstrap\Modal;
                 }
             ],
             [
-                'label' => 'Section Number',
-                'attribute' => 'SectionNumber',
+                'label' => 'Location Type',
+                'attribute' => 'LocationType',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 /*'value' => function ($model) {
