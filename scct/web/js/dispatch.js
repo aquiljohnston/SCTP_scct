@@ -111,7 +111,7 @@ function reloadDispatchGridView() {
     $('#loading').show();
     $.pjax.reload({
         type: 'GET',
-        url: form.attr("action"),
+        url: '/dispatch/dispatch/heavy-dispatch',
         container: '#dispatchUnassignedGridview', // id to update content
         data: form.serialize(),
         timeout: 99999
