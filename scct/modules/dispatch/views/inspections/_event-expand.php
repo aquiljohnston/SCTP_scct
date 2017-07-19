@@ -9,7 +9,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
-
+use yii\helpers\Url;
 ?>
 
 <div class="allegato-index">
@@ -47,7 +47,23 @@ use yii\bootstrap\Modal;
                 //'label' => false,
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-            ]
+            ],
+            [
+                'attribute' => 'img',
+                'format' => 'raw',
+                'label' => 'Image',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function ($model) {
+                    if ($model['Photo'] != null)
+                        return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                    else
+                        return '';
+                    //return Html::a('@web/logo/linkIcon.png'/* . $model['img']*/,
+                    //return Html::img('/pathToImage/'/* . $model['img']*/,
+                    //['width' => '20px']);
+                },
+            ],
         ],
     ]); ?>
 

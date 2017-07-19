@@ -68,6 +68,12 @@ $ImageUrl = 'images/';
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
+                'label' => 'Address',
+                'attribute' => 'Address',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
+            [
                 'label' => 'InspectionDateTime',
                 'attribute' => 'InspectionDateTime',
                 'headerOptions' => ['class' => 'text-center'],
