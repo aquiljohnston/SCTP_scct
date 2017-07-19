@@ -247,6 +247,8 @@ $(document).ready(function () {
                         TrackerArrayDropdownStr = "<li><a id='tracker_btn' href='" + baseUrl + "tracker'>" + TrackerArray.NavigationName.toString() + "</a></li>";
                         TrackerArrayDropdownStr += ReportDropdown;
                     } //end of tracker enabled flag check
+                }else{
+                    TrackerArrayDropdownStr = ReportDropdown;
                 }
 
                 if (data.Modules[0].Home.enabled.toString() != 0) {
