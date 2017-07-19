@@ -30,8 +30,8 @@ use yii\bootstrap\Modal;
                 }
             ],
             [
-                'label' => '',
-                'attribute' => 'MapGrid',
+                'label' => 'Section Number',
+                'attribute' => 'SectionNumber',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
                 //'label' => false,
@@ -40,8 +40,8 @@ use yii\bootstrap\Modal;
                 }*/
             ],
             [
-                'label' => 'Section Number',
-                'attribute' => 'SectionNumber',
+                'label' => 'Location Type',
+                'attribute' => 'LocationType',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
                 //'label' => false,
