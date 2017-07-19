@@ -7,14 +7,14 @@ html, body {
 img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
       max-width: none;
 }
-#startDateSpan, #endDateSpan {
+/*#startDateSpan, #endDateSpan {
     margin-left: 10px;
 }
 #startDate, #endDate{
     float: right;
     margin-right: 10px;
     width: 50px;
-}
+}*/
 
 .user input {
     float: right;
