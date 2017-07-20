@@ -2,6 +2,9 @@ html,
 body {
     height: 100%;
     overflow-y: hidden;
+
+    /* Fix for export button on report page in Safari.                      *
+     * Cause: adding a listener to an element added after the DOM is loaded */
     cursor: pointer;
 }
 
