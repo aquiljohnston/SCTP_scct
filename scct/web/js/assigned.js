@@ -5,6 +5,7 @@ $(function () {
 
     var assignedGV = $("#assignedGV");
     var assignedSection_SectionNumber = [];
+    var assignedSection_MapGrid = [];
     var assignedMap_MapGrid = [];
 
     $('#UnassignedButton').prop('disabled', false); //TO DISABLED
@@ -57,9 +58,9 @@ $(function () {
           $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('disabled', false);
         }else{
           $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
-            assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
+            //assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         }
-        //assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
+        assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         console.log("assignedMap_MapGrid: " +assignedMap_MapGrid.length);
 
         //check to see if need to disable/enable add surveyor button
@@ -83,6 +84,14 @@ $(function () {
     //checkbox listener on section table
     $(document).off('click', '.assignedSectionCheckbox input[type=checkbox]').on('click', '.assignedSectionCheckbox input[type=checkbox]', function () {
         assignedSection_SectionNumber =$("#assignedGridview #assignedSectionGV").yiiGridView('getSelectedRows');
+        var mapGridSelected = $(this).attr('MapGrid');
+        if ($(this).is(':checked')){
+            assignedSection_MapGrid.push(mapGridSelected);
+        }else{
+            assignedSection_MapGrid = jQuery.grep(y, function(value) {
+                                        return value != mapGridSelected;
+                                    });
+        }
         /*assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');*/
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
@@ -97,8 +106,7 @@ $(function () {
         unassignCheckboxListener(assignedMap_MapGrid, assignedSection_SectionNumber);
 
     $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', function () {
-        console.log(getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber));
-        $("#unassigned-message").find('span').html(getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber));
+        $("#unassigned-message").find('span').html(getSelectedUserName(getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid), assignedSection_SectionNumber, assignedSection_MapGrid));
         $("#unassigned-message").css("display", "block");
         // When the user clicks buttons, close the modal
         $('#unassignedCancelBtn').click(function () {
@@ -253,7 +261,7 @@ function getAssignedSectionArray(assignedSection_SectionNumber) {
 }
 
 // Generate unAssign Data Array; combine mapGrid and section level
-function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber) {
+function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber, assignedSection_MapGrid) {
     var selectedMapGridUser = "";
     var selectedSectionUser = "";
     for (var i = 0; i < assignedMap_MapGrid.length; i++){
@@ -261,10 +269,21 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber)
         selectedMapGridUser += "<li>"+assignedMap_MapGrid[i] + " : " + userName_MapGrid+"</li>"
     }
     for (var j = 0; j < assignedSection_SectionNumber.length; j++){
-        var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "]").attr("UserName");
-        var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "]").attr("MapGrid");
+        var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("UserName");
+        var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] +  "]").attr("MapGrid");
         selectedSectionUser += "<li>"+mapGrid_Section+" : "+userName_Section+"</li>"
     }
     var selectedUserNameList = "<ul>"+selectedMapGridUser+selectedSectionUser+"</ul>";
     return selectedUserNameList;
+}
+
+// Generate unique key from Map Grid table
+function getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid) {
+    /*var common = $.grep(assignedSection_SectionNumber, function(element) {
+        return $.inArray(element, assignedMap_MapGrid ) !== -1;
+    });*/
+    var assignedMap_MapGrid = assignedMap_MapGrid.filter(function (val) {
+        return assignedSection_SectionNumber.indexOf(val) == -1;
+    });
+    return assignedMap_MapGrid;
 }
