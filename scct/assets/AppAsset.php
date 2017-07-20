@@ -38,6 +38,7 @@ class AppAsset extends AssetBundle
         'css/inspection.css',
         'css/notification.css',
         '//cdn.datatables.net/1.10.12/css/jquery.dataTables.css',
+        "//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
         'css/indexStyleSheet.css',
         'css/mapStylesheet.css'
     ];
