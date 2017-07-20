@@ -5,6 +5,7 @@
  * Date: 7/13/2017
  * Time: 2:38 PM
  */
+$this->title = 'Map View';
 ?>
 <!--
 *todo: need to switch key depends on the environment
