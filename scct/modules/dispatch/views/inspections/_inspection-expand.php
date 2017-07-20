@@ -64,20 +64,20 @@ $ImageUrl = 'images/';
             [
                 'label' => 'Inspector',
                 'attribute' => 'Inspector',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 8%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 8%;'],
             ],
             [
                 'label' => 'Address',
                 'attribute' => 'Address',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 38.6%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 38.6%;'],
             ],
             [
                 'label' => 'InspectionDateTime',
                 'attribute' => 'InspectionDateTime',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 22.9%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 22.9%;'],
             ],
             [
                 'header' => 'Adhoc',
@@ -143,7 +143,7 @@ $ImageUrl = 'images/';
                 'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'headerOptions' => ['class' => 'text-center'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewEventDetailInspection = "#modalViewEventDetailInspection";
