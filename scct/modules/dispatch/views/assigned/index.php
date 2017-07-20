@@ -31,7 +31,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
-                <div class="col-xs-1 col-md-1 col-lg-1" style="float: right; margin: 1.3% auto; width: 11%;">
+                <div class="col-xs-1 col-md-1 col-lg-1" style="float: right; margin: 0 auto; width: 11%;">
                     <label style="color: #0067a6; margin-bottom: 7px;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
 
