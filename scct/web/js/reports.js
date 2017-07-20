@@ -351,6 +351,13 @@ $(function () {
             }
             today = mm + '/' + dd + '/' + yyyy;
 
+            str = str.replace(/[^\x00-\x7F]/g, "");
+            str = 'sep=;\r\n' + str;
+            //using FileSaver.min.js
+            var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
+            saveAs(blob, "Report_" + today + ".csv");
+
+
             if (navigator.userAgent.indexOf('Firefox') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Firefox') + 8)) >= 3.6) {//Firefox
 
                 var csvContent = "data:text/csv;charset=utf-8," + str;
@@ -385,6 +392,7 @@ $(function () {
                 var date = new Date();
                 navigator.msSaveBlob(blob, "Report_" + today + ".csv")
             }
+
         }
 
         $.ajax({
@@ -696,8 +704,10 @@ $(function () {
             $(this).prop('disabled', true);
         });
 
+        console.log("The export listener is called below this line");
         /*export to data to file with user specified name*/
         $("#export").click(function (e) {
+            console.log("Export clicked!");
             ConvertToCSV(displayedResults.columns, displayedResults.data);
         });
 
