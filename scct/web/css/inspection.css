@@ -98,6 +98,9 @@
      max-height: 400px;
 
  }
+ #sectionDetailGV{
+     height: 250px;
+ }
 /*Pending changes pop-up missing modal ends*/
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
