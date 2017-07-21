@@ -122,6 +122,7 @@ function reloadDispatchGridView() {
 }
 
 // Asset modal view
+// Seems to be unused
 function ViewAssetClicked(url) {
     console.log("View Asset clicked!");
     console.log(url);
@@ -167,8 +168,8 @@ function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) 
 
 // View Asset Modal (Dispatch, Assigned)
 function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset) {
-    console.log("View Asset clicked!");
-    console.log(url);
+    $(modalViewAsset).modal('show')
+        .find(modalContentViewAsset).html("Loading...");
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).load(url);
 }
