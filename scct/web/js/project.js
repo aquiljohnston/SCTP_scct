@@ -15,12 +15,12 @@ $(function(){
     });
 
     // project filter listener
-    $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
-        if (e.keyCode === 13 || e.keyCode === 10) {
-            e.preventDefault();
-            reloadProjectGridView();
-        }
-    });
+    // $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
+    //     if (e.keyCode === 13 || e.keyCode === 10) {
+    //         e.preventDefault();
+    //         reloadProjectGridView();
+    //     }
+    // });
 });
 
 function reloadProjectGridView() {
