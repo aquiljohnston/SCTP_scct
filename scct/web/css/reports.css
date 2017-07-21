@@ -1,58 +1,89 @@
-#reportsContainer .containerByDropdown{
-	/*position: fixed;*/
-	padding:0 1%;
-	width:100%;
-	margin-top:25px;
+#reportsContainer .containerByDropdown {
+    /*position: fixed;*/
+    padding: 0 1%;
+    width: 100%;
+    margin-top: 25px;
 }
-.reportsDropdown{
-	margin-bottom:5px;
+
+.reportsDropdown {
+    margin-bottom: 5px;
 }
-#reportsdropdown{
-	padding-left:1%;
+
+#reportsdropdown {
+    padding-left: 1%;
 }
-#reportsdropdown  .dropDownList-form{
-	margin-top:2%;
+
+#reportsdropdown .dropDownList-form {
+    margin-top: 2%;
 }
-#reportsFilterForm h4{
+
+#reportsFilterForm h4 {
     color: #0067a6;
 }
-#reportsFilterForm .dropdowntitle{
-	width:16%;
-	position:relative;
-	float:left;
-	padding-right:20px;
+
+#reportsFilterForm .dropdowntitle {
+    width: 16%;
+    position: relative;
+    float: left;
+    padding-right: 20px;
 }
-#reportsFilterForm #summarytitle{
-	margin-top: -40px;
-} 
-#reportsFilterForm  #SummaryInfo{
-	margin-top:15px;
-	color:black;
+
+#reportsFilterForm #summarytitle {
+    margin-top: -40px;
 }
-#reportTable_wrapper .dataTables_scrollBody{
-	max-height:520px;
-	height:auto;
-	
+
+#reportsFilterForm #SummaryInfo {
+    margin-top: 15px;
+    color: black;
 }
-#reports-page .footerabove{
-	display:none;
+
+#reportTable_wrapper .dataTables_scrollBody {
+    max-height: 415px;
+    height: auto;
+
 }
-table.dataTable tbody td{
-	word-break: break-all;
-	vertical-align: top;
+
+#reports-page .footerabove {
+    display: none;
 }
+
+table.dataTable tbody td {
+    word-break: break-all;
+    vertical-align: top;
+}
+
 /*-----------css for the 1360*768 resolution---------------*/
-@media only screen and (min-width: 1300px) {
-#reportTable_wrapper .dataTables_scrollBody{
-	max-height:230px;	
-}
-}
-/*-----------css for the 1360*768 resolution ends---------------*/ 
+
+/*-----------css for the 1360*768 resolution ends---------------*/
 
 /*-----------css for the 1920*1028 resolution---------------*/
-@media only screen and (min-width: 1900px) {
-#reportTable_wrapper .dataTables_scrollBody{
-	max-height:710px;
+/*@media only screen and (min-width: 1080px) {
+    #reportTable_wrapper .dataTables_scrollBody {
+        max-height: 395px;
+        overflow-y: scroll;
+    }
+}*/
+/* ----------- Non-Retina Screens ----------- */
+@media screen
+and (min-device-width: 1200px)
+and (max-device-width: 1600px)
+and (-webkit-min-device-pixel-ratio: 1) {
+    #reportTable_wrapper .dataTables_scrollBody {
+        max-height: 390px;
+        overflow-y: scroll;
+    }
 }
+
+/* ----------- Retina Screens ----------- */
+@media screen
+and (min-device-width: 1200px)
+and (max-device-width: 1600px)
+and (-webkit-min-device-pixel-ratio: 2)
+and (min-resolution: 192dpi) {
+    #reportTable_wrapper .dataTables_scrollBody {
+        max-height: 390px;
+        overflow-y: scroll;
+    }
 }
+
 /*-----------css for the 1920*1028 resolution ends---------------*/
