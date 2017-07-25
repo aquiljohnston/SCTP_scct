@@ -67,7 +67,7 @@ class MileageCardController extends BaseController
             if (isset(Yii::$app->request->queryParams['weekMileageCard'])){
                 $week = Yii::$app->request->queryParams['weekMileageCard'];
             } else {
-                $week = 'current';
+                $week = 'prior';
             }
 
             //build url with params
