@@ -19,7 +19,7 @@
 }
 #userDropdownContainer {
     float: right;
-    width: 95%;
+    width: 92%;
 }
 #userDropdownContainer label {
     padding-right: 0;
@@ -37,7 +37,7 @@
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 #userGridview .kv-grid-container{
-	max-height: 44vh;
+	max-height: 57vh;
 }
 }
 /*-----------css for the 1366*768 resolution ends---------------*/ 
