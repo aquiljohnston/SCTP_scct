@@ -75,7 +75,7 @@ class TimeCardController extends BaseController
             if (isset(Yii::$app->request->queryParams['weekTimeCard'])){
                 $week = Yii::$app->request->queryParams['weekTimeCard'];
             } else {
-                $week = 'current';
+                $week = 'prior';
             }
 
             //build url with params
