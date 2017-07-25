@@ -127,7 +127,7 @@ div[id^=modalContent] #loading {
 @media only screen 
 and (min-width : 1360px) {
 #GridViewForTimeCard{
-	max-height:44vh;
+	max-height:60vh;
 }
 }
 @media only screen 
