@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="containerByDropdown">
 		<div class="reportsDropdown" >
 				Report:
-			<select id="reportsDropdown" class="reportsDropdown">
+			<select id="reportsDropdown" class="reportsDropdown" style="width: 16%">
 				<option>Please make a selection</option>
 			</select>
 			<input type="button" id="go" name="go" value="Go" style="display: none;"/>
@@ -38,17 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
 			<input type="text" id="datePickerBeginDate" style="float: right;"></div>
 		<div id="endDate" style="width: 300px;height:20px;display: block;padding-top: 5px; display: none; ">End Date:
 			<input type="text" class="reportsDropdown"  id="datePickerEndDate" style="float: right;"></div>
-		<div id="beginDateView" style="width: 300px;height: 20px;display: block;margin-bottom:5px;display: none;">Begin Date: 
-			<input type="text" id="datePickerBeginDateView" style="float: right;"></div>
-		<div id="endDateView" class="reportsDropdown" style="width: 300px;height:20px;display: block;padding-top:5px;display: none; ">End Date:
-			<input type="text" id="datePickerEndDateView" style="float: right;"></div>
 		<div id="dropDownListView" style="width: 430px; height: 20px;padding-top: 20px;display: block;">
-			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
-			<select id="parmDropdown" class="reportsDropdown" style="margin-top:20px; display: none;">
-				<option>Please make a selection</option>
+			<label id="mapGridListHeader" style="display: none;">MapGrid List: </label>
+			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 48%;">
 			</select>
+			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
 			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right;">
-				<option>Please make a selection</option>
 			</select>
 		</div>
 
