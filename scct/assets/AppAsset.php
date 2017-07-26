@@ -40,7 +40,8 @@ class AppAsset extends AssetBundle
         '//cdn.datatables.net/1.10.12/css/jquery.dataTables.css',
         "//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
         'css/indexStyleSheet.css',
-        'css/mapStylesheet.css'
+        'css/mapStylesheet.css',
+        'https://vjs.zencdn.net/5.4.6/video-js.css'
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -76,7 +77,9 @@ class AppAsset extends AssetBundle
         'js/progressBar.js',
         '//developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js',
         'js/inspection.js',
-        'js/FileSaver.min.js'
+        'js/FileSaver.min.js',
+        'https://vjs.zencdn.net/ie8/1.1.1/videojs-ie8.min.js',
+        'https://vjs.zencdn.net/5.4.6/video.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

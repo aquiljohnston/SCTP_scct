@@ -28,11 +28,18 @@
 	
 }
 ul{
-text-align: left;
+	text-align: left;
+}
+#dispatchTab {
+	border-bottom: none;
+	padding: 1%;
+	float: none;
+	width: auto;
+	margin-top: 2%;
 }
 </style>
 <div class="site-index">
-    <div class="jumbotron intro">
+    <div class="jumbotron intro" id="dispatchTab">
         <h2>Training Section</h2>
     </div>
     <div class="body-content">
@@ -61,7 +68,7 @@ text-align: left;
 			    </article>
 			</div>
 			<div class="col-md-12" id="embedVideo">
-				<h2>Mobile - Coming Soon</h2>
+				<h2>Mobile Videos - Coming Soon</h2>
 			</div>				
         </div>
     </div>
