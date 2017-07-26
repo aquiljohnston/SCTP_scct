@@ -419,4 +419,11 @@ class BaseController extends Controller
 		//concat values into string and return the resulting UID
 		return "{$type}_{$random}_{$date}_WEB";
 	}
+	
+	// guest default redirect action
+	protected function isGuestUser() {
+		if (Yii::$app->user->isGuest) {
+			return $this->redirect(['/login']);
+		}
+	}
 }

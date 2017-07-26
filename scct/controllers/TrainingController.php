@@ -1,6 +1,6 @@
 <?php
 namespace app\controllers;
-use Yii;
+require 'BaseController.php';
 /**
  * TrainingController class is used to display videos on the website
  * The training videos will be part of the core application for user reference. 
@@ -14,10 +14,7 @@ class TrainingController extends BaseController {
      */
     public function actionIndex() {
         try {
-            //guest redirect
-            if (Yii::$app->user->isGuest) {
-                return $this->redirect(['/login']);
-            }
+            $this->isGuestUser();
             return $this->render('index');
         } catch (ForbiddenHttpException $e) {
             Yii::$app->runAction('login/user-logout');
