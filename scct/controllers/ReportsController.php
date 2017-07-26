@@ -145,10 +145,11 @@ class ReportsController extends BaseController
      * @throws Exception
      */
     public function actionGetParmDropDown(){
-        if (isset($_POST['ReportName'])){
+        if (isset($_POST['ViewName'])){
             // Reading the response from the the api and filling Parm Drop Down
-            $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&spName='.urlencode($_POST['ReportName']);
+            $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&viewName='.urlencode($_POST['ViewName']);
             $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, self::API_VERSION_2); // indirect rbac
+            Yii::trace("MAP GRID RESPONSE: ".$getParmDropDownResponse);
             $ParmDropDownList = $getParmDropDownResponse;//json_decode($reportsUrlListResponse, true);
             echo $ParmDropDownList;
         }else{
