@@ -43,7 +43,7 @@ $(document).ready(function () {
         + "<ul class='nav navbar-nav' id='nonav'></ul>");
     $(".loginMenu").prepend(login_head);
 
-//Ajax call to retrieve all the projects for the project drop-down selection on the main menu
+	//Ajax call to retrieve all the projects for the project drop-down selection on the main menu
     /*var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
      + "PROJECTS<b class='caret'></b></a>"
      + "    <ul href='#' id='projects_dropdown' class='dropdown-menu' role='menu'>"
@@ -55,24 +55,18 @@ $(document).ready(function () {
     var defaultID = $(".menu").attr("id");
     var userRoleID = -1;
 
+	//check if user is logged in before trying to get menus
     if (adminID != null || middlePrivilegeID != null || defaultID != null) {
 
+		//should not be usign these hard coded values
         var AdminDropdown, DispatchDropdown, HomeDropdown;
-        var PreFixUrl = window.location.hostname;
+        var PrefixUrl = window.location.hostname;
 
         // get prefix of current project
-        PreFixUrl = PreFixUrl.split(".");
-        PreFixUrl = PreFixUrl[0];
-        if (PreFixUrl === "localhost") {
-            PreFixUrl = "scct"; // for localhost
-        }
-
-        if (adminID != null) {
-            userRoleID = adminID;
-        } else if (middlePrivilegeID != null) {
-            userRoleID = middlePrivilegeID;
-        } else {
-            userRoleID = defaultID;
+        PrefixUrl = PrefixUrl.split(".");
+        PrefixUrl = PrefixUrl[0];
+        if (PrefixUrl === "localhost") {
+            PrefixUrl = "scctdev"; // for localhost
         }
         ajaxNavBarTries = 0;
         function ajaxLoadNavBar() {
@@ -80,7 +74,7 @@ $(document).ready(function () {
                 type: "GET",
                 url: "/base/get-nav-menu",
                 dataType: "json",
-                data: {id: PreFixUrl},
+                data: {id: PrefixUrl},
                 beforeSend: function () {
                     $('#loading').show();
                 },
@@ -134,164 +128,112 @@ $(document).ready(function () {
         }
 
         function NavBar(data) {
+			var modules = data.Modules[0];
             var str = "";
             var SubNavigationStr = "";
-            var DispatchDropdown = "";
-            var HomeDropdown = "";
-            var AdminDropdown = "";
             var dropdownFlag = 0;
             var baseUrl = "/";
-            var HomeDropdownStr = "";
-            var TrackerArrayDropdownStr = "";
-            var ReportDropdown = "";
+			var Dropdown = "";
+			var LocalStorageString = "";
+			var menuItems = [];
             if (jQuery.isEmptyObject(data)) {
-                str = "Json array is empty";
+                //this does nothing?
+				str = "Json array is empty";
             } else {
-                // check which module is enabled
-                if (data.Modules[0].CometTracker.enabled.toString() != 0) {
-                    CometTrackerArray = data.Modules[0].CometTracker.NavigationMenu[0];
-
-                    // clean SubNavigationStr
-                    SubNavigationStr = "";
-
-                    // get SubNavigationArray  and length of the SubNavigation menu
-                    CometTrackerSubNavigationLength = CometTrackerArray.SubNavigation.length;
-                    CometTrackerSubNavigationArray = CometTrackerArray.SubNavigation;
-
-                    AdminDropdown = "<li class='dropdown'>"
-                        + "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-                        + CometTrackerArray.NavigationName.toString()
-                        + "<b class='caret'></b></a>"
-                        + "<ul class='dropdown-menu' role='menu'>";
-
-                    for (i = 0; i < CometTrackerSubNavigationLength; i++) {
-                        if (CometTrackerSubNavigationArray[i].enabled.toString() != 0) {
-                            SubNavigationStr += "<li><a data-description='Adminstration Option' href='" + baseUrl + CometTrackerSubNavigationArray[i].Url.toString() + "'>" + CometTrackerSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
-                        } else {
-                            continue;
-                        }
-                    }
-
-                    AdminDropdown = AdminDropdown + SubNavigationStr + "</ul></li>";
-
-                }
-
-                if (data.Modules[0].Dispatch.enabled.toString() != 0) {
-                    // get the length of the NavigationMenu
-                    DispatchNavigationMenuLength = data.Modules[0].Dispatch.NavigationMenu.length;
-
-                    for (var j = 0; j < DispatchNavigationMenuLength; j++) {
-
-                        DispatchArray = data.Modules[0].Dispatch.NavigationMenu[j];
-
-                        // clean SubNavigationStr
-                        SubNavigationStr = "";
-
-                        // if NavigationName is not report
-                        if (DispatchArray.NavigationName.toString() != "Reports") {
-
-                            // get SubNavigationArray  and length of the SubNavigation menu
-                            DispatchSubNavigationLength = DispatchArray.SubNavigation.length;
-                            DispatchSubNavigationArray = DispatchArray.SubNavigation;
-
-                            // get tab name, if tab is disable not showing
-                            //var tabName = DispatchArray.enabled.toString() != 0 ? DispatchArray.NavigationName.toString() : "";
-                            if (DispatchSubNavigationLength > 0) {
-                                var navigationName;
-                                if (DispatchArray.enabled.toString() == 0)
-                                    continue;
-                                if (DispatchArray.NavigationName.toString() == "Dispatch")
-                                    navigationName = "Work Orders";
-                                else
-                                    navigationName = DispatchArray.NavigationName.toString();
-
-                                DispatchDropdown += "<li class='dropdown'>"
-                                    + "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-                                    + navigationName
-                                    + "<b class='caret'></b></a>"
-                                //+ "<ul class='dropdown-menu' role='menu'>";
-
-                                if (DispatchArray.NavigationName.toString() == "Dashboard" && DispatchArray.enabled.toString() != 0) {
-                                    for (var i = 0; i < DispatchSubNavigationLength; i++) {
-                                        if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
-                                            dropdownFlag = 1;
-                                            SubNavigationStr += "<li><a data-description='Dashboard Option' href='" + baseUrl + DispatchSubNavigationArray[i].Url.toString() + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
-                                        } else {
-                                            continue;
-                                        }
-                                    }
-                                }
-                                if (DispatchArray.NavigationName.toString() == "Dispatch" && DispatchArray.enabled.toString() != 0) {
-                                    for (var i = 0; i < DispatchSubNavigationLength; i++) {
-                                        if (DispatchSubNavigationArray[i].enabled.toString() != 0) {
-                                            dropdownFlag = 1;
-                                            var dispatchModule = DispatchSubNavigationArray[i].SubNavigationName.toString().toLowerCase();
-                                            SubNavigationStr += "<li><a data-description='Dispatch Option' href='" + baseUrl + DispatchSubNavigationArray[0].Url.toString() + "/" + dispatchModule + "'>" + DispatchSubNavigationArray[i].SubNavigationName.toString() + "</a></li>";
-                                        } else {
-                                            continue;
-                                        }
-                                    }
-                                }
-                                if (dropdownFlag == 1) {
-                                    DispatchDropdown = DispatchDropdown + "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
-                                } else {
-                                    DispatchDropdown = DispatchDropdown + SubNavigationStr + "</li>";
-                                }
-                            }
-
-                        } else {
-                            if (DispatchArray.enabled.toString() != 0) {
-                                ReportDropdown = "<li><a class='dropdown' href='" + baseUrl + DispatchArray.Url.toString() + "'>" + DispatchArray.NavigationName.toString() + "</a></li>";
-                            }
-                        }
-                    }
-                }
-
-                if (data.Modules[0].Tracker.enabled.toString() != 0) {
-                    TrackerArray = data.Modules[0].Tracker.NavigationMenu[0];
-                    if (TrackerArray.enabled.toString() != 0) {
-                        TrackerArrayDropdown = $("<li><a id='tracker_btn' href='" + baseUrl + "tracker'>" + TrackerArray.NavigationName.toString() + "</a></li>");
-                        TrackerArrayDropdownStr = "<li><a id='tracker_btn' href='" + baseUrl + "tracker'>" + TrackerArray.NavigationName.toString() + "</a></li>";
-                        TrackerArrayDropdownStr += ReportDropdown;
-                    } //end of tracker enabled flag check
-                }else{
-                    TrackerArrayDropdownStr = ReportDropdown;
-                }
-
-                if (data.Modules[0].Home.enabled.toString() != 0) {
-                    HomeArray = data.Modules[0].Home.NavigationMenu[0];
-                    if (HomeArray.enabled.toString() != 0) {
-                        HomeDropdown = $("<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>");
-                        HomeDropdownStr = "<li><a id='home_btn' href='" + baseUrl + "home'>" + HomeArray.NavigationName.toString() + "</a></li>";
-                    } //end of home enabled flag check
-                }
-                if ((data.Modules[0].Home.enabled.toString() == 0)
-                    && (data.Modules[0].Dispatch.enabled.toString() == 0)
-                    && (data.Modules[0].CometTracker.enabled.toString() == 0)
-                    && (data.Modules[0].Tracker.enabled.toString() == 0)) {
-                    if(isLocalStorageNameSupported()) {
-                        localStorage.setItem('scct-navbar-blank', 'true');
-                    }
-                } else {
-                    var nav = $("#nav");
-                    nav.removeClass("blankNavBar");
-                    if (AdminDropdown.length !== 0) {
-                        nav.prepend(AdminDropdown);
-                    }
-                    if (TrackerArrayDropdownStr.length !== 0) {
-                        nav.prepend(TrackerArrayDropdownStr);
-                    }
-                    if (DispatchDropdown.length !== 0) {
-                        nav.prepend(DispatchDropdown);
-                    }
-                    if (HomeDropdownStr.length !== 0) {
-                        nav.prepend(HomeDropdownStr);
-                    }
-                    if(isLocalStorageNameSupported()) {
-                        localStorage.setItem('scct-navbar-data', HomeDropdownStr + DispatchDropdown + TrackerArrayDropdownStr + AdminDropdown);
-                    }
-
-                }
+				//loop all modules
+				for (var module in modules){
+					if (modules.hasOwnProperty(module)){
+						//check if module is enable
+						if(modules[module].enabled.toString() == 1)
+						{				
+							//console.log(modules[module]);
+							navigationMenusLength = modules[module].NavigationMenu.length;
+							//loop all nav menu items withing a module
+							for (var i = 0; i < navigationMenusLength; i++)
+							{
+								//reset dropdown variables
+								dropdownFlag = 0;
+								Dropdown = "";
+								
+								//set navigation menu values
+								navigationMenuArray = modules[module].NavigationMenu[i];
+								var navigationName = "";
+								var navigationURL = "";
+								if (navigationMenuArray.enabled.toString() == 0)
+									continue;
+								//check to change dispatch to work orders for non pge
+								//TODO do this better
+								if (navigationMenuArray.NavigationName.toString() == "Dispatch")
+									navigationName = "Work Orders";
+								else
+									navigationName = navigationMenuArray.NavigationName.toString();
+								if(navigationMenuArray.Url !== null)
+									navigationURL = navigationMenuArray.Url.toString();
+								
+								// clean SubNavigationStr
+								SubNavigationStr = "";
+								subNavigationLength = 0;
+								
+								// get SubNavigationArray  and length of the SubNavigation menu
+								if("SubNavigation" in navigationMenuArray)
+								{
+									subNavigationArray = navigationMenuArray.SubNavigation;
+									subNavigationLength = subNavigationArray.length;
+								}
+								
+								//check if sub navs exist
+								if (subNavigationLength > 0) {
+									
+									//create dropdown base
+									Dropdown += "<li class='dropdown'>"
+										+ "<a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
+										+ navigationName
+										+ "<b class='caret'></b></a>"
+									
+									//loop sub navigation items
+									for (var j = 0; j < subNavigationLength; j++) {
+										if (subNavigationArray[j].enabled.toString() != 0) {
+											dropdownFlag = 1;
+											SubNavigationStr += "<li><a data-description='Dropdown" + j + "Option' href='" + baseUrl + subNavigationArray[j].Url.toString() + "'>" + subNavigationArray[j].SubNavigationName.toString() + "</a></li>";
+										} else {
+											continue;
+										}
+									}
+									if (dropdownFlag == 1) {
+										Dropdown += "<ul class='dropdown-menu' role='menu'>" + SubNavigationStr + "</ul></li>";
+									} else {
+										Dropdown += SubNavigationStr + "</li>";
+									}
+									//console.log("Dropdown Value " + module + ": " + Dropdown);
+								}
+								else
+								{
+									Dropdown += "<li><a id='" + navigationName + "_btn' href='" + baseUrl + navigationURL + "'>" + navigationName + "</a></li>";
+									//console.log("Dropdown Value " + module + ": " + Dropdown);
+								}
+								//create object of dropdowns to organize before appending.
+								menuItems[navigationMenuArray.SortSequence.toString()] = Dropdown;
+							}	
+						}
+					}
+				}
+				//order and loop dropdown items and add them to nav bar object
+				Object.keys(menuItems).sort();
+				for (var item in menuItems)
+				{
+					//console.log("Dropdown Before Prepend - Key: " + item + " Value: " + menuItems[item]);
+					//append dropdowns to nav bar
+					var nav = $("#nav");
+					nav.removeClass("blankNavBar");
+					if (menuItems[item].length !== 0) {
+						nav.append(menuItems[item]);
+					}
+					//add dropdown to local storage
+					LocalStorageString += menuItems[item];
+				}
+				if(isLocalStorageNameSupported()) {
+					localStorage.setItem('scct-navbar-data', LocalStorageString);
+				}
             }
             if(isLocalStorageNameSupported()) {
                 localStorage.setItem('scct-navbar-saved', 'true');
