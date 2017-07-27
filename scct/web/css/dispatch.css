@@ -23,7 +23,7 @@
 #dispatchGV {
     width: 100%;
     float: left;
-    max-height: 360px;
+    max-height: 51vh;/*360px;*/
     overflow-y: auto;
     margin: 0 auto;
     overflow-x: hidden;
@@ -287,6 +287,9 @@
         overflow-y: auto;
         margin: 0 auto;
         overflow-x: hidden;
+    }
+    .floatThead-col{
+        height: 0 !important;
     }
 }
 

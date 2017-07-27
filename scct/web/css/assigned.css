@@ -77,7 +77,7 @@
 }
 
 #assignedTable .table-responsive {
-    max-height: 380px;
+    max-height: 51vh;/*380px;*/
     overflow-y: auto;
     width: 100%;
     margin: 0 auto;
@@ -245,6 +245,9 @@
         overflow-y: auto;
         width: 100%;
         margin: 0 auto;
+    }
+    .floatThead-col{
+        height: 0 !important;
     }
 }
 
