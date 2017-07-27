@@ -38,7 +38,7 @@
 }
 
 #reportTable_wrapper .dataTables_scrollBody {
-    max-height: 340px;
+    max-height: 54vh;
     height: auto;
 
 }
@@ -85,5 +85,20 @@ and (min-resolution: 192dpi) {
         overflow-y: scroll;
     }
 }
+/* ----------- Safari Browser ----------- */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+
+    ::i-block-chrome,#assignedTable .table-responsive {
+        max-height: 580px;
+        overflow-y: auto;
+        width: 100%;
+        margin: 0 auto;
+    }
+    #reportTable_wrapper .dataTables_scrollBody {
+        max-height: 550px;
+        overflow-y: scroll;
+    }
+}
+/* ----------- Retina Screens ----------- */
 
 /*-----------css for the 1920*1028 resolution ends---------------*/
