@@ -306,7 +306,8 @@ $(function () {
                 for (var index in array[i]) {
                     if (line != '') line += ';';
 
-                    line += array[i][index];
+                    line += (array[i][index] !== null) ? array[i][index] : ''; // Append the cell data
+                    // The ternary operator changes nulls to ''
                 }
                 str += line + '\r\n';
             }
@@ -330,43 +331,6 @@ $(function () {
             //using FileSaver.min.js
             var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
             saveAs(blob, "Report_" + today + ".csv");
-
-
-            if (navigator.userAgent.indexOf('Firefox') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Firefox') + 8)) >= 3.6) {//Firefox
-
-                var csvContent = "data:text/csv;charset=utf-8," + str;
-                var encodedUri = encodeURI(csvContent);
-                window.open(encodedUri);
-
-            } else if (navigator.userAgent.indexOf('Chrome') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Chrome') + 7).split(' ')[0]) >= 15) {//Chrome
-
-                str = str.replace(/[^\x00-\x7F]/g, "");
-                sep = '",';
-                str = 'sep=;\r\n' + str;
-                var csvData = new Blob([str], {type: 'data:text/csv;charset=utf-8'});
-                var csvUrl = URL.createObjectURL(csvData);
-
-                var link = document.createElement("a");
-                link.setAttribute("href", csvUrl);
-                link.setAttribute("download", "Report_" + today + ".csv");
-
-                link.click(); // This will download the data file named "my_data.csv".
-            } else if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Version') != -1 && parseFloat(navigator.userAgent.substring(navigator.userAgent.indexOf('Version') + 8).split(' ')[0]) >= 5) {//Safari
-
-            } else {
-                str = str.replace(/[^\x00-\x7F]/g, "");
-                sep = '";';
-                str = 'sep=;\r\n' + str;
-
-                var csvContent = str; //here we load our csv data
-                var blob = new Blob([csvContent], {
-                    type: "text/csv;charset=utf-8;"
-                });
-
-                var date = new Date();
-                navigator.msSaveBlob(blob, "Report_" + today + ".csv")
-            }
-
         }
 
         $.ajax({
