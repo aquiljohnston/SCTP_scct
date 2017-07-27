@@ -58,7 +58,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
                 'export' => false,
                 'pjax' => true,
-                //'floatHeader' => true,
+                'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
@@ -143,13 +143,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             else
                                 return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];
                         }
-                    ]
-                ],
-                'beforeHeader' => [
-                    [
-                        'columns' => [
-                            ['content' => 'Dispatch', 'options' => ['colspan' => 12, 'class' => 'kv-table-caption text-center']],
-                        ],
                     ]
                 ],
             ]); ?>

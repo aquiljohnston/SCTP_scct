@@ -65,7 +65,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'id' => 'assignedGV',
                 'summary' => false,
                 'pjax' => true,
-                'caption' => 'Assign',
+                'floatHeader' => true,
                 'pjaxSettings' => [
                     'options' => [
                         'enablePushState' => false,
