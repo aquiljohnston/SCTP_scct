@@ -48,7 +48,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $inspectionDataProvider, // Sent from inspectionController.php
                 'export' => false,
                 'pjax' => true,
-                //'floatHeader' => true,
+                'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
@@ -98,13 +98,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                ],
-                'beforeHeader' => [
-                    [
-                        'columns' => [
-                            ['content' => 'Inspection', 'options' => ['colspan' => 12, 'class' => 'kv-table-caption text-center']],
-                        ],
-                    ]
                 ],
             ]); ?>
             <div id="InspectionTablePagination">
