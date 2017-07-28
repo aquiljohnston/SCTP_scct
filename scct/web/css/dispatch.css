@@ -23,7 +23,7 @@
 #dispatchGV {
     width: 100%;
     float: left;
-    max-height: 51vh;/*360px;*/
+    max-height: 49vh;/*360px;*/
     overflow-y: auto;
     margin: 0 auto;
     overflow-x: hidden;
