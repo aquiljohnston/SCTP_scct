@@ -99,7 +99,7 @@
 
  }
  #sectionDetailGV{
-     height: 250px;
+     max-height: 250px;
  }
 /*Pending changes pop-up missing modal ends*/
 

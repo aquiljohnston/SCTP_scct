@@ -148,7 +148,10 @@ $ImageUrl = 'images/';
                     'view' => function($url, $model) {
                         $modalViewEventDetailInspection = "#modalViewEventDetailInspection";
                         $modalContentViewEventDetailInspection = "#modalContentViewEventDetailInspection";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-event?inspectionID=".$model['InspectionID']."','".$modalViewEventDetailInspection ."','".$modalContentViewEventDetailInspection."')"]);
+                        if ($model['HasEvents'] > 0)
+                            return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/inspections/view-event?inspectionID=".$model['InspectionID']."','".$modalViewEventDetailInspection ."','".$modalContentViewEventDetailInspection."')"]);
+                        else
+                            return '';
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
