@@ -252,6 +252,9 @@
     width: 35px;
     cursor: pointer;
 }
+.kv-grid-wrapper {
+    height: 49vh !important;
+}
 
 /* Safari 7.1+ */
 
