@@ -76,10 +76,7 @@ ul{
 					</figure>
 					<h4 class="videoTitle">Reports</h4>
 			    </article>
-			</div>
-			<div class="col-md-12" id="embedVideo">
-				<h2>Mobile Videos - Coming Soon</h2>
-			</div>				
+			</div>			
         </div>
     </div>
 </div>
