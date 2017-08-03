@@ -33,9 +33,6 @@ use yii\bootstrap\Modal;
                 'attribute' => 'SectionNumber',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
-                /*'value' => function ($model) {
-                    return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                }*/
             ],
             [
                 'label' => 'Assigned User(s)',
@@ -55,9 +52,6 @@ use yii\bootstrap\Modal;
                 'attribute' => 'LocationType',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
-                /*'value' => function ($model) {
-                    return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                }*/
             ],
 			[
 				'label' => 'Remaining/Total',
@@ -69,24 +63,6 @@ use yii\bootstrap\Modal;
 					return $model['Remaining'] . "/" . $model['Total'];
 				}
 			],
-            /*[
-                'label' => 'Work Queue Count',
-                'attribute' => 'AssignedWorkQueueCount',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-            ],*/
-            /*[
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view}',
-                'header' => 'View<br/>Assets',
-                'urlCreator' => function ($action, $model, $key, $index) {
-                    if ($action === 'view') {
-                        $url = '/dispatch/view-asset?id=' . $model['MapGrid']; //TODO: change to correct identifier.
-                        return $url;
-                    }
-                    return "";
-                }
-            ],*/
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',

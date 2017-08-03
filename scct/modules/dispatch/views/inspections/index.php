@@ -72,9 +72,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                        }*/
                     ],
                     [
                         'label' => 'Compliance Start',
@@ -82,9 +79,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
                     ],
                     [
                         'label' => 'Compliance End',

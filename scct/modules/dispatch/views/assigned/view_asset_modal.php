@@ -45,16 +45,6 @@ use kartik\grid\GridView;
         'pjax' => true,
         'summary' => '',
         'columns' => [
-            /*[
-                'class' => 'kartik\grid\CheckboxColumn',
-                'header' => 'Select',
-                'contentOptions' => ['class' => 'AddSurveyor'],
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if (!empty($model)) {
-                        return ['WorkOrderID' => $model["WorkOrderID"]];
-                    }
-                },
-            ],*/
             [
                 'label' => 'Address',
                 'attribute' => 'HouseNumber',
@@ -102,9 +92,6 @@ use kartik\grid\GridView;
 
     <?php Pjax::end() ?>
 </div>
-<!--<div id="assetDispatchButtonContainer">
-    <?php /*echo Html::button('DISPATCH', ['class' => 'btn btn-primary modalDispatchBtn', 'id' => 'assetDispatchButton']); */?>
-</div>-->
 
 <script type="text/javascript">
     $(document).ready(function () {
@@ -141,7 +128,6 @@ use kartik\grid\GridView;
             timeout: 99999
         }).done(function () {
             $("body").css("cursor", "default");
-            //enableDisableControls(true, searchFilterVal);
         });
     }
 </script>

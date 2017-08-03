@@ -26,25 +26,16 @@ use yii\helpers\Url;
                 'attribute' => 'EventType',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-                //'label' => false,
-                /*'value' => function ($model) {
-                    return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                }*/
             ],
             [
                 'label' => 'Reason',
                 'attribute' => 'Reason',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-                //'label' => false,
-                /*'value' => function ($model) {
-                    return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                }*/
             ],
             [
                 'label' => 'Comments',
                 'attribute' => 'Comments',
-                //'label' => false,
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
@@ -59,9 +50,6 @@ use yii\helpers\Url;
                         return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
                     else
                         return '';
-                    //return Html::a('@web/logo/linkIcon.png'/* . $model['img']*/,
-                    //return Html::img('/pathToImage/'/* . $model['img']*/,
-                    //['width' => '20px']);
                 },
             ],
         ],
