@@ -57,26 +57,6 @@ ul{
 					</figure>
 					<h4 class="videoTitle">Dispatch & Assigned</h4>
 			    </article>
-				<article class="video">
-					<figure>
-						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
-							poster=""
-							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
-							<source src="/videos/Inspection 07_28_17.mp4" type="video/mp4"-->
-						</video>
-					</figure>
-					<h4 class="videoTitle">Inspections</h4>
-			    </article>
-			    <article class="video">
-					<figure>
-						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
-							poster=""
-							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
-							<source src="/videos/Reports_07_19_17.mp4" type="video/mp4"-->
-						</video>
-					</figure>
-					<h4 class="videoTitle">Reports</h4>
-			    </article>
 			</div>			
         </div>
     </div>
