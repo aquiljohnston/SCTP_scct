@@ -38,6 +38,7 @@ ul{
 	margin-top: 2%;
 }
 </style>
+<!--video path app/web/videos-->
 <div class="site-index">
     <div class="jumbotron intro" id="dispatchTab">
         <h2>Training Section</h2>
