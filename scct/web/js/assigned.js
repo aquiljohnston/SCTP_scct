@@ -92,7 +92,6 @@ $(function () {
                                         return value != mapGridSelected;
                                     });
         }
-        /*assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');*/
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
             $("#UnassignedButton").prop('disabled', false);
@@ -130,7 +129,6 @@ function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumb
     $('#loading').show();
     $.ajax({
         url: '/dispatch/assigned/unassign',
-        //data: {MapGrid: pks, AssignedToIDs: getAssignedUserIDs()},
         data: {unassignMap: unassignMapData, unassignSection: unassignSectionData},
         type: 'POST',
         beforeSend: function () {
@@ -202,14 +200,6 @@ function getAssignedUserIDs() {
 }
 
 // Asset modal view (not in use; using one in dispatch.js, sharing the same function)
-/*function ViewAssetClicked(url) {
-    console.log("View Asset clicked!");
-    console.log(url);
-    // get the click of the create button
-    $('#assetModal').modal('show')
-        .find('#viewAssetModalContent').load(url);
-    $(".modal-backdrop.in").css({'opacity': 0});
-}*/
 
 // Generate Assigned Map Array;
 function getAssignedMapArray(assignedMap_MapGrid) {
@@ -238,14 +228,7 @@ function getAssignedMapArray(assignedMap_MapGrid) {
 function getAssignedSectionArray(assignedSection_SectionNumber) {
     var assignedSectionArray = [];
     if (assignedSection_SectionNumber.length > 0) {
-        /*for (var i = 0; i < assignedSection_SectionNumber.length; i++) {
-            var MapGrid = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[i] + "]").attr("MapGrid");
-            assignedSectionArray.push({
-                MapGrid: MapGrid,
-                SectionNumber: assignedSection_SectionNumber[i],
-                AssignedUserID: assignedUserID
-            });
-        }*/
+
         $('#assignedSectionGV-container input:checked').each(function() {
             console.log("SELECTED MAP - SECTION: "+$(this).attr('SectionNumber'));
             assignedSectionArray.push({
@@ -279,9 +262,7 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
 
 // Generate unique key from Map Grid table
 function getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid) {
-    /*var common = $.grep(assignedSection_SectionNumber, function(element) {
-        return $.inArray(element, assignedMap_MapGrid ) !== -1;
-    });*/
+
     var assignedMap_MapGrid = assignedMap_MapGrid.filter(function (val) {
         return assignedSection_SectionNumber.indexOf(val) == -1;
     });

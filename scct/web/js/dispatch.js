@@ -57,7 +57,6 @@ function initializeDispatch() {
     $(document).off('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV").on('kvexprow:toggle', "#dispatchUnassignedTable #dispatchGV", function (event, ind, key, extra, state) {
     //dispatchGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
-        //var isCheckDisabled = $('.dispatchCheckbox input[type=checkbox]').is(':disabled');
         var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
         if (isCheckDisabled){
             $(this).find("[data-key='"+key+"']").find('.dispatchCheckbox input[type=checkbox]').prop('disabled', false);

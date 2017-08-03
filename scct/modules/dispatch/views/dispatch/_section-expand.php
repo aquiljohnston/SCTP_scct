@@ -22,7 +22,6 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                //'label' => ' ',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
                 'value' => function($model){
@@ -34,25 +33,16 @@ use yii\bootstrap\Modal;
                 'attribute' => 'SectionNumber',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
-                //'label' => false,
-                /*'value' => function ($model) {
-                    return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                }*/
             ],
             [
                 'label' => 'Location Type',
                 'attribute' => 'LocationType',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
-                //'label' => false,
-                /*'value' => function ($model) {
-                    return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                }*/
             ],
             [
                 'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
-                //'label' => false,
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
