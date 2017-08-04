@@ -57,6 +57,16 @@ ul{
 					</figure>
 					<h4 class="videoTitle">Dispatch & Assigned</h4>
 			    </article>
+				<article class="video">
+					<figure>
+						<video id="video2" class="fancybox fancybox.iframe video-js vjs-default-skin" 
+							poster=""
+							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
+							<source src="/videos/Dominion_Voyager_08_04_17.mp4" type="video/mp4"-->
+						</video>
+					</figure>
+					<h4 class="videoTitle">Voyager</h4>
+			    </article>
 			</div>			
         </div>
     </div>
