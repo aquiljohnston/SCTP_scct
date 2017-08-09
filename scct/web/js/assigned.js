@@ -4,11 +4,11 @@
 $(function () {
 
     var assignedGV = $("#assignedGV");
-    var assignedSection_SectionNumber = [];
-    var assignedSection_MapGrid = [];
-    var assignedMap_MapGrid = [];
+    assignedSection_SectionNumber = [];
+    assignedSection_MapGrid = [];
+    assignedMap_MapGrid = [];
 
-    $('#UnassignedButton').prop('disabled', false); //TO DISABLED
+    $('#UnassignedButton').prop('disabled', true); //TO DISABLED
 
     //assigned Seachfilter listener
     $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
@@ -49,9 +49,9 @@ $(function () {
     });
 
     //expandable row column listener
-    //$(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
+    $(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
       //assignedGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
-      assignedGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
+      //assignedGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
         var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
         if (isCheckDisabled){
@@ -88,18 +88,16 @@ $(function () {
         if ($(this).is(':checked')){
             assignedSection_MapGrid.push(mapGridSelected);
         }else{
-            assignedSection_MapGrid = jQuery.grep(y, function(value) {
+            assignedSection_MapGrid = jQuery.grep(assignedSection_MapGrid, function(value) {
                                         return value != mapGridSelected;
                                     });
         }
-        /*assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');*/
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
             $("#UnassignedButton").prop('disabled', false);
         }else{
             $("#UnassignedButton").prop('disabled', true);
         }
-        console.log(assignedSection_SectionNumber);
     });
 
     if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0)
@@ -130,7 +128,6 @@ function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumb
     $('#loading').show();
     $.ajax({
         url: '/dispatch/assigned/unassign',
-        //data: {MapGrid: pks, AssignedToIDs: getAssignedUserIDs()},
         data: {unassignMap: unassignMapData, unassignSection: unassignSectionData},
         type: 'POST',
         beforeSend: function () {
@@ -146,9 +143,11 @@ function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumb
         });
         $('#assignedGridview').on('pjax:success', function () {
             $('#loading').hide();
+            resetValue();
             unassignCheckboxListener();
         });
         $('#assignedGridview').on('pjax:error', function (e) {
+            resetValue();
             e.preventDefault();
         });
     });
@@ -202,14 +201,6 @@ function getAssignedUserIDs() {
 }
 
 // Asset modal view (not in use; using one in dispatch.js, sharing the same function)
-/*function ViewAssetClicked(url) {
-    console.log("View Asset clicked!");
-    console.log(url);
-    // get the click of the create button
-    $('#assetModal').modal('show')
-        .find('#viewAssetModalContent').load(url);
-    $(".modal-backdrop.in").css({'opacity': 0});
-}*/
 
 // Generate Assigned Map Array;
 function getAssignedMapArray(assignedMap_MapGrid) {
@@ -238,14 +229,7 @@ function getAssignedMapArray(assignedMap_MapGrid) {
 function getAssignedSectionArray(assignedSection_SectionNumber) {
     var assignedSectionArray = [];
     if (assignedSection_SectionNumber.length > 0) {
-        /*for (var i = 0; i < assignedSection_SectionNumber.length; i++) {
-            var MapGrid = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[i] + "]").attr("MapGrid");
-            assignedSectionArray.push({
-                MapGrid: MapGrid,
-                SectionNumber: assignedSection_SectionNumber[i],
-                AssignedUserID: assignedUserID
-            });
-        }*/
+
         $('#assignedSectionGV-container input:checked').each(function() {
             console.log("SELECTED MAP - SECTION: "+$(this).attr('SectionNumber'));
             assignedSectionArray.push({
@@ -264,14 +248,18 @@ function getAssignedSectionArray(assignedSection_SectionNumber) {
 function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber, assignedSection_MapGrid) {
     var selectedMapGridUser = "";
     var selectedSectionUser = "";
-    for (var i = 0; i < assignedMap_MapGrid.length; i++){
-        var userName_MapGrid = $("#assignedGridview #assignedGV input[MapGrid=" + assignedMap_MapGrid[i] + "]").attr("UserName");
-        selectedMapGridUser += "<li>"+assignedMap_MapGrid[i] + " : " + userName_MapGrid+"</li>"
+    if (assignedMap_MapGrid != null && assignedMap_MapGrid.length > 0) {
+        for (var i = 0; i < assignedMap_MapGrid.length; i++) {
+            var userName_MapGrid = $("#assignedGridview #assignedGV input[MapGrid=" + assignedMap_MapGrid[i] + "]").attr("UserName");
+            selectedMapGridUser += "<li>" + assignedMap_MapGrid[i] + " : " + userName_MapGrid + "</li>"
+        }
     }
-    for (var j = 0; j < assignedSection_SectionNumber.length; j++){
-        var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("UserName");
-        var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] +  "]").attr("MapGrid");
-        selectedSectionUser += "<li>"+mapGrid_Section+" : "+userName_Section+"</li>"
+    if (assignedSection_SectionNumber.length > 0) {
+        for (var j = 0; j < assignedSection_SectionNumber.length; j++) {
+            var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("username");
+            var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("mapgrid");
+            selectedSectionUser += "<li>" + mapGrid_Section + " : " + userName_Section + "</li>"
+        }
     }
     var selectedUserNameList = "<ul>"+selectedMapGridUser+selectedSectionUser+"</ul>";
     return selectedUserNameList;
@@ -279,11 +267,16 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
 
 // Generate unique key from Map Grid table
 function getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid) {
-    /*var common = $.grep(assignedSection_SectionNumber, function(element) {
-        return $.inArray(element, assignedMap_MapGrid ) !== -1;
-    });*/
+
     var assignedMap_MapGrid = assignedMap_MapGrid.filter(function (val) {
         return assignedSection_SectionNumber.indexOf(val) == -1;
     });
     return assignedMap_MapGrid;
+}
+
+// Reset Value After Unassigning Work
+function resetValue() {
+    assignedSection_SectionNumber = [];
+    assignedSection_MapGrid = [];
+    assignedMap_MapGrid = [];
 }

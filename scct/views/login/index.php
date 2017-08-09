@@ -54,10 +54,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php yii\widgets\Pjax::end(); ?>
 
     </div>
-    <!--<div class="col-lg-offset-1" style="color:#999;">
-        You may login with <strong>admin/admin</strong> or <strong>demo/demo</strong>.<br>
-        Ref. code <code>app\models\User::$users</code>.
-    </div>-->
 </div>
 <script type="text/javascript">
     localStorage.clear(); // Clear out the menus in case the user's session expired and they didn't hit the logout button

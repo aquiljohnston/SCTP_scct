@@ -215,17 +215,11 @@ class InspectionsController extends \app\controllers\BaseController
         }
 
         if (Yii::$app->request->get()){
-            //todo: need to remove hard code value
-            //$viewSectionDetailFilterParams = $searchFilterVal;
-            //$mapGridSelectedParam = $mapGridSelected;
-            //$sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
         }else{
-            //$viewSectionDetailFilterParams = "";
             $viewAssetPageSizeParams = 50;
             $pageAt = 1;
-            //$searchFilterVal = "";
         }
 
         // get the key to generate section table
@@ -259,19 +253,11 @@ class InspectionsController extends \app\controllers\BaseController
             return $this->renderAjax('_inspection-expand', [
                 'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
-                /*'searchFilterVal' => $viewSectionDetailFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,*/
             ]);
         } else {
             return $this->render('_inspection-expand', [
                 'sectionDetailDataProvider' => $sectionDetailDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
-                /*'searchFilterVal' => $viewSectionDetailFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,*/
             ]);
         }
     }
