@@ -94,7 +94,7 @@
  }
  #sectionDetailTable{
      overflow-y: scroll;
-     width: 100%;
+     width: 101%;
      max-height: 400px;
 
  }
