@@ -270,6 +270,13 @@ $(function () {
 
                     displayedResults = results;
                     //console.log(results);
+
+                    /*adjust the table size based on the selected report*/
+                    if (parameters[2] == 1){
+                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 42vh !important; overflow-y: auto');
+                    }else{
+                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 54vh !important; overflow-y: auto');
+                    }
                 }
             });
         }
@@ -381,6 +388,7 @@ $(function () {
             var parmDropdownSelected = false;
             var parmType;
             console.log(parms);
+
             $('#inspectorsDropdown').val("Please select an inspector");
             $('#datePickerSelectDate').val("");
             $('#datePickerBeginDate').val("");

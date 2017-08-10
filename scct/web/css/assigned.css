@@ -231,6 +231,23 @@
     width: 35px;
     cursor: pointer;
 }
+#assignedButtonContainer{
+    float: right;
+    margin: 0 auto;
+    width: 11%;
+}
+
+@media (max-width: 760px) {
+    #assignedButtonContainer{
+        width: 22%;
+    }
+    #AssignedPageSizeLabel {
+        width: 20%;
+    }
+    #assignedSearchContainer{
+        margin-left: 40%;
+    }
+}
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 
