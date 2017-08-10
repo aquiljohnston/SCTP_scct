@@ -94,11 +94,18 @@ and (min-resolution: 192dpi) {
         width: 100%;
         margin: 0 auto;
     }
-    #reportTable_wrapper .dataTables_scrollBody {
-        max-height: 550px;
-        overflow-y: scroll;
-    }
 }
+/* Safari 10.1+ (which is the latest version of Safari at this time) */
+
+@media not all and (min-resolution:.001dpcm) {
+    @media {
+        ::i-block-chrome,#reportTable_wrapper .dataTables_scrollBody{
+            max-height: 580px;
+        }
+        ::i-block-chrome,#inspectorsDropdown {
+            margin-right: 12%;
+        }
+    }}
 /* ----------- Retina Screens ----------- */
 
 /*-----------css for the 1920*1028 resolution ends---------------*/
