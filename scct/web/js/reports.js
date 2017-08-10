@@ -34,7 +34,7 @@ $(function () {
                 var selectedDate = new Date(date);
                 var msecsInADay = 86400000;
                 var endDate = new Date(selectedDate.getTime() + msecsInADay);
-                var maxDate = new Date(selectedDate.getTime() + 6*msecsInADay);
+                var maxDate = new Date(selectedDate.getTime() + 13*msecsInADay);
                 var currentDate = new Date();
                 maxDate = maxDate >= currentDate ? currentDate: maxDate;
                 endDate = selectedDate.toDateString() == currentDate.toDateString() ? date: endDate;
