@@ -46,8 +46,8 @@ $(function () {
     inspectionGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
     //inspectionGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
         if (state){
-            inspectionGV.css({"overflow-y": "hidden", "max-height": "51vh"});
-            /*inspectionGV.css({"overflow-y": "hidden", "max-height": "405px"});*/
+            inspectionGV.css({"overflow-y": "auto", "max-height": "51vh"});
+            $('.table-responsive').css({"overflow-x": "hidden"});
         }else{
             inspectionGV.css('overflow-y', 'auto');
         }
