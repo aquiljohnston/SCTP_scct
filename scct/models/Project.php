@@ -14,6 +14,7 @@ use Yii;
  * @property string $ProjectType
  * @property integer $ProjectStatus
  * @property string $ProjectUrlPrefix
+ * @property string $ProjectLandingPage
  * @property integer $ProjectClientID
  * @property integer $ProjectState
  * @property string $ProjectStartDate
@@ -37,6 +38,7 @@ class Project extends \yii\base\model
 	public $ProjectType;
 	public $ProjectStatus;
 	public $ProjectUrlPrefix;
+	public $ProjectLandingPage;
 	public $ProjectClientID;
 	public $ProjectState;
 	public $ProjectStartDate;
@@ -54,6 +56,7 @@ class Project extends \yii\base\model
     const MAX_TYPE_LENGTH = 50;
     const MAX_STATE_LENGTH = 25;
     const MAX_PREFIX_LENGTH = 10;
+    const MAX_LANDING_LENGTH = 255;
 
     /**
      * @inheritdoc
@@ -62,10 +65,11 @@ class Project extends \yii\base\model
     {
         return [
             [['ProjectName', 'ProjectUrlPrefix'], 'required'],
-            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix'], 'string'],
+            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix', 'ProjectLandingPage'], 'string'],
             [['ProjectID', 'ProjectStatus', 'ProjectClientID', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'integer'],
             [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe'],
             ['ProjectUrlPrefix', 'string', 'max' => self::MAX_PREFIX_LENGTH],
+            ['ProjectLandingPage', 'string', 'max' => self::MAX_LANDING_LENGTH],
             ['ProjectName', 'string', 'max' => self::MAX_NAME_LENGTH],
             ['ProjectDescription', 'string', 'max' => self::MAX_DESCRIPTION_LENGTH],
             ['ProjectNotes', 'string', 'max' => self::MAX_NOTES_LENGTH],
@@ -87,6 +91,7 @@ class Project extends \yii\base\model
             'ProjectType' => 'Project Type',
             'ProjectStatus' => 'Project Status',
 			'ProjectUrlPrefix' => 'Project Url Prefix',
+			'ProjectLandingPage' => 'Project Landing Page',
             'ProjectClientID' => 'Project Client ID',
 			'ProjectState' => 'Project State',
             'ProjectStartDate' => 'Project Start Date',

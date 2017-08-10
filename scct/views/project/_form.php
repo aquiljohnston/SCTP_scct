@@ -23,7 +23,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectName',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectName']); ?>
+					])->textInput(['placeholder'=>'Project Name']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectDescription', [
 					'label'=>'Description', 
@@ -32,7 +32,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectDescription',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectDescription']); ?>
+					])->textInput(['placeholder'=>'Description']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectNotes', [
 					'label'=>'Notes', 
@@ -41,7 +41,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectNotes',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectNotes']); ?>
+					])->textInput(['placeholder'=>'Notes']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectType', [
 					'label'=>'Type', 
@@ -50,7 +50,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectType',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectType']); ?>
+					])->textInput(['placeholder'=>'Project Type']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectStatus', [
 					'label'=>'Status', 
@@ -68,7 +68,16 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectUrlPrefix',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'ProjectUrlPrefix']); ?>
+					])->textInput(['placeholder'=>'Url Prefix']); ?>
+				</div>
+				<?= Html::activeLabel($model, 'ProjectLandingPage', [
+					'label'=>'Landing Page', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'ProjectLandingPage',[
+						'showLabels'=>false
+					])->textInput(['placeholder'=>'Landing Page']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
 					'label'=>'Client', 
