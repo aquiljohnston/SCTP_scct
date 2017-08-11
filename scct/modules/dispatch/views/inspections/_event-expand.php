@@ -31,7 +31,15 @@ use yii\helpers\Url;
                 'label' => 'Reason',
                 'attribute' => 'Reason',
                 'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'format' => 'html',
+                'value' => function($model){
+                    if (strpos($model['Reason'], '|') !== false) {
+                        list($LeakNumber, $Grade) = explode('|', $model['Reason'], 2);
+                        return "<span style='margin-left: 10%'>" . $LeakNumber . "</span><br/><span style='margin-left: 10%'>". $Grade."</span>";
+                    }else{
+                        return $model['Reason'];
+                    }
+                }
             ],
             [
                 'label' => 'Comments',
