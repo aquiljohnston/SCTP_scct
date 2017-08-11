@@ -57,6 +57,7 @@
 #inspectionTable .table-responsive {
     margin-top:0px;
     width:100%;
+    overflow-x: hidden;!important;
 }
 #inspection-dropDownList-form{
     width:99%;
