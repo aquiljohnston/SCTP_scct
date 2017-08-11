@@ -47,9 +47,9 @@ $(function () {
     //inspectionGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
         if (state){
             inspectionGV.css({"overflow-y": "auto", "max-height": "51vh"});
-            $('.table-responsive').css({"overflow-x": "hidden"});
         }else{
             inspectionGV.css('overflow-y', 'auto');
+            inspectionGV.css('overflow-x', 'hidden');
         }
     });
 });
