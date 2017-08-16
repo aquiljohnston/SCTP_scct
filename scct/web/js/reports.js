@@ -49,6 +49,10 @@ $(function () {
                 }
 
                 $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
+                if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                    var sp = "spRptDropDownInspectionEventsByMapGrid";
+                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
+                }
             }
         });
         $('#datePickerSelectDate').datepicker();
@@ -66,7 +70,7 @@ $(function () {
             return element.style.display !== "none";
         }
 
-        function buildParmDropdown(sp, parm, exports) {
+        function buildParmDropdown(startDate, endDate, sp, parm, exports) {
             //bookmark
 
             $.ajax({
@@ -74,12 +78,15 @@ $(function () {
                 url: "reports/get-parm-drop-down",
                 data: {
                     //type: "parmDropdown",
-                    ViewName: sp
+                    SPName: sp,
+                    startDate: startDate,
+                    endDate: endDate
                 },
                 beforeSend: function () {
                     $('#ajax-busy').show();
                 },
                 success: function (data) {
+                    //console.log(JSON.stringify(data, null, 2));
                     while (parmDropdown.lastChild && parmDropdown.lastChild.innerHTML !== "Please make a selection") {
                         parmDropdown.removeChild(parmDropdown.lastChild);
                     }
@@ -91,13 +98,13 @@ $(function () {
                     //added default option to inspector dropdown
                     var firstOption = document.createElement("option");
                     firstOption.innerHTML = "All";
-                    firstOption.value = null;
+                    firstOption.value = "< All >";
                     parmDropdown.appendChild(firstOption);
 
                     var results = JSON.parse(data);
                     $.each(results.options, function (i, obj) {
                         var option = document.createElement("option");
-                        option.value = option.innerHTML = obj['mapgrid'];
+                        option.value = option.innerHTML = obj;
                         parmDropdown.appendChild(option);
                     });
                     $('#parmDropdown').on('change', function () {
@@ -529,8 +536,8 @@ $(function () {
                                 toggleVisible([parmDropdown], "none");
                                 $('#inspectorListHeader').css("display", "none");
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "vMapGrid";
-                                    buildParmDropdown(sp, parms, exp);
+                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
+                                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                 }
                             }
                             else {
@@ -541,6 +548,7 @@ $(function () {
                             }
                         });
                         $(document).off('change', '#datePickerEndDate').on('change', '#datePickerEndDate', function () {
+                            console.log("End Date changed under parm drop down");
                             if (oTable != null) {
                                 oTable.fnDestroy(); //have to be destory first, then rebuild
                                 $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
@@ -548,8 +556,9 @@ $(function () {
                             if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                                 dateSelected = true;
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "vMapGrid";
-                                    buildParmDropdown(sp, parms, exp);
+                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
+                                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
+                                    //buildParmDropdown(sp, parms, exp);
                                 }
                             }
                             else {
