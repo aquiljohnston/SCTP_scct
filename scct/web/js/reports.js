@@ -49,10 +49,10 @@ $(function () {
                 }
 
                 $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
-                if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                /*if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                     var sp = "spRptDropDownInspectionEventsByMapGrid";
                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
-                }
+                }*/
             }
         });
         $('#datePickerSelectDate').datepicker();
@@ -97,7 +97,7 @@ $(function () {
 
                     //added default option to inspector dropdown
                     var firstOption = document.createElement("option");
-                    firstOption.innerHTML = "All";
+                    firstOption.innerHTML = "< All >";
                     firstOption.value = "< All >";
                     parmDropdown.appendChild(firstOption);
 
@@ -132,9 +132,9 @@ $(function () {
                 type: "POST",
                 url: "reports/get-inspector-drop-down",
                 data: {
-                    /*ReportName: sp,
-                    BeginDate: beginDate || null,
-                    EndDate: endDate || null,*/
+                    SPName: sp,
+                    startDate: beginDate || null,
+                    endDate: endDate || null,
                     Parm: parm || null
                 },
                 beforeSend: function () {
@@ -156,16 +156,16 @@ $(function () {
 
                     //build dropdown
                     //added default option to inspector dropdown
-                    var firstOption = document.createElement("option");
+                    /*var firstOption = document.createElement("option");
                     firstOption.innerHTML = "All";
-                    firstOption.value = null;
-                    inspectorsDropdown.appendChild(firstOption);
+                    firstOption.value = "< All >";
+                    inspectorsDropdown.appendChild(firstOption);*/
 
                     $.each(results.inspectors, function (i, obj) {
                         //console.log(obj);
                         var option = document.createElement("option");
-                        option.innerHTML = obj['displayNameData'];
-                        option.value = obj['userNameData'];
+                        option.innerHTML = obj;
+                        option.value = obj;
                         inspectorsDropdown.appendChild(option);
                     });
 

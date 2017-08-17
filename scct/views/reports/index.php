@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 41%; width: 20%;">
 			</select>
 			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
-			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right;">
+			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
 			</select>
 		</div>
 
