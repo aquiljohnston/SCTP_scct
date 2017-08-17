@@ -165,9 +165,9 @@ class ReportsController extends BaseController
      * @throws Exception
      */
     public function actionGetInspectorDropDown(){
-        if (isset($_POST['Parm'])){
+        if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
             // Reading the response from the the api and filling Inspector Drop Down
-            $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&viewName=vUsers';
+            $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
             $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, BaseController::API_VERSION_2); // indirect rbac
             $InspectorDropDownList = $getInspectorDropDownResponse;
             echo $InspectorDropDownList;
