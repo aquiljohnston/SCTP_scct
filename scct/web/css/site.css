@@ -268,13 +268,23 @@ ul > li > a:hover {
 
 .pagination {
     float: right;
+    /*float: left;*/
 }
 
 .GridviewTotalNumber {
-    position: fixed;
+    /*posit ion: fixed;
     bottom: 39px;
     left: 2%;
+    z-index: 42;*//*
+    position: relative;
     z-index: 42;
+    float: right;
+    top: 20px;
+    margin-right: 2%;*/
+    margin-left: 85%;
+    position: fixed;
+    z-index: 42;
+    bottom: 4.5%;
 }
 
 table {
@@ -334,6 +344,13 @@ table {
     top: 40%;
     left: 0;
     right: 0;
+}
+.recordsPerPage{
+    color: #0067a6;
+    margin-top: 5px;
+}
+label{
+    margin-bottom: 0;
 }
 
 /*-----------End loader----------*/
