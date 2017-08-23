@@ -58,7 +58,7 @@ use kartik\widgets\Spinner;
             ],
             [
                 'label' => 'Name',
-                'attribute' => 'UserFirstName',
+                'attribute' => 'Name',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
