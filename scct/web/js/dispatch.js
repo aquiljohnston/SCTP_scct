@@ -22,6 +22,8 @@ function initializeDispatch() {
     // Refer the modal in dispatch page
     $('#dispatchButton').click(function () {
         $('#addSurveyorModal').modal('show')
+            .find('#modalAddSurveyor').html("Loading...");
+        $('#addSurveyorModal').modal('show')
             .find('#modalAddSurveyor')
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal');
     });

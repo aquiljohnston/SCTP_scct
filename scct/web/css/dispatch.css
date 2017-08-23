@@ -12,7 +12,7 @@
     padding-left: 1%;
 }
 #dispatchUnassignedTable{
-    height: 430px;
+    height: 62vh;
     overflow-y: hidden;
     overflow-x: hidden;
 }
@@ -23,7 +23,7 @@
 #dispatchGV {
     width: 100%;
     float: left;
-    max-height: 49vh;/*360px;*/
+    max-height: 57vh;/*360px;*/
     overflow-y: auto;
     margin: 0 auto;
     overflow-x: hidden;
@@ -210,6 +210,8 @@
 }
 #unassignedTablePagination .pagination {
     margin: 5px 0 0 0;
+    /*margin-top: 5.5%;
+    margin-right: 14%;*/
 }
 .field-dispatchFilter{
     width: 100%;
@@ -253,7 +255,7 @@
     cursor: pointer;
 }
 .kv-grid-wrapper {
-    height: 49vh !important;
+    height: 51vh !important;
 }
 #dispatchSearchContainer{
     float:left;
@@ -316,6 +318,9 @@
     .floatThead-col{
         height: 0 !important;
     }
+    ::i-block-chrome,.kv-grid-wrapper {
+        height: 530px !important;
+    }
     @media (max-width: 950px) {
         ::i-block-chrome,#addSurveyorButtonDispatch{
             width: 21%;
@@ -326,6 +331,13 @@
         ::i-block-chrome,#dispatchSearchContainer{
             margin-left: 40%;
         }
+    }
+}
+/* Chrome 29+ */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+    #inspectionTablePagination .pagination {
+        margin: 3px 15% 0 0;
     }
 }
 
