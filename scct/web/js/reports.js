@@ -33,8 +33,8 @@ $(function () {
             onSelect: function(date){
                 var selectedDate = new Date(date);
                 var msecsInADay = 86400000;
-                var endDate = new Date(selectedDate.getTime() + msecsInADay);
-                var maxDate = new Date(selectedDate.getTime() + 13*msecsInADay);
+                var endDate = new Date(selectedDate.getTime() /*+ msecsInADay*/);
+                var maxDate = new Date(selectedDate.getTime() + 27*msecsInADay);
                 var currentDate = new Date();
                 maxDate = maxDate >= currentDate ? currentDate: maxDate;
                 endDate = selectedDate.toDateString() == currentDate.toDateString() ? date: endDate;
@@ -96,10 +96,10 @@ $(function () {
                     toggleVisible([parmDropdown], "inline");
 
                     //added default option to inspector dropdown
-                    var firstOption = document.createElement("option");
+                    /*var firstOption = document.createElement("option");
                     firstOption.innerHTML = "< All >";
                     firstOption.value = "< All >";
-                    parmDropdown.appendChild(firstOption);
+                    parmDropdown.appendChild(firstOption);*/
 
                     var results = JSON.parse(data);
                     $.each(results.options, function (i, obj) {
@@ -153,13 +153,6 @@ $(function () {
                     while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
                         inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
                     }
-
-                    //build dropdown
-                    //added default option to inspector dropdown
-                    /*var firstOption = document.createElement("option");
-                    firstOption.innerHTML = "All";
-                    firstOption.value = "< All >";
-                    inspectorsDropdown.appendChild(firstOption);*/
 
                     $.each(results.inspectors, function (i, obj) {
                         //console.log(obj);
@@ -544,7 +537,7 @@ $(function () {
                                 toggleVisible([parmDropdown], "none");
                                 $('#inspectorListHeader').css("display", "none");
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
+                                    //var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                 }
                             }
@@ -564,7 +557,7 @@ $(function () {
                             if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                                 dateSelected = true;
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
+                                    //var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                     //buildParmDropdown(sp, parms, exp);
                                 }
