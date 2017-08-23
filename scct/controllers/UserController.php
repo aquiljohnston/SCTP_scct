@@ -308,4 +308,68 @@ class UserController extends BaseController
         Parent::executePutRequest($url, $json_data, BaseController::API_VERSION_2); // indirect rbac
         $this->redirect('/user/');
     }
+	
+	/**
+     * Modal view for reactivating users
+     * @return string|\yii\web\Response
+     * @throws ForbiddenHttpException
+     */
+    public function actionReactivateUserModal()
+    {
+        try {
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+            $model = new \yii\base\DynamicModel([
+				'modalSearch'
+            ]);
+            $model->addRule('modalSearch', 'string', ['max' => 32]);
+
+                $searchFilterVal = "";
+            if (Yii::$app->request->post()){
+                $data = Yii::$app->request->post();
+
+                if (!empty($data["searchFilterVal"])) {
+                    $searchFilterVal = $data["searchFilterVal"];
+                }
+            }
+
+            // Reading the response from the the api and filling the surveyorGridView
+            $getUrl = 'user%2Fget-inactive&' . http_build_query([
+                    'filter' => $searchFilterVal,
+                ]);
+            $usersResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+
+            $dataProvider = new ArrayDataProvider
+            ([
+                'allModels' => $usersResponse['users'],
+                'pagination' => false,
+            ]);
+
+            $dataProvider->key = 'UserID';
+
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('reactivate_user_modal', [
+					'reactivateUserDataProvider' => $dataProvider,
+					'model' => $model,
+					'searchFilterVal' => $searchFilterVal,
+				]);
+			}else{
+				return $this->render('reactivate_user_modal', [
+					'reactivateUserDataProvider' => $dataProvider,
+					'model' => $model,
+					'searchFilterVal' => $searchFilterVal,
+				]);
+			}
+        }catch(ForbiddenHttpException $e)
+        {
+            throw new ForbiddenHttpException;
+        }
+        catch(\Exception $e)
+        {
+			yii::trace('Exception' . json_encode($e));
+            Yii::$app->runAction('login/user-logout');
+        }
+    }
 }
