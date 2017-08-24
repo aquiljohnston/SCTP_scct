@@ -49,10 +49,18 @@ $(function () {
                 }
 
                 $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
-                /*if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                    var sp = "spRptDropDownInspectionEventsByMapGrid";
-                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
-                }*/
+                var currentSelectedReport = $('#reportsDropdown').val();
+                var parms = reportsToParms[currentSelectedReport];
+                var sp = reportsToSP[currentSelectedReport];
+                if (parms['isMapGridDropDownRequired'] != 0 ) {
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                        buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
+                    }
+                }else{
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                        buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
+                    }
+                }
             }
         });
         $('#datePickerSelectDate').datepicker();
