@@ -57,6 +57,7 @@
 #inspectionTable .table-responsive {
     margin-top:0px;
     width:100%;
+    overflow-x: hidden;!important;
 }
 #inspection-dropDownList-form{
     width:99%;
@@ -71,7 +72,7 @@
     margin-right:1%;
 }
 #inspectionPageSizeLabel{
-    margin: -39px auto;
+    margin: -5px auto;
     width: 10%;
 }
 #inspectionTablePagination .pagination {
@@ -94,19 +95,38 @@
  }
  #sectionDetailTable{
      overflow-y: scroll;
-     width: 100%;
+     width: 101%;
      max-height: 400px;
 
  }
  #sectionDetailGV{
      max-height: 250px;
  }
+ #inspectionSearchContainer{
+     float:left;
+     margin-left: 60%;
+ }
+
+@media (max-width: 760px) {
+    #inspectionPageSizeLabel {
+        margin: -5px auto;
+        width: 20%;
+    }
+
+    #inspectionSearchContainer {
+        float: left;
+        margin-left: 41%;
+    }
+    #inspectionGV-container{
+        overflow-x: hidden;
+    }
+}
 /*Pending changes pop-up missing modal ends*/
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 
     /* Safari only override */
-    ::i-block-chrome,#inspectionGV{
+    ::i-block-chrome, #inspectionGV {
         width: 100%;
         float: left;
         max-height: 530px;
@@ -114,11 +134,13 @@
         margin: 0 auto;
         overflow-x: hidden;
     }
+
     #inspectionTableTable {
         height: 620px;
         overflow-y: hidden;
         overflow-x: hidden;
     }
+
     .chrome_only {
         width: 100%;
         float: left;
@@ -127,7 +149,15 @@
         margin: 0 auto;
         overflow-x: hidden;
     }
-    .floatThead-col{
+
+    .floatThead-col {
         height: 0 !important;
+    }
+}
+/* Chrome 29+ */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+    #inspectionTablePagination .pagination {
+        margin: 3px 15% 0 0;
     }
 }
