@@ -33,8 +33,8 @@ $(function () {
             onSelect: function(date){
                 var selectedDate = new Date(date);
                 var msecsInADay = 86400000;
-                var endDate = new Date(selectedDate.getTime() + msecsInADay);
-                var maxDate = new Date(selectedDate.getTime() + 6*msecsInADay);
+                var endDate = new Date(selectedDate.getTime() /*+ msecsInADay*/);
+                var maxDate = new Date(selectedDate.getTime() + 27*msecsInADay);
                 var currentDate = new Date();
                 maxDate = maxDate >= currentDate ? currentDate: maxDate;
                 endDate = selectedDate.toDateString() == currentDate.toDateString() ? date: endDate;
@@ -49,10 +49,19 @@ $(function () {
                 }
 
                 $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
-                /*if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                    var sp = "spRptDropDownInspectionEventsByMapGrid";
-                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
-                }*/
+
+                var currentSelectedReport = $('#reportsDropdown').val();
+                var parms = reportsToParms[currentSelectedReport];
+                var sp = reportsToSP[currentSelectedReport];
+                if (parms['isMapGridDropDownRequired'] != 0 ) {
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                        buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
+                    }
+                }else{
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                        buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
+                    }
+                }
             }
         });
         $('#datePickerSelectDate').datepicker();
@@ -96,10 +105,12 @@ $(function () {
                     toggleVisible([parmDropdown], "inline");
 
                     //added default option to inspector dropdown
-                    var firstOption = document.createElement("option");
+
+                    /*var firstOption = document.createElement("option");
                     firstOption.innerHTML = "< All >";
                     firstOption.value = "< All >";
-                    parmDropdown.appendChild(firstOption);
+                    parmDropdown.appendChild(firstOption);*/
+
 
                     var results = JSON.parse(data);
                     $.each(results.options, function (i, obj) {
@@ -153,13 +164,6 @@ $(function () {
                     while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
                         inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
                     }
-
-                    //build dropdown
-                    //added default option to inspector dropdown
-                    /*var firstOption = document.createElement("option");
-                    firstOption.innerHTML = "All";
-                    firstOption.value = "< All >";
-                    inspectorsDropdown.appendChild(firstOption);*/
 
                     $.each(results.inspectors, function (i, obj) {
                         //console.log(obj);
@@ -277,6 +281,13 @@ $(function () {
 
                     displayedResults = results;
                     //console.log(results);
+
+                    /*adjust the table size based on the selected report*/
+                    if (parameters[2] == 1){
+                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 42vh !important; overflow-y: auto');
+                    }else{
+                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 54vh !important; overflow-y: auto');
+                    }
                 }
             });
         }
@@ -388,6 +399,7 @@ $(function () {
             var parmDropdownSelected = false;
             var parmType;
             console.log(parms);
+
             $('#inspectorsDropdown').val("Please select an inspector");
             $('#datePickerSelectDate').val("");
             $('#datePickerBeginDate').val("");
@@ -536,7 +548,6 @@ $(function () {
                                 toggleVisible([parmDropdown], "none");
                                 $('#inspectorListHeader').css("display", "none");
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                 }
                             }
@@ -556,7 +567,6 @@ $(function () {
                             if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                                 dateSelected = true;
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                     //buildParmDropdown(sp, parms, exp);
                                 }
