@@ -108,7 +108,10 @@ use kartik\grid\GridView;
             url: '/dispatch/dispatch/view-asset',
             container: '#assetTablePjax', // id to update content
             data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected},
-            timeout: 99999
+            timeout: 99999,
+            push: false,
+            replace: false,
+            replaceRedirect: false
         }).done(function () {
             $("body").css("cursor", "default");
         });

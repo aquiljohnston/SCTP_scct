@@ -121,11 +121,13 @@
     }
     /*-----------css for the 1920*1028 resolution ends---------------*/
 
-    /*-----------css for width < 760 resolution ---------------*/
-    @media only screen and (max-width: 760px) {
+    /*-----------css for width < 860 resolution ---------------*/
+    @media only screen and (max-width: 860px) {
         .loginInput{
             margin-left: 6%;
             margin-right: 6%;
+            width: 83.33333333%;!important;
+            float: left;
         }
         #logincontainer input {
             margin: 10px 0;
@@ -143,7 +145,7 @@
             width: auto;
         }
     }
-    /*-----------css for width < 760 resolution ends---------------*/
+    /*-----------css for width < 860 resolution ends---------------*/
 
     /* Safari 7.1+ */
 
@@ -164,4 +166,35 @@
     _::-webkit-full-page-media, _:future, :root #loginbox img{
         height: 100%;
         width: auto;
+    }
+
+    /*---------------Safari Browser---------------*/
+    @media screen and (-webkit-min-device-pixel-ratio:0) {
+
+        /* Safari only override */
+        ::i-block-chrome,#loginbox img {
+            width: 100%;
+            height: 100%;
+            margin-right: 15%;
+        }
+        ::i-block-chrome,#loginbox{
+            top:0px;
+        }
+        ::i-block-chrome, .loginInput{
+            width: 83.33333333%;!important;
+            float: left;
+        }
+        ::i-block-chrome, #logincontainer input {
+            font-size: 1.6em;
+            color: #0067A6;
+            height: 40px;
+        }
+        /*@media only screen and (max-width: 860px) {
+            ::i-block-chrome, #logincontainer input {
+                margin: 10px 0.1;
+                font-size: 1.6em;
+                color: #0067A6;
+                height: 40px;
+            }
+        }*/
     }
