@@ -12,6 +12,7 @@ use linslin\yii2\curl;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\grid\GridView;
+use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -175,15 +176,10 @@ class UserController extends BaseController
                 // post url
                 $url = "user%2Fcreate";
                 $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
-
                 $obj = json_decode($response, true);
-//                if($obj['projectUser'] != false) {
-//                    $userId = $obj['projectUser']['UserID'];
-//                } else {
-//                    $userId = $obj['scctUser']['UserID'];
-//                }
+
                 return $this->redirect(['user/index']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // duplicationflag:
                 // 1: yes 0: no
                 // set duplicateFlag to 1, which means duplication happened.
