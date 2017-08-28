@@ -163,7 +163,7 @@ function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) 
         }
         return dispatchSectionArray;
     }else{
-        return null;
+        return dispatchSectionArray;
     }
 }
 

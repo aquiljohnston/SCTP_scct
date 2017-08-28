@@ -220,9 +220,9 @@ class BaseController extends Controller
 		{
 			throw new ForbiddenHttpException(self::UNAUTH_MESSAGE);
 		}
-		/*else if ($httpCode == 400){
+		else if ($httpCode == 400){
             throw new BadRequestHttpException();
-        }*/
+        }
 		curl_close ($curl);
 		
 		return $response;

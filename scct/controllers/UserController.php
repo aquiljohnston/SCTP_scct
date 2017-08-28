@@ -20,7 +20,6 @@ use yii\web\ForbiddenHttpException;
  */
 class UserController extends BaseController
 {
-    const USER_EXIST = "UserName already exist.";
     /**
      * Lists all user models.
      * @return mixed
@@ -178,16 +177,8 @@ class UserController extends BaseController
                 $url = "user%2Fcreate";
                 $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
                 $obj = json_decode($response, true);
-                if ($obj == self::USER_EXIST){
-                    return $this->render('create', [
-                        'model' => $model,
-                        'roles' => $roles,
-                        'types' => $types,
-                        'duplicateFlag' => 1,
-                    ]);
-                }else{
-                    return $this->redirect(['user/index']);
-                }
+
+                return $this->redirect(['user/index']);
             } catch (Exception $e) {
                 // duplicationflag:
                 // 1: yes 0: no
