@@ -49,6 +49,7 @@ $(function () {
                 }
 
                 $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
+
                 var currentSelectedReport = $('#reportsDropdown').val();
                 var parms = reportsToParms[currentSelectedReport];
                 var sp = reportsToSP[currentSelectedReport];
@@ -104,10 +105,12 @@ $(function () {
                     toggleVisible([parmDropdown], "inline");
 
                     //added default option to inspector dropdown
+
                     /*var firstOption = document.createElement("option");
                     firstOption.innerHTML = "< All >";
                     firstOption.value = "< All >";
                     parmDropdown.appendChild(firstOption);*/
+
 
                     var results = JSON.parse(data);
                     $.each(results.options, function (i, obj) {
@@ -545,7 +548,6 @@ $(function () {
                                 toggleVisible([parmDropdown], "none");
                                 $('#inspectorListHeader').css("display", "none");
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    //var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                 }
                             }
@@ -565,7 +567,6 @@ $(function () {
                             if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                                 dateSelected = true;
                                 if (parms["isMapGridDropDownRequired"] == 1) {
-                                    //var sp = "spRptDropDownInspectionEventsByMapGrid";
                                     buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
                                     //buildParmDropdown(sp, parms, exp);
                                 }

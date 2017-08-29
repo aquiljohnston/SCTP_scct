@@ -18,7 +18,11 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?= Html::csrfMetaTags() ?>
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="no-cache">
+	<meta http-equiv="Expires" content="-1">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<?= Html::csrfMetaTags() ?>
 	<link rel="shortcut icon" href="<?= Yii::$app->request->baseUrl ?>/SC_star_logo.ico" type="image/x-icon" />
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
