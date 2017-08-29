@@ -52,7 +52,7 @@ use kartik\widgets\Spinner;
                 'contentOptions' => ['class' => 'ReactivateUser'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($reactivateUserDataProvider)) {
-                        return ['UserID' => $model["UserID"]];
+                        return ['UserName' => $model["UserName"]];
                     }
                 },
             ],
@@ -102,53 +102,47 @@ use kartik\widgets\Spinner;
         $('#reactivateUserButton').prop('disabled', true); //TO DISABLED
 
         $(".ReactivateUser input[type=checkbox]").click(function () {
-            userIDs = $("#reactivateUserGridview #reactivateUserGV").yiiGridView('getSelectedRows');
-            // dispatchMapData = getDispatchMapArray(dispatchMap_MapGrid, assignedUserID[0]);
-            // dispatchSectionData = getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID[0]);
-            if (userIDs.length == 1) {
+            Usernames = $("#reactivateUserGridview #reactivateUserGV").yiiGridView('getSelectedRows');
+            if (Usernames.length > 0) {
                 $('.modalReactivateBtn').prop('disabled', false); //TO DISABLED
-                $('#reactivateUserModal').prop('disabled', false); //TO DISABLED
-
             } else {
                 $('.modalReactivateBtn').prop('disabled', true); //TO DISABLED
             }
         });
 
-        // $('.modalReactivateBtn').click(function () {
-            // var form = $("#dispatchActiveForm");
-            // if (!assignedUserID || assignedUserID.length == 1) {
-                // // Ajax post request to dispatch action
-                // $.ajax({
-                    // timeout: 99999,
-                    // url: '/dispatch/dispatch/dispatch',
-                    // data: {dispatchMap: dispatchMapData, dispatchSection: dispatchSectionData},
-                    // type: 'POST',
-                    // beforeSend: function () {
-                        // $('#reactivateUserModal').modal("hide");
-                        // $('#loading').show();
-                    // }
-                // }).done(function () {
-                    // $.pjax.reload({
-                        // container:'#dispatchUnassignedGridview',
-                        // timeout: 99999,
-						// push: false,
-						// replace: false,
-						// replaceRedirect: false
-                        // type: 'GET',
-                        // url: form.attr("action"),
-                        // data: form.serialize()
-                    // });
-                    // $('#dispatchUnassignedGridview').on('pjax:success', function() {
-                        // console.log("Pjax success");
-                        // $("#dispatchButton").prop('disabled', true);
-                        // $('#loading').hide();
-                    // });
-                    // $('#dispatchUnassignedGridview').on('pjax:error', function(e) {
-                        // e.preventDefault();
-                    // });
-                // });
-            // }
-        // });
+        $('.modalReactivateBtn').click(function () {
+            var form = $("#reactivateUserForm");
+            if (!Usernames || Usernames.length > 0) {
+                // Ajax post request to dispatch action
+                $.ajax({
+                    timeout: 99999,
+                    url: '/user/reactivate',
+                    data: {Usernames: Usernames},
+                    type: 'POST',
+                    beforeSend: function () {
+                        $('#reactivateUserModal').modal("hide");
+                        $('#loading').show();
+                    }
+                }).done(function () {
+                    $.pjax.reload({
+                        container:'#userGridview',
+                        timeout: 99999,
+						push: false,
+						replace: false,
+						replaceRedirect: false,
+                        type: 'GET',
+                        url: form.attr("action"),
+                        data: form.serialize()
+                    });
+                    $('#userGridview').on('pjax:success', function() {
+                        $('#loading').hide();
+                    });
+                    $('#userGridview').on('pjax:error', function(e) {
+                        e.preventDefault();
+                    });
+                });
+            }
+        });
     }
 	
 	function reactivateUserCheckboxListener() {

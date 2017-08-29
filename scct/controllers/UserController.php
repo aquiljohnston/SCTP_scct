@@ -347,7 +347,7 @@ class UserController extends BaseController
                 'pagination' => false,
             ]);
 
-            $dataProvider->key = 'UserID';
+            $dataProvider->key = 'UserName';
 
 			if (Yii::$app->request->isAjax) {
 				return $this->renderAjax('reactivate_user_modal', [
@@ -372,4 +372,33 @@ class UserController extends BaseController
             Yii::$app->runAction('login/user-logout');
         }
     }
+	
+	/**
+     * Reactivate Function
+     * @throws ForbiddenHttpException
+     */
+	public function actionReactivate()
+	{
+		try
+		{
+			if(Yii::$app->request->isAjax)
+			{
+				//get user data for put request
+				$data = Yii::$app->request->post();
+				//add url prefix to put body
+				$data['ProjectUrlPrefix'] = BaseController::getXClient();
+				//json encode put body
+                $json_data = json_encode($data);
+				
+				// post url
+                $putUrl = 'user%2Freactivate';
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
+			}
+		} catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException;
+        } catch (Exception $e) {
+			//TODO implement alternative to logging out when a bad request is returned.
+            Yii::$app->runAction('login/user-logout');
+        }
+	}
 }
