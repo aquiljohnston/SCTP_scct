@@ -28,7 +28,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'class' => 'recordsPerPage'
                         ]); ?>
                 </span>
-                <div id="inspectionSearchContainer" class="col-xs-3 col-md-3 col-lg-3" style="float:left; margin-left: 60%;">
+                <div id="inspectionSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
                     <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
                         <?= $form->field($model, 'inspectionfilter')->textInput(['value' => $inspectionFilterParams, 'id' => 'inspectionFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>

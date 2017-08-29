@@ -82,7 +82,7 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 #info-panel div {
     magin-left:5px;
 }
-h1 {
+/*h1 {
     font-family: MS Reference Sans Serif,Arial,Calibri,Helvetica;
     font-variant: small-caps;
     font-size: 14px;
@@ -90,7 +90,7 @@ h1 {
     color: #ffffff;
     padding-bottom: 10px;
     margin-top: 5px;
-}
+}*/
 p {
     text-align: left;
 }
