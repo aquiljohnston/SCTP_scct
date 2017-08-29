@@ -82,43 +82,38 @@ $column = [
 ];
 ?>
 <div class="user-index">
-
-	<?php
-    Modal::begin([
-        'header' => '<h4>Reactivate Users</h4>',
-        'id' => 'reactivateUserModal',
-    ]);?>
-	<div id='modalReactivateUser'>Loading...</div>
-	<?php 
-		Modal::end();
-    ?>
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-	<div id="userDropdownContainer">
-		<?php $form = ActiveForm::begin([
-			'type' => ActiveForm::TYPE_HORIZONTAL,
-			'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-			'method' => 'get',
-			'options' => [
-				'id' => 'UserForm',
-			],
-			'action' => Url::to(['user/index'])
-		]); ?>
+	<div class="user_filter">
+        <div id="userButtons">
+            <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        </div>
+		<div id="userDropdownContainer">
+			<?php $form = ActiveForm::begin([
+				'type' => ActiveForm::TYPE_HORIZONTAL,
+				'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+				'method' => 'get',
+				'options' => [
+					'id' => 'UserForm',
+				],
+				'action' => Url::to(['user/index'])
+			]); ?>
 
-		<label id="userPageSizeLabel">
-			<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
-		</label>
-		<label id="userFilter">
-			<?= $form->field($model, 'filter')->label("Search"); ?>
-		</label>
-		<input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
-		<?php ActiveForm::end(); ?>
-		
-		<?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
-		<div id="reactivateButtonUser" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
-			<?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
+			<label id="userPageSizeLabel">
+				<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
+			</label>
+			<label id="userFilter">
+				<?= $form->field($model, 'filter')->label("Search"); ?>
+			</label>
+			<input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
+			<?php ActiveForm::end(); ?>
+			
+			<?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
+			<div id="reactivateButtonUser" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
+				<?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
+			</div>
+			<?php Pjax::end() ?>
 		</div>
-		<?php Pjax::end() ?>
 	</div>
     <div id="userGridViewContainer">
         <div id="userGV" class="userForm">
@@ -144,4 +139,13 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
+	<?php
+    Modal::begin([
+        'header' => '<h4>Reactivate Users</h4>',
+        'id' => 'reactivateUserModal',
+    ]);?>
+	<div id='modalReactivateUser'>Loading...</div>
+	<?php 
+		Modal::end();
+    ?>
 </div>
