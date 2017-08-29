@@ -1,4 +1,4 @@
-$(function () {
+$(function() {
     var jqUserDropDowns = $('#userDropdownContainer');
     var jqUserPageSize = jqUserDropDowns.find('#userPageSize');
 
@@ -15,7 +15,14 @@ $(function () {
         });
     });
 
-
+	//reactivate user button
+    $('#reactivateButton').click(function () {
+        $('#reactivateUserModal').modal('show')
+			.find('#modalReactivateUser').html("Loading...");
+		$('#reactivateUserModal').modal('show')
+            .find('#modalReactivateUser')
+            .load('/user/reactivate-user-modal');
+    });
 
     function reloadGridView() {
         var form = jqUserDropDowns.find("#UserForm");
@@ -37,6 +44,7 @@ $(function () {
 
     userManagementPaginationListener();
 });
+
 function firePageChangeHandler(event, page) {
     $('#UserManagementPageNumber').val(page);
     var form = $('#UserForm');
