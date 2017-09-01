@@ -20,10 +20,10 @@ use kartik\widgets\Spinner;
             'type' => ActiveForm::TYPE_VERTICAL,
         ]); ?>
         <div class="reactivateUserContainer">
-            <div id="reactivateUserSearchContainer" class="searchTitle">
+            <div id="reactivateUserSearchContainer" class="searchTitle" style="position: relative;float: left;width: 50%;padding-right: 1%;">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'reactivateUserSearch', 'placeholder'=>'Search'])->label('Inactive Users'); ?>
             </div>
-			<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'reactivateUserCleanFilterButton']) ?>
+			<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'reactivateUserCleanFilterButton', 'style' => 'margin-top: 25px;width: 32px;cursor: pointer;']) ?>
         </div>		
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
