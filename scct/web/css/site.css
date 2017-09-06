@@ -186,7 +186,7 @@ a.desc:after {
     color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
     font-weight: 100;
-    padding-right: 2%;
+    /*padding-right: 2%;*/
 }
 
 ul > li > a {
@@ -356,6 +356,11 @@ label{
 /*-----------End loader----------*/
 
 /*-----------responsive ----------*/
+@media (max-width:950px) and (min-width:800px) {
+    .GridviewTotalNumber {
+        margin-left: 75%;
+    }
+}
 @media only screen
 and (max-width: 870px) {
     /*---------Header responsive------*/
@@ -383,4 +388,31 @@ and (max-width: 870px) {
     }
 
     /*-------End Header responsive------*/
+}
+
+@media (max-width: 760px) {
+    .GridviewTotalNumber {
+        margin-left: 70%;
+        position: fixed;
+        z-index: 42;
+        bottom: 4.5%;
+    }
+}
+
+@media (max-width: 950px) {
+    ::i-block-chrome,.GridviewTotalNumber {
+        margin-left: 75%;
+        position: fixed;
+        z-index: 42;
+        bottom: 4.5%;
+    }
+}
+
+@media (max-width:1280px) and (min-width:960px) {
+    .GridviewTotalNumber{
+        margin-left: 83%;
+        position: fixed;
+        z-index: 42;
+        bottom: 5.5%;
+    }
 }

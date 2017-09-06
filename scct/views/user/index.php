@@ -82,12 +82,8 @@ $column = [
 ];
 ?>
 <div class="user-index">
-    <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 	<div class="user_filter">
-        <div id="userButtons">
-            <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
 		<div id="userDropdownContainer">
 			<?php $form = ActiveForm::begin([
 				'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -99,20 +95,27 @@ $column = [
 				'action' => Url::to(['user/index'])
 			]); ?>
 
-			<label id="userPageSizeLabel">
-				<?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
-			</label>
-			<label id="userFilter">
-				<?= $form->field($model, 'filter')->label("Search"); ?>
-			</label>
+            <div class="row" style="margin-left: 0;">
+                <h3 class="title" style="float: left;"><?= Html::encode($this->title) ?></h3>
+                <label id="userPageSizeLabel" class="col-sm-4 col-md-4 col-lg-4">
+                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label(""); ?>
+                </label>
+            </div>
+            <div class="row" style="margin-left: 0;">
+                <div id="reactivateButtonUser" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-right: 0;padding-left: 0;margin-left: 2%;">
+                    <?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
+                </div>
+                <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0;">
+                    <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']) ?>
+                </div>
+                <label id="userFilter" class="col-sm-7 col-md-7 col-lg-7" style="float:right;">
+                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search'])->label(''); ?>
+                </label>
+                <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
+                <?php Pjax::end() ?>
+            </div>
 			<input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
 			<?php ActiveForm::end(); ?>
-			
-			<?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
-			<div id="reactivateButtonUser" class="col-xs-1 col-md-1 col-lg-1" style="float: right;margin: 25px auto;width: 11%;">
-				<?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
-			</div>
-			<?php Pjax::end() ?>
 		</div>
 	</div>
     <div id="userGridViewContainer">
