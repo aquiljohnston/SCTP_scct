@@ -39,6 +39,7 @@ use kartik\widgets\Spinner;
         'id' =>'reactivateUserGV',
         'dataProvider' => $reactivateUserDataProvider,
         'export' => false,
+        'summary' => '',
         'pjax' =>true,
         'pjaxSettings' => [
             'options' => [
