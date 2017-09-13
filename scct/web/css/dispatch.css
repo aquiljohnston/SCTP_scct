@@ -255,7 +255,8 @@
     cursor: pointer;
 }
 .kv-grid-wrapper {
-    height: 51vh !important;
+    height: auto !important;
+    max-height: 51vh !important;
 }
 #dispatchSearchContainer{
     float:left;
@@ -277,6 +278,9 @@
     }
     #dispatchSearchContainer{
         margin-left: 40%;
+    }
+    .kv-grid-wrapper {
+        overflow-x: hidden;
     }
 }
 

@@ -97,60 +97,63 @@ $column = [
 ?>
 
 <div class="timecard-index">
+    <div class="lightBlueBar">
+        <h3 class="title"><?= Html::encode($this->title) ?></h3>
+        <div id="timecard_filter">
+            <div id="multiple_time_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
+                <?php
+                echo Html::button('Approve',
+                    [
+                        'class' => 'btn btn-primary multiple_approve_btn',
+                        'id' => 'multiple_approve_btn_id',
+                    ]);
 
-    <h3 class="title"><?= Html::encode($this->title) ?></h3>
-    <div id="timecard_filter">
-        <div id="multiple_time_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
-            <?php
-            echo Html::button('Approve',
-                [
-                    'class' => 'btn btn-primary multiple_approve_btn',
-                    'id' => 'multiple_approve_btn_id',
-                ]);
-
-            if ($week == "prior") {
-                $priorSelected = "selected";
-                $currentSelected = "";
-            } else {
-                $priorSelected = "";
-                $currentSelected = "selected";
-            }
-            ?>
-            <?php
-            if ($pages->totalCount > 0) {
+                if ($week == "prior") {
+                    $priorSelected = "selected";
+                    $currentSelected = "";
+                } else {
+                    $priorSelected = "";
+                    $currentSelected = "selected";
+                }
                 ?>
-                <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-                   href="<?= $this->params['download_url']; ?>">Export</a>
-            <?php } ?>
+                <?php
+                if ($pages->totalCount > 0) {
+                    ?>
+                    <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
+                       href="<?= $this->params['download_url']; ?>">Export</a>
+                <?php } ?>
 
-        </div>
-        <div id="timeCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
+            </div>
+            <div id="timeCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
 
-            <?php $form = ActiveForm::begin([
-                'type' => ActiveForm::TYPE_HORIZONTAL,
-                'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-                'method' => 'get',
-                'options' => [
-                    'id' => 'TimeCardForm',
-                ],
-                'action' => Url::to(['time-card/index'])
-            ]); ?>
-            <label id="timeCardFilter">
-                <?= $form->field($model, 'filter')->label("Search"); ?>
-            </label>
-            <div id="timeCardWeekContainer">
-                <select name="weekTimeCard" id="weekSelection"<!--onchange="this.form.submit()-->">
-                <option value="prior" <?= $priorSelected ?> >Prior Week</option>
-                <option value="current" <?= $currentSelected ?> >Current Week</option>
-                </select>
+                <?php $form = ActiveForm::begin([
+                    'type' => ActiveForm::TYPE_HORIZONTAL,
+                    'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+                    'method' => 'get',
+                    'options' => [
+                        'id' => 'TimeCardForm',
+                    ],
+                    'action' => Url::to(['time-card/index'])
+                ]); ?>
+                <div id="timeCardWeekContainer">
+                    <select name="weekTimeCard" id="weekSelection"<!--onchange="this.form.submit()-->">
+                    <option value="prior" <?= $priorSelected ?> >Prior Week</option>
+                    <option value="current" <?= $currentSelected ?> >Current Week</option>
+                    </select>
+                </div>
+                <div id="timeCardPageSizeLabelContainer">
+                    <label id="timeCardPageSizeLabel">
+                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
+                    </label>
+                    <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
+                </div>
+                <div class="col-sm-5">
+                    <label id="timeCardFilter">
+                        <?= $form->field($model, 'filter')->label("Search"); ?>
+                    </label>
+                </div>
+                <?php ActiveForm::end(); ?>
             </div>
-            <div id="timeCardPageSizeLabelContainer">
-                <label id="timeCardPageSizeLabel">
-                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
-                </label>
-                <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
-            </div>
-            <?php ActiveForm::end(); ?>
         </div>
     </div>
     <div id="timeCardGridViewContainer">

@@ -117,22 +117,28 @@ div[id^=modalContent] #loading {
 	z-index: 2 !important;
 }
 .timecard-view .grid-view .kv-grid-wrapper{
-	height:auto;
-	max-height:30vh;
+	max-height: 40vh;
+	overflow-y: auto;
+	overflow-x: hidden;
 }
 .timecard-view .footerabove{
 	display:none;
+}
+#TimeCardView{
+	max-height: 450px;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 /*responsive css* for table*/
 @media only screen 
 and (min-width : 1360px) {
 #GridViewForTimeCard{
-	max-height:60vh;
+	max-height:57vh;
 }
 }
 @media only screen 
 and (min-width : 1900px) {
 #GridViewForTimeCard{
-	max-height:65vh;
+	max-height:62vh;
 }
 }

@@ -353,6 +353,12 @@ table {
 label{
     margin-bottom: 0;
 }
+/*Time/Mileage Card light blue bar*/
+.lightBlueBar{
+    background-color: #E6F0F6;
+    height: 80px;
+    margin-bottom: 0.5%;
+}
 
 /*-----------End loader----------*/
 
