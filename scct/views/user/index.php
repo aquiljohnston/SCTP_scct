@@ -61,13 +61,13 @@ $column = [
                 return $url;
             }
             if ($action === 'delete') {
-                $url = '/user/Deactivate?id=' . $model["UserID"];
+                $url = '/user/Deactivate?username=' . $model["UserName"];
                 return $url;
             }
         },
         'buttons' => [
             'delete' => function ($url, $model, $key) {
-                $url = '/user/deactivate?id=' . $model["UserID"];
+                $url = '/user/deactivate?username=' . $model["UserName"];
                 $options = [
                     'title' => Yii::t('yii', 'Deactivate'),
                     'aria-label' => Yii::t('yii', 'Deactivate'),
