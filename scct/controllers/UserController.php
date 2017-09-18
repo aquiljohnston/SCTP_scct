@@ -288,17 +288,17 @@ class UserController extends BaseController
     /**
      * Deletes an existing user model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param string $username
      * @return mixed
      */
-    public function actionDeactivate($id)
+    public function actionDeactivate($username)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
         //calls route to deactivate user account
-        $url = 'user%2Fdeactivate&userID=' . urlencode($id);
+        $url = 'user%2Fdeactivate&username=' . urlencode($username);
         //empty body
         $json_data = "";
         Parent::executePutRequest($url, $json_data, BaseController::API_VERSION_2); // indirect rbac
