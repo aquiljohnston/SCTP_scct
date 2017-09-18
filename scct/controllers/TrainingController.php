@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
-require 'BaseController.php';
+use app\controllers\BaseController;
+//require 'BaseController.php';
 /**
  * TrainingController class is used to display videos on the website
  * The training videos will be part of the core application for user reference. 
