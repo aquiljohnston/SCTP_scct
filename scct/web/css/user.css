@@ -47,6 +47,15 @@
 #reactivateUserGV-container{
     overflow-x: inherit;!important;
 }
+#reactivateUserTable{
+    overflow-y: auto;
+    max-height: 350px;
+    overflow-x: hidden;
+    margin-top: 3%;
+}
+#userReactivateBtn{
+    margin-top: 2%;
+}
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 #userGridview .kv-grid-container{
