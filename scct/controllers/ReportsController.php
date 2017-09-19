@@ -145,9 +145,10 @@ class ReportsController extends BaseController
      * @throws Exception
      */
     public function actionGetParmDropDown(){
-        if (isset($_POST['ViewName'])){
+        if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
             // Reading the response from the the api and filling Parm Drop Down
-            $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&viewName='.urlencode($_POST['ViewName']);
+            $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
+            Yii::trace("MAP GRID URL: ".$getParmDropDownUrl);
             $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, self::API_VERSION_2); // indirect rbac
             Yii::trace("MAP GRID RESPONSE: ".$getParmDropDownResponse);
             $ParmDropDownList = $getParmDropDownResponse;//json_decode($reportsUrlListResponse, true);
@@ -164,9 +165,9 @@ class ReportsController extends BaseController
      * @throws Exception
      */
     public function actionGetInspectorDropDown(){
-        if (isset($_POST['Parm'])){
+        if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
             // Reading the response from the the api and filling Inspector Drop Down
-            $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&viewName=vUsers';
+            $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
             $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, BaseController::API_VERSION_2); // indirect rbac
             $InspectorDropDownList = $getInspectorDropDownResponse;
             echo $InspectorDropDownList;

@@ -31,7 +31,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
-                <div class="col-xs-1 col-md-1 col-lg-1" style="float: right; margin: 0 auto; width: 11%;">
+                <div class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
                     <label style="color: #0067a6; margin-bottom: 7px;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
 
@@ -66,6 +66,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'summary' => false,
                 'pjax' => true,
                 'floatHeader' => true,
+                'floatOverflowContainer' => true,
+                'responsive'=>true,
+                'responsiveWrap' => true,
                 'pjaxSettings' => [
                     'options' => [
                         'enablePushState' => false,
@@ -101,7 +104,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -111,7 +114,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Assigned User(s)',
                         'attribute' => 'SearchString',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                         'format' => 'html',
                         'value' => function ($model) {
@@ -124,7 +127,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -134,7 +137,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -144,7 +147,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Completed (%)',
                         'attribute' => 'Percent Completed',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'raw',
                         // 'value' => function ($model, $key, $index) {
@@ -158,7 +161,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					[
                         'label' => 'Remaining/Total',
                         'attribute' => 'Counts',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
                         'value' => function ($model) {
@@ -184,7 +187,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'header' => 'Remove Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%; word-wrap: break-word;'],
                         'contentOptions' => ['class' => 'text-center unassignCheckbox', 'style' => 'width: 5%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if (/*$model['WorkQueueStatus'] != 100&&*/ $model['AssignedCount'] == "MANY") {

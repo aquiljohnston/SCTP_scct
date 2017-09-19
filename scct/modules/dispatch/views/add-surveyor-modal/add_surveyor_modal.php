@@ -190,7 +190,10 @@ use kartik\form\ActiveForm;
             url: '/dispatch/add-surveyor-modal/add-surveyor-modal',
             container: '#addSurveyorsGridviewPJAX', // id to update content
             data: {searchFilterVal: searchFilterVal},
-            timeout: 99999
+            timeout: 99999,
+            push: false,
+            replace: false,
+            replaceRedirect: false
         }).done(function () {
             $("body").css("cursor", "default");
             enableDisableControls(true, searchFilterVal);

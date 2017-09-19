@@ -186,7 +186,7 @@ a.desc:after {
     color: #FFFFFF;
     font-family: 'Roboto', sans-serif;
     font-weight: 100;
-    padding-right: 2%;
+    /*padding-right: 2%;*/
 }
 
 ul > li > a {
@@ -242,8 +242,8 @@ ul > li > a:hover {
     /* margin-top: 2%;	 */
 }
 
-.user-view, .client-view, .equipment-view, .project-view, .timecard-view, .mileagecard-view {
-    margin-top: 60px;
+.user-index,.equipment-view, .project-index, .timecard-index, .mileagecard-index {
+    margin-top: 30px;
 }
 
 #projects_dropdown {
@@ -268,13 +268,24 @@ ul > li > a:hover {
 
 .pagination {
     float: right;
+    /*float: left;*/
+    margin: 0px 0px;
 }
 
 .GridviewTotalNumber {
-    position: fixed;
+    /*posit ion: fixed;
     bottom: 39px;
     left: 2%;
+    z-index: 42;*//*
+    position: relative;
     z-index: 42;
+    float: right;
+    top: 20px;
+    margin-right: 2%;*/
+    margin-left: 85%;
+    position: fixed;
+    z-index: 42;
+    bottom: 4.5%;
 }
 
 table {
@@ -299,7 +310,7 @@ table {
     bottom: 30px;
     left: 0;
     width: 100%;
-    height: 40px;
+    height: 30px;
     background-color: #E6F0F5;
     /*z-index: 40;*/
     opacity: 1;
@@ -335,10 +346,28 @@ table {
     left: 0;
     right: 0;
 }
+.recordsPerPage{
+    color: #0067a6;
+    margin-top: 5px;
+}
+label{
+    margin-bottom: 0;
+}
+/*Time/Mileage Card light blue bar*/
+.lightBlueBar{
+    background-color: #E6F0F6;
+    height: 80px;
+    margin-bottom: 0.5%;
+}
 
 /*-----------End loader----------*/
 
 /*-----------responsive ----------*/
+@media (max-width:950px) and (min-width:800px) {
+    .GridviewTotalNumber {
+        margin-left: 75%;
+    }
+}
 @media only screen
 and (max-width: 870px) {
     /*---------Header responsive------*/
@@ -366,4 +395,31 @@ and (max-width: 870px) {
     }
 
     /*-------End Header responsive------*/
+}
+
+@media (max-width: 760px) {
+    .GridviewTotalNumber {
+        margin-left: 70%;
+        position: fixed;
+        z-index: 42;
+        bottom: 4.5%;
+    }
+}
+
+@media (max-width: 950px) {
+    ::i-block-chrome,.GridviewTotalNumber {
+        margin-left: 75%;
+        position: fixed;
+        z-index: 42;
+        bottom: 4.5%;
+    }
+}
+
+@media (max-width:1280px) and (min-width:960px) {
+    .GridviewTotalNumber{
+        margin-left: 83%;
+        position: fixed;
+        z-index: 42;
+        bottom: 5.5%;
+    }
 }

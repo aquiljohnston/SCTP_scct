@@ -202,6 +202,6 @@ class LoginController extends BaseController
 		$postData['activity'] = $activityArray;
 		
 		//execute post request
-		$response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData));
+		$response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), SELF::API_VERSION_2);
 	}
 }

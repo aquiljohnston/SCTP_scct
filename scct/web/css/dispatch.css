@@ -12,7 +12,7 @@
     padding-left: 1%;
 }
 #dispatchUnassignedTable{
-    height: 430px;
+    height: 62vh;
     overflow-y: hidden;
     overflow-x: hidden;
 }
@@ -23,7 +23,7 @@
 #dispatchGV {
     width: 100%;
     float: left;
-    max-height: 49vh;/*360px;*/
+    max-height: 57vh;/*360px;*/
     overflow-y: auto;
     margin: 0 auto;
     overflow-x: hidden;
@@ -210,6 +210,8 @@
 }
 #unassignedTablePagination .pagination {
     margin: 5px 0 0 0;
+    /*margin-top: 5.5%;
+    margin-right: 14%;*/
 }
 .field-dispatchFilter{
     width: 100%;
@@ -253,7 +255,33 @@
     cursor: pointer;
 }
 .kv-grid-wrapper {
-    height: 49vh !important;
+    height: auto !important;
+    max-height: 51vh !important;
+}
+#dispatchSearchContainer{
+    float:left;
+    margin-left: 60%;
+}
+#addSurveyorButtonDispatch{
+    float: right;
+    margin: 25px auto;
+    width: 11%;
+}
+
+@media (max-width: 760px) {
+    #addSurveyorButtonDispatch{
+        width: 22%;
+    }
+    #dispatchPageSizeLabel {
+        margin: -39px auto;
+        width: 20%;
+    }
+    #dispatchSearchContainer{
+        margin-left: 40%;
+    }
+    .kv-grid-wrapper {
+        overflow-x: hidden;
+    }
 }
 
 /* Safari 7.1+ */
@@ -294,23 +322,55 @@
     .floatThead-col{
         height: 0 !important;
     }
+    ::i-block-chrome,.kv-grid-wrapper {
+        height: 530px !important;
+    }
+    @media (max-width: 950px) {
+        ::i-block-chrome,#addSurveyorButtonDispatch{
+            width: 21%;
+        }
+        ::i-block-chrome,#dispatchPageSizeLabel {
+            width: 19.5%;
+        }
+        ::i-block-chrome,#dispatchSearchContainer{
+            margin-left: 40%;
+        }
+    }
+}
+/* Chrome 29+ */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+    #inspectionTablePagination .pagination {
+        margin: 3px 15% 0 0;
+    }
 }
 
 /* Safari 10.1+ (which is the latest version of Safari at this time) */
 
-@media not all and (min-resolution:.001dpcm) { @media {
-
-    ::i-block-chrome,#dispatchGV{
-        width: 100%;
-        float: left;
-        max-height: 530px;
-        overflow-y: auto;
-        margin: 0 auto;
-        overflow-x: hidden;
+@media not all and (min-resolution:.001dpcm) {
+    @media {
+        ::i-block-chrome,#dispatchGV{
+            width: 100%;
+            float: left;
+            max-height: 530px;
+            overflow-y: auto;
+            margin: 0 auto;
+            overflow-x: hidden;
+        }
+        ::i-block-chrome,#dispatchUnassignedTable {
+            height: 620px;
+            overflow-y: hidden;
+            overflow-x: hidden;
+        }
     }
-    #dispatchUnassignedTable {
-        height: 620px;
-        overflow-y: hidden;
-        overflow-x: hidden;
-    }
-}}
+    @media (max-width: 950px) {
+        #addSurveyorButtonDispatch{
+            width: 21%;
+        }
+        #dispatchPageSizeLabel {
+            width: 19.5%;
+        }
+        #dispatchSearchContainer{
+            margin-left: 40%;
+        }
+    }}

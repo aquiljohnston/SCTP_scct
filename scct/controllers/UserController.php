@@ -12,6 +12,7 @@ use linslin\yii2\curl;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use yii\grid\GridView;
+use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
 
 /**
@@ -175,15 +176,10 @@ class UserController extends BaseController
                 // post url
                 $url = "user%2Fcreate";
                 $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
-
                 $obj = json_decode($response, true);
-//                if($obj['projectUser'] != false) {
-//                    $userId = $obj['projectUser']['UserID'];
-//                } else {
-//                    $userId = $obj['scctUser']['UserID'];
-//                }
+
                 return $this->redirect(['user/index']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // duplicationflag:
                 // 1: yes 0: no
                 // set duplicateFlag to 1, which means duplication happened.
@@ -292,20 +288,113 @@ class UserController extends BaseController
     /**
      * Deletes an existing user model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param string $username
      * @return mixed
      */
-    public function actionDeactivate($id)
+    public function actionDeactivate($username)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
         //calls route to deactivate user account
-        $url = 'user%2Fdeactivate&userID=' . urlencode($id);
+        $url = 'user%2Fdeactivate&username=' . urlencode($username);
         //empty body
         $json_data = "";
         Parent::executePutRequest($url, $json_data, BaseController::API_VERSION_2); // indirect rbac
         $this->redirect('/user/');
     }
+	
+	/**
+     * Modal view for reactivating users
+     * @return string|\yii\web\Response
+     * @throws ForbiddenHttpException
+     */
+    public function actionReactivateUserModal()
+    {
+        try {
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+            $model = new \yii\base\DynamicModel([
+				'modalSearch'
+            ]);
+            $model->addRule('modalSearch', 'string', ['max' => 32]);
+
+                $searchFilterVal = "";
+            if (Yii::$app->request->post()){
+                $data = Yii::$app->request->post();
+
+                if (!empty($data["searchFilterVal"])) {
+                    $searchFilterVal = $data["searchFilterVal"];
+                }
+            }
+
+            // Reading the response from the the api and filling the surveyorGridView
+            $getUrl = 'user%2Fget-inactive&' . http_build_query([
+                    'filter' => $searchFilterVal,
+                ]);
+            $usersResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+
+            $dataProvider = new ArrayDataProvider
+            ([
+                'allModels' => $usersResponse['users'],
+                'pagination' => false,
+            ]);
+
+            $dataProvider->key = 'UserName';
+
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('reactivate_user_modal', [
+					'reactivateUserDataProvider' => $dataProvider,
+					'model' => $model,
+					'searchFilterVal' => $searchFilterVal,
+				]);
+			}else{
+				return $this->render('reactivate_user_modal', [
+					'reactivateUserDataProvider' => $dataProvider,
+					'model' => $model,
+					'searchFilterVal' => $searchFilterVal,
+				]);
+			}
+        }catch(ForbiddenHttpException $e)
+        {
+            throw new ForbiddenHttpException;
+        }
+        catch(\Exception $e)
+        {
+			yii::trace('Exception' . json_encode($e));
+            Yii::$app->runAction('login/user-logout');
+        }
+    }
+	
+	/**
+     * Reactivate Function
+     * @throws ForbiddenHttpException
+     */
+	public function actionReactivate()
+	{
+		try
+		{
+			if(Yii::$app->request->isAjax)
+			{
+				//get user data for put request
+				$data = Yii::$app->request->post();
+				//add url prefix to put body
+				$data['ProjectUrlPrefix'] = BaseController::getXClient();
+				//json encode put body
+                $json_data = json_encode($data);
+				
+				// post url
+                $putUrl = 'user%2Freactivate';
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
+			}
+		} catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException;
+        } catch (Exception $e) {
+			//TODO implement alternative to logging out when a bad request is returned.
+            Yii::$app->runAction('login/user-logout');
+        }
+	}
 }

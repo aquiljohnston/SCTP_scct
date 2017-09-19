@@ -26,7 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
+    <div id="detailViewContainer" style="overflow-y: auto; max-height: 430px;">
+        <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'ClientID',
@@ -71,5 +72,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]) ?>
+    </div>
 
 </div>

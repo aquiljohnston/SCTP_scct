@@ -8,10 +8,20 @@
     margin-left: 1%;
 }
 
-.user_filter, #userGridViewContainer {
+.user_filter {
     position: relative;
     float: left;
     width: 100%;
+    background-color: #E6F0F6;
+    margin-bottom: 0.5%;
+    padding:0.5%;
+}
+#userGridViewContainer{
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-bottom: 0.5%;
+    padding:0.5%;
 }
 
 #userButtons {
@@ -19,7 +29,7 @@
 }
 #userDropdownContainer {
     float: right;
-    width: 92%;
+    width: 99%;
 }
 #userDropdownContainer label {
     padding-right: 0;
@@ -34,10 +44,22 @@
 	max-height:60vh;
 	overflow-y:auto;
 }
+#reactivateUserGV-container{
+    overflow-x: inherit;!important;
+}
+#reactivateUserTable{
+    overflow-y: auto;
+    max-height: 350px;
+    overflow-x: hidden;
+    margin-top: 3%;
+}
+#userReactivateBtn{
+    margin-top: 2%;
+}
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 #userGridview .kv-grid-container{
-	max-height: 57vh;
+	max-height: 53vh;
 }
 }
 /*-----------css for the 1366*768 resolution ends---------------*/ 
@@ -49,3 +71,98 @@
 }
 }
 /*-----------css for the 1920*1028 resolution ends---------------*/
+
+/*-css for reactivate users modal-*/
+#modalReactivateUser #w0-container {
+    max-height: 400px;
+    margin-top: 0;
+}
+
+#reactivateUserGridview #w1-container {
+    max-height: 400px;
+    overflow-y: auto;
+    width: 98%;
+}
+
+
+#reactivateUserModal .modal-content {
+    width: 90%;
+    margin: 0 5%;
+}
+
+#modalBtns{
+    position: fixed;
+    top:100px;
+    bottom: 0px;
+    border: solid;
+    width: 100%;
+    height: 70px;
+    padding: 10px;
+}
+
+#reactivateLoading{
+	width: 90%;
+    height: 100%;
+    top: 0;
+    left: 5%;
+    position: fixed;
+    display: block;
+    opacity: 0.7;
+    background-color: #fff;
+    z-index: 9999;
+    text-align: center;
+}
+
+#reactivateButton{
+    width:100%;
+}
+#userFilter{
+    margin-right: 10%;
+}
+#createUserButton{
+    width: 100%;
+}
+@media only screen and (max-width: 760px) {
+    #user-index{
+        margin-top: 0
+    }
+    .title{
+        margin-top: 3%;
+    }
+    label{
+        display: inherit;
+    }
+    #userGridview .kv-grid-container{
+        max-height:370px;
+        overflow-y:auto;
+    }
+}
+@media (max-width:950px) and (min-width:800px) {
+    #user-index{
+        margin-top: 0
+    }
+    .title{
+        margin-top: 3%;
+    }
+    label{
+        display: inherit;
+    }
+    #reactivateButtonUser{
+        margin-left: 6%;
+        margin-right: 2.5%;
+    }
+    #reactivateButton {
+        width: initial;
+    }
+    #userGridview .kv-grid-container {
+        max-height: 560px;
+        overflow-y: auto;
+    }
+}
+
+@media not all and (min-resolution:.001dpcm) {
+    @media (max-width: 950px) {
+        ::i-block-chrome,#reactivateButtonUser{
+            margin-right: 3%;
+        }
+    }}

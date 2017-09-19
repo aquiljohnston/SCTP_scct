@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
@@ -60,13 +61,13 @@ $column = [
                 return $url;
             }
             if ($action === 'delete') {
-                $url = '/user/Deactivate?id=' . $model["UserID"];
+                $url = '/user/Deactivate?username=' . $model["UserName"];
                 return $url;
             }
         },
         'buttons' => [
             'delete' => function ($url, $model, $key) {
-                $url = '/user/deactivate?id=' . $model["UserID"];
+                $url = '/user/deactivate?username=' . $model["UserName"];
                 $options = [
                     'title' => Yii::t('yii', 'Deactivate'),
                     'aria-label' => Yii::t('yii', 'Deactivate'),
@@ -81,34 +82,42 @@ $column = [
 ];
 ?>
 <div class="user-index">
-
-    <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    <div class="user_filter">
-        <div id="userButtons">
-            <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-        </div>
-        <div id="userDropdownContainer">
-            <?php $form = ActiveForm::begin([
-                'type' => ActiveForm::TYPE_HORIZONTAL,
-                'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-                'method' => 'get',
-                'options' => [
-                    'id' => 'UserForm',
-                ],
-                'action' => Url::to(['user/index'])
-            ]); ?>
+	<div class="user_filter">
+		<div id="userDropdownContainer">
+			<?php $form = ActiveForm::begin([
+				'type' => ActiveForm::TYPE_HORIZONTAL,
+				'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+				'method' => 'get',
+				'options' => [
+					'id' => 'UserForm',
+				],
+				'action' => Url::to(['user/index'])
+			]); ?>
 
-            <label id="userPageSizeLabel">
-                <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label("Records Per Page"); ?>
-            </label>
-            <label id="userFilter">
-                <?= $form->field($model, 'filter')->label("Search"); ?>
-            </label>
-            <input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
-            <?php ActiveForm::end(); ?>
-        </div>
-    </div>
+            <div class="row" style="margin-left: 0;">
+                <h3 class="title" style="float: left;"><?= Html::encode($this->title) ?></h3>
+                <label id="userPageSizeLabel" class="col-sm-4 col-md-4 col-lg-4">
+                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label(""); ?>
+                </label>
+            </div>
+            <div class="row" style="margin-left: 0;">
+                <div id="reactivateButtonUser" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-right: 0;padding-left: 0;margin-left: 2%;">
+                    <?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
+                </div>
+                <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0;">
+                    <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']) ?>
+                </div>
+                <label id="userFilter" class="col-sm-7 col-md-7 col-lg-7" style="float:right;">
+                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search'])->label(''); ?>
+                </label>
+                <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
+                <?php Pjax::end() ?>
+            </div>
+			<input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
+			<?php ActiveForm::end(); ?>
+		</div>
+	</div>
     <div id="userGridViewContainer">
         <div id="userGV" class="userForm">
             <?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
@@ -133,4 +142,13 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
+	<?php
+    Modal::begin([
+        'header' => '<h4>Reactivate Users</h4>',
+        'id' => 'reactivateUserModal',
+    ]);?>
+	<div id='modalReactivateUser'>Loading...</div>
+	<?php 
+		Modal::end();
+    ?>
 </div>
