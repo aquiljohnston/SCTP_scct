@@ -17,6 +17,8 @@ use kartik\grid\GridView;
         <?php yii\widgets\Pjax::begin(['id' => 'assetDispatchForm']) ?>
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
+            'options' => ['id' => 'viewDispatchAssetsActiveForm'],
+            'action' => '/dispatch/dispatch/view-asset'
         ]); ?>
         <div class="viewAssetsSearchcontainer dropdowntitle">
             <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
@@ -25,6 +27,7 @@ use kartik\grid\GridView;
         <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
         <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
         <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
+        <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
     </div>
@@ -72,7 +75,16 @@ use kartik\grid\GridView;
             ],
         ],
     ]); ?>
-
+    <div id="assetsTablePagination" style="margin-top: 2%;">
+        <?php
+        // display pagination
+        echo LinkPager::widget([
+            'pagination' => $pages,
+        ]); ?>
+    </div>
+    <div class="GridviewTotalNumber" style="margin-left: 0%;position: fixed;z-index: 42;bottom: 4.5%;">
+        <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
+    </div>
     <?php Pjax::end() ?>
 </div>
 
@@ -95,25 +107,35 @@ use kartik\grid\GridView;
             $('#viewAssetsSearchDispatch').val("");
             reloadViewAssetsModalDispatch();
         })
+
+        //pagination listener on view asset modal
+        $(document).off('click', '#assetsTablePagination .pagination li a').on('click', '#assetsTablePagination .pagination li a', function (event) {
+            event.preventDefault();
+            var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+            $('#viewAssetPageNumber').val(page);
+            reloadViewAssetsModalDispatch(page);
+        });
     });
 
-    function reloadViewAssetsModalDispatch() {
+    function reloadViewAssetsModalDispatch(page) {
         var form = $('#viewAssetsFormDispatch');
         var searchFilterVal = $('#viewAssetsSearchDispatch').val() == "/" ? "" : $('#viewAssetsSearchDispatch').val();
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+        $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/dispatch/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected},
+            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page},
             timeout: 99999,
             push: false,
             replace: false,
             replaceRedirect: false
         }).done(function () {
             $("body").css("cursor", "default");
+            $('#loading').hide();
         });
     }
 </script>

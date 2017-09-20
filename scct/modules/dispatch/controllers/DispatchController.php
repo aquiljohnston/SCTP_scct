@@ -241,7 +241,9 @@ class DispatchController extends \app\controllers\BaseController
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
-            $pageAt = 1;
+            //$pageAt = 1;
+            $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
+            Yii::trace('PAGE AT : '.$pageAt);
         }else{
             $viewAssetFilterParams = "";
             $viewAssetPageSizeParams = 50;
@@ -285,7 +287,7 @@ class DispatchController extends \app\controllers\BaseController
             return $this->renderAjax('view_asset_modal', [
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
+                'pages' => $pages,
                 //'surveyorList' => $surveyorList,
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
@@ -295,7 +297,7 @@ class DispatchController extends \app\controllers\BaseController
             return $this->render('view_asset_modal', [
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
+                'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
                 //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,

@@ -241,7 +241,8 @@ class AssignedController extends \app\controllers\BaseController
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 50;
-            $pageAt = 1;
+            $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
+            //$pageAt = 1;
         }else{
             $viewAssetFilterParams = "";
             $viewAssetPageSizeParams = 50;
@@ -285,7 +286,7 @@ class AssignedController extends \app\controllers\BaseController
             return $this->renderAjax('view_asset_modal', [
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
+                'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
                 //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
@@ -295,7 +296,7 @@ class AssignedController extends \app\controllers\BaseController
             return $this->render('view_asset_modal', [
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
-                //'pages' => $pages,
+                'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
                 //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
