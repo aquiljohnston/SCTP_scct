@@ -27,6 +27,7 @@ use kartik\grid\GridView;
             <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
             <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
             <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
+            <input id="viewAssignedAssetPageNumber" type="hidden" name="viewAssignedAssetPageNumber" value="1"/>
         </div>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
@@ -89,6 +90,17 @@ use kartik\grid\GridView;
             ],
         ],
     ]); ?>
+    <div id="assignedAssetsTablePagination" style="margin-top: 2%;">
+        <?php
+        // display pagination
+        echo LinkPager::widget([
+            'pagination' => $pages,
+        ]);
+        ?>
+    </div>
+    <div class="GridviewTotalNumber" style="margin-left: 0%;position: fixed;z-index: 42;bottom: 4.5%;">
+        <?php echo "Showing " . ($pages->offset + 1) . "  to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
+    </div>
 
     <?php Pjax::end() ?>
 </div>
@@ -112,22 +124,31 @@ use kartik\grid\GridView;
             $('#viewAssetsSearchAssigned').val("");
             reloadViewAssetsModal();
         })
+        //pagination listener on view asset modal
+        $(document).off('click', '#assignedAssetsTablePagination .pagination li a').on('click', '#assignedAssetsTablePagination .pagination li a', function (event) {
+            event.preventDefault();
+            var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+            $('#viewAssignedAssetPageNumber').val(page);
+            reloadViewAssetsModal(page);
+        });
     });
 
-    function reloadViewAssetsModal() {
+    function reloadViewAssetsModal(page) {
         var form = $('#viewAssetsFormAssigned');
         var searchFilterVal = $('#viewAssetsSearchAssigned').val() == "/" ? "" : $('#viewAssetsSearchAssigned').val();
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+        $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/assigned/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected},
+            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewAssignedAssetPageNumber:page},
             timeout: 99999
         }).done(function () {
             $("body").css("cursor", "default");
+            $('#loading').hide();
         });
     }
 </script>

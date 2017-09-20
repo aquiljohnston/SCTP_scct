@@ -227,8 +227,11 @@
 .ViewAssetBtn_DispatchMapGrid{
     cursor: pointer;
 }
-#assetsTable #modalViewAssetDispatch{
+#modalViewAssetDispatch{
     overflow-y: hidden;
+}
+#modalViewAssetDispatch.modal-open.modal{
+    padding: 0px 15px 15px 15px;!important;
 }
 #assetsTable #assetGV-container{
     overflow-y: scroll; !important;
@@ -266,6 +269,9 @@
     float: right;
     margin: 25px auto;
     width: 11%;
+}
+#assetTablePjax{
+    margin-bottom:6%;
 }
 
 @media (max-width: 760px) {

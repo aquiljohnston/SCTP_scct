@@ -71,7 +71,7 @@
     width: 100%;
     margin-top: 1%;
     overflow-x: hidden;
-    z-index: 999;
+    /*z-index: 999;*/
 }
 
 #assignedTable .table-responsive {
@@ -165,6 +165,9 @@
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
     animation-duration: 0.4s
+}
+#modalViewAssetAssigned{
+    padding: 0px 15px 15px 15px;!important;
 }
 
 /* Add Animation */

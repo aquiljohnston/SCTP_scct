@@ -197,7 +197,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     Modal::begin([
         'header' => '<h4>Assets</h4>',
         'id' => 'modalViewAssetDispatch',
-        'size' => 'modal-m',
+        'size' => 'modal-lg',
     ]);
 
     ?>
