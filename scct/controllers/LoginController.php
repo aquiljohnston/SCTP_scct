@@ -139,69 +139,72 @@ class LoginController extends BaseController
     }
 	
 	public static function logActivity($activityTitle, $geoLocationData=null)
-	{
-		//create models
-		$activity = new Activity();
-		$timeEntry = new TimeEntry();
-		
-		//populate activity data
-		$activity->ActivityUID = BaseController::generateUID($activityTitle);
-		$activity->ActivityStartTime = BaseController::getDate();
-		$activity->ActivityEndTime = BaseController::getDate();
-		$activity->ActivitySrcDTLT = BaseController::getDate();
-		$activity->ActivityTitle = $activityTitle;
-		$activity->ActivityCreateDate = BaseController::getDate();
-		$activity->ActivityCreatedUserUID = Yii::$app->session['userID'];
-		$activity->ActivityAppVersion = 'Web_' . BaseController::DEFAULT_VERSION;
-		$activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . BaseController::DEFAULT_VERSION;
-		//loop and format geolocation data
-		if(is_array($geoLocationData))
-		{
-			/*
-			Geo Location Data Key
-			0 => 'Latitude'
-			1 => 'Longitude'
-			2 => 'Accuracy'
-			3 => 'Altitude'
-			4 => 'AltitudeAccuracy'
-			5 => 'Heading'
-			6 => 'Speed'
-			7 => 'Timestamp'       
-			*/
-			$activity->ActivityLatitude = $geoLocationData[0];
-			$activity->ActivityLongitude = $geoLocationData[1];
-			$activity->ActivityFixQuality = $geoLocationData[2];
-			$activity->ActivityAltitudemetersAboveMeanSeaLevel = $geoLocationData[3];
-			$activity->ActivityBearing = $geoLocationData[5];
-			$activity->ActivitySpeed = $geoLocationData[6];
-			$activity->ActivityGPSTime = $geoLocationData[7];
-		}
-		else
-		{
-			$activity->ActivityComments = $geoLocationData;
-		}
-		
-		//populate timeEntry data
-		$timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
-		$timeEntry->TimeEntryStartTime = BaseController::getDate();
-		$timeEntry->TimeEntryEndTime = BaseController::getDate();
-		$timeEntry->TimeEntryActiveFlag = 1;
-		$timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
-		$timeEntry->TimeEntryCreateDate = BaseController::getDate();
-		$timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
-		
-		//build post json
-		$postData = [];
-		$activityArray = [];
-		$timeEntryArray = [];
-		
-		//populate post data
-		$timeEntryArray[] = $timeEntry;
-		$activity['timeEntry'] = $timeEntryArray;
-		$activityArray[] = $activity;
-		$postData['activity'] = $activityArray;
-		
-		//execute post request
-		$response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), SELF::API_VERSION_2);
+    {
+        try {
+            //create models
+            $activity = new Activity();
+            $timeEntry = new TimeEntry();
+
+            //populate activity data
+            $activity->ActivityUID = BaseController::generateUID($activityTitle);
+            $activity->ActivityStartTime = BaseController::getDate();
+            $activity->ActivityEndTime = BaseController::getDate();
+            $activity->ActivitySrcDTLT = BaseController::getDate();
+            $activity->ActivityTitle = $activityTitle;
+            $activity->ActivityCreateDate = BaseController::getDate();
+            $activity->ActivityCreatedUserUID = Yii::$app->session['userID'];
+            $activity->ActivityAppVersion = 'Web_' . BaseController::DEFAULT_VERSION;
+            $activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . BaseController::DEFAULT_VERSION;
+            //loop and format geolocation data
+            if (is_array($geoLocationData)) {
+                /*
+                Geo Location Data Key
+                0 => 'Latitude'
+                1 => 'Longitude'
+                2 => 'Accuracy'
+                3 => 'Altitude'
+                4 => 'AltitudeAccuracy'
+                5 => 'Heading'
+                6 => 'Speed'
+                7 => 'Timestamp'
+                */
+                $activity->ActivityLatitude = $geoLocationData[0];
+                $activity->ActivityLongitude = $geoLocationData[1];
+                $activity->ActivityFixQuality = $geoLocationData[2];
+                $activity->ActivityAltitudemetersAboveMeanSeaLevel = $geoLocationData[3];
+                $activity->ActivityBearing = $geoLocationData[5];
+                $activity->ActivitySpeed = $geoLocationData[6];
+                $activity->ActivityGPSTime = $geoLocationData[7];
+            } else {
+                $activity->ActivityComments = $geoLocationData;
+            }
+
+            //populate timeEntry data
+            $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
+            $timeEntry->TimeEntryStartTime = BaseController::getDate();
+            $timeEntry->TimeEntryEndTime = BaseController::getDate();
+            $timeEntry->TimeEntryActiveFlag = 1;
+            $timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
+            $timeEntry->TimeEntryCreateDate = BaseController::getDate();
+            $timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
+
+            //build post json
+            $postData = [];
+            $activityArray = [];
+            $timeEntryArray = [];
+
+            //populate post data
+            $timeEntryArray[] = $timeEntry;
+            $activity['timeEntry'] = $timeEntryArray;
+            $activityArray[] = $activity;
+            $postData['activity'] = $activityArray;
+
+            //execute post request
+            $response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), SELF::API_VERSION_2);
+        } catch(UnauthorizedHttpException $exception) {
+            // This is reached when the user is logging out with an expired token.
+            Yii::$app->response->redirect(['login/index'])->send(); return;
+            //return $this->redirect(['login/index']);
+        }
 	}
 }
