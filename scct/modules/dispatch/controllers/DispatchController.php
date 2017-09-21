@@ -240,13 +240,13 @@ class DispatchController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 200;
             //$pageAt = 1;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
             Yii::trace('PAGE AT : '.$pageAt);
         }else{
             $viewAssetFilterParams = "";
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 200;
             $pageAt = 1;
             $searchFilterVal = "";
         }

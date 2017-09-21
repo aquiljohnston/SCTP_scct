@@ -240,12 +240,12 @@ class AssignedController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
             //$pageAt = 1;
         }else{
             $viewAssetFilterParams = "";
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 200;
             $pageAt = 1;
             $searchFilterVal = "";
         }
