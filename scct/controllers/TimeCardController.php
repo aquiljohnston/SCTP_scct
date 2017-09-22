@@ -92,9 +92,7 @@ class TimeCardController extends BaseController
 				/*'key' => function (){
                     return md5($model["TimeCardID"]);
                 },*/
-				'pagination' => [
-					'pageSize' => 100,
-				],
+				'pagination' => false
 			]);
 
             // Sorting TimeCard table
