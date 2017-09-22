@@ -77,13 +77,8 @@ class LoginController extends BaseController
 					Yii::$app->session->set('userID', $user['AuthUserID']);
 					Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
 					Yii::$app->session->set('UserLastName', $user['UserLastName']);
-					//get users time card and store in session data
-//					$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
-//					$userTimeCard = json_decode($timeCardResponse, true);
-//					if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
-//					{
-//						Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
-//					}
+					//call helper method for additional session values
+					self::getSessionData();
 					
 					$userIdentity = new User();
 					$userIdentity->UserID = $user['AuthUserID'];
@@ -206,5 +201,26 @@ class LoginController extends BaseController
             Yii::$app->response->redirect(['login/index'])->send(); return;
             //return $this->redirect(['login/index']);
         }
+	}
+	
+	//helper method for login action to make api calls to retrieve session data
+	//and save values in session variables. 
+	private static function getSessionData()
+	{
+		//get users time card and store in session data
+		// $timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
+		// $userTimeCard = json_decode($timeCardResponse, true);
+		// if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
+		// {
+			// Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
+		// }
+		
+		//get web dropdowns and store in sesssion data
+		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', SELF::API_VERSION_2);
+		$dropdowns = json_decode($dropdownResponse, true);
+		if(is_array($dropdowns) && array_key_exists('WebDropDowns', $dropdowns))
+		{
+			Yii::$app->session->set('webDropDowns', $dropdowns['WebDropDowns']);
+		}
 	}
 }
