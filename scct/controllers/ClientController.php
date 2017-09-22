@@ -111,7 +111,7 @@ class ClientController extends BaseController
 			return $this->redirect(['/login']);
 		}
 		$url = 'client%2Fview&joinNames=true&id='.$id;
-		$response = Parent::executeGetRequest($url); // indirect rbac
+		$response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
     }
@@ -217,7 +217,7 @@ class ClientController extends BaseController
 		}
 		self::requirePermission("clientUpdate");
 		$getUrl = 'client%2Fview&id='.$id;
-		$getResponse = json_decode(Parent::executeGetRequest($getUrl), true);
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl, BaseController::API_VERSION_2), true);
 
 		$model = new Client();
 		$model->attributes = $getResponse;
