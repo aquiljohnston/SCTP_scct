@@ -37,6 +37,10 @@ ul{
 	width: auto;
 	margin-top: 2%;
 }
+.body-content {
+	overflow-y: scroll;
+    max-height: 600px;
+}
 </style>
 <!--video path app/web/videos-->
 <div class="site-index">
@@ -79,7 +83,17 @@ ul{
 			    </article>
 			</div>
 			<div class="col-md-12" id="embedVideo">
-				<h2>Mobile Videos - Coming Soon</h2>
+				<h2>Mobile Videos</h2>
+				<article class="video">
+					<figure>
+						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
+							poster=""
+							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
+							<source src="/videos/InstallAndUpdateTutorial.mp4" type="video/mp4"-->
+						</video>
+					</figure>
+					<h4 class="videoTitle">Install & Update</h4>
+			    </article>
 			</div>				
         </div>
     </div>

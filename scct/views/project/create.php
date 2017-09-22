@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		'clients' => $clients,
 		'flag' => $flag,
 		'states' => $states,
+		'landingPages' => $landingPages,
     ]) ?>
 
 </div>
