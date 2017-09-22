@@ -77,7 +77,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectLandingPage',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'Landing Page']); ?>
+					])->dropDownList($landingPages); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectClientID', [
 					'label'=>'Client', 
