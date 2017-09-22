@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = 'Update';
 		'clients' => $clients,
 		'flag' => $flag,
 		'states' => $states,
+		'landingPages' => $landingPages,
     ]) ?>
 
 </div>

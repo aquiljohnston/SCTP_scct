@@ -134,6 +134,15 @@ class ProjectController extends BaseController
 			0 => "Inactive",
 		];
 		
+		if(Yii::$app->session->has('webDropDowns') && array_key_exists('ProjectLanding', Yii::$app->session['webDropDowns']))
+		{
+			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
+			foreach($landingPageArray as $page)
+			{
+				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+			}
+		}
+		
 		if ($model->load(Yii::$app->request->post())){
 			
 			$data =array(
@@ -168,6 +177,7 @@ class ProjectController extends BaseController
 					'clients' => $clients,
 					'flag' => $flag,
 					'states' => $states,
+					'landingPages' => $landingPages,
 				]);
 			}
 		}else {
@@ -176,6 +186,7 @@ class ProjectController extends BaseController
 				'clients' => $clients,
 				'flag' => $flag,
 				'states' => $states,
+				'landingPages' => $landingPages,
 				]);
 		}
     }
@@ -216,6 +227,15 @@ class ProjectController extends BaseController
 			1 => "Active",
 			0 => "Inactive",
 		];
+		
+		if(Yii::$app->session->has('webDropDowns') && array_key_exists('ProjectLanding', Yii::$app->session['webDropDowns']))
+		{
+			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
+			foreach($landingPageArray as $page)
+			{
+				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+			}
+		}
 			  
 		if ($model->load(Yii::$app->request->post()))
 		{
@@ -249,7 +269,8 @@ class ProjectController extends BaseController
                         'clients' => $clients,
                         'flag' => $flag,
                         'states' => $states,
-                        'updateFailed' => true
+                        'updateFailed' => true,
+						'landingPages' => $landingPages,
                     ]);
                 } else {
 				    return $this->redirect(['view', 'id' => $model["ProjectID"]]);
@@ -260,7 +281,8 @@ class ProjectController extends BaseController
 					'clients' => $clients,
 					'flag' => $flag,
 					'states' => $states,
-                    'updateFailed' => true
+                    'updateFailed' => true,
+					'landingPages' => $landingPages,
 				]);
 			}
 		} else {
@@ -269,7 +291,8 @@ class ProjectController extends BaseController
 				'clients' => $clients,
 				'flag' => $flag,
 				'states' => $states,
-                'updateFailed' => false
+                'updateFailed' => false,
+				'landingPages' => $landingPages,
 			]);
 		}
     }
