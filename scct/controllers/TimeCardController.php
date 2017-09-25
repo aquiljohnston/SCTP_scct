@@ -33,7 +33,7 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($recordNumber = null)
+    public function actionIndex()
     {
         //guest redirect
         if (Yii::$app->user->isGuest)
@@ -65,8 +65,8 @@ class TimeCardController extends BaseController
             }
 
             //check current page at
-            if (isset(Yii::$app->request->queryParams['timeCardPageNumber'])){
-                $page = Yii::$app->request->queryParams['timeCardPageNumber'];
+            if (isset($_GET['timeCardPageNumber'])){
+                $page = $_GET['timeCardPageNumber'];
             } else {
                 $page = 1;
             }
@@ -89,9 +89,6 @@ class TimeCardController extends BaseController
             $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $assets,
-				/*'key' => function (){
-                    return md5($model["TimeCardID"]);
-                },*/
 				'pagination' => false
 			]);
 
@@ -128,33 +125,29 @@ class TimeCardController extends BaseController
             //set timecardid as id
             $dataProvider->key = 'TimeCardID';
 
-
-            // Create drop down with current selection pre-selected based on GET variable
-//            $approvedInput = '<select class="form-control" name="filterapproved">'
-//				. '<option value=""></option><option value="Yes"';
-//            if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
-//                $approvedInput .= " selected";
-//            }
-//            $approvedInput .= '>Yes</option><option value="No"';
-//            if ($searchModel['TimeCardApprovedFlag'] == "No") {
-//                $approvedInput .= ' selected';
-//            }
-//            $approvedInput .= '>No</option></select>';
-
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
-            //calling index page to pass dataProvider.
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                //'searchModel' => $searchModel,
-                //'approvedInput' => $approvedInput,
-                'week' => $week,
-                'model' => $model,
-                'timeCardPageSizeParams' => $timeCardPageSizeParams,
-                'pages' => $pages
-            ]);
-
+			//calling index page to pass dataProvider.
+			if(Yii::$app->request->isAjax) {
+				return $this->renderAjax('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
+				]);
+			}else{
+				return $this->render('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
+				]);
+			}
         } catch(ForbiddenHttpException $e) {
             throw $e;
         } catch(ErrorException $e) {
