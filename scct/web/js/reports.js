@@ -3,13 +3,16 @@
  */
 
 $(function () {
+    const COMPLETED_WORK_ORDERS = "Completed Work Orders";
+
+    var oTable; //datatable variable
     var currentPath = window.location.pathname;
     var reports = currentPath.replace(/\/+$/, "");//.substr(0, currentPath.length - 1);//.replace(/\/$/, "")
     console.log(reports);
-    var oTable; //datatable variable
     var reportsToSP = {}; //map of report names -> stored procedures
     var reportsToParms = {}; //map of report names -> parm objects
     var reportsToExports = {}; //map of report names -> export values
+    var selectedReport = null;
 
     if (reports == "/reports") {
 
@@ -26,6 +29,7 @@ $(function () {
             noSelectionError = document.getElementById('noSelectionError'),
             noDateError = document.getElementById('noDateError'),
             selectDateFirstError = document.getElementById('selectDateFirstError');
+
 
         $('#datePickerEndDate').datepicker();
         $("#datePickerBeginDate").datepicker({
@@ -380,6 +384,7 @@ $(function () {
                     parms["ReportType"] = obj["ReportType"];
                     parms["isMapGridDropDownRequired"] = obj["ParmDropDownFlag"];
                     reportsToParms[obj["ReportDisplayName"]] = parms;
+                    parms["ReportDisplayName"] = obj["ReportDisplayName"];
                     if (obj["ExportFlag"] === "1") {
                         reportsToExports[obj["ReportDisplayName"]] = obj["ExportFlag"];
                     }
@@ -390,7 +395,7 @@ $(function () {
 
         $('#reportsDropdown').on('change', function () {
             $('#go').prop('disabled', false);
-            var selectedReport = $(this).val();
+            selectedReport = $(this).val();
             var parms = reportsToParms[selectedReport];
             var exp = reportsToExports[selectedReport];
             var sp = reportsToSP[selectedReport];
@@ -637,6 +642,9 @@ $(function () {
                     }
                     else if (parms["ParmBetweenDateFlag"] === "1") {
                         console.log("call Viwe");
+                        if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS){
+                            toggleVisible([goButton, exportButton], "inline");
+                        }
                         toggleVisible([beginDate, endDate], "block");
 
                         $(document).off('change', '#datePickerBeginDate').on('change', '#datePickerBeginDate', function () {
@@ -644,7 +652,7 @@ $(function () {
                                 oTable.fnDestroy(); //have to be destory first, then rebuild
                                 $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
                             }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" || parms["ReportDisplayName"] != COMPLETED_WORK_ORDERS) {
                                 dateSelected = true;
                                 toggleVisible([goButton], "inline");
                                 $('#go').prop('disabled', false);
@@ -662,7 +670,7 @@ $(function () {
                                 oTable.fnDestroy(); //have to be destory first, then rebuild
                                 $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
                             }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" || parms["ReportDisplayName"] != COMPLETED_WORK_ORDERS) {
                                 dateSelected = true;
                                 $('#go').prop('disabled', false);
                                 toggleVisible([goButton], "inline");
@@ -701,6 +709,9 @@ $(function () {
 
         });
         $('#go').on('click', function () {
+            var parms = null;
+            if (selectedReport != null)
+                parms = reportsToParms[selectedReport];
             toggleVisible([exportButton], "");
             if (isVisible(beginDate)) {
                 if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
@@ -721,6 +732,9 @@ $(function () {
             else { //Parm != 1
                 toggleVisible([noDateError, selectDateFirstError], "none");
                 dateSelected = true;
+            }
+            if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS){
+                buildTable();
             }
 
             if (dateSelected) {
