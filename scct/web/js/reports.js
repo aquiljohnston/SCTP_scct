@@ -57,12 +57,12 @@ $(function () {
                 var currentSelectedReport = $('#reportsDropdown').val();
                 var parms = reportsToParms[currentSelectedReport];
                 var sp = reportsToSP[currentSelectedReport];
-                if (parms['isMapGridDropDownRequired'] != 0 ) {
+                if (parms['isMapGridDropDownRequired'] != 0 && parms['isMapGridDropDownRequired'] != null) {
                     if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
                         buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
                     }
                 }else{
-                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" && parms['ReportDisplayName'] != COMPLETED_WORK_ORDERS) {
                         buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
                     }
                 }
