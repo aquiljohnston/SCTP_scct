@@ -46,9 +46,8 @@ class MileageCardController extends BaseController
                 'filter'
             ]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
-            $model->addRule('filter', 'string');
+            $model->addRule('filter', 'string', ['max' => 100]);
             if ($model->load(Yii::$app->request->queryParams)) {
-                Yii::trace("pagesize: " . $model->pagesize);
                 $mileageCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
             } else {
@@ -57,8 +56,8 @@ class MileageCardController extends BaseController
             }
 
             //check current page at
-            if (isset(Yii::$app->request->queryParams['mileageCardPageNumber'])){
-                $page = Yii::$app->request->queryParams['mileageCardPageNumber'];
+			if (isset($_GET['mileageCardPageNumber'])){
+                $page = $_GET['mileageCardPageNumber'];
             } else {
                 $page = 1;
             }
@@ -116,34 +115,29 @@ class MileageCardController extends BaseController
             //Set Mile Card ID On the JS Call
             $dataProvider->key = 'MileageCardID';
 
-//            $searchModel = [
-//                'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
-//            ];
-//
-//            $approvedInput = '<select class="form-control" name="filterapproved">'
-//                . '<option value=""></option><option value="Yes"';
-//            if ($searchModel['MileageCardApprovedFlag'] == "Yes") {
-//                $approvedInput .= " selected";
-//            }
-//            $approvedInput .= '>Yes</option><option value="No"';
-//            if ($searchModel['MileageCardApprovedFlag'] == "No") {
-//                $approvedInput .= ' selected';
-//            }
-//            $approvedInput .= '>No</option></select>';
-
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
             //calling index page to pass dataProvider.
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-//                'searchModel' => $searchModel,
-//                'approvedInput' => $approvedInput,
-                'week' => $week,
-                'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
-                'pages' => $pages,
-                'model' => $model
-            ]);
+			if (Yii::$app->request->isAjax) {
+				 return $this->renderAjax('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
+					'pages' => $pages,
+					'model' => $model,
+					'mileageCardFilterParams' => $filter
+				]);
+			}else{
+				return $this->render('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
+					'pages' => $pages,
+					'model' => $model,
+					'mileageCardFilterParams' => $filter
+				]); 
+			}
         } catch (ForbiddenHttpException $e) {
             throw $e;
         } catch (ErrorException $e) {
