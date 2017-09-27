@@ -8,6 +8,7 @@ use yii\data\ArrayDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use app\models\TrackerHistoryMapFilters;
+use app\constants\Constants;
 
 /**
  * Tracker implements the CRUD actions for Tracker model.
@@ -29,7 +30,7 @@ class TrackerController extends BaseController
 		self::requirePermission("viewTrackerMenu");
 		
         $url = "dropdown%2Fget-tracker-map-grids";
-        $mapGridsResponse = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
+        $mapGridsResponse = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
         $mapGridsResponse = json_decode($mapGridsResponse, true);
         $mapGridsResponse =  ['select' => 'Select a map...'] + $mapGridsResponse;
         return $this->render("landing", [
@@ -62,7 +63,7 @@ class TrackerController extends BaseController
             $getUrl = 'map%2Fget&' . http_build_query([
                     'mapgrid' => $mapGrid
                 ]);
-            $getMapDataResponse = Parent::executeGetRequest($getUrl, self::API_VERSION_2); //indirect RBAC
+            $getMapDataResponse = Parent::executeGetRequest($getUrl, Constants::API_VERSION_2); //indirect RBAC
             Yii::trace("ASSETS DATA: ".json_encode($getMapDataResponse));
             echo $getMapDataResponse;
         }else{
