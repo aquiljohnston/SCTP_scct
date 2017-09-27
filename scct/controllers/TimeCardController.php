@@ -20,6 +20,7 @@ use yii\web\ForbiddenHttpException;
 use yii\base\Model;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use app\constants\Constants;
 
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
@@ -80,7 +81,7 @@ class TimeCardController extends BaseController
 
             //build url with params
             $url = "time-card%2Fget-cards&filter=$filter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
 

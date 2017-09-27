@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
+use app\constants\Constants;
 
 
 class ResetController extends BaseController
@@ -57,7 +58,7 @@ class ResetController extends BaseController
 			{	
 				$url = 'user%2Freset-password';
 				
-				$json_response = Parent::executePutRequest($url, $json_data, self::API_VERSION_2);
+				$json_response = Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2);
 				
 				$response = json_decode($json_response, true);
 

@@ -19,6 +19,7 @@ use \DateTime;
 use yii\data\Pagination;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use app\constants\Constants;
 
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
@@ -71,7 +72,7 @@ class MileageCardController extends BaseController
 
             //build url with params
             $url = "mileage-card%2Fget-cards&week=$week&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
 
@@ -506,7 +507,7 @@ class MileageCardController extends BaseController
 
                 // post url
                 $putUrl = 'mileage-card%2Fapprove-cards';
-                $apiResponse = parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2); //indirect rbac
+                $apiResponse = parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); //indirect rbac
                 $json_response_data = json_decode($apiResponse, true);
                 //create response
                 $response = Yii::$app->response;

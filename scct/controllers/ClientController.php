@@ -6,6 +6,7 @@ use app\models\Client;
 use Yii;
 use yii\data\Pagination;
 use yii\data\ArrayDataProvider;
+use app\constants\Constants;
 
 /**
  * ClientController implements the CRUD actions for client model.
@@ -53,7 +54,7 @@ class ClientController extends BaseController
         $url = "client%2Fget-all&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($userPageSizeParams)
             . "&page=" . urlencode($page) . "&filterclientname=" . urlencode($nameFilterParam)
             . "&filtercityname=" . urlencode($cityFilterParam) . "&filterstatename=" . urlencode($stateFilterParam);
-        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // RBAC permissions checked indirectly via this call
+        $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // RBAC permissions checked indirectly via this call
         $response = json_decode($response, true);
         $assets = $response['assets'];
         $searchModel = [
@@ -111,7 +112,7 @@ class ClientController extends BaseController
 			return $this->redirect(['/login']);
 		}
 		$url = 'client%2Fview&joinNames=true&id='.$id;
-		$response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
+		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
     }
@@ -146,7 +147,7 @@ class ClientController extends BaseController
 		
 		//get states for form dropdown
 		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
-		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+		$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 			  
 		if ($model->load(Yii::$app->request->post())) {
@@ -217,7 +218,7 @@ class ClientController extends BaseController
 		}
 		self::requirePermission("clientUpdate");
 		$getUrl = 'client%2Fview&id='.$id;
-		$getResponse = json_decode(Parent::executeGetRequest($getUrl, BaseController::API_VERSION_2), true);
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
 		$model = new Client();
 		$model->attributes = $getResponse;
@@ -236,7 +237,7 @@ class ClientController extends BaseController
 		
 		//get states for form dropdown
 		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
-		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+		$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 			  
 		if ($model->load(Yii::$app->request->post()))
