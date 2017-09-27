@@ -11,6 +11,7 @@ use Exception;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
 use linslin\yii2\curl;
+use app\constants\Constants;
 
 /**
  * HomeController implements the CRUD actions for home model.
@@ -47,7 +48,7 @@ class HomeController extends BaseController
             }
             // Reading the response from the the api and filling the GridView
             $url = 'notification%2Fget-notifications';
-            $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             Yii::trace("USER RESPONSE: ".$response);
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = json_decode($response, true);

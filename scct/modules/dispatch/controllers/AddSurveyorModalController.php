@@ -4,6 +4,7 @@ namespace app\modules\dispatch\controllers;
 
 use Yii;
 use yii\data\ArrayDataProvider;
+use app\constants\Constants;
 
 class AddSurveyorModalController extends \app\controllers\BaseController {
 
@@ -41,7 +42,7 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
                     'filter' => $searchFilterVal,
                 ]);
             Yii::trace("surveyors " . $getUrl);
-            $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+            $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
             Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
 
             $dataProvider = new ArrayDataProvider

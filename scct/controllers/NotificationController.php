@@ -9,6 +9,7 @@ use yii\data\ArrayDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
+use app\constants\Constants;
 
 class NotificationController extends \app\controllers\BaseController
 {
@@ -51,7 +52,7 @@ class NotificationController extends \app\controllers\BaseController
                     'listPerPage' => $notificationPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            $getNotificationDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getNotificationDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             Yii::trace("NOTIFICATION DATA: " . json_encode($getNotificationDataResponse));
 
             if ($getNotificationDataResponse != null) {
