@@ -5,6 +5,7 @@ namespace app\modules\dispatch\controllers;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
+use app\constants\Constants;
 
 class AssignedController extends \app\controllers\BaseController
 {
@@ -49,7 +50,7 @@ class AssignedController extends \app\controllers\BaseController
                     'listPerPage' => $assignedPageSizeParams,
                     'page' => $pageAt
                 ]);
-            $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             Yii::trace("ASSIGNED DATA: " . json_encode($getAssignedDataResponse));
             $assignedData = $getAssignedDataResponse['mapGrids'];
 
@@ -118,7 +119,7 @@ class AssignedController extends \app\controllers\BaseController
 
                 // post url
                 $deleteUrl = 'dispatch%2Funassign';
-                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, self::API_VERSION_2); // indirect rbac
+                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
                 Yii::trace("unassignputResponse " . $deleteResponse);
 
             } else {
@@ -182,7 +183,7 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $assignedPageSizeParams,
                 'page' => $pageAt
             ]);
-        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSIGNED SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['sections'];
 
@@ -257,7 +258,7 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
         /*// Reading the response from the the api and filling the surveyorGridView
@@ -265,7 +266,7 @@ class AssignedController extends \app\controllers\BaseController
                 'filter' => $searchFilterVal,
             ]);
         Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
         Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
 
         // Put data in data provider

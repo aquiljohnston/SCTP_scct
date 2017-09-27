@@ -9,6 +9,7 @@
 namespace app\modules\dispatch\controllers;
 use Yii;
 use yii\data\ArrayDataProvider;
+use app\constants\Constants;
 
 class AssetsController extends \app\controllers\BaseController {
     public function actionIndex($id)
@@ -18,7 +19,7 @@ class AssetsController extends \app\controllers\BaseController {
         }
 
         $getUrl = "assets%2Fget&id=$id";
-        $data = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $data = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         $data = $data["assets"];
 
         $assetsDataProvider = new ArrayDataProvider([

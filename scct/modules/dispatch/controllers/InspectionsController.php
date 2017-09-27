@@ -9,6 +9,7 @@ use yii\data\ArrayDataProvider;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
+use app\constants\Constants;
 
 class InspectionsController extends \app\controllers\BaseController
 {
@@ -57,7 +58,7 @@ class InspectionsController extends \app\controllers\BaseController
                     'listPerPage' => $inspectionPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            $getInspectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getInspectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             Yii::trace("INSPECTION INDEX DATA: ".json_encode($getInspectionDataResponse));
 
             $inspectionData = $getInspectionDataResponse['mapGrids'];
@@ -155,7 +156,7 @@ class InspectionsController extends \app\controllers\BaseController
                 'page' => $pageAt,
             ]);
 
-        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         $sectionData = $getSectionDataResponse['sections'];
 
         // Put data in data provider
@@ -235,7 +236,7 @@ class InspectionsController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getSectionDetailDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDetailDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("SECTION DETAIL DATA: ".json_encode($getSectionDetailDataResponse));
 
         // Put data in data provider
@@ -307,7 +308,7 @@ class InspectionsController extends \app\controllers\BaseController
                 'page' => $pageAt,
             ]);
         Yii::trace("EVENT URL: ".$getUrl);
-        $getEventDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getEventDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("EVENT DATA: ".json_encode($getEventDataResponse));
         $eventData = $getEventDataResponse['events'];
 

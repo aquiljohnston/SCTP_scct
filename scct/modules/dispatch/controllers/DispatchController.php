@@ -11,6 +11,7 @@ use yii\web\Response;
 use yii\data\Pagination;
 use yii\web\ServerErrorHttpException;
 use yii\web\View;
+use app\constants\Constants;
 
 class DispatchController extends \app\controllers\BaseController
 {
@@ -65,7 +66,7 @@ class DispatchController extends \app\controllers\BaseController
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
@@ -175,7 +176,7 @@ class DispatchController extends \app\controllers\BaseController
                 'page' => $pageAt,
             ]);
 
-        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         //Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
         $sectionData = $getSectionDataResponse['sections'];
 
@@ -258,7 +259,7 @@ class DispatchController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
         /*// Reading the response from the the api and filling the surveyorGridView
@@ -266,7 +267,7 @@ class DispatchController extends \app\controllers\BaseController
                 'filter' => $searchFilterVal,
             ]);
         Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
         Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
 
         // Put data in data provider
@@ -320,7 +321,7 @@ class DispatchController extends \app\controllers\BaseController
 
                 // post url
                 $putUrl = 'dispatch%2Fdispatch';
-                $putResponse = Parent::executePostRequest($putUrl, $json_data, self::API_VERSION_2); // indirect rbac
+                $putResponse = Parent::executePostRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
                 Yii::trace("dispatchputResponse " . $putResponse);
 
             }
