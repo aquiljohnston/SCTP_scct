@@ -73,6 +73,20 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
+            [
+                'attribute' => 'attribute_name',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function ($model) {
+                    $dropDownListOpenSelect = '<select class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'>';
+                    $dropDownListCloseSelect = '</select>';
+                    foreach ($model['userList'] as $item){
+                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option value='.$item['UserID'].'>'.$item['UserName'].'</option>';
+                    }
+                    return $dropDownListOpenSelect.$dropDownListCloseSelect;
+                },
+            ]
         ],
     ]); ?>
     <div id="assetsTablePagination" style="margin-top: 2%;">
@@ -106,7 +120,7 @@ use kartik\grid\GridView;
         $('#assetsModalCleanFilterButtonDispatch').on('click', function () {
             $('#viewAssetsSearchDispatch').val("");
             reloadViewAssetsModalDispatch();
-        })
+        });
 
         //pagination listener on view asset modal
         $(document).off('click', '#assetsTablePagination .pagination li a').on('click', '#assetsTablePagination .pagination li a', function (event) {

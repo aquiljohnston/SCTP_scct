@@ -252,6 +252,11 @@ class DispatchController extends \app\controllers\BaseController
             $searchFilterVal = "";
         }
 
+        $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+                'filter' => '',
+            ]);
+        $getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
+
         $getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
@@ -260,25 +265,17 @@ class DispatchController extends \app\controllers\BaseController
                 'page' => $pageAt,
             ]);
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
-        /*// Reading the response from the the api and filling the surveyorGridView
-        $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
-                'filter' => $searchFilterVal,
-            ]);
-        Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
-        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
+        $data = self::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
+        Yii::trace("reGenerateAssetsData " . json_encode($data));
 
         // Put data in data provider
         $assetDataProvider = new ArrayDataProvider
         ([
-            'allModels' => $getAssetDataResponse['assets'],
+            'allModels' => $data,
             'pagination' => false,
         ]);
         $assetDataProvider->key = 'WorkOrderID';
-        /*$surveyorList = [];
-        $surveyorList = $surveyorsResponse['users'];*/
 
         //todo: set paging on both tables
         // set pages to dispatch table
@@ -289,7 +286,6 @@ class DispatchController extends \app\controllers\BaseController
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
                 'pages' => $pages,
-                //'surveyorList' => $surveyorList,
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
@@ -300,7 +296,6 @@ class DispatchController extends \app\controllers\BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
-                //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);
@@ -368,6 +363,15 @@ class DispatchController extends \app\controllers\BaseController
         }
         $unassignedArr['data'] = $unassignedArr;
         return $unassignedArr;
+    }
+
+    private function reGenerateAssetsData($assetsData, $surveyorList){
+        $newAssetsData = array();
+        foreach ($assetsData as $item){
+            $item['userList'] = $surveyorList;
+            $newAssetsData[] = $item;
+        }
+        return $newAssetsData;
     }
 
 }
