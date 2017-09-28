@@ -74,7 +74,7 @@ use kartik\grid\GridView;
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'attribute' => 'attribute_name',
+                'attribute' => 'Add Surveyor',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
