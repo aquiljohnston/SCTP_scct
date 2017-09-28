@@ -113,24 +113,26 @@ function initializeDispatch() {
             WorkOrderID: $(this).attr("workorderid"),
             AssignedUserID: this.value
         });
-        //dispatch map grid at assets level
-        // Ajax post request to dispatch action
-        $.ajax({
-            timeout: 99999,
-            url: '/dispatch/dispatch/dispatch',
-            data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
-            type: 'POST',
-            beforeSend: function () {
-                $('#modalViewAssetDispatch').modal("hide");
-                $('#loading').show();
-            }
-        }).done(function () {
-            viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' +MapGrid,'#modalViewAssetDispatch','#modalContentViewAssetDispatch');
-            //$('#modalViewAssetDispatch').modal("show");
-            /*var searchFilterVal = $('#addSurveyorSearch').val();
-            reloadAssetsModal(searchFilterVal);*/
-            $('#loading').hide();
-        });
+        if (this.value != null) {
+            //dispatch map grid at assets level
+            // Ajax post request to dispatch action
+            $.ajax({
+                timeout: 99999,
+                url: '/dispatch/dispatch/dispatch',
+                data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
+                type: 'POST',
+                beforeSend: function () {
+                    $('#modalViewAssetDispatch').modal("hide");
+                    $('#loading').show();
+                }
+            }).done(function () {
+                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + MapGrid, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch');
+                //$('#modalViewAssetDispatch').modal("show");
+                /*var searchFilterVal = $('#addSurveyorSearch').val();
+                 reloadAssetsModal(searchFilterVal);*/
+                $('#loading').hide();
+            });
+        }
     });
 }
 
