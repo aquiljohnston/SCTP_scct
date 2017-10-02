@@ -82,7 +82,7 @@ use kartik\grid\GridView;
                     $dropDownListOpenSelect = '<select class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'><option value=null>Please Select a User</option>';
                     $dropDownListCloseSelect = '</select>';
                     foreach ($model['userList'] as $item){
-                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option value='.$item['UserID'].'>'.$item['UserName'].'</option>';
+                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option value='.$item['UserID'].'>'.$item['Name']." (".$item['UserName'].")".'</option>';
                     }
                     return $dropDownListOpenSelect.$dropDownListCloseSelect;
                 },
