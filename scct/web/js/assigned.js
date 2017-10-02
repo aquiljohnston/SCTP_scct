@@ -232,11 +232,14 @@ function getAssignedSectionArray(assignedSection_SectionNumber) {
 
         $('#assignedSectionGV-container input:checked').each(function() {
             console.log("SELECTED MAP - SECTION: "+$(this).attr('SectionNumber'));
-            assignedSectionArray.push({
-                MapGrid: $(this).attr('MapGrid'),
-                SectionNumber: $(this).attr('SectionNumber'),
-                AssignedUserID: $(this).attr('AssignedToID')
-            })
+            var userIDsCount = $(this).attr('AssignedToID').split(',');
+            for (var i = 0; i < userIDsCount.length; i++) {
+                assignedSectionArray.push({
+                    MapGrid: $(this).attr('MapGrid'),
+                    SectionNumber: $(this).attr('SectionNumber'),
+                    AssignedUserID: userIDsCount[i]
+                })
+            }
         });
         return assignedSectionArray;
     }else{
