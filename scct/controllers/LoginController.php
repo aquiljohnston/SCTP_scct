@@ -179,7 +179,7 @@ class LoginController extends BaseController
             $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
             $timeEntry->TimeEntryStartTime = BaseController::getDate();
             $timeEntry->TimeEntryEndTime = BaseController::getDate();
-            $timeEntry->TimeEntryActiveFlag = 1;
+            $timeEntry->TimeEntryActiveFlag = "1";
             $timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
             $timeEntry->TimeEntryCreateDate = BaseController::getDate();
             $timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
