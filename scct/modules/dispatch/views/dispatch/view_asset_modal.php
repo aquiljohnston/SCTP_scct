@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
-
+$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div id="viewAssetModalContainer">
     <div id="assetDispatchContainer">
@@ -20,6 +20,13 @@ use kartik\grid\GridView;
             'options' => ['id' => 'viewDispatchAssetsActiveForm'],
             'action' => '/dispatch/dispatch/view-asset'
         ]); ?>
+        <span id="dispatchAssetsPageSizeLabel" style="float: right;margin: 0px auto;width: 16%;color: #0067a6;display: inline !important;">
+                <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                    ['value' => $viewAssetPageSizeParams, 'id' => 'dispatchAssetsPageSize'])
+                    ->label('Records Per Page', [
+                        'class' => 'recordsPerPage'
+                    ]); ?>
+        </span>
         <div class="viewAssetsSearchcontainer dropdowntitle">
             <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
         </div>
@@ -44,6 +51,8 @@ use kartik\grid\GridView;
         'export' => false,
         'pjax' => true,
         'summary' => '',
+        'floatHeader' => true,
+        'floatOverflowContainer' => true,
         'columns' => [
             [
                 'label' => 'Address',
@@ -122,6 +131,11 @@ use kartik\grid\GridView;
             reloadViewAssetsModalDispatch();
         });
 
+        //page size listener
+        $(document).off('change', '#dispatchAssetsPageSize').on('change', '#dispatchAssetsPageSize', function () {
+            reloadViewAssetsModalDispatch();
+        });
+
         //pagination listener on view asset modal
         $(document).off('click', '#assetsTablePagination .pagination li a').on('click', '#assetsTablePagination .pagination li a', function (event) {
             event.preventDefault();
@@ -136,13 +150,14 @@ use kartik\grid\GridView;
         var searchFilterVal = $('#viewAssetsSearchDispatch').val() == "/" ? "" : $('#viewAssetsSearchDispatch').val();
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+        var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/dispatch/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page},
+            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page, recordsPerPageSelected: recordsPerPageSelected},
             timeout: 99999,
             push: false,
             replace: false,
