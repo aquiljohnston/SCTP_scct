@@ -11,6 +11,8 @@ use app\controllers\Cge;
 use kartik\form\ActiveForm;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 $this->title = 'CGE';
 $this->params['breadcrumbs'][] = $this->title;
@@ -67,7 +69,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 ],
                 'export' => false,
                 'columns' => [
-                    /*[
+                    [
                         'class' => 'kartik\grid\ExpandRowColumn',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width:5%'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width:5%'],
@@ -78,21 +80,15 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             return GridView::ROW_COLLAPSED;
                         },
 
-                        'detailUrl' => Url::to(['assigned/view-section']),
+                        'detailUrl' => Url::to(['cge/view-section']),
                         'detailAnimationDuration' => 'fast'
-                    ],*/
+                    ],
                     [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html'
-                    ],
-                    [
-                        'label' => 'Available WorkOrder Count',
-                        'attribute' => 'AvailableWorkOrderCount',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                     ],
                     [
                         'label' => 'Compliance Start',
@@ -107,6 +103,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html'
+                    ],
+                    [
+                        'label' => 'Available WorkOrder Count',
+                        'attribute' => 'AvailableWorkOrderCount',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                     ],
                     [
                         'header' => 'Add Surveyor',
@@ -135,4 +137,20 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             <?php Pjax::end() ?>
         </div>
     </div>
+
+    <?php
+    Modal::begin([
+        'header' => '<h4>CGE History</h4>',
+        'id' => 'modalViewHistoryDetailCGE',
+        'size' => 'modal-lg',
+    ]);
+
+    ?>
+    <div id='modalContentViewHistoryDetailCGE'>
+        Loading...
+    </div>
+    <?php
+
+    Modal::end();
+    ?>
 </div>
