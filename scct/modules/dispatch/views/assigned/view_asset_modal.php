@@ -56,6 +56,12 @@ use kartik\grid\GridView;
                     return $model['HouseNumber'] . " " . $model['Street']. " " .$model['AptSuite']. "<br/>" . $model['City'] . " , " . $model['State'] . " " . $model['Zip'];
                 }
             ],
+			[
+                'label' => 'Assogined User',
+                'attribute' => 'AssignedTo',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
             [
                 'label' => 'Meter Number',
                 'attribute' => 'MeterNumber',
