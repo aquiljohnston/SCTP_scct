@@ -57,7 +57,7 @@ use kartik\grid\GridView;
                 }
             ],
 			[
-                'label' => 'Assogined User',
+                'label' => 'Assigned User',
                 'attribute' => 'AssignedTo',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
