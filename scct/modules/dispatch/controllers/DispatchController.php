@@ -221,15 +221,16 @@ class DispatchController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
-            'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
+            'modalSearch', 'mapGridSelected', 'sectionNumberSelected', 'pagesize'
         ]);
         $model->addRule('modalSearch', 'string', ['max' => 32])
             ->addRule('mapGridSelected', 'string', ['max' => 32])
-            ->addRule('sectionNumberSelected', 'string', ['max' => 32]);
+            ->addRule('sectionNumberSelected', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);
 
         // Verify logged in
         if (Yii::$app->user->isGuest) {
@@ -241,15 +242,12 @@ class DispatchController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-            $viewAssetPageSizeParams = 200;
-            //$pageAt = 1;
+            $viewAssetPageSizeParams = $recordsPerPageSelected;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
             Yii::trace('PAGE AT : '.$pageAt);
         }else{
             $viewAssetFilterParams = "";
-            $viewAssetPageSizeParams = 200;
             $pageAt = 1;
-            $searchFilterVal = "";
         }
 
         $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
@@ -289,6 +287,7 @@ class DispatchController extends \app\controllers\BaseController
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
             ]);
         } else {
             return $this->render('view_asset_modal', [
@@ -298,6 +297,7 @@ class DispatchController extends \app\controllers\BaseController
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
             ]);
         }
     }
