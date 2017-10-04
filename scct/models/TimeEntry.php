@@ -11,7 +11,6 @@ use Yii;
  * @property integer $TimeEntryUserID
  * @property string  $TimeEntryStartTime
  * @property string  $TimeEntryEndTime
- * @property string  $TimeEntryWeekDay
  * @property string  $TimeEntryDate
  * @property string  $TimeEntryActiveFlag
  * @property string  $TimeEntryHours
@@ -36,7 +35,6 @@ class TimeEntry extends \yii\base\model
 	public $TimeEntryUserID;
 	public $TimeEntryStartTime;
 	public $TimeEntryEndTime;
-	public $TimeEntryWeekDay;
 	public $TimeEntryDate;
 	public $TimeEntryActiveFlag;
 	public $TimeEntryHours;
@@ -59,7 +57,7 @@ class TimeEntry extends \yii\base\model
         return [
             [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
             [['TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeCardFK'], 'integer'],
-            [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryWeekDay', 'TimeEntryHours', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
+            [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryHours', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
         ];
     }
 
@@ -74,7 +72,6 @@ class TimeEntry extends \yii\base\model
             'TimeEntryStartTime' => 'Time Entry Start Time',
             'TimeEntryEndTime' => 'Time Entry End Time',
             'TimeEntryDate' => 'Time Entry Date',
-			'TimeEntryWeekDay' => 'Time Entry Week Day',
 			'TimeEntryActiveFlag' => 'Time Entry Active Flag',
 			'TimeEntryHours' => 'Time Entry Hours',
 			'TimeEntryMinutes' => 'Time Entry Minutes',
