@@ -45,6 +45,8 @@ use kartik\grid\GridView;
         'export' => false,
         'pjax' => true,
         'summary' => '',
+        'floatHeader' => true,
+        'floatOverflowContainer' => true,
         'columns' => [
             [
                 'label' => 'Address',
@@ -129,7 +131,7 @@ use kartik\grid\GridView;
         $('#assetsModalCleanFilterButtonAssigned').on('click', function () {
             $('#viewAssetsSearchAssigned').val("");
             reloadViewAssetsModal();
-        })
+        });
         //pagination listener on view asset modal
         $(document).off('click', '#assignedAssetsTablePagination .pagination li a').on('click', '#assignedAssetsTablePagination .pagination li a', function (event) {
             event.preventDefault();
