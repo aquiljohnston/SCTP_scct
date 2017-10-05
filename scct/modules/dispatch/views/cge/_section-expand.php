@@ -24,8 +24,8 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Inspector',
                 'attribute' => 'Inspector',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 25%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 25%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
             ],
             [
                 'label' => 'Address',
@@ -36,20 +36,14 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'InspectionDateTime',
                 'attribute' => 'InspectionDateTime',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 25%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 25%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
             ],
             [
-                'header' => 'CGE',
-                'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center CGE','style' => 'width: 5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    /*if ($model['CGE'] == 1)
-                        return ['disabled' => true, 'checked' => true];
-                    else
-                        return ['disabled' => true, 'checked' => false];*/
-                }
+                'label' => 'Scheduled Date',
+                'attribute' => 'ScheduledDate',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
             ],
             [
                 'attribute' => 'img',
@@ -80,6 +74,18 @@ use yii\bootstrap\Modal;
                 'urlCreator' => function ($action, $model, $key, $index) {
                 }
             ],
+            [
+                'header' => '',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'headerOptions' => ['class' => 'text-center CGE','style' => 'width: 5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    /*if ($model['CGE'] == 1)
+                        return ['disabled' => true, 'checked' => true];
+                    else
+                        return ['disabled' => true, 'checked' => false];*/
+                }
+            ]
         ],
     ]); ?>
     <?php
