@@ -74,7 +74,7 @@ use yii\bootstrap\Modal;
                     'view' => function($url, $model) {
                         $modalViewHistoryDetailCGE = "#modalViewHistoryDetailCGE";
                         $modalContentViewHistoryDetailCGE = "#modalContentViewHistoryDetailCGE";
-                            return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/cge/view-asset?workOrderID=".$model['ID']."','".$modalViewHistoryDetailCGE ."','".$modalContentViewHistoryDetailCGE."')"]);
+                            return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/cge/view-history?workOrderID=".$model['ID']."','".$modalViewHistoryDetailCGE ."','".$modalContentViewHistoryDetailCGE."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
@@ -84,12 +84,12 @@ use yii\bootstrap\Modal;
     ]); ?>
     <?php
     Modal::begin([
-        'id' => 'assetModal',
+        'id' => 'historyModal',
         'size' => 'modal-m',
     ]);
 
     ?>
-    <div id='viewAssetModalContent'>
+    <div id='viewHistoryModalContent'>
         Loading...
     </div>
     <?php
