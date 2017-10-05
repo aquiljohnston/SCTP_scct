@@ -101,39 +101,6 @@ function initializeDispatch() {
     });
 
     $('#loading').hide();
-
-    // Assets Surveyor Drop Down List listener
-    $(document).off('change', '.assetSurveyorDropDown').on('change', '.assetSurveyorDropDown', function (event) {
-        event.preventDefault();
-        //alert("Drop down triggered! "+this.value);
-        //var option = $(this).attr("workorderid");
-        var MapGrid = $(this).attr("mapgrid");
-        var dispatchAsset = [];
-        dispatchAsset.push({
-            WorkOrderID: $(this).attr("workorderid"),
-            AssignedUserID: this.value
-        });
-        if (this.value != null) {
-            //dispatch map grid at assets level
-            // Ajax post request to dispatch action
-            $.ajax({
-                timeout: 99999,
-                url: '/dispatch/dispatch/dispatch',
-                data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
-                type: 'POST',
-                beforeSend: function () {
-                    $('#modalViewAssetDispatch').modal("hide");
-                    $('#loading').show();
-                }
-            }).done(function () {
-                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + MapGrid, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch');
-                //$('#modalViewAssetDispatch').modal("show");
-                /*var searchFilterVal = $('#addSurveyorSearch').val();
-                 reloadAssetsModal(searchFilterVal);*/
-                $('#loading').hide();
-            });
-        }
-    });
 }
 
 function reloadDispatchGridView() {
