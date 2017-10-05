@@ -212,7 +212,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         var AssignedUserID = "";
         var workOrderID = "";
         var dispatchAsset = [];
-        mapGridSelected = $(this).find('.assetSurveyorDropDown').attr("mapgrid");
+        mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
         $('#assetGV-container tr').each(function () {
             AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
             workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
