@@ -177,8 +177,14 @@ class CgeController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
 
-		return $this->render('view_history_modal', [
-			'historyDataProvider' => $historyDataProvider
-		]);
+		if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('view_history_modal', [
+                'historyDataProvider' => $historyDataProvider
+            ]);
+        } else {
+			return $this->render('view_history_modal', [
+				'historyDataProvider' => $historyDataProvider
+			]);
+		}
     }
 }
