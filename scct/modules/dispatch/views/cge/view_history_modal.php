@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
+use yii\helpers\Url;
 
 ?>
 <div id="historyTable">
@@ -38,8 +39,18 @@ use kartik\grid\GridView;
                 'contentOptions' => ['class' => 'text-center'],
             ],
 			[
-			//image
-			]
+                'attribute' => 'Image',
+                'format' => 'raw',
+                'label' => 'Image',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function ($model) {
+                    if ($model['Image'] != null)
+                        return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Image'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                    else
+                        return '';
+                },
+            ]
         ],
     ]); ?>
 </div>
