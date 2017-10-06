@@ -20,7 +20,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             'options' => ['id' => 'viewDispatchAssetsActiveForm'],
             'action' => '/dispatch/dispatch/view-asset'
         ]); ?>
-        <span id="dispatchAssetsPageSizeLabel" style="float: right;margin: 0px auto;width: 16%;color: #0067a6;display: inline !important;">
+        <span id="dispatchAssetsPageSizeLabel" style="float: right;margin: -20px auto;width: 16%;color: #0067a6;display: inline !important;">
                 <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                     ['value' => $viewAssetPageSizeParams, 'id' => 'dispatchAssetsPageSize'])
                     ->label('Records Per Page', [
@@ -37,6 +37,11 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
+        <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -1.5%;">
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsButton', 'disabled' => 'disabled']); ?>
+        </div>
+        <?php Pjax::end() ?>
     </div>
 </div>
 <div id="assetsTable">
@@ -88,10 +93,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 'value' => function ($model) {
-                    $dropDownListOpenSelect = '<select class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'><option value=null>Please Select a User</option>';
+                    $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'><option class="text-center" value=null>Please Select a User</option>';
                     $dropDownListCloseSelect = '</select>';
                     foreach ($model['userList'] as $item){
-                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option value='.$item['UserID'].'>'.$item['Name']." (".$item['UserName'].")".'</option>';
+                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option class="surveyorID text-center" value='.$item['UserID'].'>'.$item['Name']." (".$item['UserName'].")".'</option>';
                     }
                     return $dropDownListOpenSelect.$dropDownListCloseSelect;
                 },
@@ -113,6 +118,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
 <script type="text/javascript">
     $(document).ready(function () {
+        // global variable to use to pop selected assets modal
+        mapGridSelected = null;
+
         $('#viewAssetsSearchDispatch').keypress(function (event) {
             var key = event.which;
             if (key == 13) {
@@ -143,6 +151,38 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             $('#viewAssetPageNumber').val(page);
             reloadViewAssetsModalDispatch(page);
         });
+
+        // Assets Surveyor Drop Down List listener
+        $(document).off('change','.assetSurveyorDropDown').on('change', '.assetSurveyorDropDown', function (event) {
+            $('#dispatchAssetsButton').prop('disabled', true);
+            $('#assetGV-container tr').each(function () {
+                AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+                if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                    $('#dispatchAssetsButton').prop('disabled', false);
+                    return false
+                }
+            });
+        });
+
+        $(document).off('click', '#dispatchAssetsButton').on('click', '#dispatchAssetsButton', function (event){
+            var dispatchAsset = [];
+            dispatchAsset = getDispatchAssetsData();
+
+            // Ajax post request to dispatch assets
+            $.ajax({
+                timeout: 99999,
+                url: '/dispatch/dispatch/dispatch',
+                data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
+                type: 'POST',
+                beforeSend: function () {
+                    $('#modalViewAssetDispatch').modal("hide");
+                    $('#loading').show();
+                }
+            }).done(function () {
+                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch');
+                $('#loading').hide();
+            });
+        });
     });
 
     function reloadViewAssetsModalDispatch(page) {
@@ -166,6 +206,24 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             $("body").css("cursor", "default");
             $('#loading').hide();
         });
+    }
+
+    function getDispatchAssetsData() {
+        var AssignedUserID = "";
+        var workOrderID = "";
+        var dispatchAsset = [];
+        mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
+        $('#assetGV-container tr').each(function () {
+            AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+            workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
+            if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                dispatchAsset.push({
+                    WorkOrderID: workOrderID,
+                    AssignedUserID: AssignedUserID
+                });
+            }
+        });
+        return dispatchAsset;
     }
 </script>
 
