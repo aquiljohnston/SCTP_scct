@@ -89,18 +89,5 @@ use yii\helpers\Url;
             ]
         ],
     ]); ?>
-    <?php
-    Modal::begin([
-        'id' => 'historyModal',
-        'size' => 'modal-m',
-    ]);
 
-    ?>
-    <div id='viewHistoryModalContent'>
-        Loading...
-    </div>
-    <?php
-
-    Modal::end();
-    ?>
 </div>
