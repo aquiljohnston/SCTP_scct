@@ -9,6 +9,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 ?>
 
@@ -46,7 +47,7 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
             ],
             [
-                'attribute' => 'img',
+                'attribute' => 'Image',
                 'format' => 'raw',
                 'label' => 'Image',
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
