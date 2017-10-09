@@ -216,10 +216,10 @@ class InspectionsController extends \app\controllers\BaseController
         }
 
         if (Yii::$app->request->get()){
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 750;
             $pageAt = 1;
         }else{
-            $viewAssetPageSizeParams = 50;
+            $viewAssetPageSizeParams = 750;
             $pageAt = 1;
         }
 
