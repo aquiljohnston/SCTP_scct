@@ -35,7 +35,7 @@ use yii\helpers\Url;
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 25%;'],
             ],
             [
-                'label' => 'InspectionDateTime',
+                'label' => 'Last Inspection Date',
                 'attribute' => 'InspectionDateTime',
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
