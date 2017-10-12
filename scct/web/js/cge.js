@@ -56,7 +56,9 @@ $(function () {
     $(document).off('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]').on('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]', function () {
         cgeSelectedAssets = $("#cgeGridview #cgeAssetsGV").yiiGridView('getSelectedRows');
         console.log("SELECTED ASSETS: "+cgeSelectedAssets);
-        getSelectedScheduledDate(cgeSelectedAssets);
+        if ($(this).is(':checked')){
+            cgeSelectedScheduledDate.push($(this).attr("ScheduledDate"));
+        }
         console.log("SELECTED cgeSelectedScheduledDate: "+cgeSelectedScheduledDate);
         if (cgeSelectedMapGrid.length > 0 || cgeSelectedAssets.length > 0)
             $("#cgeDispatchButton").prop('disabled', false);
@@ -74,13 +76,6 @@ $(function () {
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge');
     });
 });
-
-function getSelectedScheduledDate(cgeSelectedAssets) {
-    for(var i = 0; i < cgeSelectedAssets.length; i++){
-        var ScheduledDate = $("#cgeAssetsGV .cgeDispatchAssetsCheckbox input[WorkOrderID=" + cgeSelectedAssets[i] + "]").attr("ScheduledDate");
-        cgeSelectedScheduledDate.push(ScheduledDate);
-    }
-}
 
 function cgeGridViewReload() {
     var form = $("#cgeActiveForm");
