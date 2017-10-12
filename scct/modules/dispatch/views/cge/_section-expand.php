@@ -82,7 +82,7 @@ use kartik\date\DatePicker;
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
-            ]
+            ],
             [
                 'attribute' => 'Image',
                 'format' => 'raw',
