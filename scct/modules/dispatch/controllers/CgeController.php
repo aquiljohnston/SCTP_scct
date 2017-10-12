@@ -137,7 +137,7 @@ class CgeController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
 
-        //$sectionDataProvider->key = 'SectionNumber';
+        $sectionDataProvider->key = 'ID';
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
@@ -186,5 +186,29 @@ class CgeController extends \app\controllers\BaseController
 				'historyDataProvider' => $historyDataProvider
 			]);
 		}
+    }
+
+    /**
+     * CGE Dispatch function
+     * @throws ForbiddenHttpException
+     */
+    public function actionDispatch(){
+        try {
+            if (Yii::$app->request->isAjax) {
+                $data = Yii::$app->request->post();
+                $json_data = json_encode($data);
+                Yii::trace("CGE DISPATCH DATA: " . $json_data);
+
+                // post url
+                /*$postUrl = 'cge%2Fdispatch';
+                $putResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
+                Yii::trace("cge dispatchputResponse " . $putResponse);*/
+
+            }
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException;
+        } catch (Exception $e) {
+            Yii::$app->runAction('login/user-logout');
+        }
     }
 }

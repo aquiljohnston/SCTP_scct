@@ -36,7 +36,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             <div class="col-xs-1 col-md-1 col-lg-1" id="cgeButtonContainer" style="float: right;margin: 0.3% auto;width: 11%;">
                 <label style="color: #0067a6; margin-bottom: 7px;"></label>
                 <?php Pjax::begin(['id' => 'cgeButtons', 'timeout' => false]) ?>
-                <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton', 'disabled' => 'disabled']); ?>
+                <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary cge_dispatch_btn', 'id' => 'cgeDispatchButton', 'disabled' => 'disabled']); ?>
                 <?php Pjax::end() ?>
             </div>
             <div id="cgeSearchContainer">
@@ -114,12 +114,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'header' => 'Add Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],
-                        'contentOptions' => ['class' => 'text-center dispatchCheckbox', 'style' => 'width: 15%'],
+                        'contentOptions' => ['class' => 'text-center cgeDispatchCheckbox', 'style' => 'width: 15%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if ( $model['ScheduleRequired'] != 1 )
                                 return [/*'SectionNumber' => '000', 'MapGrid' => $model['MapGrid'],*/ 'disabled' => false];
                             else
-                                return [/*'SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'],*/ 'disabled' => true];
+                                return [/*'SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'],*/ 'disabled' => 'disabled'];
                         }
                     ]
                 ]
@@ -151,6 +151,16 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     </div>
     <?php
 
+    Modal::end();
+    ?>
+    <!--CGE Add Surveyor Modal-->
+    <?php
+
+    Modal::begin([
+        'header' => '<h4>ADD SURVEYORS</h4>',
+        'id' => 'addSurveyorCgeModal',
+    ]);
+    echo "<div id='modalAddSurveyorCge'>Loading...</div>";
     Modal::end();
     ?>
 </div>

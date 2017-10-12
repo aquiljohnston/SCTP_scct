@@ -10,10 +10,11 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
 
     /**
      * Modal view for assigning work to surveyors
+     * @param $modalName modal to load
      * @return string|\yii\web\Response
      * @throws ForbiddenHttpException
      */
-    public function actionAddSurveyorModal()
+    public function actionAddSurveyorModal($modalName = null)
     {
         try {
             if (Yii::$app->user->isGuest) {
@@ -53,12 +54,39 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
 
             $dataProvider->key = 'UserID';
 
-            return $this->render('add_surveyor_modal', [
-                'addSurveyorsDataProvider' => $dataProvider,
-                'model' => $model,
-                'searchFilterVal' => $searchFilterVal,
-                'workCenterFilterVal' => $workCenterFilterVal,
-            ]);
+            if ($modalName == null) {
+                if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('add_surveyor_modal', [
+                        'addSurveyorsDataProvider' => $dataProvider,
+                        'model' => $model,
+                        'searchFilterVal' => $searchFilterVal,
+                        'workCenterFilterVal' => $workCenterFilterVal,
+                    ]);
+                } else {
+                    return $this->render('add_surveyor_modal', [
+                        'addSurveyorsDataProvider' => $dataProvider,
+                        'model' => $model,
+                        'searchFilterVal' => $searchFilterVal,
+                        'workCenterFilterVal' => $workCenterFilterVal,
+                    ]);
+                }
+            }else {
+                if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('add_surveyor_modal_cge', [
+                        'addSurveyorsDataProvider' => $dataProvider,
+                        'model' => $model,
+                        'searchFilterVal' => $searchFilterVal,
+                        'workCenterFilterVal' => $workCenterFilterVal,
+                    ]);
+                } else {
+                    return $this->render('add_surveyor_modal_cge', [
+                        'addSurveyorsDataProvider' => $dataProvider,
+                        'model' => $model,
+                        'searchFilterVal' => $searchFilterVal,
+                        'workCenterFilterVal' => $workCenterFilterVal,
+                    ]);
+                }
+            }
         }catch(ForbiddenHttpException $e)
         {
             throw new ForbiddenHttpException;
