@@ -54,7 +54,7 @@ use kartik\datetime\DateTimePicker;
                 'contentOptions' => ['class' => 'text-center ScheduledDate','style' => 'width: 20%;'],
                 'value' => function($model){
                         $uniqueID = uniqid();
-                    //if ($model['ScheduledDate'] == 1 ) {
+                    if ($model['ScheduleRequired'] == 1 ) {
                         return DateTimePicker::widget([
                             'name' => 'ScheduledDate',
                             'options' => [
@@ -70,9 +70,12 @@ use kartik\datetime\DateTimePicker;
                                 //"changeDate" => "function(e) {  alert('date changed'); }",
                             ]
                         ]);
-                    /*}else {
-                        return "";
-                    }*/
+                    }else {
+                        return DateTimePicker::widget([
+                            'name' => 'ScheduledDate',
+                            'disabled' => true
+                        ]);
+                    }
                 },
                 'format' => 'raw'
             ],
