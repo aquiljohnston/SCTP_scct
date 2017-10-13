@@ -10,6 +10,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use kartik\datetime\DateTimePicker;
 
 ?>
 
@@ -18,7 +19,7 @@ use yii\helpers\Url;
     <?= GridView::widget([
         'dataProvider' => $sectionDataProvider,
         'export' => false,
-        'id' => 'cgeSectionGV',
+        'id' => 'cgeAssetsGV',
         'summary' => '',
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
@@ -49,13 +50,36 @@ use yii\helpers\Url;
             [
                 'label' => 'Scheduled Date',
                 'attribute' => 'ScheduledDate',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
+                'contentOptions' => ['class' => 'text-center ScheduledDate','style' => 'width: 20%;'],
+                'value' => function($model){
+                        $uniqueID = uniqid();
+                    //if ($model['ScheduledDate'] == 1 ) {
+                        return DateTimePicker::widget([
+                            'name' => 'ScheduledDate',
+                            'options' => [
+                                'placeholder' => Yii::t('app', 'Enter the date ...'),
+                                'id' => $uniqueID,
+                            ],
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'mm/dd/yyyy hh:ii:ss',
+                                'todayHighlight' => true
+                            ],
+                            'pluginEvents' => [
+                                //"changeDate" => "function(e) {  alert('date changed'); }",
+                            ]
+                        ]);
+                    /*}else {
+                        return "";
+                    }*/
+                },
+                'format' => 'raw'
             ],
-			[
+            [
                 'label' => 'Customer Info',
                 'attribute' => 'CustomerInfo',
-				'format' => 'raw',
+                'format' => 'raw',
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
             ],
@@ -91,13 +115,14 @@ use yii\helpers\Url;
             [
                 'header' => '',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center CGE','style' => 'width: 5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'contentOptions' => ['class' => 'text-center cgeDispatchAssetsCheckbox','style' => 'width: 5%;'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     /*if ($model['CGE'] == 1)
                         return ['disabled' => true, 'checked' => true];
                     else
                         return ['disabled' => true, 'checked' => false];*/
+                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['ID']];
                 }
             ]
         ],
