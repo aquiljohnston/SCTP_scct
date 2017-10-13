@@ -1,5 +1,13 @@
 //Taken from commit a09e6b8d7fed3035d888ade56ffd0e1a623f4c00 on PGE-Web
-$(function(){
+$(function(){	
+
+	var environment = getSubDomainEnvironment();
+	
+	//autofill url prefix based on project name
+	$('#projectName').keyup(function(){
+		$('#urlPrefix').val($(this).val().toLowerCase().replace(/\s/g, '') + environment);
+	});
+	
     $('#projectAddUserSubmitBtn').on('click',function(){
         $(this).val('Please wait ...')
             .attr('disabled','disabled');
@@ -22,6 +30,21 @@ $(function(){
          }
      });
 });
+
+function getSubDomainEnvironment() {
+	//get environment variable
+	var urlPrefix = location.hostname.split( '.' )[0];
+	var environment = "";
+	
+	if (urlPrefix.indexOf("dev") >= 0 || urlPrefix.indexOf("localhost") >= 0){
+		environment = "dev";
+	}
+	if (urlPrefix.indexOf("stage") >= 0){
+		environment = "stage";
+	}
+	
+	return environment;
+}
 
 function reloadProjectGridView() {
     var jqProjectAddUser = $('.project-add-user');
