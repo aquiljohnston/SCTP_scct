@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
-use kartik\date\DatePicker;
+use kartik\datetime\DateTimePicker;
 
 ?>
 
@@ -55,7 +55,7 @@ use kartik\date\DatePicker;
                 'value' => function($model){
                         $uniqueID = uniqid();
                     //if ($model['ScheduledDate'] == 1 ) {
-                        return DatePicker::widget([
+                        return DateTimePicker::widget([
                             'name' => 'ScheduledDate',
                             'options' => [
                                 'placeholder' => Yii::t('app', 'Enter the date ...'),
@@ -63,7 +63,7 @@ use kartik\date\DatePicker;
                             ],
                             'pluginOptions' => [
                                 'autoclose' => true,
-                                'format' => 'mm/dd/yyyy',
+                                'format' => 'mm/dd/yyyy hh:ii:ss',
                                 'todayHighlight' => true
                             ],
                             'pluginEvents' => [

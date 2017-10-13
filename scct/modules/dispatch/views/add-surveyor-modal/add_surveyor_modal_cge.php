@@ -126,13 +126,14 @@ use kartik\form\ActiveForm;
                 $.ajax({
                     timeout: 99999,
                     url: '/dispatch/cge/dispatch',
-                    data: {dispatchMap: dispatchMapGridData, dispatchAssets: dispatchAssetsData},
+                    data: {dispatchMap: dispatchMapGridData, dispatchAsset: dispatchAssetsData},
                     type: 'POST',
                     beforeSend: function () {
-                        $('#addSurveyorModal').modal("hide");
+                        $('#addSurveyorCgeModal').modal("hide");
                         $('#loading').show();
                     }
                 }).done(function () {
+                    resetCge_Global_Variable();
                     $.pjax.reload({
                         container:'#cgeGridview',
                         timeout: 99999,
@@ -151,7 +152,7 @@ use kartik\form\ActiveForm;
                 });
             }
         });
-    }
+    };
 
     // set trigger for search box in the add surveyor modal
     $(document).ready(function () {
