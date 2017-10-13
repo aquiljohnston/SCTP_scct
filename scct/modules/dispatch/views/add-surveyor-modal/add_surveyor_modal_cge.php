@@ -133,6 +133,7 @@ use kartik\form\ActiveForm;
                         $('#loading').show();
                     }
                 }).done(function () {
+                    $('#cgeDispatchButton').prop('disabled', true); //TO DISABLED
                     resetCge_Global_Variable();
                     $.pjax.reload({
                         container:'#cgeGridview',
