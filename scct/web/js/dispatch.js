@@ -173,6 +173,6 @@ function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid
         .find(modalContentViewAsset).html("Loading...");
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).load(url);
-		document.getElementById('assetModalHeader').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
+		document.getElementById('assetModalHeader').innerHTML += '<h4>' + mapGrid + ' - Assets</h4>';
 }
 
