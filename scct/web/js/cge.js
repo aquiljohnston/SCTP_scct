@@ -32,7 +32,7 @@ $(function () {
 
     // Datepicker listener
     $(document).off('change', '.ScheduledDate').on('change', '.ScheduledDate', function () {
-        currentSelectedDate = $(this).find(".krajee-datepicker[name=ScheduledDate]").val();
+        currentSelectedDate = $(this).find("input[name=ScheduledDate]").val();
         $(this).closest('tr').find('td.cgeDispatchAssetsCheckbox input[type="checkbox"]').attr("scheduleddate", currentSelectedDate);
         //console.log("SCHEDULED DATE: "+$(this).closest('tr').find('td.cgeCheckBox input[type="checkbox"]').attr("scheduleddate"));
         if (currentSelectedDate == "" || currentSelectedDate.length == 0){
@@ -123,4 +123,10 @@ function getCgeDispatchMapGridData(cgeSelectedMapGrid, assignedUserID) {
     }else{
         return cgeDispatchMapGridData;
     }
+}
+
+function resetCge_Global_Variable() {
+    cgeSelectedMapGrid = "";
+    cgeSelectedAssets = "";
+    cgeSelectedScheduledDate = [];
 }

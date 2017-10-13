@@ -197,12 +197,15 @@ class CgeController extends \app\controllers\BaseController
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
                 $json_data = json_encode($data);
-                Yii::trace("CGE DISPATCH DATA: " . $json_data);
+                //Yii::trace("CGE DISPATCH DATA: " . $json_data);
+                $dispatchType = "DISPATCH_CGE_TYPE";
 
                 // post url
-                /*$postUrl = 'cge%2Fdispatch';
-                $putResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-                Yii::trace("cge dispatchputResponse " . $putResponse);*/
+                $postUrl = 'dispatch%2Fdispatch&'. http_build_query([
+                        'dispatchType' => $dispatchType,
+                    ]);
+                $postResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
+                Yii::trace("cge dispatchpostResponse " . $postResponse);
 
             }
         } catch (ForbiddenHttpException $e) {
