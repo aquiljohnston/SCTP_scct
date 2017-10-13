@@ -116,10 +116,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],
                         'contentOptions' => ['class' => 'text-center cgeDispatchCheckbox', 'style' => 'width: 15%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            //if ( $model['ScheduleRequired'] != 1 )
-                                return [/*'SectionNumber' => '000', 'MapGrid' => $model['MapGrid'],*/ 'disabled' => false];
-                            //else
-                                //return [/*'SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'],*/ 'disabled' => 'disabled'];
+                            if ( $model['ScheduleRequired'] != 1 )
+                                return ['disabled' => false];
+                            else
+                                return ['disabled' => 'disabled'];
                         }
                     ]
                 ]
