@@ -231,13 +231,6 @@ class UserController extends BaseController
         $typeResponse = Parent::executeGetRequest($typeUrl);
         $types = json_decode($typeResponse, true);
 
-        //generate array for Active Flag dropdown
-        $flag =
-            [
-                1 => "Active",
-                0 => "Inactive",
-            ];
-
         if ($model->load(Yii::$app->request->post())) {
             $data = array(
                 'UserName' => $model->UserName,
@@ -250,7 +243,6 @@ class UserController extends BaseController
                 'UserAppRoleType' => $model->UserAppRoleType,
                 'UserComments' => $model->UserComments,
                 'UserPassword' => $model->UserPassword,
-                'UserActiveFlag' => $model->UserActiveFlag,
                 'UserCreatedDate' => $model->UserCreatedDate,
                 'UserModifiedDate' => $model->UserModifiedDate,
                 'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
@@ -280,7 +272,6 @@ class UserController extends BaseController
                 'model' => $model,
                 'roles' => $roles,
                 'types' => $types,
-                'flag' => $flag,
             ]);
         }
 
