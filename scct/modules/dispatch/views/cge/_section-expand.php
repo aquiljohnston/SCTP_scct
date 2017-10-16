@@ -109,7 +109,7 @@ use kartik\datetime\DateTimePicker;
                     'view' => function($url, $model) {
                         $modalViewHistoryDetailCGE = "#modalViewHistoryDetailCGE";
                         $modalContentViewHistoryDetailCGE = "#modalContentViewHistoryDetailCGE";
-                            return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/cge/view-history?workOrderID=".$model['ID']."','".$modalViewHistoryDetailCGE ."','".$modalContentViewHistoryDetailCGE."')"]);
+                            return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/cge/view-history?workOrderID=".$model['WorkOrderID']."','".$modalViewHistoryDetailCGE ."','".$modalContentViewHistoryDetailCGE."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
@@ -125,7 +125,7 @@ use kartik\datetime\DateTimePicker;
                         return ['disabled' => true, 'checked' => true];
                     else
                         return ['disabled' => true, 'checked' => false];*/
-                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['ID']];
+                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID']];
                 }
             ]
         ],
