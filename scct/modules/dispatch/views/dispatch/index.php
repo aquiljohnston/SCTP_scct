@@ -93,13 +93,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                     ],
-					[
-                        'label' => 'Frequency',
-                        'attribute' => 'Frequency',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
-                        'format' => 'html',
-                    ],
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
