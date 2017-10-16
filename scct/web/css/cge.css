@@ -1,3 +1,42 @@
 #cgeGV-container{
     overflow-x: hidden;
 }
+#cgeDispatchButton{
+    width: 110%;
+}
+#cgeButtonContainer{
+    float: right;
+    margin: 0.3% auto;
+    width: 11%;
+}
+#cgePageSizeLabel{
+    float: right;
+    margin: -39px auto;
+    width: 10%;
+}
+#cgefiltertitle{
+    float: left;
+    width: 30%;
+    color: #0067a6;
+    margin-left: 50%
+}
+@media (max-width: 960px) {
+    #cgeButtonContainer{
+        float: right;
+        margin: 2.5% auto;
+        width: 25%;
+    }
+    #cgePageSizeLabel{
+        width: 20%;
+    }
+    #cgeButtonContainer{
+        margin: 2.2% auto;
+        width: 22%;
+    }
+    #cgefiltertitle{
+        margin-left: 35%
+    }
+    .kv-grid-wrapper {
+        overflow-x: hidden;
+    }
+}

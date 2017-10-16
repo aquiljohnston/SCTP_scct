@@ -26,21 +26,21 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'type' => ActiveForm::TYPE_VERTICAL,
                 'options' => ['id' => 'cgeActiveForm', 'data-pjax' => true],
             ]); ?>
-            <span id="cgePageSizeLabel" style="float: right;margin: -39px auto;width: 10%;">
+            <span id="cgePageSizeLabel">
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                             ['value' => $cgePageSizeParams, 'id' => 'cgePageSize'])
                             ->label('Records Per Page', [
                                 'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
-            <div class="col-xs-1 col-md-1 col-lg-1" id="cgeButtonContainer" style="float: right;margin: 0.3% auto;width: 11%;">
+            <div class="col-xs-1 col-md-1 col-lg-1" id="cgeButtonContainer">
                 <label style="color: #0067a6; margin-bottom: 7px;"></label>
                 <?php Pjax::begin(['id' => 'cgeButtons', 'timeout' => false]) ?>
                 <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary cge_dispatch_btn', 'id' => 'cgeDispatchButton', 'disabled' => 'disabled']); ?>
                 <?php Pjax::end() ?>
             </div>
             <div id="cgeSearchContainer">
-                <div id="filtertitle" class="dropdowntitle" style="float: left;width: 30%;color: #0067a6; margin-left: 50%">
+                <div id="cgefiltertitle" class="dropdowntitle">
                     <?= $form->field($model, 'cgefilter')->textInput(['value' => $cgeFilterParams, 'id' => 'cgeFilter', 'placeholder' => 'Search'])->label(''); ?>
                 </div>
             </div>
@@ -50,7 +50,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
-    <div id="cgeGridViewContainer" style="position: relative;float: left;width: 100%;margin-top: 1%;overflow-x: hidden;">
+    <div id="cgeGridViewContainer" style="position: relative;float: left;width: 100%;margin-top: 1%;overflow-x: hidden;z-index: 1;">
         <div id="cgeTable">
             <?php Pjax::begin(['id' => 'cgeGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
