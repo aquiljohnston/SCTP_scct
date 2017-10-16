@@ -3,6 +3,10 @@
  */
 
 $(function () {
+    const COMPLETED_WORK_ORDERS = "Completed Work Orders";
+    const COMPLETED_MAP_GRID = "Completed Map Grid";
+
+    var oTable; //datatable variable
     var currentPath = window.location.pathname;
     var reports = currentPath.replace(/\/+$/, "");//.substr(0, currentPath.length - 1);//.replace(/\/$/, "")
     console.log(reports);
@@ -58,7 +62,7 @@ $(function () {
                         buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
                     }
                 }else{
-                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
+                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" && parms['ReportDisplayName'] != COMPLETED_WORK_ORDERS && parms['ReportDisplayName'] != COMPLETED_MAP_GRID) {
                         buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
                     }
                 }
@@ -637,6 +641,9 @@ $(function () {
                     }
                     else if (parms["ParmBetweenDateFlag"] === "1") {
                         console.log("call Viwe");
+                        if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS || parms["ReportDisplayName"] == COMPLETED_MAP_GRID){
+                            toggleVisible([goButton, exportButton], "inline");
+                        }
                         toggleVisible([beginDate, endDate], "block");
 
                         $(document).off('change', '#datePickerBeginDate').on('change', '#datePickerBeginDate', function () {
@@ -721,6 +728,9 @@ $(function () {
             else { //Parm != 1
                 toggleVisible([noDateError, selectDateFirstError], "none");
                 dateSelected = true;
+            }
+            if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS || parms["ReportDisplayName"] == COMPLETED_MAP_GRID){
+                buildTable();
             }
 
             if (dateSelected) {
