@@ -57,6 +57,7 @@ class Project extends \yii\base\model
     const MAX_STATE_LENGTH = 25;
     const MAX_PREFIX_LENGTH = 10;
     const MAX_LANDING_LENGTH = 255;
+    const ONLY_LETTERS_AND_SPACES_REGEX =  '/^[a-zA-Z\s]*$/';
 
     /**
      * @inheritdoc
@@ -74,7 +75,10 @@ class Project extends \yii\base\model
             ['ProjectDescription', 'string', 'max' => self::MAX_DESCRIPTION_LENGTH],
             ['ProjectNotes', 'string', 'max' => self::MAX_NOTES_LENGTH],
             ['ProjectType', 'string', 'max' => self::MAX_TYPE_LENGTH],
-            ['ProjectState', 'string', 'max' => self::MAX_STATE_LENGTH]
+            ['ProjectState', 'string', 'max' => self::MAX_STATE_LENGTH],
+			['ProjectName', 'match',
+				'pattern' => self::ONLY_LETTERS_AND_SPACES_REGEX,
+				'message' => 'Project Name may only contain letters and spaces.'],
         ];
     }
 
