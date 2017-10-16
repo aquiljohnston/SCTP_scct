@@ -137,7 +137,7 @@ class CgeController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
 
-        $sectionDataProvider->key = 'ID';
+        $sectionDataProvider->key = 'WorkOrderID';
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
