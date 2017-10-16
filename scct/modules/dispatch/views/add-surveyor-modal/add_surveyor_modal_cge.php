@@ -166,17 +166,17 @@ use kartik\form\ActiveForm;
                 console.log("searchFilterVal: " + searchFilterVal);
                 if (event.keyCode == 13) {
                     event.preventDefault();
-                    reloadAssetsModal(searchFilterVal);
+                    reloadCgeAssetsModal(searchFilterVal);
                 }
             }
         });
         resetCgeDispatchButtonState();
     });
 
-    function reloadAssetsModal(searchFilterVal) {
+    function reloadCgeAssetsModal(searchFilterVal) {
         $.pjax.reload({
             type: 'POST',
-            url: '/dispatch/add-surveyor-modal/add-surveyor-modal-cge',
+            url: '/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge',
             container: '#addSurveyorsGridviewPJAX', // id to update content
             data: {searchFilterVal: searchFilterVal},
             timeout: 99999,
@@ -193,6 +193,6 @@ use kartik\form\ActiveForm;
     $('#SurveyorModalCleanFilterButton').click(function () {
         $("#addSurveyorSearchCge").val("");
         var searchFilterVal = $('#addSurveyorSearchCge').val();
-        reloadAssetsModal(searchFilterVal);
+        reloadCgeAssetsModal(searchFilterVal);
     });
 </script>
