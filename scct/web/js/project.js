@@ -5,8 +5,8 @@ $(function(){
 	
 	//autofill url prefix based on project name
 	$('#projectName').keyup(function(){
-		//if length is greater than 10(subject to change) then use acronym+environment instead
-		if(($(this).val() + environment).length < 10){
+		//if length is greater than 20 then use acronym+environment instead
+		if(($(this).val() + environment).length < 20){
 			$('#urlPrefix').val($(this).val().toLowerCase().replace(/\s/g, '') + environment);
 		}else{			
 			var acronym = $(this).val().toLowerCase().match(/\b\w/g).join('');
