@@ -358,6 +358,7 @@ class MileageCardController extends BaseController
             if ($endTimeObj > $startTimeObj && $endMileageObj > $startMileageObj) {
                 $time_entry_data = array();
                 $data[] = array(
+                    'ActivityUID' => BaseController::generateUID($mileageEntryTitle),
                     'ActivityTitle' => $mileageEntryTitle,
                     'ActivityCreatedBy' => Yii::$app->session['userID'],
                     'timeEntry' => $time_entry_data,
@@ -373,7 +374,7 @@ class MileageCardController extends BaseController
                 try {
                     // post url
                     $url_send_activity = 'activity%2Fcreate';
-                    $response_activity = Parent::executePostRequest($url_send_activity, $json_data);
+                    $response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
                     $obj = json_decode($response_activity, true);
 
                     return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);
