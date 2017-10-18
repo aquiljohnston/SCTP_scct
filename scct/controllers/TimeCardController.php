@@ -365,9 +365,6 @@ class TimeCardController extends BaseController
 				//$interval = $datetimeObj1->diff($datetimeObj2);
 				//$dateTimeDiff = $interval->format('%R%a');
 
-                Yii::trace("ID is : ".$id);
-                Yii::trace("TimeCardTechID: ".$TimeCardTechID);
-
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
@@ -380,12 +377,11 @@ class TimeCardController extends BaseController
 					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
 				);
 
-                Yii::trace("TIMEENTRYDATA: ".json_encode($time_entry_data));
-
 				// check difference between startTime and endTime
 				if ($endTimeObj > $startTimeObj) {
 					$mileage_entry_data = array();
 					$data[] = array(
+						'ActivityUID' => BaseController::generateUID($timeEntryTitle),
 						'ActivityTitle' => $timeEntryTitle,
 						'ActivityCreatedBy' => Yii::$app->session['userID'],
 						'ActivityPayCode' => $activityModel->ActivityPayCode,
@@ -403,8 +399,7 @@ class TimeCardController extends BaseController
 					try {
 						// post url
 						$url_send_activity = 'activity%2Fcreate';
-						$response_activity = Parent::executePostRequest($url_send_activity, $json_data);
-                        Yii::trace("RESPONSE ACTIVITY".$response_activity);
+						$response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
 						$obj = json_decode($response_activity, true);
 
                         /*return $this->renderAjax('view',[
