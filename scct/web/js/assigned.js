@@ -279,8 +279,8 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
     if (assignedAssets_WorkOrderID != "" || assignedAssets_WorkOrderID.length > 0){
         for (var i = 0; i < assignedAssets_WorkOrderID.length; i++){
             var userName_Assets = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "]").attr("AssignedTo");
-            var ClientWorkOrderID = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "]").attr("ClientWorkOrderID");
-            selectedAssetsUser += "<li>" + ClientWorkOrderID + " : " + userName_Assets + "</li>";
+            var assetAddress = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "]").attr("assetAddress");
+            selectedAssetsUser += "<li>" + assetAddress + " : " + userName_Assets + "</li>";
         }
     }
 
