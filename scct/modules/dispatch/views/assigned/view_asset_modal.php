@@ -110,7 +110,7 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'word-wrap: break-word;'],
                 'contentOptions' => ['class' => 'text-center unassignAssetsCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'], 'AssignedToID' => $model['AssignedToID'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => false ];
+                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'], 'AssignedToID' => $model['AssignedToID'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false ];
                 }
             ]
         ],
