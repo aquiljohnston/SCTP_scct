@@ -294,7 +294,8 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
         for (var j = 0; j < assignedSection_SectionNumber.length; j++) {
             var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("username");
             var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("mapgrid");
-            selectedSectionUser += "<li>" + mapGrid_Section + " : " + userName_Section + "</li>"
+            var sectionNumber = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("sectionnumber");
+            selectedSectionUser += "<li>MapGrid: " + mapGrid_Section + "<br>Section #: "+ sectionNumber+ "<br>UserName: " + userName_Section + "</li>"
         }
     }
     var selectedUserNameList = "<ul>"+selectedMapGridUser+selectedSectionUser+selectedAssetsUser+"</ul>";
