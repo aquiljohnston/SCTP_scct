@@ -179,7 +179,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     $('#loading').show();
                 }
             }).done(function () {
-                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch');
+                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
                 $('#loading').hide();
             });
         });
