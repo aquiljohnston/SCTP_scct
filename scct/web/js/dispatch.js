@@ -176,3 +176,9 @@ function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid
 		document.getElementById('assetModalTitle').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
 }
 
+// Reset global variables
+function resetGlobalVariables() {
+    dispatchMap_MapGrid = [];
+    dispatchSection_SectionNumber = [];
+}
+

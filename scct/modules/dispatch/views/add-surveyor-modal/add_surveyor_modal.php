@@ -132,6 +132,7 @@ use kartik\form\ActiveForm;
                         $('#loading').show();
                     }
                 }).done(function () {
+                    resetGlobalVariables();
                     $.pjax.reload({
                         container:'#dispatchUnassignedGridview',
                         timeout: 99999,
