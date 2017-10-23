@@ -80,6 +80,10 @@ $(function () {
             $("#UnassignedButton").prop('disabled', false);
         } else
             $("#UnassignedButton").prop('disabled', true);
+
+        assignedMap_MapGrid = assignedMap_MapGrid.filter( function( el ) {
+            return assignedSection_SectionNumber.indexOf( el ) < 0;
+        } );
         console.log(assignedMap_MapGrid);
     });
 
@@ -87,13 +91,19 @@ $(function () {
     $(document).off('click', '.assignedSectionCheckbox input[type=checkbox]').on('click', '.assignedSectionCheckbox input[type=checkbox]', function () {
         assignedSection_SectionNumber =$("#assignedGridview #assignedSectionGV").yiiGridView('getSelectedRows');
         var mapGridSelected = $(this).attr('MapGrid');
+        //console.log("CURRENT SECLECTED SECTION - MAP GRID "+ mapGridSelected);
         if ($(this).is(':checked')){
-            assignedSection_MapGrid.push(mapGridSelected);
+            //if($.inArray(mapGridSelected, assignedSection_MapGrid) == -1)
+                assignedSection_MapGrid.push(mapGridSelected);
+            console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         }else{
-            assignedSection_MapGrid = jQuery.grep(assignedSection_MapGrid, function(value) {
-                                        return value != mapGridSelected;
-                                    });
+            var index = assignedSection_MapGrid.indexOf(mapGridSelected);
+            if (index > -1) {
+                assignedSection_MapGrid.splice(index, 1);
+            }
+            //console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         }
+        //console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
             $("#UnassignedButton").prop('disabled', false);
@@ -290,11 +300,11 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
             selectedMapGridUser += "<li>" + assignedMap_MapGrid[i] + " : " + userName_MapGrid + "</li>"
         }
     }
-    if (assignedSection_SectionNumber == "" || assignedSection_SectionNumber.length > 0) {
+    if (assignedSection_SectionNumber != "" || assignedSection_SectionNumber.length > 0) {
         for (var j = 0; j < assignedSection_SectionNumber.length; j++) {
             var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("username");
             var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("mapgrid");
-            var sectionNumber = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("sectionnumber");
+            var sectionNumber = assignedSection_SectionNumber[j];/*$("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("sectionnumber");*/
             selectedSectionUser += "<li>MapGrid: " + mapGrid_Section + "<br>Section #: "+ sectionNumber+ "<br>UserName: " + userName_Section + "</li>"
         }
     }
