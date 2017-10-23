@@ -55,7 +55,7 @@ class Project extends \yii\base\model
     const MAX_NOTES_LENGTH = 255;
     const MAX_TYPE_LENGTH = 50;
     const MAX_STATE_LENGTH = 25;
-    const MAX_PREFIX_LENGTH = 10;
+    const MAX_PREFIX_LENGTH = 20;
     const MAX_LANDING_LENGTH = 255;
     const ONLY_LETTERS_AND_SPACES_REGEX =  '/^[a-zA-Z\s]*$/';
 
