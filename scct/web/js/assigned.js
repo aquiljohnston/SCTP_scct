@@ -60,7 +60,6 @@ $(function () {
           $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('disabled', false);
         }else{
           $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
-            //assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         }
         assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         console.log("assignedMap_MapGrid: " +assignedMap_MapGrid.length);
@@ -91,9 +90,7 @@ $(function () {
     $(document).off('click', '.assignedSectionCheckbox input[type=checkbox]').on('click', '.assignedSectionCheckbox input[type=checkbox]', function () {
         assignedSection_SectionNumber =$("#assignedGridview #assignedSectionGV").yiiGridView('getSelectedRows');
         var mapGridSelected = $(this).attr('MapGrid');
-        //console.log("CURRENT SECLECTED SECTION - MAP GRID "+ mapGridSelected);
         if ($(this).is(':checked')){
-            //if($.inArray(mapGridSelected, assignedSection_MapGrid) == -1)
                 assignedSection_MapGrid.push(mapGridSelected);
             console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         }else{
@@ -101,9 +98,7 @@ $(function () {
             if (index > -1) {
                 assignedSection_MapGrid.splice(index, 1);
             }
-            //console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         }
-        //console.log("assignedSection_MapGrid: "+assignedSection_MapGrid);
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
             $("#UnassignedButton").prop('disabled', false);
