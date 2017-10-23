@@ -140,7 +140,7 @@ class ProjectController extends BaseController
 			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
 			foreach($landingPageArray as $page)
 			{
-				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+				$landingPages[$page['FieldValue']]= $page['FieldDisplay'];
 			}
 		}
 		
@@ -234,7 +234,7 @@ class ProjectController extends BaseController
 			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
 			foreach($landingPageArray as $page)
 			{
-				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+				$landingPages[$page['FieldValue']]= $page['FieldDisplay'];
 			}
 		}
 			  
