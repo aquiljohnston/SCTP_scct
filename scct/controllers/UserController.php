@@ -87,6 +87,8 @@ class UserController extends BaseController
                 'page' => $page
             ]);
 
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             throw $e;
         } catch (ErrorException $e) {
