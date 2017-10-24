@@ -100,6 +100,8 @@ class InspectionsController extends \app\controllers\BaseController
                     'inspectionPageSizeParams' => $inspectionPageSizeParams,
                 ]);
             }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             //Yii::$app->runAction('login/user-logout');
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
