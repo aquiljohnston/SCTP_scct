@@ -111,7 +111,7 @@ use kartik\grid\GridView;
                 'contentOptions' => ['class' => 'text-center unassignAssetsCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     $assetAddress = $model['HouseNumber']." ". $model['Street']." ". $model['AptSuite'].", ". $model['City']." ". $model['State'].", ". $model['Zip']."<br>";
-                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'], 'AssignedToID' => $model['AssignedToID'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false, 'assetAddress' => $assetAddress ];
+                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false, 'assetAddress' => $assetAddress ];
                 }
             ]
         ],
