@@ -93,6 +93,8 @@ class NotificationController extends \app\controllers\BaseController
                     'pages' => $pages,
                 ]);
             }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
