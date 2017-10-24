@@ -23,7 +23,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectName',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'Project Name']); ?>
+					])->textInput(['placeholder'=>'Project Name', 'id' => 'projectName']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectDescription', [
 					'label'=>'Description', 
@@ -68,7 +68,7 @@ use kartik\date\DatePicker;
 				<div class="col-sm-2">
 					<?= $form->field($model, 'ProjectUrlPrefix',[
 						'showLabels'=>false
-					])->textInput(['placeholder'=>'Url Prefix']); ?>
+					])->textInput(['placeholder'=>'Url Prefix', 'id' => 'urlPrefix', 'readonly' => 'true']); ?>
 				</div>
 				<?= Html::activeLabel($model, 'ProjectLandingPage', [
 					'label'=>'Landing Page', 

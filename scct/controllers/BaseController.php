@@ -14,32 +14,12 @@ use yii\filters\VerbFilter;
 use linslin\yii2\curl;
 use yii\data\ArrayDataProvider;
 use yii\web\UnauthorizedHttpException;
+use app\constants\Constants;
 
 class BaseController extends Controller
 {
 
-    // VERSION contains the string for the SCAPI version that one wishes to target.
-    const API_VERSION_1 = "v1";
-    const API_VERSION_2 = "v2";
-	const DATE_FORMAT = 'Y-m-d H:i:s';
-
-    //strings to be matched against url prefix, except prod which will be when no match occurs.
-    const SERVER_LOCALHOST = 'local';
-    const SERVER_DEV = 'dev';
-    const SERVER_STAGE = 'stage';
-	//prod has no additional distinguishing characters
-    const SERVER_PRODUCTION = '';
-	
-	//api url for different environments
-	const API_LOCAL_URL = 'http://localhost:8080/index.php?r=';
-	const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
-	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
-	const API_PROD_URL = 'http://api.southerncrossinc.com/index.php?r=';
-
-    // Legacy support. Version 1 calls do not specify which version to use, so we use a default value.
-    const DEFAULT_VERSION = self::API_VERSION_1;
-
-    const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
+    //Constants moved to app\constants\Constants
 
 	public function behaviors()
     {
@@ -53,19 +33,19 @@ class BaseController extends Controller
         ];
     }
 
-    public static function prependURL($path, $version = self::DEFAULT_VERSION) {
+    public static function prependURL($path, $version = Constants::DEFAULT_VERSION) {
 		$prefix = self::urlPrefix();
 	    //check if url prefix contains api target
-        if(strpos($prefix, self::SERVER_LOCALHOST) !== false) {
-            return self::API_LOCAL_URL . "$version%2F$path";
+        if(strpos($prefix, Constants::SERVER_LOCALHOST) !== false) {
+            return Constants::API_LOCAL_URL . "$version%2F$path";
 		//checks for demo in dev check because name does not follow the standard convention
-		} else if(strpos($prefix, self::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
-            return self::API_DEV_URL . "$version%2F$path";
-        } else if(strpos($prefix, self::SERVER_STAGE) !== false){
-            return self::API_STAGE_URL . "$version%2F$path";
+		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
+            return Constants::API_DEV_URL . "$version%2F$path";
+        } else if(strpos($prefix, Constants::SERVER_STAGE) !== false){
+            return Constants::API_STAGE_URL . "$version%2F$path";
         } else {
 			//if not distinguishing characters are present defaults to production
-			return self::API_PROD_URL . "$version%2F$path";
+			return Constants::API_PROD_URL . "$version%2F$path";
         }
     }
 
@@ -94,7 +74,7 @@ class BaseController extends Controller
     }
 
     //function generates and executes a "GET" request and returns the response
-	public static function executeGetRequest($url, $version = self::DEFAULT_VERSION)
+	public static function executeGetRequest($url, $version = Constants::DEFAULT_VERSION)
 	{		
         $url = self::prependURL($url, $version);
 		//set headers
@@ -117,9 +97,9 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-//            $url = ['login/user-logout'];
-//            Yii::$app->getResponse()->redirect($url)->send();
-            throw new UnauthorizedHttpException(self::UNAUTH_MESSAGE);
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -131,7 +111,7 @@ class BaseController extends Controller
 	}
 
     //function generates and executes a "GET" request and places the response in the stream/filepointer given by $fp
-    public static function executeGetRequestToStream($url, $fp=null, $version = self::DEFAULT_VERSION, $token = null)
+    public static function executeGetRequestToStream($url, $fp=null, $version = Constants::DEFAULT_VERSION, $token = null)
     {
         if($token === null) {
             $token = Yii::$app->session['token'];
@@ -170,6 +150,7 @@ class BaseController extends Controller
             //should be able to check response for error message at this point if we end up having more unauthorized cases
             $url = '/login/user-logout';
             Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
         }
         else if($httpCode == 403) // Inadequate permissions.
         {
@@ -187,7 +168,7 @@ class BaseController extends Controller
     }
 	
 	//function generates and executes a "POST" request and returns the response
-    public static function executePostRequest($url, $postData, $version = self::DEFAULT_VERSION)
+    public static function executePostRequest($url, $postData, $version = Constants::DEFAULT_VERSION)
 	{
         $url = self::prependURL($url, $version);
 		//set headers
@@ -212,13 +193,13 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-//            $url = ['login/user-logout'];
-//            Yii::$app->getResponse()->redirect($url)->send();
-            throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
-			throw new ForbiddenHttpException(self::UNAUTH_MESSAGE);
+			throw new ForbiddenHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		else if ($httpCode == 400){
             throw new BadRequestHttpException();
@@ -229,7 +210,7 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "PUT" request and returns the response
-	public static function executePutRequest($url, $putData, $version = self::DEFAULT_VERSION)
+	public static function executePutRequest($url, $putData, $version = Constants::DEFAULT_VERSION)
 	{
         $url = self::prependURL($url, $version);
 		//set headers
@@ -254,13 +235,13 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-//            $url = ['login/user-logout'];
-//            Yii::$app->getResponse()->redirect($url)->send();
-            throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
-			throw new ForbiddenHttpException(self::UNAUTH_MESSAGE);
+			throw new ForbiddenHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		curl_close ($curl);
 		
@@ -268,7 +249,7 @@ class BaseController extends Controller
 	}
 	
 	//function generates and executes a "Delete" request and returns the response
-	public static function executeDeleteRequest($url, $putData, $version = self::DEFAULT_VERSION)
+	public static function executeDeleteRequest($url, $putData, $version = Constants::DEFAULT_VERSION)
 	{
         $url = self::prependURL($url, $version);
 		//set headers
@@ -293,13 +274,13 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-//            $url = ['login/user-logout'];
-//            Yii::$app->getResponse()->redirect($url)->send();
-            throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
-			throw new ForbiddenHttpException(self::UNAUTH_MESSAGE);
+			throw new ForbiddenHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		curl_close ($curl);
 		
@@ -365,7 +346,7 @@ class BaseController extends Controller
         if (PermissionDictionary::permissionIsPGE($permission)) {
             self::executeGetRequest("pge%2Fpge-permissions%2Fcheck-permission&permission=$permission");
         } else */ if (PermissionDictionary::permissionIsCT($permission)) {
-            self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission", self::API_VERSION_2);
+            self::executeGetRequest("permissions%2Fcheck-permission&permission=$permission", Constants::API_VERSION_2);
         } else {
             throw new ForbiddenHttpException();
         }
@@ -395,9 +376,9 @@ class BaseController extends Controller
 
             $navMenuUrl = "menu%2Fget";//Switch for localhost
             //get nav menu by calling API route
-            $mavMenuResponse = self::executeGetRequest($navMenuUrl, self::API_VERSION_2); // indirect rbac
+            $mavMenuResponse = self::executeGetRequest($navMenuUrl, Constants::API_VERSION_2); // indirect rbac
 
-            Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
+            //Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
             //set up response data type
             Yii::$app->response->format = 'json';
 
@@ -408,7 +389,7 @@ class BaseController extends Controller
 	//returns a date time in the const format
 	public static function getDate()
 	{
-		return date(SELF::DATE_FORMAT);
+		return date(Constants::DATE_FORMAT);
 	}
 	
 	//type: type of data the UID will be associated with such as User, breadcrumb, activty, etc.

@@ -10,7 +10,9 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
 use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 use yii\web\View;
+use app\constants\Constants;
 
 class DispatchController extends \app\controllers\BaseController
 {
@@ -65,7 +67,7 @@ class DispatchController extends \app\controllers\BaseController
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
                 ]);
-            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
@@ -113,6 +115,8 @@ class DispatchController extends \app\controllers\BaseController
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             //Yii::$app->runAction('login/user-logout');
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
@@ -123,7 +127,16 @@ class DispatchController extends \app\controllers\BaseController
     }
 
     public function actionIndex() {
-        return $this->render('lightDispatch');
+        try{
+            return $this->render('lightDispatch');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (Exception $e) {
+            Yii::$app->runAction('login/user-logout');
+            return "";
+        }
     }
 
 
@@ -175,7 +188,7 @@ class DispatchController extends \app\controllers\BaseController
                 'page' => $pageAt,
             ]);
 
-        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         //Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
         $sectionData = $getSectionDataResponse['sections'];
 
@@ -220,15 +233,16 @@ class DispatchController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
-            'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
+            'modalSearch', 'mapGridSelected', 'sectionNumberSelected', 'pagesize'
         ]);
         $model->addRule('modalSearch', 'string', ['max' => 32])
             ->addRule('mapGridSelected', 'string', ['max' => 32])
-            ->addRule('sectionNumberSelected', 'string', ['max' => 32]);
+            ->addRule('sectionNumberSelected', 'string', ['max' => 32])
+            ->addRule('pagesize', 'string', ['max' => 32]);
 
         // Verify logged in
         if (Yii::$app->user->isGuest) {
@@ -240,16 +254,18 @@ class DispatchController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-            $viewAssetPageSizeParams = 200;
-            //$pageAt = 1;
+            $viewAssetPageSizeParams = $recordsPerPageSelected;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
             Yii::trace('PAGE AT : '.$pageAt);
         }else{
             $viewAssetFilterParams = "";
-            $viewAssetPageSizeParams = 200;
             $pageAt = 1;
-            $searchFilterVal = "";
         }
+
+        $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+                'filter' => '',
+            ]);
+        $getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
 
         $getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
                 'mapGridSelected' => $mapGridSelectedParam,
@@ -258,26 +274,18 @@ class DispatchController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 
-        /*// Reading the response from the the api and filling the surveyorGridView
-        $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
-                'filter' => $searchFilterVal,
-            ]);
-        Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
-        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
+        $data = self::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
+        Yii::trace("reGenerateAssetsData " . json_encode($data));
 
         // Put data in data provider
         $assetDataProvider = new ArrayDataProvider
         ([
-            'allModels' => $getAssetDataResponse['assets'],
+            'allModels' => $data,
             'pagination' => false,
         ]);
         $assetDataProvider->key = 'WorkOrderID';
-        /*$surveyorList = [];
-        $surveyorList = $surveyorsResponse['users'];*/
 
         //todo: set paging on both tables
         // set pages to dispatch table
@@ -288,10 +296,10 @@ class DispatchController extends \app\controllers\BaseController
                 'assetDataProvider' => $assetDataProvider,
                 'model' => $model,
                 'pages' => $pages,
-                //'surveyorList' => $surveyorList,
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
             ]);
         } else {
             return $this->render('view_asset_modal', [
@@ -299,9 +307,9 @@ class DispatchController extends \app\controllers\BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
-                //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
             ]);
         }
     }
@@ -320,7 +328,7 @@ class DispatchController extends \app\controllers\BaseController
 
                 // post url
                 $putUrl = 'dispatch%2Fdispatch';
-                $putResponse = Parent::executePostRequest($putUrl, $json_data, self::API_VERSION_2); // indirect rbac
+                $putResponse = Parent::executePostRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
                 Yii::trace("dispatchputResponse " . $putResponse);
 
             }
@@ -367,6 +375,15 @@ class DispatchController extends \app\controllers\BaseController
         }
         $unassignedArr['data'] = $unassignedArr;
         return $unassignedArr;
+    }
+
+    private function reGenerateAssetsData($assetsData, $surveyorList){
+        $newAssetsData = array();
+        foreach ($assetsData as $item){
+            $item['userList'] = $surveyorList;
+            $newAssetsData[] = $item;
+        }
+        return $newAssetsData;
     }
 
 }

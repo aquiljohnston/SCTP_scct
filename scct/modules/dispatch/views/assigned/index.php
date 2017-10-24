@@ -178,7 +178,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'view' => function($url, $model) {
                                 $modalViewAssetAssigned = "#modalViewAssetAssigned";
                                 $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
@@ -259,7 +259,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <!--View Asset Modal-->
     <?php
     Modal::begin([
-        'header' => '<h4>Assets</h4>',
+		'header' => '<h4 id="assetModalTitle"></h4>',
         'id' => 'modalViewAssetAssigned',
         'size' => 'modal-lg',
     ]);

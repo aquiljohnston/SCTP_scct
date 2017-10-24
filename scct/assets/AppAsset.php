@@ -41,7 +41,8 @@ class AppAsset extends AssetBundle
         "//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css",
         'css/indexStyleSheet.css',
         'css/mapStylesheet.css',
-        'https://vjs.zencdn.net/5.4.6/video-js.css'
+        'https://vjs.zencdn.net/5.4.6/video-js.css',
+        'css/cge.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -79,7 +80,8 @@ class AppAsset extends AssetBundle
         'js/inspection.js',
         'js/FileSaver.min.js',
         'https://vjs.zencdn.net/ie8/1.1.1/videojs-ie8.min.js',
-        'https://vjs.zencdn.net/5.4.6/video.js'
+        'https://vjs.zencdn.net/5.4.6/video.js',
+        'js/cge.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',

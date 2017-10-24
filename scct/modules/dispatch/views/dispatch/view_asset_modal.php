@@ -10,7 +10,7 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
-
+$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div id="viewAssetModalContainer">
     <div id="assetDispatchContainer">
@@ -20,6 +20,13 @@ use kartik\grid\GridView;
             'options' => ['id' => 'viewDispatchAssetsActiveForm'],
             'action' => '/dispatch/dispatch/view-asset'
         ]); ?>
+        <span id="dispatchAssetsPageSizeLabel" style="float: right;margin: -20px auto;width: 16%;color: #0067a6;display: inline !important;">
+                <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
+                    ['value' => $viewAssetPageSizeParams, 'id' => 'dispatchAssetsPageSize'])
+                    ->label('Records Per Page', [
+                        'class' => 'recordsPerPage'
+                    ]); ?>
+        </span>
         <div class="viewAssetsSearchcontainer dropdowntitle">
             <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
         </div>
@@ -30,6 +37,11 @@ use kartik\grid\GridView;
         <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
+        <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -1.5%;">
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsButton', 'disabled' => 'disabled']); ?>
+        </div>
+        <?php Pjax::end() ?>
     </div>
 </div>
 <div id="assetsTable">
@@ -44,6 +56,8 @@ use kartik\grid\GridView;
         'export' => false,
         'pjax' => true,
         'summary' => '',
+        'floatHeader' => true,
+        'floatOverflowContainer' => true,
         'columns' => [
             [
                 'label' => 'Address',
@@ -73,6 +87,20 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
+            [
+                'attribute' => 'Add Surveyor',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+                'value' => function ($model) {
+                    $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'><option class="text-center" value=null>Please Select a User</option>';
+                    $dropDownListCloseSelect = '</select>';
+                    foreach ($model['userList'] as $item){
+                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option class="surveyorID text-center" value='.$item['UserID'].'>'.$item['Name']." (".$item['UserName'].")".'</option>';
+                    }
+                    return $dropDownListOpenSelect.$dropDownListCloseSelect;
+                },
+            ]
         ],
     ]); ?>
     <div id="assetsTablePagination" style="margin-top: 2%;">
@@ -90,6 +118,9 @@ use kartik\grid\GridView;
 
 <script type="text/javascript">
     $(document).ready(function () {
+        // global variable to use to pop selected assets modal
+        mapGridSelected = null;
+
         $('#viewAssetsSearchDispatch').keypress(function (event) {
             var key = event.which;
             if (key == 13) {
@@ -106,7 +137,12 @@ use kartik\grid\GridView;
         $('#assetsModalCleanFilterButtonDispatch').on('click', function () {
             $('#viewAssetsSearchDispatch').val("");
             reloadViewAssetsModalDispatch();
-        })
+        });
+
+        //page size listener
+        $(document).off('change', '#dispatchAssetsPageSize').on('change', '#dispatchAssetsPageSize', function () {
+            reloadViewAssetsModalDispatch();
+        });
 
         //pagination listener on view asset modal
         $(document).off('click', '#assetsTablePagination .pagination li a').on('click', '#assetsTablePagination .pagination li a', function (event) {
@@ -115,6 +151,38 @@ use kartik\grid\GridView;
             $('#viewAssetPageNumber').val(page);
             reloadViewAssetsModalDispatch(page);
         });
+
+        // Assets Surveyor Drop Down List listener
+        $(document).off('change','.assetSurveyorDropDown').on('change', '.assetSurveyorDropDown', function (event) {
+            $('#dispatchAssetsButton').prop('disabled', true);
+            $('#assetGV-container tr').each(function () {
+                AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+                if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                    $('#dispatchAssetsButton').prop('disabled', false);
+                    return false
+                }
+            });
+        });
+
+        $(document).off('click', '#dispatchAssetsButton').on('click', '#dispatchAssetsButton', function (event){
+            var dispatchAsset = [];
+            dispatchAsset = getDispatchAssetsData();
+
+            // Ajax post request to dispatch assets
+            $.ajax({
+                timeout: 99999,
+                url: '/dispatch/dispatch/dispatch',
+                data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
+                type: 'POST',
+                beforeSend: function () {
+                    $('#modalViewAssetDispatch').modal("hide");
+                    $('#loading').show();
+                }
+            }).done(function () {
+                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
+                $('#loading').hide();
+            });
+        });
     });
 
     function reloadViewAssetsModalDispatch(page) {
@@ -122,13 +190,14 @@ use kartik\grid\GridView;
         var searchFilterVal = $('#viewAssetsSearchDispatch').val() == "/" ? "" : $('#viewAssetsSearchDispatch').val();
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+        var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/dispatch/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page},
+            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page, recordsPerPageSelected: recordsPerPageSelected},
             timeout: 99999,
             push: false,
             replace: false,
@@ -137,6 +206,24 @@ use kartik\grid\GridView;
             $("body").css("cursor", "default");
             $('#loading').hide();
         });
+    }
+
+    function getDispatchAssetsData() {
+        var AssignedUserID = "";
+        var workOrderID = "";
+        var dispatchAsset = [];
+        mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
+        $('#assetGV-container tr').each(function () {
+            AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+            workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
+            if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                dispatchAsset.push({
+                    WorkOrderID: workOrderID,
+                    AssignedUserID: AssignedUserID
+                });
+            }
+        });
+        return dispatchAsset;
     }
 </script>
 

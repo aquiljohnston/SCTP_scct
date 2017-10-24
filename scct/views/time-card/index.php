@@ -125,7 +125,6 @@ $column = [
 
             </div>
             <div id="timeCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
-
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
                     'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
@@ -148,8 +147,8 @@ $column = [
                     <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                 </div>
                 <div class="col-sm-5">
-                    <label id="timeCardFilter">
-                        <?= $form->field($model, 'filter')->label("Search"); ?>
+                    <label id="timeCardSearch">
+						<?= $form->field($model, 'filter')->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
                     </label>
                 </div>
                 <?php ActiveForm::end(); ?>
@@ -164,7 +163,6 @@ $column = [
                 'dataProvider' => $dataProvider,
                 'export' => false,
                 'bootstrap' => false,
-                //'filterModel' => $searchModel,
                 'pjax' => true,
                 'summary' => '',
                 'columns' => $column

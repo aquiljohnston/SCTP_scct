@@ -20,6 +20,7 @@ use yii\web\ForbiddenHttpException;
 use yii\base\Model;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use app\constants\Constants;
 
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
@@ -33,7 +34,7 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($recordNumber = null)
+    public function actionIndex()
     {
         //guest redirect
         if (Yii::$app->user->isGuest)
@@ -65,8 +66,8 @@ class TimeCardController extends BaseController
             }
 
             //check current page at
-            if (isset(Yii::$app->request->queryParams['timeCardPageNumber'])){
-                $page = Yii::$app->request->queryParams['timeCardPageNumber'];
+            if (isset($_GET['timeCardPageNumber'])){
+                $page = $_GET['timeCardPageNumber'];
             } else {
                 $page = 1;
             }
@@ -80,7 +81,7 @@ class TimeCardController extends BaseController
 
             //build url with params
             $url = "time-card%2Fget-cards&filter=$filter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
 
@@ -89,9 +90,6 @@ class TimeCardController extends BaseController
             $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $assets,
-				/*'key' => function (){
-                    return md5($model["TimeCardID"]);
-                },*/
 				'pagination' => false
 			]);
 
@@ -128,33 +126,31 @@ class TimeCardController extends BaseController
             //set timecardid as id
             $dataProvider->key = 'TimeCardID';
 
-
-            // Create drop down with current selection pre-selected based on GET variable
-//            $approvedInput = '<select class="form-control" name="filterapproved">'
-//				. '<option value=""></option><option value="Yes"';
-//            if ($searchModel['TimeCardApprovedFlag'] == "Yes") {
-//                $approvedInput .= " selected";
-//            }
-//            $approvedInput .= '>Yes</option><option value="No"';
-//            if ($searchModel['TimeCardApprovedFlag'] == "No") {
-//                $approvedInput .= ' selected';
-//            }
-//            $approvedInput .= '>No</option></select>';
-
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
-            //calling index page to pass dataProvider.
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-                //'searchModel' => $searchModel,
-                //'approvedInput' => $approvedInput,
-                'week' => $week,
-                'model' => $model,
-                'timeCardPageSizeParams' => $timeCardPageSizeParams,
-                'pages' => $pages
-            ]);
-
+			//calling index page to pass dataProvider.
+			if(Yii::$app->request->isAjax) {
+				return $this->renderAjax('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
+				]);
+			}else{
+				return $this->render('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
+				]);
+			}
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {
             throw $e;
         } catch(ErrorException $e) {
@@ -371,9 +367,6 @@ class TimeCardController extends BaseController
 				//$interval = $datetimeObj1->diff($datetimeObj2);
 				//$dateTimeDiff = $interval->format('%R%a');
 
-                Yii::trace("ID is : ".$id);
-                Yii::trace("TimeCardTechID: ".$TimeCardTechID);
-
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
@@ -386,12 +379,11 @@ class TimeCardController extends BaseController
 					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
 				);
 
-                Yii::trace("TIMEENTRYDATA: ".json_encode($time_entry_data));
-
 				// check difference between startTime and endTime
 				if ($endTimeObj > $startTimeObj) {
 					$mileage_entry_data = array();
 					$data[] = array(
+						'ActivityUID' => BaseController::generateUID($timeEntryTitle),
 						'ActivityTitle' => $timeEntryTitle,
 						'ActivityCreatedBy' => Yii::$app->session['userID'],
 						'ActivityPayCode' => $activityModel->ActivityPayCode,
@@ -409,8 +401,7 @@ class TimeCardController extends BaseController
 					try {
 						// post url
 						$url_send_activity = 'activity%2Fcreate';
-						$response_activity = Parent::executePostRequest($url_send_activity, $json_data);
-                        Yii::trace("RESPONSE ACTIVITY".$response_activity);
+						$response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
 						$obj = json_decode($response_activity, true);
 
                         /*return $this->renderAjax('view',[
