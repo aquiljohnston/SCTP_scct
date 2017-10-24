@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
+use app\constants\Constants;
 /**
  * ProjectController implements the CRUD actions for project model.
  */
@@ -60,7 +61,7 @@ class ProjectController extends BaseController
                     'listPerPage' => $listPerPageParam,
                     "page" => $pageParam
                 ]);
-		$response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
+		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
         Yii::trace("Response from ProjectController: $response");
 		$resultData = json_decode($response, true);
@@ -95,7 +96,7 @@ class ProjectController extends BaseController
 			return $this->redirect(['/login']);
 		}
 		$url = "project%2Fview&joinNames=true&id=$id";
-		$response = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
+		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
         Yii::trace("VIEW PROJECT : ".$response);
 
 		return $this -> render('view', ['model' => json_decode($response), true]);
@@ -119,12 +120,12 @@ class ProjectController extends BaseController
 			  
 		//get clients for form dropdown
 		$clientUrl = "client%2Fget-client-dropdowns";
-		$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
+		$clientResponse = Parent::executeGetRequest($clientUrl, Constants::API_VERSION_2);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
 		$stateUrl = 'dropdown%2Fget-state-codes-dropdown';
-		$stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+		$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
@@ -139,7 +140,7 @@ class ProjectController extends BaseController
 			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
 			foreach($landingPageArray as $page)
 			{
-				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+				$landingPages[$page['FieldValue']]= $page['FieldDisplay'];
 			}
 		}
 		
@@ -166,7 +167,7 @@ class ProjectController extends BaseController
 			try{
 				// post url
 				$url= "project%2Fcreate";
-				$response = Parent::executePostRequest($url, $json_data, self::API_VERSION_2);
+				$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
 				
 				$obj = json_decode($response, true);
 
@@ -206,19 +207,19 @@ class ProjectController extends BaseController
 		}
 		self::requirePermission("projectUpdate");
 		$getUrl = 'project%2Fview&id='.$id;
-		$getResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true);
+		$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
 		$model  = new Project();
 		$model->attributes = $getResponse;
 			  
 		//get clients for form dropdown
 		$clientUrl = "client%2Fget-client-dropdowns";
-		$clientResponse = Parent::executeGetRequest($clientUrl, self::API_VERSION_2);
+		$clientResponse = Parent::executeGetRequest($clientUrl, Constants::API_VERSION_2);
 		$clients = json_decode($clientResponse, true);
 		
 		//get states for form dropdown
 		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
-        $stateResponse = Parent::executeGetRequest($stateUrl, self::API_VERSION_2);
+        $stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 		$states = json_decode($stateResponse, true);
 		
 		//generate array for Active Flag dropdown
@@ -233,7 +234,7 @@ class ProjectController extends BaseController
 			$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
 			foreach($landingPageArray as $page)
 			{
-				$landingPages[$page['FieldDisplayValue']]= $page['FieldDisplayValue'];
+				$landingPages[$page['FieldValue']]= $page['FieldDisplay'];
 			}
 		}
 			  
@@ -260,7 +261,7 @@ class ProjectController extends BaseController
 			$json_data = json_encode($data);
 			try {
 				$putUrl = 'project%2Fupdate&id='.$id;
-                $putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 				
 				$obj = json_decode($putResponse, true);
                 if(isset($obj["status"]) && $obj["status"] == 400) {
@@ -312,7 +313,7 @@ class ProjectController extends BaseController
             return $this->redirect(['/login']);
         }
         $url = 'project%2Fdeactivate&id='.$id;
-        Parent::executePostRequest($url, "", self::API_VERSION_2); //indirect RBAC
+        Parent::executePostRequest($url, "", Constants::API_VERSION_2); //indirect RBAC
         $this->redirect(['project/index']);
     }
 
@@ -332,7 +333,7 @@ class ProjectController extends BaseController
 			
 			$projectDropdownUrl = "project%2Fget-all";
 			//get projects by calling API route
-			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, self::API_VERSION_2); // indirect rbac
+			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, Constants::API_VERSION_2); // indirect rbac
 			//set up response data type
 			Yii::$app->response->format = 'json';
 
@@ -372,8 +373,8 @@ class ProjectController extends BaseController
             //Yii::trace("URL: ".$url);
             //Yii::trace("Proejct: ".$projectUrl);
 
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
-            $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
 
             $users = json_decode($response,true);
             $project = json_decode($projectResponse);
@@ -395,8 +396,8 @@ class ProjectController extends BaseController
             $projectUrl = 'project%2Fview&id='.$id;
 
             //indirect rbac
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
-            $projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
 
             $users = json_decode($response,true);
             $project = json_decode($projectResponse);
@@ -427,7 +428,7 @@ class ProjectController extends BaseController
 			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
             //Yii::trace("ADD USER URL: ".$postUrl);
 			//execute post request
-			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
             //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
@@ -457,8 +458,8 @@ class ProjectController extends BaseController
 		$projectUrl = 'project%2Fview&id='.$id;
 
 		//indirect rbac
-		$moduleResponse = Parent::executeGetRequest($moduleUrl, self::API_VERSION_2);
-		$projectResponse = Parent::executeGetRequest($projectUrl, self::API_VERSION_2);
+		$moduleResponse = Parent::executeGetRequest($moduleUrl, Constants::API_VERSION_2);
+		$projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
 
 
 		$modules = json_decode($moduleResponse,true);
@@ -500,7 +501,7 @@ class ProjectController extends BaseController
 			//TODO change url
 			$postUrl = 'project%2Fadd-remove-module&projectID='.$id;
 			//execute post request
-			$postResponse = Parent::executePostRequest($postUrl, $jsonData, self::API_VERSION_2);
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
 			//refresh page
 			return $this->redirect(['add-module', 'id' => $project->ProjectID]);
 		}

@@ -79,13 +79,9 @@ $column = [
 ];
 ?>
 <div class="mileagecard-index">
-
     <div class="lightBlueBar">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
         <div id="mileage_card_filter">
-            <!-- Approve Multiple Mileage Card button -->
             <div id="mileage_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
                 <?php
                 echo Html::button('Approve',
@@ -127,9 +123,11 @@ $column = [
                     </label>
                     <input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
                 </div>
-                <label id="userFilter">
-                    <?= $form->field($model, 'filter')->label("Search"); ?>
-                </label>
+				<div class="sol-sm-5">
+					<label id="mileageCardSearch">
+						<?= $form->field($model, 'filter')->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
+					</label>
+				</div>
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
@@ -140,7 +138,6 @@ $column = [
             <?php Pjax::begin(['id' => 'mileageCardGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-//                'filterModel' => $searchModel,
                 'export' => false,
                 'bootstrap' => false,
                 'pjax' => true,

@@ -14,6 +14,7 @@ use yii\data\Pagination;
 use yii\grid\GridView;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
+use app\constants\Constants;
 
 /**
  * UserController implements the CRUD actions for user model.
@@ -62,7 +63,7 @@ class UserController extends BaseController
             $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
                 . "&page=" . urlencode($page);
             Yii::trace("User index url: $url");
-            $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
             //Passing data to the dataProvider and formatting it in an associative array
@@ -86,6 +87,8 @@ class UserController extends BaseController
                 'page' => $page
             ]);
 
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             throw $e;
         } catch (ErrorException $e) {
@@ -107,7 +110,7 @@ class UserController extends BaseController
             return $this->redirect(['/login']);
         }
         $url = 'user%2Fview&id=' . $id;
-        $response = Parent::executeGetRequest($url, BaseController::API_VERSION_2); // indirect rbac
+        $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
         return $this->render('view', ['model' => json_decode($response), true]);
     }
@@ -175,7 +178,7 @@ class UserController extends BaseController
             try {
                 // post url
                 $url = "user%2Fcreate";
-                $response = Parent::executePostRequest($url, $json_data, BaseController::API_VERSION_2);
+                $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
                 $obj = json_decode($response, true);
 
                 return $this->redirect(['user/index']);
@@ -215,7 +218,7 @@ class UserController extends BaseController
         }
         self::requirePermission("userUpdate");
         $getUrl = 'user%2Fview&id=' . $id;
-        $getResponse = json_decode(Parent::executeGetRequest($getUrl, BaseController::API_VERSION_2), true);
+        $getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
         $model = new User();
         $model->attributes = $getResponse;
@@ -262,7 +265,7 @@ class UserController extends BaseController
             $json_data = json_encode($data);
 
             $putUrl = 'user%2Fupdate&id=' . $id;
-            $putResponse = Parent::executePutRequest($putUrl, $json_data, BaseController::API_VERSION_2);
+            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
             $obj = json_decode($putResponse, true);
 
             return $this->redirect(['view', 'id' => $id]);
@@ -292,7 +295,7 @@ class UserController extends BaseController
         $url = 'user%2Fdeactivate&username=' . urlencode($username);
         //empty body
         $json_data = "";
-        Parent::executePutRequest($url, $json_data, BaseController::API_VERSION_2); // indirect rbac
+        Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2); // indirect rbac
         $this->redirect('/user/');
     }
 	
@@ -326,7 +329,7 @@ class UserController extends BaseController
             $getUrl = 'user%2Fget-inactive&' . http_build_query([
                     'filter' => $searchFilterVal,
                 ]);
-            $usersResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
+            $usersResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
 
             $dataProvider = new ArrayDataProvider
             ([
@@ -379,7 +382,7 @@ class UserController extends BaseController
 				
 				// post url
                 $putUrl = 'user%2Freactivate';
-                $putResponse = Parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2);
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 			}
 		} catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;

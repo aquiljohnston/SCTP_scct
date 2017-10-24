@@ -11,11 +11,8 @@ use Yii;
  * @property integer $TimeEntryUserID
  * @property string  $TimeEntryStartTime
  * @property string  $TimeEntryEndTime
- * @property string  $TimeEntryWeekDay
  * @property string  $TimeEntryDate
  * @property string  $TimeEntryActiveFlag
- * @property string  $TimeEntryHours
- * @property integer $TimeEntryMinutes
  * @property integer $TimeEntryTimeCardID
  * @property integer $TimeCardFK
  * @property integer $TimeEntryActivityID
@@ -36,11 +33,8 @@ class TimeEntry extends \yii\base\model
 	public $TimeEntryUserID;
 	public $TimeEntryStartTime;
 	public $TimeEntryEndTime;
-	public $TimeEntryWeekDay;
 	public $TimeEntryDate;
 	public $TimeEntryActiveFlag;
-	public $TimeEntryHours;
-	public $TimeEntryMinutes;
 	public $TimeEntryTimeCardID;
 	public $TimeCardFK;
 	public $TimeEntryActivityID;
@@ -58,8 +52,8 @@ class TimeEntry extends \yii\base\model
     {
         return [
             [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
-            [['TimeEntryUserID', 'TimeEntryMinutes', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeCardFK'], 'integer'],
-            [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryWeekDay', 'TimeEntryHours', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
+            [['TimeEntryUserID', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeCardFK'], 'integer'],
+            [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
         ];
     }
 
@@ -74,10 +68,7 @@ class TimeEntry extends \yii\base\model
             'TimeEntryStartTime' => 'Time Entry Start Time',
             'TimeEntryEndTime' => 'Time Entry End Time',
             'TimeEntryDate' => 'Time Entry Date',
-			'TimeEntryWeekDay' => 'Time Entry Week Day',
 			'TimeEntryActiveFlag' => 'Time Entry Active Flag',
-			'TimeEntryHours' => 'Time Entry Hours',
-			'TimeEntryMinutes' => 'Time Entry Minutes',
             'TimeEntryTimeCardID' => 'Time Entry Time Card ID',
 			'TimeCardFK' => 'Time Card FK',
             'TimeEntryActivityID' => 'Time Entry Activity ID',

@@ -12,6 +12,7 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use linslin\yii2\curl;
 use yii\web\UnauthorizedHttpException;
+use app\constants\Constants;
 
 class LoginController extends BaseController
 {
@@ -77,7 +78,7 @@ class LoginController extends BaseController
 					Yii::$app->session->set('userID', $user['AuthUserID']);
 					Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
 					Yii::$app->session->set('UserLastName', $user['UserLastName']);
-					//call helper method for additional session values
+					//call helper method to set additional session values
 					self::getSessionData();
 					
 					$userIdentity = new User();
@@ -148,8 +149,8 @@ class LoginController extends BaseController
             $activity->ActivityTitle = $activityTitle;
             $activity->ActivityCreateDate = BaseController::getDate();
             $activity->ActivityCreatedUserUID = Yii::$app->session['userID'];
-            $activity->ActivityAppVersion = 'Web_' . BaseController::DEFAULT_VERSION;
-            $activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . BaseController::DEFAULT_VERSION;
+            $activity->ActivityAppVersion = 'Web_' . Constants::DEFAULT_VERSION;
+            $activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . Constants::DEFAULT_VERSION;
             //loop and format geolocation data
             if (is_array($geoLocationData)) {
                 /*
@@ -178,7 +179,7 @@ class LoginController extends BaseController
             $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
             $timeEntry->TimeEntryStartTime = BaseController::getDate();
             $timeEntry->TimeEntryEndTime = BaseController::getDate();
-            $timeEntry->TimeEntryActiveFlag = 1;
+            $timeEntry->TimeEntryActiveFlag = "1";
             $timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
             $timeEntry->TimeEntryCreateDate = BaseController::getDate();
             $timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
@@ -195,7 +196,7 @@ class LoginController extends BaseController
             $postData['activity'] = $activityArray;
 
             //execute post request
-            $response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), SELF::API_VERSION_2);
+            $response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), Constants::API_VERSION_2);
         } catch(UnauthorizedHttpException $exception) {
             // This is reached when the user is logging out with an expired token.
             Yii::$app->response->redirect(['login/index'])->send(); return;
@@ -216,7 +217,7 @@ class LoginController extends BaseController
 		// }
 		
 		//get web dropdowns and store in sesssion data
-		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', SELF::API_VERSION_2);
+		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', Constants::API_VERSION_2);
 		$dropdowns = json_decode($dropdownResponse, true);
 		if(is_array($dropdowns) && array_key_exists('WebDropDowns', $dropdowns))
 		{
