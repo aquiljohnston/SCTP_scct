@@ -113,16 +113,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     ],
                     [
                         'label' => 'Assigned User(s)',
-                        'attribute' => 'SearchString',
+                        'attribute' => 'AssignedUser',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                         'format' => 'html',
-                        'value' => function ($model) {
-                            if ($model['AssignedCount'] == "MANY")
-                                return "MANY";
-                            else
-                                return $model['SearchString'];
-                        }
                     ],
                     [
                         'label' => 'Compliance Start',
@@ -190,11 +184,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%; word-wrap: break-word;'],
                         'contentOptions' => ['class' => 'text-center unassignCheckbox', 'style' => 'width: 5%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            if (/*$model['WorkQueueStatus'] != 100&&*/ $model['AssignedCount'] == "MANY") {
-                                return ['disabled' => true];
-                            } else {
-                                return ['AssignedToID' => $model['UIDList'],'MapGrid' => $model['MapGrid'], 'disabled' => false, 'UserName' => $model['SearchString'] ];
-                            }
+							return ['MapGrid' => $model['MapGrid'], 'disabled' => false, 'UserName' => $model['AssignedUser'] ];
                         }
                     ]
                 ]
@@ -231,29 +221,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 </div>
             </div>
         </div>
-    </div>
-    <?php
-    Modal::begin([
-        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
-        'id' => 'addSurveyorModal',
-    ]);
-    echo "<div id='modalAddSurveyor'>Loading...</div>";
-    Modal::end();
-    ?>
-    <div id="dialog-unassign" title="Unassign" style="display:none;">
-        <p>Unassigned successfully.</p>
-    </div>
-
-    <?php
-    Modal::begin([
-        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
-        'id' => 'addSurveyorModal',
-    ]);
-    echo "<div id='modalAddSurveyor'>Loading...</div>";
-    Modal::end();
-    ?>
-    <div id="dialog-add-surveyor" title="Add New Surveyor" style="display: none">
-        <p>New surveyor(s) has been added successfully.</p>
     </div>
 
     <!--View Asset Modal-->
