@@ -97,15 +97,14 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
-
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
 			throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-		}else if( $httpCode == 404){
-            throw new NotFoundHttpException('Bad Request Found.');
-        }
+		}
 		curl_close ($curl);
 		
 		return $response;
@@ -149,7 +148,9 @@ class BaseController extends Controller
         if($httpCode == 401) // Not authenticated
         {
             //should be able to check response for error message at this point if we end up having more unauthorized cases
-            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            $url = '/login/user-logout';
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
         }
         else if($httpCode == 403) // Inadequate permissions.
         {
@@ -192,7 +193,9 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -232,7 +235,9 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -269,7 +274,9 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            $url = ['login/user-logout'];
+            Yii::$app->getResponse()->redirect($url)->send();
+            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
