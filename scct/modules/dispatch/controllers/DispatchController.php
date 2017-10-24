@@ -10,6 +10,7 @@ use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\data\Pagination;
 use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 use yii\web\View;
 use app\constants\Constants;
 
@@ -114,6 +115,8 @@ class DispatchController extends \app\controllers\BaseController
                     'dispatchPageSizeParams' => $dispatchPageSizeParams,
                 ]);
             }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             //Yii::$app->runAction('login/user-logout');
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
@@ -124,7 +127,16 @@ class DispatchController extends \app\controllers\BaseController
     }
 
     public function actionIndex() {
-        return $this->render('lightDispatch');
+        try{
+            return $this->render('lightDispatch');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (Exception $e) {
+            Yii::$app->runAction('login/user-logout');
+            return "";
+        }
     }
 
 

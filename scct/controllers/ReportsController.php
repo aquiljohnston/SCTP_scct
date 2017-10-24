@@ -22,23 +22,31 @@ class ReportsController extends BaseController
     /**
      * Lists all user models.
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws Exception
      */
     public function actionIndex()
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['/login']);
-		}
-		
-		//Check if user has permission to reports page
-		self::requirePermission("viewReportsMenu");
-		
-		$model = new Report();
-		return $this -> render('index', [
-				'model' => $model,
-			]
-		);
+        try {
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+            //Check if user has permission to reports page
+            //self::requirePermission("viewReportsMenu");
+
+            $model = new Report();
+            return $this->render('index', [
+                    'model' => $model,
+                ]
+            );
+        } catch (ForbiddenHttpException $e) {
+            //Yii::$app->runAction('login/user-logout');
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }
 	}
 
     /**
