@@ -95,7 +95,9 @@ class AssignedController extends \app\controllers\BaseController
                     'assignedFilterParams' => $assignedFilterParams,
                 ]);
             }
-        } catch (ForbiddenHttpException $e) {
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }catch (ForbiddenHttpException $e) {
             Yii::$app->runAction('login/user-logout');
             //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
@@ -125,7 +127,9 @@ class AssignedController extends \app\controllers\BaseController
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        } catch (ForbiddenHttpException $e) {
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch (\Exception $e) {
             Yii::$app->runAction('login/user-logout');
