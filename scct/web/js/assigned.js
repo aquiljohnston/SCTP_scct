@@ -134,16 +134,23 @@ $(function () {
     $(document).off('click', '#UnassignedAssetsButton').on('click', '#UnassignedAssetsButton', function () {
         $("#unassigned-message").find('span').html(getSelectedUserName("","", "",assignedAssets_WorkOrderID));
         $("#unassigned-message").css("display", "block");
-        $('#modalViewAssetAssigned').modal('hide');
+		//get asset data before it get reset
+		unassignAssetsData = getAssignedAssetsArray();
+		$('#modalViewAssetAssigned').modal('hide');
         // When the user clicks buttons, close the modal
         $('#unassignedCancelBtn').click(function () {
             $("#unassigned-message").css("display", "none");
         });
         $('#unassignedConfirmBtn').click(function () {
             $("#unassigned-message").css("display", "none");
-            unassignAssetsButtonListener();
+            unassignAssetsButtonListener(unassignAssetsData);
         });
     });
+	
+	//reset checked assets on modal close
+	$('#modalViewAssetAssigned').on('hidden.bs.modal', function () {
+		assignedAssets_WorkOrderID = [];
+	})
 });
 
 function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber) {
@@ -261,14 +268,10 @@ function getAssignedSectionArray(assignedSection_SectionNumber) {
 
         $('#assignedSectionGV-container input:checked').each(function() {
             console.log("SELECTED MAP - SECTION: "+$(this).attr('SectionNumber'));
-            var userIDsCount = $(this).attr('AssignedToID').split(',');
-            for (var i = 0; i < userIDsCount.length; i++) {
-                assignedSectionArray.push({
-                    MapGrid: $(this).attr('MapGrid'),
-                    SectionNumber: $(this).attr('SectionNumber'),
-                    AssignedUserID: userIDsCount[i]
-                })
-            }
+			assignedSectionArray.push({
+				MapGrid: $(this).attr('MapGrid'),
+				SectionNumber: $(this).attr('SectionNumber')
+			})
         });
         return assignedSectionArray;
     }else{
@@ -324,9 +327,7 @@ function resetValue() {
 }
 
 // Unassign Assets Button Listener
-function unassignAssetsButtonListener() {
-
-    unassignAssetsData = getAssignedAssetsArray();
+function unassignAssetsButtonListener(unassignAssetsData) {
     var form = $("#AssignForm");
     $('#loading').show();
     $.ajax({
@@ -364,7 +365,6 @@ function getAssignedAssetsArray() {
     if (assignedAssets_WorkOrderID.length > 0){
         $('#assetGV-container input:checked').each(function() {
             assetsArray.push({
-                AssignedUserID: $(this).attr('AssignedToID'),
                 WorkOrderID: $(this).attr('WorkOrderID')
             })
         });
