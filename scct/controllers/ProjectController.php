@@ -74,6 +74,32 @@ class ProjectController extends BaseController
 			],
 		]);
 
+        // Sorting Project table
+        $dataProvider->sort = [
+            'attributes' => [
+                'ProjectName' => [
+                    'asc' => ['ProjectName' => SORT_ASC],
+                    'desc' => ['ProjectName' => SORT_DESC]
+                ],
+                'ProjectType' => [
+                    'asc' => ['ProjectType' => SORT_ASC],
+                    'desc' => ['ProjectType' => SORT_DESC]
+                ],
+                'ProjectState' => [
+                    'asc' => ['ProjectState' => SORT_ASC],
+                    'desc' => ['ProjectState' => SORT_DESC]
+                ],
+                'ProjectStartDate' => [
+                    'asc' => ['ProjectStartDate' => SORT_ASC],
+                    'desc' => ['ProjectStartDate' => SORT_DESC]
+                ],
+                'ProjectEndDate' => [
+                    'asc' => ['ProjectEndDate' => SORT_ASC],
+                    'desc' => ['ProjectEndDate' => SORT_DESC]
+                ]
+            ]
+        ];
+
 		return $this -> render('index', [
 			'dataProvider' => $dataProvider,
 			'canCreateProjects' => self::can("projectCreate"),
