@@ -6,6 +6,9 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use app\constants\Constants;
+use yii\web\UnauthorizedHttpException;
+use yii\web\ForbiddenHttpException;
+use Exception;
 
 class AssignedController extends \app\controllers\BaseController
 {
@@ -72,6 +75,36 @@ class AssignedController extends \app\controllers\BaseController
 
             $assignedDataProvider->key = 'MapGrid';
 
+            // Sorting Unassign table
+            $assignedDataProvider->sort = [
+                'attributes' => [
+                    'MapGrid' => [
+                        'asc' => ['MapGrid' => SORT_ASC],
+                        'desc' => ['MapGrid' => SORT_DESC]
+                    ],
+                    'AssignedUser' => [
+                        'asc' => ['AssignedUser' => SORT_ASC],
+                        'desc' => ['AssignedUser' => SORT_DESC]
+                    ],
+                    'ComplianceStart' => [
+                        'asc' => ['ComplianceStart' => SORT_ASC],
+                        'desc' => ['ComplianceStart' => SORT_DESC]
+                    ],
+                    'ComplianceEnd' => [
+                        'asc' => ['ComplianceEnd' => SORT_ASC],
+                        'desc' => ['ComplianceEnd' => SORT_DESC]
+                    ],
+                    'Percent Completed' => [
+                        'asc' => ['Percent Completed' => SORT_ASC],
+                        'desc' => ['Percent Completed' => SORT_DESC]
+                    ],
+                    'Counts' => [
+                        'asc' => ['Counts' => SORT_ASC],
+                        'desc' => ['Counts' => SORT_DESC]
+                    ]
+                ]
+            ];
+
             if (Yii::$app->request->isAjax) {
                 return $this->render('index', [
                     'assignedDataProvider' => $assignedDataProvider,
@@ -97,7 +130,7 @@ class AssignedController extends \app\controllers\BaseController
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        }catch (ForbiddenHttpException $e) {
+        } catch (ForbiddenHttpException $e) {
             Yii::$app->runAction('login/user-logout');
             //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
