@@ -44,7 +44,6 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 #map-container {
     position: relative;
     margin: 1% 1%;
-    margin-top: 6%;
     height: 450px;
     width: 98%;
     box-shadow: 0 0 2px;
