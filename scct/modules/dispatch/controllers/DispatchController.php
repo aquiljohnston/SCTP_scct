@@ -90,6 +90,32 @@ class DispatchController extends \app\controllers\BaseController
             //todo: check permission to dispatch work
             $can = 1;
 
+            // Sorting Dispatch table
+            $dispatchDataProvider->sort = [
+                'attributes' => [
+                    'MapGrid' => [
+                        'asc' => ['MapGrid' => SORT_ASC],
+                        'desc' => ['MapGrid' => SORT_DESC]
+                    ],
+                    'Division' => [
+                        'asc' => ['Division' => SORT_ASC],
+                        'desc' => ['Division' => SORT_DESC]
+                    ],
+                    'ComplianceStart' => [
+                        'asc' => ['ComplianceStart' => SORT_ASC],
+                        'desc' => ['ComplianceStart' => SORT_DESC]
+                    ],
+                    'ComplianceEnd' => [
+                        'asc' => ['ComplianceEnd' => SORT_ASC],
+                        'desc' => ['ComplianceEnd' => SORT_DESC]
+                    ],
+                    'AvailableWorkOrderCount' => [
+                        'asc' => ['AvailableWorkOrderCount' => SORT_ASC],
+                        'desc' => ['AvailableWorkOrderCount' => SORT_DESC]
+                    ]
+                ]
+            ];
+
             if (Yii::$app->request->isAjax) {
                 //Prevent CSS from being loaded twice, causing a visual bug
                 Yii::$app->assetManager->bundles = [
