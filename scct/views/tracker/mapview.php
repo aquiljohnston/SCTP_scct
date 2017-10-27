@@ -68,8 +68,13 @@ $this->title = 'Map View';
         var mapCanvas;
 
         $(function () {
-            // need to hide nav bar in tracker map view
+            // need to hide nav bar and light-blue bar in tracker map view
             $('.menu').css('display', 'none');
+            $('.footerabove').css('display', 'none');
+
+            // hide user info and logout button
+            $('.logout').css('display', 'none');
+            $('#UserInfo').css('display', 'none');
 
             var grid_pipeline = "";
 
