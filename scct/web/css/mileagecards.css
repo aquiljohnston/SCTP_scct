@@ -45,6 +45,13 @@ div[id^=modalContent] .wrap #top-wrapper {
 	max-height:60vh;
 	overflow-y:auto;
 }
+
+.totalmileage {
+    float: right;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+}
+
 /*mileageCard view page*/
 .mileagecard-view table{
 	margin-bottom:0px;
