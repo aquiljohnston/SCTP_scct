@@ -181,16 +181,21 @@ class User extends \yii\base\model implements IdentityInterface
 	//identity interface methods
     public static function findIdentity($id)
 	{
-		$url = 'user%2Fget-me';
-		$response = BaseController::executeGetRequest($url);
-		$decodedResponse = json_decode($response, true);
-		$userIdentity = new User();
-		if (array_key_exists("User",$decodedResponse))
+		if(Yii::$app->session->has('userIdentity'))
 		{
-			$identityAttributes = $decodedResponse["User"];
-			$userIdentity->attributes = $identityAttributes;
+			$userIdentity = Yii::$app->session['userIdentity'];
+		}else{
+			$url = 'user%2Fget-me';
+			$response = BaseController::executeGetRequest($url);
+			$decodedResponse = json_decode($response, true);
+			$userIdentity = new User();
+			if (array_key_exists("User",$decodedResponse))
+			{
+				$identityAttributes = $decodedResponse["User"];
+				$userIdentity->attributes = $identityAttributes;
+			}
+			Yii::$app->session->set('userIdentity', $userIdentity);
 		}
-		
 		return $userIdentity;
     }
 
