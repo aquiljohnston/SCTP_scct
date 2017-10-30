@@ -178,80 +178,60 @@ class MileageCardController extends BaseController
             $mileage_card_url = 'mileage-card%2Fview&id=' . $id;
 
             //Indirect RBAC checks
-            $response = Parent::executeGetRequest($url);
-            $mileage_card_response = Parent::executeGetRequest($mileage_card_url);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $mileage_card_response = Parent::executeGetRequest($mileage_card_url, Constants::API_VERSION_2);
             $model = json_decode($mileage_card_response, true);
-            $dateProvider = json_decode($response, true);
-            $ApprovedFlag = $dateProvider["ApprovedFlag"];
-            $Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
+            $entryData = json_decode($response, true);
+            $ApprovedFlag = $entryData['ApprovedFlag'];
+			
+            $Sundaydata = $entryData['MileageEntries']['Sunday']['Entries'];
             $SundayProvider = new ArrayDataProvider([
                 'allModels' => $Sundaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Sun = $this->TotalMileageCal($Sundaydata);
+            $Total_Mileage_Sun = $entryData['MileageEntries']['Sunday']['Total'];
 
-            $Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
+            $Mondaydata = $entryData['MileageEntries']['Monday']['Entries'];
             $MondayProvider = new ArrayDataProvider([
                 'allModels' => $Mondaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Mon = $this->TotalMileageCal($Mondaydata);
+            $Total_Mileage_Mon = $entryData['MileageEntries']['Monday']['Total'];
 
-            $Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
+            $Tuesdaydata = $entryData['MileageEntries']['Tuesday']['Entries'];
             $TuesdayProvider = new ArrayDataProvider([
                 'allModels' => $Tuesdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Tue = $this->TotalMileageCal($Tuesdaydata);
+            $Total_Mileage_Tue = $entryData['MileageEntries']['Tuesday']['Total'];
 
-            $Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
+            $Wednesdaydata = $entryData['MileageEntries']['Wednesday']['Entries'];
             $WednesdayProvider = new ArrayDataProvider([
                 'allModels' => $Wednesdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Wed = $this->TotalMileageCal($Wednesdaydata);
+            $Total_Mileage_Wed = $entryData['MileageEntries']['Wednesday']['Total'];
 
-            $Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
+            $Thursdaydata = $entryData['MileageEntries']['Thursday']['Entries'];
             $ThursdayProvider = new ArrayDataProvider([
                 'allModels' => $Thursdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Thr = $this->TotalMileageCal($Thursdaydata);
+            $Total_Mileage_Thr = $entryData['MileageEntries']['Thursday']['Total'];
 
-            $Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
+            $Fridaydata = $entryData['MileageEntries']['Friday']['Entries'];
             $FridayProvider = new ArrayDataProvider([
                 'allModels' => $Fridaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Fri = $this->TotalMileageCal($Fridaydata);
+            $Total_Mileage_Fri = $entryData['MileageEntries']['Friday']['Total'];
 
-            $Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
+            $Saturdaydata = $entryData['MileageEntries']['Saturday']['Entries'];
             $SaturdayProvider = new ArrayDataProvider([
                 'allModels' => $Saturdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Sat = $this->TotalMileageCal($Saturdaydata);
+            $Total_Mileage_Sat = $entryData['MileageEntries']['Saturday']['Total'];
 
             //calculation total miles for this mileage card
             $Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
@@ -276,7 +256,6 @@ class MileageCardController extends BaseController
                 'duplicateFlag' => $duplicateFlag,
                 'ApprovedFlag' => $ApprovedFlag,
                 'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
-                'dateProvider' => $dateProvider,
                 'SundayProvider' => $SundayProvider,
                 'Total_Mileage_Sun' => $Total_Mileage_Sun,
                 'MondayProvider' => $MondayProvider,
@@ -576,23 +555,6 @@ class MileageCardController extends BaseController
             Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');
         }
-    }
-
-    /**
-     * Calculate total work hours
-     * @return total work hours
-     */
-    public function TotalMileageCal($dataProvider)
-    {
-        $Total_Mileages = 0;
-        foreach ($dataProvider as $item) {
-            if ($item["MileageEntryActiveFlag"] != "Inactive") {
-                $Total_Mileages += $item["MileageEntryEndingMileage"] - $item["MileageEntryStartingMileage"];
-                Yii::Trace("End mileage is: " . $item["MileageEntryEndingMileage"]);
-            }
-        }
-
-        return number_format($Total_Mileages, 2);
     }
 
     /**
