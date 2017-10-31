@@ -98,7 +98,8 @@ $ImageUrl = 'images/';
                 'contentOptions' => ['class' => 'text-center'],
                 'value' => function ($model) {
                     if ($model['Photo1Path'] != null)
-                        return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo1Path'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
+                        return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),['/dispatch/inspections/view-image?Photo1Path='.$model['Photo1Path']],['target'=>'_blank', 'data-pjax'=>"0"]);
+                        //return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Photo1Path'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
                     else
                         return '';
                 },
