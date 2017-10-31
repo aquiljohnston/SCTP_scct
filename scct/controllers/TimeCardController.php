@@ -349,7 +349,6 @@ class TimeCardController extends BaseController
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
-					'TimeEntryDate' => $TimeEntryDate,
 					'TimeEntryModifiedDate' => $timeEntryModel->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $TimeCardTechID,
 					'TimeEntryTimeCardID' => $id,

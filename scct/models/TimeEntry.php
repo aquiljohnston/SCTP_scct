@@ -11,7 +11,6 @@ use Yii;
  * @property integer $TimeEntryUserID
  * @property string  $TimeEntryStartTime
  * @property string  $TimeEntryEndTime
- * @property string  $TimeEntryDate
  * @property string  $TimeEntryActiveFlag
  * @property integer $TimeEntryTimeCardID
  * @property integer $TimeCardFK
@@ -33,7 +32,6 @@ class TimeEntry extends \yii\base\model
 	public $TimeEntryUserID;
 	public $TimeEntryStartTime;
 	public $TimeEntryEndTime;
-	public $TimeEntryDate;
 	public $TimeEntryActiveFlag;
 	public $TimeEntryTimeCardID;
 	public $TimeCardFK;
@@ -51,7 +49,7 @@ class TimeEntry extends \yii\base\model
     public function rules()
     {
         return [
-            [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryDate', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
+            [['TimeEntryStartTime', 'TimeEntryEndTime', 'TimeEntryCreateDate', 'TimeEntryModifiedDate'], 'safe'],
             [['TimeEntryUserID', 'TimeEntryTimeCardID', 'TimeEntryActivityID', 'TimeCardFK'], 'integer'],
             [['TimeEntryComment', 'TimeEntryActiveFlag', 'TimeEntryArchiveFlag', 'TimeEntryCreatedBy', 'TimeEntryModifiedBy'], 'string']
         ];
@@ -67,7 +65,6 @@ class TimeEntry extends \yii\base\model
 			'TimeEntryUserID' => 'Time Entry User ID',
             'TimeEntryStartTime' => 'Time Entry Start Time',
             'TimeEntryEndTime' => 'Time Entry End Time',
-            'TimeEntryDate' => 'Time Entry Date',
 			'TimeEntryActiveFlag' => 'Time Entry Active Flag',
             'TimeEntryTimeCardID' => 'Time Entry Time Card ID',
 			'TimeCardFK' => 'Time Card FK',
