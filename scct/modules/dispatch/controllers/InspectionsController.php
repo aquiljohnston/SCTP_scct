@@ -372,4 +372,28 @@ class InspectionsController extends \app\controllers\BaseController
             ]);
         }
     }
+
+    /**
+     * render Image
+     * @param null $Photo1Path
+     * @return string|\yii\web\Response
+     */
+    public function actionViewImage($Photo1Path = null){
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        Yii::trace("CALL VIEW IMAGE ACTION.");
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('viewImage', [
+                'Photo1Path' => $Photo1Path
+            ]);
+        } else {
+            return $this->render('viewImage', [
+                'Photo1Path' => $Photo1Path
+            ]);
+        }
+    }
 }
