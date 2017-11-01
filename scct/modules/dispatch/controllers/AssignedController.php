@@ -5,6 +5,7 @@ namespace app\modules\dispatch\controllers;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
+use app\constants\Constants;
 
 class AssignedController extends \app\controllers\BaseController
 {
@@ -49,7 +50,7 @@ class AssignedController extends \app\controllers\BaseController
                     'listPerPage' => $assignedPageSizeParams,
                     'page' => $pageAt
                 ]);
-            $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+            $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             Yii::trace("ASSIGNED DATA: " . json_encode($getAssignedDataResponse));
             $assignedData = $getAssignedDataResponse['mapGrids'];
 
@@ -94,7 +95,9 @@ class AssignedController extends \app\controllers\BaseController
                     'assignedFilterParams' => $assignedFilterParams,
                 ]);
             }
-        } catch (ForbiddenHttpException $e) {
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }catch (ForbiddenHttpException $e) {
             Yii::$app->runAction('login/user-logout');
             //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
@@ -118,13 +121,15 @@ class AssignedController extends \app\controllers\BaseController
 
                 // post url
                 $deleteUrl = 'dispatch%2Funassign';
-                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, self::API_VERSION_2); // indirect rbac
+                $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
                 Yii::trace("unassignputResponse " . $deleteResponse);
 
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        } catch (ForbiddenHttpException $e) {
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch (\Exception $e) {
             Yii::$app->runAction('login/user-logout');
@@ -182,7 +187,7 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $assignedPageSizeParams,
                 'page' => $pageAt
             ]);
-        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSIGNED SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['sections'];
 
@@ -242,12 +247,10 @@ class AssignedController extends \app\controllers\BaseController
             $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
-            //$pageAt = 1;
         }else{
             $viewAssetFilterParams = "";
             $viewAssetPageSizeParams = 200;
             $pageAt = 1;
-            $searchFilterVal = "";
         }
 
         $getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
@@ -257,16 +260,8 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
             ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); //indirect RBAC
+        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
-
-        /*// Reading the response from the the api and filling the surveyorGridView
-        $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
-                'filter' => $searchFilterVal,
-            ]);
-        Yii::trace("surveyors " . $getUrl);
-        $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, self::API_VERSION_2), true); // indirect rbac
-        Yii::trace("Surveyors response " . json_encode($surveyorsResponse));*/
 
         // Put data in data provider
         $assetDataProvider = new ArrayDataProvider
@@ -275,8 +270,6 @@ class AssignedController extends \app\controllers\BaseController
             'pagination' => false,
         ]);
         $assetDataProvider->key = 'WorkOrderID';
-        /*$surveyorList = [];
-        $surveyorList = $surveyorsResponse['users'];*/
 
         //todo: set paging on both tables
         // set pages to dispatch table
@@ -288,7 +281,6 @@ class AssignedController extends \app\controllers\BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
-                //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);
@@ -298,7 +290,6 @@ class AssignedController extends \app\controllers\BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'searchFilterVal' => $viewAssetFilterParams,
-                //'surveyorList' => $surveyorList,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
             ]);

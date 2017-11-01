@@ -25,6 +25,15 @@ $(function(){
         event.preventDefault();
         return false;
     });
+	
+	// timecard filter listener
+    $(document).off('keypress', '#timeCardFilter').on('keypress', '#timeCardFilter', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+			$('#timeCardPageNumber').val(1);
+            reloadGridView();
+        }
+    });
     
     function reloadGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");

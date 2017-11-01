@@ -25,7 +25,15 @@ $(function(){
         event.preventDefault();
         return false;
     });
-
+	
+	// mileagecard filter listener
+    $(document).off('keypress', '#mileageCardFilter').on('keypress', '#mileageCardFilter', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+			$('#mileageCardPageNumber').val(1);
+            reloadGridView();
+        }
+    });
     
     function reloadGridView() {
         var form = jqMCDropDowns.find("#MileageCardForm");

@@ -17,6 +17,8 @@ class TrainingController extends BaseController {
         try {
             $this->isGuestUser();
             return $this->render('index');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             Yii::$app->runAction('login/user-logout');
         }

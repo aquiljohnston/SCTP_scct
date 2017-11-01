@@ -12,6 +12,7 @@ use yii\base\Exception;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use app\constants\Constants;
 
 /**
  * UserController implements the CRUD actions for user model.
@@ -21,23 +22,31 @@ class ReportsController extends BaseController
     /**
      * Lists all user models.
      * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws Exception
      */
     public function actionIndex()
     {
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['/login']);
-		}
-		
-		//Check if user has permission to reports page
-		self::requirePermission("viewReportsMenu");
-		
-		$model = new Report();
-		return $this -> render('index', [
-				'model' => $model,
-			]
-		);
+        try {
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+            //Check if user has permission to reports page
+            //self::requirePermission("viewReportsMenu");
+
+            $model = new Report();
+            return $this->render('index', [
+                    'model' => $model,
+                ]
+            );
+        } catch (ForbiddenHttpException $e) {
+            //Yii::$app->runAction('login/user-logout');
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        }
 	}
 
     /**
@@ -49,7 +58,7 @@ class ReportsController extends BaseController
 
         // Reading the response from the the api and filling the report drop down
         $reportsUrl = 'reports%2Fget-report-drop-down';
-        $reportsUrlListResponse = Parent::executeGetRequest($reportsUrl, self::API_VERSION_2); // indirect rbac
+        $reportsUrlListResponse = Parent::executeGetRequest($reportsUrl, Constants::API_VERSION_2); // indirect rbac
         $reportsList = $reportsUrlListResponse;//json_decode($reportsUrlListResponse, true);
         echo $reportsList;
     }
@@ -60,7 +69,7 @@ class ReportsController extends BaseController
      */
     public function actionView()
     {
-        $data = self::executeGetRequest("reports%2Fget-stub", self::API_VERSION_2);
+        $data = self::executeGetRequest("reports%2Fget-stub", Constants::API_VERSION_2);
         $data = json_decode($data);
         return $this -> render('view', [
                 'data' => $data
@@ -109,7 +118,7 @@ class ReportsController extends BaseController
             // post url
             $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
             Yii::trace("reportUrl " . $url);
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
             echo $response;
 
@@ -133,7 +142,7 @@ class ReportsController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp, self::API_VERSION_2);
+        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
@@ -149,7 +158,7 @@ class ReportsController extends BaseController
             // Reading the response from the the api and filling Parm Drop Down
             $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
             Yii::trace("MAP GRID URL: ".$getParmDropDownUrl);
-            $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, self::API_VERSION_2); // indirect rbac
+            $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, Constants::API_VERSION_2); // indirect rbac
             Yii::trace("MAP GRID RESPONSE: ".$getParmDropDownResponse);
             $ParmDropDownList = $getParmDropDownResponse;//json_decode($reportsUrlListResponse, true);
             echo $ParmDropDownList;
@@ -168,7 +177,7 @@ class ReportsController extends BaseController
         if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
             // Reading the response from the the api and filling Inspector Drop Down
             $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
-            $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, BaseController::API_VERSION_2); // indirect rbac
+            $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, Constants::API_VERSION_2); // indirect rbac
             $InspectorDropDownList = $getInspectorDropDownResponse;
             echo $InspectorDropDownList;
         }else{

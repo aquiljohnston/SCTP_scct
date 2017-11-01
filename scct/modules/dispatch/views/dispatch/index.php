@@ -75,14 +75,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
                         'detailUrl' => Url::to(['dispatch/view-section']),
                         'detailAnimationDuration' => 'fast'
-                        /*$searchModel = new CreateBookingsSearch();
-                        $searchModel->booking_id = $model ->id;
-                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-                        return Yii::$app->controller->renderPartial('_expandrowview.php',[
-                            'searchModel' => $searchModel,
-                            'dataProvider' => $dataProvider,
-                        ]);*/
                     ],
                     [
                         'label' => 'Map Grid',
@@ -93,6 +85,13 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         /*'value' => function ($model) {
                             return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
                         }*/
+                    ],
+					[
+                        'label' => 'Division',
+                        'attribute' => 'Division',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                        'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance Start',
@@ -127,7 +126,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'view' => function($url, $model) {
                                 $modalViewAssetDispatch = "#modalViewAssetDispatch";
                                 $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=" . $model['MapGrid']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."','".$model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
@@ -195,7 +194,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     <!--View Asset Modal-->
     <?php
     Modal::begin([
-        'header' => '<h4>Assets</h4>',
+		'header' => '<h4 id="assetModalTitle"></h4>',
         'id' => 'modalViewAssetDispatch',
         'size' => 'modal-lg',
     ]);
