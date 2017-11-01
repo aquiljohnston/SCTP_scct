@@ -168,10 +168,17 @@ function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) 
 }
 
 // View Asset Modal (Dispatch, Assigned)
-function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset) {
+function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid) {
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).html("Loading...");
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).load(url);
+		document.getElementById('assetModalTitle').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
+}
+
+// Reset global variables
+function resetGlobalVariables() {
+    dispatchMap_MapGrid = [];
+    dispatchSection_SectionNumber = [];
 }
 

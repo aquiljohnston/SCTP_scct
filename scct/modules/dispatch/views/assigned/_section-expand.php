@@ -37,15 +37,10 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Assigned User(s)',
                 'attribute' => 'SearchString',
+                //'attribute' => 'AssignedUser',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.5%'],
                 'format' => 'html',
-                'value' => function ($model) {
-                    if ($model['AssignedCount'] == "MANY")
-                        return "MANY";
-                    else
-                        return $model['SearchString'];
-                }
             ],
             [
                 'label' => 'Location Type',
@@ -73,7 +68,7 @@ use yii\bootstrap\Modal;
                     'view' => function($url, $model) {
                         $modalViewAssetAssigned = "#modalViewAssetAssigned";
                         $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] ."&sectionNumberSelected=" . $model['SectionNumber'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."')"]);
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid'] ."&sectionNumberSelected=" . $model['SectionNumber'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
                     }
                 ],
             ],
@@ -84,7 +79,7 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
-                        return ['AssignedToID' => $model['UIDList'],'SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']];
+                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']/*['AssignedUser']*/];
                     else
                         return "";
                 }

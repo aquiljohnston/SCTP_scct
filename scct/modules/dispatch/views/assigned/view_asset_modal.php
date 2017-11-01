@@ -24,6 +24,14 @@ use kartik\grid\GridView;
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchAssigned', 'placeholder'=>'Search'])->label(''); ?>
             </div>
             <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButtonAssigned']) ?>
+            <div id="assignedAssetsButtonContainer" style="float: right;margin: 2% auto;width: 16%;">
+                <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
+                    <div id="assiunassignedButton">
+                        <?php echo Html::button('Remove Surveyor', ['class' => 'btn btn-primary',
+                            'id' => 'UnassignedAssetsButton', 'disabled' => 'disabled']); ?>
+                    </div>
+                <?php Pjax::end() ?>
+            </div>
             <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
             <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
             <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
@@ -45,6 +53,8 @@ use kartik\grid\GridView;
         'export' => false,
         'pjax' => true,
         'summary' => '',
+        'floatHeader' => true,
+        'floatOverflowContainer' => true,
         'columns' => [
             [
                 'label' => 'Address',
@@ -55,6 +65,12 @@ use kartik\grid\GridView;
                 'value' => function($model){
                     return $model['HouseNumber'] . " " . $model['Street']. " " .$model['AptSuite']. "<br/>" . $model['City'] . " , " . $model['State'] . " " . $model['Zip'];
                 }
+            ],
+			[
+                'label' => 'Assigned User',
+                'attribute' => 'AssignedTo',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ],
             [
                 'label' => 'Meter Number',
@@ -88,6 +104,16 @@ use kartik\grid\GridView;
                         return "Completed";
                 }
             ],
+            [
+                'header' => '',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'word-wrap: break-word;'],
+                'contentOptions' => ['class' => 'text-center unassignAssetsCheckbox'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    $assetAddress = $model['HouseNumber']." ". $model['Street']." ". $model['AptSuite'].", ". $model['City']." ". $model['State'].", ". $model['Zip']."<br>";
+                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false, 'assetAddress' => $assetAddress ];
+                }
+            ]
         ],
     ]); ?>
     <div id="assignedAssetsTablePagination" style="margin-top: 2%;">
@@ -123,7 +149,7 @@ use kartik\grid\GridView;
         $('#assetsModalCleanFilterButtonAssigned').on('click', function () {
             $('#viewAssetsSearchAssigned').val("");
             reloadViewAssetsModal();
-        })
+        });
         //pagination listener on view asset modal
         $(document).off('click', '#assignedAssetsTablePagination .pagination li a').on('click', '#assignedAssetsTablePagination .pagination li a', function (event) {
             event.preventDefault();
@@ -145,11 +171,32 @@ use kartik\grid\GridView;
             url: '/dispatch/assigned/view-asset',
             container: '#assetTablePjax', // id to update content
             data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewAssignedAssetPageNumber:page},
-            timeout: 99999
+            timeout: 99999,
+            push: false,
+            replace: false,
+            replaceRedirect: false
         }).done(function () {
             $("body").css("cursor", "default");
             $('#loading').hide();
         });
+    }
+
+    function getUnassignAssetsData() {
+        var AssignedUserID = "";
+        var workOrderID = "";
+        var unassignAsset = [];
+        mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
+        $('#assetGV-container tr').each(function () {
+            AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+            workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
+            if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                unassignAsset.push({
+                    WorkOrderID: workOrderID,
+                    AssignedUserID: AssignedUserID
+                });
+            }
+        });
+        return unassignAsset;
     }
 </script>
 

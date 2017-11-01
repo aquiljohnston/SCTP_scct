@@ -19,6 +19,7 @@ use \DateTime;
 use yii\data\Pagination;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use app\constants\Constants;
 
 /**
  * MileageCardController implements the CRUD actions for MileageCard model.
@@ -46,9 +47,8 @@ class MileageCardController extends BaseController
                 'filter'
             ]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
-            $model->addRule('filter', 'string');
+            $model->addRule('filter', 'string', ['max' => 100]);
             if ($model->load(Yii::$app->request->queryParams)) {
-                Yii::trace("pagesize: " . $model->pagesize);
                 $mileageCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
             } else {
@@ -57,8 +57,8 @@ class MileageCardController extends BaseController
             }
 
             //check current page at
-            if (isset(Yii::$app->request->queryParams['mileageCardPageNumber'])){
-                $page = Yii::$app->request->queryParams['mileageCardPageNumber'];
+			if (isset($_GET['mileageCardPageNumber'])){
+                $page = $_GET['mileageCardPageNumber'];
             } else {
                 $page = 1;
             }
@@ -72,7 +72,7 @@ class MileageCardController extends BaseController
 
             //build url with params
             $url = "mileage-card%2Fget-cards&week=$week&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
-            $response = Parent::executeGetRequest($url, self::API_VERSION_2); // indirect rbac
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
 
@@ -116,34 +116,31 @@ class MileageCardController extends BaseController
             //Set Mile Card ID On the JS Call
             $dataProvider->key = 'MileageCardID';
 
-//            $searchModel = [
-//                'MileageCardApprovedFlag' => Yii::$app->request->getQueryParam('filterapproved', '')
-//            ];
-//
-//            $approvedInput = '<select class="form-control" name="filterapproved">'
-//                . '<option value=""></option><option value="Yes"';
-//            if ($searchModel['MileageCardApprovedFlag'] == "Yes") {
-//                $approvedInput .= " selected";
-//            }
-//            $approvedInput .= '>Yes</option><option value="No"';
-//            if ($searchModel['MileageCardApprovedFlag'] == "No") {
-//                $approvedInput .= ' selected';
-//            }
-//            $approvedInput .= '>No</option></select>';
-
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
             //calling index page to pass dataProvider.
-            return $this->render('index', [
-                'dataProvider' => $dataProvider,
-//                'searchModel' => $searchModel,
-//                'approvedInput' => $approvedInput,
-                'week' => $week,
-                'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
-                'pages' => $pages,
-                'model' => $model
-            ]);
+			if (Yii::$app->request->isAjax) {
+				 return $this->renderAjax('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
+					'pages' => $pages,
+					'model' => $model,
+					'mileageCardFilterParams' => $filter
+				]);
+			}else{
+				return $this->render('index', [
+					'dataProvider' => $dataProvider,
+					'week' => $week,
+					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
+					'pages' => $pages,
+					'model' => $model,
+					'mileageCardFilterParams' => $filter
+				]); 
+			}
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             throw $e;
         } catch (ErrorException $e) {
@@ -363,6 +360,7 @@ class MileageCardController extends BaseController
             if ($endTimeObj > $startTimeObj && $endMileageObj > $startMileageObj) {
                 $time_entry_data = array();
                 $data[] = array(
+                    'ActivityUID' => BaseController::generateUID($mileageEntryTitle),
                     'ActivityTitle' => $mileageEntryTitle,
                     'ActivityCreatedBy' => Yii::$app->session['userID'],
                     'timeEntry' => $time_entry_data,
@@ -378,7 +376,7 @@ class MileageCardController extends BaseController
                 try {
                     // post url
                     $url_send_activity = 'activity%2Fcreate';
-                    $response_activity = Parent::executePostRequest($url_send_activity, $json_data);
+                    $response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
                     $obj = json_decode($response_activity, true);
 
                     return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);
@@ -512,7 +510,7 @@ class MileageCardController extends BaseController
 
                 // post url
                 $putUrl = 'mileage-card%2Fapprove-cards';
-                $apiResponse = parent::executePutRequest($putUrl, $json_data, self::API_VERSION_2); //indirect rbac
+                $apiResponse = parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); //indirect rbac
                 $json_response_data = json_decode($apiResponse, true);
                 //create response
                 $response = Yii::$app->response;
