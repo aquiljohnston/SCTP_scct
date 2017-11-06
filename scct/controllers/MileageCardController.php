@@ -327,7 +327,6 @@ class MileageCardController extends BaseController
                 'MileageEntryEndingMileage' => $model->MileageEntryEndingMileage,
                 'MileageEntryStartDate' => $MileageEntryStartTimeConcatenate,
                 'MileageEntryEndDate' => $MileageEntryEndTimeConcatenate,
-                'MileageEntryDate' => $mileageCardDate,
                 'MileageEntryType' => '0', //Automatically set the mileage entry type to 0 for BUSINESS - Andre V.
                 'MileageEntryActivityID' => '3', //Automatically set the mileage entry activity type to 3 for PRODUCTION - Andre V.
                 'MileageEntryMileageCardID' => $mileageCardId,
