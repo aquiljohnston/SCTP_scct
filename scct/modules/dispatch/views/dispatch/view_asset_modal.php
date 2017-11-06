@@ -61,13 +61,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         'columns' => [
             [
                 'label' => 'Address',
-                'attribute' => 'HouseNumber',
+                'attribute' => 'Address',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
                 'format' => 'raw',
-                'value' => function($model){
-                    return $model['HouseNumber'] . " " . $model['Street']. " " .$model['AptSuite']. "<br/>" . $model['City'] . " , " . $model['State'] . " " . $model['Zip'];
-                }
             ],
             [
                 'label' => 'Meter Number',
