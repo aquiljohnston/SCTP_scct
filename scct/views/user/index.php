@@ -34,30 +34,11 @@ $column = [
         'label' => 'Role Type',
         'attribute' => 'UserAppRoleType',
     ],
-    // 'UserEmployeeType',
-    // 'UserPhone',
-    // 'UserCompanyName',
-    // 'UserCompanyPhone',
-    // 'UserAppRoleType',
-    // 'UserComments',
-    // 'UserKey',
-    // 'UserActiveFlag',
-    // 'UserCreatedDate',
-    // 'UserModifiedDate',
-    // 'UserCreatedBy',
-    // 'UserModifiedBy',
-    // 'UserCreateDTLTOffset',
-    // 'UserModifiedDTLTOffset',
-    // 'UserInactiveDTLTOffset',
-
     ['class' => 'kartik\grid\ActionColumn',
+		'template' => '{view} {delete}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
                 $url = '/user/view?id=' . $model["UserID"];
-                return $url;
-            }
-            if ($action === 'update') {
-                $url = '/user/update?id=' . $model["UserID"];
                 return $url;
             }
             if ($action === 'delete') {
