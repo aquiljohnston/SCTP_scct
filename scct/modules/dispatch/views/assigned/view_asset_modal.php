@@ -58,13 +58,9 @@ use kartik\grid\GridView;
         'columns' => [
             [
                 'label' => 'Address',
-                'attribute' => 'HouseNumber',
+                'attribute' => 'Address',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
-                'format' => 'raw',
-                'value' => function($model){
-                    return $model['HouseNumber'] . " " . $model['Street']. " " .$model['AptSuite']. "<br/>" . $model['City'] . " , " . $model['State'] . " " . $model['Zip'];
-                }
             ],
 			[
                 'label' => 'Assigned User',
