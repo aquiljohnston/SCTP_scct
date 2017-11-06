@@ -45,18 +45,10 @@ $column = [
     ],
 
     ['class' => 'kartik\grid\ActionColumn',
-        'template' => '{view} {update}',
+        'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
                 $url = '/project/view?id=' . $model["ProjectID"];
-                return $url;
-            }
-            if ($action === 'update') {
-                $url = '/project/update?id=' . $model["ProjectID"];
-                return $url;
-            }
-            if ($action === 'deactivate') {
-                $url = '/project/deactivate?id=' . $model["ProjectID"];
                 return $url;
             }
         },
