@@ -90,14 +90,29 @@ a.desc:after {
     font-style: normal;
     font-weight: normal;
     line-height: 1;
+    padding-right: 5px;
+}
+
+.indicator:before {
+    content: "\e150";;
+}
+
+.indicator>a.asc:after, .indicator>a.desc:after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
     padding-left: 5px;
 }
 
-.indicator:before {
+.indicator>a.asc:after {
     content: /*"\e113"*/ "\e151";
 }
 
-.indicator:before {
+.indicator>a.desc:after {
     content: /*"\e114"*/ "\e152";
 }
 
