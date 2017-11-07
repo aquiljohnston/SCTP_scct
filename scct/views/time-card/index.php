@@ -21,18 +21,26 @@ $column = [
     [
         'label' => 'User First Name',
         'attribute' => 'UserFirstName',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'User Last Name',
         'attribute' => 'UserLastName',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Start Date',
         'attribute' => 'TimeCardStartDate',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['TimeCardStartDate']));
         }
@@ -40,6 +48,8 @@ $column = [
     [
         'label' => 'End Date',
         'attribute' => 'TimeCardEndDate',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['TimeCardEndDate']));
         }

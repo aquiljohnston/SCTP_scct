@@ -19,16 +19,22 @@ $column = [
     [
         'label' => 'Name',
         'attribute' => 'ClientName',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
     ],
     [
         'label' => 'Client City',
         'attribute' => 'ClientCity',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filtercity" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
     ],
     [
         'label' => 'Client State',
         'attribute' => 'ClientState',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ClientState']) . '" type="text">'
     ],
     ['class' => 'kartik\grid\ActionColumn',
