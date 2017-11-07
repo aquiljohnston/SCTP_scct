@@ -104,7 +104,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 16%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -114,14 +114,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Assigned User(s)',
                         'attribute' => 'AssignedUser',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 16.3%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -131,7 +131,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -141,7 +141,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Completed (%)',
                         'attribute' => 'Percent Completed',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'raw',
                         'value' => function ($model, $key, $index) {
@@ -155,7 +155,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					[
                         'label' => 'Remaining/Total',
                         'attribute' => 'Counts',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
+                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
                         'value' => function ($model) {
