@@ -20,18 +20,26 @@ $column = [
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Project Type',
         'attribute' => 'ProjectType',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Project State',
         'attribute' => 'ProjectState',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Start Date',
         'attribute' => 'ProjectStartDate',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['ProjectStartDate']));
         }
@@ -39,6 +47,8 @@ $column = [
     [
         'label' => 'End Date',
         'attribute' => 'ProjectEndDate',
+        'headerOptions' => ['class' => 'text-center indicator'],
+        'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['ProjectEndDate']));
         }
