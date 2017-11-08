@@ -109,11 +109,11 @@ a.desc:after {
 }
 
 .indicator>a.asc:after {
-    content: /*"\e113"*/ "\e151";
+    content: "\e093";
 }
 
 .indicator>a.desc:after {
-    content: /*"\e114"*/ "\e152";
+    content: "\e094";
 }
 
 .grid-view th {
