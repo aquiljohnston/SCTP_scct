@@ -180,7 +180,7 @@ class UserController extends BaseController
                 //'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
                 //'UserCreatedBy' => Yii::$app->session['userID'],
                 //'UserModifiedBy' => $model->UserModifiedBy,
-                'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
+                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
                 'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
                 'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
             );
@@ -269,7 +269,7 @@ class UserController extends BaseController
                 'UserPassword' => $model->UserPassword,
                 'UserCreatedDate' => $model->UserCreatedDate,
                 'UserModifiedDate' => $model->UserModifiedDate,
-                'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
+                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
                 'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
                 'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
             );
