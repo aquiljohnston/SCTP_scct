@@ -27,19 +27,19 @@ $column = [
     [
         'label' => 'First Name',
         'attribute' => 'UserFirstName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Last Name',
         'attribute' => 'UserLastName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Role Type',
         'attribute' => 'UserAppRoleType',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     ['class' => 'kartik\grid\ActionColumn',

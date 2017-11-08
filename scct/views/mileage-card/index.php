@@ -26,19 +26,19 @@ $column = [
     [
         'label' => 'User Last Name',
         'attribute' => 'UserLastName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Start Date',
         'attribute' => 'MileageStartDate',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['MileageStartDate']));
@@ -47,7 +47,7 @@ $column = [
     [
         'label' => 'End Date',
         'attribute' => 'MileageEndDate',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['MileageEndDate']));
