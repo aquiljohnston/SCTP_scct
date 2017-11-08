@@ -374,17 +374,18 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['/login']);
 		}
-
-        $filterParam = null;
-
-		self::requirePermission("projectAddRemoveUsers");
+		$uaFilterParam = null;
+		$aFilterParam = null;
+		
+		self::requirePermission('projectAddRemoveUsers');
 
 		//create model for active form
 		$model = new \yii\base\DynamicModel([
-			'UnassignedUsers', 'AssignedUsers', 'filter' ]);
+			'UnassignedUsers', 'AssignedUsers', 'uaFilter', 'aFilter' ]);
 		$model->addRule('UnassignedUsers', 'string')
               ->addRule('AssignedUsers',  'string')
-              ->addRule('filter', 'string', ['max' => 32]);
+              ->addRule('uaFilter', 'string', ['max' => 32])
+              ->addRule('aFilter', 'string', ['max' => 32]);
 
         // receive get request to filter user list
         if (Yii::$app->request->get()) {
@@ -392,12 +393,10 @@ class ProjectController extends BaseController
             if (isset($_GET['projectID']))
                 $id = $_GET['projectID'];
             $model->load(Yii::$app->request->queryParams);
-            $filterParam = $model->filter;
-            $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
+            $uaFilterParam = $model->uaFilter;
+            $aFilterParam = $model->aFilter;
+            $url = 'project%2Fget-user-relationships&projectID='.$id.'&uaFilter='.$uaFilterParam.'&aFilter='.$aFilterParam;
             $projectUrl = 'project%2Fview&id='.$id;
-
-            //Yii::trace("URL: ".$url);
-            //Yii::trace("Proejct: ".$projectUrl);
 
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
@@ -405,20 +404,21 @@ class ProjectController extends BaseController
             $users = json_decode($response,true);
             $project = json_decode($projectResponse);
             //load get data into variables
-            $unassignedData = $users["unassignedUsers"];
-            $assignedData = $users["assignedUsers"];
+            $unassignedData = $users['unassignedUsers'];
+            $assignedData = $users['assignedUsers'];
             return $this -> render('add_user', [
                 'project' => $project,
                 'model' => $model,
                 'unassignedData' => $unassignedData,
                 'assignedData' => $assignedData,
-                'projectFilterParams' => $filterParam
+                'unassignedFilterParams' => $uaFilterParam,
+                'assignedFilterParams' => $aFilterParam,
             ]);
         }else{
             if (isset($_POST['projectID']))
                 $id = $_POST['projectID'];
 
-            $url = 'project%2Fget-user-relationships&projectID='.$id.'&filter='.$filterParam;
+            $url = 'project%2Fget-user-relationships&projectID='.$id;
             $projectUrl = 'project%2Fview&id='.$id;
 
             //indirect rbac
@@ -429,8 +429,8 @@ class ProjectController extends BaseController
             $project = json_decode($projectResponse);
 
             //load get data into variables
-            $unassignedData = $users["unassignedUsers"];
-            $assignedData = $users["assignedUsers"];
+            $unassignedData = $users['unassignedUsers'];
+            $assignedData = $users['assignedUsers'];
         }
 
 		if ($model->load(Yii::$app->request->post()))
@@ -444,8 +444,8 @@ class ProjectController extends BaseController
 			$usersRemoved = array_values(array_diff($unassignedUsersArray,array_keys($unassignedData)));
 			//load arrays of changes into post data
 			$data = [];
-			$data["usersRemoved"] = $usersRemoved;
-			$data["usersAdded"] = $usersAdded;
+			$data['usersRemoved'] = $usersRemoved;
+			$data['usersAdded'] = $usersAdded;
 
 			//encode data
 			$jsonData = json_encode($data);
@@ -464,7 +464,8 @@ class ProjectController extends BaseController
                                             'model' => $model,
                                             'unassignedData' => $unassignedData,
                                             'assignedData' => $assignedData,
-                                            'projectFilterParams' => $filterParam
+                                            'unassignedFilterParams' => $uaFilterParam,
+											'assignedFilterParams' => $aFilterParam,
                                     ]);
 		}
 	}

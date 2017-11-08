@@ -26,8 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
                 'options' => ['id' => 'projectAdduserform']
 			]); ?>
-		<label id="projectFilter">
-			<?= $form->field($model, 'filter')->textInput(['value' => $projectFilterParams, 'id' => 'projectFilter'])->label('Search'); ?>
+		<label id="unassignedFilter" class="col-sm-6" style = "padding-left:unset">
+			<?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
+		</label>
+		<label id="assignedFilter" class="col-sm-6" style = "padding-left:unset">
+			<?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
 		</label>
 		<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
 	<?php ActiveForm::end(); ?>
