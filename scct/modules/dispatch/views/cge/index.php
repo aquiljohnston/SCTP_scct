@@ -93,21 +93,21 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 20%;'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html'
                     ],
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 20%;'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html'
                     ],
                     [
                         'label' => 'Available WorkOrder Count',
                         'attribute' => 'AvailableWorkOrderCount',
-                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 20%;'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                     ],
                     [

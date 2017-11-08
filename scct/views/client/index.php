@@ -26,14 +26,14 @@ $column = [
     [
         'label' => 'Client City',
         'attribute' => 'ClientCity',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filtercity" value="' . Html::encode($searchModel['ClientCity']) . '" type="text">'
     ],
     [
         'label' => 'Client State',
         'attribute' => 'ClientState',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filterstate" value="' . Html::encode($searchModel['ClientState']) . '" type="text">'
     ],

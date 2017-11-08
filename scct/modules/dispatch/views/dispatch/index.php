@@ -89,14 +89,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					[
                         'label' => 'Division',
                         'attribute' => 'Division',
-                        'headerOptions' => ['class' => 'text-center indicator'],
+                        'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center indicator'],
+                        'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                         /*'value' => function ($model) {
@@ -106,13 +106,13 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center indicator'],
+                        'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
                         'label' => 'Available Work Order',
                         'attribute' => 'AvailableWorkOrderCount',
-                        'headerOptions' => ['class' => 'text-center indicator'],
+                        'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
