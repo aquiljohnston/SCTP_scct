@@ -21,34 +21,23 @@ $gridviewColumnList = [
         'attribute' => 'TimeEntryEndTime',
         'label' => 'End Time'
     ],
+    // [
+        // 'attribute' => 'TimeEntryComment',
+        // 'label' => 'Comment'
+    // ],
     [
-        'attribute' => 'TimeEntryDate',
-        'label' => 'Entry Date'
-    ],
-    [
-        'attribute' => 'TimeEntryComment',
-        'label' => 'Comment'
-    ],
-    [
-        'attribute' => 'TimeEntryCreateDate',
-        'label' => 'Creat Date'
-    ],
-    [
-        'attribute' => 'TimeEntryCreatedBy',
+        'attribute' => 'User',
         'label' => 'Created By'
     ],
     [
-        'attribute' => 'TimeEntryHours',
-        'label' => 'Hours'
-    ],
-    [
-        'attribute' => 'TimeEntryActiveFlag',
-        'label' => 'Active Flag'
+        'attribute' => 'ElapsedTime',
+        'label' => 'Elapsed Time'
     ],
     [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
-            return ['timecardid' => $model["TimeEntryTimeCardID"], 'timeEntryID' => $model["TimeEntryID"], 'activeStatus' => $model["TimeEntryActiveFlag"]];
+			//this function does not appear to use the fields I removed and is already broken before I made any changes in the current dev environment
+            return [/*'timecardid' => $model['TimeEntryTimeCardID'],*/ 'timeEntryID' => $model['TimeEntryID']/*, 'activeStatus' => $model["TimeEntryActiveFlag"]*/];
         }
     ],
 ];
@@ -126,12 +115,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'modalButtonSunday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Sun > 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Sun ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Sun" ?></span>
     </p>
     <br/>
 
@@ -154,12 +138,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Monurl, 'class' => 'btn btn-success', 'id' => 'modalButtonMonday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Mon != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Mon ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Mon" ?></span>
     </p>
 
     <?php
@@ -195,12 +174,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Tueurl, 'class' => 'btn btn-success', 'id' => 'modalButtonTuesday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Tue != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Tue ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Tue" ?></span>
     </p>
     <br/>
 
@@ -224,12 +198,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Wedurl, 'class' => 'btn btn-success', 'id' => 'modalButtonWednesday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Wed != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Wed ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Wed" ?></span>
     </p>
     <br/>
 
@@ -252,12 +221,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Thururl, 'class' => 'btn btn-success', 'id' => 'modalButtonThursday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Thu != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Thu ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Thu" ?></span>
     </p>
     <br/>
 
@@ -280,12 +244,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Friurl, 'class' => 'btn btn-success', 'id' => 'modalButtonFriday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Fri != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Fri ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Fri" ?></span>
     </p>
     <br/>
 
@@ -310,12 +269,7 @@ $gridviewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $Saturl, 'class' => 'btn btn-success', 'id' => 'modalButtonSaturday', 'disabled' => $approve_status]) ?>
-
-        <?php if ($Total_Hours_Sat != 0) { ?>
-            <span class="totalhours"><?php echo "Total hours is : " . $Total_Hours_Sat ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalhours"><?php echo "Total Time: $Total_Hours_Sat" ?></span>
     </p>
     <br/>
     <?php Pjax::end() ?>

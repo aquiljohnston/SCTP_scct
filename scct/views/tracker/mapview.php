@@ -68,6 +68,14 @@ $this->title = 'Map View';
         var mapCanvas;
 
         $(function () {
+            // need to hide nav bar and light-blue bar in tracker map view
+            $('.menu').css('display', 'none');
+            $('.footerabove').css('display', 'none');
+
+            // hide user info and logout button
+            $('.logout').css('display', 'none');
+            $('#UserInfo').css('display', 'none');
+
             var grid_pipeline = "";
 
             // Initialize map
@@ -435,18 +443,18 @@ $this->title = 'Map View';
 
                 //Create image to use as marker
                 var icon = "";
-                switch (obj.AssetType) {
-                    case 'Service Location':
-                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FF0000|000000"
+                switch (obj.CompletedFlag) {
+                    case 1:
+                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|33FF00|000000";//33FF00 green
                         break;
-                    case 'CGE/CNL':
+                    /*case 'CGE/CNL':
                         icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FFFF00|000000"
                         break;
                     case 'Completed':
                         icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|33FF00|000000"
-                        break;
+                        break;*/
                     default:
-                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FF0000|000000"
+                        icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FF0000|000000";//FF0000 red
                         //icon = "http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|FFFFFF|000000"
                         break;
                 }

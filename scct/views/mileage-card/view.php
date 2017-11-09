@@ -22,37 +22,26 @@ $gridViewColumnList = [
         'label' => 'Ending Mileage'
     ],
     [
-        'attribute' => 'MileageEntryStartDate',
-        'label' => 'Start Date'
+        'attribute' => 'MileageEntryStartTime',
+        'label' => 'Start Time'
     ],
     [
-        'attribute' => 'MileageEntryEndDate',
-        'label' => 'End Date'
+        'attribute' => 'MileageEntryEndTime',
+        'label' => 'End Time'
     ],
+    // [
+        // 'attribute' => 'MileageEntryComment',
+        // 'label' => 'Comment'
+    // ],
     [
-        'attribute' => 'MileageEntryComment',
-        'label' => 'Comment'
-    ],
-    [
-        'attribute' => 'MileageEntryCreateDate',
-        'label' => 'Created Date'
-    ],
-    [
-        'attribute' => 'MileageEntryCreatedBy',
-        'label' => 'CreatedBy'
-    ],
-    [
-        'attribute' => 'MileageEntryActiveFlag',
-        'label' => 'Active Flag'
+        'attribute' => 'User',
+        'label' => 'Created By'
     ],
     [
         'class' => 'yii\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
-            return ['mileagecardid' => $model["MileageEntryMileageCardID"], 'mileageentryid' => $model["MileageEntryID"], 'activeStatus' => $model["MileageEntryActiveFlag"]];
+            return [/*'mileagecardid' => $model["MileageEntryMileageCardID"], */'mileageentryid' => $model['MileageEntryID']/*, 'activeStatus' => $model["MileageEntryActiveFlag"]*/];
         }
-        /*'pageSummary' => true,
-        'rowSelectedClass' => GridView::TYPE_SUCCESS,
-        'contentOptions'=>['style'=>'width: 0.5%'],*/
     ],
 ];
 ?>
@@ -132,11 +121,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSunday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Sun != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Sun ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Sun" ?></span>
     </p>
 
     <br>
@@ -160,11 +145,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonMonday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Mon != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Mon ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Mon" ?></span>
     </p>
 
     <br>
@@ -187,11 +168,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonTuesday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Tue != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Tue ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Tue" ?></span>
     </p>
 
     <br>
@@ -214,11 +191,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonWednesday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Wed != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Wed ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Wed" ?></span>
     </p>
 
     <br>
@@ -241,11 +214,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonThursday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Thr != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Thr ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+		<span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Thr" ?></span>
     </p>
 
     <br>
@@ -268,11 +237,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonFriday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Fri != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Fri ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Fri" ?></span>
     </p>
 
     <br>
@@ -295,11 +260,7 @@ $gridViewColumnList = [
     ?>
     <p>
         <?= Html::button('Create New', ['value' => $url, 'class' => 'btn btn-success', 'id' => 'mileageModalButtonSaturday', 'disabled' => $approve_status]) ?>
-        <?php if ($Total_Mileage_Sat != 0) { ?>
-            <span class="totalhours"><?php echo "Total mileage is : " . $Total_Mileage_Sat ?></span>
-        <?php } else { ?>
-            <span class="no_totalhours"></span>
-        <?php } ?>
+        <span class="totalmileage"><?php echo "Total Mileage: $Total_Mileage_Sat" ?></span>
     </p>
     <?php Pjax::end(); ?>
 

@@ -25,7 +25,7 @@ use app\controllers\BaseController;
  * @property string $UserModifiedDate
  * @property integer $UserCreatedBy
  * @property integer $UserModifiedBy
- * @property string $UserCreateDTLTOffset
+ * @property string $UserCreatedDTLTOffset
  * @property integer $UserModifiedDTLTOffset
  * @property integer $UserInactiveDTLTOffset
  *
@@ -59,7 +59,7 @@ class User extends \yii\base\model implements IdentityInterface
 	public $UserModifiedDate;
 	public $UserCreatedBy;
 	public $UserModifiedBy;
-	public $UserCreateDTLTOffset;
+	public $UserCreatedDTLTOffset;
 	public $UserModifiedDTLTOffset;
 	public $UserInactiveDTLTOffset;
 
@@ -79,7 +79,7 @@ class User extends \yii\base\model implements IdentityInterface
     public function rules()
     {
         return [
-            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreateDTLTOffset'], 'string'],
+            [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreatedDTLTOffset'], 'string'],
             [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
             ['UserPassword', 'string'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe'],
@@ -118,7 +118,7 @@ class User extends \yii\base\model implements IdentityInterface
             'UserModifiedDate' => 'User Modified Date',
             'UserCreatedBy' => 'User Created By',
             'UserModifiedBy' => 'User Modified By',
-            'UserCreateDTLTOffset' => 'User Create Dtltoffset',
+            'UserCreatedDTLTOffset' => 'User Created Dtltoffset',
             'UserModifiedDTLTOffset' => 'User Modified Dtltoffset',
             'UserInactiveDTLTOffset' => 'User Inactive Dtltoffset',
         ];
@@ -181,16 +181,21 @@ class User extends \yii\base\model implements IdentityInterface
 	//identity interface methods
     public static function findIdentity($id)
 	{
-		$url = 'user%2Fget-me';
-		$response = BaseController::executeGetRequest($url);
-		$decodedResponse = json_decode($response, true);
-		$userIdentity = new User();
-		if (array_key_exists("User",$decodedResponse))
+		if(Yii::$app->session->has('userIdentity'))
 		{
-			$identityAttributes = $decodedResponse["User"];
-			$userIdentity->attributes = $identityAttributes;
+			$userIdentity = Yii::$app->session['userIdentity'];
+		}else{
+			$url = 'user%2Fget-me';
+			$response = BaseController::executeGetRequest($url);
+			$decodedResponse = json_decode($response, true);
+			$userIdentity = new User();
+			if (array_key_exists("User",$decodedResponse))
+			{
+				$identityAttributes = $decodedResponse["User"];
+				$userIdentity->attributes = $identityAttributes;
+			}
+			Yii::$app->session->set('userIdentity', $userIdentity);
 		}
-		
 		return $userIdentity;
     }
 
