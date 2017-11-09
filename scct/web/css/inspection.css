@@ -106,6 +106,21 @@
      float:left;
      margin-left: 60%;
  }
+img:active {
+    -webkit-transform: scale(2);
+}
+img{
+    transition: -webkit-transform 0.25s ease;
+}
+.showImage{
+    width: 24%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.imageContainer{
+    overflow-y: scroll;
+}
 
 @media (max-width: 760px) {
     #inspectionPageSizeLabel {

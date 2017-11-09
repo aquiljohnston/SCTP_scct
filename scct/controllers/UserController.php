@@ -78,6 +78,28 @@ class UserController extends BaseController
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
+            // Sorting User table
+            $dataProvider->sort = [
+                'attributes' => [
+                    'UserName' => [
+                        'asc' => ['UserName' => SORT_ASC],
+                        'desc' => ['UserName' => SORT_DESC]
+                    ],
+                    'UserFirstName' => [
+                        'asc' => ['UserFirstName' => SORT_ASC],
+                        'desc' => ['UserFirstName' => SORT_DESC]
+                    ],
+                    'UserLastName' => [
+                        'asc' => ['UserLastName' => SORT_ASC],
+                        'desc' => ['UserLastName' => SORT_DESC]
+                    ],
+                    'UserAppRoleType' => [
+                        'asc' => ['UserAppRoleType' => SORT_ASC],
+                        'desc' => ['UserAppRoleType' => SORT_DESC]
+                    ]
+                ]
+            ];
+
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
@@ -158,7 +180,7 @@ class UserController extends BaseController
                 //'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
                 //'UserCreatedBy' => Yii::$app->session['userID'],
                 //'UserModifiedBy' => $model->UserModifiedBy,
-                'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
+                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
                 'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
                 'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
             );
@@ -247,7 +269,7 @@ class UserController extends BaseController
                 'UserPassword' => $model->UserPassword,
                 'UserCreatedDate' => $model->UserCreatedDate,
                 'UserModifiedDate' => $model->UserModifiedDate,
-                'UserCreateDTLTOffset' => $model->UserCreateDTLTOffset,
+                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
                 'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
                 'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
             );
