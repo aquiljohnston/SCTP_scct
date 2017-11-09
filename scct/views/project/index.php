@@ -20,7 +20,7 @@ $column = [
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [

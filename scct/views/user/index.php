@@ -21,7 +21,7 @@ $column = [
     [
         'label' => 'Username',
         'attribute' => 'UserName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
