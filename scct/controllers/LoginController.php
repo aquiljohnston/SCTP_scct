@@ -6,6 +6,7 @@ use Yii;
 use app\models\User;
 use app\models\Activity;
 use app\models\TimeEntry;
+use yii\base\Exception;
 use yii\filters\AccessControl;
 use app\controllers\BaseController;
 use yii\filters\VerbFilter;
@@ -59,9 +60,9 @@ class LoginController extends BaseController
 		} catch (UnauthorizedHttpException $exception) {
 			$isGuest = true;
 		}
-		if (!$isGuest) {
+		/*if (!$isGuest) {
 			return $this->redirect(['home/index']);
-		}else{	
+		}else{	*/
 			$loginError = false;
 			$model = new LoginForm();
 			//$geoLocationData = [];
@@ -112,7 +113,7 @@ class LoginController extends BaseController
 				'model' => $model,
 				'loginError' => $loginError
 			]);	
-		}	
+		//}
 	}
 
     public function actionUserLogout()
@@ -128,13 +129,13 @@ class LoginController extends BaseController
             $version = "v2";
             $response = Parent::executeGetRequest($url, $version);
         } catch(UnauthorizedHttpException $exception) {
-            // This is reached when the user is logging out with an expired token.
-		}
 
-        return $this->redirect(['login/index']);
+        }
+        return Yii::$app->response->redirect(['login/index']);
+        //return $this->redirect(['login/index']);
     }
 	
-	public static function logActivity($activityTitle, $geoLocationData=null)
+	public function logActivity($activityTitle, $geoLocationData=null)
     {
         try {
             //create models
@@ -199,8 +200,9 @@ class LoginController extends BaseController
             $response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), Constants::API_VERSION_2);
         } catch(UnauthorizedHttpException $exception) {
             // This is reached when the user is logging out with an expired token.
-            Yii::$app->response->redirect(['login/index'])->send(); return;
-            //return $this->redirect(['login/index']);
+            return Yii::$app->response->redirect(['login/index']);
+        } catch (Exception $e){
+            return Yii::$app->response->redirect(['login/index']);
         }
 	}
 	
