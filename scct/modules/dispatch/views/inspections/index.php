@@ -69,7 +69,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Map Grid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center indicator'],
+                        'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
                     ],

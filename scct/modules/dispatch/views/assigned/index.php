@@ -104,7 +104,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'MapGrid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center indicator', 'style' => 'width: 16%;'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
                         /*'value' => function ($model) {

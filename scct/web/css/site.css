@@ -46,7 +46,7 @@ body {
 }
 
 /* add sorting icons to gridview sort links */
-/*a.asc:after, a.desc:after {
+a.asc:after, a.desc:after {
     position: relative;
     top: 1px;
     display: inline-block;
@@ -58,12 +58,12 @@ body {
 }
 
 a.asc:after {
-    content: !*"\e113"*! "\e151";
+    content: /*"\e113"*/ "\e151";
 }
 
 a.desc:after {
-    content: !*"\e114"*! "\e152";
-}*/
+    content: /*"\e114"*/ "\e152";
+}
 
 .sort-numerical a.asc:after {
     content: "\e153";
@@ -82,7 +82,7 @@ a.desc:after {
 }
 
 /* temp change */
-.indicator>a:after {
+/*.indicator>a:after {
     position: relative;
     top: 1px;
     display: inline-block;
@@ -118,7 +118,7 @@ a.desc:after {
 
 .indicator>a.desc:after {
     content: "\e093";
-}
+}*/
 
 .grid-view th {
     white-space: nowrap;

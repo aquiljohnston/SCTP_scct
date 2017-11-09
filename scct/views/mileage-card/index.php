@@ -20,7 +20,7 @@ $column = [
     [
         'label' => 'User First Name',
         'attribute' => 'UserFirstName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [

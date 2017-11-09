@@ -19,7 +19,7 @@ $column = [
     [
         'label' => 'Name',
         'attribute' => 'ClientName',
-        'headerOptions' => ['class' => 'text-center indicator'],
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
         'filter' => '<input class="form-control" name="filterclientname" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
     ],
