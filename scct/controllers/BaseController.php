@@ -6,6 +6,7 @@ use app\dictionaries\PermissionDictionary;
 use Yii;
 use app\models\user;
 use app\models\UserSearch;
+use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
@@ -97,9 +98,8 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-            $url = ['login/user-logout'];
-            Yii::$app->getResponse()->redirect($url)->send();
-            //throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            //return Yii::$app->response->redirect(['login/index']);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -370,7 +370,6 @@ class BaseController extends Controller
      */
     public function actionGetNavMenu($id)
     {
-
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
