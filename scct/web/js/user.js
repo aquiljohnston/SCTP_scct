@@ -2,6 +2,24 @@ $(function() {
     var jqUserDropDowns = $('#userDropdownContainer');
     var jqUserPageSize = jqUserDropDowns.find('#userPageSize');
 
+    $(document).off('click', '#searchCleanFilterButton').on('click', '#searchCleanFilterButton', function (){
+        $('#userSearchFilter').val("");
+        reloadGridView();
+    });
+
+    $('#userSearchFilter').keypress(function (event) {
+        var key = event.which;
+        if (key == 13) {
+            var searchFilterVal = $('#userSearchFilter').val();
+            console.log("about to call");
+            console.log("searchFilterVal: " + searchFilterVal);
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                reloadGridView();
+            }
+        }
+    });
+
     jqUserPageSize.on('change', function (event) {
         reloadGridView();
         event.preventDefault();

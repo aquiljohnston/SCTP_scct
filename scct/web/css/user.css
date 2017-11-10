@@ -56,6 +56,12 @@
 #userReactivateBtn{
     margin-top: 2%;
 }
+#searchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    float: right;
+    margin-right: 10%;
+}
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 #userGridview .kv-grid-container{
@@ -117,7 +123,7 @@
     width:100%;
 }
 #userFilter{
-    margin-right: 10%;
+   /* margin-right: 10%;*/
 }
 #createUserButton{
     width: 100%;
