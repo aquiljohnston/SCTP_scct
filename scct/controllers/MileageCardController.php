@@ -84,8 +84,10 @@ class MileageCardController extends BaseController
 			$startDate = $dateRangeArray['startDate'];
 			$endDate =  $dateRangeArray['endDate'];
 			
+			$encodedFilter = urlencode($filter);
+
             //build url with params
-            $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
+            $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$encodedFilter&listPerPage=$mileageCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];

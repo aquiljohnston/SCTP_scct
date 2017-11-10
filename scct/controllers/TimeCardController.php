@@ -78,9 +78,12 @@ class TimeCardController extends BaseController
             } else {
                 $week = 'prior';
             }
+			
+			//url encode filter
+			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "time-card%2Fget-cards&filter=$filter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
+            $url = "time-card%2Fget-cards&filter=$encodedFilter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
