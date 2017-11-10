@@ -79,15 +79,13 @@ class MileageCardController extends BaseController
             } else {
                 $page = 1;
             }
-			
-			Yii::trace('Date Range: ' . json_encode($dateRangeValue));
+
 			$dateRangeArray = BaseController::splitDateRange($dateRangeValue);
 			$startDate = $dateRangeArray['startDate'];
 			$endDate =  $dateRangeArray['endDate'];
 			
             //build url with params
             $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
-			yii::trace("URL: $url");
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -452,7 +450,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageEntryIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -495,7 +492,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageCardIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -540,7 +536,6 @@ class MileageCardController extends BaseController
      */
     public function actionDownloadMileageCardData() {
         try {
-            Yii::trace("get called");
             // check if user has permission
             //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
 
@@ -550,26 +545,26 @@ class MileageCardController extends BaseController
             }
 
             $model = new \yii\base\DynamicModel([
-                'week'
+                'dateRange'
             ]);
-            $model->addRule('week', 'string', ['max' => 32]);
-
-            $week = "current";
+            $model->addRule('dateRange', 'string', ['max' => 64]);
 
             if ($model->load(Yii::$app->request->queryParams,'')) {
-                $week = $model->week;
+                $dateRange = $model->dateRange;
             }
+			
+			$dateRangeArray = BaseController::splitDateRange($dateRange);
+			$startDate = $dateRangeArray['startDate'];
+			$endDate =  $dateRangeArray['endDate'];
 
-            $url = 'mileage-card%2Fget-mileage-cards-history-data&' . http_build_query([
-                    'week' => $week
-                ]);
-
+            $url = "mileage-card%2Fget-cards-export&startDate=$startDate&endDate=$endDate";
+			
             header('Content-Disposition: attachment; filename="mileagecard_history_'.date('Y-m-d_h_i_s').'.csv"');
             $this->requestAndOutputCsv($url);
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (\Exception $e) {
-            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            //Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');
         }
     }
@@ -584,7 +579,7 @@ class MileageCardController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp);
+        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
