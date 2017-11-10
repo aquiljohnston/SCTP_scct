@@ -106,10 +106,10 @@
      float:left;
      margin-left: 60%;
  }
-img:active {
+.showImage:active {
     -webkit-transform: scale(2);
 }
-img{
+.showImage{
     transition: -webkit-transform 0.25s ease;
 }
 .showImage{
