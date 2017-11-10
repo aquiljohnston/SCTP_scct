@@ -391,6 +391,26 @@ class BaseController extends Controller
 		return date(Constants::DATE_FORMAT);
 	}
 	
+	//returns string 'beginDate, endDate'
+	//the last Sunday(begin) and next Saturday(end) based on the given date
+	public static function getWeekBeginEnd($date)
+	{
+		$lastSunday = date('m/d/Y', strtotime('last Sunday', strtotime($date)));
+		$nextSaturday = date('m/d/Y',strtotime('next Saturday', strtotime($date)));
+		return "$lastSunday, $nextSaturday";
+	}
+	
+	//param date range 'mm/dd/yyyy, mm/dd/yyyy'
+	//returns array ['beginDate'=>'mm/dd/yyyy', 'endDate'=>'mm/dd/yyyy']
+	public static function splitDateRange($dateRange)
+	{
+		$dates = [];
+		$dateRangeArray = explode(',', $dateRange);
+		$dates['startDate'] = str_replace(' ', '', $dateRangeArray[0]);
+		$dates['endDate'] = str_replace(' ', '', $dateRangeArray[1]);
+		return $dates;
+	}
+	
 	//type: type of data the UID will be associated with such as User, breadcrumb, activty, etc.
 	public static function generateUID($type)
 	{
