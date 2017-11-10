@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 //TODO rework this to handle new params
 $this->params['download_url'] = '/mileage-card/download-mileage-card-data?' . http_build_query([
-        'week' => $dateRangeValue
+        'dateRange' => $dateRangeValue
     ]);
 $column = [
     [
