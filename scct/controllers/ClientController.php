@@ -91,6 +91,10 @@ class ClientController extends BaseController
         // Sorting Client table
         $dataProvider->sort = [
             'attributes' => [
+                'ClientAccountID' => [
+                    'asc' => ['ClientAccountID' => SORT_ASC],
+                    'desc' => ['ClientAccountID' => SORT_DESC]
+                ],
                 'ClientName' => [
                     'asc' => ['ClientName' => SORT_ASC],
                     'desc' => ['ClientName' => SORT_DESC]
