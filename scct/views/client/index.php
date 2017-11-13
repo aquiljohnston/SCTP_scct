@@ -14,7 +14,13 @@ $this->title = 'Clients';
 $this->params['breadcrumbs'][] = $this->title;
 $column = [
     ['class' => 'kartik\grid\SerialColumn'],
-
+    [
+        'label' => 'AccountID',
+        'attribute' => 'ClientAccountID',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
+        'filter' => '<input class="form-control" name="filterclientaccountID" value="' . Html::encode($searchModel['ClientName']) . '" type="text">'
+    ],
     //'ClientID',
     [
         'label' => 'Name',

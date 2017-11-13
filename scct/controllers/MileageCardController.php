@@ -43,17 +43,34 @@ class MileageCardController extends BaseController
 			//Check if user has permission to view mileage card page
 			self::requirePermission("viewMileageCardMgmt");
             $model = new \yii\base\DynamicModel([
-                'pagesize',
+                'dateRangeValue',
+				'pagesize',
                 'filter'
             ]);
+			$model->addRule('dateRangeValue', 'string', ['max' => 30]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
+			
+			//get current and prior weeks date range
+			$today = BaseController::getDate();
+			$priorWeek = BaseController::getWeekBeginEnd("$today -1 week");
+			$currentWeek = BaseController::getWeekBeginEnd($today);
+			
+			//create default prior/current week values
+			$dateRangeDD = [
+			$priorWeek => 'Prior Week',
+			$currentWeek => 'Current Week'
+			];
+			
+			//check current filtering values
             if ($model->load(Yii::$app->request->queryParams)) {
                 $mileageCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
+				$dateRangeValue = $model->dateRangeValue;
             } else {
                 $mileageCardPageSizeParams = 50;
                 $filter = "";
+				$dateRangeValue = $priorWeek;
             }
 
             //check current page at
@@ -63,15 +80,14 @@ class MileageCardController extends BaseController
                 $page = 1;
             }
 
-            //get week
-            if (isset(Yii::$app->request->queryParams['weekMileageCard'])){
-                $week = Yii::$app->request->queryParams['weekMileageCard'];
-            } else {
-                $week = 'prior';
-            }
+			$dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+			$startDate = $dateRangeArray['startDate'];
+			$endDate =  $dateRangeArray['endDate'];
+			
+			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "mileage-card%2Fget-cards&week=$week&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
+            $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$encodedFilter&listPerPage=$mileageCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -123,7 +139,8 @@ class MileageCardController extends BaseController
 			if (Yii::$app->request->isAjax) {
 				 return $this->renderAjax('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+					'dateRangeDD' => $dateRangeDD,
+					'dateRangeValue' => $dateRangeValue,
 					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
 					'pages' => $pages,
 					'model' => $model,
@@ -132,7 +149,8 @@ class MileageCardController extends BaseController
 			}else{
 				return $this->render('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+					'dateRangeDD' => $dateRangeDD,
+					'dateRangeValue' => $dateRangeValue,
 					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
 					'pages' => $pages,
 					'model' => $model,
@@ -434,7 +452,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageEntryIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -477,7 +494,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageCardIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -522,7 +538,6 @@ class MileageCardController extends BaseController
      */
     public function actionDownloadMileageCardData() {
         try {
-            Yii::trace("get called");
             // check if user has permission
             //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
 
@@ -532,26 +547,26 @@ class MileageCardController extends BaseController
             }
 
             $model = new \yii\base\DynamicModel([
-                'week'
+                'dateRange'
             ]);
-            $model->addRule('week', 'string', ['max' => 32]);
-
-            $week = "current";
+            $model->addRule('dateRange', 'string', ['max' => 64]);
 
             if ($model->load(Yii::$app->request->queryParams,'')) {
-                $week = $model->week;
+                $dateRange = $model->dateRange;
             }
+			
+			$dateRangeArray = BaseController::splitDateRange($dateRange);
+			$startDate = $dateRangeArray['startDate'];
+			$endDate =  $dateRangeArray['endDate'];
 
-            $url = 'mileage-card%2Fget-mileage-cards-history-data&' . http_build_query([
-                    'week' => $week
-                ]);
-
+            $url = "mileage-card%2Fget-cards-export&startDate=$startDate&endDate=$endDate";
+			
             header('Content-Disposition: attachment; filename="mileagecard_history_'.date('Y-m-d_h_i_s').'.csv"');
             $this->requestAndOutputCsv($url);
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (\Exception $e) {
-            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            //Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');
         }
     }
@@ -566,7 +581,7 @@ class MileageCardController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp);
+        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
