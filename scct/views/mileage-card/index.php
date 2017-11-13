@@ -79,7 +79,7 @@ $column = [
         'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
-            $disabledBoolean = strtoupper($model["MileageCardApproved"]) == "YES";
+            /*$disabledBoolean = strtoupper($model["MileageCardApproved"]) == "YES";
             $result = [
                 'mileageCardId' => $model["MileageCardID"],
                 'approved' => $model["MileageCardApproved"],
@@ -89,7 +89,11 @@ $column = [
                 $result['disabled'] = 'true';
             }
 
-            return $result;
+            return $result;*/
+            if (strtoupper($model["MileageCardApproved"]) == "YES")
+                return ['disabled' => true];
+            else
+                return ['disabled' => false];
         }
     ],
 ];
