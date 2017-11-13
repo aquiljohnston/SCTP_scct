@@ -13,8 +13,9 @@ use kartik\form\ActiveForm;
 $this->title = 'Mileage Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
+//TODO rework this to handle new params
 $this->params['download_url'] = '/mileage-card/download-mileage-card-data?' . http_build_query([
-        'week' => $week
+        'dateRange' => $dateRangeValue
     ]);
 $column = [
     [
@@ -53,10 +54,15 @@ $column = [
             return date("m/d/Y", strtotime($model['MileageEndDate']));
         }
     ],
-    'SumMiles',
+	[
+        'label' => 'Total Miles',
+        'attribute' => 'MileageCardAllMileage_calc',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
+    ],
     [
         'label' => 'Approved',
-        'attribute' => 'MileageCardApprovedFlag',
+        'attribute' => 'MileageCardApproved',
 //        'filter' => $approvedInput
     ],
 
@@ -73,11 +79,11 @@ $column = [
         'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
-            $disabledBoolean = strtoupper($model["MileageCardApprovedFlag"]) == "YES";
+            $disabledBoolean = strtoupper($model["MileageCardApproved"]) == "YES";
             $result = [
                 'mileageCardId' => $model["MileageCardID"],
-                'approved' => $model["MileageCardApprovedFlag"],
-                'totalmileage' => $model["SumMiles"]
+                'approved' => $model["MileageCardApproved"],
+                'totalmileage' => $model["MileageCardAllMileage_calc"]
             ];
             if ($disabledBoolean) {
                 $result['disabled'] = 'true';
@@ -99,13 +105,6 @@ $column = [
                         'class' => 'btn btn-primary multiple_approve_btn',
                         'id' => 'multiple_mileage_card_approve_btn',
                     ]);
-                if ($week == "prior") {
-                    $priorSelected = "selected";
-                    $currentSelected = "";
-                } else {
-                    $priorSelected = "";
-                    $currentSelected = "selected";
-                }
                 ?>
                 <?php if ($pages->totalCount > 0) { ?>
                     <a id="export_mileagecard_btn" class="btn btn-primary" target="_blank"
@@ -121,11 +120,10 @@ $column = [
                         'id' => 'MileageCardForm',
                     ]
                 ]); ?>
-                <div id="mileageCardWeekContainer">
-                    <select name="weekMileageCard" id="mileageCardWeekSelection">
-                        <option value="prior" <?= $priorSelected ?> >Prior Week</option>
-                        <option value="current" <?= $currentSelected ?> >Current Week</option>
-                    </select>
+                <div id="mileageCardDateContainer">
+                    <label id="mileageCardDateSelection">
+                         <?= $form->field($model, 'dateRangeValue')->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Date Range"); ?>
+					</label>
                 </div>
                 <div id="mileageCardPageSizeContainer">
                     <label id="mileageCardPageSizeLabel">
