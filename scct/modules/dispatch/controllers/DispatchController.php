@@ -71,6 +71,7 @@ class DispatchController extends \app\controllers\BaseController
             //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
+			$divisionFlag = $getDispatchDataResponse['divisionFlag'];
 
             // Put data in data provider
             // render page
@@ -125,6 +126,7 @@ class DispatchController extends \app\controllers\BaseController
                 ];
                 return $this->renderAjax('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
+					'divisionFlag' => $divisionFlag,
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,
@@ -134,6 +136,7 @@ class DispatchController extends \app\controllers\BaseController
             } else {
                 return $this->render('index', [
                     'dispatchDataProvider' => $dispatchDataProvider,
+					'divisionFlag' => $divisionFlag,
                     'model' => $model,
                     'can' => $can,
                     'pages' => $pages,

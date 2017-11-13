@@ -91,6 +91,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'attribute' => 'Division',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
+						'visible' => $divisionFlag,
                         'format' => 'html',
                     ],
                     [
