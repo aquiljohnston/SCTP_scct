@@ -43,6 +43,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 <div id="cgefiltertitle" class="dropdowntitle">
                     <?= $form->field($model, 'cgefilter')->textInput(['value' => $cgeFilterParams, 'id' => 'cgeFilter', 'placeholder' => 'Search'])->label(''); ?>
                 </div>
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'cgeSearchCleanFilterButton']) ?>
             </div>
             <input id="cgeTableRecordsUpdate" type="hidden" name="cgeTableRecordsUpdate" value="no" />
             <input id="cgePageNumber" type="hidden" name="cgePageNumber" value="1" />

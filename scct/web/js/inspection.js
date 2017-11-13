@@ -52,6 +52,11 @@ $(function () {
             inspectionGV.css('overflow-x', 'hidden');
         }
     });
+
+    $(document).off('click', '#inspectionSearchCleanFilterButton').on('click', '#inspectionSearchCleanFilterButton', function (){
+        $('#inspectionFilter').val("");
+        reloadInspectionGridView();
+    });
 });
 
 
