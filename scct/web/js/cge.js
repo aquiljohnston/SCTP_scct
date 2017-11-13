@@ -75,6 +75,11 @@ $(function () {
             .find('#modalAddSurveyorCge')
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge');
     });
+
+    $(document).off('click', '#cgeSearchCleanFilterButton').on('click', '#cgeSearchCleanFilterButton', function (){
+        $('#cgeFilter').val("");
+        cgeGridViewReload();
+    });
 });
 
 function cgeGridViewReload() {

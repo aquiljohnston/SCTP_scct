@@ -101,6 +101,11 @@ function initializeDispatch() {
     });
 
     $('#loading').hide();
+
+    $(document).off('click', '#dispatchSearchCleanFilterButton').on('click', '#dispatchSearchCleanFilterButton', function (){
+        $('#dispatchFilter').val("");
+        reloadDispatchGridView();
+    });
 }
 
 function reloadDispatchGridView() {
