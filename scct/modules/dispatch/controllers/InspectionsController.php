@@ -81,6 +81,28 @@ class InspectionsController extends \app\controllers\BaseController
             //todo: check permission to dispatch work
             $can = 1;
 
+            // Sorting Unassign table
+            $inspectionDataProvider->sort = [
+                'attributes' => [
+                    'MapGrid' => [
+                        'asc' => ['MapGrid' => SORT_ASC],
+                        'desc' => ['MapGrid' => SORT_DESC]
+                    ],
+                    'ComplianceStart' => [
+                        'asc' => ['ComplianceStart' => SORT_ASC],
+                        'desc' => ['ComplianceStart' => SORT_DESC]
+                    ],
+                    'ComplianceEnd' => [
+                        'asc' => ['ComplianceEnd' => SORT_ASC],
+                        'desc' => ['ComplianceEnd' => SORT_DESC]
+                    ],
+                    'TotalInspections' => [
+                        'asc' => ['TotalInspections' => SORT_ASC],
+                        'desc' => ['TotalInspections' => SORT_DESC]
+                    ]
+                ]
+            ];
+
             if (Yii::$app->request->isAjax) {
                 return $this->renderAjax('index', [
                     'inspectionDataProvider' => $inspectionDataProvider,
@@ -347,6 +369,30 @@ class InspectionsController extends \app\controllers\BaseController
                 'pages' => $pages,
                 'eventFilterParams' => $eventFilterParams,
                 'eventPageSizeParams' => $eventPageSizeParams,
+            ]);
+        }
+    }
+
+    /**
+     * render Image
+     * @param null $Photo1Path
+     * @return string|\yii\web\Response
+     */
+    public function actionViewImage($Photo1Path = null){
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        Yii::trace("CALL VIEW IMAGE ACTION.");
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('viewImage', [
+                'Photo1Path' => $Photo1Path
+            ]);
+        } else {
+            return $this->render('viewImage', [
+                'Photo1Path' => $Photo1Path
             ]);
         }
     }

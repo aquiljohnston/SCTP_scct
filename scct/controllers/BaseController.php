@@ -6,6 +6,7 @@ use app\dictionaries\PermissionDictionary;
 use Yii;
 use app\models\user;
 use app\models\UserSearch;
+use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\web\ForbiddenHttpException;
@@ -97,9 +98,8 @@ class BaseController extends Controller
 		if($httpCode == 401) // Not authenticated
 		{
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
-            $url = ['login/user-logout'];
-            Yii::$app->getResponse()->redirect($url)->send();
-            //throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
+            //return Yii::$app->response->redirect(['login/index']);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -370,7 +370,6 @@ class BaseController extends Controller
      */
     public function actionGetNavMenu($id)
     {
-
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post();
 
@@ -390,6 +389,26 @@ class BaseController extends Controller
 	public static function getDate()
 	{
 		return date(Constants::DATE_FORMAT);
+	}
+	
+	//returns string 'beginDate, endDate'
+	//the last Sunday(begin) and next Saturday(end) based on the given date
+	public static function getWeekBeginEnd($date)
+	{
+		$lastSunday = date('m/d/Y', strtotime('last Sunday', strtotime($date)));
+		$nextSaturday = date('m/d/Y',strtotime('next Saturday', strtotime($date)));
+		return "$lastSunday, $nextSaturday";
+	}
+	
+	//param date range 'mm/dd/yyyy, mm/dd/yyyy'
+	//returns array ['beginDate'=>'mm/dd/yyyy', 'endDate'=>'mm/dd/yyyy']
+	public static function splitDateRange($dateRange)
+	{
+		$dates = [];
+		$dateRangeArray = explode(',', $dateRange);
+		$dates['startDate'] = str_replace(' ', '', $dateRangeArray[0]);
+		$dates['endDate'] = str_replace(' ', '', $dateRangeArray[1]);
+		return $dates;
 	}
 	
 	//type: type of data the UID will be associated with such as User, breadcrumb, activty, etc.

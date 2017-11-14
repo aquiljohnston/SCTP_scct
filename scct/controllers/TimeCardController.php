@@ -78,9 +78,12 @@ class TimeCardController extends BaseController
             } else {
                 $week = 'prior';
             }
+			
+			//url encode filter
+			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "time-card%2Fget-cards&filter=$filter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
+            $url = "time-card%2Fget-cards&filter=$encodedFilter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -188,80 +191,60 @@ class TimeCardController extends BaseController
 			$url = 'time-card%2Fget-entries&cardID='.$id;
 			$time_card_url = 'time-card%2Fview&id='.$id;
 
-			$response = Parent::executeGetRequest($url); // rbac check
-			$time_card_response = Parent::executeGetRequest($time_card_url); // rbac check
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // rbac check
+			$time_card_response = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
 			$model = json_decode($time_card_response, true);
-			$dateProvider = json_decode($response, true);
-			$ApprovedFlag = $dateProvider["ApprovedFlag"];
-			$Sundaydata = $dateProvider["TimeEntries"][0]["Sunday"];
+			$entryData = json_decode($response, true);
+			$ApprovedFlag = $entryData['ApprovedFlag'];
+			
+			$Sundaydata = $entryData['TimeEntries']['Sunday']['Entries'];
 			$SundayProvider = new ArrayDataProvider([
 				'allModels' => $Sundaydata,
 				'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Sun = $this->TotalHourCal($Sundaydata);
+			$Total_Hours_Sun = $entryData['TimeEntries']['Sunday']['Total'];
 
-			$Mondaydata = $dateProvider["TimeEntries"][0]["Monday"];
+			$Mondaydata = $entryData['TimeEntries']['Monday']['Entries'];
 			$MondayProvider = new ArrayDataProvider([
 				'allModels' => $Mondaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Mon = $this->TotalHourCal($Mondaydata);
+			$Total_Hours_Mon = $entryData['TimeEntries']['Monday']['Total'];
 
-			$Tuesdaydata = $dateProvider["TimeEntries"][0]["Tuesday"];
+			$Tuesdaydata = $entryData['TimeEntries']['Tuesday']['Entries'];
 			$TuesdayProvider = new ArrayDataProvider([
 				'allModels' => $Tuesdaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Tue = $this->TotalHourCal($Tuesdaydata);
+			$Total_Hours_Tue = $entryData['TimeEntries']['Tuesday']['Total'];
 
-			$Wednesdaydata = $dateProvider["TimeEntries"][0]["Wednesday"];
+			$Wednesdaydata = $entryData['TimeEntries']['Wednesday']['Entries'];
 			$WednesdayProvider = new ArrayDataProvider([
 				'allModels' => $Wednesdaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Wed = $this->TotalHourCal($Wednesdaydata);
+			$Total_Hours_Wed = $entryData['TimeEntries']['Wednesday']['Total'];
 
-			$Thursdaydata = $dateProvider["TimeEntries"][0]["Thursday"];
+			$Thursdaydata = $entryData['TimeEntries']['Thursday']['Entries'];
 			$ThursdayProvider = new ArrayDataProvider([
 				'allModels' => $Thursdaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Thu = $this->TotalHourCal($Thursdaydata);
+			$Total_Hours_Thu = $entryData['TimeEntries']['Thursday']['Total'];
 
-			$Fridaydata = $dateProvider["TimeEntries"][0]["Friday"];
+			$Fridaydata = $entryData['TimeEntries']['Friday']['Entries'];
 			$FridayProvider = new ArrayDataProvider([
 				'allModels' => $Fridaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Fri = $this->TotalHourCal($Fridaydata);
+			$Total_Hours_Fri = $entryData['TimeEntries']['Friday']['Total'];
 
-			$Saturdaydata = $dateProvider["TimeEntries"][0]["Saturday"];
+			$Saturdaydata = $entryData['TimeEntries']['Saturday']['Entries'];
 			$SaturdayProvider = new ArrayDataProvider([
 				'allModels' => $Saturdaydata,
                 'pagination' => false,
-				// 'sort' => [
-					// 'attributes' => ['id', 'name'],
-				// ],
 			]);
-			$Total_Hours_Sat = $this->TotalHourCal($Saturdaydata);
+			$Total_Hours_Sat = $entryData['TimeEntries']['Saturday']['Total'];
 
 			//calculation total hours for this timecardid
 			$Total_Hours_Current_TimeCard = $Total_Hours_Sun +
@@ -285,7 +268,6 @@ class TimeCardController extends BaseController
 											'duplicateFlag' => $duplicateFlag,
 											'ApprovedFlag' => $ApprovedFlag,
 											'Total_Hours_Current_TimeCard' => $Total_Hours_Current_TimeCard,
-											'dateProvider' => $dateProvider,
 											'SundayProvider' => $SundayProvider,
 											'Total_Hours_Sun' => $Total_Hours_Sun,
 											'MondayProvider' => $MondayProvider,
@@ -370,7 +352,6 @@ class TimeCardController extends BaseController
 				$time_entry_data[] = array(
 					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
 					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
-					'TimeEntryDate' => $TimeEntryDate,
 					'TimeEntryModifiedDate' => $timeEntryModel->TimeEntryModifiedDate,
 					'TimeEntryUserID' => $TimeCardTechID,
 					'TimeEntryTimeCardID' => $id,
@@ -481,7 +462,6 @@ class TimeCardController extends BaseController
 					foreach($key as $keyitem){
 					
 					   $TimeEntryIDArray[] = $keyitem;
-					   Yii::Trace("TimeCardid is ; ". $keyitem);
 					}
 				}
 				
@@ -587,28 +567,6 @@ class TimeCardController extends BaseController
             // Yii::$app->runAction('login/user-logout');
         }
     }
-
-    /**
-     * Calculate total work hours
-     * @param $dataProvider
-     * @return total work hours
-     * @throws \yii\web\HttpException
-     */
-	 public function TotalHourCal($dataProvider){
-		try{ 
-			$Total_Work_Minutes = 0;
-			foreach($dataProvider as $item){
-				if($item["TimeEntryActiveFlag"] != "Inactive"){
-					$Total_Work_Minutes += $item["TimeEntryMinutes"];
-					Yii::Trace("item minutes is: ".$item["TimeEntryMinutes"]);
-				}
-			}
-
-			return number_format ($Total_Work_Minutes / 60, 2);
-		}catch(ErrorException $e){
-				throw new \yii\web\HttpException(400);
-			} 
-	 }
 
     /**
      * Export TimeCard Table To Excel File

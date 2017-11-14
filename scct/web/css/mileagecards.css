@@ -15,9 +15,6 @@ div[id^=modalContent] .container {
 div[id^=modalContent] .wrap #top-wrapper {
     display: none;
 }
-#mileageCardWeekSelection {
-    margin-top: 7%;
-}
 #mileageCardGridViewContainer,#mileage_card_filter{
 	position:relative;
 	width:100%;
@@ -29,7 +26,7 @@ div[id^=modalContent] .wrap #top-wrapper {
 #mileageCardDropdownContainer{
 	padding-right:0;
 }
-#mileageCardWeekContainer{
+#mileageCardDateContainer{
 	float:left;
 }
 #mileageCardPageSizeContainer{
@@ -45,6 +42,13 @@ div[id^=modalContent] .wrap #top-wrapper {
 	max-height:60vh;
 	overflow-y:auto;
 }
+
+.totalmileage {
+    float: right;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 800;
+}
+
 /*mileageCard view page*/
 .mileagecard-view table{
 	margin-bottom:0px;
