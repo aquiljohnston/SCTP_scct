@@ -98,7 +98,7 @@ $column = [
     <div class="lightBlueBar">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="mileage_card_filter">
-            <div id="mileage_card_approve_btn" class="col-xs-4 col-md-3 col-lg-2">
+            <div id="mileage_card_approve_btn" class="col-xs-4 col-md-2 col-lg-2">
                 <?php
                 echo Html::button('Approve',
                     [
@@ -111,31 +111,25 @@ $column = [
                        href="<?= $this->params['download_url']; ?>">Export</a>
                 <?php } ?>
             </div>
-            <div id="mileageCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
+            <div id="mileageCardDropdownContainer" class="col-xs-8 col-md-10 col-lg-10">
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
-                    'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+                    'formConfig' => ['deviceSize' => ActiveForm::SIZE_SMALL],
                     'method' => 'get',
                     'options' => [
                         'id' => 'MileageCardForm',
                     ]
                 ]); ?>
-                <div id="mileageCardDateContainer">
-                    <label id="mileageCardDateSelection">
-                         <?= $form->field($model, 'dateRangeValue')->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Date Range"); ?>
-					</label>
-                </div>
-                <div id="mileageCardPageSizeContainer">
-                    <label id="mileageCardPageSizeLabel">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
-                    </label>
-                    <input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
-                </div>
-				<div class="sol-sm-5">
-					<label id="mileageCardSearch">
-						<?= $form->field($model, 'filter')->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
-					</label>
+				<div class="col-md-3">
+					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 5])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Date Range"); ?>
 				</div>
+				<div class="col-md-3">
+					<?= $form->field($model, 'filter', ['labelSpan' => 2])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
+				</div>
+				<div class="col-md-5" style="float:right;">
+					<?= $form->field($model, 'pagesize', ['labelSpan' => 10])->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
+					<input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>	
+				</div>				
                 <?php ActiveForm::end(); ?>
             </div>
         </div>
