@@ -123,10 +123,12 @@ $(function () {
         $("#unassigned-message").find('span').html(getSelectedUserName(getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid), assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID));
         $("#unassigned-message").css("display", "block");
         // When the user clicks buttons, close the modal
-        $('#unassignedCancelBtn').click(function () {
+        $(document).off('click', '#unassignedCancelBtn').on('click', '#unassignedCancelBtn', function () {
+        //$('#unassignedCancelBtn').click(function () {
             $("#unassigned-message").css("display", "none");
         });
-        $('#unassignedConfirmBtn').click(function () {
+        $(document).off('click', '#unassignedConfirmBtn').on('click', '#unassignedConfirmBtn', function () {
+        //$('#unassignedConfirmBtn').click(function () {
             $("#unassigned-message").css("display", "none");
             unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber);
         });

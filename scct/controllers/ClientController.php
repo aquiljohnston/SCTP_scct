@@ -88,6 +88,28 @@ class ClientController extends BaseController
         //set pages
         $pages = new Pagination($response['pages']);
 
+        // Sorting Client table
+        $dataProvider->sort = [
+            'attributes' => [
+                'ClientAccountID' => [
+                    'asc' => ['ClientAccountID' => SORT_ASC],
+                    'desc' => ['ClientAccountID' => SORT_DESC]
+                ],
+                'ClientName' => [
+                    'asc' => ['ClientName' => SORT_ASC],
+                    'desc' => ['ClientName' => SORT_DESC]
+                ],
+                'ClientCity' => [
+                    'asc' => ['ClientCity' => SORT_ASC],
+                    'desc' => ['ClientCity' => SORT_DESC]
+                ],
+                'ClientState' => [
+                    'asc' => ['ClientState' => SORT_ASC],
+                    'desc' => ['ClientState' => SORT_DESC]
+                ]
+            ]
+        ];
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,

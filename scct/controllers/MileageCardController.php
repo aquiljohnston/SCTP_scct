@@ -43,17 +43,34 @@ class MileageCardController extends BaseController
 			//Check if user has permission to view mileage card page
 			self::requirePermission("viewMileageCardMgmt");
             $model = new \yii\base\DynamicModel([
-                'pagesize',
+                'dateRangeValue',
+				'pagesize',
                 'filter'
             ]);
+			$model->addRule('dateRangeValue', 'string', ['max' => 30]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
+			
+			//get current and prior weeks date range
+			$today = BaseController::getDate();
+			$priorWeek = BaseController::getWeekBeginEnd("$today -1 week");
+			$currentWeek = BaseController::getWeekBeginEnd($today);
+			
+			//create default prior/current week values
+			$dateRangeDD = [
+			$priorWeek => 'Prior Week',
+			$currentWeek => 'Current Week'
+			];
+			
+			//check current filtering values
             if ($model->load(Yii::$app->request->queryParams)) {
                 $mileageCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
+				$dateRangeValue = $model->dateRangeValue;
             } else {
                 $mileageCardPageSizeParams = 50;
                 $filter = "";
+				$dateRangeValue = $priorWeek;
             }
 
             //check current page at
@@ -63,15 +80,14 @@ class MileageCardController extends BaseController
                 $page = 1;
             }
 
-            //get week
-            if (isset(Yii::$app->request->queryParams['weekMileageCard'])){
-                $week = Yii::$app->request->queryParams['weekMileageCard'];
-            } else {
-                $week = 'prior';
-            }
+			$dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+			$startDate = $dateRangeArray['startDate'];
+			$endDate =  $dateRangeArray['endDate'];
+			
+			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "mileage-card%2Fget-cards&week=$week&filter=$filter&listPerPage=$mileageCardPageSizeParams&page=$page";
+            $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$encodedFilter&listPerPage=$mileageCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -123,7 +139,8 @@ class MileageCardController extends BaseController
 			if (Yii::$app->request->isAjax) {
 				 return $this->renderAjax('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+					'dateRangeDD' => $dateRangeDD,
+					'dateRangeValue' => $dateRangeValue,
 					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
 					'pages' => $pages,
 					'model' => $model,
@@ -132,7 +149,8 @@ class MileageCardController extends BaseController
 			}else{
 				return $this->render('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+					'dateRangeDD' => $dateRangeDD,
+					'dateRangeValue' => $dateRangeValue,
 					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
 					'pages' => $pages,
 					'model' => $model,
@@ -178,80 +196,60 @@ class MileageCardController extends BaseController
             $mileage_card_url = 'mileage-card%2Fview&id=' . $id;
 
             //Indirect RBAC checks
-            $response = Parent::executeGetRequest($url);
-            $mileage_card_response = Parent::executeGetRequest($mileage_card_url);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $mileage_card_response = Parent::executeGetRequest($mileage_card_url, Constants::API_VERSION_2);
             $model = json_decode($mileage_card_response, true);
-            $dateProvider = json_decode($response, true);
-            $ApprovedFlag = $dateProvider["ApprovedFlag"];
-            $Sundaydata = $dateProvider["MileageEntries"][0]["Sunday"];
+            $entryData = json_decode($response, true);
+            $ApprovedFlag = $entryData['ApprovedFlag'];
+			
+            $Sundaydata = $entryData['MileageEntries']['Sunday']['Entries'];
             $SundayProvider = new ArrayDataProvider([
                 'allModels' => $Sundaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Sun = $this->TotalMileageCal($Sundaydata);
+            $Total_Mileage_Sun = $entryData['MileageEntries']['Sunday']['Total'];
 
-            $Mondaydata = $dateProvider["MileageEntries"][0]["Monday"];
+            $Mondaydata = $entryData['MileageEntries']['Monday']['Entries'];
             $MondayProvider = new ArrayDataProvider([
                 'allModels' => $Mondaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Mon = $this->TotalMileageCal($Mondaydata);
+            $Total_Mileage_Mon = $entryData['MileageEntries']['Monday']['Total'];
 
-            $Tuesdaydata = $dateProvider["MileageEntries"][0]["Tuesday"];
+            $Tuesdaydata = $entryData['MileageEntries']['Tuesday']['Entries'];
             $TuesdayProvider = new ArrayDataProvider([
                 'allModels' => $Tuesdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Tue = $this->TotalMileageCal($Tuesdaydata);
+            $Total_Mileage_Tue = $entryData['MileageEntries']['Tuesday']['Total'];
 
-            $Wednesdaydata = $dateProvider["MileageEntries"][0]["Wednesday"];
+            $Wednesdaydata = $entryData['MileageEntries']['Wednesday']['Entries'];
             $WednesdayProvider = new ArrayDataProvider([
                 'allModels' => $Wednesdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Wed = $this->TotalMileageCal($Wednesdaydata);
+            $Total_Mileage_Wed = $entryData['MileageEntries']['Wednesday']['Total'];
 
-            $Thursdaydata = $dateProvider["MileageEntries"][0]["Thursday"];
+            $Thursdaydata = $entryData['MileageEntries']['Thursday']['Entries'];
             $ThursdayProvider = new ArrayDataProvider([
                 'allModels' => $Thursdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Thr = $this->TotalMileageCal($Thursdaydata);
+            $Total_Mileage_Thr = $entryData['MileageEntries']['Thursday']['Total'];
 
-            $Fridaydata = $dateProvider["MileageEntries"][0]["Friday"];
+            $Fridaydata = $entryData['MileageEntries']['Friday']['Entries'];
             $FridayProvider = new ArrayDataProvider([
                 'allModels' => $Fridaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Fri = $this->TotalMileageCal($Fridaydata);
+            $Total_Mileage_Fri = $entryData['MileageEntries']['Friday']['Total'];
 
-            $Saturdaydata = $dateProvider["MileageEntries"][0]["Saturday"];
+            $Saturdaydata = $entryData['MileageEntries']['Saturday']['Entries'];
             $SaturdayProvider = new ArrayDataProvider([
                 'allModels' => $Saturdaydata,
                 'pagination' => false,
-                // 'sort' => [
-                // 'attributes' => ['id', 'name'],
-                // ],
             ]);
-            $Total_Mileage_Sat = $this->TotalMileageCal($Saturdaydata);
+            $Total_Mileage_Sat = $entryData['MileageEntries']['Saturday']['Total'];
 
             //calculation total miles for this mileage card
             $Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
@@ -276,7 +274,6 @@ class MileageCardController extends BaseController
                 'duplicateFlag' => $duplicateFlag,
                 'ApprovedFlag' => $ApprovedFlag,
                 'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
-                'dateProvider' => $dateProvider,
                 'SundayProvider' => $SundayProvider,
                 'Total_Mileage_Sun' => $Total_Mileage_Sun,
                 'MondayProvider' => $MondayProvider,
@@ -348,7 +345,6 @@ class MileageCardController extends BaseController
                 'MileageEntryEndingMileage' => $model->MileageEntryEndingMileage,
                 'MileageEntryStartDate' => $MileageEntryStartTimeConcatenate,
                 'MileageEntryEndDate' => $MileageEntryEndTimeConcatenate,
-                'MileageEntryDate' => $mileageCardDate,
                 'MileageEntryType' => '0', //Automatically set the mileage entry type to 0 for BUSINESS - Andre V.
                 'MileageEntryActivityID' => '3', //Automatically set the mileage entry activity type to 3 for PRODUCTION - Andre V.
                 'MileageEntryMileageCardID' => $mileageCardId,
@@ -456,7 +452,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageEntryIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -499,7 +494,6 @@ class MileageCardController extends BaseController
                     foreach ($key as $keyitem) {
 
                         $MileageCardIDArray[] = $keyitem;
-                        Yii::Trace("Mileage Card ID is : " . $keyitem);
                     }
                 }
 
@@ -544,7 +538,6 @@ class MileageCardController extends BaseController
      */
     public function actionDownloadMileageCardData() {
         try {
-            Yii::trace("get called");
             // check if user has permission
             //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
 
@@ -554,45 +547,28 @@ class MileageCardController extends BaseController
             }
 
             $model = new \yii\base\DynamicModel([
-                'week'
+                'dateRange'
             ]);
-            $model->addRule('week', 'string', ['max' => 32]);
-
-            $week = "current";
+            $model->addRule('dateRange', 'string', ['max' => 64]);
 
             if ($model->load(Yii::$app->request->queryParams,'')) {
-                $week = $model->week;
+                $dateRange = $model->dateRange;
             }
+			
+			$dateRangeArray = BaseController::splitDateRange($dateRange);
+			$startDate = $dateRangeArray['startDate'];
+			$endDate =  $dateRangeArray['endDate'];
 
-            $url = 'mileage-card%2Fget-mileage-cards-history-data&' . http_build_query([
-                    'week' => $week
-                ]);
-
+            $url = "mileage-card%2Fget-cards-export&startDate=$startDate&endDate=$endDate";
+			
             header('Content-Disposition: attachment; filename="mileagecard_history_'.date('Y-m-d_h_i_s').'.csv"');
             $this->requestAndOutputCsv($url);
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (\Exception $e) {
-            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            //Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');
         }
-    }
-
-    /**
-     * Calculate total work hours
-     * @return total work hours
-     */
-    public function TotalMileageCal($dataProvider)
-    {
-        $Total_Mileages = 0;
-        foreach ($dataProvider as $item) {
-            if ($item["MileageEntryActiveFlag"] != "Inactive") {
-                $Total_Mileages += $item["MileageEntryEndingMileage"] - $item["MileageEntryStartingMileage"];
-                Yii::Trace("End mileage is: " . $item["MileageEntryEndingMileage"]);
-            }
-        }
-
-        return number_format($Total_Mileages, 2);
     }
 
     /**
@@ -605,7 +581,7 @@ class MileageCardController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp);
+        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);

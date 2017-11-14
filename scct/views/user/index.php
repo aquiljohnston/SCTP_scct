@@ -21,43 +21,32 @@ $column = [
     [
         'label' => 'Username',
         'attribute' => 'UserName',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'First Name',
         'attribute' => 'UserFirstName',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Last Name',
         'attribute' => 'UserLastName',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
     [
         'label' => 'Role Type',
         'attribute' => 'UserAppRoleType',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
     ],
-    // 'UserEmployeeType',
-    // 'UserPhone',
-    // 'UserCompanyName',
-    // 'UserCompanyPhone',
-    // 'UserAppRoleType',
-    // 'UserComments',
-    // 'UserKey',
-    // 'UserActiveFlag',
-    // 'UserCreatedDate',
-    // 'UserModifiedDate',
-    // 'UserCreatedBy',
-    // 'UserModifiedBy',
-    // 'UserCreateDTLTOffset',
-    // 'UserModifiedDTLTOffset',
-    // 'UserInactiveDTLTOffset',
-
     ['class' => 'kartik\grid\ActionColumn',
+		'template' => '{view} {delete}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
                 $url = '/user/view?id=' . $model["UserID"];
-                return $url;
-            }
-            if ($action === 'update') {
-                $url = '/user/update?id=' . $model["UserID"];
                 return $url;
             }
             if ($action === 'delete') {
@@ -108,8 +97,9 @@ $column = [
                 <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0;">
                     <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']) ?>
                 </div>
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton']) ?>
                 <label id="userFilter" class="col-sm-7 col-md-7 col-lg-7" style="float:right;">
-                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search'])->label(''); ?>
+                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search', 'id' => 'userSearchFilter'])->label(''); ?>
                 </label>
                 <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
                 <?php Pjax::end() ?>

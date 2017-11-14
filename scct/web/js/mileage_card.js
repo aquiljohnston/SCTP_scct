@@ -1,11 +1,11 @@
 $(function(){
     var jqMileageCardFilter = $('#mileage_card_filter');
     var jqMCDropDowns = $('#mileageCardDropdownContainer');
-    var jqWeekSelection = jqMileageCardFilter.find('#mileageCardWeekSelection');
+    var jqDateSelection = jqMileageCardFilter.find('#mileageCardDateSelection');
     var jqMCPageSize = jqMCDropDowns.find('#mileageCardPageSize');
 
 
-    jqWeekSelection.on('change', function (event) {
+    jqDateSelection.on('change', function (event) {
         event.preventDefault();
         reloadGridView();
         return false;
