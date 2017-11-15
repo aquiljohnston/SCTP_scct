@@ -16,6 +16,8 @@ $(function () {
     $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
+            //reset page number to 1
+            $('#assignedPageNumber').val(1);
             reloadAssignedGridView();
         }
     });
