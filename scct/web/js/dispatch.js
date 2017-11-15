@@ -9,6 +9,8 @@ function initializeDispatch() {
     $(document).off('keypress', '#dispatchFilter').on('keypress', '#dispatchFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
+            //reset page number to 1
+            $('#dispatchPageNumber').val(1);
             reloadDispatchGridView();
         }
     });

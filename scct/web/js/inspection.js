@@ -9,6 +9,8 @@ $(function () {
     $(document).off('keypress', '#inspectionFilter').on('keypress', '#inspectionFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
+            //reset page number to 1
+            $('#inspectionPageNumber').val(1);
             reloadInspectionGridView();
         }
     });
