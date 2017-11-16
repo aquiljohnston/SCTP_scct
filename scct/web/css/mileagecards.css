@@ -61,6 +61,10 @@ div[id^=modalContent] .wrap #top-wrapper {
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+#mileageCardSearchCleanFilterButton{
+	width: 32px;
+	cursor: pointer;
+}
 /*responsive css for table*/
 @media only screen 
 and (min-width : 1360px) {

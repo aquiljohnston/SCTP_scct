@@ -130,7 +130,8 @@ $column = [
 				<div class="col-md-3">
 					<?= $form->field($model, 'filter', ['labelSpan' => 2])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
 				</div>
-				<div class="col-md-5" style="float:right;">
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
+                <div class="col-md-5" style="float:right;">
 					<?= $form->field($model, 'pagesize', ['labelSpan' => 10])->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
 					<input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>	
 				</div>				
