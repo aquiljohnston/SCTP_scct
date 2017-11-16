@@ -281,7 +281,7 @@ ul > li > a:hover {
     /* margin-top: 2%;	 */
 }
 
-.user-index,.equipment-view, .project-index, .timecard-index, .mileagecard-index {
+.user-index,.equipment-view, .project-index, .timecard-index, .mileagecard-index, .client-index {
     margin-top: 30px;
 }
 
