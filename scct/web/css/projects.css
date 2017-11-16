@@ -1,33 +1,48 @@
-#project_form{
-	margin-right: 9%;
+#project_form {
+    margin-right: 9%;
     margin-top: 3%;
 }
-#project_submit_btn{
-	margin-top: 2%;
-	margin-left: 1%;
+
+#project_submit_btn {
+    margin-top: 2%;
+    margin-left: 1%;
 }
-.project-index .kv-grid-container{
-	max-height:56vh;
-	overflow-y:auto;
+
+.project-index .kv-grid-container {
+    max-height: 56vh;
+    overflow-y: auto;
 }
-.projectAddUserForms,.projectAddModuleForms{
-	overflow: auto;
-	height: 58vh;  
-	margin-bottom: 10px;
+
+.projectAddUserForms, .projectAddModuleForms {
+    overflow: auto;
+    height: 58vh;
+    margin-bottom: 10px;
+}
+
+#projectSearchCleanFilterButton {
+    width: 32px;
+    cursor: pointer;
+}
+
+.field-projectSearchField {
+    float: left;
+    width: 90%;
 }
 
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
-.projectAddUserForms,.projectAddModuleForms{
-	height: 41vh;
+    .projectAddUserForms, .projectAddModuleForms {
+        height: 41vh;
+    }
 }
-}
-/*-----------css for the 1366*768 resolution ends---------------*/ 
+
+/*-----------css for the 1366*768 resolution ends---------------*/
 
 /*-----------css for the 1920*1028 resolution---------------*/
 @media only screen and (min-width: 1900px) {
-.projectAddUserForms,.projectAddModuleForms{
-	height: 65vh;
+    .projectAddUserForms, .projectAddModuleForms {
+        height: 65vh;
+    }
 }
-}
+
 /*-----------css for the 1920*1028 resolution ends---------------*/
