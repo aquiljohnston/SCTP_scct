@@ -34,6 +34,11 @@ $(function(){
             reloadGridView();
         }
     });
+
+    $(document).off('click', '#mileageCardSearchCleanFilterButton').on('click', '#mileageCardSearchCleanFilterButton', function (){
+        $('#mileageCardFilter').val("");
+        reloadGridView();
+    });
     
     function reloadGridView() {
         var form = jqMCDropDowns.find("#MileageCardForm");

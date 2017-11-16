@@ -34,6 +34,11 @@ $(function(){
             reloadGridView();
         }
     });
+
+    $(document).off('click', '#timeCardSearchCleanFilterButton').on('click', '#timeCardSearchCleanFilterButton', function (){
+        $('#timeCardFilter').val("");
+        reloadGridView();
+    });
     
     function reloadGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
