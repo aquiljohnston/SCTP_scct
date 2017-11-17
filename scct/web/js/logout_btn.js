@@ -1,7 +1,15 @@
 $(document).ready(function(){
-    $("#logout_btn").click(function () {
-        $("#loading").show();
+    $("#logout_btn").click(function (event) {
+        event.preventDefault();
         localStorage.clear(); // Clear the menus
-        window.location.href = "/login/user-logout"; //Link type redirect (instead of replace)
+        $.ajax({
+            url: '/login/user-logout',
+            beforeSend: function () {
+                $('#loading').show();
+            }
+        }).done(function () {
+            window.location.href = "/login/index";
+            $('#loading').hide();
+        });
     });
 });

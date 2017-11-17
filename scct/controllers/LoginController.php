@@ -124,14 +124,16 @@ class LoginController extends BaseController
 			//call function to create/send logout activity
 			self::logActivity('WebLogoutActivity');
 			
-		    Yii::$app->user->logout();
+		    //Yii::$app->user->logout();
             $url = 'login%2Fuser-logout';
             $version = "v2";
             $response = Parent::executeGetRequest($url, $version);
         } catch(UnauthorizedHttpException $exception) {
-
+            return $this->redirect(['index']);
+        } catch(Exception $exception){
+            return $this->redirect(['index']);
         }
-        return Yii::$app->response->redirect(['login/index']);
+        return $this->redirect(['index']);
         //return $this->redirect(['login/index']);
     }
 	
@@ -200,9 +202,9 @@ class LoginController extends BaseController
             $response = BaseController::executePostRequest('activity%2Fcreate', json_encode($postData), Constants::API_VERSION_2);
         } catch(UnauthorizedHttpException $exception) {
             // This is reached when the user is logging out with an expired token.
-            return Yii::$app->response->redirect(['login/index']);
+            return $this->redirect(['index']);
         } catch (Exception $e){
-            return Yii::$app->response->redirect(['login/index']);
+            return $this->redirect(['index']);
         }
 	}
 	
