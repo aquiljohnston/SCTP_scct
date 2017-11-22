@@ -81,7 +81,8 @@ class AppAsset extends AssetBundle
         'js/FileSaver.min.js',
         'https://vjs.zencdn.net/ie8/1.1.1/videojs-ie8.min.js',
         'https://vjs.zencdn.net/5.4.6/video.js',
-        'js/cge.js'
+        'js/cge.js',
+        'js/clients.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
