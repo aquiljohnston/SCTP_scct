@@ -23,21 +23,7 @@ div[id^=modalContent] .wrap #top-wrapper {
 #mileage_card_approve_btn{
 	padding-left:0;
 }
-#mileageCardDropdownContainer{
-	padding-right:0;
-}
-#mileageCardDateContainer{
-	float:left;
-}
-#mileageCardPageSizeContainer{
-	float:right;
-}
-#mileageCardDropdownContainer label{
-	padding-right:0;
-}
-#mileageCardDropdownContainer .form-control{
-	padding:6px 10px;
-}
+
 #mileageCardGridview .kv-grid-container{
 	max-height:60vh;
 	overflow-y:auto;
@@ -74,6 +60,10 @@ div[id^=modalContent] .wrap #top-wrapper {
 	max-height: 450px;
 	overflow-y: scroll;
 	overflow-x: hidden;
+}
+#mileageCardSearchCleanFilterButton{
+	width: 32px;
+	cursor: pointer;
 }
 /*responsive css for table*/
 @media only screen 

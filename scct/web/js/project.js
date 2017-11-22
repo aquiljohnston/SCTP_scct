@@ -32,9 +32,14 @@ $(function(){
      $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
          if (e.keyCode === 13 || e.keyCode === 10) {
              e.preventDefault();
-             reloadProjectGridView();
+             projectGridViewReload();
          }
      });
+
+    $(document).off('click', '#projectSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton', function (){
+        $('#projectSearchField').val("");
+        projectGridViewReload();
+    });
 });
 
 function getSubDomainEnvironment() {
@@ -96,6 +101,25 @@ function addRemoveUser() {
         }).done(function () {
             $('#loading').hide();
         });*/
+    });
+}
+
+function projectGridViewReload() {
+    var form = $("#projectForm");
+    $('#loading').show();
+    $.pjax.reload({
+        container: "#projectGridview",
+        timeout: 99999,
+        url: form.attr("action"),
+        type: "GET",
+        data: form.serialize()
+    }).done(function () {
+    });
+    $('#projectGridview').on('pjax:success', function (event, data, status, xhr, options) {
+        $('#loading').hide();
+    });
+    $('#projectGridview').on('pjax:error', function (event, data, status, xhr, options) {
+        console.log("Error");
     });
 }
 

@@ -33,6 +33,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         <?= $form->field($model, 'inspectionfilter')->textInput(['value' => $inspectionFilterParams, 'id' => 'inspectionFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
                 </div>
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'inspectionSearchCleanFilterButton']) ?>
                 <input id="inspectionPageNumber" type="hidden" name="inspectionPageNumber" value="1"/>
                 <input id="inspectionTableRecordsUpdate" type="hidden" name="inspectionTableRecordsUpdate"value="false">
             <?php ActiveForm::end(); ?>

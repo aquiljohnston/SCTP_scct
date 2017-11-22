@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ClientSearch */
@@ -63,13 +64,13 @@ $column = [
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
+    <p style="float: left;">
         <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_HORIZONTAL,
-        'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+        'formConfig' => ['labelSpan' => 5, 'deviceSize' => ActiveForm::SIZE_SMALL],
         'method' => 'get',
         'action' => Url::to(['client/index']),
         'options' => [
@@ -77,17 +78,20 @@ $column = [
         ]
     ]); ?>
 
-    <label id="clientFilter">
-        <?= $form->field($model, 'filter')->textInput(['value' => $filter ])->label("Search"); ?>
+    <label id="clientFilter" style="width: 40%;;">
+        <?= $form->field($model, 'filter')->textInput(['value' => $filter, 'id' => 'clientSearchField' ])->label("Search"); ?>
+        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clientSearchCleanFilterButton']) ?>
     </label>
     <?php ActiveForm::end(); ?>
 
+    <?php Pjax::begin(['id' => 'clientGridview', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'export' => false,
         'bootstrap' => false,
-        'columns' => $column
+        'columns' => $column,
+        'id' => 'clientGV'
     ]); ?>
     <div id="UserPagination">
         <?php
@@ -99,4 +103,5 @@ $column = [
     <div class="GridviewTotalNumber">
         <?php echo "Showing " . ($pages->offset + 1) . " to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
     </div>
+    <?php Pjax::end() ?>
 </div>
