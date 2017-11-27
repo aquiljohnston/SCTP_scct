@@ -88,14 +88,18 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'attribute' => 'Add Surveyor',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center surveyorDropDown'],
                 'value' => function ($model) {
-                    $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID='.$model['WorkOrderID']. " MapGrid=".$model['MapGrid'].'><option class="text-center" value=null>Please Select a User</option>';
-                    $dropDownListCloseSelect = '</select>';
-                    foreach ($model['userList'] as $item){
-                        $dropDownListOpenSelect = $dropDownListOpenSelect.'<option class="surveyorID text-center" value='.$item['UserID'].'>'.$item['Name']." (".$item['UserName'].")".'</option>';
+                    if (strpos($model['LocationType'], 'Gas Main') !== false) {
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . ' multiple>';
+                    }else {
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . "SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
                     }
-                    return $dropDownListOpenSelect.$dropDownListCloseSelect;
+                    $dropDownListCloseSelect = '</select>';
+                    foreach ($model['userList'] as $item) {
+                        $dropDownListOpenSelect = $dropDownListOpenSelect . '<option class="surveyorID text-center" value=' . $item['UserID'] . '>' . $item['Name'] . " (" . $item['UserName'] . ")" . '</option>';
+                    }
+                    return $dropDownListOpenSelect . $dropDownListCloseSelect;
                 },
             ]
         ],
@@ -152,9 +156,23 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         // Assets Surveyor Drop Down List listener
         $(document).off('change','.assetSurveyorDropDown').on('change', '.assetSurveyorDropDown', function (event) {
             $('#dispatchAssetsButton').prop('disabled', true);
+            $('#assignedDispatchAssetsButton').prop('disabled', true);
             $('#assetGV-container tr').each(function () {
                 AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
                 if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                    $('#dispatchAssetsButton').prop('disabled', false);
+                    $('#assignedDispatchAssetsButton').prop('disabled', false);
+                    return false
+                }
+            });
+        });
+
+        // Assets Surveyor Multi- Drop Down List Listener
+        $(document).off('change','.assetPipelineSurveyorDropDown').on('change', '.assetPipelineSurveyorDropDown', function (event) {
+            $('#dispatchAssetsButton').prop('disabled', true);
+            $('#assetGV-container tr').each(function () {
+                var surveyorSelectedForPipeline = $(this).find('.assetPipelineSurveyorDropDown').val();
+                if (surveyorSelectedForPipeline != null && surveyorSelectedForPipeline.length > 0) {
                     $('#dispatchAssetsButton').prop('disabled', false);
                     return false
                 }
@@ -164,6 +182,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         $(document).off('click', '#dispatchAssetsButton').on('click', '#dispatchAssetsButton', function (event){
             var dispatchAsset = [];
             dispatchAsset = getDispatchAssetsData();
+            //console.log("DISPATCH ASSET " + dispatchAsset);
 
             // Ajax post request to dispatch assets
             $.ajax({
@@ -176,6 +195,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     $('#loading').show();
                 }
             }).done(function () {
+                $('.modal-backdrop').remove();
                 viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
                 $('#loading').hide();
             });
@@ -209,15 +229,41 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         var AssignedUserID = "";
         var workOrderID = "";
         var dispatchAsset = [];
-        mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
+        var surveyorSelectedForPipeline = null;
+        var sectionNumber = null;
+
         $('#assetGV-container tr').each(function () {
-            AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
-            workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
-            if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
-                dispatchAsset.push({
-                    WorkOrderID: workOrderID,
-                    AssignedUserID: AssignedUserID
-                });
+            if ($(this).find(".surveyorDropDown select").hasClass("assetPipelineSurveyorDropDown")) {
+                workOrderID = $(this).find('.assetPipelineSurveyorDropDown').attr("workorderid");
+                sectionNumber = $(this).find('.assetPipelineSurveyorDropDown').attr("SectionNumber");
+                surveyorSelectedForPipeline = $(this).find('.assetPipelineSurveyorDropDown').val();
+                mapGridSelected = $('#assetGV-container').find('.assetPipelineSurveyorDropDown').attr("mapgrid");
+                if(surveyorSelectedForPipeline != null && surveyorSelectedForPipeline.length > 0) {
+                    $(this).find(".assetPipelineSurveyorDropDown option:selected").each(function () {
+                        console.log("SELECTED SURVEYOR IS : " + $(this).val());
+                        console.log("SELECTED WORKORDER IS : " + workOrderID);
+                        AssignedUserID = $(this).val();
+                        if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                            dispatchAsset.push({
+                                WorkOrderID: workOrderID,
+                                SectionNumber: sectionNumber,
+                                AssignedUserID: AssignedUserID
+                            });
+                        }
+                    });
+                }
+            }else {
+                AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+                workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
+                sectionNumber = $(this).find('.assetSurveyorDropDown').attr("SectionNumber");
+                mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
+                if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                     dispatchAsset.push({
+                         WorkOrderID: workOrderID,
+                         SectionNumber: sectionNumber,
+                         AssignedUserID: AssignedUserID
+                     });
+                 }
             }
         });
         return dispatchAsset;

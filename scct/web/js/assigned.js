@@ -8,6 +8,7 @@ $(function () {
     assignedSection_MapGrid = [];
     assignedMap_MapGrid = [];
     assignedAssets_WorkOrderID = [];
+    assignedAssets_AssignedUserId = [];
 
 
     $('#UnassignedButton').prop('disabled', true); //TO DISABLED
@@ -112,6 +113,10 @@ $(function () {
     // Assets Modal checkbox Listener
     $(document).off('click', '.unassignAssetsCheckbox input[type=checkbox]').on('click', '.unassignAssetsCheckbox input[type=checkbox]', function () {
         assignedAssets_WorkOrderID = $("#assetGV").yiiGridView('getSelectedRows');
+        if($(this).prop('checked') == true){
+            //do something
+            assignedAssets_AssignedUserId.push($(this).attr('assigneduserid'));
+        }
         if (assignedAssets_WorkOrderID.length > 0) {
             $("#UnassignedAssetsButton").prop('disabled', false);
         } else
@@ -122,7 +127,7 @@ $(function () {
         unassignCheckboxListener();
 
     $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', function () {
-        $("#unassigned-message").find('span').html(getSelectedUserName(getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid), assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID));
+        $("#unassigned-message").find('span').html(getSelectedUserName(getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid), assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
         $("#unassigned-message").css("display", "block");
         // When the user clicks buttons, close the modal
         $(document).off('click', '#unassignedCancelBtn').on('click', '#unassignedCancelBtn', function () {
@@ -136,7 +141,7 @@ $(function () {
         });
     });
     $(document).off('click', '#UnassignedAssetsButton').on('click', '#UnassignedAssetsButton', function () {
-        $("#unassigned-message").find('span').html(getSelectedUserName("","", "",assignedAssets_WorkOrderID));
+        $("#unassigned-message").find('span').html(getSelectedUserName("","", "",assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
         $("#unassigned-message").css("display", "block");
 		//get asset data before it get reset
 		unassignAssetsData = getAssignedAssetsArray();
@@ -154,7 +159,7 @@ $(function () {
 	//reset checked assets on modal close
 	$('#modalViewAssetAssigned').on('hidden.bs.modal', function () {
 		assignedAssets_WorkOrderID = [];
-	})
+	});
 
     $(document).off('click', '#assignedSearchCleanFilterButton').on('click', '#assignedSearchCleanFilterButton', function (){
         $('#assignedFilter').val("");
@@ -289,14 +294,16 @@ function getAssignedSectionArray(assignedSection_SectionNumber) {
 }
 
 // Generate unAssign Data Array; combine mapGrid and section level
-function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID) {
+function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID, assignedAssets_AssignedUserId) {
     var selectedMapGridUser = "";
     var selectedSectionUser = "";
     var selectedAssetsUser = "";
     if (assignedAssets_WorkOrderID != "" || assignedAssets_WorkOrderID.length > 0){
         for (var i = 0; i < assignedAssets_WorkOrderID.length; i++){
-            var userName_Assets = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "]").attr("AssignedTo");
-            var assetAddress = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "]").attr("assetAddress");
+            console.log("WORK ORDER ID: " + assignedAssets_WorkOrderID[i]);
+            console.log("ASSIGNED USER ID: " + assignedAssets_AssignedUserId[i]);
+            var userName_Assets = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "][assigneduserid="+assignedAssets_AssignedUserId[i]+"]").attr("AssignedTo");
+            var assetAddress = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "][assigneduserid="+assignedAssets_AssignedUserId[i]+"]").attr("assetAddress");
             selectedAssetsUser += "<li>" + assetAddress + " : " + userName_Assets + "</li>";
         }
     }
@@ -347,6 +354,9 @@ function unassignAssetsButtonListener(unassignAssetsData) {
             $('#loading').show();
         }
     }).done(function () {
+        assignedAssets_WorkOrderID = [];
+        assignedAssets_AssignedUserId = [];
+
         $.pjax.reload({
             container: '#assignedGridview',
             timeout: 99999,
@@ -374,7 +384,8 @@ function getAssignedAssetsArray() {
     if (assignedAssets_WorkOrderID.length > 0){
         $('#assetGV-container input:checked').each(function() {
             assetsArray.push({
-                WorkOrderID: $(this).attr('WorkOrderID')
+                WorkOrderID: $(this).attr('WorkOrderID'),
+                AssignedUserID: $(this).attr("AssignedUserID")
             })
         });
         return assetsArray;
