@@ -286,6 +286,12 @@ class AssignedController extends \app\controllers\BaseController
             $pageAt = 1;
         }
 
+        $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+                'filter' => '',
+            ]);
+        $getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
+
+
         $getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
@@ -296,10 +302,12 @@ class AssignedController extends \app\controllers\BaseController
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
+        $data = DispatchController::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
+
         // Put data in data provider
         $assetDataProvider = new ArrayDataProvider
         ([
-            'allModels' => $getAssetDataResponse['assets'],
+            'allModels' => $data,
             'pagination' => false,
         ]);
         $assetDataProvider->key = 'WorkOrderID';

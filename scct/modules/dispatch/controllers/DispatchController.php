@@ -404,7 +404,7 @@ class DispatchController extends \app\controllers\BaseController
         return $unassignedArr;
     }
 
-    private function reGenerateAssetsData($assetsData, $surveyorList){
+    public static function reGenerateAssetsData($assetsData, $surveyorList){
         $newAssetsData = array();
         foreach ($assetsData as $item){
             $item['userList'] = $surveyorList;
