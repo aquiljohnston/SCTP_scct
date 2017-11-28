@@ -59,8 +59,10 @@ $(function () {
       //assignedGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
         var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
+        var inProgressFlag = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').attr('InProgressFlag');
         if (isCheckDisabled){
-          $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('disabled', false);
+            if (inProgressFlag != "1")
+                $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('disabled', false);
         }else{
           $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
         }
