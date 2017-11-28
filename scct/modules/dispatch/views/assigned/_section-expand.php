@@ -78,10 +78,10 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden'],
                 'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if (!empty($model))
+                    if ($model['InProgressFlag'] != "1")
                         return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']/*['AssignedUser']*/];
                     else
-                        return "";
+                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => 'disabled'];
                 }
             ]
         ],

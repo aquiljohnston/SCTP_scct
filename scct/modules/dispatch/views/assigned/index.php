@@ -185,7 +185,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%; word-wrap: break-word;'],
                         'contentOptions' => ['class' => 'text-center unassignCheckbox', 'style' => 'width: 5%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-							return ['MapGrid' => $model['MapGrid'], 'disabled' => false, 'UserName' => $model['AssignedUser'] ];
+                            if ($model['InProgressFlag'] != "1")
+							    return ['MapGrid' => $model['MapGrid'], 'disabled' => false, 'UserName' => $model['AssignedUser'] ];
+                            else
+                                return ['MapGrid' => $model['MapGrid'], 'disabled' => 'disabled', 'UserName' => $model['AssignedUser'] ];
                         }
                     ]
                 ]
