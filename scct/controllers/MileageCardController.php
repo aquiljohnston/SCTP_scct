@@ -43,23 +43,32 @@ class MileageCardController extends BaseController
 			//Check if user has permission to view mileage card page
 			self::requirePermission("viewMileageCardMgmt");
             $model = new \yii\base\DynamicModel([
-                'dateRangeValue',
+                'DateRangePicker',
 				'pagesize',
-                'filter'
+                'filter',
+                'dateRangeValue'
             ]);
-			$model->addRule('dateRangeValue', 'string', ['max' => 30]);
+			$model->addRule('DateRangePicker', 'string', ['max' => 30]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
+            $model->addRule('dateRangeValue', 'string', ['max' => 30]);
 			
 			//get current and prior weeks date range
 			$today = BaseController::getDate();
 			$priorWeek = BaseController::getWeekBeginEnd("$today -1 week");
 			$currentWeek = BaseController::getWeekBeginEnd($today);
+            $other = "other";
+
+            // Store start/end date data
+            $dateData = [];
+            $startDate = null;
+            $endDate = null;
 			
 			//create default prior/current week values
 			$dateRangeDD = [
 			$priorWeek => 'Prior Week',
-			$currentWeek => 'Current Week'
+			$currentWeek => 'Current Week',
+            $other => 'Other'
 			];
 			
 			//check current filtering values
@@ -67,10 +76,23 @@ class MileageCardController extends BaseController
                 $mileageCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
 				$dateRangeValue = $model->dateRangeValue;
+                $dateRangePicker = $model->DateRangePicker;
             } else {
                 $mileageCardPageSizeParams = 50;
                 $filter = "";
 				$dateRangeValue = $priorWeek;
+                $dateRangePicker = null;
+            }
+
+            if ($dateRangePicker != null && $dateRangeValue == 'other') {
+                Yii::trace("DATE : " . $dateRangePicker);
+                $dateData = TimeCardController::dateRangeProcessor($dateRangePicker);
+                $startDate = $dateData[0];
+                $endDate = $dateData[1];
+            } else {
+                $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+                $startDate = $dateRangeArray['startDate'];
+                $endDate =  $dateRangeArray['endDate'];
             }
 
             //check current page at
@@ -79,10 +101,6 @@ class MileageCardController extends BaseController
             } else {
                 $page = 1;
             }
-
-			$dateRangeArray = BaseController::splitDateRange($dateRangeValue);
-			$startDate = $dateRangeArray['startDate'];
-			$endDate =  $dateRangeArray['endDate'];
 			
 			$encodedFilter = urlencode($filter);
 

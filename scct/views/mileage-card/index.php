@@ -6,6 +6,7 @@ use app\controllers\MileageCard;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
+use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -116,6 +117,7 @@ $column = [
                 <?php } ?>
             </div>
             <div id="mileageCardDropdownContainer" class="col-xs-8 col-md-10 col-lg-10">
+                <?php Pjax::begin(['id' => 'mileageCardForm', 'timeout' => false]) ?>
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
                     'formConfig' => ['deviceSize' => ActiveForm::SIZE_SMALL],
@@ -124,18 +126,58 @@ $column = [
                         'id' => 'MileageCardForm',
                     ]
                 ]); ?>
-				<div class="col-md-3">
-					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 5])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Date Range"); ?>
+				<div class="col-md-2">
+					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
 				</div>
+                <div id="datePickerContainer" style="float: left; width: 24%; display: none;">
+                    <label class="control-label">Date Range</label>
+                    <?= $form->field($model, 'DateRangePicker', [
+                        'showLabels' => false
+                    ])->widget(DateRangePicker::classname(), [
+                        'options' => [
+                            'placeholder' => 'Enter time...',
+                            'id' => 'mileageCardDateRangePicker'
+                        ],
+                        'name'=>'date_range_2',
+                        'presetDropdown'=>true,
+                        'hideInput'=>true,
+                        'pluginEvents' => [
+                            "apply.daterangepicker" => "function(ev, picker) {
+                                "." var jqTCDropDowns = $('#mileageCardDropdownContainer');
+                                    var form = jqTCDropDowns.find(\"#MileageCardForm\");
+                                    if (form.find(\".has-error\").length){
+                                        return false;
+                                    }
+                                    $('#loading').show();
+                                    $.pjax.reload({
+                                        type: 'GET',
+                                        url: form.attr(\"action\"),
+                                        container: '#mileageCardGridview', // id to update content
+                                        data: form.serialize(),
+                                        timeout: 99999
+                                    });
+                                    $('#mileageCardGridview').on('pjax:success', function () {
+                                        $('#loading').hide();
+                                        applyOnClickListeners();
+                                    });
+                                    $('#mileageCardGridview').on('pjax:error', function () {
+                                        $('#loading').hide();
+                                        location.reload();
+                                    });
+                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
+                            }"],
+                    ]); ?>
+                </div>
 				<div class="col-md-3">
 					<?= $form->field($model, 'filter', ['labelSpan' => 2])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
 				</div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
-                <div class="col-md-5" style="float:right;">
-					<?= $form->field($model, 'pagesize', ['labelSpan' => 10])->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
+                <div class="col-md-3" style="float:right;">
+					<?= $form->field($model, 'pagesize', ['labelSpan' => 8])->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
 					<input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>	
 				</div>				
                 <?php ActiveForm::end(); ?>
+                <?php Pjax::end() ?>
             </div>
         </div>
     </div>
