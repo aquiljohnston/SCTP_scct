@@ -7,13 +7,19 @@ $(function(){
 
     jqDateSelection.on('change', function (event) {
         event.preventDefault();
-        reloadGridView();
-        return false;
+        var selected = $(this).find(":selected").val();
+        if(selected == "other") {
+            $('#datePickerContainer').css("display", "block");
+        }else {
+            $('#datePickerContainer').css("display", "none");
+
+            reloadMileageCardGridView();
+        }
     });
 
     jqMCPageSize.on('change', function (event) {
         $('#mileageCardPageNumber').val(1);
-        reloadGridView();
+        reloadMileageCardGridView();
         event.preventDefault();
         return false;
     });
@@ -21,7 +27,7 @@ $(function(){
     $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function (event) {
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
         $('#mileageCardPageNumber').val(page);
-        reloadGridView();
+        reloadMileageCardGridView();
         event.preventDefault();
         return false;
     });
@@ -31,16 +37,16 @@ $(function(){
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
 			$('#mileageCardPageNumber').val(1);
-            reloadGridView();
+            reloadMileageCardGridView();
         }
     });
 
     $(document).off('click', '#mileageCardSearchCleanFilterButton').on('click', '#mileageCardSearchCleanFilterButton', function (){
         $('#mileageCardFilter').val("");
-        reloadGridView();
+        reloadMileageCardGridView();
     });
     
-    function reloadGridView() {
+    function reloadMileageCardGridView() {
         var form = jqMCDropDowns.find("#MileageCardForm");
         if (form.find(".has-error").length){
             return false;
