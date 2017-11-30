@@ -65,7 +65,7 @@ div[id^=modalContent] .wrap #top-wrapper {
 	width: 32px;
 	cursor: pointer;
 }
-.field-mileageCardDateRangePicker{
+.dynamicmodel-daterangepicker-container{
 	float:right;!important;
 	margin-left: 0px;!important;
 }
