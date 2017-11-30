@@ -134,9 +134,7 @@ $column = [
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
-                        'options' => [
-                            'placeholder' => 'Enter time...',
-                            'id' => 'mileageCardDateRangePicker'
+                        'pluginOptions' => [
                         ],
                         'name'=>'date_range_2',
                         'presetDropdown'=>true,
