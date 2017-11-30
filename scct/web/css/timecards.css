@@ -130,6 +130,10 @@ div[id^=modalContent] #loading {
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+#timeCardSearchCleanFilterButton{
+	width: 32px;
+	cursor: pointer;
+}
 /*responsive css* for table*/
 @media only screen 
 and (min-width : 1360px) {

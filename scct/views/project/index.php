@@ -6,6 +6,7 @@ use app\controllers\ProjectController;
 use kartik\form\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -81,7 +82,7 @@ $column = [
 <div class="project-index">
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
-    <p>
+    <p style="float: left;">
         <?php if ($canCreateProjects): ?>
             <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
         <?php else: ?>
@@ -91,18 +92,21 @@ $column = [
     <div id="projectSearchContainer">
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_HORIZONTAL,
-            'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+            'formConfig' => ['labelSpan' => 5, 'deviceSize' => ActiveForm::SIZE_SMALL],
             'method' => 'get',
             'action' => Url::to(['project/index']),
             'options' => [
-                'id' => 'UserForm',
+                'id' => 'projectForm',
             ]
         ]); ?>
-        <label id="projectFilter">
-            <?= $form->field($model, 'filter')->label("Search"); ?>
+        <label id="projectFilter" style="width: 40%">
+            <?= $form->field($model, 'filter')->textInput(['id' => 'projectSearchField'])->label("Search"); ?>
+            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectSearchCleanFilterButton']) ?>
         </label>
         <?php ActiveForm::end(); ?>
     </div>
+
+    <?php Pjax::begin(['id' => 'projectGridview', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
@@ -119,4 +123,5 @@ $column = [
     <div class="GridviewTotalNumber">
         <?php echo "Showing " . ($pages->offset + 1) . " to " . ($pages->offset + $pages->getPageSize()) . " of " . $pages->totalCount . " entries"; ?>
     </div>
+    <?php Pjax::end() ?>
 </div>

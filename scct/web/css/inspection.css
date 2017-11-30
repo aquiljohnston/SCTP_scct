@@ -121,6 +121,12 @@
 .imageContainer{
     overflow-y: scroll;
 }
+#inspectionSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -5px;
+}
 
 @media (max-width: 760px) {
     #inspectionPageSizeLabel {
