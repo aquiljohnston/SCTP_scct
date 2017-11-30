@@ -16,6 +16,8 @@ $(function () {
     $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
+            //reset page number to 1
+            $('#assignedPageNumber').val(1);
             reloadAssignedGridView();
         }
     });
@@ -153,6 +155,11 @@ $(function () {
 	$('#modalViewAssetAssigned').on('hidden.bs.modal', function () {
 		assignedAssets_WorkOrderID = [];
 	})
+
+    $(document).off('click', '#assignedSearchCleanFilterButton').on('click', '#assignedSearchCleanFilterButton', function (){
+        $('#assignedFilter').val("");
+        reloadAssignedGridView();
+    });
 });
 
 function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber) {

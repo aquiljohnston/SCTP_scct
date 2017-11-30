@@ -277,6 +277,12 @@
     padding-left: 25%;
     padding-right: 25%;
 }
+#dispatchSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -15px;
+}
 
 @media (max-width: 760px) {
     #addSurveyorButtonDispatch{

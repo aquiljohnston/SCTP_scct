@@ -157,9 +157,10 @@ $column = [
                     <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                 </div>
                 <div class="col-sm-5">
-                    <label id="timeCardSearch">
+                    <label id="timeCardSearch" style="float: left;">
 						<?= $form->field($model, 'filter')->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
                     </label>
+                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 </div>
                 <?php ActiveForm::end(); ?>
             </div>

@@ -1,7 +1,7 @@
 $(function(){
     var jqMileageCardFilter = $('#mileage_card_filter');
     var jqMCDropDowns = $('#mileageCardDropdownContainer');
-    var jqDateSelection = jqMileageCardFilter.find('#mileageCardDateSelection');
+    var jqDateSelection = jqMileageCardFilter.find('#mileageCardDateRange');
     var jqMCPageSize = jqMCDropDowns.find('#mileageCardPageSize');
 
 
@@ -33,6 +33,11 @@ $(function(){
 			$('#mileageCardPageNumber').val(1);
             reloadGridView();
         }
+    });
+
+    $(document).off('click', '#mileageCardSearchCleanFilterButton').on('click', '#mileageCardSearchCleanFilterButton', function (){
+        $('#mileageCardFilter').val("");
+        reloadGridView();
     });
     
     function reloadGridView() {

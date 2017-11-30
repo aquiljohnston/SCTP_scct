@@ -38,6 +38,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
             <?php ActiveForm::end(); ?>
             <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
+            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSearchCleanFilterButton']) ?>
             <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1">
                 <?php if ($can != 0) { ?>
                     <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>
@@ -91,6 +92,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'attribute' => 'Division',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
+						'visible' => $divisionFlag,
                         'format' => 'html',
                     ],
                     [

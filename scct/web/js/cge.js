@@ -26,6 +26,8 @@ $(function () {
     $(document).off('keypress', '#cgeFilter').on('keypress', '#cgeFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
+            //reset page number to 1
+            $('#cgePageNumber').val(1);
             cgeGridViewReload();
         }
     });
@@ -74,6 +76,11 @@ $(function () {
         $('#addSurveyorCgeModal').modal('show')
             .find('#modalAddSurveyorCge')
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge');
+    });
+
+    $(document).off('click', '#cgeSearchCleanFilterButton').on('click', '#cgeSearchCleanFilterButton', function (){
+        $('#cgeFilter').val("");
+        cgeGridViewReload();
     });
 });
 
