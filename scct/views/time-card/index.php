@@ -7,6 +7,7 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
+use kartik\daterange\DateRangePicker;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,7 +16,7 @@ $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
-        'week' => $week
+        'dateRange' => $dateRangeValue
     ]);
 $column = [
     [
@@ -117,14 +118,6 @@ $column = [
                         'class' => 'btn btn-primary multiple_approve_btn',
                         'id' => 'multiple_approve_btn_id',
                     ]);
-
-                if ($week == "prior") {
-                    $priorSelected = "selected";
-                    $currentSelected = "";
-                } else {
-                    $priorSelected = "";
-                    $currentSelected = "selected";
-                }
                 ?>
                 <?php
                 if ($pages->totalCount > 0) {
@@ -135,6 +128,7 @@ $column = [
 
             </div>
             <div id="timeCardDropdownContainer" class="col-xs-8 col-md-9 col-lg-10">
+                <?php Pjax::begin(['id' => 'timeCardForm', 'timeout' => false]) ?>
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
                     'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
@@ -142,27 +136,59 @@ $column = [
                     'options' => [
                         'id' => 'TimeCardForm',
                     ],
-                    'action' => Url::to(['time-card/index'])
                 ]); ?>
-                <div id="timeCardWeekContainer">
-                    <select name="weekTimeCard" id="weekSelection"<!--onchange="this.form.submit()-->">
-                    <option value="prior" <?= $priorSelected ?> >Prior Week</option>
-                    <option value="current" <?= $currentSelected ?> >Current Week</option>
-                    </select>
+                <div class="col-md-2" >
+                    <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div>
-                <div id="timeCardPageSizeLabelContainer">
-                    <label id="timeCardPageSizeLabel">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
-                    </label>
+                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
+                    <?= $form->field($model, 'DateRangePicker', [
+                        'showLabels' => false
+                    ])->widget(DateRangePicker::classname(), [
+                        'pluginOptions' => [
+                        ],
+                        'name'=>'date_range_3',
+                        'presetDropdown'=>true,
+                        'hideInput'=>true,
+                        'pluginEvents' => [
+                            "apply.daterangepicker" => "function(ev, picker) {
+                                "." var jqTCDropDowns = $('#timeCardDropdownContainer');
+                                    var form = jqTCDropDowns.find(\"#TimeCardForm\");
+                                    if (form.find(\".has-error\").length){
+                                        return false;
+                                    }
+                                    $('#loading').show();
+                                    $.pjax.reload({
+                                        type: 'GET',
+                                        url: form.attr(\"action\"),
+                                        container: '#timeCardGridview', // id to update content
+                                        data: form.serialize(),
+                                        timeout: 99999
+                                    });
+                                    $('#timeCardGridview').on('pjax:beforeSend', function () {
+                                        console.log(form.serialize());
+                                    });
+                                    $('#timeCardGridview').on('pjax:success', function () {
+                                        $('#loading').hide();
+                                        applyOnClickListeners();
+                                    });
+                                    $('#timeCardGridview').on('pjax:error', function () {
+                                        $('#loading').hide();
+                                        location.reload();
+                                    });
+                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
+                            }"],
+                    ]); ?>
+                </div>
+                <div class="col-md-3">
+                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
+                </div>
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
+                <div class="col-md-3" style="float:right;">
+                    <?= $form->field($model, 'pagesize', ['labelSpan' => 8])->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page"); ?>
                     <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                 </div>
-                <div class="col-sm-5">
-                    <label id="timeCardSearch" style="float: left;">
-						<?= $form->field($model, 'filter')->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
-                    </label>
-                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
-                </div>
                 <?php ActiveForm::end(); ?>
+                <?php Pjax::end() ?>
             </div>
         </div>
     </div>

@@ -134,6 +134,10 @@ div[id^=modalContent] #loading {
 	width: 32px;
 	cursor: pointer;
 }
+.field-dynamicmodel-daterangepicker{
+	float:right;!important;
+	margin-left: 0px;!important;
+}
 /*responsive css* for table*/
 @media only screen 
 and (min-width : 1360px) {

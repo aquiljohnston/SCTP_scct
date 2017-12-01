@@ -49,21 +49,58 @@ class TimeCardController extends BaseController
             //get user role
             $userID = Yii::$app->session['userID'];
 
+            // Store start/end date data
+            $dateData = [];
+            $startDate = null;
+            $endDate = null;
+
             $model = new \yii\base\DynamicModel([
                 'pagesize',
-                'filter'
+                'filter',
+                'dateRangeValue',
+                'DateRangePicker'
             ]);
             $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
+            $model ->addRule('DateRangePicker', 'string', ['max' => 32]);//get page number and records per page
+            $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
+
+            //get current and prior weeks date range
+            $today = BaseController::getDate();
+            $priorWeek = BaseController::getWeekBeginEnd("$today -1 week");
+            $currentWeek = BaseController::getWeekBeginEnd($today);
+            $other = "other";
+
+            //create default prior/current week values
+            $dateRangeDD = [
+                $priorWeek => 'Prior Week',
+                $currentWeek => 'Current Week',
+                $other => 'Other'
+            ];
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)) {
                 $timeCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
+                $dateRangeValue = $model->dateRangeValue;
+                $dateRangePicker = $model->DateRangePicker;
             } else {
                     $timeCardPageSizeParams = 50;
                     $filter = "";
+                    $dateRangeValue = $priorWeek;
+                    $dateRangePicker = null;
             }
+
+            if ($dateRangePicker != null && $dateRangeValue == 'other') {
+                $dateData = SELF::dateRangeProcessor($dateRangePicker);
+                $startDate = $dateData[0];
+                $endDate = $dateData[1];
+            }else{
+                $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+                $startDate = $dateRangeArray['startDate'];
+                $endDate =  $dateRangeArray['endDate'];
+            }
+
 
             //check current page at
             if (isset($_GET['timeCardPageNumber'])){
@@ -78,12 +115,12 @@ class TimeCardController extends BaseController
             } else {
                 $week = 'prior';
             }
-			
+
 			//url encode filter
 			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "time-card%2Fget-cards&filter=$encodedFilter&week=$week&listPerPage=$timeCardPageSizeParams&page=$page";
+            $url = "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
@@ -136,7 +173,9 @@ class TimeCardController extends BaseController
 			if(Yii::$app->request->isAjax) {
 				return $this->renderAjax('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+                    'dateRangeDD' => $dateRangeDD,
+                    'dateRangeValue' => $dateRangeValue,
+                    'week' => $week,
 					'model' => $model,
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
@@ -145,7 +184,9 @@ class TimeCardController extends BaseController
 			}else{
 				return $this->render('index', [
 					'dataProvider' => $dataProvider,
-					'week' => $week,
+                    'dateRangeDD' => $dateRangeDD,
+                    'dateRangeValue' => $dateRangeValue,
+                    'week' => $week,
 					'model' => $model,
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
@@ -582,5 +623,22 @@ class TimeCardController extends BaseController
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
+    }
+
+    /**
+     * Process Date Range Data
+     * @param $dateRange
+     * @return array
+     */
+    public function dateRangeProcessor($dateRange){
+        $data = explode(" ", $dateRange);
+        $dateData = [];
+        foreach ($data as $item){
+            if($item != "-"){
+                Yii::trace("ITEM: ".$item);
+                array_push($dateData, $item);
+            }
+        }
+        return $dateData;
     }
 }
