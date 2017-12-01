@@ -93,7 +93,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     if (strpos($model['LocationType'], 'Gas Main') !== false) {
                         $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . ' multiple>';
                     }else {
-                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . "SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
                     }
                     $dropDownListCloseSelect = '</select>';
                     foreach ($model['userList'] as $item) {
@@ -257,13 +257,16 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
                 sectionNumber = $(this).find('.assetSurveyorDropDown').attr("SectionNumber");
                 mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
-                if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
-                     dispatchAsset.push({
-                         WorkOrderID: workOrderID,
-                         SectionNumber: sectionNumber,
-                         AssignedUserID: AssignedUserID
-                     });
-                 }
+                $(this).find(".assetSurveyorDropDown option:selected").each(function () {
+                    if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+
+                        dispatchAsset.push({
+                            WorkOrderID: workOrderID,
+                            SectionNumber: sectionNumber,
+                            AssignedUserID: AssignedUserID
+                        });
+                    }
+                });
             }
         });
         return dispatchAsset;
