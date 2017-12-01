@@ -129,8 +129,7 @@ $column = [
 				<div class="col-md-2">
 					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
 				</div>
-                <div id="datePickerContainer" style="float: left; width: 24%; display: none;">
-                    <label class="control-label">Date Range</label>
+                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
@@ -167,7 +166,7 @@ $column = [
                     ]); ?>
                 </div>
 				<div class="col-md-3">
-					<?= $form->field($model, 'filter', ['labelSpan' => 2])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
+					<?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
 				</div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
                 <div class="col-md-3" style="float:right;">
