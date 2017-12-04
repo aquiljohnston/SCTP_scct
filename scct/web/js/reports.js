@@ -5,11 +5,10 @@
 $(function () {
     const COMPLETED_WORK_ORDERS = "Completed Work Orders";
     const COMPLETED_MAP_GRID = "Completed Map Grid";
-
-    var oTable; //datatable variable
     var currentPath = window.location.pathname;
     var reports = currentPath.replace(/\/+$/, "");//.substr(0, currentPath.length - 1);//.replace(/\/$/, "")
     console.log(reports);
+    var oTable; //datatable variable
     var reportsToSP = {}; //map of report names -> stored procedures
     var reportsToParms = {}; //map of report names -> parm objects
     var reportsToExports = {}; //map of report names -> export values
@@ -30,7 +29,6 @@ $(function () {
             noSelectionError = document.getElementById('noSelectionError'),
             noDateError = document.getElementById('noDateError'),
             selectDateFirstError = document.getElementById('selectDateFirstError');
-
 
         $('#datePickerEndDate').datepicker();
         $("#datePickerBeginDate").datepicker({
