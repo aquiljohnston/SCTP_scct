@@ -113,6 +113,14 @@ class DispatchController extends \app\controllers\BaseController
                     'AvailableWorkOrderCount' => [
                         'asc' => ['AvailableWorkOrderCount' => SORT_ASC],
                         'desc' => ['AvailableWorkOrderCount' => SORT_DESC]
+                    ],
+                    'InspectionType' => [
+                        'asc' => ['InspectionType' => SORT_ASC],
+                        'desc' => ['InspectionType' => SORT_DESC]
+                    ],
+                    'BillingCode' => [
+                        'asc' => ['BillingCode' => SORT_ASC],
+                        'desc' => ['BillingCode' => SORT_DESC]
                     ]
                 ]
             ];

@@ -13,6 +13,14 @@ $this->title = 'Assigned';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
+<style>
+    @media (min-width: 768px) {
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+  }
+}
+</style>
 <div class="dispatch-assigned">
     <div id="assignedDropdownContainer" style="height: 105px;">
 
@@ -164,6 +172,20 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }
                     ],
                     [
+                        'label' => 'Inspection Type',
+                        'attribute' => 'InspectionType',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'format' => 'html',
+                    ],
+                    [
+                        'label' => 'Billing Code',
+                        'attribute' => 'BillingCode',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'format' => 'html',
+                    ],
+                    [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',
@@ -232,7 +254,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     Modal::begin([
 		'header' => '<h4 id="assetModalTitle"></h4>',
         'id' => 'modalViewAssetAssigned',
-        'size' => 'modal-lg',
+        'size' => 'modal-xl',
     ]);
 
     ?>

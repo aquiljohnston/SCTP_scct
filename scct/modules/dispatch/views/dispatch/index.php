@@ -116,6 +116,20 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'attribute' => 'AvailableWorkOrderCount',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
+                    ], 
+                        //PROJECT-498 
+                    [
+                        'label' => 'Inspection Type',
+                        'attribute' => 'InspectionType',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                    ],
+                        //PROJECT-501
+                     [
+                        'label' => 'Billing Code',
+                        'attribute' => 'BillingCode',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
                         'class' => 'kartik\grid\ActionColumn',

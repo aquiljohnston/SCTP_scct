@@ -112,6 +112,18 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                     ],
                     [
+                        'label' => 'Inspection Type',
+                        'attribute' => 'InspectionType',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                    ],
+                    [
+                        'label' => 'Billing Code',
+                        'attribute' => 'BillingCode',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                    ],
+                    [
                         'header' => 'Add Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],

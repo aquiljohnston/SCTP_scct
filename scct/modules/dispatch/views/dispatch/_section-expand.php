@@ -21,13 +21,7 @@ use yii\bootstrap\Modal;
         'summary' => '',
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
-            [
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.3%;'],
-                'value' => function($model){
-                    return "";
-                }
-            ],
+           
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
@@ -43,6 +37,18 @@ use yii\bootstrap\Modal;
             [
                 'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+            ],
+            [   //PROJECT-498
+                'label' => '',
+                'attribute' => 'InspectionType',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+            ],
+            [   //PROJECT-501
+                'label' => '',
+                'attribute' => 'BillingCode',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
