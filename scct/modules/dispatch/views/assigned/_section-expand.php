@@ -48,6 +48,18 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
             ],
+            [
+                'label' => 'Inspection Type',
+                'attribute' => 'InspectionType',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+            ],
+            [
+                'label' => 'Billing Code',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+            ],
 			[
 				'label' => 'Remaining/Total',
 				'attribute' => 'Counts',
@@ -90,7 +102,7 @@ use yii\bootstrap\Modal;
     <?php
     Modal::begin([
         'id' => 'assetModal',
-        'size' => 'modal-m',
+        'size' => 'modal-l',
     ]);
 
     ?>

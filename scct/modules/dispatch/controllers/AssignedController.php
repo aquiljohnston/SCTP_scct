@@ -101,6 +101,14 @@ class AssignedController extends \app\controllers\BaseController
                     'Counts' => [
                         'asc' => ['Counts' => SORT_ASC],
                         'desc' => ['Counts' => SORT_DESC]
+                    ],
+                    'InspectionType' => [
+                        'asc' => ['InspectionType' => SORT_ASC],
+                        'desc' => ['InspectionType' => SORT_DESC]
+                    ],
+                    'BillingCode' => [
+                        'asc' => ['BillingCode' => SORT_ASC],
+                        'desc' => ['BillingCode' => SORT_DESC]
                     ]
                 ]
             ];

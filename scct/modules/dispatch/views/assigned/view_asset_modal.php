@@ -132,6 +132,18 @@ use kartik\grid\GridView;
                         return "N/A";
                     }
                 }
+            ],
+            [
+                'label' => 'Inpection Type',
+                'attribute' => 'InspectionType',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
+            [
+                'label' => 'Billing Code',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
             ]
         ],
     ]); ?>
