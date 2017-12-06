@@ -14,11 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <style>
-    @media (min-width: 768px) {
   .modal-xl {
     width: 90%;
    max-width:1200px;
-  }
 }
 </style>
 <div class="dispatch-assigned">

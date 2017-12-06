@@ -103,9 +103,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'contentOptions' => ['class' => 'text-center surveyorDropDown'],
                 'value' => function ($model) {
                     if (strpos($model['LocationType'], 'Gas Main') !== false) {
-                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . ' multiple>';
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center; width:155px" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . ' multiple>';
                     }else {
-                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center; width:100px" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . "SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Select User</option>';
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center; width:155px" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . "SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
                     }
                     $dropDownListCloseSelect = '</select>';
                     foreach ($model['userList'] as $item) {
