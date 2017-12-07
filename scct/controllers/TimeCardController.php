@@ -91,7 +91,7 @@ class TimeCardController extends BaseController
                     $dateRangePicker = null;
             }
 
-            if ($dateRangePicker != null && $dateRangeValue == 'other') {
+            if ($dateRangePicker != null && $dateRangeValue == "other") {
                 $dateData = SELF::dateRangeProcessor($dateRangePicker);
                 $startDate = $dateData[0];
                 $endDate = $dateData[1];
@@ -120,7 +120,7 @@ class TimeCardController extends BaseController
 			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url = "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page";
+            $url = "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page&filter=$encodedFilter";
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
