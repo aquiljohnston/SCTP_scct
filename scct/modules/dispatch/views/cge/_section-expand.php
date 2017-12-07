@@ -131,7 +131,7 @@ use kartik\datetime\DateTimePicker;
                         return ['disabled' => true, 'checked' => true];
                     else
                         return ['disabled' => true, 'checked' => false];*/
-                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID']];
+                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID'], 'SectionNumber' =>$model['SectionNumber']];
                 }
             ]
         ],

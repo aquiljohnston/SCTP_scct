@@ -7,6 +7,7 @@ $(function () {
         cgeSelectedMapGrid = "";
         cgeSelectedAssets = "";
         cgeSelectedScheduledDate = [];
+        cgeSelectedSectionNumber = [];
 
     //pagination listener on CGE page
     $(document).off('click', '#cgeTablePagination .pagination li a').on('click', '#cgeTablePagination .pagination li a', function (event) {
@@ -60,6 +61,7 @@ $(function () {
         console.log("SELECTED ASSETS: "+cgeSelectedAssets);
         if ($(this).is(':checked')){
             cgeSelectedScheduledDate.push($(this).attr("ScheduledDate"));
+            cgeSelectedSectionNumber.push($(this).attr("SectionNumber"));
         }
         console.log("SELECTED cgeSelectedScheduledDate: "+cgeSelectedScheduledDate);
         if (cgeSelectedMapGrid.length > 0 || cgeSelectedAssets.length > 0)
@@ -103,14 +105,16 @@ function cgeGridViewReload() {
     });
 }
 
-function getCgeDispatchAssetsData(cgeSelectedAssets, AssignedUserID, ScheduledDate) {
+function getCgeDispatchAssetsData(cgeSelectedAssets, AssignedUserID, ScheduledDate, SectionNumbers) {
     var cgeDispatchAssetsData = [];
     if (cgeSelectedAssets.length > 0) {
         for (var i = 0; i < cgeSelectedAssets.length; i++) {
+            console.log("SECTION # " + SectionNumbers[i]);
             cgeDispatchAssetsData.push({
                 WorkOrderID: cgeSelectedAssets[i],
                 AssignedUserID: AssignedUserID,
-                ScheduledDate: ScheduledDate[i]
+                ScheduledDate: ScheduledDate[i],
+                SectionNumber: SectionNumbers[i]
             });
         }
     }
@@ -136,4 +140,5 @@ function resetCge_Global_Variable() {
     cgeSelectedMapGrid = "";
     cgeSelectedAssets = "";
     cgeSelectedScheduledDate = [];
+    cgeSelectedSectionNumber = [];
 }
