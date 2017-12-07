@@ -84,8 +84,7 @@ class MileageCardController extends BaseController
                 $dateRangePicker = null;
             }
 
-            if ($dateRangePicker != null && $dateRangeValue == 'other') {
-                Yii::trace("DATE : " . $dateRangePicker);
+            if ($dateRangePicker != null && $dateRangeValue == "other") {
                 $dateData = TimeCardController::dateRangeProcessor($dateRangePicker);
                 $startDate = $dateData[0];
                 $endDate = $dateData[1];
