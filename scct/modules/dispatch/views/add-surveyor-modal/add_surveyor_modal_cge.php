@@ -108,7 +108,7 @@ use kartik\form\ActiveForm;
         $(".AddSurveyor input[type=checkbox]").click(function () {
             assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
             dispatchMapGridData = getCgeDispatchMapGridData(cgeSelectedMapGrid, assignedUserID[0]);
-            dispatchAssetsData = getCgeDispatchAssetsData(cgeSelectedAssets, assignedUserID[0], cgeSelectedScheduledDate, cgeSelectedSectionNumber);
+            dispatchAssetsData = getCgeDispatchAssetsData(cgeSelectedAssets, assignedUserID[0]);
             console.log(assignedUserID.length);
             if (assignedUserID.length == 1) {
                 $('.modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED

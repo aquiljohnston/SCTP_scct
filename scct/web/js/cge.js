@@ -6,8 +6,6 @@ $(function () {
     var currentSelectedDate = null;
         cgeSelectedMapGrid = "";
         cgeSelectedAssets = "";
-        cgeSelectedScheduledDate = [];
-        cgeSelectedSectionNumber = [];
 
     //pagination listener on CGE page
     $(document).off('click', '#cgeTablePagination .pagination li a').on('click', '#cgeTablePagination .pagination li a', function (event) {
@@ -59,11 +57,6 @@ $(function () {
     $(document).off('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]').on('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]', function () {
         cgeSelectedAssets = $("#cgeGridview #cgeAssetsGV").yiiGridView('getSelectedRows');
         console.log("SELECTED ASSETS: "+cgeSelectedAssets);
-        if ($(this).is(':checked')){
-            cgeSelectedScheduledDate.push($(this).attr("ScheduledDate"));
-            cgeSelectedSectionNumber.push($(this).attr("SectionNumber"));
-        }
-        console.log("SELECTED cgeSelectedScheduledDate: "+cgeSelectedScheduledDate);
         if (cgeSelectedMapGrid.length > 0 || cgeSelectedAssets.length > 0)
             $("#cgeDispatchButton").prop('disabled', false);
         else
@@ -105,16 +98,19 @@ function cgeGridViewReload() {
     });
 }
 
-function getCgeDispatchAssetsData(cgeSelectedAssets, AssignedUserID, ScheduledDate, SectionNumbers) {
+function getCgeDispatchAssetsData(cgeSelectedAssets, AssignedUserID) {
     var cgeDispatchAssetsData = [];
+    var SectionNumber = null;
+    var ScheduledDate = null;
     if (cgeSelectedAssets.length > 0) {
         for (var i = 0; i < cgeSelectedAssets.length; i++) {
-            console.log("SECTION # " + SectionNumbers[i]);
+            ScheduledDate = $("#cgeAssetsGV input[workorderid=" + cgeSelectedAssets[i] + "]").attr("ScheduledDate");
+            SectionNumber = $("#cgeAssetsGV input[workorderid=" + cgeSelectedAssets[i] + "]").attr("SectionNumber");
             cgeDispatchAssetsData.push({
                 WorkOrderID: cgeSelectedAssets[i],
                 AssignedUserID: AssignedUserID,
-                ScheduledDate: ScheduledDate[i],
-                SectionNumber: SectionNumbers[i]
+                ScheduledDate: ScheduledDate,
+                SectionNumber: SectionNumber
             });
         }
     }
@@ -139,6 +135,4 @@ function getCgeDispatchMapGridData(cgeSelectedMapGrid, assignedUserID) {
 function resetCge_Global_Variable() {
     cgeSelectedMapGrid = "";
     cgeSelectedAssets = "";
-    cgeSelectedScheduledDate = [];
-    cgeSelectedSectionNumber = [];
 }
