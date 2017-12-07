@@ -12,6 +12,12 @@ $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
+<style>
+  .modal-xl {
+    width: 90%;
+   max-width:1200px;
+}
+</style>
 <div class="dispatch">
     <div id="dispatchTab">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
@@ -212,7 +218,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     Modal::begin([
 		'header' => '<h4 id="assetModalTitle"></h4>',
         'id' => 'modalViewAssetDispatch',
-        'size' => 'modal-lg',
+        'size' => 'modal-xl',
     ]);
 
     ?>

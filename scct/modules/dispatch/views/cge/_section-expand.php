@@ -29,11 +29,12 @@ use kartik\datetime\DateTimePicker;
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
             ],
-			[
-                'label' => 'Survey Type',
-                'attribute' => 'SurveyType',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+             [
+                'label' => 'Customer Info',
+                'attribute' => 'CustomerInfo',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
             ],
             [
                 'label' => 'Address',
@@ -80,11 +81,16 @@ use kartik\datetime\DateTimePicker;
                 'format' => 'raw'
             ],
             [
-                'label' => 'Customer Info',
-                'attribute' => 'CustomerInfo',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
+                'label' => 'Inspection Type',
+                'attribute' => 'SurveyType',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+            ],
+            [
+                'label' => 'Billing Code',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [
                 'attribute' => 'Image',
