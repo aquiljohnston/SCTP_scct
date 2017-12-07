@@ -91,10 +91,14 @@ class TimeCardController extends BaseController
                     $dateRangePicker = null;
             }
 
-            if ($dateRangePicker != null && $dateRangeValue == "other") {
-                $dateData = SELF::dateRangeProcessor($dateRangePicker);
-                $startDate = $dateData[0];
-                $endDate = $dateData[1];
+            if ($dateRangeValue == "other") {
+                if ($dateRangePicker == null){
+                    $endDate = $startDate = date('Y-m-d');
+                }else {
+                    $dateData = SELF::dateRangeProcessor($dateRangePicker);
+                    $startDate = $dateData[0];
+                    $endDate = $dateData[1];
+                }
             }else{
                 $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
                 $startDate = $dateRangeArray['startDate'];
