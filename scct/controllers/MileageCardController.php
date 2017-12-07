@@ -77,6 +77,7 @@ class MileageCardController extends BaseController
                 $filter = $model->filter;
 				$dateRangeValue = $model->dateRangeValue;
                 $dateRangePicker = $model->DateRangePicker;
+
             } else {
                 $mileageCardPageSizeParams = 50;
                 $filter = "";
@@ -84,15 +85,22 @@ class MileageCardController extends BaseController
                 $dateRangePicker = null;
             }
 
-            if ($dateRangePicker != null && $dateRangeValue == "other") {
-                $dateData = TimeCardController::dateRangeProcessor($dateRangePicker);
-                $startDate = $dateData[0];
-                $endDate = $dateData[1];
+            if ($dateRangeValue == "other") {
+                if ($dateRangePicker == null){
+                    $endDate = $startDate = date('Y-m-d');
+                }else {
+                    $dateData = TimeCardController::dateRangeProcessor($dateRangePicker);
+                    $startDate = $dateData[0];
+                    $endDate = $dateData[1];
+                }
             } else {
                 $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
                 $startDate = $dateRangeArray['startDate'];
                 $endDate =  $dateRangeArray['endDate'];
             }
+
+            Yii::trace("START DATE: ".$startDate);
+            Yii::trace("END DATE: ".$endDate);
 
             //check current page at
 			if (isset($_GET['mileageCardPageNumber'])){
