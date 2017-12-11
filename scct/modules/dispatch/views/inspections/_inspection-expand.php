@@ -105,7 +105,7 @@ $ImageUrl = 'images/';
                 },
             ],
             [
-                'header' => 'View Asset',
+                'header' => 'View Event',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
                 'headerOptions' => ['class' => 'text-center'],
