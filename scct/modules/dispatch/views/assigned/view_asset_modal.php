@@ -116,24 +116,6 @@ use kartik\grid\GridView;
                 }
             ],
             [
-                'attribute' => 'Add Surveyor',
-                'format' => 'raw',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center surveyorDropDown'],
-                'value' => function ($model) {
-                    if (strpos($model['LocationType'], 'Gas Main') !== false) {
-                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
-                        $dropDownListCloseSelect = '</select>';
-                        foreach ($model['userList'] as $item) {
-                            $dropDownListOpenSelect = $dropDownListOpenSelect . '<option class="surveyorID text-center" value=' . $item['UserID'] . '>' . $item['Name'] . " (" . $item['UserName'] . ")" . '</option>';
-                        }
-                        return $dropDownListOpenSelect . $dropDownListCloseSelect;
-                    }else{
-                        return "N/A";
-                    }
-                }
-            ],
-            [
                 'label' => 'Inpection Type',
                 'attribute' => 'InspectionType',
                 'headerOptions' => ['class' => 'text-center'],
@@ -144,6 +126,24 @@ use kartik\grid\GridView;
                 'attribute' => 'BillingCode',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
+            ],
+              [
+                'attribute' => 'Add Surveyor',
+                'format' => 'raw',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center surveyorDropDown'],
+                'value' => function ($model) {
+                    if (strpos($model['LocationType'], 'Gas Main') !== false) {
+                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;width:155px;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
+                        $dropDownListCloseSelect = '</select>';
+                        foreach ($model['userList'] as $item) {
+                            $dropDownListOpenSelect = $dropDownListOpenSelect . '<option class="surveyorID text-center" value=' . $item['UserID'] . '>' . $item['Name'] . " (" . $item['UserName'] . ")" . '</option>';
+                        }
+                        return $dropDownListOpenSelect . $dropDownListCloseSelect;
+                    }else{
+                        return "N/A";
+                    }
+                }
             ]
         ],
     ]); ?>
