@@ -48,6 +48,16 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
             ],
+			[
+				'label' => 'Remaining/Total',
+				'attribute' => 'Counts',
+				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 5%'],
+				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+				'format' => 'html',
+				'value' => function ($model) {
+					return $model['Remaining'] . "/" . $model['Total'];
+				}
+			],
             [
                 'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
@@ -60,16 +70,6 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
             ],
-			[
-				'label' => 'Remaining/Total',
-				'attribute' => 'Counts',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 5%'],
-				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
-				'format' => 'html',
-				'value' => function ($model) {
-					return $model['Remaining'] . "/" . $model['Total'];
-				}
-			],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
