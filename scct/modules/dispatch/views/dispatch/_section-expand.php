@@ -74,7 +74,7 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
+                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'AvailableWorkOrderCount' => $model['AvailableWorkOrderCount'] == null ? "" : $model['AvailableWorkOrderCount'], 'InspectionType' => $model['InspectionType'] == null ? "" : $model['InspectionType'], 'BillingCode' => $model['BillingCode'] == null ? "" : $model['BillingCode']];
                     else
                         return "";
                 }

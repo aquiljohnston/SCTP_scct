@@ -90,10 +90,7 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden'],
                 'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if ($model['InProgressFlag'] != "1")
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']/*['AssignedUser']*/];
-                    else
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => 'disabled'];
+                    return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => $model['InProgressFlag'] != "1" ? false : 'disabled', 'InspectionType' => $model['InspectionType'] == null ? "" : $model['InspectionType'], 'BillingCode' => $model['BillingCode'] == null ? "" : $model['BillingCode']];
                 }
             ]
         ],
