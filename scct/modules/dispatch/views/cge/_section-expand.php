@@ -83,13 +83,13 @@ use kartik\datetime\DateTimePicker;
             [
                 'label' => 'Inspection Type',
                 'attribute' => 'SurveyType',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [
                 'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [
@@ -131,7 +131,7 @@ use kartik\datetime\DateTimePicker;
                         return ['disabled' => true, 'checked' => true];
                     else
                         return ['disabled' => true, 'checked' => false];*/
-                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID'], 'SectionNumber' =>$model['SectionNumber'], 'InspectionType' => $model['SurveyType'] == null ? "" : $model['SurveyType'], 'BillingCode' => $model['BillingCode'] == null ? "" : $model['BillingCode']];
+                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID'], 'SectionNumber' =>$model['SectionNumber']];
                 }
             ]
         ],

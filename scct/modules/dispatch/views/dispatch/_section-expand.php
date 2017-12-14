@@ -35,28 +35,28 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
             ],
             [
-                'label' => '',
+                'label' => 'Available Work Order Count',
                 'attribute' => 'AvailableWorkOrderCount',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
             [   //PROJECT-498
-                'label' => '',
+                'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
             [   //PROJECT-501
-                'label' => '',
+                'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
             ],
             [
                 'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetDispatch = "#modalViewAssetDispatch";
@@ -70,11 +70,11 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
                 'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'AvailableWorkOrderCount' => $model['AvailableWorkOrderCount'] == null ? "" : $model['AvailableWorkOrderCount'], 'BillingCode' => $model['BillingCode'] == null ? "" : $model['BillingCode']];
+                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
                     else
                         return "";
                 }
