@@ -22,8 +22,8 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 3.1%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 3.1%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 1.47%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 1.47%'],
                 'value' => function($model){
                     return "";
                 }
@@ -31,51 +31,51 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 13.8%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15.4%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.4%'],
             ],
             [
                 'label' => 'Assigned User(s)',
                 'attribute' => 'SearchString',
                 //'attribute' => 'AssignedUser',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 16.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width:15.9%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%'],
                 'format' => 'html',
             ],
             [
                 'label' => 'Location Type',
                 'attribute' => 'LocationType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 38.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 38.5%'],
             ],
 			[
 				'label' => 'Remaining/Total',
 				'attribute' => 'Counts',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 5%'],
-				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 6.5%'],
+				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.5%'],
 				'format' => 'html',
 				'value' => function ($model) {
 					return $model['Remaining'] . "/" . $model['Total'];
 				}
 			],
             [
-                'label' => 'Inspection Type',
+                'label' => '',
                 'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%'],
             ],
             [
-                'label' => 'Billing Code',
+                'label' => '',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 48.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width: 6%'],
-                'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection',],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width:6%;'],
+                'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection','style'=>'padding-right:19px;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetAssigned = "#modalViewAssetAssigned";
