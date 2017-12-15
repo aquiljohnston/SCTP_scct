@@ -12,6 +12,13 @@ use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
+<style>
+/*fix overflow header* -- eigyan*/
+    .kv-thead-float{
+    width: 100% !important;
+    }
+</style>
+
 <div id="viewAssetModalContainer">
     <div id="assetDispatchContainer">
         <?php yii\widgets\Pjax::begin(['id' => 'assetDispatchForm']) ?>
