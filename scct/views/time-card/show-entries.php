@@ -12,7 +12,7 @@ use yii\widgets\Pjax;
 <div class="time-card-entries">
 
     <?php
-    $this->title = 'Task View';
+    $this->title = 'Week '.$from.' - '.$to;
     $this->params['breadcrumbs'][] = $this->title;
      ?>
 

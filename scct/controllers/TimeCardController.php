@@ -370,7 +370,9 @@ class TimeCardController extends BaseController
 
 			return $this -> render('show-entries', [
 											'model' => $card,
-											'task' => $allTask
+											'task' => $allTask,
+											'from' => $entries[0]['Date1'],
+											'to' => $entries[0]['Date7'],
 								
 									]);
 		}catch(ErrorException $e){
