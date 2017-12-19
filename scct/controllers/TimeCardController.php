@@ -331,6 +331,51 @@ class TimeCardController extends BaseController
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
+    } 
+
+
+
+     /**
+     * Displays all time entries for a given time card.
+     * @param string $id
+     * @throws \yii\web\HttpException
+     * @return mixed
+     */
+    public function actionShowEntries($id)
+    {		
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['/login']);
+		}
+
+		try{
+
+	
+			$time_card_url = 'time-card%2Fview&id='.$id;
+
+			$entries_url = 'time-card%2Fshow-entries&cardID='.$id;
+
+			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+			$card = json_decode($time_response, true);
+			$entries = json_decode($resp, true);
+
+			//var_dump($card);exit();
+		
+			$allTask = new ArrayDataProvider([
+				'allModels' => $entries,
+                'pagination' => false,
+			]);
+
+			return $this -> render('show-entries', [
+											'model' => $card,
+											'task' => $allTask
+								
+									]);
+		}catch(ErrorException $e){
+			throw new \yii\web\HttpException(400);
+		}
     }
 
     /**
@@ -476,12 +521,23 @@ class TimeCardController extends BaseController
 			);
 			$json_data = json_encode($data);
 
+			$referrer = Yii::$app->request->referrer;
+
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
-			return $this->redirect(['view', 'id' => $responseTimeCardID]);
+
+			if(strpos($referrer,'show-entries')){
+
+				return $this->redirect(['index']);
+
+			}else{
+				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+			}
+
+			
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
