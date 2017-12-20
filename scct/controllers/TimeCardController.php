@@ -331,6 +331,71 @@ class TimeCardController extends BaseController
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
+    } 
+
+
+
+     /**
+     * Displays all time entries for a given time card.
+     * @param string $id
+     * @throws \yii\web\HttpException
+     * @return mixed
+     */
+    public function actionShowEntries($id)
+    {		
+		//guest redirect
+		if (Yii::$app->user->isGuest)
+		{
+			return $this->redirect(['/login']);
+		}
+
+		try{
+
+			//build api url paths
+			$time_card_url	= 'time-card%2Fview&id='.$id;
+			$entries_url 	= 'time-card%2Fshow-entries&cardID='.$id;
+
+			//execute API request
+			$resp 			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response 	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+			$card 			= json_decode($time_response, true);
+			$entries 		= json_decode($resp, true);
+
+			//alter from and to dates a bit
+			$from   		= str_replace('-','/',$entries[0]['Date1']);
+			$to   			=	 str_replace('-','/',$entries[0]['Date7']);
+			$from 			= explode('/', $from);
+
+			//holds dates that accompany table header ex. Sunday 10-23
+			$SundayDate 	=  explode('-', $entries[0]['Date1']);
+			$MondayDate		=  explode('-', $entries[0]['Date2']);
+			$TuesdayDate	=  explode('-', $entries[0]['Date3']);
+			$WednesdayDate	=  explode('-', $entries[0]['Date4']);
+			$ThursdayDate 	=  explode('-', $entries[0]['Date5']);
+			$FridayDate		=  explode('-', $entries[0]['Date6']);
+			$SaturdayDate	=  explode('-', $entries[0]['Date7']);
+		
+			$allTask = new ArrayDataProvider([
+				'allModels' => $entries,
+                'pagination'=> false,
+			]);
+
+			return $this -> render('show-entries', [
+											'model' 		=> $card,
+											'task' 			=> $allTask,
+											'from' 			=> $from[0].'/'.$from[1],
+											'to' 			=> $to,
+											'SundayDate' 	=> $SundayDate[0].'-'.$SundayDate[1],
+											'MondayDate' 	=> $MondayDate[0].'-'.$MondayDate[1],
+											'TuesdayDate' 	=> $TuesdayDate[0].'-'.$TuesdayDate[1],
+											'WednesdayDate' => $WednesdayDate[0].'-'.$WednesdayDate[1],
+											'ThursdayDate' 	=> $ThursdayDate[0].'-'.$ThursdayDate[1],
+											'FridayDate' 	=> $FridayDate[0].'-'.$FridayDate[1],
+											'SaturdayDate' 	=> $SaturdayDate[0].'-'.$SaturdayDate[1]								
+									]);
+		}catch(ErrorException $e){
+			throw new \yii\web\HttpException(400);
+		}
     }
 
     /**
@@ -476,12 +541,23 @@ class TimeCardController extends BaseController
 			);
 			$json_data = json_encode($data);
 
+			$referrer = Yii::$app->request->referrer;
+
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
-			return $this->redirect(['view', 'id' => $responseTimeCardID]);
+
+			if(strpos($referrer,'show-entries')){
+
+				return $this->redirect(['index']);
+
+			}else{
+				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+			}
+
+			
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
