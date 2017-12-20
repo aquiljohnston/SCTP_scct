@@ -361,7 +361,10 @@ class TimeCardController extends BaseController
 			$card = json_decode($time_response, true);
 			$entries = json_decode($resp, true);
 
-			//var_dump($card);exit();
+			//alter from and to dates a bit
+			$from   = str_replace('-','/',$entries[0]['Date1']);
+			$to   = str_replace('-','/',$entries[0]['Date7']);
+			$from = explode('/', $from);
 		
 			$allTask = new ArrayDataProvider([
 				'allModels' => $entries,
@@ -371,8 +374,8 @@ class TimeCardController extends BaseController
 			return $this -> render('show-entries', [
 											'model' => $card,
 											'task' => $allTask,
-											'from' => $entries[0]['Date1'],
-											'to' => $entries[0]['Date7'],
+											'from' => $from[0].'/'.$from[1],
+											'to' => $to,
 								
 									]);
 		}catch(ErrorException $e){

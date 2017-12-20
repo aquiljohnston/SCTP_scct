@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
-//use yii\bootstrap\Modal;
+use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -22,11 +22,8 @@ use yii\widgets\Pjax;
 
         <?php
 
-           // check start date for this timecard.
     $approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
 
-    //disactive TimeEntry
-    //$disApproveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
     if ($model["TimeCardApprovedFlag"] === "Yes") {
         $approve_status = true;
     } else {
@@ -59,12 +56,33 @@ use yii\widgets\Pjax;
                 'id' => 'deactive_timeEntry_btn_id',
             ]) ?>
         <?php endif; ?>
+
+    <!--create new button start
+        <?= Html::button('Create New', ['value' =>'', 'class' => 'btn btn-success', 'id' => 'modalNewTimeEntry', 'disabled' => $approve_status]) ?>
+    create new button end-->
+
     </p>
     <br>
+
+
+      <!--modal start-->
+    <?php
+    Modal::begin([
+        'header' => '<h4>New Time Entry</h4>',
+        'id' => 'modalNewTimeEntry',
+        'size' => 'modal-lg',
+    ]);
+
+    echo "<div id='modalNewTimeEntryContent'></div>";
+
+    Modal::end();
+    ?>
+      <!--modal end-->
+  
     </div>
 
     <?= \kartik\grid\GridView::widget([
-        'id' => 'assetsGV',
+        'id' => 'allTaskEntries',
         'dataProvider' => $task,
         'export' => false,
         'pjax' => true,
