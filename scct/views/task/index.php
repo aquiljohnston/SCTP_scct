@@ -27,6 +27,7 @@ $taskColumn = [
     [
         'header' => 'Add Task',
         'class' => 'kartik\grid\CheckboxColumn',
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'taskCheckbox'],
         'checkboxOptions' => function ($model, $key, $index, $column) {
             /*if (empty($model['SectionNumber']))
@@ -48,6 +49,7 @@ $userColumn = [
     [
         'header' => 'Add Surveyor',
         'class' => 'kartik\grid\CheckboxColumn',
+        'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'userCheckbox'],
         'checkboxOptions' => function ($model, $key, $index, $column) {
             /*if (empty($model['SectionNumber']))

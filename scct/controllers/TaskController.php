@@ -102,6 +102,16 @@ class TaskController extends BaseController
 
         $userDataProvider->key = 'UserID';
 
+        // Sorting User Table
+        $userDataProvider->sort = [
+            'attributes' => [
+                'UserName' => [
+                    'asc' => ['UserName' => SORT_ASC],
+                    'desc' => ['UserName' => SORT_DESC]
+                ],
+            ]
+        ];
+
         return $this->render('index', [
             'taskDataProvider' => $taskDataProvider,
             'userDataProvider' => $userDataProvider,
