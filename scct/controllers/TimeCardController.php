@@ -351,32 +351,47 @@ class TimeCardController extends BaseController
 
 		try{
 
-	
-			$time_card_url = 'time-card%2Fview&id='.$id;
+			//build api url paths
+			$time_card_url	= 'time-card%2Fview&id='.$id;
+			$entries_url 	= 'time-card%2Fshow-entries&cardID='.$id;
 
-			$entries_url = 'time-card%2Fshow-entries&cardID='.$id;
-
-			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
-			$time_response = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$card = json_decode($time_response, true);
-			$entries = json_decode($resp, true);
+			//execute API request
+			$resp 			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response 	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+			$card 			= json_decode($time_response, true);
+			$entries 		= json_decode($resp, true);
 
 			//alter from and to dates a bit
-			$from   = str_replace('-','/',$entries[0]['Date1']);
-			$to   = str_replace('-','/',$entries[0]['Date7']);
-			$from = explode('/', $from);
+			$from   		= str_replace('-','/',$entries[0]['Date1']);
+			$to   			=	 str_replace('-','/',$entries[0]['Date7']);
+			$from 			= explode('/', $from);
+
+			//holds dates that accompany table header ex. Sunday 10-23
+			$SundayDate 	=  explode('-', $entries[0]['Date1']);
+			$MondayDate		=  explode('-', $entries[0]['Date2']);
+			$TuesdayDate	=  explode('-', $entries[0]['Date3']);
+			$WednesdayDate	=  explode('-', $entries[0]['Date4']);
+			$ThursdayDate 	=  explode('-', $entries[0]['Date5']);
+			$FridayDate		=  explode('-', $entries[0]['Date6']);
+			$SaturdayDate	=  explode('-', $entries[0]['Date7']);
 		
 			$allTask = new ArrayDataProvider([
 				'allModels' => $entries,
-                'pagination' => false,
+                'pagination'=> false,
 			]);
 
 			return $this -> render('show-entries', [
-											'model' => $card,
-											'task' => $allTask,
-											'from' => $from[0].'/'.$from[1],
-											'to' => $to,
-								
+											'model' 		=> $card,
+											'task' 			=> $allTask,
+											'from' 			=> $from[0].'/'.$from[1],
+											'to' 			=> $to,
+											'SundayDate' 	=> $SundayDate[0].'-'.$SundayDate[1],
+											'MondayDate' 	=> $MondayDate[0].'-'.$MondayDate[1],
+											'TuesdayDate' 	=> $TuesdayDate[0].'-'.$TuesdayDate[1],
+											'WednesdayDate' => $WednesdayDate[0].'-'.$WednesdayDate[1],
+											'ThursdayDate' 	=> $ThursdayDate[0].'-'.$ThursdayDate[1],
+											'FridayDate' 	=> $FridayDate[0].'-'.$FridayDate[1],
+											'SaturdayDate' 	=> $SaturdayDate[0].'-'.$SaturdayDate[1]								
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);

@@ -9,6 +9,13 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $model app\models\time-card */
 ?>
+<style type="text/css">
+[data-key="0"] 
+{
+    display:none;
+}
+</style>
+
 <div class="time-card-entries">
 
     <?php
@@ -94,31 +101,31 @@ use yii\widgets\Pjax;
                 'attribute' => 'Task',
             ],
             [
-                'label' => 'Sunday',
+                'label' => 'Sunday ' . $SundayDate,
                 'attribute' => 'Date1',
             ],
             [
-                'label' => 'Monday',
+                'label' => 'Monday '. $MondayDate,
                 'attribute' => 'Date2',
             ],
             [
-                'label' => 'Tuesday',
+                'label' => 'Tuesday '. $TuesdayDate,
                 'attribute' => 'Date3',
             ],
             [
-                'label' => 'Wednesday',
+                'label' => 'Wednesday '. $WednesdayDate,
                 'attribute' => 'Date4',
             ],
             [
-                'label' => 'Thurday',
+                'label' => 'Thursday '. $ThursdayDate,
                 'attribute' => 'Date5',
             ],
             [
-                'label' => 'Friday',
+                'label' => 'Friday '. $FridayDate,
                 'attribute' => 'Date6',
             ],
             [
-                'label' => 'Saturday',
+                'label' => 'Saturday '. $SaturdayDate,
                 'attribute' => 'Date7',
             ]
         ]
