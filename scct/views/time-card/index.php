@@ -64,7 +64,7 @@ $column = [
         'template' => '{view}', // does not include delete
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
-                $url = '/time-card/view?id=' . $model["TimeCardID"];
+                $url = '/time-card/show-entries?id=' . $model["TimeCardID"];
                 return $url;
             }
         },
