@@ -65,19 +65,19 @@ $userColumn = [
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_HORIZONTAL,
-            'formConfig' => ['labelSpan' => 5, 'deviceSize' => ActiveForm::SIZE_SMALL],
+            'formConfig' => [/*'labelSpan' => 1,*/'showLabels' => false, 'deviceSize' => ActiveForm::SIZE_SMALL],
             //'method' => 'get',
             //'action' => Url::to(['task/index']),
             'options' => [
                 'id' => 'taskForm',
             ]
         ]); ?>
-        <label id="taskFilter" style="width: 47%">
-            <?= $form->field($model, 'taskfilter')->textInput(['id' => 'taskSearchField'])->label("Search"); ?>
+        <label id="taskFilter" style="width: 51%">
+            <?= $form->field($model, 'taskfilter')->textInput(['id' => 'taskSearchField'])->label(false); ?>
             <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'taskSearchCleanFilterButton']) ?>
         </label>
-        <label id="userFilter" style="width: 47%">
-            <?= $form->field($model, 'userfilter')->textInput(['id' => 'userSearchField'])->label("Search"); ?>
+        <label id="userFilter" style="width: 40%">
+            <?= $form->field($model, 'userfilter')->textInput(['id' => 'userSearchField'])->label(false); ?>
             <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'userSearchCleanFilterButton']) ?>
         </label>
         <p style="float: right;">
