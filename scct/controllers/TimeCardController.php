@@ -343,6 +343,16 @@ class TimeCardController extends BaseController
      */
     public function actionShowEntries($id)
     {		
+    	//Defensive Programming - Magic Numbers
+    	//declare constants to hold constant values
+    	
+    	private const ENTRIES_ZERO_INDEX	=	0;
+     	private const DATES_ZERO_INDEX		=	0;	
+     	private const DATES_FIRST_INDEX		=	1;	
+     	private const FROM_DATE_ZERO_INDEX	=	0;
+     	private const TO_DATE_FIRST_INDEX	=	1;
+
+
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
@@ -362,18 +372,18 @@ class TimeCardController extends BaseController
 			$entries 		= json_decode($resp, true);
 
 			//alter from and to dates a bit
-			$from   		= str_replace('-','/',$entries[0]['Date1']);
-			$to   			=	 str_replace('-','/',$entries[0]['Date7']);
-			$from 			= explode('/', $from);
+			$from   		=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
+			$to   			=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date7']);
+			$from 			= 	explode('/', $from);
 
 			//holds dates that accompany table header ex. Sunday 10-23
-			$SundayDate 	=  explode('-', $entries[0]['Date1']);
-			$MondayDate		=  explode('-', $entries[0]['Date2']);
-			$TuesdayDate	=  explode('-', $entries[0]['Date3']);
-			$WednesdayDate	=  explode('-', $entries[0]['Date4']);
-			$ThursdayDate 	=  explode('-', $entries[0]['Date5']);
-			$FridayDate		=  explode('-', $entries[0]['Date6']);
-			$SaturdayDate	=  explode('-', $entries[0]['Date7']);
+			$SundayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date1']);
+			$MondayDate		=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date2']);
+			$TuesdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date3']);
+			$WednesdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date4']);
+			$ThursdayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date5']);
+			$FridayDate		=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date6']);
+			$SaturdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date7']);
 		
 			$allTask = new ArrayDataProvider([
 				'allModels' => $entries,
@@ -383,15 +393,15 @@ class TimeCardController extends BaseController
 			return $this -> render('show-entries', [
 											'model' 		=> $card,
 											'task' 			=> $allTask,
-											'from' 			=> $from[0].'/'.$from[1],
+											'from' 			=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
 											'to' 			=> $to,
-											'SundayDate' 	=> $SundayDate[0].'-'.$SundayDate[1],
-											'MondayDate' 	=> $MondayDate[0].'-'.$MondayDate[1],
-											'TuesdayDate' 	=> $TuesdayDate[0].'-'.$TuesdayDate[1],
-											'WednesdayDate' => $WednesdayDate[0].'-'.$WednesdayDate[1],
-											'ThursdayDate' 	=> $ThursdayDate[0].'-'.$ThursdayDate[1],
-											'FridayDate' 	=> $FridayDate[0].'-'.$FridayDate[1],
-											'SaturdayDate' 	=> $SaturdayDate[0].'-'.$SaturdayDate[1]								
+											'SundayDate' 	=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+											'MondayDate' 	=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+											'TuesdayDate' 	=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+											'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+											'ThursdayDate' 	=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+											'FridayDate' 	=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX]								
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
