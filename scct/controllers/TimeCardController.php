@@ -344,13 +344,13 @@ class TimeCardController extends BaseController
     public function actionShowEntries($id)
     {		
     	//Defensive Programming - Magic Numbers
-    	//declare constants to hold constant values
-    	
-    	private const ENTRIES_ZERO_INDEX	=	0;
-     	private const DATES_ZERO_INDEX		=	0;	
-     	private const DATES_FIRST_INDEX		=	1;	
-     	private const FROM_DATE_ZERO_INDEX	=	0;
-     	private const TO_DATE_FIRST_INDEX	=	1;
+    	//declare constants to hold constant values	
+    	 define('ENTRIES_ZERO_INDEX',0);
+    	 define('DATES_ZERO_INDEX',0);
+    	 define('DATES_FIRST_INDEX',1);
+    	 define('FROM_DATE_ZERO_INDEX',0);
+    	 define('TO_DATE_FIRST_INDEX',1);
+
 
 
 		//guest redirect
