@@ -271,6 +271,7 @@ class DispatchController extends \app\controllers\BaseController
     public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200)
     {
         Yii::trace("CALL VIEW ASSET");
+
         $model = new \yii\base\DynamicModel([
             'modalSearch', 'mapGridSelected', 'sectionNumberSelected', 'pagesize'
         ]);
@@ -286,13 +287,19 @@ class DispatchController extends \app\controllers\BaseController
 
         if (Yii::$app->request->get()){
             //todo: need to remove hard code value
-            $viewAssetFilterParams = $searchFilterVal;
-            $mapGridSelectedParam = $mapGridSelected;
+            $viewAssetFilterParams      = $searchFilterVal;
+            $mapGridSelectedParam       = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-            $viewAssetPageSizeParams = $recordsPerPageSelected;
+            $viewAssetPageSizeParams    = $recordsPerPageSelected;
+
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
+
+            //include inspection type and billingType for dispatch assets query
+            $inspectionType = Yii::$app->getRequest()->getQueryParam('inspectionType');
+            $billingCode = Yii::$app->getRequest()->getQueryParam('billingCode');
+
             Yii::trace('PAGE AT : '.$pageAt);
-        }else{
+        } else {
             $viewAssetFilterParams = "";
             $pageAt = 1;
         }
@@ -300,16 +307,22 @@ class DispatchController extends \app\controllers\BaseController
         $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
                 'filter' => '',
             ]);
+
         $getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
 
         $getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
-                'mapGridSelected' => $mapGridSelectedParam,
+                'mapGridSelected'       => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'filter' => $viewAssetFilterParams,
-                'listPerPage' => $viewAssetPageSizeParams,
-                'page' => $pageAt,
+                'filter'                => $viewAssetFilterParams,
+                'listPerPage'           => $viewAssetPageSizeParams,
+                'page'                  => $pageAt,
+                'inspectionType'        => $inspectionType,
+                'billingCode'           => $billingCode
             ]);
+
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+
+        //var_dump($getAssetDataResponse); exit();
 
         $data = self::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
         Yii::trace("reGenerateAssetsData " . json_encode($data));
@@ -328,23 +341,23 @@ class DispatchController extends \app\controllers\BaseController
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'searchFilterVal' => $viewAssetFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
+                'assetDataProvider'         => $assetDataProvider,
+                'model'                     => $model,
+                'pages'                     => $pages,
+                'searchFilterVal'           => $viewAssetFilterParams,
+                'mapGridSelected'           => $mapGridSelectedParam,
+                'sectionNumberSelected'     => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams
             ]);
         } else {
             return $this->render('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'searchFilterVal' => $viewAssetFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'viewAssetPageSizeParams' => $viewAssetPageSizeParams
+                'assetDataProvider'         => $assetDataProvider,
+                'model'                     => $model,
+                'pages'                     => $pages,
+                'searchFilterVal'           => $viewAssetFilterParams,
+                'mapGridSelected'           => $mapGridSelectedParam,
+                'sectionNumberSelected'     => $sectionNumberSelectedParam,
+                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams
             ]);
         }
     }
