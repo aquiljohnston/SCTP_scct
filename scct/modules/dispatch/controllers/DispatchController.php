@@ -259,7 +259,7 @@ class DispatchController extends \app\controllers\BaseController
                 'can' => $can,
                 'pages' => $pages,
                 'sectionFilterParams' => $sectionFilterParams,
-                'sectionPageSizeParams' => $sectionPageSizeParams,
+                'sectionPageSizeParams' => $sectionPageSizeParams
             ]);
         }
     }
@@ -268,7 +268,7 @@ class DispatchController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200, $inspectionType=null,$billingCode=null)
     {
         Yii::trace("CALL VIEW ASSET");
 
@@ -291,12 +291,14 @@ class DispatchController extends \app\controllers\BaseController
             $mapGridSelectedParam       = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
             $viewAssetPageSizeParams    = $recordsPerPageSelected;
+            $inspectionType             = $inspectionType; 
+            $billingCode                = $billingCode; 
 
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
 
             //include inspection type and billingType for dispatch assets query
-            $inspectionType = Yii::$app->getRequest()->getQueryParam('inspectionType');
-            $billingCode = Yii::$app->getRequest()->getQueryParam('billingCode');
+            //$inspectionType = Yii::$app->getRequest()->getQueryParam('inspectionType');
+           // $billingCode = Yii::$app->getRequest()->getQueryParam('billingCode');
 
             Yii::trace('PAGE AT : '.$pageAt);
         } else {
@@ -347,7 +349,10 @@ class DispatchController extends \app\controllers\BaseController
                 'searchFilterVal'           => $viewAssetFilterParams,
                 'mapGridSelected'           => $mapGridSelectedParam,
                 'sectionNumberSelected'     => $sectionNumberSelectedParam,
-                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams
+                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams,
+                'inspectionType'            => $inspectionType,
+                'billingCode'               => $billingCode
+
             ]);
         } else {
             return $this->render('view_asset_modal', [
@@ -357,7 +362,9 @@ class DispatchController extends \app\controllers\BaseController
                 'searchFilterVal'           => $viewAssetFilterParams,
                 'mapGridSelected'           => $mapGridSelectedParam,
                 'sectionNumberSelected'     => $sectionNumberSelectedParam,
-                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams
+                'viewAssetPageSizeParams'   => $viewAssetPageSizeParams,
+                'inspectionType'            => $inspectionType,
+                'billingCode'               => $billingCode
             ]);
         }
     }
