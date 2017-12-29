@@ -41,6 +41,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
         <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
         <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
+        <input id="inspectionType" type="hidden" name="inspectionType" value=<?php echo $inspectionType; ?> />
+        <input id="billingCode" type="hidden" name="billingCode" value=<?php echo $billingCode; ?> />
         <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
@@ -140,6 +142,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     $(document).ready(function () {
         // global variable to use to pop selected assets modal
         mapGridSelected = null;
+        inspectionType = $('#inspectionType').val();
+        billingCode = $('#billingCode').val();
 
         $('#viewAssetsSearchDispatch').keypress(function (event) {
             var key = event.which;
@@ -215,11 +219,13 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 }
             }).done(function () {
                 $('.modal-backdrop').remove();
-                viewAssetRowClicked('/dispatch/dispatch/view-asset?mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
+                viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode='+billingCode+'&inspectionType='+inspectionType+'&mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
                 $('#loading').hide();
             });
         });
     });
+
+
 
     function reloadViewAssetsModalDispatch(page) {
         var form = $('#viewAssetsFormDispatch');
@@ -227,13 +233,23 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
         var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
+        var inspectionType = $('#inspectionType').val();
+        var billingCode = $('#billingCode').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/dispatch/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewDispatchAssetPageNumber:page, recordsPerPageSelected: recordsPerPageSelected},
+            data: {
+                searchFilterVal: searchFilterVal, 
+                mapGridSelected: mapGridSelected, 
+                sectionNumberSelected: sectionNumberSelected, 
+                viewDispatchAssetPageNumber:page, 
+                recordsPerPageSelected: recordsPerPageSelected,
+                inspectionType: inspectionType,
+                billingCode: billingCode
+            },
             timeout: 99999,
             push: false,
             replace: false,
