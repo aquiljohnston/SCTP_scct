@@ -450,6 +450,8 @@ class ProjectController extends BaseController
 			$data['usersRemoved'] = $usersRemoved;
 			$data['usersAdded'] = $usersAdded;
 
+
+
 			//encode data
 			$jsonData = json_encode($data);
             //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
@@ -520,7 +522,10 @@ class ProjectController extends BaseController
 
             $unAssignedDataProvider = new ArrayDataProvider
             ([
-                'allModels'		 	=> $unassignedData
+                'allModels'		 	=> $unassignedData,
+               	'pagination' 		=> [
+                'pageSize' 			=> 200
+            	]
                
             ]
         	);
@@ -529,7 +534,7 @@ class ProjectController extends BaseController
             ([
                 'allModels'		 	=> $assignedData,
                	'pagination' 		=> [
-                'pageSize' 			=> 20,     
+                'pageSize' 			=> 50,     
                 'pageParam' 	    => 'pages'    
             	]
             ]
