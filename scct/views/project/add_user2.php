@@ -22,8 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?= Html::a('Back', ['view' , 'id' => $project->ProjectID], ['class' => 'btn btn-primary']) ?>
 	</p>
 
+	<div class="row">
+	</div>
+
 		<div class="row">
-			   <div id="unassignedTable">
+     
+		<div id="unassignedTable">
         <div id="unassignedTableGrid">
    			<div class="col-sm-6">
             <?= GridView::widget([
@@ -43,10 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'header' 			=> 'Assign User',
                         'class' 			=> 'kartik\grid\CheckboxColumn',
-                        'contentOptions' 	=> ['class' => 'assignUser'],
+                        'contentOptions' 	=> [],
                         'checkboxOptions' 	=> function ($model, $key, $index, $column) {
 
-                            return ['userID' => $index,'disabled' => false];
+                            return ['userID' => $key,'disabled' => false,'class' => 'moveToAssigned'];
                         }
                     ]
                 ]
@@ -77,10 +81,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                         'header' 	=> 'Unassign User',
                         'class' 	=> 'kartik\grid\CheckboxColumn',
-                        'contentOptions' => ['class' => 'assignUser'],
+                        'contentOptions' => [],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
 
-                            return ['userID' => $index,'disabled' => false,'checked'=>'checked'];
+                            return ['userID' => $key,'disabled' => false,'class' => 'moveToUnAssigned'];
                         }
                     ]
                 ],
@@ -95,8 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		</div>
 		<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
-
-
+    <?php ActiveForm::end(); ?>
 	<div class="form-group">
 		<?= Html::Button( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
 		<?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>

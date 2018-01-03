@@ -42,6 +42,33 @@ $(function(){
     });
 });
 
+///move unassigned to the assigned table
+$('#unassignedTableGrid').on('change','.moveToAssigned', function (e) {
+
+    if($(this).is(":checked")){
+     //change classname for the return trip
+     $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
+     var row = $(this).closest('tr').html();
+     $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $(this).closest('tr').remove();
+    }
+});
+
+//move assigned to the unassigned table
+$('#assignedTableGrid').on('change','.moveToUnAssigned', function (e) {
+
+    if($(this).is(":checked")){
+    //change classname for the return trip
+     $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
+     var row = $(this).closest('tr').html();
+     $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $(this).closest('tr').remove();
+    }
+   
+});
+
+
+
 function getSubDomainEnvironment() {
 	//get environment variable
 	var urlPrefix = location.hostname.split( '.' )[0];
@@ -81,6 +108,11 @@ function addRemoveUser() {
     if (form.find(".has-error").length) {
         return false;
     }
+
+    //stuff = form.serializeArray();
+
+   // console.log(stuff); return false;
+
     $('#loading').show();
     $.ajax({
         type: 'POST',
