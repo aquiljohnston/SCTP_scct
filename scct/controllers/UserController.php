@@ -125,13 +125,13 @@ class UserController extends BaseController
      * @param string $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($username)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
-        $url = 'user%2Fview&id=' . $id;
+        $url = 'user%2Fview&username=' . $username;
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
         return $this->render('view', ['model' => json_decode($response), true]);
@@ -232,14 +232,14 @@ class UserController extends BaseController
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
+    public function actionUpdate($username)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
         self::requirePermission("userUpdate");
-        $getUrl = 'user%2Fview&id=' . $id;
+        $getUrl = 'user%2Fview&username=' . $username;
         $getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
         $model = new User();
@@ -286,11 +286,11 @@ class UserController extends BaseController
 
             $json_data = json_encode($data);
 
-            $putUrl = 'user%2Fupdate&id=' . $id;
+            $putUrl = 'user%2Fupdate&username=' . $username;
             $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
             $obj = json_decode($putResponse, true);
 
-            return $this->redirect(['view', 'id' => $id]);
+            return $this->redirect(['view', 'username' => $username]);
         } else {
             return $this->render('update', [
                 'model' => $model,
