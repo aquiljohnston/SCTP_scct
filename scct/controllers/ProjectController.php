@@ -533,8 +533,7 @@ class ProjectController extends BaseController
         	 $assignedDataProvider = new ArrayDataProvider
             ([
                 'allModels'		 	=> $assignedData,
-               	'pagination' 		=> [
-                'pageSize' 			=> 50,     
+               	'pagination' 		=> [   
                 'pageParam' 	    => 'pages'    
             	]
             ]
@@ -574,33 +573,45 @@ class ProjectController extends BaseController
             $assignedData 		= $users['assignedUsers'];
         }
 
-		if ($model->load(Yii::$app->request->post()))
+		if (Yii::$app->request->post())
 		{
+
+
+			$request 					= Yii::$app->request->post();
+
+			 //convert assigned data values to string
+			$func 						= function($element) {return (string)$element;};
+
+
 			//prepare arrays for post request
 			//explode strings from active form into arrays
-			$unassignedUsersArray 		= explode(',',$model->UnassignedUsers);
-			$assignedUsersArray 		= explode(',',$model->AssignedUsers);
+			$unassignedUsersArray 		= explode(',',$request["unassignedUsers"]);
+			$assignedUsersArray 		= explode(',',$request["assignedUsers"]);
 			//array diff new arrays with arrays previous to submission to get changes
-			$usersAdded 				= array_values(array_diff($assignedUsersArray,array_keys($assignedData)));
-			$usersRemoved 				= array_values(array_diff($unassignedUsersArray,array_keys($unassignedData)));
+			$usersAdded 				= array_values(array_diff($assignedUsersArray,array_map($func,array_keys($assignedData))));
+			$usersRemoved 				= array_values(array_diff($unassignedUsersArray,array_map($func,array_keys($unassignedData))));
 			//load arrays of changes into post data
 			$data 						= [];
 			$data['usersRemoved'] 		= $usersRemoved;
 			$data['usersAdded'] 		= $usersAdded;
 
+
+
+			
+
 			//encode data
 			$jsonData 					= json_encode($data);
-            //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
+            Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
 			//set post url
 			$postUrl					= 'project%2Fadd-remove-users&projectID='.$id;
-            //Yii::trace("ADD USER URL: ".$postUrl);
+            Yii::trace("ADD USER URL: ".$postUrl);
 			//execute post request
 			$postResponse 				= Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
-            //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
+            Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user2', 'id' 					=> $project->ProjectID]);
 		}else{
-            return $this->render('add_user', [
+            return $this->render('add_user2', [
                                             'project' 					=> $project,
                                             'model' 					=> $model,
                                             'unassignedData' 			=> $unassignedData,
@@ -683,6 +694,5 @@ class ProjectController extends BaseController
 								]);
 		}
 	}
-
 
 }

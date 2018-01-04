@@ -99,7 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 		</div>
 		<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
-    <?php ActiveForm::end(); ?>
+ 
 	<div class="form-group">
 		<?= Html::Button( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
 		<?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>
