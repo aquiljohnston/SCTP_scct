@@ -555,7 +555,7 @@ class TimeCardController extends BaseController
 
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
+			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
 

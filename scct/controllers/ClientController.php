@@ -199,7 +199,7 @@ class ClientController extends BaseController
 			// post url
 			$url= "client%2Fcreate";
 			
-			$response = Parent::executePostRequest($url, $json_data);
+			$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
 			$obj = json_decode($response, true);
 			if(array_key_exists("ClientID", $obj)) {
 				return $this->redirect(['view', 'id' => $obj["ClientID"]]);
@@ -291,7 +291,7 @@ class ClientController extends BaseController
 			$json_data = json_encode($data);
 			
 			$putUrl = 'client%2Fupdate&id='.$id;
-			$putResponse = Parent::executePutRequest($putUrl, $json_data);
+			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 			
 			$obj = json_decode($putResponse, true);
 			
