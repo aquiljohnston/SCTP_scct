@@ -1,6 +1,9 @@
 //Taken from commit a09e6b8d7fed3035d888ade56ffd0e1a623f4c00 on PGE-Web
 $(function(){	
 
+    unAssignedUsersArray = [];
+    assignedUsersArray   = [];
+
 	var environment = getSubDomainEnvironment();
 	
 	//autofill url prefix based on project name
@@ -103,22 +106,45 @@ function reloadProjectGridView() {
 }
 
 function addRemoveUser() {
-    var jqProjectAddUser = $('.project-add-user');
-    var form = jqProjectAddUser.find("#projectSortableInputForm");
+    var jqProjectAddUser    = $('.project-add-user');
+    var form                = jqProjectAddUser.find("#projectSortableInputForm");
+    var projectID           = $('#projectID').val();
+    var unassignedVals      = [];
+    var assignedVals        = [];
+   // var csrf_param          = $("meta[name=csrf-param]");   
+    //var csrf_token          = $("meta[name=csrf-token]");
+
+
+
     if (form.find(".has-error").length) {
         return false;
     }
 
-    //stuff = form.serializeArray();
+     //populate unassigned userid values
+    $(".moveToAssigned").each(function(key,value){unassignedVals.push($(this).val());})
+     //unAssignedUsersArray.push({unassignedVals});
 
-   // console.log(stuff); return false;
+    //populate assigned userid values
+    $(".moveToUnAssigned").each(function(key,value){assignedVals.push($(this).val());})
+      //assignedUsersArray.push({assignedVals});
+
+    data = {
+        assignedUsers:assignedVals.join(','),
+        unassignedUsers:unassignedVals.join(','),
+        projectID: projectID
+    }
+
+   console.log('DATA',data);
+
+    //return false;
+
 
     $('#loading').show();
     $.ajax({
         type: 'POST',
-        url: '/project/add-user',
+        url: '/project/add-user2',
         //container: '#projectSortableView', // id to update content
-        data: form.serialize(),
+        data: data,
         timeout: 99999
     }).done(function () {
         $('#loading').hide();
