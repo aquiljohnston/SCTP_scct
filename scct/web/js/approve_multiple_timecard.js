@@ -8,7 +8,7 @@ $(function () {
 
     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
 
-    $("#timeCardGV input[type=checkbox]").click(function () {
+    $(document).off('click', "#timeCardGV input[type=checkbox]").on('click', "#timeCardGV input[type=checkbox]", function (e) {
         var disable;
         if ($("#timeCardGV .kv-row-select input:checked").length != 0) {
             disable = false;
@@ -37,7 +37,6 @@ function applyTimeCardOnClickListeners() {
     $('#multiple_approve_btn_id').click(function () {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
-        var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
@@ -53,14 +52,21 @@ function applyTimeCardOnClickListeners() {
                     timecardid: primaryKeys
                 },
                 success: function (data) {
+                    var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
                     if (win) {
                         //Browser has allowed it to be opened
                         win.focus();
+                        $.pjax.reload({
+                            container: '#timeCardGridview',
+                            timeout: false
+                        });
+                        $('#timeCardGridview').on('pjax:success', function() {
+                            $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+                        });
                     } else {
                         //Browser has blocked it
                         console.log('Please allow popups for this website');
                     }
-                    $.pjax.reload({container: '#timeCardGridview'});
                 }
             });
         } else {
