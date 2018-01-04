@@ -16,7 +16,7 @@ $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
-        'dateRange' => $dateRangeValue
+        'dateRangeValue' => $dateRangeValue
     ]);
 $column = [
     [
@@ -123,7 +123,7 @@ $column = [
                 if ($pages->totalCount > 0) {
                     ?>
                     <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-                       href="<?= $this->params['download_url']; ?>">Export</a>
+                       href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
                 <?php } ?>
 
             </div>

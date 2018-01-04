@@ -37,6 +37,8 @@ function applyTimeCardOnClickListeners() {
     $('#multiple_approve_btn_id').click(function () {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
+        var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
+
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
         } else {
@@ -51,7 +53,14 @@ function applyTimeCardOnClickListeners() {
                     timecardid: primaryKeys
                 },
                 success: function (data) {
-                    $.pjax.reload({container: '#w0'});
+                    if (win) {
+                        //Browser has allowed it to be opened
+                        win.focus();
+                    } else {
+                        //Browser has blocked it
+                        console.log('Please allow popups for this website');
+                    }
+                    $.pjax.reload({container: '#timeCardGridview'});
                 }
             });
         } else {
@@ -60,6 +69,16 @@ function applyTimeCardOnClickListeners() {
         }
     });
 }
+
+/*function appendQueryString(url, queryVars) {
+    var firstSeperator = (url.indexOf('?')==-1 ? '?' : '&');
+    var queryStringParts = new Array();
+    for(var key in queryVars) {
+        queryStringParts.push(key + '=' + queryVars[key]);
+    }
+    var queryString = queryStringParts.join('&');
+    return url + firstSeperator + queryString;
+}*/
 
 
 /*Converts javascript array to CSV format */
