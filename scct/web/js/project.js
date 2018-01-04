@@ -142,7 +142,7 @@ function addRemoveUser() {
     $('#loading').show();
     $.ajax({
         type: 'POST',
-        url: '/project/add-user2',
+        url: '/project/add-user',
         //container: '#projectSortableView', // id to update content
         data: data,
         timeout: 99999

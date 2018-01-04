@@ -370,7 +370,7 @@ class ProjectController extends BaseController
 		}
 	}
 	
-	public function actionAddUser($id = null)
+	/*public function actionAddUser($id = null)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -473,9 +473,9 @@ class ProjectController extends BaseController
 											'assignedFilterParams' => $aFilterParam,
                                     ]);
 		}
-	}
+	}----deprecated---eigyan*/
 
-		public function actionAddUser2($id = null)
+		public function actionAddUser($id = null)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -543,7 +543,7 @@ class ProjectController extends BaseController
             $assignedDataProvider->key 		= 'userID';
 
 
-            return $this -> render('add_user2', [
+            return $this -> render('add_user', [
                 'project' 								=> $project,
                 'model' 								=> $model,
                 'dataProviderUnassigned'				=> $unAssignedDataProvider,
@@ -608,9 +608,9 @@ class ProjectController extends BaseController
 			$postResponse 				= Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
             //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
-			return $this->redirect(['add-user2', 'id' 					=> $project->ProjectID]);
+			return $this->redirect(['add-user', 'id' 					=> $project->ProjectID]);
 		}else{
-            return $this->render('add_user2', [
+            return $this->render('add_user', [
                                             'project' 					=> $project,
                                             'model' 					=> $model,
                                             'unassignedData' 			=> $unassignedData,
