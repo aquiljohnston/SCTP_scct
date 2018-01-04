@@ -481,14 +481,13 @@ class MileageCardController extends BaseController
                 }
 
                 $data = array(
-                    'deactivatedBy' => Yii::$app->session['userID'],
                     'entryArray' => $MileageEntryIDArray,
                 );
                 $json_data = json_encode($data);
 
                 // post url
                 $putUrl = 'mileage-entry%2Fdeactivate';
-                $putResponse = Parent::executePutRequest($putUrl, $json_data);
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
                 $obj = json_decode($putResponse, true);
                 $responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
                 return $this->redirect(['view', 'id' => $responseMileageCardID]);
