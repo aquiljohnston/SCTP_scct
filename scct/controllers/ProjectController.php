@@ -490,10 +490,7 @@ class ProjectController extends BaseController
 		//create model for active form
 		$model = new \yii\base\DynamicModel([
 			'UnassignedUsers', 'AssignedUsers', 'uaFilter', 'aFilter' ]);
-		$model->addRule('UnassignedUsers', 'string')
-              ->addRule('AssignedUsers',  'string')
-              ->addRule('uaFilter', 'string', ['max' => 32])
-              ->addRule('pageAt', 'string', ['max' => 32])
+		$model->addRule('uaFilter', 'string', ['max' => 32])
               ->addRule('aFilter', 'string', ['max' => 32]);
 
         // receive get request to filter user list
@@ -519,6 +516,8 @@ class ProjectController extends BaseController
             $unassignedData 	= $users['unassignedUsers'];
             $assignedData 		= $users['assignedUsers'];
 
+
+            
 
             $unAssignedDataProvider = new ArrayDataProvider
             ([
@@ -601,13 +600,13 @@ class ProjectController extends BaseController
 
 			//encode data
 			$jsonData 					= json_encode($data);
-            Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
+            //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
 			//set post url
 			$postUrl					= 'project%2Fadd-remove-users&projectID='.$id;
-            Yii::trace("ADD USER URL: ".$postUrl);
+            //Yii::trace("ADD USER URL: ".$postUrl);
 			//execute post request
 			$postResponse 				= Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
-            Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
+            //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
 			return $this->redirect(['add-user2', 'id' 					=> $project->ProjectID]);
 		}else{

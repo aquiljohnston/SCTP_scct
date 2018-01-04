@@ -166,18 +166,17 @@ function projectGridViewReload() {
     var form = $("#projectForm");
     $('#loading').show();
     $.pjax.reload({
-        container: "#projectGridview",
+        container: "#projectGridView",
         timeout: 99999,
         url: form.attr("action"),
         type: "GET",
         data: form.serialize()
     }).done(function () {
-    });
-    $('#projectGridview').on('pjax:success', function (event, data, status, xhr, options) {
+
         $('#loading').hide();
+
+  
     });
-    $('#projectGridview').on('pjax:error', function (event, data, status, xhr, options) {
-        console.log("Error");
-    });
+ 
 }
 
