@@ -450,7 +450,7 @@ class MileageCardController extends BaseController
 
             // post url
             $putUrl = 'mileage-card%2Fapprove-cards';
-            $putResponse = Parent::executePutRequest($putUrl, $json_data);  // indirect RBAC
+            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);  // indirect RBAC
             $obj = json_decode($putResponse, true);
             $responseMileageCardID = $obj[0]["MileageCardID"];
             return $this->redirect(['view', 'id' => $responseMileageCardID]);
