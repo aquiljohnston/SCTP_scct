@@ -121,6 +121,10 @@ class DispatchController extends \app\controllers\BaseController
                     'BillingCode' => [
                         'asc' => ['BillingCode' => SORT_ASC],
                         'desc' => ['BillingCode' => SORT_DESC]
+                    ],
+                    'OfficeName' => [
+                        'asc' => ['OfficeName' => SORT_ASC],
+                        'desc' => ['OfficeName' => SORT_DESC]
                     ]
                 ]
             ];
