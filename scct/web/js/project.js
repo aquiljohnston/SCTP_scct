@@ -46,7 +46,7 @@ $(function(){
 });
 
 ///move unassigned to the assigned table
-$('#unassignedTableGrid').on('change','.moveToAssigned', function (e) {
+$(document).on('change','.moveToAssigned', function (e) {
 
     if($(this).is(":checked")){
      //change classname for the return trip
@@ -58,7 +58,7 @@ $('#unassignedTableGrid').on('change','.moveToAssigned', function (e) {
 });
 
 //move assigned to the unassigned table
-$('#assignedTableGrid').on('change','.moveToUnAssigned', function (e) {
+$(document).on('change','.moveToUnAssigned', function (e) {
 
     if($(this).is(":checked")){
     //change classname for the return trip
