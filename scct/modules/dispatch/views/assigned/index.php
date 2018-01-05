@@ -184,6 +184,13 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'format' => 'html',
                     ],
                     [
+                        'label' => 'Office Name',
+                        'attribute' => 'OfficeName',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'format' => 'html',
+                    ],
+                    [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
                         'header' => 'View<br/>Assets',

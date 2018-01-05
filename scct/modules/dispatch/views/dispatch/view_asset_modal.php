@@ -106,6 +106,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
+                'label' => 'Office Name',
+                'attribute' => 'OfficeName',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
+            [
                 'attribute' => 'Add Surveyor',
                 'format' => 'raw',
                 'headerOptions' => ['class' => 'text-center'],
@@ -149,8 +155,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             var key = event.which;
             if (key == 13) {
                 var searchFilterVal = $('#viewAssetsSearchDispatch').val();
-                console.log("about to call");
-                console.log("searchFilterVal: " + searchFilterVal);
+                //console.log("about to call");
+                //console.log("searchFilterVal: " + searchFilterVal);
                 if (event.keyCode == 13) {
                     event.preventDefault();
                     reloadViewAssetsModalDispatch();

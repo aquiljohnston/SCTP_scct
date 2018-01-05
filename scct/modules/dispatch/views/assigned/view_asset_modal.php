@@ -133,6 +133,12 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],
+            [
+                'label' => 'Office Name',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center'],
+                'contentOptions' => ['class' => 'text-center'],
+            ],
               [
                 'attribute' => 'Add Surveyor',
                 'format' => 'raw',

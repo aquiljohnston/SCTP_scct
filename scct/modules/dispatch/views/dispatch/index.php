@@ -137,6 +137,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
+                     [
+                        'label' => 'Office Name',
+                        'attribute' => 'OfficeName',
+                        'headerOptions' => ['class' => 'text-center'],
+                        'contentOptions' => ['class' => 'text-center'],
+                    ],
                     [
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
