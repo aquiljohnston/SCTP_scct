@@ -59,7 +59,7 @@
     display: inline !important;
 }
 
-#assignedCleanFilterButton, #assignedSearchCleanFilterButton, #SurveyorModalCleanFilterButton, #leakLogSearchClearFilterButton {
+#assignedCleanFilterButton, #assignedSearchCleanFilterButton, #SurveyorModalCleanFilterButton, #leakLogSearchClearFilterButton, .assignedSearchCleanFilterButton {
     margin-top: 25px;
     width: 32px;
     cursor: pointer;
@@ -237,11 +237,11 @@
     margin: 0 auto;
     width: 11%;
 }
-#assignedSearchCleanFilterButton{
+#assignedSearchCleanFilterButton, .assignedSearchCleanFilterButton{
     width: 32px;
     cursor: pointer;
-    margin-top: 20px;
-    margin-left: 10px;
+    margin-top: 1px;
+    margin-left: -88px;
 }
 #assignedDispatchAssetsButton{
     padding-left: 25%;

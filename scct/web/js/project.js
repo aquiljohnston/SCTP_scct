@@ -39,9 +39,24 @@ $(function(){
          }
      });
 
-    $(document).off('click', '#projectSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton', function (){
-        $('#projectSearchField').val("");
-        projectGridViewReload();
+    $(document).off('click', '#projectSearchCleanFilterButton, .assignedSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton,.assignedSearchCleanFilterButton', function (){
+        a = $('#projectFilter');
+        u = $('.projectFilterAssigned')
+         
+        if(u.val()!=""){
+              //clear input and trigger keypress on the input to only refresh the connected gridview
+              //not both grid views
+              u.val(""); 
+              projectGridViewReload()
+         
+        }
+         if(a.val()!=""){
+              //clear input and trigger keypress on the input to only refresh the connected gridview
+              //not both grid views
+              a.val(""); 
+              projectGridViewReload()
+     
+        }
     });
 });
 
@@ -70,6 +85,13 @@ $(document).on('change','.moveToUnAssigned', function (e) {
    
 });
 
+$(document).on('click','#projectAddUserResetBtn',function(e){
+
+    $('#projectFilter').val("");
+    $('.projectFilterAssigned').val("");
+    projectGridViewReload();
+
+})
 
 
 function getSubDomainEnvironment() {
