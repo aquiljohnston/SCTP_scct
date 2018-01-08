@@ -93,6 +93,12 @@ use kartik\datetime\DateTimePicker;
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [
+                'label' => 'Office Name',
+                'attribute' => 'OfficeName',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+            ],
+            [
                 'attribute' => 'Image',
                 'format' => 'raw',
                 'label' => 'Image',
