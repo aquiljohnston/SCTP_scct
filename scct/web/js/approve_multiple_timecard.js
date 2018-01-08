@@ -50,25 +50,23 @@ function applyTimeCardOnClickListeners() {
                 url: '/time-card/approve-multiple',
                 data: {
                     timecardid: primaryKeys
-                },
-                success: function (data) {
-                    var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
-                    if (win) {
-                        //Browser has allowed it to be opened
-                        win.focus();
-                        $.pjax.reload({
-                            container: '#timeCardGridview',
-                            timeout: false
-                        });
-                        $('#timeCardGridview').on('pjax:success', function() {
-                            $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                        });
-                    } else {
-                        //Browser has blocked it
-                        console.log('Please allow popups for this website');
-                    }
                 }
             });
+            var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
+            if (win) {
+                //Browser has allowed it to be opened
+                win.focus();
+                $.pjax.reload({
+                    container: '#timeCardGridview',
+                    timeout: false
+                });
+                $('#timeCardGridview').on('pjax:success', function() {
+                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+                });
+            } else {
+                //Browser has blocked it
+                console.log('Please allow popups for this website');
+            }
         } else {
             e.stopImmediatePropagation();
             e.preventDefault();
