@@ -1,6 +1,9 @@
 //Taken from commit a09e6b8d7fed3035d888ade56ffd0e1a623f4c00 on PGE-Web
 $(function(){	
 
+    unAssignedUsersArray = [];
+    assignedUsersArray   = [];
+
 	var environment = getSubDomainEnvironment();
 	
 	//autofill url prefix based on project name
@@ -42,6 +45,33 @@ $(function(){
     });
 });
 
+///move unassigned to the assigned table
+$(document).on('change','.moveToAssigned', function (e) {
+
+    if($(this).is(":checked")){
+     //change classname for the return trip
+     $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
+     var row = $(this).closest('tr').html();
+     $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $(this).closest('tr').remove();
+    }
+});
+
+//move assigned to the unassigned table
+$(document).on('change','.moveToUnAssigned', function (e) {
+
+    if($(this).is(":checked")){
+    //change classname for the return trip
+     $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
+     var row = $(this).closest('tr').html();
+     $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $(this).closest('tr').remove();
+    }
+   
+});
+
+
+
 function getSubDomainEnvironment() {
 	//get environment variable
 	var urlPrefix = location.hostname.split( '.' )[0];
@@ -76,17 +106,45 @@ function reloadProjectGridView() {
 }
 
 function addRemoveUser() {
-    var jqProjectAddUser = $('.project-add-user');
-    var form = jqProjectAddUser.find("#projectSortableInputForm");
+    var jqProjectAddUser    = $('.project-add-user');
+    var form                = jqProjectAddUser.find("#projectSortableInputForm");
+    var projectID           = $('#projectID').val();
+    var unassignedVals      = [];
+    var assignedVals        = [];
+   // var csrf_param          = $("meta[name=csrf-param]");   
+    //var csrf_token          = $("meta[name=csrf-token]");
+
+
+
     if (form.find(".has-error").length) {
         return false;
     }
+
+     //populate unassigned userid values
+    $(".moveToAssigned").each(function(key,value){unassignedVals.push($(this).val());})
+     //unAssignedUsersArray.push({unassignedVals});
+
+    //populate assigned userid values
+    $(".moveToUnAssigned").each(function(key,value){assignedVals.push($(this).val());})
+      //assignedUsersArray.push({assignedVals});
+
+    data = {
+        assignedUsers:assignedVals.join(','),
+        unassignedUsers:unassignedVals.join(','),
+        projectID: projectID
+    }
+
+   console.log('DATA',data);
+
+    //return false;
+
+
     $('#loading').show();
     $.ajax({
         type: 'POST',
         url: '/project/add-user',
         //container: '#projectSortableView', // id to update content
-        data: form.serialize(),
+        data: data,
         timeout: 99999
     }).done(function () {
         $('#loading').hide();
@@ -108,18 +166,17 @@ function projectGridViewReload() {
     var form = $("#projectForm");
     $('#loading').show();
     $.pjax.reload({
-        container: "#projectGridview",
+        container: "#projectGridView",
         timeout: 99999,
         url: form.attr("action"),
         type: "GET",
         data: form.serialize()
     }).done(function () {
-    });
-    $('#projectGridview').on('pjax:success', function (event, data, status, xhr, options) {
+
         $('#loading').hide();
+
+  
     });
-    $('#projectGridview').on('pjax:error', function (event, data, status, xhr, options) {
-        console.log("Error");
-    });
+ 
 }
 
