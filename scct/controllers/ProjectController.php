@@ -533,10 +533,17 @@ class ProjectController extends BaseController
             ([
                 'allModels'		 	=> $assignedData,
                	'pagination' 		=> [   
-                'pageParam' 	    => 'pages'    
+                'pageParam' 	    => 'pages',
+                'pageSize' 			=>  200 
             	]
             ]
         	);
+
+        	$unassignedPagination    	= $unAssignedDataProvider->getPagination();
+        	$assignedPagination 	    = $assignedDataProvider->getPagination();
+
+        	//$unassignedOffset 			= $unassignedPagination->getOffset();
+        	//$assignedOffset 			= $assignedPagination->getOffset();
 
             // dispatch section data provider
             $unAssignedDataProvider->key 	= 'userID';
@@ -551,7 +558,11 @@ class ProjectController extends BaseController
                 'unAssignedPages'						=> $unAssignedDataProvider,
                 'assignedPages' 						=> $assignedDataProvider,
                 'unassignedFilterParams'				=> $uaFilterParam,
-                'assignedFilterParams' 					=> $aFilterParam,
+                'assignedFilterParams' 					=> $aFilterParam, 
+                'unassignedPagination'					=> $unassignedPagination,
+                'assignedPagination' 					=> $assignedPagination,
+                //'unassignedOffset'						=> $unassignedOffset,
+                //'assignedOffset' 						=> $assignedOffset,
             ]);
         }else{
             if (isset($_POST['projectID']))
@@ -617,6 +628,10 @@ class ProjectController extends BaseController
                                             'assignedData' 				=> $assignedData,
                                             'unassignedFilterParams' 	=> $uaFilterParam,
 											'assignedFilterParams' 		=> $aFilterParam,
+										    'unassignedPagination'		=> $unassignedPagination,
+                							'assignedPagination' 		=> $assignedPagination,
+                							//'unassignedOffset'			=> $unassignedOffset,
+                							//'assignedOffset' 			=> $assignedOffset,
                                     ]);
 		}
 	}
