@@ -163,7 +163,11 @@ class TimeCardController extends BaseController
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
-                    ]
+                    ],
+                    'TimeCardApprovedFlag' => [
+                        'asc' => ['TimeCardApprovedFlag' => SORT_ASC],
+                        'desc' => ['TimeCardApprovedFlag' => SORT_DESC]
+                    ],
                 ]
             ];
 
@@ -677,6 +681,7 @@ class TimeCardController extends BaseController
 
             $url = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
                 'selectedTimeCardIDs' => json_encode($selectedTimeCardIDs),
+                    'week' => null
                 ]);
 
             Yii::trace("LOAD DATA URL: ".$url);

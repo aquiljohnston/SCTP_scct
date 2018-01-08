@@ -147,10 +147,14 @@ class MileageCardController extends BaseController
                         'asc' => ['MileageEndDate' => SORT_ASC],
                         'desc' => ['MileageEndDate' => SORT_DESC]
                     ],
-                    'SumMiles' => [
-                        'asc' => ['SumMiles' => SORT_ASC],
-                        'desc' => ['SumMiles' => SORT_DESC]
-                    ]
+                    'MileageCardAllMileage_calc' => [
+                        'asc' => ['MileageCardAllMileage_calc' => SORT_ASC],
+                        'desc' => ['MileageCardAllMileage_calc' => SORT_DESC]
+                    ],
+                    'MileageCardApproved' => [
+                        'asc' => ['MileageCardApproved' => SORT_ASC],
+                        'desc' => ['MileageCardApproved' => SORT_DESC]
+                    ],
                 ]
             ];
 
