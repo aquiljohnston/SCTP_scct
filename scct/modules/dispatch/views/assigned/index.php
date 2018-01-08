@@ -56,7 +56,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <div id="filtertitle" class="dropdowntitle">
                         <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
-                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedSearchCleanFilterButton']) ?>
+                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['class'=>'fixAssignFilter','id' => 'assignedSearchCleanFilterButton']) ?>
                 </div>
             <input id="assignedTableRecordsUpdate" type="hidden" name="assignedTableRecordsUpdate" value="no" />
             <input id="assignedPageNumber" type="hidden" name="assignedPageNumber" value="1" />
