@@ -65,6 +65,11 @@
     cursor: pointer;
 }
 
+.fixAssignFilter{
+    margin-top: 21px !important;
+    margin-left: 13px !important;
+}
+
 #assginedGridViewContainer {
     position: relative;
     float: left;
