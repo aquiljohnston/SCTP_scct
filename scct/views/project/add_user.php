@@ -15,6 +15,11 @@ $this->params['breadcrumbs'][] = ['label' => $project->ProjectID, 'url' => ['vie
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<style type="text/css">
+div.inline { float:left; }
+.clearBoth { clear:both; }
+</style>
+
 <div class="project-add-user" style="margin-top: 2%;">
     <h1 class="title"><?= Html::encode($this->title) ?></h1>
 
@@ -28,15 +33,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
                 'options' => ['id' => 'projectForm']
             ]); ?>
-        <label id="unassignedFilter" class="col-sm-6" style = "">
-            <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
-        </label>
-        <label id="assignedFilter" class="col-sm-6" style = "">
-            <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
-        </label>
-        <input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
+
+     
+            <div id="unassignedFilter" class="col-sm-2" style = "">
+                 <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
+            </div>      
+            
+            <div class="col-sm-4">
+                 <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+            </div>
+
+            <div class="col-sm-2" id="assignedFilter" style = "">
+                <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilter', 'style' =>'width:auto'])->label('Search'); ?>       
+            </div>
+
+             <div class="col-sm-4">
+                 <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+            </div>
+   
     <?php ActiveForm::end(); ?>
 	</div>
+   
 
 		<div class="row">
      <?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
@@ -71,8 +88,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ]  
             
               ); ?>
+        <div class="">
+
+        <?php echo "<b>Showing " . ($unassignedPagination->getOffset() + 1) . " to " .($unassignedPagination->getOffset() + $unassignedPagination->getPageSize()) . " of " . $unassignedPagination->totalCount . " entries</b>"
+        //var_dump($unassignedPagination); ?>
+            </div>
           </div>
+
         </div>
+     
     </div>
 
     	   <div id="assignedTable">
@@ -103,6 +127,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'floatOverflowContainer' => true,
             ]); ?>
+            <br>
+              <div class="">
+
+        <?php echo "<b>"."Showing " . ($assignedPagination->getOffset() + 1) . " to " .($assignedPagination->getOffset() + $assignedPagination->getPageSize()) . " of " . $assignedPagination->totalCount . " entries</b>"
+        //var_dump($unassignedPagination); ?>
+            </div>
+          </div>
+      
           </div>
         </div>
     </div>
