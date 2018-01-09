@@ -4,7 +4,7 @@
 }
 
 #dispatchTab{
-    height: 105px;
+    height: 140px;
     padding:10px;
     margin-bottom: 5px;
 }
@@ -267,7 +267,7 @@
 }
 #addSurveyorButtonDispatch{
     float: right;
-    margin: 25px auto;
+    margin: 38px auto;
     width: 11%;
 }
 #assetTablePjax{

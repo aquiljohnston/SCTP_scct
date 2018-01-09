@@ -3,10 +3,11 @@
 }
 #cgeDispatchButton{
     width: 110%;
+    margin-top: 13px;
 }
 #cgeButtonContainer{
     float: right;
-    margin: 0.3% auto;
+    margin: 18px auto;
     width: 11%;
 }
 #cgePageSizeLabel{
