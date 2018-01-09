@@ -239,7 +239,7 @@
 }
 #assignedButtonContainer{
     float: right;
-    margin: 0 auto;
+    margin: 13px auto;
     width: 11%;
 }
 #assignedSearchCleanFilterButton, .assignedSearchCleanFilterButton{

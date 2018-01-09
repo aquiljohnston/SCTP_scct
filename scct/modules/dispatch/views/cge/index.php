@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <div class="dispatch-cge" style="margin-top: 2%;">
-    <div id="cgeDropdownContainer" style="height: 105px;float: left;width: 100%;background-color: #E6F0F6;z-index: 3;border-bottom: 1px solid black;padding: 10px;">
+    <div id="cgeDropdownContainer" style="height: 140px;float: left;width: 100%;background-color: #E6F0F6;z-index: 3;border-bottom: 1px solid black;padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="cge-dropDownList-form">
             <?php $form = ActiveForm::begin([
