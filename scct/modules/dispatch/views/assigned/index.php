@@ -20,7 +20,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 }
 </style>
 <div class="dispatch-assigned">
-    <div id="assignedDropdownContainer" style="height: 105px;">
+    <div id="assignedDropdownContainer" style="height: 140px;">
 
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
 
@@ -34,11 +34,11 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                             ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
                             ->label('Records Per Page', [
-                                'class' => 'recordsPerPage'
+                                'class' => ''
                             ]); ?>
                 </span>
-                <div class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
-                    <label style="color: #0067a6; margin-bottom: 7px;"></label>
+                <span class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
+                    <label style="color: #0067a6;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
 
                     <?php if ($canUnassign != 0) { ?>
@@ -50,7 +50,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         echo "";
                     } ?>
                     <?php Pjax::end() ?>
-                </div>
+                </span>
 
                 <div id="assignedSearchContainer">
                     <div id="filtertitle" class="dropdowntitle">
