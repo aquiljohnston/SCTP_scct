@@ -39,17 +39,25 @@ $(function(){
          }
      });
 
-    $(document).off('click', '#projectSearchCleanFilterButton, .assignedSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton,.assignedSearchCleanFilterButton', function (){
+     // projectFilterAssigned filter listener
+     $(document).off('keypress', '#projectFilterAssigned').on('keypress', '#projectFilterAssigned', function (e) {
+         if (e.keyCode === 13 || e.keyCode === 10) {
+             e.preventDefault();
+             projectGridViewAssignedReload();
+         }
+     });
+
+    $(document).off('click', '#projectSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton', function (){
         a = $('#projectFilter');
-        u = $('.projectFilterAssigned')
+        //u = $('.projectFilterAssigned')
          
-        if(u.val()!=""){
+        /*if(u.val()!=""){
               //clear input and trigger keypress on the input to only refresh the connected gridview
               //not both grid views
               u.val(""); 
               projectGridViewReload()
          
-        }
+        }*/
          if(a.val()!=""){
               //clear input and trigger keypress on the input to only refresh the connected gridview
               //not both grid views
@@ -58,7 +66,20 @@ $(function(){
      
         }
     });
-});
+
+    //separate gridview refresh filter 
+    $(document).off('click', '.assignedSearchCleanFilterButton').on('click', '.assignedSearchCleanFilterButton', function (){
+        u = $('#projectFilterAssigned');
+
+         if(u.val()!=""){
+              //clear input and trigger keypress on the input to only refresh the connected gridview
+              //not both grid views
+              u.val(""); 
+              projectGridViewAssignedReload()
+     
+        }
+    });
+
 
 ///move unassigned to the assigned table
 $(document).on('change','.moveToAssigned', function (e) {
@@ -89,7 +110,11 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
 
     $('#projectFilter').val("");
     $('.projectFilterAssigned').val("");
-    projectGridViewReload();
+
+    //add boolean flag means to refresh both grid views
+    //if true will call both reload routines in succession
+    //if not only one grid view will refresh
+    projectGridViewReload(true);
 
 })
 
@@ -184,7 +209,7 @@ function addRemoveUser() {
     });
 }
 
-function projectGridViewReload() {
+function projectGridViewReload(both=false) {
     var form = $("#projectForm");
     $('#loading').show();
     $.pjax.reload({
@@ -194,11 +219,30 @@ function projectGridViewReload() {
         type: "GET",
         data: form.serialize()
     }).done(function () {
-
         $('#loading').hide();
-
-  
+        //special condition for reset button
+        if(both){
+          projectGridViewAssignedReload();
+        }
     });
- 
 }
+
+function projectGridViewAssignedReload() {
+    var form = $("#projectForm");
+    $('#loading').show();
+    $.pjax.reload({
+        container: "#projectGridViewAssigned",
+        timeout: 99999,
+        url: form.attr("action"),
+        type: "GET",
+        data: form.serialize()
+    }).done(function () {
+        $('#loading').hide();
+    });
+}
+
+
+
+
+});
 

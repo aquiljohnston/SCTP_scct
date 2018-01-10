@@ -40,11 +40,11 @@ div.inline { float:left; }
             </div>      
             
             <div class="col-sm-4">
-                 <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+                 <img id="projectSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div>
 
             <div class="col-sm-2" id="assignedFilter" style = "">
-                <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilter', 'style' =>'width:auto'])->label('Search'); ?>       
+                <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilterAssigned', 'style' =>'width:auto'])->label('Search'); ?>       
             </div>
 
              <div class="col-sm-4">
@@ -98,7 +98,9 @@ div.inline { float:left; }
         </div>
      
     </div>
-
+        <input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
+<?php Pjax::end() ?>
+<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
     	   <div id="assignedTable">
         <div id="assignedTableGrid">
    			<div class="col-sm-6">
