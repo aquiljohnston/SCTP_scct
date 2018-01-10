@@ -3,6 +3,8 @@ $(function(){
 
     unAssignedUsersArray = [];
     assignedUsersArray   = [];
+    unassignedTagCloud   = {};
+    assignedTagCloud     = {};
 
 	var environment = getSubDomainEnvironment();
 	
@@ -84,17 +86,29 @@ $(function(){
 ///move unassigned to the assigned table
 $(document).on('change','.moveToAssigned', function (e) {
 
+    username  = $(this).closest('tr').find('td').eq(0).text();
+    userid    = $(this).attr('userid'); 
+
     if($(this).is(":checked")){
      //change classname for the return trip
      $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
      var row = $(this).closest('tr').html();
      $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
+
+     addToAssignedTagCloud(userid,username);
+
+     $("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
+
+
     }
 });
 
 //move assigned to the unassigned table
 $(document).on('change','.moveToUnAssigned', function (e) {
+
+    username  = $(this).closest('tr').find('td').eq(0).text();
+    userid    = $(this).attr('userid'); 
 
     if($(this).is(":checked")){
     //change classname for the return trip
@@ -102,6 +116,11 @@ $(document).on('change','.moveToUnAssigned', function (e) {
      var row = $(this).closest('tr').html();
      $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
+    
+    addToUnssignedTagCloud(userid,username);
+
+     $("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
+
     }
    
 });
@@ -110,6 +129,8 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
 
     $('#projectFilter').val("");
     $('.projectFilterAssigned').val("");
+    $('#unassignedTagCloud').html("");
+    $('#assignedTagCloud').html("");
 
     //add boolean flag means to refresh both grid views
     //if true will call both reload routines in succession
@@ -117,6 +138,27 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
     projectGridViewReload(true);
 
 })
+
+function addToAssignedTagCloud(key,value){
+
+      tag = "<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+
+      $('#assignedTagCloud').append(tag);
+
+
+     // assignedTagCloud[key] = tag;
+
+}
+
+function addToUnssignedTagCloud(key,value){
+
+      tag = "<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+
+      $('#unassignedTagCloud').append(tag);
+
+     // assignedTagCloud[key] = tag;
+
+}
 
 
 function getSubDomainEnvironment() {
