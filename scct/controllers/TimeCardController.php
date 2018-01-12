@@ -163,7 +163,11 @@ class TimeCardController extends BaseController
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
-                    ]
+                    ],
+                    'TimeCardApprovedFlag' => [
+                        'asc' => ['TimeCardApprovedFlag' => SORT_ASC],
+                        'desc' => ['TimeCardApprovedFlag' => SORT_DESC]
+                    ],
                 ]
             ];
 
@@ -341,7 +345,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id)
+    public function actionShowEntries($id, $projectName = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -401,7 +405,8 @@ class TimeCardController extends BaseController
 											'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
 											'ThursdayDate' 	=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
 											'FridayDate' 	=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
-											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX]								
+											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+                                            'projectName'   => $projectName
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
@@ -555,7 +560,7 @@ class TimeCardController extends BaseController
 
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
+			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
 
@@ -665,7 +670,6 @@ class TimeCardController extends BaseController
      */
     public function actionDownloadTimeCardData() {
         try {
-            Yii::trace("get called");
             // check if user has permission
             //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
 
@@ -674,20 +678,14 @@ class TimeCardController extends BaseController
                 return $this->redirect(['/login']);
             }
 
-            $model = new \yii\base\DynamicModel([
-                'week'
-            ]);
-            $model->addRule('week', 'string', ['max' => 32]);
-
-            $week = "current";
-
-            if ($model->load(Yii::$app->request->queryParams,'')) {
-                $week = $model->week;
-            }
+            $selectedTimeCardIDs = isset(Yii::$app->request->queryParams['selectedTimeCardIDs']) ? Yii::$app->request->queryParams['selectedTimeCardIDs'] : null;
 
             $url = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
-                'week' => $week
+                'selectedTimeCardIDs' => json_encode($selectedTimeCardIDs),
+                    'week' => null
                 ]);
+
+            Yii::trace("LOAD DATA URL: ".$url);
 
             header('Content-Disposition: attachment; filename="timecard_history_'.date('Y-m-d_h_i_s').'.csv"');
             $this->requestAndOutputCsv($url);
@@ -709,7 +707,7 @@ class TimeCardController extends BaseController
         header('Content-Type: text/csv;charset=UTF-8');
         header('Pragma: no-cache');
         header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp);
+        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);

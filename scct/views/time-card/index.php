@@ -16,7 +16,7 @@ $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
-        'dateRange' => $dateRangeValue
+        'dateRangeValue' => $dateRangeValue
     ]);
 $column = [
     [
@@ -64,7 +64,7 @@ $column = [
         'template' => '{view}', // does not include delete
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
-                $url = '/time-card/show-entries?id=' . $model["TimeCardID"];
+                $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName'];
                 return $url;
             }
         },
@@ -87,8 +87,8 @@ $column = [
         'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
-            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
-                || $model["SumHours"] == "0";
+            $disabledBoolean = false;/*strtoupper($model["TimeCardApprovedFlag"]) == "YES"
+                || $model["SumHours"] == "0" || $model["TimeCardApprovedFlag"] == 1;*/
             $result = [
                 'timecardid' => $model["TimeCardID"],
                 'approved' => $model["TimeCardApprovedFlag"],
@@ -123,7 +123,7 @@ $column = [
                 if ($pages->totalCount > 0) {
                     ?>
                     <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-                       href="<?= $this->params['download_url']; ?>">Export</a>
+                       href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
                 <?php } ?>
 
             </div>

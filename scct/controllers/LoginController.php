@@ -123,11 +123,11 @@ class LoginController extends BaseController
 		try {
 			//call function to create/send logout activity
 			self::logActivity('WebLogoutActivity');
-			
-		    //Yii::$app->user->logout();
+
             $url = 'login%2Fuser-logout';
             $version = "v2";
             $response = Parent::executeGetRequest($url, $version);
+            Yii::$app->user->logout();
         } catch(UnauthorizedHttpException $exception) {
             return $this->redirect(['index']);
         } catch(Exception $exception){

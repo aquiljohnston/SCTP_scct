@@ -147,10 +147,14 @@ class MileageCardController extends BaseController
                         'asc' => ['MileageEndDate' => SORT_ASC],
                         'desc' => ['MileageEndDate' => SORT_DESC]
                     ],
-                    'SumMiles' => [
-                        'asc' => ['SumMiles' => SORT_ASC],
-                        'desc' => ['SumMiles' => SORT_DESC]
-                    ]
+                    'MileageCardAllMileage_calc' => [
+                        'asc' => ['MileageCardAllMileage_calc' => SORT_ASC],
+                        'desc' => ['MileageCardAllMileage_calc' => SORT_DESC]
+                    ],
+                    'MileageCardApproved' => [
+                        'asc' => ['MileageCardApproved' => SORT_ASC],
+                        'desc' => ['MileageCardApproved' => SORT_DESC]
+                    ],
                 ]
             ];
 
@@ -450,7 +454,7 @@ class MileageCardController extends BaseController
 
             // post url
             $putUrl = 'mileage-card%2Fapprove-cards';
-            $putResponse = Parent::executePutRequest($putUrl, $json_data);  // indirect RBAC
+            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);  // indirect RBAC
             $obj = json_decode($putResponse, true);
             $responseMileageCardID = $obj[0]["MileageCardID"];
             return $this->redirect(['view', 'id' => $responseMileageCardID]);
@@ -481,14 +485,13 @@ class MileageCardController extends BaseController
                 }
 
                 $data = array(
-                    'deactivatedBy' => Yii::$app->session['userID'],
                     'entryArray' => $MileageEntryIDArray,
                 );
                 $json_data = json_encode($data);
 
                 // post url
                 $putUrl = 'mileage-entry%2Fdeactivate';
-                $putResponse = Parent::executePutRequest($putUrl, $json_data);
+                $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
                 $obj = json_decode($putResponse, true);
                 $responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
                 return $this->redirect(['view', 'id' => $responseMileageCardID]);

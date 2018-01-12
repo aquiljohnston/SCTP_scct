@@ -6,10 +6,14 @@ $(document).ready(function(){
             url: '/login/user-logout',
             beforeSend: function () {
                 $('#loading').show();
+            },
+            success: function(data) {
+                window.location.href = "/login/index";
+                $('#loading').hide();
             }
-        }).done(function () {
+        })/*.done(function () {
             window.location.href = "/login/index";
             $('#loading').hide();
-        });
+        });*/
     });
 });

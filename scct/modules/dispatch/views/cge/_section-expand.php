@@ -83,13 +83,13 @@ use kartik\datetime\DateTimePicker;
             [
                 'label' => 'Inspection Type',
                 'attribute' => 'SurveyType',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [
                 'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
             ],
             [

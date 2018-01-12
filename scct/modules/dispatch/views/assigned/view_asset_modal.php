@@ -122,7 +122,7 @@ use kartik\grid\GridView;
                 }
             ],
             [
-                'label' => 'Inpection Type',
+                'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],

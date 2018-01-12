@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Update', ['update', 'id' => $model->UserID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Update', ['update', 'username' => $model->UserName], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Deactivate', ['deactivate', 'username' => $model->UserName], [
             'class' => 'btn btn-danger',
             'data' => [
