@@ -3,6 +3,8 @@ $(function(){
 
     unAssignedUsersArray = [];
     assignedUsersArray   = [];
+    unassignedTagCloud   = {};
+    assignedTagCloud     = {};
 
 	var environment = getSubDomainEnvironment();
 	
@@ -84,24 +86,62 @@ $(function(){
 ///move unassigned to the assigned table
 $(document).on('change','.moveToAssigned', function (e) {
 
+    username  = $(this).closest('tr').find('td').eq(0).text();
+    userid    = $(this).attr('userid'); 
+
     if($(this).is(":checked")){
+
+      if(jQuery.inArray(userid,assignedTagCloud)){
+
+        $("#"+userid+"_uCloud").remove();
+
+        console.log("#"+userid+"_aCloud");
+          
+      }
+
+
      //change classname for the return trip
      $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
      var row = $(this).closest('tr').html();
-     $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $('#assignedGV-container table tbody').append('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
+
+     addToAssignedTagCloud(userid,username);
+
+     $("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
+
+
     }
 });
 
 //move assigned to the unassigned table
 $(document).on('change','.moveToUnAssigned', function (e) {
 
+    username  = $(this).closest('tr').find('td').eq(0).text();
+    userid    = $(this).attr('userid'); 
+
     if($(this).is(":checked")){
+
+
+      if(jQuery.inArray(userid,unassignedTagCloud)){
+
+        $("#"+userid+"_aCloud").remove();
+
+        console.log("#"+userid+"_uCloud");
+          
+      }
+
+
     //change classname for the return trip
      $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
      var row = $(this).closest('tr').html();
-     $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+     $('#unAssignedGV-container table tbody').append('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
+    
+    addToUnssignedTagCloud(userid,username);
+
+     $("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
+
     }
    
 });
@@ -110,6 +150,8 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
 
     $('#projectFilter').val("");
     $('.projectFilterAssigned').val("");
+    $('#unassignedTagCloud').html("");
+    $('#assignedTagCloud').html("");
 
     //add boolean flag means to refresh both grid views
     //if true will call both reload routines in succession
@@ -117,6 +159,30 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
     projectGridViewReload(true);
 
 })
+
+function addToAssignedTagCloud(key,value){
+
+
+      tag = "&nbsp;&nbsp;<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+
+      if(!$("#"+key+"_aCloud").length > 0){
+
+        $('#assignedTagCloud').append(tag);
+        assignedTagCloud[key] = tag;
+    }
+
+}
+
+function addToUnssignedTagCloud(key,value){
+
+      tag = "&nbsp;&nbsp;<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+
+      if(!$("#"+key+"_uCloud").length > 0){
+         $('#unassignedTagCloud').append(tag);
+      unassignedTagCloud[key] = tag;
+    }
+
+}
 
 
 function getSubDomainEnvironment() {

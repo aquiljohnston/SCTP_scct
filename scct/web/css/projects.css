@@ -22,11 +22,43 @@
 #projectSearchCleanFilterButton {
     width: 32px;
     cursor: pointer;
+    margin-top: 1px;
+    margin-left: -88px;
 }
 
 .field-projectSearchField {
     float: left;
     width: 90%;
+}
+
+.tagCloud{
+display: block;
+overflow: auto;
+width:100%;
+height:50px;
+word-wrap: break-word;
+white-space: normal;
+margin-bottom: 10px;
+border:solid 1px #DDD;
+}
+
+.roundedTagSpan {
+border:solid 1px #000;
+background-color:#acf;
+color: #FFFFFF;
+display: inline;
+padding: .2em .6em .3em;
+font-size: 75%;
+font-weight: 700;
+line-height: 1;
+color: #fff;
+text-align: center;
+white-space: nowrap;
+vertical-align: baseline;
+border-radius: .25em;
+word-wrap: break-word;
+float: left;
+margin-bottom: 2px;
 }
 
 /*css for the 1366*768 resolution*/
