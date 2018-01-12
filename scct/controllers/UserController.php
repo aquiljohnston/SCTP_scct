@@ -122,7 +122,7 @@ class UserController extends BaseController
 
     /**
      * Displays a single user model.
-     * @param string $id
+     * @param string $username
      * @return mixed
      */
     public function actionView($username)
@@ -134,7 +134,9 @@ class UserController extends BaseController
         $url = 'user%2Fview&username=' . $username;
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
-        return $this->render('view', ['model' => json_decode($response), true]);
+        return $this->render('view', [
+            'model' => json_decode($response, true),
+        ]);
     }
 
     /**
@@ -229,7 +231,7 @@ class UserController extends BaseController
     /**
      * Updates an existing user model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param string $username
      * @return mixed
      */
     public function actionUpdate($username)
