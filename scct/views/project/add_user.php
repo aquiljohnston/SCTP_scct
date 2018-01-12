@@ -45,7 +45,7 @@ div.inline { float:left; }
 
 
             <div class="col-sm-3" >
-                  <label>To Be Unassigned:</label>
+                  
             <span id="unassignedTagCloud" class="tagCloud"></span>
             </div>
     
@@ -59,8 +59,8 @@ div.inline { float:left; }
             </div>
 
               <div class="col-sm-3" >
-                <label>To Be Assigned:</label>
-            <span id="assignedTagCloud" class="tagCloud"></span>
+                
+            <span id="assignedTagCloud";" class="tagCloud"></span>
             </div>
             <br>
    

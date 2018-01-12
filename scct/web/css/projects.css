@@ -39,7 +39,7 @@ height:50px;
 word-wrap: break-word;
 white-space: normal;
 margin-bottom: 10px;
-border:1px 1px 1px 1px !important;
+border:solid 1px #DDD;
 }
 
 .roundedTagSpan {
