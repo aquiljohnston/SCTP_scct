@@ -100,13 +100,17 @@ class UserController extends BaseController
                 ]
             ];
 
+            // Generate User Permission Table
+            $userPermissionTable = SELF::getUserPermissionTable();
+
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'pages' => $pages,
                 'filter' => $filterParam,
                 'userPageSizeParams' => $listPerPageParam,
-                'page' => $page
+                'page' => $page,
+                'userPermissionTable' => $userPermissionTable
             ]);
 
         } catch (UnauthorizedHttpException $e){
@@ -134,8 +138,12 @@ class UserController extends BaseController
         $url = 'user%2Fview&username=' . $username;
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
+        // Generate User Permission Table
+        $userPermissionTable = SELF::getUserPermissionTable();
+
         return $this->render('view', [
             'model' => json_decode($response, true),
+            'userPermissionTable' => $userPermissionTable,
         ]);
     }
 
@@ -415,4 +423,19 @@ class UserController extends BaseController
             Yii::$app->runAction('login/user-logout');
         }
 	}
+
+	/**
+     * Generate userPermissionTable
+     * @return array $userPermissionTable
+     */
+	private function getUserPermissionTable(){
+        $userPermissionTable = array(
+            '5' => 'Technician',
+            '4' => 'Engineer',
+            '3' => 'Supervisor',
+            '2' => 'ProjectManager',
+            '1' => 'Admin'
+        );
+        return $userPermissionTable;
+    }
 }

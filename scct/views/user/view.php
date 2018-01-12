@@ -9,13 +9,6 @@ use yii\widgets\DetailView;
 $this->title = $model['UserLastName'] . ', ' .$model['UserFirstName'];
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$userPermissionTable = array(
-    '5' => 'Technician',
-    '4' => 'Engineer',
-    '3' => 'Supervisor',
-    '2' => 'ProjectManager',
-    '1' => 'Admin'
-);
 ?>
 <div class="user-view">
 
@@ -23,9 +16,9 @@ $userPermissionTable = array(
 
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Update', ['update', 'username' => $model['UserName']], ['class' => 'btn btn-primary', 'disabled' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'disabled' : false]) ?>
+        <?= Html::a('Update', ['update', 'username' => $model['UserName']], ['class' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-primary disabled' : 'btn btn-primary']) ?>
         <?= Html::a('Deactivate', ['deactivate', 'username' => $model['UserName']], [
-            'class' => 'btn btn-danger',
+            'class' =>array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-danger disabled' : 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to deactivate this user?',
                 'method' => 'put',
