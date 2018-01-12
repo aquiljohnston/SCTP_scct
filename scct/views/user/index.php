@@ -46,7 +46,7 @@ $column = [
 		'template' => '{view} {delete}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
-                $url = '/user/view?id=' . $model["UserID"];
+                $url = '/user/view?username=' . $model["UserName"];
                 return $url;
             }
             if ($action === 'delete') {

@@ -38,8 +38,9 @@ use yii\bootstrap\Modal;
                 'label' => 'Assigned User(s)',
                 'attribute' => 'SearchString',
                 //'attribute' => 'AssignedUser',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width:15.9%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0; width:15.9%'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%'],
+
                 'format' => 'html',
             ],
             [
@@ -51,7 +52,7 @@ use yii\bootstrap\Modal;
 			[
 				'label' => 'Remaining/Total',
 				'attribute' => 'Counts',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;width: 6.5%'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;width: 6.5%'],
 				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.5%'],
 				'format' => 'html',
 				'value' => function ($model) {
@@ -59,15 +60,15 @@ use yii\bootstrap\Modal;
 				}
 			],
             [
-                'label' => '',
+                'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%; opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%'],
             ],
             [
-                'label' => '',
+                'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%; opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
             ],
             [
@@ -80,7 +81,7 @@ use yii\bootstrap\Modal;
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
                 'header' => 'View<br/>Assets',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden; width:6%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0; width:6%;'],
                 'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection','style'=>'padding-right:19px;'],
                 'buttons' => [
                     'view' => function($url, $model) {
@@ -93,13 +94,10 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Remove User',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    if ($model['InProgressFlag'] != "1")
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString']/*['AssignedUser']*/];
-                    else
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => 'disabled'];
+                    return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => $model['InProgressFlag'] != "1" ? false : 'disabled'];
                 }
             ]
         ],
