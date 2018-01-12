@@ -91,7 +91,13 @@ $(document).on('change','.moveToAssigned', function (e) {
 
     if($(this).is(":checked")){
 
+      if(jQuery.inArray(userid,assignedTagCloud)){
 
+        $("#"+userid+"_uCloud").remove();
+
+        console.log("#"+userid+"_aCloud");
+          
+      }
 
 
      //change classname for the return trip
@@ -115,6 +121,17 @@ $(document).on('change','.moveToUnAssigned', function (e) {
     userid    = $(this).attr('userid'); 
 
     if($(this).is(":checked")){
+
+
+      if(jQuery.inArray(userid,unassignedTagCloud)){
+
+        $("#"+userid+"_aCloud").remove();
+
+        console.log("#"+userid+"_uCloud");
+          
+      }
+
+
     //change classname for the return trip
      $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
      var row = $(this).closest('tr').html();
