@@ -36,20 +36,33 @@ div.inline { float:left; }
 
      
             <div id="unassignedFilter" class="col-sm-2" style = "">
-                 <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>
+                 <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>  
             </div>      
             
-            <div class="col-sm-4">
-                 <img id="projectSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+            <div class="col-sm-1">
+                <img id="projectSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+            </div> 
+
+
+            <div class="col-sm-3" >
+                  
+            <span id="unassignedTagCloud" class="tagCloud"></span>
             </div>
+    
 
             <div class="col-sm-2" id="assignedFilter" style = "">
                 <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilterAssigned', 'style' =>'width:auto'])->label('Search'); ?>       
             </div>
 
-             <div class="col-sm-4">
+             <div class="col-sm-1">
                  <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div>
+
+              <div class="col-sm-3" >
+                
+            <span id="assignedTagCloud";" class="tagCloud"></span>
+            </div>
+            <br>
    
     <?php ActiveForm::end(); ?>
 	</div>
