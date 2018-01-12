@@ -35,34 +35,20 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
             ],
             [
-                'label' => 'Available Work Order Count',
+                'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
-<<<<<<< HEAD
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
-=======
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
->>>>>>> essex_scct_dev
             ],
             [   //PROJECT-498
-                'label' => 'Inspection Type',
+                'label' => '',
                 'attribute' => 'InspectionType',
-<<<<<<< HEAD
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
-=======
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
->>>>>>> essex_scct_dev
             ],
             [   //PROJECT-501
-                'label' => 'Billing Code',
+                'label' => '',
                 'attribute' => 'BillingCode',
-<<<<<<< HEAD
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%; opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 21.9%;'],
-=======
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
             ],
@@ -71,13 +57,12 @@ use yii\bootstrap\Modal;
                 'attribute' => 'OfficeName',
                 'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
                 'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
->>>>>>> essex_scct_dev
             ],
             [
                 'header' => 'View Asset',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetDispatch = "#modalViewAssetDispatch";
@@ -91,7 +76,7 @@ use yii\bootstrap\Modal;
             [
                 'header' => 'Add Surveyor',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
                 'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
