@@ -95,18 +95,22 @@ $(document).on('change','.moveToAssigned', function (e) {
 
         $("#"+userid+"_uCloud").remove();
 
-        console.log("#"+userid+"_aCloud");
+        toggleCloudVisibility('unassignedTagCloud');
           
       }
+
+
 
 
      //change classname for the return trip
      $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
      var row = $(this).closest('tr').html();
-     $('#assignedGV-container table tbody').append('<tr>'+row+'</tr>');
+     $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
 
      addToAssignedTagCloud(userid,username);
+
+     toggleCloudVisibility('assignedTagCloud');
 
      $("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
 
@@ -122,23 +126,24 @@ $(document).on('change','.moveToUnAssigned', function (e) {
 
     if($(this).is(":checked")){
 
-
       if(jQuery.inArray(userid,unassignedTagCloud)){
 
         $("#"+userid+"_aCloud").remove();
+        toggleCloudVisibility('assignedTagCloud');
 
-        console.log("#"+userid+"_uCloud");
+        //console.log("#"+userid+"_uCloud");
           
       }
-
 
     //change classname for the return trip
      $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
      var row = $(this).closest('tr').html();
-     $('#unAssignedGV-container table tbody').append('<tr>'+row+'</tr>');
+     $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
      $(this).closest('tr').remove();
     
     addToUnssignedTagCloud(userid,username);
+
+     toggleCloudVisibility('unassignedTagCloud');
 
      $("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
 
@@ -160,10 +165,28 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
 
 })
 
+
+function toggleCloudVisibility(cloud){
+
+  if ( $('#'+cloud).children().length > 0 ) {
+    
+    $('#'+cloud).css({"display":"block"})
+
+    //console.log($('#'+cloud).children().length);
+
+  }
+
+  else{
+    $('#'+cloud).css({"display":"none"});
+    //console.log('ELSE',$('#'+cloud).children().length);
+    //console.log('Assign',$('#'+cloud));
+  }
+}
+
 function addToAssignedTagCloud(key,value){
 
 
-      tag = "&nbsp;&nbsp;<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+      tag = "<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>";
 
       if(!$("#"+key+"_aCloud").length > 0){
 
@@ -175,11 +198,15 @@ function addToAssignedTagCloud(key,value){
 
 function addToUnssignedTagCloud(key,value){
 
-      tag = "&nbsp;&nbsp;<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>&nbsp;&nbsp;";
+      tag = "<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>";
 
       if(!$("#"+key+"_uCloud").length > 0){
+
+        if(!assignedTagCloud[key]){
          $('#unassignedTagCloud').append(tag);
-      unassignedTagCloud[key] = tag;
+          unassignedTagCloud[key] = tag;
+        }
+ 
     }
 
 }
