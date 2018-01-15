@@ -189,9 +189,10 @@ function addToAssignedTagCloud(key,value){
       tag = "<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>";
 
       if(!$("#"+key+"_aCloud").length > 0){
-
+        if(!unassignedTagCloud[key]){
         $('#assignedTagCloud').append(tag);
         assignedTagCloud[key] = tag;
+      }
     }
 
 }
@@ -201,7 +202,6 @@ function addToUnssignedTagCloud(key,value){
       tag = "<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>";
 
       if(!$("#"+key+"_uCloud").length > 0){
-
         if(!assignedTagCloud[key]){
          $('#unassignedTagCloud').append(tag);
           unassignedTagCloud[key] = tag;
