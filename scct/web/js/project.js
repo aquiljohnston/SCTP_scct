@@ -156,7 +156,9 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
     $('#projectFilter').val("");
     $('.projectFilterAssigned').val("");
     $('#unassignedTagCloud').html("");
+    $('#unassignedTagCloud').css({"display":"none"})
     $('#assignedTagCloud').html("");
+    $('#assignedTagCloud').css({"display":"none"})
 
     //add boolean flag means to refresh both grid views
     //if true will call both reload routines in succession
