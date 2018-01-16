@@ -17,8 +17,9 @@ final class Constants
     const SERVER_PRODUCTION = '';
 	
 	//api url for different environments
-	const API_LOCAL_URL = 'http://localhost:8080/index.php?r=';
-	const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
+	const API_LOCAL_URL = 'http://localhost:8888/index.php?r=';
+	//const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
+	const API_DEV_URL = 'http://localhost:8888/index.php?r=';
 	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
 	const API_PROD_URL = 'http://api.southerncrossinc.com/index.php?r=';
 	
