@@ -42,7 +42,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
         <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
         <input id="inspectionType" type="hidden" name="inspectionType" value=<?php echo $inspectionType; ?> />
-        <input id="billingCode" type="hidden" name="billingCode" value=<?php echo $billingCode; ?> />
+        <input id="billingCode" type="hidden" name="billingCode" value="<?php echo $billingCode; ?>"/>
         <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
