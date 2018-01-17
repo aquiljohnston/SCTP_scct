@@ -686,8 +686,43 @@ class TimeCardController extends BaseController
                 ]);
 
             Yii::trace("LOAD DATA URL: ".$url);
+            $dateTime = date('Y-m-d_h_i');
 
-            header('Content-Disposition: attachment; filename="timecard_history_'.date('Y-m-d_h_i_s').'.csv"');
+            header('Content-Disposition: attachment; filename="timecard_history_'.$dateTime.'.csv"');
+            $this->requestAndOutputCsv($url);
+
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+        } catch (\Exception $e) {
+            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            // Yii::$app->runAction('login/user-logout');
+        }
+    }
+
+    /**
+     * Get Payroll Data
+     * @return \yii\web\Response
+     * @throws ForbiddenHttpException
+     */
+    public function actionDownloadPayrollData() {
+        try {
+
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+            $selectedTimeCardIDs = isset(Yii::$app->request->queryParams['selectedTimeCardIDs']) ? Yii::$app->request->queryParams['selectedTimeCardIDs'] : null;
+
+            $url = 'time-card%2Fget-payroll-data&' . http_build_query([
+                    'selectedTimeCardIDs' => json_encode($selectedTimeCardIDs)
+                ]);
+            $payrollFile = 'payroll';
+            $dateTime = date('Y-m-d_h_i');
+
+            Yii::trace("LOAD DATA URL: ".$url);
+
+            header('Content-Disposition: attachment; filename="payroll_history_'.$dateTime.'.csv"');
             $this->requestAndOutputCsv($url);
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
@@ -711,6 +746,103 @@ class TimeCardController extends BaseController
         rewind($fp);
         echo stream_get_contents($fp);
         fclose($fp);
+    }
+
+    public function actionFtpFiles(){
+        $defaultPath = 'C:\Users\tzhang\Downloads';
+        $fileType = '.csv';
+        $timeCardFile = "timecard";//"payroll";//"timecard";
+        $dateTime = date('Y-m-d_h_i');
+
+        $timeCardFile = '\timecard_history_';
+        $filePath = $defaultPath . $timeCardFile . $dateTime . $fileType;
+        if (file_exists($filePath)) {
+            Yii::trace("The file $filePath exists");
+        } else {
+            Yii::trace("The file $filePath not exists");
+        }
+
+
+        $remoteFileName = 'timecard_history_' . $dateTime . $fileType;
+
+        $ftp_server = "10.100.10.10";
+        $ftp_user_name='ftpdev.southerncrosslighthouse.com|tzhang';
+        $ftp_user_pass='Wojiushiye008';
+
+        // FTP connection
+        $ftp_conn = ftp_connect($ftp_server);
+
+        // FTP login
+        @$login_result=ftp_login($ftp_conn, $ftp_user_name, $ftp_user_pass);
+
+        ftp_pasv($ftp_conn, true);
+
+        if ($login_result)
+            Yii::trace("LOGIN IN SUCCESS");
+        else
+            Yii::trace("LOGIN IN FALL");
+
+        // get FTP result
+        $upload_result = ftp_put($ftp_conn, $remoteFileName, $filePath, FTP_BINARY);
+
+        // Error handling
+        if(!$upload_result)
+        {
+            Yii::trace("FTP error: The file could not be written to the FTP server.");
+        } else {
+            Yii::trace("FTP success: The file is transferred to FTP server.");
+        }
+
+        // close connection
+        ftp_close($ftp_conn);
+    }
+
+    public function actionFtpFilesPayroll(){
+        $defaultPath = 'C:\Users\tzhang\Downloads';
+        $fileType = '.csv';
+        $timeCardFile = "payroll";//"timecard";
+        $dateTime = date('Y-m-d_h_i');
+
+        $payrollFile = '\payroll_history_';
+        $filePath = $defaultPath . $payrollFile . $dateTime . $fileType;
+        if (file_exists($filePath)) {
+            Yii::trace("The file $filePath exists");
+        } else {
+            Yii::trace("The file $filePath not exists");
+        }
+
+        $remoteFileName = 'payroll_history_' . $dateTime . $fileType;
+
+        $ftp_server = "10.100.10.10";
+        $ftp_user_name='ftpdev.southerncrosslighthouse.com|tzhang';
+        $ftp_user_pass='Wojiushiye008';
+
+        // FTP connection
+        $ftp_conn = ftp_connect($ftp_server);
+
+        // FTP login
+        @$login_result=ftp_login($ftp_conn, $ftp_user_name, $ftp_user_pass);
+
+        ftp_pasv($ftp_conn, true);
+
+        if ($login_result)
+            Yii::trace("LOGIN IN SUCCESS");
+        else
+            Yii::trace("LOGIN IN FALL");
+
+        // get FTP result
+        $upload_result = ftp_put($ftp_conn, $remoteFileName, $filePath, FTP_BINARY);
+
+        // Error handling
+        if(!$upload_result)
+        {
+            Yii::trace("FTP error: The file could not be written to the FTP server.");
+        } else {
+            Yii::trace("FTP success: The file is transferred to FTP server.");
+        }
+
+        // close connection
+        ftp_close($ftp_conn);
     }
 
     /**

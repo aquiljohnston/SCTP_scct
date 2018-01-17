@@ -6,7 +6,7 @@ $(function () {
         $(this).addClass('disabled');
     });
 
-    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+    $('#multiple_approve_btn_id').prop('disabled', false); //TO DISABLED
 
     $(document).off('click', "#timeCardGV input[type=checkbox]").on('click', "#timeCardGV input[type=checkbox]", function (e) {
         var disable;
@@ -14,7 +14,7 @@ $(function () {
             disable = false;
             $("#timeCardGV .kv-row-select input:checked").each(function () {
                 if ($(this).attr("approved").toUpperCase() == "YES" || $(this).attr("totalworkhours") == 0) {
-                    disable = true;
+                    //disable = true;
                 }
             });
         } else {
@@ -54,18 +54,42 @@ function applyTimeCardOnClickListeners() {
             });
             var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
             if (win) {
-                //Browser has allowed it to be opened
-                win.focus();
+
                 $.pjax.reload({
+                    type: 'GET',
+                    url: '/time-card/ftp-files',
                     container: '#timeCardGridview',
-                    timeout: false
+                    timeout: 99999,
+                    push: false,
+                    replace: false,
+                    replaceRedirect: false
                 });
-                $('#timeCardGridview').on('pjax:success', function() {
+                $('#timeCardGridview').on('pjax:success', function () {
+                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
+                    if (payroll) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/time-card/ftp-files-payroll'
+                        });
+                    } else {
+                        //Browser has blocked it
+                        console.log('Please allow popups for this website');
+                    }
                     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
                 });
-            } else {
-                //Browser has blocked it
-                console.log('Please allow popups for this website');
+                $('#timeCardGridview').on('pjax:error', function () {
+                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
+                    if (payroll) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/time-card/ftp-files-payroll'
+                        });
+                    } else {
+                        //Browser has blocked it
+                        console.log('Please allow popups for this website');
+                    }
+                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+                });
             }
         } else {
             e.stopImmediatePropagation();
