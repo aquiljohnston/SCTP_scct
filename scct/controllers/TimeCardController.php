@@ -751,7 +751,6 @@ class TimeCardController extends BaseController
     public function actionFtpFiles(){
         $defaultPath = 'C:\Users\tzhang\Downloads';
         $fileType = '.csv';
-        $timeCardFile = "timecard";//"payroll";//"timecard";
         $dateTime = date('Y-m-d_h_i');
 
         $timeCardFile = '\timecard_history_';
@@ -761,8 +760,7 @@ class TimeCardController extends BaseController
         } else {
             Yii::trace("The file $filePath not exists");
         }
-
-
+        
         $remoteFileName = 'timecard_history_' . $dateTime . $fileType;
 
         $ftp_server = "10.100.10.10";
@@ -800,7 +798,6 @@ class TimeCardController extends BaseController
     public function actionFtpFilesPayroll(){
         $defaultPath = 'C:\Users\tzhang\Downloads';
         $fileType = '.csv';
-        $timeCardFile = "payroll";//"timecard";
         $dateTime = date('Y-m-d_h_i');
 
         $payrollFile = '\payroll_history_';
