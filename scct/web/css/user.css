@@ -62,6 +62,10 @@
     float: right;
     margin-right: 10%;
 }
+.disabled {
+    pointer-events: none;
+    cursor: default;
+}
 /*css for the 1366*768 resolution*/
 @media only screen and (min-width: 1360px) {
 #userGridview .kv-grid-container{

@@ -56,6 +56,13 @@ $column = [
         },
         'buttons' => [
             'delete' => function ($url, $model, $key) {
+                $userPermissionTable = array(
+                    '5' => 'Technician',
+                    '4' => 'Engineer',
+                    '3' => 'Supervisor',
+                    '2' => 'ProjectManager',
+                    '1' => 'Admin'
+                );
                 $url = '/user/deactivate?username=' . $model["UserName"];
                 $options = [
                     'title' => Yii::t('yii', 'Deactivate'),
@@ -63,10 +70,11 @@ $column = [
                     'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
                     'data-method' => 'Put',
                     'data-pjax' => '0',
+                    'class' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'disabled' : "",
                 ];
                 return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
             },
-        ]
+        ],
     ],
 ];
 ?>
