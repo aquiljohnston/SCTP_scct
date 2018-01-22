@@ -66,4 +66,23 @@ $(function(){
             location.reload();
         });
     }
+
+
+    $(document).on('click','#deactive_timeEntry_btn_id',function(e){
+             $('#loading').show();
+        id = $('#timeCardId').val()
+        $.ajax({
+            type: 'POST',
+            url: '/time-card/deactivate/?timeCardId='+id,
+            beforeSend: function(  ) {
+            console.log(id);
+            },
+            success: function(data) {
+                $('#loading').hide();
+            }
+        });
+
+
+    })
+
 });

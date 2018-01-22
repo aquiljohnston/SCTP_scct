@@ -36,6 +36,7 @@ use yii\widgets\Pjax;
     } else {
         $approve_status = false;
     }
+    //var_dump($task);
     ?>
     <p>
         <?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
@@ -63,6 +64,8 @@ use yii\widgets\Pjax;
                 'id' => 'deactive_timeEntry_btn_id',
             ]) ?>
         <?php endif; ?>
+
+        <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
 
     <!--create new button start
         <?= Html::button('Create New', ['value' =>'', 'class' => 'btn btn-success', 'id' => 'modalNewTimeEntry', 'disabled' => $approve_status]) ?>
