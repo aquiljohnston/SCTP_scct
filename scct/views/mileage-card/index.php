@@ -91,7 +91,9 @@ $column = [
             }
 
             return $result;*/
-            if (strtoupper($model["MileageCardApproved"]) == "YES")
+            //if (strtoupper($model["MileageCardApproved"]) == "YES")
+              if (strtoupper($model["MileageCardApproved"]) == "YES"
+                  || $model["MileageCardApproved"] == 1)
                 return ['disabled' => true];
             else
                 return ['disabled' => false];
