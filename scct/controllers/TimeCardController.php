@@ -603,9 +603,7 @@ class TimeCardController extends BaseController
 				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
 				$obj 			= json_decode($putResponse, true);
 
-				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
-				//fail gracefully if no response time card entry id
-				return $this->redirect(['index', 'id' => $timeCardId]);
+				return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
