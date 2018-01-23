@@ -586,38 +586,31 @@ class TimeCardController extends BaseController
      * @internal param string $id
      *
      */
-	public function actionDeactivate(){
+	public function actionDeactivate($timeCardId){
 
-		if (Yii::$app->request->isAjax) {
 			
 			try{
-				
-				$data = Yii::$app->request->post();					
-				 // loop the data array to get all id's.	
-				foreach ($data as $key) {
-					foreach($key as $keyitem){
-					
-					   $TimeEntryIDArray[] = $keyitem;
-					}
-				}
-				
+
+
 				$data = array(
-						'deactivatedBy' => Yii::$app->session['userID'],
-						'entryArray' => $TimeEntryIDArray,
+						//'deactivatedBy' => Yii::$app->session['userID'],
+						'timeCardId' => $timeCardId,
 					);		
-				$json_data = json_encode($data);
+				$json_data 		= json_encode($data);
 				
 				// post url
-				$putUrl = 'time-entry%2Fdeactivate';
-				$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
-				$obj = json_decode($putResponse, true);
-				$responseTimeCardID = $obj[0]["TimeEntryTimeCardID"];
-				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+				$putUrl 		= 'time-entry%2Fdeactivate';
+				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
+				$obj 			= json_decode($putResponse, true);
+
+				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
+				//fail gracefully if no response time card entry id
+				return $this->redirect(['index', 'id' => $timeCardId]);
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
 			}
-		}
+		
 	}
 
     /**
