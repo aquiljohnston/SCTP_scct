@@ -6,7 +6,7 @@ $(function() {
 	var approved = "No"
 	var totalworkhours = -1;
 	
-	$('#deactive_timeEntry_btn_id').prop('disabled', true); //TO DISABLED
+	//$('#deactive_timeEntry_btn_id').prop('disabled', true); //TO DISABLED
 	$('.select-on-check-all').change(function() {
 
 		// get approved value for this timecard
@@ -55,7 +55,7 @@ $(function() {
 					}   
 				});
 			}else {
-					$('#deactive_timeEntry_btn_id').prop('disabled', true);
+					//$('#deactive_timeEntry_btn_id').prop('disabled', true);
 				}
 		
 	});
@@ -107,7 +107,7 @@ $(function() {
 					}  
 				});
 			}else {
-					$('#deactive_timeEntry_btn_id').prop('disabled', true);
+					//$('#deactive_timeEntry_btn_id').prop('disabled', true);
 				}
 	}); 
  });
