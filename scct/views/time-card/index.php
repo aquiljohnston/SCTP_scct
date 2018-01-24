@@ -121,7 +121,37 @@ $column = [
                         'id' => 'TimeCardForm',
                     ],
                 ]); ?>
-                <div class="col-md-2" style="margin-left: 10%;">
+                <div class="row">
+                    <div style="float: right;margin-top: -2%;width: 21%;">
+                        <?= $form->field($model, 'pagesize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
+                            'class' => 'TimeCardRecordsPerPage'
+                        ]); ?>
+                        <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="multiple_time_card_approve_btn">
+                        <?php
+                        echo Html::button('Approve',
+                            [
+                                'class' => 'btn btn-primary multiple_approve_btn',
+                                'id' => 'multiple_approve_btn_id',
+                            ]);
+                        ?>
+                        <?php
+                        if ($pages->totalCount > 0) {
+                            ?>
+                            <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
+                               href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
+                        <?php } ?>
+
+                    </div>
+                </div>
+                <div class="col-md-3 col-md-offset-1 TimeCardSearch">
+                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
+                </div>
+                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
+                <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div>
                 <div id="datePickerContainer" style="float: left; width: auto; display: none;">
@@ -162,36 +192,6 @@ $column = [
                                     $('#datePickerContainer').css(\"display\", \"block\"); "."
                             }"],
                     ]); ?>
-                </div>
-                <div class="col-md-3 col-md-offset-1">
-                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
-                </div>
-                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
-                <div class="row">
-                    <div style="float: right;margin-top: -2%;width: 21%;">
-                        <?= $form->field($model, 'pagesize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
-                            'class' => 'TimeCardRecordsPerPage'
-                        ]); ?>
-                        <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div id="multiple_time_card_approve_btn">
-                        <?php
-                        echo Html::button('Approve',
-                            [
-                                'class' => 'btn btn-primary multiple_approve_btn',
-                                'id' => 'multiple_approve_btn_id',
-                            ]);
-                        ?>
-                        <?php
-                        if ($pages->totalCount > 0) {
-                            ?>
-                            <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-                               href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
-                        <?php } ?>
-
-                    </div>
                 </div>
                 <?php ActiveForm::end(); ?>
                 <?php Pjax::end() ?>
