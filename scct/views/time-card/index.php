@@ -154,7 +154,7 @@ $column = [
                 <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div>
-                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
+                <div id="datePickerContainer" style="float: left; width: auto; display: none; margin-top: -2.2%;">
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
