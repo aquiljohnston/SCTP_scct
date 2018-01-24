@@ -83,7 +83,7 @@ div[id^=modalContent] #loading {
 #multiple_time_card_approve_btn{
     padding-left:0;
 	float: right;
-	margin-top: -1%;
+	margin-top: -0.5%;
 	margin-right: 1%;
 }
 #timeCardDropdownContainer{
@@ -140,7 +140,9 @@ div[id^=modalContent] #loading {
 #timeCardSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
-	float: left;
+	float: right;
+	margin-right: -35%;
+	margin-top: -2.2%;
 }
 .field-dynamicmodel-daterangepicker{
 	float:right;!important;
@@ -149,6 +151,15 @@ div[id^=modalContent] #loading {
 #multiple_approve_btn_id {
 	padding-left: 31%;
 	padding-right: 31%;
+}
+.TimeCardSearch {
+	float: right;
+	margin-right: 31%;
+	margin-top: -2.2%;
+}
+.DateRangeDropDown {
+	margin-left: 10%;
+	margin-top: -2.2%;
 }
 /*responsive css* for table*/
 @media only screen 
@@ -169,6 +180,7 @@ and (min-resolution:.001dpcm) {
 	#multiple_approve_btn_id {
 		padding-left: 32%;
 		padding-right: 27%;
+		margin-top: 6%;
 	}
 	#multiple_time_card_approve_btn{
 	    float: right;
