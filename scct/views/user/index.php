@@ -43,10 +43,10 @@ $column = [
         'contentOptions' => ['class' => 'text-center'],
     ],
     ['class' => 'kartik\grid\ActionColumn',
-		'template' => '{view} {delete}',
+        'template' => '{view} {delete}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
-                $url = '/user/view?username=' . $model["UserName"];
+                $url = '/user/view?id=' . $model["UserID"];
                 return $url;
             }
             if ($action === 'delete') {
@@ -56,13 +56,6 @@ $column = [
         },
         'buttons' => [
             'delete' => function ($url, $model, $key) {
-                $userPermissionTable = array(
-                    '5' => 'Technician',
-                    '4' => 'Engineer',
-                    '3' => 'Supervisor',
-                    '2' => 'ProjectManager',
-                    '1' => 'Admin'
-                );
                 $url = '/user/deactivate?username=' . $model["UserName"];
                 $options = [
                     'title' => Yii::t('yii', 'Deactivate'),
@@ -70,27 +63,26 @@ $column = [
                     'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
                     'data-method' => 'Put',
                     'data-pjax' => '0',
-                    'class' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'disabled' : "",
                 ];
                 return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
             },
-        ],
+        ]
     ],
 ];
 ?>
 <div class="user-index">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-	<div class="user_filter">
-		<div id="userDropdownContainer">
-			<?php $form = ActiveForm::begin([
-				'type' => ActiveForm::TYPE_HORIZONTAL,
-				'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
-				'method' => 'get',
-				'options' => [
-					'id' => 'UserForm',
-				],
-				'action' => Url::to(['user/index'])
-			]); ?>
+    <div class="user_filter">
+        <div id="userDropdownContainer">
+            <?php $form = ActiveForm::begin([
+                'type' => ActiveForm::TYPE_HORIZONTAL,
+                'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+                'method' => 'get',
+                'options' => [
+                    'id' => 'UserForm',
+                ],
+                'action' => Url::to(['user/index'])
+            ]); ?>
 
             <div class="row" style="margin-left: 0;">
                 <h3 class="title" style="float: left;"><?= Html::encode($this->title) ?></h3>
@@ -112,10 +104,10 @@ $column = [
                 <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
                 <?php Pjax::end() ?>
             </div>
-			<input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
-			<?php ActiveForm::end(); ?>
-		</div>
-	</div>
+            <input id="UserManagementPageNumber" type="hidden" name="UserManagementPageNumber" value="<?= $page ?>" />
+            <?php ActiveForm::end(); ?>
+        </div>
+    </div>
     <div id="userGridViewContainer">
         <div id="userGV" class="userForm">
             <?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
@@ -140,13 +132,13 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
-	<?php
+    <?php
     Modal::begin([
         'header' => '<h4>Reactivate Users</h4>',
         'id' => 'reactivateUserModal',
     ]);?>
-	<div id='modalReactivateUser'>Loading...</div>
-	<?php 
-		Modal::end();
+    <div id='modalReactivateUser'>Loading...</div>
+    <?php 
+        Modal::end();
     ?>
 </div>

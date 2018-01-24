@@ -34,7 +34,7 @@ class UserController extends BaseController
             return $this->redirect(['/login']);
         }
         try {
-			//Check if user has permission to view user page
+            //Check if user has permission to view user page
             self::requirePermission("viewUserMgmt");
 
             $model = new \yii\base\DynamicModel([
@@ -100,17 +100,13 @@ class UserController extends BaseController
                 ]
             ];
 
-            // Generate User Permission Table
-            $userPermissionTable = SELF::getUserPermissionTable();
-
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'pages' => $pages,
                 'filter' => $filterParam,
                 'userPageSizeParams' => $listPerPageParam,
-                'page' => $page,
-                'userPermissionTable' => $userPermissionTable
+                'page' => $page
             ]);
 
         } catch (UnauthorizedHttpException $e){
@@ -126,25 +122,19 @@ class UserController extends BaseController
 
     /**
      * Displays a single user model.
-     * @param string $username
+     * @param string $id
      * @return mixed
      */
-    public function actionView($username)
+    public function actionView($id)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
-        $url = 'user%2Fview&username=' . $username;
+        $url = 'user%2Fview&id=' . $id;
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
-        // Generate User Permission Table
-        $userPermissionTable = SELF::getUserPermissionTable();
-
-        return $this->render('view', [
-            'model' => json_decode($response, true),
-            'userPermissionTable' => $userPermissionTable,
-        ]);
+        return $this->render('view', ['model' => json_decode($response), true]);
     }
 
     /**
@@ -239,17 +229,17 @@ class UserController extends BaseController
     /**
      * Updates an existing user model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $username
+     * @param string $id
      * @return mixed
      */
-    public function actionUpdate($username)
+    public function actionUpdate($id)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
         self::requirePermission("userUpdate");
-        $getUrl = 'user%2Fview&username=' . $username;
+        $getUrl = 'user%2Fview&id=' . $id;
         $getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
         $model = new User();
@@ -296,11 +286,11 @@ class UserController extends BaseController
 
             $json_data = json_encode($data);
 
-            $putUrl = 'user%2Fupdate&username=' . $username;
+            $putUrl = 'user%2Fupdate&id=' . $id;
             $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
             $obj = json_decode($putResponse, true);
 
-            return $this->redirect(['view', 'username' => $username]);
+            return $this->redirect(['view', 'id' => $id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -330,8 +320,8 @@ class UserController extends BaseController
         Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2); // indirect rbac
         $this->redirect('/user/');
     }
-	
-	/**
+    
+    /**
      * Modal view for reactivating users
      * @return string|\yii\web\Response
      * @throws ForbiddenHttpException
@@ -344,7 +334,7 @@ class UserController extends BaseController
             }
 
             $model = new \yii\base\DynamicModel([
-				'modalSearch'
+                'modalSearch'
             ]);
             $model->addRule('modalSearch', 'string', ['max' => 32]);
 
@@ -371,71 +361,56 @@ class UserController extends BaseController
 
             $dataProvider->key = 'UserName';
 
-			if (Yii::$app->request->isAjax) {
-				return $this->renderAjax('reactivate_user_modal', [
-					'reactivateUserDataProvider' => $dataProvider,
-					'model' => $model,
-					'searchFilterVal' => $searchFilterVal,
-				]);
-			}else{
-				return $this->render('reactivate_user_modal', [
-					'reactivateUserDataProvider' => $dataProvider,
-					'model' => $model,
-					'searchFilterVal' => $searchFilterVal,
-				]);
-			}
+            if (Yii::$app->request->isAjax) {
+                return $this->renderAjax('reactivate_user_modal', [
+                    'reactivateUserDataProvider' => $dataProvider,
+                    'model' => $model,
+                    'searchFilterVal' => $searchFilterVal,
+                ]);
+            }else{
+                return $this->render('reactivate_user_modal', [
+                    'reactivateUserDataProvider' => $dataProvider,
+                    'model' => $model,
+                    'searchFilterVal' => $searchFilterVal,
+                ]);
+            }
         }catch(ForbiddenHttpException $e)
         {
             throw new ForbiddenHttpException;
         }
         catch(\Exception $e)
         {
-			yii::trace('Exception' . json_encode($e));
+            yii::trace('Exception' . json_encode($e));
             Yii::$app->runAction('login/user-logout');
         }
     }
-	
-	/**
+    
+    /**
      * Reactivate Function
      * @throws ForbiddenHttpException
      */
-	public function actionReactivate()
-	{
-		try
-		{
-			if(Yii::$app->request->isAjax)
-			{
-				//get user data for put request
-				$data = Yii::$app->request->post();
-				//add url prefix to put body
-				$data['ProjectUrlPrefix'] = BaseController::getXClient();
-				//json encode put body
+    public function actionReactivate()
+    {
+        try
+        {
+            if(Yii::$app->request->isAjax)
+            {
+                //get user data for put request
+                $data = Yii::$app->request->post();
+                //add url prefix to put body
+                $data['ProjectUrlPrefix'] = BaseController::getXClient();
+                //json encode put body
                 $json_data = json_encode($data);
-				
-				// post url
+                
+                // post url
                 $putUrl = 'user%2Freactivate';
                 $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
-			}
-		} catch (ForbiddenHttpException $e) {
+            }
+        } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch (Exception $e) {
-			//TODO implement alternative to logging out when a bad request is returned.
+            //TODO implement alternative to logging out when a bad request is returned.
             Yii::$app->runAction('login/user-logout');
         }
-	}
-
-	/**
-     * Generate userPermissionTable
-     * @return array $userPermissionTable
-     */
-	private function getUserPermissionTable(){
-        $userPermissionTable = array(
-            '5' => 'Technician',
-            '4' => 'Engineer',
-            '3' => 'Supervisor',
-            '2' => 'ProjectManager',
-            '1' => 'Admin'
-        );
-        return $userPermissionTable;
     }
 }
