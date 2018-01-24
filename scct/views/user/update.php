@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = 'Update User: ' . ' ' . $model->UserLastName . ', ' .$model->UserFirstName ;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->UserName, 'url' => ['view', 'username' => $model->UserName]];
+$this->params['breadcrumbs'][] = ['label' => $model->UserID, 'url' => ['view', 'id' => $model->UserID]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="user-update">
