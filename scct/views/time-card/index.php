@@ -132,6 +132,11 @@ $column = [
                 <div class="row">
                     <div id="multiple_time_card_approve_btn">
                         <?php
+                        echo Html::button('Submit',
+                            [
+                                'class' => 'btn btn-primary multiple_submit_btn',
+                                'id' => 'multiple_submit_btn_id',
+                            ]);
                         echo Html::button('Approve',
                             [
                                 'class' => 'btn btn-primary multiple_approve_btn',
@@ -154,7 +159,7 @@ $column = [
                 <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div>
-                <div id="datePickerContainer" style="float: left; width: auto; display: none; margin-top: -2.2%;">
+                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
@@ -224,4 +229,14 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
+
+<!--    --><?php
+/*
+    Modal::begin([
+        'header' => '<h4>ADD TASK</h4>',
+        'id' => 'addTaskModal',
+    ]);
+    echo "<div id='modalAddTask'>Loading...</div>";
+    Modal::end();
+    */?>
 </div>
