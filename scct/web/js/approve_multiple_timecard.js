@@ -30,6 +30,7 @@ $(function () {
     });
 
     applyTimeCardOnClickListeners();
+    applyTimeCardSubmitButtonListener();
 
 });
 
@@ -52,7 +53,72 @@ function applyTimeCardOnClickListeners() {
                     timecardid: primaryKeys
                 }
             });
-            var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
+            /*var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
+            if (win) {
+
+                $.pjax.reload({
+                    type: 'GET',
+                    url: '/time-card/ftp-files',
+                    container: '#timeCardGridview',
+                    timeout: 99999,
+                    push: false,
+                    replace: false,
+                    replaceRedirect: false
+                });
+                $('#timeCardGridview').on('pjax:success', function () {
+                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
+                    if (payroll) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/time-card/ftp-files-payroll'
+                        });
+                    } else {
+                        //Browser has blocked it
+                        console.log('Please allow popups for this website');
+                    }
+                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+                });
+                $('#timeCardGridview').on('pjax:error', function () {
+                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
+                    if (payroll) {
+                        $.ajax({
+                            type: 'POST',
+                            url: '/time-card/ftp-files-payroll'
+                        });
+                    } else {
+                        //Browser has blocked it
+                        console.log('Please allow popups for this website');
+                    }
+                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
+                });
+            }*/
+        } else {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+        }
+    });
+}
+
+function applyTimeCardSubmitButtonListener() {
+    $('#multiple_submit_btn_id').click(function () {
+        var quantifier = "";
+        var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+        var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
+        if (confirmBox) {
+            var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+            $.ajax({
+                type: 'POST',
+                url: '/time-card/approve-multiple',
+                data: {
+                    timecardid: primaryKeys
+                }
+            });
+            var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
             if (win) {
 
                 $.pjax.reload({
