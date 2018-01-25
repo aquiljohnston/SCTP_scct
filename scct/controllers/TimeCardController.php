@@ -742,7 +742,9 @@ class TimeCardController extends BaseController
     }
 
     public function actionFtpFiles(){
-        $defaultPath = 'C:\Users\tzhang\Downloads';
+        $userName =  getenv("username");
+        Yii::trace("CURRENT USER NAME IS : ".$userName);
+        $defaultPath = 'C:\Users\\'.$userName.'\Downloads';
         $fileType = '.csv';
         $dateTime = date('Y-m-d_h_i');
 
@@ -789,10 +791,13 @@ class TimeCardController extends BaseController
     }
 
     public function actionFtpFilesPayroll(){
-        $defaultPath = 'C:\Users\tzhang\Downloads';
+        //$defaultPath = 'C:\Users\tzhang\Downloads';
         $fileType = '.csv';
         $dateTime = date('Y-m-d_h_i');
 
+        $userName =  getenv("username");
+        Yii::trace("CURRENT USER NAME IS : ".$userName);
+        $defaultPath = 'C:\Users\\'.$userName.'\Downloads';
         $payrollFile = '\payroll_history_';
         $filePath = $defaultPath . $payrollFile . $dateTime . $fileType;
         if (file_exists($filePath)) {
