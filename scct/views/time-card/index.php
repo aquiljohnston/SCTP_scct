@@ -20,8 +20,8 @@ $this->params['download_url'] = '/time-card/download-time-card-data?' . http_bui
     ]);
 $column = [
     [
-        'label' => 'User First Name',
-        'attribute' => 'UserFirstName',
+        'label' => 'User Full Name',
+        'attribute' => 'UserFullName',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
@@ -38,14 +38,15 @@ $column = [
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
-        'label' => 'Start Date',
-        'attribute' => 'TimeCardStartDate',
+        'label' => 'Start Date - End Date',
+        'attribute' => 'TimeCardDates',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['TimeCardStartDate']));
-        }
-    ],
+        /*'value' => function ($model) {
+            $date = date("m/d/Y", strtotime($model['TimeCardStartDate']))." - ".date("m/d/Y", strtotime($model['TimeCardEndDate'])); 
+            return $date;
+        }*/
+    ]/*,
     [
         'label' => 'End Date',
         'attribute' => 'TimeCardEndDate',
@@ -54,7 +55,7 @@ $column = [
         'value' => function ($model) {
             return date("m/d/Y", strtotime($model['TimeCardEndDate']));
         }
-    ],
+    ]*/,
     'SumHours',
     [
         'label' => 'Approved',
