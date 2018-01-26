@@ -24,13 +24,13 @@ $column = [
         'attribute' => 'UserFullName',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-    ],
+    ]/*,
     [
         'label' => 'User Last Name',
         'attribute' => 'UserLastName',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-    ],
+    ]*/,
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
