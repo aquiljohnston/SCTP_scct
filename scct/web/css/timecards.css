@@ -82,6 +82,9 @@ div[id^=modalContent] #loading {
 }
 #multiple_time_card_approve_btn{
     padding-left:0;
+	float: right;
+	margin-top: -0.5%;
+	margin-right: 1%;
 }
 #timeCardDropdownContainer{
 	padding-right:0;
@@ -106,6 +109,10 @@ div[id^=modalContent] #loading {
 	max-height:58vh;
 	overflow-y:auto;
 	overflow-x: hidden;
+}
+#timeCardPageSize {
+	margin-left: 110%;
+	margin-top: 15%;
 }
 /*timeCard view page*/
 .timecard-view table{
@@ -133,10 +140,26 @@ div[id^=modalContent] #loading {
 #timeCardSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
+	float: right;
+	margin-right: -35%;
+	margin-top: -2.2%;
 }
 .field-dynamicmodel-daterangepicker{
 	float:right;!important;
 	margin-left: 0px;!important;
+}
+#multiple_approve_btn_id {
+	padding-left: 31%;
+	padding-right: 31%;
+}
+.TimeCardSearch {
+	float: right;
+	margin-right: 22%;
+	margin-top: -2.2%;
+}
+.DateRangeDropDown {
+	margin-left: 10%;
+	margin-top: -2.2%;
 }
 /*responsive css* for table*/
 @media only screen 
@@ -150,4 +173,19 @@ and (min-width : 1900px) {
 #GridViewForTimeCard{
 	max-height:62vh;
 }
+}
+/* Chrome 29+ */
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+	#multiple_approve_btn_id {
+		padding-left: 32%;
+		padding-right: 27%;
+		margin-top: 6%;
+	}
+	#multiple_time_card_approve_btn{
+	    float: right;
+		margin-top: -1%;
+		margin-right: 0.5%;
+		width: 10%;
+    }
 }
