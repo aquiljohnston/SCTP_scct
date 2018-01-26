@@ -99,7 +99,7 @@ ul{
 						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
 							poster=""
 							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
-							<source src="/videos/SurveyFilters_01_18_18.mp4" type="video/mp4"-->
+							<source src="/videos/SurveyFilters_01_26_18.mp4" type="video/mp4"-->
 						</video>
 					</figure>
 					<h4 class="videoTitle">Survey Filters</h4>
@@ -119,7 +119,7 @@ ul{
 						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
 							poster=""
 							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
-							<source src="/videos/TaskoutLogout_01_18_18.mp4" type="video/mp4"-->
+							<source src="/videos/TaskoutLogout_01_26_18.mp4" type="video/mp4"-->
 						</video>
 					</figure>
 					<h4 class="videoTitle">Taskout/Logout</h4>
