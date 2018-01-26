@@ -63,8 +63,11 @@ $column = [
     ['class' => 'kartik\grid\ActionColumn',
         'template' => '{view}', // does not include delete
         'urlCreator' => function ($action, $model, $key, $index) {
+
             if ($action === 'view') {
-                $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName'];
+                $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName']
+                .'&fName='.$model['UserFirstName']
+                .'&lName='.$model['UserLastName'];
                 return $url;
             }
         },
