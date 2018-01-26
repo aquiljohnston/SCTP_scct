@@ -140,9 +140,9 @@ class TimeCardController extends BaseController
             // Sorting TimeCard table
             $dataProvider->sort = [
                 'attributes' => [
-                    'UserFirstName' => [
-                        'asc' => ['UserFirstName' => SORT_ASC],
-                        'desc' => ['UserFirstName' => SORT_DESC]
+                    'UserFullName' => [
+                        'asc' => ['UserFullName' => SORT_ASC],
+                        'desc' => ['UserFullName' => SORT_DESC]
                     ],
                     'UserLastName' => [
                         'asc' => ['UserLastName' => SORT_ASC],
@@ -152,14 +152,14 @@ class TimeCardController extends BaseController
                         'asc' => ['ProjectName' => SORT_ASC],
                         'desc' => ['ProjectName' => SORT_DESC]
                     ],
-                    'TimeCardStartDate' => [
-                        'asc' => ['TimeCardStartDate' => SORT_ASC],
-                        'desc' => ['TimeCardStartDate' => SORT_DESC]
-                    ],
+                    'TimeCardDates' => [
+                        'asc' => ['TimeCardDates' => SORT_ASC],
+                        'desc' => ['TimeCardDates' => SORT_DESC]
+                    ]/*,
                     'TimeCardEndDate' => [
                         'asc' => ['TimeCardEndDate' => SORT_ASC],
                         'desc' => ['TimeCardEndDate' => SORT_DESC]
-                    ],
+                    ]*/,
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
