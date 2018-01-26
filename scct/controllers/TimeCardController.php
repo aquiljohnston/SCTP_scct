@@ -345,7 +345,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -406,7 +406,9 @@ class TimeCardController extends BaseController
 											'ThursdayDate' 	=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
 											'FridayDate' 	=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
 											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-                                            'projectName'   => $projectName
+                                            'projectName'   => $projectName,
+                                            'fName'   => $fName,
+                                            'lName'   => $lName
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
