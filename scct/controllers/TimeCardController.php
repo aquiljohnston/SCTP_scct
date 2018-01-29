@@ -863,14 +863,10 @@ class TimeCardController extends BaseController
      * Add New Task Entry.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $TimeCardID
-     * @param $TaskName
-     * @param $Date
-     * @param $StartTime
-     * @param $EndTime
-     * @return mixed
+     * @return string
      * @throws \yii\web\HttpException
      */
-    public function actionAddTaskEntry($TimeCardID = null)
+    public function actionAddTaskEntry($TimeCardID)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
