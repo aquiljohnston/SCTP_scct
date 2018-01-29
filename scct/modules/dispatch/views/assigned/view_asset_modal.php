@@ -145,7 +145,7 @@ use kartik\grid\GridView;
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center surveyorDropDown'],
                 'value' => function ($model) {
-                    if (strpos($model['LocationType'], 'Gas Main') !== false) {
+                    if (strpos($model['LocationType'], 'Gas Main') !== false || strpos($model['LocationType'], 'Pipeline') !== false) {
                         $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center;width:155px;" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
                         $dropDownListCloseSelect = '</select>';
                         foreach ($model['userList'] as $item) {
