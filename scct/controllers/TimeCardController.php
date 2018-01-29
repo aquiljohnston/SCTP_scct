@@ -140,9 +140,9 @@ class TimeCardController extends BaseController
             // Sorting TimeCard table
             $dataProvider->sort = [
                 'attributes' => [
-                    'UserFirstName' => [
-                        'asc' => ['UserFirstName' => SORT_ASC],
-                        'desc' => ['UserFirstName' => SORT_DESC]
+                    'UserFullName' => [
+                        'asc' => ['UserFullName' => SORT_ASC],
+                        'desc' => ['UserFullName' => SORT_DESC]
                     ],
                     'UserLastName' => [
                         'asc' => ['UserLastName' => SORT_ASC],
@@ -152,14 +152,14 @@ class TimeCardController extends BaseController
                         'asc' => ['ProjectName' => SORT_ASC],
                         'desc' => ['ProjectName' => SORT_DESC]
                     ],
-                    'TimeCardStartDate' => [
-                        'asc' => ['TimeCardStartDate' => SORT_ASC],
-                        'desc' => ['TimeCardStartDate' => SORT_DESC]
-                    ],
+                    'TimeCardDates' => [
+                        'asc' => ['TimeCardDates' => SORT_ASC],
+                        'desc' => ['TimeCardDates' => SORT_DESC]
+                    ]/*,
                     'TimeCardEndDate' => [
                         'asc' => ['TimeCardEndDate' => SORT_ASC],
                         'desc' => ['TimeCardEndDate' => SORT_DESC]
-                    ],
+                    ]*/,
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
@@ -345,7 +345,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -406,7 +406,9 @@ class TimeCardController extends BaseController
 											'ThursdayDate' 	=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
 											'FridayDate' 	=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
 											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-                                            'projectName'   => $projectName
+                                            'projectName'   => $projectName,
+                                            'fName'   => $fName,
+                                            'lName'   => $lName
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);

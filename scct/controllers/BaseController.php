@@ -67,7 +67,8 @@ class BaseController extends Controller
                 || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
         )
         {
-            return "apidev";
+            //return "apidev";
+            return "scanadev";
         }
         else {
             return self::urlPrefix();

@@ -19,7 +19,7 @@ use yii\widgets\Pjax;
 <div class="time-card-entries">
 
     <?php
-    $this->title = $projectName.' Week '.$from.' - '.$to;
+    $this->title = $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName;
     $this->params['breadcrumbs'][] = $this->title;
      ?>
 

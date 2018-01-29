@@ -94,6 +94,36 @@ ul{
 					</figure>
 					<h4 class="videoTitle">Install & Update</h4>
 			    </article>
+				<article class="video">
+					<figure>
+						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
+							poster=""
+							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
+							<source src="/videos/SurveyFilters_01_26_18.mp4" type="video/mp4"-->
+						</video>
+					</figure>
+					<h4 class="videoTitle">Survey Filters</h4>
+			    </article>
+				<article class="video">
+					<figure>
+						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
+							poster=""
+							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
+							<source src="/videos/InspectionEdits_01_18_18.mp4" type="video/mp4"-->
+						</video>
+					</figure>
+					<h4 class="videoTitle">Inspection</h4>
+			    </article>
+				<article class="video">
+					<figure>
+						<video id="video1" class="fancybox fancybox.iframe video-js vjs-default-skin" 
+							poster=""
+							data-setup='{"controls" : true, "autoplay" : false, "preload" : "auto"}'>
+							<source src="/videos/TaskoutLogout_01_26_18.mp4" type="video/mp4"-->
+						</video>
+					</figure>
+					<h4 class="videoTitle">Taskout/Logout</h4>
+			    </article>
 			</div>				
         </div>
     </div>
