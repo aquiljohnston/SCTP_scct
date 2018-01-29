@@ -106,31 +106,47 @@ use yii\widgets\Pjax;
             [
                 'label' => 'Sunday ' . $SundayDate,
                 'attribute' => 'Date1',
+                'headerOptions' => ['class'=>$SundayDateFull]
             ],
             [
                 'label' => 'Monday '. $MondayDate,
                 'attribute' => 'Date2',
+                'headerOptions' => ['class'=>$MondayDateFull],
             ],
             [
                 'label' => 'Tuesday '. $TuesdayDate,
                 'attribute' => 'Date3',
+                'headerOptions' => ['class'=>$TuesdayDateFull],
             ],
             [
                 'label' => 'Wednesday '. $WednesdayDate,
                 'attribute' => 'Date4',
+                'headerOptions' => ['class'=>$WednesdayDateFull],
             ],
             [
                 'label' => 'Thursday '. $ThursdayDate,
                 'attribute' => 'Date5',
+                'headerOptions' => ['class'=>$ThursdayDateFull],
             ],
             [
                 'label' => 'Friday '. $FridayDate,
                 'attribute' => 'Date6',
+                'headerOptions' => ['class'=>$FridayDateFull],
             ],
             [
                 'label' => 'Saturday '. $SaturdayDate,
                 'attribute' => 'Date7',
-            ]
+                'headerOptions' => ['class'=>$SaturdayDateFull],
+            ],
+                    [
+                        'header'            => 'Approve Entries',
+                        'class'             => 'kartik\grid\CheckboxColumn',
+                        'contentOptions'    => [],
+                        'checkboxOptions'   => function ($model, $key, $index, $column) {
+
+                            return ['timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),'disabled' => false,'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
+                        }
+                    ]
         ]
     ]);
     ?>

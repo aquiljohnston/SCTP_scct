@@ -395,20 +395,28 @@ class TimeCardController extends BaseController
 			]);
 
 			return $this -> render('show-entries', [
-											'model' 		=> $card,
-											'task' 			=> $allTask,
-											'from' 			=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
-											'to' 			=> $to,
-											'SundayDate' 	=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
-											'MondayDate' 	=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
-											'TuesdayDate' 	=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
-											'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
-											'ThursdayDate' 	=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
-											'FridayDate' 	=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
-											'SaturdayDate' 	=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-                                            'projectName'   => $projectName,
-                                            'fName'   => $fName,
-                                            'lName'   => $lName
+											'model' 			=> $card,
+											'task' 				=> $allTask,
+											'from' 				=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
+											'to' 				=> $to,
+											'SundayDate' 		=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+											'MondayDate' 		=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+											'TuesdayDate' 		=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+											'WednesdayDate' 	=> $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+											'ThursdayDate' 		=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+											'FridayDate' 		=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+											'SaturdayDate' 		=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+                                            'projectName'   	=> $projectName,
+                                            'fName'   			=> $fName,
+                                            'lName'   			=> $lName,
+                                            'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date1']))),
+											'MondayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date2']))),
+											'TuesdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date3']))),
+											'WednesdayDateFull' =>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
+											'ThursdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
+											'FridayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
+											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7'])))
+
 									]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
@@ -588,17 +596,16 @@ class TimeCardController extends BaseController
      * @internal param string $id
      *
      */
-	public function actionDeactivate($timeCardId){
+	public function actionDeactivate(){
 
 			
 			try{
 
+				$data 			= Yii::$app->request->post();	
 
-				$data = array(
-						//'deactivatedBy' => Yii::$app->session['userID'],
-						'timeCardId' => $timeCardId,
-					);		
-				$json_data 		= json_encode($data);
+				$json_data 		= json_encode($data['entries']);
+
+				var_dump($json_data);exit();
 				
 				// post url
 				$putUrl 		= 'time-entry%2Fdeactivate';

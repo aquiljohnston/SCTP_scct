@@ -1,8 +1,9 @@
 $(function(){
-    var jqTimeCardFilter = $('#timecard_filter');
-    var jqTCDropDowns = $('#timeCardDropdownContainer');
-    var jqWeekSelection = jqTimeCardFilter.find('#timeCardDateRange');
-    var jqTCPageSize = jqTCDropDowns.find('#timeCardPageSize');
+    var jqTimeCardFilter    = $('#timecard_filter');
+    var jqTCDropDowns       = $('#timeCardDropdownContainer');
+    var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
+    var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
+    entries                 = []; 
 
     jqWeekSelection.on('change', function (event) {
         event.preventDefault();
@@ -69,11 +70,32 @@ $(function(){
 
 
     $(document).on('click','#deactive_timeEntry_btn_id',function(e){
-             $('#loading').show();
-        id = $('#timeCardId').val()
+             //$('#loading').show();
+        id = $('#timeCardId').val();
+
+       $(".entryData").each(function(k,value){
+
+         if($(this).is(":checked")){
+            
+            //var isThere = $.grep(entries, function(e){ return e.id == k; });
+
+            //if(isThere.length == 0){
+                 entries.push({
+                   /// id : k,
+                    taskName : $(this).attr('taskName'),
+                    day : $(this).attr('entry'),
+                    timeCardID : id
+                })
+            }
+       // }
+    })
+
+        data = {entries}
+
         $.ajax({
             type: 'POST',
-            url: '/time-card/deactivate/?timeCardId='+id,
+            url: '/time-card/deactivate/',
+            data: data,
             beforeSend: function(  ) {
             console.log(id);
             },
@@ -81,8 +103,39 @@ $(function(){
                 $('#loading').hide();
             }
         });
+    });
 
 
-    })
+    //iterate table row get row that has time entrydata
+$(document).on('change','.entryData', function (e) {
+
+    tr    = $(this).closest('tr')
+    input = $(this);
+
+    if($(this).is(":checked")){
+        tr.find('td').each(function(index,value){
+          if(index != 0 && $(this).text()!=""){
+
+             th_class = $(this).closest('table').find('th').eq(index).attr('class');
+
+            }
+
+        })
+         input.attr('entry',th_class);
+    }
+    checkDeactivateBtn();
+})
+
+
+
+function checkDeactivateBtn(){
+  if ($("#allTaskEntries-container input:checkbox:checked").length > 0){
+   $('#deactive_timeEntry_btn_id').prop('disabled',false);
+  }
+  else{
+   $('#deactive_timeEntry_btn_id').prop('disabled',true);
+    }
+  }
+
 
 });
