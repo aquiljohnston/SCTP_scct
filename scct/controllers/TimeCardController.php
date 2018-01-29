@@ -910,7 +910,7 @@ class TimeCardController extends BaseController
 
                 $task_entry_data = array(
                     'TimeCardID' => $model->TimeCardID,
-                    'TaskName' => $model->TaskName,
+                    'TaskName' => 'Task ' . $model->TaskName,
                     'Date' => $model->Date,
                     'StartTime' => $model->StartTime,
                     'EndTime' => $model->EndTime,
