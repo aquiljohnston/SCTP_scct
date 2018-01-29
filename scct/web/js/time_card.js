@@ -85,4 +85,30 @@ $(function(){
 
     })
 
+    $(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
+        console.log("ADD TASK CLICKED");
+        var timeCardID = $('#timeCardId').val();
+        $('#addTaskModal').modal('show')
+            .find('#modalAddTask').html("Loading...");
+        $('#addTaskModal').modal('show')
+            .find('#modalAddTask')
+            .load('/time-card/add-task-entry?TimeCardID=' + timeCardID );
+    });
 });
+
+function TaskEntryCreation() {
+    var form = $('#TaskEntryForm');
+    $('#loading').show();
+    $.ajax({
+        type: 'GET',
+        url: form.attr("action"),
+        data: form.serialize(),
+        success: function () {
+            $('#loading').hide();
+            $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
+        },
+        error  : function () {
+            console.log("internal server error");
+        }
+    });
+}

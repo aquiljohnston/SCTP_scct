@@ -856,4 +856,119 @@ class TimeCardController extends BaseController
         }
         return $dateData;
     }
+
+    /**
+     * Add New Task Entry.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $TimeCardID
+     * @param $TaskName
+     * @param $Date
+     * @param $StartTime
+     * @param $EndTime
+     * @return mixed
+     * @throws \yii\web\HttpException
+     */
+    public function actionAddTaskEntry($TimeCardID = null)
+    {
+        //guest redirect
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+        self::requirePermission("timeEntryCreate");
+
+        $model = new \yii\base\DynamicModel([
+            'TimeCardID',
+            'TaskName',
+            'Date',
+            'StartTime',
+            'EndTime',
+            'ChargeOfAccountType'
+        ]);
+        $model -> addRule('TimeCardID', 'string', ['max' => 100]);
+        $model -> addRule('TaskName', 'string', ['max' => 100]);
+        $model -> addRule('Date', 'string', ['max' => 32]);
+        $model -> addRule('StartTime', 'string', ['max' => 100]);
+        $model -> addRule('EndTime', 'string', ['max' => 100]);
+        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100]);
+
+        try {
+
+            //get tasks for form dropdown
+            $getAllTaskUrl = "task%2Fget-all-task";
+            $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+            $allTask = json_decode($getAllTaskResponse, true);
+            $allTask = $this->FormatTaskData($allTask['assets']);
+
+            //get chartOfAccountType for form dropdown
+            $getAllChartOfAccountTypeUrl = "time-card%2Fget-charge-of-account-type";
+            $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
+            $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
+
+            if ($model->load(Yii::$app->request->queryParams)) {
+
+                $task_entry_data = array(
+                    'TimeCardID' => $model->TimeCardID,
+                    'TaskName' => $model->TaskName,
+                    'Date' => $model->Date,
+                    'StartTime' => $model->StartTime,
+                    'EndTime' => $model->EndTime,
+                    'CreatedByUserName' => Yii::$app->session['UserName'],
+                );
+
+                // check difference between startTime and endTime
+                if ($model->EndTime >= $model->StartTime) {
+
+                    $json_data = json_encode($task_entry_data);
+                    Yii::trace("NEW TASK DATA: ".$json_data);
+                    try {
+                        // post url
+                        $url = 'time-card%2Fcreate-task-entry';
+                        $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
+                        Yii::trace("NEW TASK ENTRY RESPONSE: ".$response);
+                        $obj = json_decode($response, true);
+
+                    } catch (\Exception $e) {
+                        return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
+                    }
+                } else {
+                    return $this->redirect('show-entries', ['id' => $model->TimeCardID]);
+                }
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('create_task_entry', [
+                        'model' => $model,
+                        'allTask' => $allTask,
+                        'chartOfAccountType' => $chartOfAccountType,
+                        'timeCardID' => $TimeCardID
+                    ]);
+                } else {
+                    return $this->render('create_task_entry', [
+                        'model' => $model,
+                        'allTask' => $allTask,
+                        'chartOfAccountType' => $chartOfAccountType,
+                        'timeCardID' => $TimeCardID
+                    ]);
+                }
+            }
+
+        } catch (ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        }
+    }
+
+    /**Format Task Array
+     * @param $data
+     * @return array
+     */
+    private function FormatTaskData($data){
+        $namePairs = [];
+        if ($data != null) {
+            $codesSize = count($data);
+
+            for ($i = 0; $i < $codesSize; $i++) {
+                $namePairs[$data[$i]['TaskName']] = $data[$i]['TaskName'];
+            }
+        }
+        return $namePairs;
+    }
 }
