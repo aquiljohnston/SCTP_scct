@@ -52,6 +52,11 @@ use yii\widgets\Pjax;
                 'disabled' => true,
                 'id' => 'deactive_timeEntry_btn_id',
             ]) ?>
+            <?= Html::button('Add Task', [
+                'class' => 'btn btn-primary add_task_btn',
+                'disabled' => false,
+                'id' => 'add_task_btn_id',
+            ]) ?>
         <?php  else : ?>
             <?= Html::a('Approve', $approveUrl, [
                 'class' => 'btn btn-primary',
@@ -62,6 +67,11 @@ use yii\widgets\Pjax;
                 'class' => 'btn btn-primary',
                 'disabled' => false,
                 'id' => 'deactive_timeEntry_btn_id',
+            ]) ?>
+            <?= Html::button('Add Task', [
+                'class' => 'btn btn-primary add_task_btn',
+                'disabled' => false,
+                'id' => 'add_task_btn_id',
             ]) ?>
         <?php endif; ?>
 
@@ -90,7 +100,7 @@ use yii\widgets\Pjax;
       <!--modal end-->
   
     </div>
-
+    <?php Pjax::begin(['id' => 'ShowEntriesView', 'timeout' => false]) ?>
     <?= \kartik\grid\GridView::widget([
         'id' => 'allTaskEntries',
         'dataProvider' => $task,
@@ -133,5 +143,15 @@ use yii\widgets\Pjax;
             ]
         ]
     ]);
+    ?>
+    <?php Pjax::end() ?>
+
+    <?php
+    Modal::begin([
+        'header' => '<h4>ADD TASK</h4>',
+        'id' => 'addTaskModal',
+    ]);
+    echo "<div id='modalAddTask'>Loading...</div>";
+    Modal::end();
     ?>
 </div>

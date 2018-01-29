@@ -80,6 +80,7 @@ class LoginController extends BaseController
 					Yii::$app->session->set('UserFirstName', $user['UserFirstName']);
 					Yii::$app->session->set('UserLastName', $user['UserLastName']);
                     Yii::$app->session->set('UserAppRoleType', $user['UserAppRoleType']);
+                    Yii::$app->session->set('UserName', $postData['username']);
 					//call helper method to set additional session values
 					self::getSessionData();
 					
