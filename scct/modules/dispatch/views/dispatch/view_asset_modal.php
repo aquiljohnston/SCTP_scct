@@ -117,8 +117,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center surveyorDropDown'],
                 'value' => function ($model) {
-                    if (strpos($model['LocationType'], 'Gas Main') !== false) {
-                        $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center; width:155px" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . ' multiple>';
+                    if (strpos($model['LocationType'], 'Gas Main') !== false || strpos($model['LocationType'], 'Pipeline') !== false) {
+                        $dropDownListOpenSelect = '<select multiple style="text-align: center;text-align-last: center; width:155px" value=null class="assetPipelineSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '>';
                     }else {
                         $dropDownListOpenSelect = '<select style="text-align: center;text-align-last: center; width:155px" value=null class="assetSurveyorDropDown" WorkOrderID=' . $model['WorkOrderID'] . " MapGrid=" . $model['MapGrid'] . " SectionNumber=" . $model['SectionNumber'] . '><option class="text-center" value=null>Please Select a User</option>';
                     }
