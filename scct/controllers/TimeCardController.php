@@ -605,16 +605,19 @@ class TimeCardController extends BaseController
 
 				$json_data 		= json_encode($data['entries']);
 
-				var_dump($json_data);exit();
+				//var_dump($json_data);exit();
 				
 				// post url
 				$putUrl 		= 'time-entry%2Fdeactivate';
 				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
 				$obj 			= json_decode($putResponse, true);
 
+				//var_dump($obj);exit();
+
+
 				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
 				//fail gracefully if no response time card entry id
-				return $this->redirect(['index', 'id' => $timeCardId]);
+				return $this->redirect(['index']);
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
