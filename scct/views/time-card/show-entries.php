@@ -149,7 +149,7 @@ use yii\widgets\Pjax;
                 'headerOptions' => ['class'=>$SaturdayDateFull],
             ],
                     [
-                        'header'            => 'Approve Entries',
+                        'header'            => 'Deactivate Task',
                         'class'             => 'kartik\grid\CheckboxColumn',
                         'contentOptions'    => [],
                         'checkboxOptions'   => function ($model, $key, $index, $column) {

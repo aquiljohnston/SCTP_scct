@@ -70,7 +70,7 @@ $(function(){
 
 
     $(document).on('click','#deactive_timeEntry_btn_id',function(e){
-             //$('#loading').show();
+             $('#loading').show();
         id = $('#timeCardId').val();
 
        $(".entryData").each(function(k,value){
@@ -97,7 +97,7 @@ $(function(){
             url: '/time-card/deactivate/',
             data: data,
             beforeSend: function(  ) {
-            console.log(id);
+            //console.log(data);
             },
             success: function(data) {
                 $('#loading').hide();
@@ -130,12 +130,12 @@ $(document).on('change','.entryData', function (e) {
 
 function checkDeactivateBtn(){
   if ($("#allTaskEntries-container input:checkbox:checked").length > 0){
-   $('#deactive_timeEntry_btn_id').prop('disabled',false);
+        $('#deactive_timeEntry_btn_id').prop('disabled',false);
   }
   else{
-   $('#deactive_timeEntry_btn_id').prop('disabled',true);
+        $('#deactive_timeEntry_btn_id').prop('disabled',true);
     }
-  }
+}
 
 
     $(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
