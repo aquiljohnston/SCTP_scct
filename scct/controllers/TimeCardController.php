@@ -866,7 +866,7 @@ class TimeCardController extends BaseController
      * @return string
      * @throws \yii\web\HttpException
      */
-    public function actionAddTaskEntry($TimeCardID)
+    public function actionAddTaskEntry($TimeCardID = null)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
