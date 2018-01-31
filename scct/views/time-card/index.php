@@ -57,7 +57,20 @@ $column = [
         }
     ]*/,
     'SumHours',
+   
     [
+        'label' => 'Time Card Oasis Submitted',
+        'attribute' => 'TimeCardOasisSubmitted',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
+    ],
+    [
+        'label' => 'Time Card QB Submitted',
+        'attribute' => 'TimeCardQBSubmitted',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
+    ],
+     [
         'label' => 'Approved',
         'attribute' => 'TimeCardApprovedFlag',
     ],
