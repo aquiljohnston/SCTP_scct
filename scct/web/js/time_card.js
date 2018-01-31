@@ -92,14 +92,18 @@ $(function(){
 
         data = {entries}
 
+         // console.log(data);
+        // return false;
+
         $.ajax({
             type: 'POST',
             url: '/time-card/deactivate/',
             data: data,
             beforeSend: function(  ) {
-            //console.log(data);
+          
             },
             success: function(data) {
+                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
                 $('#loading').hide();
             }
         });
