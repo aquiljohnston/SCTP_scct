@@ -155,11 +155,15 @@ class TimeCardController extends BaseController
                     'TimeCardDates' => [
                         'asc' => ['TimeCardDates' => SORT_ASC],
                         'desc' => ['TimeCardDates' => SORT_DESC]
-                    ]/*,
-                    'TimeCardEndDate' => [
-                        'asc' => ['TimeCardEndDate' => SORT_ASC],
-                        'desc' => ['TimeCardEndDate' => SORT_DESC]
-                    ]*/,
+                    ],
+                    'TimeCardOasisSubmitted' => [
+                        'asc' => ['TimeCardOasisSubmitted' => SORT_ASC],
+                        'desc' => ['TimeCardOasisSubmitted' => SORT_DESC]
+                    ],
+                    'TimeCardQBSubmitted' => [
+                        'asc' => ['TimeCardQBSubmitted' => SORT_ASC],
+                        'desc' => ['TimeCardQBSubmitted' => SORT_DESC]
+                    ],
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
@@ -617,7 +621,7 @@ class TimeCardController extends BaseController
 
 				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
 				//fail gracefully if no response time card entry id
-				return $this->redirect(['index']);
+				//return $this->redirect(['index']);
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
