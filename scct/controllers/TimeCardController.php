@@ -657,7 +657,7 @@ class TimeCardController extends BaseController
 				
 				// post url
 					$putUrl = 'time-card%2Fapprove-cards';
-					$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
+					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 					Yii::trace("PutResponse: ".json_encode($putResponse));
 					return $this->redirect(['index']);
 			} catch (\Exception $e) {
