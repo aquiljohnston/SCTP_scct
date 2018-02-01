@@ -270,7 +270,7 @@ class AssignedController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $inspectionType=null)
     {
         Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
@@ -290,6 +290,8 @@ class AssignedController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
+			$inspectionType             = $inspectionType; 
+			//should this not be hard coded?
             $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
         }else{
@@ -310,6 +312,7 @@ class AssignedController extends \app\controllers\BaseController
                 'filter' => $viewAssetFilterParams,
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
+				'inspectionType'        => $inspectionType,
             ]);
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
         Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
@@ -336,6 +339,7 @@ class AssignedController extends \app\controllers\BaseController
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+				'inspectionType'        => $inspectionType,
             ]);
         } else {
             return $this->render('view_asset_modal', [
@@ -345,6 +349,7 @@ class AssignedController extends \app\controllers\BaseController
                 'searchFilterVal' => $viewAssetFilterParams,
                 'mapGridSelected' => $mapGridSelectedParam,
                 'sectionNumberSelected' => $sectionNumberSelectedParam,
+				'inspectionType'        => $inspectionType,
             ]);
         }
     }
