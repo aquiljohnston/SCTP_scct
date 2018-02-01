@@ -67,7 +67,7 @@ use yii\widgets\Pjax;
             ]) ?>
             <?= Html::button('Deactivate', [
                 'class' => 'btn btn-primary',
-                'disabled' => false,
+                'disabled' => true,
                 'id' => 'deactive_timeEntry_btn_id',
             ]) ?>
             <?= Html::button('Add Task', [
@@ -151,7 +151,7 @@ use yii\widgets\Pjax;
                 'headerOptions' => ['class'=>$SaturdayDateFull],
             ],
                     [
-                        'header'            => 'Approve Entries',
+                        'header'            => 'Deactivate Task',
                         'class'             => 'kartik\grid\CheckboxColumn',
                         'contentOptions'    => [],
                         'checkboxOptions'   => function ($model, $key, $index, $column) {

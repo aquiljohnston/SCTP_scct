@@ -156,11 +156,15 @@ class TimeCardController extends BaseController
                     'TimeCardDates' => [
                         'asc' => ['TimeCardDates' => SORT_ASC],
                         'desc' => ['TimeCardDates' => SORT_DESC]
-                    ]/*,
-                    'TimeCardEndDate' => [
-                        'asc' => ['TimeCardEndDate' => SORT_ASC],
-                        'desc' => ['TimeCardEndDate' => SORT_DESC]
-                    ]*/,
+                    ],
+                    'TimeCardOasisSubmitted' => [
+                        'asc' => ['TimeCardOasisSubmitted' => SORT_ASC],
+                        'desc' => ['TimeCardOasisSubmitted' => SORT_DESC]
+                    ],
+                    'TimeCardQBSubmitted' => [
+                        'asc' => ['TimeCardQBSubmitted' => SORT_ASC],
+                        'desc' => ['TimeCardQBSubmitted' => SORT_DESC]
+                    ],
                     'SumHours' => [
                         'asc' => ['SumHours' => SORT_ASC],
                         'desc' => ['SumHours' => SORT_DESC]
@@ -608,16 +612,19 @@ class TimeCardController extends BaseController
 
 				$json_data 		= json_encode($data['entries']);
 
-				var_dump($json_data);exit();
+				//var_dump($json_data);exit();
 				
 				// post url
 				$putUrl 		= 'time-entry%2Fdeactivate';
 				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
 				$obj 			= json_decode($putResponse, true);
 
+				//var_dump($obj);exit();
+
+
 				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
 				//fail gracefully if no response time card entry id
-				return $this->redirect(['index', 'id' => $timeCardId]);
+				//return $this->redirect(['index']);
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
@@ -657,7 +664,7 @@ class TimeCardController extends BaseController
 				
 				// post url
 					$putUrl = 'time-card%2Fapprove-cards';
-					$putResponse = Parent::executePutRequest($putUrl, $json_data); // indirect rbac
+					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 					Yii::trace("PutResponse: ".json_encode($putResponse));
 					return $this->redirect(['index']);
 			} catch (\Exception $e) {
