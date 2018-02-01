@@ -128,6 +128,7 @@ class TimeCardController extends BaseController
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response = json_decode($response, true);
             $assets = $response['assets'];
+            $approvedTimeCardExist = $response['approvedTimeCardExist'];
 
 
             // passing decode data into dataProvider
@@ -179,7 +180,7 @@ class TimeCardController extends BaseController
 
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
-				return $this->renderAjax('index', [
+				return $this->render('index', [
 					'dataProvider' => $dataProvider,
                     'dateRangeDD' => $dateRangeDD,
                     'dateRangeValue' => $dateRangeValue,
@@ -187,7 +188,8 @@ class TimeCardController extends BaseController
 					'model' => $model,
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
-					'timeCardFilterParams' => $filter
+					'timeCardFilterParams' => $filter,
+                    'approvedTimeCardExist' => $approvedTimeCardExist
 				]);
 			}else{
 				return $this->render('index', [
@@ -198,7 +200,8 @@ class TimeCardController extends BaseController
 					'model' => $model,
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
-					'timeCardFilterParams' => $filter
+					'timeCardFilterParams' => $filter,
+                    'approvedTimeCardExist' => $approvedTimeCardExist
 				]);
 			}
         } catch (UnauthorizedHttpException $e){
