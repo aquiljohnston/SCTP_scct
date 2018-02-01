@@ -1,11 +1,9 @@
 $(function(){
     var jqTimeCardFilter    = $('#timecard_filter');
     var jqTCDropDowns       = $('#timeCardDropdownContainer');
-    var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
-    var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
     entries                 = []; 
 
-    jqWeekSelection.on('change', function (event) {
+    $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
@@ -16,7 +14,7 @@ $(function(){
         }
     });
 
-    jqTCPageSize.on('change', function (event) {
+    $(document).off('change', "#timeCardPageSize").on('change', "#timeCardPageSize", function (event) {
         $('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
         event.preventDefault();
@@ -59,8 +57,11 @@ $(function(){
             timeout: 99999
         });
         $('#timeCardGridview').on('pjax:success', function () {
-            $('#loading').hide();
-            applyOnClickListeners();
+            $.pjax.reload({container: '#timeCardForm', timeout:false});
+            $('#timeCardForm').on('pjax:success', function () {
+                $('#loading').hide();
+                applyOnClickListeners();
+            });
         });
         $('#timeCardGridview').on('pjax:error', function () {
             $('#loading').hide();
