@@ -870,15 +870,25 @@ class TimeCardController extends BaseController
      * Add New Task Entry.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $TimeCardID
+     * @param $SundayDate
+     * @param null $SaturdayDate
      * @return string
-     * @throws \yii\web\HttpException
+     * @internal param $SatudayDate
      */
-    public function actionAddTaskEntry($TimeCardID = null)
+    public function actionAddTaskEntry($TimeCardID = null, $SundayDate = null, $SaturdayDate = null)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
+
+        // convert SundayDate and SaturdayDate to MM/dd/YYYY format
+        $SundayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SundayDate)));
+        $SaturdayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SaturdayDate)));
+
+        Yii::trace("SundayDate: ".$SundayDate);
+        Yii::trace("SaturdayDate: ".$SaturdayDate);
+
         self::requirePermission("timeEntryCreate");
 
         $model = new \yii\base\DynamicModel([
@@ -889,12 +899,12 @@ class TimeCardController extends BaseController
             'EndTime',
             'ChargeOfAccountType'
         ]);
-        $model -> addRule('TimeCardID', 'string', ['max' => 100]);
-        $model -> addRule('TaskName', 'string', ['max' => 100]);
-        $model -> addRule('Date', 'string', ['max' => 32]);
-        $model -> addRule('StartTime', 'string', ['max' => 100]);
-        $model -> addRule('EndTime', 'string', ['max' => 100]);
-        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100]);
+        $model -> addRule('TimeCardID', 'string', ['max' => 100], 'required');
+        $model -> addRule('TaskName', 'string', ['max' => 100], 'required');
+        $model -> addRule('Date', 'string', ['max' => 32], 'required');
+        $model -> addRule('StartTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('EndTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
 
         try {
 
@@ -909,14 +919,14 @@ class TimeCardController extends BaseController
             $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
             $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
 
-            if ($model->load(Yii::$app->request->queryParams)) {
+            if ($model->load(Yii::$app->request->queryParams) && $model->validate()) {
 
                 $task_entry_data = array(
                     'TimeCardID' => $model->TimeCardID,
                     'TaskName' => 'Task ' . $model->TaskName,
                     'Date' => $model->Date,
-                    'StartTime' => $model->StartTime,
-                    'EndTime' => $model->EndTime,
+                    'StartTime' => date("H:i", strtotime($model->StartTime)), // convert to 24 hour format
+                    'EndTime' => date("H:i", strtotime($model->EndTime)), // convert to 24 hour format
                     'CreatedByUserName' => Yii::$app->session['UserName'],
                 );
 
@@ -924,19 +934,17 @@ class TimeCardController extends BaseController
                 if ($model->EndTime >= $model->StartTime) {
 
                     $json_data = json_encode($task_entry_data);
-                    Yii::trace("NEW TASK DATA: ".$json_data);
                     try {
                         // post url
                         $url = 'time-card%2Fcreate-task-entry';
                         $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
-                        Yii::trace("NEW TASK ENTRY RESPONSE: ".$response);
                         $obj = json_decode($response, true);
 
                     } catch (\Exception $e) {
                         return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                     }
                 } else {
-                    return $this->redirect('show-entries', ['id' => $model->TimeCardID]);
+                    return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                 }
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -944,14 +952,18 @@ class TimeCardController extends BaseController
                         'model' => $model,
                         'allTask' => $allTask,
                         'chartOfAccountType' => $chartOfAccountType,
-                        'timeCardID' => $TimeCardID
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
                     ]);
                 } else {
                     return $this->render('create_task_entry', [
                         'model' => $model,
                         'allTask' => $allTask,
                         'chartOfAccountType' => $chartOfAccountType,
-                        'timeCardID' => $TimeCardID
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
                     ]);
                 }
             }

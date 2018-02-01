@@ -141,11 +141,13 @@ function checkDeactivateBtn(){
     $(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
         console.log("ADD TASK CLICKED");
         var timeCardID = $('#timeCardId').val();
+        var SundayDate = $('#SundayDate').val();
+        var SaturdayDate = $('#SaturdayDate').val();
         $('#addTaskModal').modal('show')
             .find('#modalAddTask').html("Loading...");
         $('#addTaskModal').modal('show')
             .find('#modalAddTask')
-            .load('/time-card/add-task-entry?TimeCardID=' + timeCardID );
+            .load('/time-card/add-task-entry?TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate );
     });
 });
 
