@@ -3,6 +3,7 @@ $(function(){
     var jqTCDropDowns       = $('#timeCardDropdownContainer');
     var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
     var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
+    var projectFilterDD     = $('#projectFilterDD');
     entries                 = []; 
             
 
