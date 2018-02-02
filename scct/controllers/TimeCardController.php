@@ -89,19 +89,19 @@ class TimeCardController extends BaseController
                 $dateRangePicker = $model->DateRangePicker;
             } else {
                     $timeCardPageSizeParams = 50;
-                    $filter = "";
-                    $projectName = "";
-                    $dateRangeValue = $priorWeek;
-                    $dateRangePicker = null;
+                    $filter 			= "";
+                    $projectName 		= "";
+                    $dateRangeValue 	= $priorWeek;
+                    $DateRangePicker 	= null;
             }
 
             if ($dateRangeValue == "other") {
                 if ($dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
-                    $dateData = SELF::dateRangeProcessor($dateRangePicker);
-                    $startDate = $dateData[0];
-                    $endDate = $dateData[1];
+                    $dateData 	= SELF::dateRangeProcessor($dateRangePicker);
+                    $startDate 	= $dateData[0];
+                    $endDate 	= $dateData[1];
                 }
             }else{
                 $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
