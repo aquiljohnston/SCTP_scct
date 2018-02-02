@@ -133,7 +133,7 @@ class TimeCardController extends BaseController
             $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 			= json_decode($response, true);
             $assets 			= $response['assets'];
-            $projectDropDown 	= $response['projectDropDown'];
+            //$projectDropDown 	= $response['projectDropDown'];
 
 
             // passing decode data into dataProvider
