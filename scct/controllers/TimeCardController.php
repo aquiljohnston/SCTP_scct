@@ -133,7 +133,8 @@ class TimeCardController extends BaseController
             $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 			= json_decode($response, true);
             $assets 			= $response['assets'];
-            //$projectDropDown 	= $response['projectDropDown'];
+            $projectDropDown 	= $response['projectDropDown'];
+            $showFilter		 	= $response['showFilter'];
 
 
             // passing decode data into dataProvider
@@ -198,7 +199,8 @@ class TimeCardController extends BaseController
 					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
 					'pages' 					=> $pages,
 					'timeCardFilterParams' 		=> $filter,
-					'projectDropDown' 			=> $projectDropDown
+					'projectDropDown' 			=> $projectDropDown,
+					'showFilter' 				=> $showFilter
 				]);
 			}else{
 				return $this->render('index', [
@@ -210,7 +212,8 @@ class TimeCardController extends BaseController
 					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
 					'pages' 					=> $pages,
 					'timeCardFilterParams' 		=> $filter,
-					'projectDropDown' 			=> $projectDropDown
+					'projectDropDown' 			=> $projectDropDown,
+					'showFilter' 				=> $showFilter
 				]);
 			}
         } catch (UnauthorizedHttpException $e){

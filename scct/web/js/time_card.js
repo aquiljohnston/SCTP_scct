@@ -53,6 +53,11 @@ $(function(){
         $('#timeCardFilter').val("");
         reloadTimeCardGridView();
     });
+
+    $('#clearProjectFilterButton').on('click',function (){
+        projectFilterDD.val("");
+        reloadTimeCardGridView();
+    });
     
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
