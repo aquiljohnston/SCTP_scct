@@ -14,9 +14,23 @@
     margin-top: 2%;
 }
 
+
 .white_space {
     margin-top: 3%;
 }
+
+.projectFilterDD {
+    margin-top: -2.2%;
+}
+
+#clearProjectFilterButton  {
+    width: 32px;
+    cursor: pointer;
+    float: right;
+    margin-right: -1%;
+    margin-top: -2.2%;
+}
+
 
 /*#modalContentSunday .wrap #top-wrapper{*/
 /*display: none;*/
