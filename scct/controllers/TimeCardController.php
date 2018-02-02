@@ -352,7 +352,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -422,7 +422,8 @@ class TimeCardController extends BaseController
 											'WednesdayDateFull' =>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
 											'ThursdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
 											'FridayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
-											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7'])))
+											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
+                                            'timeCardProjectID' => $timeCardProjectID
 
 									]);
 		}catch(ErrorException $e){
@@ -882,10 +883,12 @@ class TimeCardController extends BaseController
      * @param $TimeCardID
      * @param $SundayDate
      * @param null $SaturdayDate
+     * @param $timeCardProjectID
      * @return string
+     * @throws \yii\web\HttpException
      * @internal param $SatudayDate
      */
-    public function actionAddTaskEntry($TimeCardID = null, $SundayDate = null, $SaturdayDate = null)
+    public function actionAddTaskEntry($TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
@@ -919,7 +922,7 @@ class TimeCardController extends BaseController
         try {
 
             //get tasks for form dropdown
-            $getAllTaskUrl = "task%2Fget-all-task";
+            $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
             $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
             $allTask = json_decode($getAllTaskResponse, true);
             $allTask = $this->FormatTaskData($allTask['assets']);
@@ -989,11 +992,15 @@ class TimeCardController extends BaseController
      */
     private function FormatTaskData($data){
         $namePairs = [];
+
+        // check which key exist TaskName or FilterName
+        $TaskName = array_key_exists('TaskName', $data[0]) ? 'TaskName' : 'FilterName';
+
         if ($data != null) {
             $codesSize = count($data);
 
             for ($i = 0; $i < $codesSize; $i++) {
-                $namePairs[$data[$i]['TaskName']] = $data[$i]['TaskName'];
+                $namePairs[$data[$i][$TaskName]] = $data[$i][$TaskName];
             }
         }
         return $namePairs;
