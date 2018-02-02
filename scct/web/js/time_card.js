@@ -25,6 +25,14 @@ $(function(){
         return false;
     });
 
+
+
+    projectFilterDD.on('change', function (event) {
+        reloadTimeCardGridView();
+        event.preventDefault();
+        return false;
+    });
+
     $(document).off('click', "#TCPagination ul li a").on('click', "#TCPagination ul li a", function (event) {
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
         $('#timeCardPageNumber').val(page);
