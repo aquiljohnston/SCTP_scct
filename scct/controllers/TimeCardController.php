@@ -58,14 +58,12 @@ class TimeCardController extends BaseController
                 'pagesize',
                 'filter',
                 'dateRangeValue',
-                'DateRangePicker',
-                'projectName'
+                'DateRangePicker'
             ]);
             $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model ->addRule('DateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
-            $model ->addRule('projectName', 'string', ['max' => 200]); //
 
             //get current and prior weeks date range
             $today = BaseController::getDate();
@@ -84,13 +82,11 @@ class TimeCardController extends BaseController
             if ($model->load(Yii::$app->request->queryParams)) {
                 $timeCardPageSizeParams = $model->pagesize;
                 $filter = $model->filter;
-                $projectName = $model->projectName;
                 $dateRangeValue = $model->dateRangeValue;
                 $dateRangePicker = $model->DateRangePicker;
             } else {
                     $timeCardPageSizeParams = 50;
                     $filter = "";
-                    $projectName = "";
                     $dateRangeValue = $priorWeek;
                     $dateRangePicker = null;
             }
@@ -125,19 +121,17 @@ class TimeCardController extends BaseController
             }
 
 			//url encode filter
-			$encodedFilter 		= urlencode($filter);
-			$encodedProjectName = urlencode($projectName);
+			$encodedFilter = urlencode($filter);
 
             //build url with params
-            $url 				= "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page&filter=$encodedFilter&projectName=$encodedProjectName";
-            $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response 			= json_decode($response, true);
-            $assets 			= $response['assets'];
-            $projectDropDown 	= $response['projectDropDown'];
+            $url = "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page&filter=$encodedFilter";
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response = json_decode($response, true);
+            $assets = $response['assets'];
 
 
             // passing decode data into dataProvider
-            $dataProvider 		= new ArrayDataProvider
+            $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $assets,
 				'pagination' => false
@@ -190,27 +184,25 @@ class TimeCardController extends BaseController
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
 				return $this->renderAjax('index', [
-					'dataProvider' 				=> $dataProvider,
-                    'dateRangeDD'				=> $dateRangeDD,
-                    'dateRangeValue' 			=> $dateRangeValue,
-                    'week' 						=> $week,
-					'model' 					=> $model,
-					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
-					'pages' 					=> $pages,
-					'timeCardFilterParams' 		=> $filter,
-					'projectDropDown' 			=> $projectDropDown
+					'dataProvider' => $dataProvider,
+                    'dateRangeDD' => $dateRangeDD,
+                    'dateRangeValue' => $dateRangeValue,
+                    'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
 				]);
 			}else{
 				return $this->render('index', [
-					'dataProvider' 				=> $dataProvider,
-                    'dateRangeDD' 				=> $dateRangeDD,
-                    'dateRangeValue' 			=> $dateRangeValue,
-                    'week' 						=> $week,
-					'model' 					=> $model,
-					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
-					'pages' 					=> $pages,
-					'timeCardFilterParams' 		=> $filter,
-					'projectDropDown' 			=> $projectDropDown
+					'dataProvider' => $dataProvider,
+                    'dateRangeDD' => $dateRangeDD,
+                    'dateRangeValue' => $dateRangeValue,
+                    'week' => $week,
+					'model' => $model,
+					'timeCardPageSizeParams' => $timeCardPageSizeParams,
+					'pages' => $pages,
+					'timeCardFilterParams' => $filter
 				]);
 			}
         } catch (UnauthorizedHttpException $e){
