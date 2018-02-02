@@ -60,13 +60,13 @@ $column = [
     'SumHours',
    
     [
-        'label' => 'Time Card Oasis Submitted',
+        'label' => 'Oasis Submitted',
         'attribute' => 'TimeCardOasisSubmitted',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
-        'label' => 'Time Card QB Submitted',
+        'label' => 'QB Submitted',
         'attribute' => 'TimeCardQBSubmitted',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
@@ -139,6 +139,7 @@ $column = [
                         'id' => 'TimeCardForm',
                     ],
                 ]); ?>
+
                 <div class="row">
                     <div style="float: right;margin-top: -2%;width: 21%;">
                         <?= $form->field($model, 'pagesize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
@@ -176,7 +177,13 @@ $column = [
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
+                </div> <!--show filter-->
+                <?php if($showFilter) : ?>
+                  <div class="col-md-2 projectFilterDD">
+                    <?= $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown, ['value' =>'project','id' => 'projectFilterDD'])->label("Project"); ?>
                 </div>
+                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
+            <?php endif; ?>
                 <div id="datePickerContainer" style="float: left; width: auto; display: none;">
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
