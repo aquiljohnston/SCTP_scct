@@ -50,7 +50,7 @@ $(function(){
         reloadTimeCardGridView();
     });
 
-    
+    //filter
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
         if (form.find(".has-error").length){
