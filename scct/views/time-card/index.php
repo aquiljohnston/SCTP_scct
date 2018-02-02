@@ -153,7 +153,8 @@ $column = [
                             echo Html::button('Submit',
                                 [
                                     'class' => 'btn btn-primary multiple_submit_btn',
-                                    'id' => $approvedTimeCardExist ? 'multiple_submit_btn_id' : 'multiple_submit_btn_id_hidden'
+                                    'id' => $approvedTimeCardExist ? 'multiple_submit_btn_id' : 'multiple_submit_btn_id_hidden',
+                                    'disabled' => $submitReady ? false : 'disabled'
                                 ]);
                             echo Html::button('Approve',
                                 [

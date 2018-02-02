@@ -130,6 +130,16 @@ class TimeCardController extends BaseController
             $assets = $response['assets'];
             $approvedTimeCardExist = $response['approvedTimeCardExist'];
 
+            $timeCardIDs = $this->GetAllTimeCardIDs($assets);
+            $post_data['TimeCardID'] = $timeCardIDs;
+            $json_data = json_encode($post_data);
+
+            $submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
+            $submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
+            $submit_button_ready = json_decode($submit_button_ready_response, true);
+
+            // get submit button status
+            $submitReady = $submit_button_ready[0]['SubmitReady'] == "1" ? true : false;
 
             // passing decode data into dataProvider
             $dataProvider = new ArrayDataProvider
@@ -193,7 +203,8 @@ class TimeCardController extends BaseController
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
 					'timeCardFilterParams' => $filter,
-                    'approvedTimeCardExist' => $approvedTimeCardExist
+                    'approvedTimeCardExist' => $approvedTimeCardExist,
+                    'submitReady'      => $submitReady
 				]);
 			}else{
 				return $this->render('index', [
@@ -205,7 +216,8 @@ class TimeCardController extends BaseController
 					'timeCardPageSizeParams' => $timeCardPageSizeParams,
 					'pages' => $pages,
 					'timeCardFilterParams' => $filter,
-                    'approvedTimeCardExist' => $approvedTimeCardExist
+                    'approvedTimeCardExist' => $approvedTimeCardExist,
+                    'submitReady'      => $submitReady
 				]);
 			}
         } catch (UnauthorizedHttpException $e){
@@ -373,14 +385,15 @@ class TimeCardController extends BaseController
 		try{
 
 			//build api url paths
-			$time_card_url	= 'time-card%2Fview&id='.$id;
-			$entries_url 	= 'time-card%2Fshow-entries&cardID='.$id;
+			$time_card_url	         = 'time-card%2Fview&id='.$id;
+			$entries_url 	         = 'time-card%2Fshow-entries&cardID='.$id;
 
 			//execute API request
-			$resp 			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
-			$time_response 	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$card 			= json_decode($time_response, true);
-			$entries 		= json_decode($resp, true);
+			$resp 			               = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response 	               = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+
+			$card 		         = json_decode($time_response, true);
+			$entries 		     = json_decode($resp, true);
 
 			//alter from and to dates a bit
 			$from   		=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
@@ -1004,5 +1017,18 @@ class TimeCardController extends BaseController
             }
         }
         return $namePairs;
+    }
+
+    /**
+     * Collect all time card ids
+     * @param $assets
+     * @return array $timeCardIDs
+     */
+    private function GetAllTimeCardIDs($assets){
+        $timeCardIDs = [];
+        foreach ($assets as $item){
+            $timeCardIDs[] = $item['TimeCardID'];
+        }
+        return $timeCardIDs;
     }
 }
