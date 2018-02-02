@@ -4,6 +4,7 @@ $(function(){
     var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
     var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
     entries                 = []; 
+            
 
     jqWeekSelection.on('change', function (event) {
         event.preventDefault();
