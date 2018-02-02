@@ -81,7 +81,8 @@ $column = [
             if ($action === 'view') {
                 $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName']
                 .'&fName='.$model['UserFirstName']
-                .'&lName='.$model['UserLastName'];
+                .'&lName='.$model['UserLastName']
+                .'&timeCardProjectID='.$model['TimeCardProjectID'];
                 return $url;
             }
         },
