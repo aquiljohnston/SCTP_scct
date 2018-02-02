@@ -58,6 +58,7 @@ $(function(){
         projectFilterDD.val("");
         reloadTimeCardGridView();
     });
+
     
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
