@@ -177,7 +177,7 @@ $column = [
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
-                </div>
+                </div> <!--show filter-->
                 <?php if($showFilter) : ?>
                   <div class="col-md-2 projectFilterDD">
                     <?= $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown, ['value' =>'project','id' => 'projectFilterDD'])->label("Project"); ?>
