@@ -1,7 +1,11 @@
 $(function(){
     var jqTimeCardFilter    = $('#timecard_filter');
     var jqTCDropDowns       = $('#timeCardDropdownContainer');
+    var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
+    var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
+    var projectFilterDD     = $('#projectFilterDD');
     entries                 = []; 
+            
 
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
@@ -16,6 +20,14 @@ $(function(){
 
     $(document).off('change', "#timeCardPageSize").on('change', "#timeCardPageSize", function (event) {
         $('#timeCardPageNumber').val(1);
+        reloadTimeCardGridView();
+        event.preventDefault();
+        return false;
+    });
+
+
+
+    projectFilterDD.on('change', function (event) {
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
@@ -42,7 +54,13 @@ $(function(){
         $('#timeCardFilter').val("");
         reloadTimeCardGridView();
     });
-    
+
+    $('#clearProjectFilterButton').on('click',function (){
+        projectFilterDD.val("");
+        reloadTimeCardGridView();
+    });
+
+    //filter
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
         if (form.find(".has-error").length){
