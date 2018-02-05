@@ -891,7 +891,7 @@ class TimeCardController extends BaseController
      * @return string
      * @throws \yii\web\HttpException
      */
-    public function actionAddTaskEntry($TimeCardID = null)
+    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
@@ -937,6 +937,26 @@ class TimeCardController extends BaseController
                     'EndTime' => $model->EndTime,
                     'CreatedByUserName' => Yii::$app->session['UserName'],
                 );
+
+
+                //date must be on or between week start and week end dates
+
+                $start = str_replace('-','/',$weekStart);
+                $end = str_replace('-','/',$weekEnd);
+
+                $testDate = date( "Y-m-d", strtotime(str_replace('-', '/',$model->Date)));
+
+                //echo strtotime($weekStart)."--";
+                //echo strtotime($weekEnd)."--";
+               // echo strtotime($testDate)."__";
+                //exit();
+
+
+                 // make sure date within range
+                if (strtotime($testDate) < strtotime($weekStart) || strtotime($testDate) > strtotime($weekEnd)) {
+						 throw new \yii\web\HttpException(400);
+
+                }
 
                 // check difference between startTime and endTime
                 if ($model->EndTime >= $model->StartTime) {

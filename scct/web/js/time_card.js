@@ -159,19 +159,50 @@ function checkDeactivateBtn(){
 
 
     $(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
+
+        weekStart   = $("table th").eq(1).attr('class');
+        weekEnd     = $("table th").eq(7).attr('class');
+
         console.log("ADD TASK CLICKED");
         var timeCardID = $('#timeCardId').val();
         $('#addTaskModal').modal('show')
             .find('#modalAddTask').html("Loading...");
         $('#addTaskModal').modal('show')
             .find('#modalAddTask')
-            .load('/time-card/add-task-entry?TimeCardID=' + timeCardID );
+            .load('/time-card/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID );
     });
 });
 
 function TaskEntryCreation() {
-    var form = $('#TaskEntryForm');
+        var form        = $('#TaskEntryForm');
+
+        weekStartTest   = new Date($("table th").eq(1).attr('class').replace(/-/g, '\/'));
+        weekStart       = $("table th").eq(1).attr('class');
+        weekEndTest     = new Date($("table th").eq(7).attr('class').replace(/-/g, '\/'));
+        weekEnd         = $("table th").eq(7).attr('class');
+
+        date            = new Date ($('#dynamicmodel-date').val());
+
+    
+
+    if(date < weekStartTest  ||  date > weekEndTest){
+
+          var timeCardID = $('#timeCardId').val();
+        $('#addTaskModal').modal('show')
+            .find('#modalAddTask').html("Loading...");
+        $('#addTaskModal').modal('show')
+            .find('#modalAddTask')
+            .load('/time-card/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID );
+
+            $('span[id^="errorSpot"]').remove();
+            $('#TaskEntryForm, .modal-header').prepend('<span id="errorSpot" class="bg-warning">Date is not within week range!</span>');
+
+        return false;
+
+    }
+
     $('#loading').show();
+
     $.ajax({
         type: 'GET',
         url: form.attr("action"),
