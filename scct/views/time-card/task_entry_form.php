@@ -89,6 +89,8 @@ use yii\helpers\Url;
         </div>
         <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $timeCardID]); ?>
     </div>
+    <input type="hidden" name="weekStart" value=<?=Yii::$app->getRequest()->getQueryParam('weekStart') ?> />
+    <input type="hidden" name="weekEnd" value=<?=Yii::$app->getRequest()->getQueryParam('weekEnd') ?> />
     <br>
     <br>
     <div class="form-group">
