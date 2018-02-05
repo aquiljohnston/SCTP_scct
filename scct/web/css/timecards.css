@@ -167,6 +167,11 @@ div[id^=modalContent] #loading {
 	/*padding-left: 31%;
 	padding-right: 31%;*/
 }
+#multiple_approve_btn_id_only {
+	margin-left: 21%;
+	padding-left: 25%;
+	padding-right: 24%;
+}
 .TimeCardSearch {
 	float: right;
 	margin-right: 22%;
@@ -181,6 +186,14 @@ div[id^=modalContent] #loading {
 	padding-left: 11%;
 	padding-right: 11%;
 	margin-right: 9%;
+	display: block;
+}
+#multiple_submit_btn_id_hidden{
+	float: left;
+	padding-left: 11%;
+	padding-right: 11%;
+	margin-right: 9%;
+	display: none;
 }
 #datePickerContainer{
 	margin-top: -5.2%;
@@ -221,6 +234,11 @@ and (min-resolution:.001dpcm) {
 	#multiple_approve_btn_id {
 		padding-left: 9%;
 		padding-right: 9%;
+	}
+	#multiple_approve_btn_id_only {
+		padding-left: 20%;
+		margin-left: 29%;
+		padding-right: 21%;
 	}
 	#multiple_time_card_approve_btn{
 		width: 14%;

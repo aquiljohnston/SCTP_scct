@@ -18,6 +18,9 @@ use yii\widgets\Pjax;
 
 <div class="time-card-entries">
 
+    <input id="SundayDate" type="hidden" name="SundayDate" value=<?php echo $SundayDateFull; ?>>
+    <input id="SaturdayDate" type="hidden" name="SaturdayDate" value=<?php echo $SaturdayDateFull; ?>>
+    <input id="TimeCardProjectID" type="hidden" name="TimeCardProjectID" value=<?php echo $timeCardProjectID; ?>>
     <?php
     $this->title = $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName;
     $this->params['breadcrumbs'][] = $this->title;
@@ -166,6 +169,7 @@ use yii\widgets\Pjax;
     Modal::begin([
         'header' => '<h4>ADD TASK</h4>',
         'id' => 'addTaskModal',
+        'size' => 'modal-lg',
     ]);
     echo "<div id='modalAddTask'>Loading...</div>";
     Modal::end();

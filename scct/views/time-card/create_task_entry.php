@@ -18,7 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'allTask' => $allTask,
         'chartOfAccountType' => $chartOfAccountType,
-        'timeCardID' => $timeCardID
+        'timeCardID' => $timeCardID,
+        'SundayDate' => $SundayDate,
+        'SaturdayDate' => $SaturdayDate
     ]) ?>
 
 </div>

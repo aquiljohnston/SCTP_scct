@@ -27,31 +27,6 @@ use yii\helpers\Url;
     ]); ?>
     <div class="form-group kv-fieldset-inline" id="time_entry_form">
         <div class="row">
-            <?= Html::activeLabel($model, 'StartTime', [
-                'label' => 'Start Time',
-                'class' => 'col-sm-2 control-label'
-            ]) ?>
-            <div class="col-sm-4">
-                <?= $form->field($model, 'StartTime', [
-                    'showLabels' => false
-                ])->widget(TimePicker::classname(), [
-                    'pluginOptions' => ['placeholder' => 'Enter time...', 'showMeridian' => false,]
-                ]); ?>
-            </div>
-
-            <?= Html::activeLabel($model, 'EndTime', [
-                'label' => 'End Time',
-                'class' => 'col-sm-2 control-label'
-            ]) ?>
-            <div class="col-sm-4">
-                <?= $form->field($model, 'EndTime', [
-                    'showLabels' => false
-                ])->widget(TimePicker::classname(), [
-                    'pluginOptions' => ['placeholder' => 'Enter time...', 'showMeridian' => false,]
-                ]); ?>
-            </div>
-        </div>
-        <div class="row">
             <?= Html::activeLabel($model, 'Date', [
                 'label' => 'Date',
                 'class' => 'col-sm-2 control-label'
@@ -60,8 +35,25 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'Date', [
                     'showLabels' => false
                 ])->widget(\kartik\widgets\DatePicker::classname(), [
-                    'options' => ['placeholder' => 'Enter Date...'],
+                    'pluginOptions' => [
+                        'placeholder' => 'Enter Date...',
+                        'startDate' => $SundayDate,
+                        'endDate' => $SaturdayDate,
+                        'autoclose'=>true],
                     'type' => \kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
+                    'pluginEvents' => [
+                        "changeDate" => 'function(e) {  
+                            var Date = $("#dynamicmodel-date").val();
+                            var StartTime = $("#dynamicmodel-starttime").val();
+                            var EndTime = $("#dynamicmodel-endtime").val();
+                            var TaskName = $("#dynamicmodel-taskname").val();
+                            var ChangeOfAccountType = $("#dynamicmodel-chargeofaccounttype").val();
+                           
+                            if (Date.length != 0 && StartTime.length != 0 && EndTime.length != 0 && TaskName.length != 0 && ChangeOfAccountType.length != 0){
+                                $("#create_task_entry_submit_btn").prop("disabled", false);
+                            }
+                         }'
+                    ]
                 ]); ?>
             </div>
 
@@ -73,6 +65,31 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'TaskName', [
                     'showLabels' => false
                 ])->dropDownList($allTask); ?>
+            </div>
+        </div>
+        <div class="row">
+            <?= Html::activeLabel($model, 'StartTime', [
+                'label' => 'Start Time',
+                'class' => 'col-sm-2 control-label'
+            ]) ?>
+            <div class="col-sm-4">
+                <?= $form->field($model, 'StartTime', [
+                    'showLabels' => false
+                ])->widget(\kartik\widgets\TimePicker::classname(), [
+                    'id' => 'StartTimePicker',
+                    'pluginOptions' => ['placeholder' => 'Enter time...',]
+                ]); ?>
+            </div>
+            <?= Html::activeLabel($model, 'EndTime', [
+                'label' => 'End Time',
+                'class' => 'col-sm-2 control-label'
+            ]) ?>
+            <div class="col-sm-4">
+                <?= $form->field($model, 'EndTime', [
+                    'showLabels' => false
+                ])->widget(\kartik\widgets\TimePicker::classname(), [
+                    'pluginOptions' => ['placeholder' => 'Enter time...',]
+                ]); ?>
             </div>
         </div>
 
@@ -94,17 +111,46 @@ use yii\helpers\Url;
     <br>
     <br>
     <div class="form-group">
-        <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'create_task_entry_submit_btn']) ?>
+        <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'create_task_entry_submit_btn', 'disabled' => 'disabled']) ?>
     </div>
     <?php ActiveForm::end(); ?>
     <?php Pjax::end() ?>
 
     <script>
-        $('#create_task_entry_submit_btn').click(function (event) {
-            TaskEntryCreation();
-            $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
-            event.preventDefault();
-            return false;
+        console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
+        var Date = $('#dynamicmodel-date').val();
+        var StartTime = $('#dynamicmodel-starttime').val();
+        var EndTime = $('#dynamicmodel-endtime').val();
+        var TaskName = $('#dynamicmodel-taskname').val();
+        var ChangeOfAccountType = $('#dynamicmodel-chargeofaccounttype').val();
+
+        $(document).off('click', '#dynamicmodel-taskname').on('click', '#dynamicmodel-taskname', function (){
+            if (InputFieldValidator)
+                $('#create_task_entry_submit_btn').prop('disabled', false);
         });
+        $(document).off('click', '#dynamicmodel-chargeofaccounttype').on('click', '#dynamicmodel-chargeofaccounttype', function (){
+            if (InputFieldValidator)
+                $('#create_task_entry_submit_btn').prop('disabled', false);
+        });
+
+        $('#create_task_entry_submit_btn').click(function (event) {
+            console.log("SUBMIT CLICKED !");
+            console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
+            if (InputFieldValidator) {
+                TaskEntryCreation();
+                $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
+                event.preventDefault();
+                return false;
+            } else {
+                $('#create_task_entry_submit_btn').prop('disabled', true);
+            }
+        });
+
+        function InputFieldValidator() {
+            if (Date != null && Date.length != 0 && StartTime != null && EndTime != null && TaskName != null && ChangeOfAccountType != null)
+                return true;
+            else
+                return false;
+        }
     </script>
 </div>
