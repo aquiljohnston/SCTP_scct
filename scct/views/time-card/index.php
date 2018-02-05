@@ -82,7 +82,8 @@ $column = [
             if ($action === 'view') {
                 $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName']
                 .'&fName='.$model['UserFirstName']
-                .'&lName='.$model['UserLastName'];
+                .'&lName='.$model['UserLastName']
+                .'&timeCardProjectID='.$model['TimeCardProjectID'];
                 return $url;
             }
         },
@@ -151,16 +152,17 @@ $column = [
                 <div class="row">
                     <div id="multiple_time_card_approve_btn">
                         <?php
-                        echo Html::button('Submit',
-                            [
-                                'class' => 'btn btn-primary multiple_submit_btn',
-                                'id' => 'multiple_submit_btn_id',
-                            ]);
-                        echo Html::button('Approve',
-                            [
-                                'class' => 'btn btn-primary multiple_approve_btn',
-                                'id' => 'multiple_approve_btn_id',
-                            ]);
+                            echo Html::button('Submit',
+                                [
+                                    'class' => 'btn btn-primary multiple_submit_btn',
+                                    'id' => $approvedTimeCardExist ? 'multiple_submit_btn_id' : 'multiple_submit_btn_id_hidden',
+                                    'disabled' => $submitReady ? false : 'disabled'
+                                ]);
+                            echo Html::button('Approve',
+                                [
+                                    'class' => 'btn btn-primary multiple_approve_btn',
+                                    'id' => $approvedTimeCardExist ? 'multiple_approve_btn_id' : 'multiple_approve_btn_id_only'
+                                ]);
                         ?>
                         <?php
                         if ($pages->totalCount > 0) {
@@ -254,14 +256,4 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
-
-<!--    --><?php
-/*
-    Modal::begin([
-        'header' => '<h4>ADD TASK</h4>',
-        'id' => 'addTaskModal',
-    ]);
-    echo "<div id='modalAddTask'>Loading...</div>";
-    Modal::end();
-    */?>
 </div>

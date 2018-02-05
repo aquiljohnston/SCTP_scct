@@ -135,7 +135,18 @@ class TimeCardController extends BaseController
             $assets 			= $response['assets'];
             $projectDropDown 	= $response['projectDropDown'];
             $showFilter		 	= $response['showFilter'];
+            $approvedTimeCardExist = $response['approvedTimeCardExist'];
 
+            $timeCardIDs = $this->GetAllTimeCardIDs($assets);
+            $post_data['TimeCardID'] = $timeCardIDs;
+            $json_data = json_encode($post_data);
+
+            $submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
+            $submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
+            $submit_button_ready = json_decode($submit_button_ready_response, true);
+
+            // get submit button status
+            $submitReady = $submit_button_ready[0]['SubmitReady'] == "1" ? true : false;
 
             // passing decode data into dataProvider
             $dataProvider 		= new ArrayDataProvider
@@ -200,7 +211,9 @@ class TimeCardController extends BaseController
 					'pages' 					=> $pages,
 					'timeCardFilterParams' 		=> $filter,
 					'projectDropDown' 			=> $projectDropDown,
-					'showFilter' 				=> $showFilter
+					'showFilter' 				=> $showFilter,
+					'approvedTimeCardExist'     => $approvedTimeCardExist,
+                    'submitReady'               => $submitReady
 				]);
 			}else{
 				return $this->render('index', [
@@ -213,7 +226,9 @@ class TimeCardController extends BaseController
 					'pages' 					=> $pages,
 					'timeCardFilterParams' 		=> $filter,
 					'projectDropDown' 			=> $projectDropDown,
-					'showFilter' 				=> $showFilter
+					'showFilter' 				=> $showFilter,
+					'approvedTimeCardExist'     => $approvedTimeCardExist,
+                    'submitReady'               => $submitReady
 				]);
 			}
         } catch (UnauthorizedHttpException $e){
@@ -360,7 +375,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -381,14 +396,15 @@ class TimeCardController extends BaseController
 		try{
 
 			//build api url paths
-			$time_card_url	= 'time-card%2Fview&id='.$id;
-			$entries_url 	= 'time-card%2Fshow-entries&cardID='.$id;
+			$time_card_url	         = 'time-card%2Fview&id='.$id;
+			$entries_url 	         = 'time-card%2Fshow-entries&cardID='.$id;
 
 			//execute API request
-			$resp 			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
-			$time_response 	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$card 			= json_decode($time_response, true);
-			$entries 		= json_decode($resp, true);
+			$resp 			               = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response 	               = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+
+			$card 		         = json_decode($time_response, true);
+			$entries 		     = json_decode($resp, true);
 
 			//alter from and to dates a bit
 			$from   		=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
@@ -430,7 +446,8 @@ class TimeCardController extends BaseController
 											'WednesdayDateFull' =>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
 											'ThursdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
 											'FridayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
-											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7'])))
+											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
+                                            'timeCardProjectID' => $timeCardProjectID
 
 									]);
 		}catch(ErrorException $e){
@@ -888,15 +905,31 @@ class TimeCardController extends BaseController
      * Add New Task Entry.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $TimeCardID
+     * @param $SundayDate
+     * @param null $SaturdayDate
+     * @param $timeCardProjectID
      * @return string
      * @throws \yii\web\HttpException
+     * @internal param $SatudayDate
      */
+<<<<<<< HEAD
     public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null)
+=======
+    public function actionAddTaskEntry($TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
+>>>>>>> dev
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
+
+        // convert SundayDate and SaturdayDate to MM/dd/YYYY format
+        $SundayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SundayDate)));
+        $SaturdayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SaturdayDate)));
+
+        Yii::trace("SundayDate: ".$SundayDate);
+        Yii::trace("SaturdayDate: ".$SaturdayDate);
+
         self::requirePermission("timeEntryCreate");
 
         $model = new \yii\base\DynamicModel([
@@ -907,17 +940,17 @@ class TimeCardController extends BaseController
             'EndTime',
             'ChargeOfAccountType'
         ]);
-        $model -> addRule('TimeCardID', 'string', ['max' => 100]);
-        $model -> addRule('TaskName', 'string', ['max' => 100]);
-        $model -> addRule('Date', 'string', ['max' => 32]);
-        $model -> addRule('StartTime', 'string', ['max' => 100]);
-        $model -> addRule('EndTime', 'string', ['max' => 100]);
-        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100]);
+        $model -> addRule('TimeCardID', 'string', ['max' => 100], 'required');
+        $model -> addRule('TaskName', 'string', ['max' => 100], 'required');
+        $model -> addRule('Date', 'string', ['max' => 32], 'required');
+        $model -> addRule('StartTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('EndTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
 
         try {
 
             //get tasks for form dropdown
-            $getAllTaskUrl = "task%2Fget-all-task";
+            $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
             $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
             $allTask = json_decode($getAllTaskResponse, true);
             $allTask = $this->FormatTaskData($allTask['assets']);
@@ -927,14 +960,14 @@ class TimeCardController extends BaseController
             $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
             $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
 
-            if ($model->load(Yii::$app->request->queryParams)) {
+            if ($model->load(Yii::$app->request->queryParams) && $model->validate()) {
 
                 $task_entry_data = array(
                     'TimeCardID' => $model->TimeCardID,
                     'TaskName' => 'Task ' . $model->TaskName,
                     'Date' => $model->Date,
-                    'StartTime' => $model->StartTime,
-                    'EndTime' => $model->EndTime,
+                    'StartTime' => date("H:i", strtotime($model->StartTime)), // convert to 24 hour format
+                    'EndTime' => date("H:i", strtotime($model->EndTime)), // convert to 24 hour format
                     'CreatedByUserName' => Yii::$app->session['UserName'],
                 );
 
@@ -962,19 +995,17 @@ class TimeCardController extends BaseController
                 if ($model->EndTime >= $model->StartTime) {
 
                     $json_data = json_encode($task_entry_data);
-                    Yii::trace("NEW TASK DATA: ".$json_data);
                     try {
                         // post url
                         $url = 'time-card%2Fcreate-task-entry';
                         $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
-                        Yii::trace("NEW TASK ENTRY RESPONSE: ".$response);
                         $obj = json_decode($response, true);
 
                     } catch (\Exception $e) {
                         return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                     }
                 } else {
-                    return $this->redirect('show-entries', ['id' => $model->TimeCardID]);
+                    return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                 }
             } else {
                 if (Yii::$app->request->isAjax) {
@@ -982,14 +1013,18 @@ class TimeCardController extends BaseController
                         'model' => $model,
                         'allTask' => $allTask,
                         'chartOfAccountType' => $chartOfAccountType,
-                        'timeCardID' => $TimeCardID
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
                     ]);
                 } else {
                     return $this->render('create_task_entry', [
                         'model' => $model,
                         'allTask' => $allTask,
                         'chartOfAccountType' => $chartOfAccountType,
-                        'timeCardID' => $TimeCardID
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
                     ]);
                 }
             }
@@ -1005,13 +1040,30 @@ class TimeCardController extends BaseController
      */
     private function FormatTaskData($data){
         $namePairs = [];
+
+        // check which key exist TaskName or FilterName
+        $TaskName = array_key_exists('TaskName', $data[0]) ? 'TaskName' : 'FilterName';
+
         if ($data != null) {
             $codesSize = count($data);
 
             for ($i = 0; $i < $codesSize; $i++) {
-                $namePairs[$data[$i]['TaskName']] = $data[$i]['TaskName'];
+                $namePairs[$data[$i][$TaskName]] = $data[$i][$TaskName];
             }
         }
         return $namePairs;
+    }
+
+    /**
+     * Collect all time card ids
+     * @param $assets
+     * @return array $timeCardIDs
+     */
+    private function GetAllTimeCardIDs($assets){
+        $timeCardIDs = [];
+        foreach ($assets as $item){
+            $timeCardIDs[] = $item['TimeCardID'];
+        }
+        return $timeCardIDs;
     }
 }

@@ -7,7 +7,7 @@ $(function(){
     entries                 = []; 
             
 
-    jqWeekSelection.on('change', function (event) {
+    $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
@@ -18,7 +18,7 @@ $(function(){
         }
     });
 
-    jqTCPageSize.on('change', function (event) {
+    $(document).off('change', "#timeCardPageSize").on('change', "#timeCardPageSize", function (event) {
         $('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
         event.preventDefault();
@@ -75,8 +75,11 @@ $(function(){
             timeout: 99999
         });
         $('#timeCardGridview').on('pjax:success', function () {
-            $('#loading').hide();
-            applyOnClickListeners();
+            $.pjax.reload({container: '#timeCardForm', timeout:false});
+            $('#timeCardForm').on('pjax:success', function () {
+                $('#loading').hide();
+                applyOnClickListeners();
+            });
         });
         $('#timeCardGridview').on('pjax:error', function () {
             $('#loading').hide();
@@ -165,11 +168,15 @@ function checkDeactivateBtn(){
 
         console.log("ADD TASK CLICKED");
         var timeCardID = $('#timeCardId').val();
+        var SundayDate = $('#SundayDate').val();
+        var SaturdayDate = $('#SaturdayDate').val();
+        var timeCardProjectID = $('#TimeCardProjectID').val();
         $('#addTaskModal').modal('show')
             .find('#modalAddTask').html("Loading...");
         $('#addTaskModal').modal('show')
             .find('#modalAddTask')
-            .load('/time-card/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID );
+
+            .load('/time-card/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID);
     });
 });
 
