@@ -912,11 +912,9 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @internal param $SatudayDate
      */
-<<<<<<< HEAD
-    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null)
-=======
-    public function actionAddTaskEntry($TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
->>>>>>> dev
+
+    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
+
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
