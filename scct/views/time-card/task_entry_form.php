@@ -125,11 +125,11 @@ use yii\helpers\Url;
         $(document).off('click', '#dynamicmodel-taskname').on('click', '#dynamicmodel-taskname', function (){
             if (InputFieldValidator)
                 $('#create_task_entry_submit_btn').prop('disabled', false);
-        };
+        });
         $(document).off('click', '#dynamicmodel-chargeofaccounttype').on('click', '#dynamicmodel-chargeofaccounttype', function (){
             if (InputFieldValidator)
                 $('#create_task_entry_submit_btn').prop('disabled', false);
-        };
+        });
 
         $('#create_task_entry_submit_btn').click(function (event) {
             console.log("SUBMIT CLICKED !");
