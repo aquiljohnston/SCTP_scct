@@ -53,8 +53,8 @@ class HomeController extends BaseController
             $this->mileageCardInfo = [];
 
             try {
-                if ($dataProvider["notification"] != null) {
-                    $this->notificationInfo = $dataProvider["notification"];
+                if ($dataProvider["notifications"] != null) {
+                    $this->notificationInfo = $dataProvider["notifications"];
                 }
                 if ($dataProvider["timeCards"] != null) {
                     $this->timeCardInfo = $dataProvider["timeCards"];
