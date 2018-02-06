@@ -163,8 +163,8 @@ function checkDeactivateBtn(){
 
     $(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
 
-        weekStart   = $("table th").eq(1).attr('class');
-        weekEnd     = $("table th").eq(7).attr('class');
+        var weekStart   = $("table th").eq(1).attr('class');
+        var weekEnd     = $("table th").eq(7).attr('class');
 
         console.log("ADD TASK CLICKED");
         var timeCardID = $('#timeCardId').val();
@@ -181,14 +181,12 @@ function checkDeactivateBtn(){
 });
 
 function TaskEntryCreation() {
-        var form        = $('#TaskEntryForm');
-
-        weekStartTest   = new Date($("table th").eq(1).attr('class').replace(/-/g, '\/'));
-        weekStart       = $("table th").eq(1).attr('class');
-        weekEndTest     = new Date($("table th").eq(7).attr('class').replace(/-/g, '\/'));
-        weekEnd         = $("table th").eq(7).attr('class');
-
-        date            = new Date ($('#dynamicmodel-date').val());
+        var form            = $('#TaskEntryForm');
+        var weekStartTest   = new Date($("table th").eq(1).attr('class').replace(/-/g, '\/'));
+        var weekStart       = $("table th").eq(1).attr('class');
+        var weekEndTest     = new Date($("table th").eq(7).attr('class').replace(/-/g, '\/'));
+        var weekEnd         = $("table th").eq(7).attr('class');
+        var date            = new Date ($('#dynamicmodel-date').val());
 
     
 

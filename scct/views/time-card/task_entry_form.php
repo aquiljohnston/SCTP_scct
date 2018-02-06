@@ -118,7 +118,7 @@ use yii\helpers\Url;
 
     <script>
         console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
-        var Date = $('#dynamicmodel-date').val();
+        var date = $('#dynamicmodel-date').val();
         var StartTime = $('#dynamicmodel-starttime').val();
         var EndTime = $('#dynamicmodel-endtime').val();
         var TaskName = $('#dynamicmodel-taskname').val();
@@ -147,7 +147,7 @@ use yii\helpers\Url;
         });
 
         function InputFieldValidator() {
-            if (Date != null && Date.length != 0 && StartTime != null && EndTime != null && TaskName != null && ChangeOfAccountType != null)
+            if (date != null && date.length != 0 && StartTime != null && EndTime != null && TaskName != null && ChangeOfAccountType != null)
                 return true;
             else
                 return false;
