@@ -82,7 +82,7 @@ $(function(){
             $('#timeCardForm').on('pjax:success', function () {
                   
                 //$('#loading').hide();
-                //applyOnClickListeners();
+                applyOnClickListeners();
                 if(!clear){
                      //$('#projectFilterDD').val(chosen).prop('selected',true);
                 }
