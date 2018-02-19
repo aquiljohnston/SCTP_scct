@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
                 'label' => 'Project Created By',
                 'value' => function($model, $widget) {
-                    return Html::a($model->CreatedUserName, ['user/view', 'id' => $model->CreatedUserID]);;
+                    return Html::a($model->CreatedUserName, ['user/view', 'username' => $model->CreatedUserName]);;
                 },
                 'format' => 'html'
             ],
