@@ -106,7 +106,7 @@ $column = [
         <?php ActiveForm::end(); ?>
     </div>
 
-    <?php Pjax::begin(['id' => 'projectGridview', 'timeout' => false]) ?>
+    <?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
