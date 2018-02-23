@@ -997,10 +997,9 @@ class TimeCardController extends BaseController
 
                  // make sure date within range
                 if (strtotime($testDate) < strtotime($weekStart) || strtotime($testDate) > strtotime($weekEnd)) {
-						 throw new \yii\web\HttpException(500);
+						 throw new \yii\web\HttpException(400);
 
                 }
-
 
                 // check difference between startTime and endTime
                 if ($model->EndTime >= $model->StartTime) {
@@ -1011,7 +1010,6 @@ class TimeCardController extends BaseController
                         $url = 'time-card%2Fcreate-task-entry';
                         $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
                         $obj = json_decode($response, true);
-
 
                     } catch (\Exception $e) {
                         //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
