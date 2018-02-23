@@ -13,6 +13,8 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$chosen = "";
+
 $this->title = 'Time Cards';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
@@ -182,7 +184,14 @@ $column = [
                 </div> <!--show filter-->
                 <?php if($showFilter) : ?>
                   <div class="col-md-2 projectFilterDD">
-                    <?= $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown, ['value' =>'project','id' => 'projectFilterDD'])->label("Project"); ?>
+                     <?php $chosen = isset(Yii::$app->request->queryParams['DynamicModel']) ? Yii::$app->request->queryParams['DynamicModel'] : "";?>
+                    <?=
+                    
+                     $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
+                     ['options' =>[
+                        isset($chosen["projectName"]) ? $chosen["projectName"]:"" =>['selected'=>'true'] 
+                     ],"id"=>"projectFilterDD"]
+                     )->label("Project"); ?>
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
@@ -240,6 +249,8 @@ $column = [
                 'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
+                'showOnEmpty' => true,
+                'emptyText' => 'No results found!',
                 'columns' => $column
             ]); ?>
             <div id="TCPagination">
