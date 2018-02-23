@@ -948,9 +948,21 @@ class TimeCardController extends BaseController
         try {
 
             //get tasks for form dropdown
-            $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
-            $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
-            $allTask = json_decode($getAllTaskResponse, true);
+           // $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
+           // $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+           // $allTask = json_decode($getAllTaskResponse, true);
+
+            if(Yii::$app->session['AllTask']){
+                $allTask = Yii::$app->session['AllTask'];
+            } else {
+
+                $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
+                $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+                $allTask = json_decode($getAllTaskResponse, true);
+                $allTask = Yii::$app->session['AllTask'] = $allTask;
+
+            }
+
             $allTask = $this->FormatTaskData($allTask['assets']);
 
             //get chartOfAccountType for form dropdown
@@ -985,9 +997,10 @@ class TimeCardController extends BaseController
 
                  // make sure date within range
                 if (strtotime($testDate) < strtotime($weekStart) || strtotime($testDate) > strtotime($weekEnd)) {
-						 throw new \yii\web\HttpException(400);
+						 throw new \yii\web\HttpException(500);
 
                 }
+
 
                 // check difference between startTime and endTime
                 if ($model->EndTime >= $model->StartTime) {
@@ -999,11 +1012,12 @@ class TimeCardController extends BaseController
                         $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
                         $obj = json_decode($response, true);
 
+
                     } catch (\Exception $e) {
-                        return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
+                        //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                     }
                 } else {
-                    return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
+                    //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                 }
             } else {
                 if (Yii::$app->request->isAjax) {
