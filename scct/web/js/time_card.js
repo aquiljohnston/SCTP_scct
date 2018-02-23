@@ -58,6 +58,7 @@ $(function(){
 
     $(document).off('click', '#clearProjectFilterButton').on('click', '#clearProjectFilterButton',function (){
         projectFilterDD.val("");
+        window.location.href = window.location.href.split('?')[0];
         reloadTimeCardGridView();
     });
 
@@ -68,7 +69,6 @@ $(function(){
             return false;
         }
         $('#loading').show();
-        chosen =  $('#projectFilterDD').val();
         $.pjax.reload({
             type: 'GET',
             url: form.attr("action"),
@@ -80,12 +80,9 @@ $(function(){
 
             $.pjax.reload({container: '#timeCardForm', timeout:false});
             $('#timeCardForm').on('pjax:success', function () {
-                  
-                //$('#loading').hide();
+                  chosen =  $('#projectFilterDD').val();
+                $('#loading').hide();
                 applyOnClickListeners();
-                if(!clear){
-                     //$('#projectFilterDD').val(chosen).prop('selected',true);
-                }
                
             });
             $('#loading').hide();
