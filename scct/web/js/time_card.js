@@ -130,6 +130,7 @@ $(function(){
             success: function(data) {
                 $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
                 $('#loading').hide();
+                $('#deactive_timeEntry_btn_id').prop('disabled',true);
             }
         });
     });
