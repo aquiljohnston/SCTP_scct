@@ -150,25 +150,19 @@ class TimeCardController extends BaseController
             $showFilter                         =   Yii::$app->session['showFilter'];
             //Yii::TRACE('SESSIONSZ WRITE');
             }
-            
-          
-         
 
-            $timeCardIDs = $this->GetAllTimeCardIDs($assets);
-            if(count($timeCardIDs)){
-                $post_data['TimeCardID'] = $timeCardIDs;
-                $json_data = json_encode($post_data);
+			$submitCheckData['submitCheck'] = array(
+				'ProjectName' => [$projectName],
+				'StartDate' => $startDate,
+				'EndDate' => $endDate,
+			);
+			$json_data = json_encode($submitCheckData);
 
-                $submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
-                $submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
-                $submit_button_ready = json_decode($submit_button_ready_response, true);
-                 // get submit button status
-                 $submitReady = $submit_button_ready[0]['SubmitReady'] == "1" ? true : false;
-            } else {
-                $submitReady = false;   
-            }
-           
-
+			$submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
+			$submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
+			$submit_button_ready = json_decode($submit_button_ready_response, true);
+			// get submit button status
+			$submitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
 
             // passing decode data into dataProvider
             $dataProvider 		= new ArrayDataProvider
