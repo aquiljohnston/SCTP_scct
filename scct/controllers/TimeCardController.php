@@ -133,20 +133,42 @@ class TimeCardController extends BaseController
             $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 			= json_decode($response, true);
             $assets 			= $response['assets'];
-            $projectDropDown 	= $response['projectDropDown'];
-            $showFilter		 	= $response['showFilter'];
             $approvedTimeCardExist = $response['approvedTimeCardExist'];
+            $projectSize         = $response['projectsSize'];
+            //$showFilter         = $response['showFilter'];
+
+            if(Yii::$app->session['projectDD']) {
+            $projectDropDown                    = Yii::$app->session['projectDD'];
+            $showFilter                         = Yii::$app->session['showFilter'];
+            //Yii::TRACE('SESSIONSZ READ');
+            } else {
+            $resp                               = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $records                            = json_decode($resp, true);
+            $projectDropDown                    = $records['projectDropDown'];
+            Yii::$app->session['projectDD']     = $projectDropDown;
+            Yii::$app->session['showFilter']    =  $projectSize > 1 ? true : false;
+            $showFilter                         =   Yii::$app->session['showFilter'];
+            //Yii::TRACE('SESSIONSZ WRITE');
+            }
+            
+          
+         
 
             $timeCardIDs = $this->GetAllTimeCardIDs($assets);
-            $post_data['TimeCardID'] = $timeCardIDs;
-            $json_data = json_encode($post_data);
+            if(count($timeCardIDs)){
+                $post_data['TimeCardID'] = $timeCardIDs;
+                $json_data = json_encode($post_data);
 
-            $submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
-            $submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
-            $submit_button_ready = json_decode($submit_button_ready_response, true);
+                $submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
+                $submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
+                $submit_button_ready = json_decode($submit_button_ready_response, true);
+                 // get submit button status
+                 $submitReady = $submit_button_ready[0]['SubmitReady'] == "1" ? true : false;
+            } else {
+                $submitReady = false;   
+            }
+           
 
-            // get submit button status
-            $submitReady = $submit_button_ready[0]['SubmitReady'] == "1" ? true : false;
 
             // passing decode data into dataProvider
             $dataProvider 		= new ArrayDataProvider
@@ -1059,9 +1081,13 @@ class TimeCardController extends BaseController
      */
     private function GetAllTimeCardIDs($assets){
         $timeCardIDs = [];
-        foreach ($assets as $item){
+        if(count($assets) > 0){
+            //
+             foreach ($assets as $item){
             $timeCardIDs[] = $item['TimeCardID'];
         }
+    }
+       
         return $timeCardIDs;
     }
 }
