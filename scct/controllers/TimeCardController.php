@@ -902,6 +902,7 @@ class TimeCardController extends BaseController
     }
 
     /**
+	 * SHOULD BE IN TASK CONTROLLER
      * Add New Task Entry.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @param $TimeCardID
@@ -946,24 +947,11 @@ class TimeCardController extends BaseController
         $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
 
         try {
-
-            //get tasks for form dropdown
-           // $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
-           // $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
-           // $allTask = json_decode($getAllTaskResponse, true);
-
-            if(Yii::$app->session['AllTask']){
-                $allTask = Yii::$app->session['AllTask'];
-            } else {
-
-                $getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
-                $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
-                $allTask = json_decode($getAllTaskResponse, true);
-                $allTask = Yii::$app->session['AllTask'] = $allTask;
-
-            }
-
-            $allTask = $this->FormatTaskData($allTask['assets']);
+			
+			$getAllTaskUrl = "task%2Fget-all-task&timeCardProjectID=".$timeCardProjectID;
+			$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+			$allTask = json_decode($getAllTaskResponse, true);
+            $allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
 
             //get chartOfAccountType for form dropdown
             $getAllChartOfAccountTypeUrl = "time-card%2Fget-charge-of-account-type";
