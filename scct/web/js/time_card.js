@@ -85,7 +85,7 @@ $(function(){
                 applyOnClickListeners();
                
             });
-            $('#loading').hide();
+            //$('#loading').hide();
         });
         $('#timeCardGridview').on('pjax:error', function () {
             $('#loading').hide();
