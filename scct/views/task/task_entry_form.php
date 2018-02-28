@@ -22,7 +22,7 @@ use yii\helpers\Url;
     <?php $form = ActiveForm::begin([
         'id' => 'TaskEntryForm',//$model->formName(),
         'type' => ActiveForm::TYPE_HORIZONTAL,
-        'action' => Url::to('/time-card/add-task-entry'),
+        'action' => Url::to('/task/add-task-entry'),
         'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_SMALL],
     ]); ?>
     <div class="form-group kv-fieldset-inline" id="time_entry_form">
@@ -117,7 +117,7 @@ use yii\helpers\Url;
     <?php Pjax::end() ?>
 
     <script>
-        console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
+        //console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
         var date = $('#dynamicmodel-date').val();
         var StartTime = $('#dynamicmodel-starttime').val();
         var EndTime = $('#dynamicmodel-endtime').val();
@@ -145,8 +145,7 @@ use yii\helpers\Url;
  
 
         $('#create_task_entry_submit_btn').click(function (event) {
-            console.log("SUBMIT CLICKED !");
-            console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
+            //console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
             if (InputFieldValidator) {
                 TaskEntryCreation();
                 $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
