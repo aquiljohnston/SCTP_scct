@@ -413,12 +413,18 @@ class TimeCardController extends BaseController
 			$time_card_url	         = 'time-card%2Fview&id='.$id;
 			$entries_url 	         = 'time-card%2Fshow-entries&cardID='.$id;
 
-			//execute API request
-			$resp 			               = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			//execute API request, should probably be able to combine these two calls into one.
 			$time_response 	               = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-
+			$resp 			               = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			
 			$card 		         = json_decode($time_response, true);
 			$entries 		     = json_decode($resp, true);
+			
+			//populate required values if not received from function call
+			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $card['TimeCardProjectID'];
+			$projectName = $projectName != null ? $projectName : $card['ProjectName'];
+			$fName = $fName != null ? $fName : $card['UserFirstName'];
+			$lName = $lName != null ? $lName : $card['UserLastName'];
 
 			//alter from and to dates a bit
 			$from   		=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
@@ -619,13 +625,11 @@ class TimeCardController extends BaseController
 			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
-
+//
 			if(strpos($referrer,'show-entries')){
-
-				return $this->redirect(['index']);
-
+				return $this->redirect(['show-entries', 'id' => $responseTimeCardID]);
 			}else{
-				return $this->redirect(['view', 'id' => $responseTimeCardID]);
+				return $this->redirect(['index']);
 			}
 
 			
