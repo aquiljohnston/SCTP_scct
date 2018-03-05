@@ -125,11 +125,7 @@ use yii\helpers\Url;
         var ChangeOfAccountType = $('#dynamicmodel-chargeofaccounttype').val();
 
         $(document).off('mouseleave', '#TaskEntryForm :input').on('mouseleave', '#TaskEntryForm :input', function (){
-            if ($('#dynamicmodel-date').val() !="" && 
-                $('#dynamicmodel-starttime').val() != "" &&
-                $('#dynamicmodel-endtime').val() != "" &&
-                $('#dynamicmodel-taskname').val() != "" && 
-                $('#dynamicmodel-chargeofaccounttype').val() != ""){
+            if (InputFieldValidator()){
                 $('#create_task_entry_submit_btn').prop('disabled', false); 
                }
                else{
@@ -146,7 +142,7 @@ use yii\helpers\Url;
 
         $('#create_task_entry_submit_btn').click(function (event) {
             //console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
-            if (InputFieldValidator) {
+            if (InputFieldValidator()) {
                 TaskEntryCreation();
                 $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
                 event.preventDefault();
@@ -162,7 +158,9 @@ use yii\helpers\Url;
                 $('#dynamicmodel-starttime').val() != "" &&
                 $('#dynamicmodel-endtime').val() != "" &&
                 $('#dynamicmodel-taskname').val() != "" && 
-                $('#dynamicmodel-chargeofaccounttype').val() != "")
+                $('#dynamicmodel-chargeofaccounttype').val() != "" &&
+				//>= allows same start and end remove the = if this is not allowed.
+				$('#dynamicmodel-endtime').val() >=  $('#dynamicmodel-starttime').val())
                 return true;
             else
                 return false;
