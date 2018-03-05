@@ -57,7 +57,7 @@ use yii\widgets\Pjax;
             ]) ?>
             <?= Html::button('Add Task', [
                 'class' => 'btn btn-primary add_task_btn',
-                'disabled' => false,
+                'disabled' => true,
                 'id' => 'add_task_btn_id',
             ]) ?>
         <?php  else : ?>
