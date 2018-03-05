@@ -174,13 +174,17 @@ class TaskController extends BaseController
             $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
 
             if ($model->load(Yii::$app->request->queryParams) && $model->validate()) {
-
+				
+				// convert to 24 hour format
+				$startTime24 = date("H:i", strtotime($model->StartTime));
+				$endTime24 = date("H:i", strtotime($model->EndTime));
+			
                 $task_entry_data = array(
                     'TimeCardID' => $model->TimeCardID,
                     'TaskName' => 'Task ' . $model->TaskName,
                     'Date' => $model->Date,
-                    'StartTime' => date("H:i", strtotime($model->StartTime)), // convert to 24 hour format
-                    'EndTime' => date("H:i", strtotime($model->EndTime)), // convert to 24 hour format
+                    'StartTime' => $startTime24, 
+                    'EndTime' => $endTime24,
                     'CreatedByUserName' => Yii::$app->session['UserName'],
                 );
 
@@ -197,10 +201,10 @@ class TaskController extends BaseController
 						 throw new \yii\web\HttpException(400);
 
                 }
-
-                // check difference between startTime and endTime
-                if ($model->EndTime >= $model->StartTime) {
-
+				
+				//probably dont need this check here because there is a validation check on the form
+                // check difference between startTime and endTime 
+                if ($endTime24 >= $startTime24) {
                     $json_data = json_encode($task_entry_data);
                     try {
                         // post url
