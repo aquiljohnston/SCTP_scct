@@ -117,12 +117,6 @@ use yii\helpers\Url;
     <?php Pjax::end() ?>
 
     <script>
-        //console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
-        var date = $('#dynamicmodel-date').val();
-        var StartTime = $('#dynamicmodel-starttime').val();
-        var EndTime = $('#dynamicmodel-endtime').val();
-        var TaskName = $('#dynamicmodel-taskname').val();
-        var ChangeOfAccountType = $('#dynamicmodel-chargeofaccounttype').val();
 
         $(document).off('mouseleave', '#TaskEntryForm :input').on('mouseleave', '#TaskEntryForm :input', function (){
             if (InputFieldValidator()){
@@ -141,8 +135,7 @@ use yii\helpers\Url;
  
 
         $('#create_task_entry_submit_btn').click(function (event) {
-            //console.log("Date: " + $('#dynamicmodel-date').val() + " Start Time: " + $('#dynamicmodel-starttime').val() +" End Time: " + $('#dynamicmodel-endtime').val() +" Task Name: "+$('#dynamicmodel-taskname').val() +" Account Type: "+$('#dynamicmodel-chargeofaccounttype').val());
-            if (InputFieldValidator()) {
+             if (InputFieldValidator()) {
                 TaskEntryCreation();
                 $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
                 event.preventDefault();
@@ -153,17 +146,38 @@ use yii\helpers\Url;
         });
 
         function InputFieldValidator() {
+			var date = $('#dynamicmodel-date').val();
+			var TaskName = $('#dynamicmodel-taskname').val();
+			var ChangeOfAccountType = $('#dynamicmodel-chargeofaccounttype').val();
+			//convert times to 24
+			var StartTime = ConvertToTwentyFourHourTime($('#dynamicmodel-starttime').val());
+			var EndTime = ConvertToTwentyFourHourTime($('#dynamicmodel-endtime').val());
 
-            if ($('#dynamicmodel-date').val() !="" && 
-                $('#dynamicmodel-starttime').val() != "" &&
-                $('#dynamicmodel-endtime').val() != "" &&
-                $('#dynamicmodel-taskname').val() != "" && 
-                $('#dynamicmodel-chargeofaccounttype').val() != "" &&
+            if (date !="" && 
+                StartTime != "" &&
+                EndTime != "" &&
+                TaskName != "" && 
+                ChangeOfAccountType != "" &&
 				//>= allows same start and end remove the = if this is not allowed.
-				$('#dynamicmodel-endtime').val() >=  $('#dynamicmodel-starttime').val())
+				EndTime > StartTime)
                 return true;
             else
                 return false;
         }
+		
+		//expected format of "hh:mm AM/PM"
+		//returns string in 24 hour format "hh:mm"
+		function ConvertToTwentyFourHourTime(twelveHourTime) {
+			var hours = Number(twelveHourTime.match(/^(\d+)/)[1]);
+			var minutes = Number(twelveHourTime.match(/:(\d+)/)[1]);
+			var AMPM = twelveHourTime.match(/\s(.*)$/)[1];
+			if(AMPM == "PM" && hours<12) hours = hours+12;
+			if(AMPM == "AM" && hours==12) hours = hours-12;
+			var sHours = hours.toString();
+			var sMinutes = minutes.toString();
+			if(hours<10) sHours = "0" + sHours;
+			if(minutes<10) sMinutes = "0" + sMinutes;
+			return sHours + ":" + sMinutes;
+		}
     </script>
 </div>
