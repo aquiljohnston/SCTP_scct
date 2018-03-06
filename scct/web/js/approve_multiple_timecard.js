@@ -102,6 +102,20 @@ function applyTimeCardOnClickListeners() {
 function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').click(function () {
         var quantifier = "";
+        var name = 'timecard_history_';
+        var thIndex = $('th:contains("Project Name")').index();
+        var projectName = $('table td').eq(thIndex).text();
+        var d = new Date();
+        var minutes = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+        var hours = ((d.getHours() + 11) % 12 + 1);
+        dates = $.datepicker.formatDate('yy-mm-dd', new Date());
+
+        timeCardName = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds()
+
+        console.log(projectName);
+        console.log(timeCardName);
+
+        //return false;
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
@@ -111,26 +125,31 @@ function applyTimeCardSubmitButtonListener() {
         var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
         if (confirmBox) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
-            $.ajax({
+            /*$.ajax({
                 type: 'POST',
                 url: '/time-card/approve-multiple',
                 data: {
                     timecardid: primaryKeys
                 }
-            });
-            var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
-            if (win) {
+            });*/
+            //FORCE CSV DOWNLOAD
+            window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+'&projectName=' + projectName, '_blank');
+          
 
-                $.pjax.reload({
+
+          //  if (win) {
+
+                 /* $.pjax.reload({
                     type: 'GET',
-                    url: '/time-card/ftp-files',
+                    url: '/time-card/ftp-files?timeCardName='+timeCardName,
                     container: '#timeCardGridview',
                     timeout: 99999,
                     push: false,
                     replace: false,
                     replaceRedirect: false
                 });
-                $('#timeCardGridview').on('pjax:success', function () {
+               
+               $('#timeCardGridview').on('pjax:success', function () {
                     var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
                     if (payroll) {
                         $.ajax({
@@ -143,7 +162,7 @@ function applyTimeCardSubmitButtonListener() {
                     }
                     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
                 });
-                $('#timeCardGridview').on('pjax:error', function () {
+               $('#timeCardGridview').on('pjax:error', function () {
                     var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
                     if (payroll) {
                         $.ajax({
@@ -156,7 +175,7 @@ function applyTimeCardSubmitButtonListener() {
                     }
                     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
                 });
-            }
+           // } */
         } else {
             e.stopImmediatePropagation();
             e.preventDefault();
