@@ -3,7 +3,7 @@ $(function () {
 
     // disable single approve button once user clicked it
     $('#enable_single_approve_btn_id_timecard').click(function (e) {
-        $(this).addClass('disabled');
+        //$(this).addClass('disabled');
     });
 
     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
