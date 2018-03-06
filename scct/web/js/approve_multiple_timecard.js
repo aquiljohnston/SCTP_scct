@@ -6,26 +6,19 @@ $(function () {
         $(this).addClass('disabled');
     });
 
-    $('#multiple_approve_btn_id').prop('disabled', false); //TO DISABLED
+    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
 
     $(document).off('click', "#timeCardGV input[type=checkbox]").on('click', "#timeCardGV input[type=checkbox]", function (e) {
         var disable;
         if ($("#timeCardGV .kv-row-select input:checked").length != 0) {
             disable = false;
-            $("#timeCardGV .kv-row-select input:checked").each(function () {
-                if ($(this).attr("approved").toUpperCase() == "YES" || $(this).attr("totalworkhours") == 0) {
-                    //disable = true;
-                }
-            });
         } else {
             disable = true;
         }
         if (disable) {
             $('#multiple_approve_btn_id').prop('disabled', true);
-            $('#export_timecard_btn').prop('disabled', true);
         } else {
             $('#multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
-            $('#export_timecard_btn').prop('disabled', false); //TO ENABLE
         }
     });
 
@@ -35,7 +28,11 @@ $(function () {
 });
 
 function applyTimeCardOnClickListeners() {
-    $('#multiple_approve_btn_id').click(function () {
+	if ($("#timeCardGV .kv-row-select input:checked").length == 0) {
+		$('#multiple_approve_btn_id').prop('disabled', true);
+	}
+	
+    $('#multiple_approve_btn_id').click(function (event) {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
 
@@ -53,54 +50,15 @@ function applyTimeCardOnClickListeners() {
                     timecardid: primaryKeys
                 }
             });
-            /*var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
-            if (win) {
-
-                $.pjax.reload({
-                    type: 'GET',
-                    url: '/time-card/ftp-files',
-                    container: '#timeCardGridview',
-                    timeout: 99999,
-                    push: false,
-                    replace: false,
-                    replaceRedirect: false
-                });
-                $('#timeCardGridview').on('pjax:success', function () {
-                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
-                    if (payroll) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/time-card/ftp-files-payroll'
-                        });
-                    } else {
-                        //Browser has blocked it
-                        console.log('Please allow popups for this website');
-                    }
-                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                });
-                $('#timeCardGridview').on('pjax:error', function () {
-                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
-                    if (payroll) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/time-card/ftp-files-payroll'
-                        });
-                    } else {
-                        //Browser has blocked it
-                        console.log('Please allow popups for this website');
-                    }
-                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                });
-            }*/
         } else {
-            e.stopImmediatePropagation();
-            e.preventDefault();
+            event.stopImmediatePropagation();
+            event.preventDefault();
         }
     });
 }
 
 function applyTimeCardSubmitButtonListener() {
-    $('#multiple_submit_btn_id').click(function () {
+    $('#multiple_submit_btn_id').click(function (event) {
         var quantifier = "";
         var name = 'timecard_history_';
         var thIndex = $('th:contains("Project Name")').index();
@@ -122,77 +80,17 @@ function applyTimeCardSubmitButtonListener() {
         } else {
             quantifier = "these items?"
         }
-        var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
+        var confirmBox = confirm('Are you sure you want to submit ' + quantifier);
         if (confirmBox) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
-            /*$.ajax({
-                type: 'POST',
-                url: '/time-card/approve-multiple',
-                data: {
-                    timecardid: primaryKeys
-                }
-            });*/
             //FORCE CSV DOWNLOAD
             window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+'&projectName=' + projectName, '_blank');
-          
-
-
-          //  if (win) {
-
-                 /* $.pjax.reload({
-                    type: 'GET',
-                    url: '/time-card/ftp-files?timeCardName='+timeCardName,
-                    container: '#timeCardGridview',
-                    timeout: 99999,
-                    push: false,
-                    replace: false,
-                    replaceRedirect: false
-                });
-               
-               $('#timeCardGridview').on('pjax:success', function () {
-                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
-                    if (payroll) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/time-card/ftp-files-payroll'
-                        });
-                    } else {
-                        //Browser has blocked it
-                        console.log('Please allow popups for this website');
-                    }
-                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                });
-               $('#timeCardGridview').on('pjax:error', function () {
-                    var payroll = window.open('/time-card/download-payroll-data?selectedTimeCardIDs=' + primaryKeys, '_blank');
-                    if (payroll) {
-                        $.ajax({
-                            type: 'POST',
-                            url: '/time-card/ftp-files-payroll'
-                        });
-                    } else {
-                        //Browser has blocked it
-                        console.log('Please allow popups for this website');
-                    }
-                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                });
-           // } */
         } else {
-            e.stopImmediatePropagation();
-            e.preventDefault();
+            event.stopImmediatePropagation();
+            event.preventDefault();
         }
     });
 }
-
-/*function appendQueryString(url, queryVars) {
-    var firstSeperator = (url.indexOf('?')==-1 ? '?' : '&');
-    var queryStringParts = new Array();
-    for(var key in queryVars) {
-        queryStringParts.push(key + '=' + queryVars[key]);
-    }
-    var queryString = queryStringParts.join('&');
-    return url + firstSeperator + queryString;
-}*/
-
 
 /*Converts javascript array to CSV format */
 function ConvertToCSV(headerArray, dataArray) {
