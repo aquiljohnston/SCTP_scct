@@ -170,4 +170,31 @@ $(function(){
 			$('#deactive_timeEntry_btn_id').prop('disabled',true);
 		}
 	}
+
+
+   $('#enable_single_approve_btn_id_timecard').click(function (e) {
+        var timeCardId = $('#timeCardId').val();
+        var confirmBox = confirm('Are you sure you want to approve this?');
+        if (confirmBox) {
+
+            $('#loading').show();
+
+            $.ajax({
+                type: 'POST',
+                url: '/time-card/approve?id='+timeCardId,
+                success: function(data) {
+                 //$.pjax.reload({container:"#allTheButtons", timeout: 99999}); //for pjax update
+                $('#deactive_timeEntry_btn_id').prop('disabled',true);
+                $('#enable_single_approve_btn_id_timecard').addClass('disabled');
+                $('#loading').hide();
+            }
+            });
+        } else {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+
+       
+    });
+
 });

@@ -21,18 +21,16 @@ use yii\widgets\Pjax;
     <input id="SundayDate" type="hidden" name="SundayDate" value=<?php echo $SundayDateFull; ?>>
     <input id="SaturdayDate" type="hidden" name="SaturdayDate" value=<?php echo $SaturdayDateFull; ?>>
     <input id="TimeCardProjectID" type="hidden" name="TimeCardProjectID" value=<?php echo $timeCardProjectID; ?>>
-    <?php
-    $this->title = $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName;
-    $this->params['breadcrumbs'][] = $this->title;
-     ?>
+  
 
     <div class="lightBlueBar">
-    <h3> <?= Html::encode($this->title) ?></h3>
+    <h3> <?= $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName; ?></h3>
 
 
         <?php
 
-    $approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+    //$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
+    $approveUrl = "#";
 
     if ($model["TimeCardApprovedFlag"] === "Yes") {
         $approve_status = true;
@@ -77,6 +75,7 @@ use yii\widgets\Pjax;
                 'id' => 'add_task_btn_id',
             ]) ?>
         <?php endif; ?>
+       
 
         <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
 
