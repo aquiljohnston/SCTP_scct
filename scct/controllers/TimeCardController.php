@@ -627,9 +627,9 @@ class TimeCardController extends BaseController
 			$responseTimeCardID = $obj[0]["TimeCardID"];
 //
 			if(strpos($referrer,'show-entries')){
-				return $this->redirect(['show-entries', 'id' => $responseTimeCardID]);
+				//return $this->redirect(['show-entries', 'id' => $responseTimeCardID]);
 			}else{
-				return $this->redirect(['index']);
+				//return $this->redirect(['index']);
 			}
 
 			
