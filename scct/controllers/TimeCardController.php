@@ -136,7 +136,7 @@ class TimeCardController extends BaseController
             $approvedTimeCardExist = $response['approvedTimeCardExist'];
             $projectSize         = $response['projectsSize'];
             //$showFilter         = $response['showFilter'];
-
+//
             if(Yii::$app->session['projectDD']) {
             $projectDropDown                    = Yii::$app->session['projectDD'];
             $showFilter                         = Yii::$app->session['showFilter'];
@@ -733,10 +733,6 @@ class TimeCardController extends BaseController
                 return $this->redirect(['/login']);
             }
 
-           // $projectName = isset(Yii::$app->request->queryParams['projectName']) ? Yii::$app->request->queryParams['projectName'] : null;
-
-           // $projectName = isset(Yii::$app->request->queryParams['projectName']) ? Yii::$app->request->queryParams['projectName'] : null;
-
             $url = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
                 'projectName' => $projectName,
                 'timeCardName' => $timeCardName,
@@ -837,19 +833,16 @@ class TimeCardController extends BaseController
                 $defaultPath    = Constants::PROD_DEFAULT_FTP_PATH.$timeCardName.".csv";
         }
        
-         if (file_exists($defaultPath)) {
-                    Yii::trace("The file $defaultPath exists");
-            } else {
-                    Yii::trace("The file $defaultPath not exists");
-            }
-
-
+         // if (file_exists($defaultPath)) {
+                    // Yii::trace("The file $defaultPath exists");
+            // } else {
+                    // Yii::trace("The file $defaultPath not exists");
+            // }
 
         //SFTP connection   
         //$connection   = ssh2_connect($ftp_server, 22);
         //@$login_result=ssh2_auth_password($connection, $ftp_user_name,  $ftp_user_pass);
         
-
         // FTP connection
         $ftp_conn = ftp_connect($ftp_server);
 
@@ -858,10 +851,10 @@ class TimeCardController extends BaseController
 
         ftp_pasv($ftp_conn, true);
 
-        if ($login_result)
-            Yii::trace("LOGIN IN SUCCESS");
-        else
-            Yii::trace("LOGIN IN FALL");
+        // if ($login_result)
+            // Yii::trace("LOGIN IN SUCCESS");
+        // else
+            // Yii::trace("LOGIN IN FALL");
 
         // get FTP result
         $upload_result = ftp_put($ftp_conn,$timeCardName,$defaultPath, FTP_BINARY);
@@ -869,12 +862,12 @@ class TimeCardController extends BaseController
         //$upload_result = ssh2_scp_send($connection, $defaultPath,$timeCardName, 0644);
 
         // Error handling
-        if(!$upload_result)
-        {
-            Yii::trace("FTP error: The file could not be written to the FTP server.");
-        } else {
-            Yii::trace("FTP success: The file is transferred to FTP server.");
-        }
+        // if(!$upload_result)
+        // {
+            // Yii::trace("FTP error: The file could not be written to the FTP server.");
+        // } else {
+            // Yii::trace("FTP success: The file is transferred to FTP server.");
+        // }
 
         // close connection
         ftp_close($ftp_conn);
