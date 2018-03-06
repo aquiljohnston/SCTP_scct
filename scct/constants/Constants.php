@@ -17,7 +17,8 @@ final class Constants
     const SERVER_PRODUCTION = '';
 	
 	//api url for different environments
-	const API_LOCAL_URL = 'http://localhost:8080/index.php?r=';
+	const API_LOCAL_URL = 'http://localhost:8888/index.php?r=';
+	//const API_DEV_URL = 'http://localhost:8888/index.php?r=';
 	const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
 	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
 	//const API_PROD_URL = 'http://api.southerncrossinc.com/index.php?r=';
@@ -26,6 +27,19 @@ final class Constants
 	const DEFAULT_VERSION = self::API_VERSION_1;
 
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
+    //PRODUCTION FTP CREDENTIALS
+    const PROD_FTP_SERVER_ADDRESS = "sftp.southerncrossinc.com";
+    const PROD_FTP_USERNAME = "ctfiletransfer";
+    const PROD_FTP_PASSWORD = "lLiamiLENsCOPhAnceLLadwil";
+    const PROD_DEFAULT_FTP_PATH = "C:\\Inetpub\\wwwroot\\";
+
+    //DEV_FTP_CREDENTIALS
+    const DEV_FTP_SERVER_ADDRESS = "10.100.10.10";
+    const DEV_FTP_USERNAME = "ftpdev.southerncrosslighthouse.com|eigyan";
+    const DEV_FTP_PASSWORD = "";
+    //FTP_DEFAULT_PATH
+    const DEV_DEFAULT_FTP_PATH = "/Users/Shared/";
+ 
 	
 	private function __construct()
 	{
