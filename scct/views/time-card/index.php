@@ -205,7 +205,7 @@ $column = [
                         'presetDropdown'=>true,
                         'hideInput'=>true,
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(ev, picker) {
+                            "apply.daterangepicker" => "function() {
                                 "." var jqTCDropDowns = $('#timeCardDropdownContainer');
                                     var form = jqTCDropDowns.find(\"#TimeCardForm\");
                                     if (form.find(\".has-error\").length){
@@ -219,12 +219,11 @@ $column = [
                                         data: form.serialize(),
                                         timeout: 99999
                                     });
-                                    $('#timeCardGridview').on('pjax:beforeSend', function () {
-                                        console.log(form.serialize());
-                                    });
                                     $('#timeCardGridview').on('pjax:success', function () {
+										//these functions are declared in approve_multiple_timecard.js
+										applyTimeCardOnClickListeners();
+										applyTimeCardSubmitButtonListener();
                                         $('#loading').hide();
-                                        applyOnClickListeners();
                                     });
                                     $('#timeCardGridview').on('pjax:error', function () {
                                         $('#loading').hide();
