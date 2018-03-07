@@ -58,12 +58,13 @@ $(function(){
 
     $(document).off('click', '#clearProjectFilterButton').on('click', '#clearProjectFilterButton',function (){
         projectFilterDD.val("");
-        window.location.href = window.location.href.split('?')[0];
+		//either or not both, first line returns you to the base screen /time-card second line reloads the page
+        //window.location.href = window.location.href.split('?')[0];
         reloadTimeCardGridView();
     });
 
     //filter
-    function reloadTimeCardGridView(clear=false) {
+    function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
         if (form.find(".has-error").length){
             return false;
@@ -77,16 +78,9 @@ $(function(){
             timeout: 99999
         });
         $('#timeCardGridview').on('pjax:success', function () {
-
-            $.pjax.reload({
-				container: '#timeCardForm',
-				timeout:false});
-            $('#timeCardForm').on('pjax:success', function () {
-                $('#loading').hide();
-				applyTimeCardOnClickListeners();
-				applyTimeCardSubmitButtonListener();
-            });
-            //$('#loading').hide();
+			applyTimeCardOnClickListeners();
+			applyTimeCardSubmitButtonListener();
+			$('#loading').hide();	
         });
         $('#timeCardGridview').on('pjax:error', function () {
             $('#loading').hide();
