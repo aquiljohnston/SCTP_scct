@@ -186,7 +186,6 @@ $column = [
                   <div class="col-md-2 projectFilterDD">
                      <?php $chosen = isset(Yii::$app->request->queryParams['DynamicModel']) ? Yii::$app->request->queryParams['DynamicModel'] : "";?>
                     <?=
-                    
                      $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
                      ['options' =>[
                         isset($chosen["projectName"]) ? $chosen["projectName"]:"" =>['selected'=>'true'] 
@@ -195,7 +194,11 @@ $column = [
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
-                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
+					<?php if($dateRangeValue == 'other'){ ?>
+						<div id="datePickerContainer" style="float: left; width: auto; display: block;" >
+					<?php } else { ?>
+						<div id="datePickerContainer" style="float: left; width: auto; display: none;" >
+					<?php } ?>
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
