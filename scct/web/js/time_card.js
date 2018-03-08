@@ -4,16 +4,18 @@ $(function(){
     var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
     var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
     var projectFilterDD     = $('#projectFilterDD');
-    entries                 = []; 
-
-            
-
+    entries                 = [];           
+	
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
+			//reset date picker
+			resetDatePicker();
+			//show date picker
             $('#datePickerContainer').css("display", "block");
         }else {
+			//hide date picker
             $('#datePickerContainer').css("display", "none");
             reloadTimeCardGridView();
         }
@@ -191,4 +193,19 @@ $(function(){
        
     });
 
+	//function called when other is selected in week dropdown to reset widget to default
+	function resetDatePicker(){
+		//get date picker object
+		var datePicker = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').data('daterangepicker');
+		//create default start end
+		var fm = moment().startOf('day') || '';
+		var to = moment() || '';
+		//set default selections in widget
+		datePicker.setStartDate(fm);
+		datePicker.setEndDate(to);
+		//set default date range
+		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
+		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
+	}
+	
 });
