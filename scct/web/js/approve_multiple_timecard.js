@@ -31,8 +31,7 @@ function applyTimeCardOnClickListeners() {
 	if ($("#timeCardGV .kv-row-select input:checked").length == 0) {
 		$('#multiple_approve_btn_id').prop('disabled', true);
 	}
-	
-    $('#multiple_approve_btn_id').click(function (event) {
+    $('#multiple_approve_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
 
@@ -58,7 +57,7 @@ function applyTimeCardOnClickListeners() {
 }
 
 function applyTimeCardSubmitButtonListener() {
-    $('#multiple_submit_btn_id').click(function (event) {
+    $('#multiple_submit_btn_id').off('click').click(function (event) {
         var quantifier = "";
         var name = 'timecard_history_';
         var payroll = 'payroll_history_'
