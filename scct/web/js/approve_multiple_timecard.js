@@ -61,6 +61,7 @@ function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').click(function (event) {
         var quantifier = "";
         var name = 'timecard_history_';
+        var payroll = 'payroll_history_'
         var thIndex = $('th:contains("Project Name")').index();
         var projectName = $('table td').eq(thIndex).text();
         var d = new Date();
@@ -68,10 +69,17 @@ function applyTimeCardSubmitButtonListener() {
         var hours = ((d.getHours() + 11) % 12 + 1);
         dates = $.datepicker.formatDate('yy-mm-dd', new Date());
 
-        timeCardName = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds()
+        timeCardName    = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        payRollFileName = payroll+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        dateRange = $('[name="DynamicModel[dateRangeValue]"]').val();
+        dateRange = dateRange.split(",");
 
-        console.log(projectName);
+        /*console.log('/time-card/download-time-card-data?timeCardName='+timeCardName+
+                '&projectName='+projectName+
+                '&weekStart='+dateRange[0]+
+                '&weekEnd='+$.trim(dateRange[1]));*/
         console.log(timeCardName);
+        console.log(payRollFileName);
 
         //return false;
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
@@ -84,7 +92,18 @@ function applyTimeCardSubmitButtonListener() {
         if (confirmBox) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
             //FORCE CSV DOWNLOAD
-            window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+'&projectName=' + projectName, '_blank');
+            window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
+                '&projectName=' + projectName+
+                '&weekStart=' + dateRange[0]+
+                '&weekEnd=' + $.trim(dateRange[1]), '_blank');
+
+            window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
+                '&projectName=' + projectName+
+                '&weekStart=' + dateRange[0]+
+                '&weekEnd=' + $.trim(dateRange[1]), '_blank');
+        //INITIATE MOVE
+           //window.open('/time-card/ftp-files', '_blank');
+
         } else {
             event.stopImmediatePropagation();
             event.preventDefault();
