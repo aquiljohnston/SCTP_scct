@@ -79,12 +79,12 @@ $(function(){
             data: form.serialize(),
             timeout: 99999
         });
-        $('#timeCardGridview').on('pjax:success', function () {
+        $('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
 			applyTimeCardOnClickListeners();
 			applyTimeCardSubmitButtonListener();
 			$('#loading').hide();	
         });
-        $('#timeCardGridview').on('pjax:error', function () {
+        $('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
             $('#loading').hide();
             location.reload();
         });

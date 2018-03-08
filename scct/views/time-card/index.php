@@ -206,9 +206,9 @@ $column = [
                         ],
                         'name'=>'date_range_3',
                         'presetDropdown'=>true,
-                        'hideInput'=>true,
+                        //'hideInput'=>true,
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function() {
+                            "apply.daterangepicker" => "function(ev, picker) {
                                 "." var jqTCDropDowns = $('#timeCardDropdownContainer');
                                     var form = jqTCDropDowns.find(\"#TimeCardForm\");
                                     if (form.find(\".has-error\").length){
@@ -231,8 +231,7 @@ $column = [
                                     $('#timeCardGridview').on('pjax:error', function () {
                                         $('#loading').hide();
                                         location.reload();
-                                    });
-                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
+                                    }); "."
                             }"],
                     ]); ?>
                 </div>
