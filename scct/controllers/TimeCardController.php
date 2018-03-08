@@ -25,6 +25,9 @@ use app\constants\Constants;
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
  */
+
+
+
 class TimeCardController extends BaseController
 {
     /**
@@ -34,6 +37,10 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
+
+
+
+
     public function actionIndex()
     {
         //guest redirect
@@ -723,7 +730,7 @@ class TimeCardController extends BaseController
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      */
-    public function actionDownloadTimeCardData($timeCardName,$projectName) {
+    public function actionDownloadTimeCardData($timeCardName,$projectName,$weekStart=null,$weekEnd=null) {
         try {
             // check if user has permission
             //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
@@ -736,7 +743,9 @@ class TimeCardController extends BaseController
             $url = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
                 'projectName' => $projectName,
                 'timeCardName' => $timeCardName,
-                    'week' => null
+                    'week' => null,
+                    'weekStart' => $weekStart,
+                    'weekEnd' => $weekEnd
                 ]);
 
 
@@ -744,18 +753,17 @@ class TimeCardController extends BaseController
                 'projectName' => $projectName,
                 'timeCardName' => $timeCardName,
                 'week' => null,
-                'download' => true,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'download' => true
                 ]);
 
 
-            Yii::trace("LOAD DATA URL: ".$url);
-            $dateTime = date('Y-m-d_h_i');
+            Yii::$app->session['timeCardFileWritten']     = $this->writeCSVfile($downloadUrl); 
+            Yii::$app->session['timeCardFileName']        = $timeCardName;
 
-           $this->writeCSVfile($downloadUrl); 
 
-           $this->ftpFiles($timeCardName);
-
-           header('Content-Disposition: attachment; filename="'.$timeCardName.'.csv"');
+            header('Content-Disposition: attachment; filename="'.$timeCardName.'.csv"');
             $this->requestAndOutputCsv($url);
 
         } catch (ForbiddenHttpException $e) {
@@ -771,7 +779,7 @@ class TimeCardController extends BaseController
      * @return \yii\web\Response
      * @throws ForbiddenHttpException
      */
-    public function actionDownloadPayrollData() {
+    public function actionDownloadPayrollData($cardName,$projectName,$weekStart=null,$weekEnd=null) {
         try {
 
             //guest redirect
@@ -779,18 +787,41 @@ class TimeCardController extends BaseController
                 return $this->redirect(['/login']);
             }
 
-            $selectedTimeCardIDs = isset(Yii::$app->request->queryParams['selectedTimeCardIDs']) ? Yii::$app->request->queryParams['selectedTimeCardIDs'] : null;
-
             $url = 'time-card%2Fget-payroll-data&' . http_build_query([
-                    'selectedTimeCardIDs' => json_encode($selectedTimeCardIDs)
+                'cardName' => $cardName,
+                'projectName' => $projectName,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd
                 ]);
-            $payrollFile = 'payroll';
-            $dateTime = date('Y-m-d_h_i');
 
-            Yii::trace("LOAD DATA URL: ".$url);
 
-            header('Content-Disposition: attachment; filename="payroll_history_'.$dateTime.'.csv"');
+            $downloadUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
+                'cardName' => $cardName,
+                'projectName' => $projectName,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'download' => true
+                ]);
+
+
+            Yii::$app->session['payrollFileWritten']     = $this->writeCSVfile($downloadUrl); 
+            Yii::$app->session['payrollFileName']        = $cardName; 
+
+            Yii::TRACE('IS_WRITTEN ' . Yii::$app->session['payrollFileWritten'] );
+            Yii::TRACE('IS_WRITTEN ' . $cardName );
+
+
+            header('Content-Disposition: attachment; filename="'.$cardName.'.csv"');
             $this->requestAndOutputCsv($url);
+
+            //This needs to run after the last file so if we add more files later we need to move this;
+        if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE){
+            $this->ftpFiles();
+        }
+        else{
+                 throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+        }
+
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (\Exception $e) {
@@ -815,23 +846,26 @@ class TimeCardController extends BaseController
         fclose($fp);
     }
 
-    public function ftpFiles($timeCardName){
-
-       
-        if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
+    public function ftpFiles(){
+            if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
                 ||  $_SERVER['SERVER_NAME'] === '0.0.0.0'
-                || strpos($_SERVER['SERVER_NAME'],'192.168.')===0))
-        {
-                $ftp_server     = Constants::DEV_FTP_SERVER_ADDRESS;
-                $ftp_user_name  = Constants::DEV_FTP_USERNAME;
-                $ftp_user_pass  = Constants::DEV_FTP_PASSWORD;
-                $defaultPath    = Constants::DEV_DEFAULT_FTP_PATH.$timeCardName.".csv";
-        }else{
-                $ftp_server     = Constants::PROD_FTP_SERVER_ADDRESS;
-                $ftp_user_name  = Constants::PROD_FTP_USERNAME;
-                $ftp_user_pass  = Constants::PROD_FTP_PASSWORD;
-                $defaultPath    = Constants::PROD_DEFAULT_FTP_PATH.$timeCardName.".csv";
-        }
+                || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)){
+
+                $ftp_server             = Constants::DEV_FTP_SERVER_ADDRESS;
+                $ftp_user_name          = Constants::DEV_FTP_USERNAME;
+                $ftp_user_pass          = Constants::DEV_FTP_PASSWORD;
+                $defaultPathTimeCard    = Constants::DEV_DEFAULT_FTP_PATH.Yii::$app->session['timeCardFileName'].".csv";
+                $defaultPathPayRoll     = Constants::DEV_DEFAULT_FTP_PATH.Yii::$app->session['payrollFileName'] .".csv";
+            }else{
+
+                $ftp_server             = Constants::PROD_FTP_SERVER_ADDRESS;
+                $ftp_user_name          = Constants::PROD_FTP_USERNAME;
+                $ftp_user_pass          = Constants::PROD_FTP_PASSWORD;
+                $defaultPathTimeCard    = Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['timeCardFileName'] .".csv";
+                $defaultPathPayRoll     = Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['payrollFileName']  .".csv";
+            }
+
+          //WILL CLEAN UP ONCE FULL IMPLEMENTATION IS COMPLETE(FTP->SFTP) - EI  
        
          // if (file_exists($defaultPath)) {
                     // Yii::trace("The file $defaultPath exists");
@@ -857,74 +891,36 @@ class TimeCardController extends BaseController
             // Yii::trace("LOGIN IN FALL");
 
         // get FTP result
-        $upload_result = ftp_put($ftp_conn,$timeCardName,$defaultPath, FTP_BINARY);
+        $time_upload_result = ftp_put($ftp_conn,Yii::$app->session['timeCardFileName'],$defaultPathTimeCard, FTP_BINARY);
+        $pay_upload_result  = ftp_put($ftp_conn,Yii::$app->session['payrollFileName'],$defaultPathPayRoll, FTP_BINARY);
         //SFTP connection  
         //$upload_result = ssh2_scp_send($connection, $defaultPath,$timeCardName, 0644);
 
         // Error handling
-        // if(!$upload_result)
-        // {
-            // Yii::trace("FTP error: The file could not be written to the FTP server.");
-        // } else {
-            // Yii::trace("FTP success: The file is transferred to FTP server.");
-        // }
+         if(!$time_upload_result || !$pay_upload_result)
+         {
+             Yii::trace("FTP error: The file could not be written to the FTP server.");
+         } else {
+             Yii::trace("FTP success: The file is transferred to FTP server.");
+         }
 
         // close connection
         ftp_close($ftp_conn);
         //ssh2_exec($connection, 'exit');
         //unset($connection);
         //delete file from server
-        unlink($defaultPath);
-    }
+        //unlink($defaultPath);
 
-    public function actionFtpFilesPayroll(){
-        //$defaultPath = 'C:\Users\tzhang\Downloads';
-        $fileType = '.csv';
-        $dateTime = date('Y-m-d_h_i');
+         //Empty PayRoll Session vars
+         unset(Yii::$app->session['payrollFileWritten']);
+         unset(Yii::$app->session['payrollFileName']);
+         //Empty TimeCard Session Vars
+         unset(Yii::$app->session['timeCardFileWritten']);
+         unset(Yii::$app->session['timeCardFileName']);
+         
+         Yii::trace("FTTP SENT");
+       
 
-        $userName =  getenv("username");
-        Yii::trace("CURRENT USER NAME IS : ".$userName);
-        $defaultPath = 'C:\Users\\'.$userName.'\Downloads';
-        $payrollFile = '\payroll_history_';
-        $filePath = $defaultPath . $payrollFile . $dateTime . $fileType;
-        if (file_exists($filePath)) {
-            Yii::trace("The file $filePath exists");
-        } else {
-            Yii::trace("The file $filePath not exists");
-        }
-
-        $remoteFileName = 'payroll_history_' . $dateTime . $fileType;
-
-        $ftp_server = "10.100.10.10";
-        $ftp_user_name='ftpdev.southerncrosslighthouse.com|tzhang';
-        $ftp_user_pass='Wojiushiye008';
-
-        // FTP connection
-        $ftp_conn = ftp_connect($ftp_server);
-
-        // FTP login
-        @$login_result=ftp_login($ftp_conn, $ftp_user_name, $ftp_user_pass);
-
-        ftp_pasv($ftp_conn, true);
-
-        if ($login_result)
-            Yii::trace("LOGIN IN SUCCESS");
-        else
-            Yii::trace("LOGIN IN FALL");
-
-        // get FTP result
-        $upload_result = ftp_put($ftp_conn, $remoteFileName, $filePath, FTP_BINARY);
-
-        // Error handling
-        if(!$upload_result)
-        {
-            Yii::trace("FTP error: The file could not be written to the FTP server.");
-        } else {
-            Yii::trace("FTP success: The file is transferred to FTP server.");
-        }
-
-        // close connection
-        ftp_close($ftp_conn);
     }
 
     /**
@@ -964,9 +960,7 @@ class TimeCardController extends BaseController
     public function writeCSVfile($downloadUrl){
         Yii::$app->response->format = Response::FORMAT_RAW;
         $csvReq = Parent::executeGetRequest($downloadUrl,Constants::API_VERSION_2);
-        $success = json_decode($csvReq, true);
-
-        return $success;
+        return $csvReq;
         
     }
 
