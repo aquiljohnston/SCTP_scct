@@ -66,6 +66,12 @@ $(function(){
     });
 
     //reload table
+   
+
+
+
+    //filter
+
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
         if (form.find(".has-error").length){
@@ -216,4 +222,14 @@ $(function(){
 		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
 	}
 	
+});
+
+  $( function() {
+    $( document ).tooltip()
+    
+    if($('#multiple_submit_btn_id').hasClass('off-btn')){
+
+       $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+      
+    }
 });

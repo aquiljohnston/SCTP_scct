@@ -35,6 +35,7 @@ function applyTimeCardOnClickListeners() {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
 
+
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
         } else {
@@ -58,6 +59,10 @@ function applyTimeCardOnClickListeners() {
 
 function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').off('click').click(function (event) {
+
+         if($(this).hasClass('off-btn')){
+            return false;
+        }
         var quantifier = "";
         var name = 'timecard_history_';
         var payroll = 'payroll_history_'
