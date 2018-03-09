@@ -814,12 +814,19 @@ class TimeCardController extends BaseController
             header('Content-Disposition: attachment; filename="'.$cardName.'.csv"');
             $this->requestAndOutputCsv($url);
 
-            //This needs to run after the last file so if we add more files later we need to move this;
+            //This needs to run after the last file download
+            //so if we add more files later we need to move this;
         if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE){
-            $this->ftpFiles();
+            //USE FTP WHEN IN DEV
+            if(YII_ENV_DEV){
+                $this->ftpFiles();
+            } else {
+                $this->sftpFiles();
+            }
+            
         }
         else{
-                 throw new \yii\web\HttpException(404, 'The requested Item could not be found.');
+                 throw new \yii\web\HttpException(500, 'System Error - FW-100');
         }
 
         } catch (ForbiddenHttpException $e) {
@@ -847,9 +854,7 @@ class TimeCardController extends BaseController
     }
 
     public function ftpFiles(){
-            if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
-                ||  $_SERVER['SERVER_NAME'] === '0.0.0.0'
-                || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)){
+            if(YII_ENV_DEV){
 
                 $ftp_server             = Constants::DEV_FTP_SERVER_ADDRESS;
                 $ftp_user_name          = Constants::DEV_FTP_USERNAME;
@@ -865,17 +870,7 @@ class TimeCardController extends BaseController
                 $defaultPathPayRoll     = Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['payrollFileName']  .".csv";
             }
 
-          //WILL CLEAN UP ONCE FULL IMPLEMENTATION IS COMPLETE(FTP->SFTP) - EI  
-       
-         // if (file_exists($defaultPath)) {
-                    // Yii::trace("The file $defaultPath exists");
-            // } else {
-                    // Yii::trace("The file $defaultPath not exists");
-            // }
-
-        //SFTP connection   
-        //$connection   = ssh2_connect($ftp_server, 22);
-        //@$login_result=ssh2_auth_password($connection, $ftp_user_name,  $ftp_user_pass);
+        //WILL CLEAN UP ONCE FULL IMPLEMENTATION IS COMPLETE(FTP->SFTP) - EI  
         
         // FTP connection
         $ftp_conn = ftp_connect($ftp_server);
@@ -885,16 +880,10 @@ class TimeCardController extends BaseController
 
         ftp_pasv($ftp_conn, true);
 
-        // if ($login_result)
-            // Yii::trace("LOGIN IN SUCCESS");
-        // else
-            // Yii::trace("LOGIN IN FALL");
 
         // get FTP result
         $time_upload_result = ftp_put($ftp_conn,Yii::$app->session['timeCardFileName'],$defaultPathTimeCard, FTP_BINARY);
         $pay_upload_result  = ftp_put($ftp_conn,Yii::$app->session['payrollFileName'],$defaultPathPayRoll, FTP_BINARY);
-        //SFTP connection  
-        //$upload_result = ssh2_scp_send($connection, $defaultPath,$timeCardName, 0644);
 
         // Error handling
          if(!$time_upload_result || !$pay_upload_result)
@@ -906,8 +895,6 @@ class TimeCardController extends BaseController
 
         // close connection
         ftp_close($ftp_conn);
-        //ssh2_exec($connection, 'exit');
-        //unset($connection);
         //delete file from server
         //unlink($defaultPath);
 
@@ -921,6 +908,57 @@ class TimeCardController extends BaseController
          Yii::trace("FTTP SENT");
        
 
+    }
+
+        public function sftpFiles(){
+   
+        $ftp_server             = Constants::PROD_FTP_SERVER_ADDRESS;
+        $ftp_user_name          = Constants::PROD_FTP_USERNAME;
+        $ftp_user_pass          = Constants::PROD_FTP_PASSWORD;
+        $defaultPathTimeCard    = Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['timeCardFileName'] .".csv";
+        $defaultPathPayRoll     = Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['payrollFileName']  .".csv";
+
+
+          //WILL CLEAN UP ONCE FULL IMPLEMENTATION IS COMPLETE(FTP->SFTP) - EI  
+
+        //SFTP connection   
+        $ftp_conn   = ssh2_connect($ftp_server, 22);
+        @$login_result  =ssh2_auth_password($ftp_conn , $ftp_user_name,  $ftp_user_pass);
+        
+
+        if ($login_result)
+             Yii::trace("LOGIN IN SUCCESS");
+         else
+             Yii::trace("LOGIN IN FALL");
+
+        //SFTP connection  
+        $time_upload_result = ssh2_scp_send($ftp_conn,Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['timeCardFileName'],"/fromctfiletransfer/".$defaultPathTimeCard, 0777);
+        $pay_upload_result = ssh2_scp_send($ftp_conn,Constants::PROD_DEFAULT_FTP_PATH.Yii::$app->session['payrollFileName'],"/fromctfiletransfer/".$defaultPathTimeCard, 0777);
+
+        // Error handling
+         if(!$time_upload_result || !$pay_upload_result)
+         {
+             Yii::trace("SFFTP error: The file could not be written to the FTP server.");
+         } else {
+             Yii::trace("SFFTP success: The file is transferred to FTP server.");
+         }
+
+        // close connection
+
+        ssh2_exec($ftp_conn, 'exit');
+        unset($ftp_conn);
+        //delete file from server
+        //unlink($defaultPath);
+
+         //Empty PayRoll Session vars
+         unset(Yii::$app->session['payrollFileWritten']);
+         unset(Yii::$app->session['payrollFileName']);
+         //Empty TimeCard Session Vars
+         unset(Yii::$app->session['timeCardFileWritten']);
+         unset(Yii::$app->session['timeCardFileName']);
+         
+         Yii::trace("FTTP SENT");
+       
     }
 
     /**

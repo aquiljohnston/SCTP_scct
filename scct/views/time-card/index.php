@@ -8,6 +8,7 @@ use yii\widgets\Pjax;
 use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
+use kartik\popover\PopoverX;
 
 
 /* @var $this yii\web\View */
@@ -153,13 +154,35 @@ $column = [
                 </div>
                 <div class="row">
                     <div id="multiple_time_card_approve_btn">
+
+
+                   
                         <?php
-                            echo Html::button('Submit',
+
+                          if(!$submitReady){
+                             echo Html::button('Submit',
+                                [
+                                    'class' => 'btn btn-primary multiple_submit_btn off-btn',
+                                    'id' => 'multiple_submit_btn_id',
+                                    //'disabled' => $submitReady ? false : 'disabled',
+                                     'style' => 'opacity:0.7'
+                                ]);
+                          } else {
+                      
+                             echo Html::button('Submit',
                                 [
                                     'class' => 'btn btn-primary multiple_submit_btn',
                                     'id' => 'multiple_submit_btn_id',
-                                    'disabled' => $submitReady ? false : 'disabled'
+                                    //'disabled' => $submitReady ? false : 'disabled',
+
                                 ]);
+                    
+                          }
+
+                           
+                        ?>  
+                   
+                        <?php
                             echo Html::button('Approve',
                                 [
                                     'class' => 'btn btn-primary multiple_approve_btn',
@@ -268,4 +291,11 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
+    <div id="myPopover6" class="popover popover-x popover-default">
+    <div class="arrow"></div>
+    <div class="popover-header popover-title"><button type="button" class="close" data-dismiss="popover-x">&times;</button>My Header</div>
+    <div class="popover-body popover-content">
+        <p class="text-justify">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+    </div>
+</div>
 </div>
