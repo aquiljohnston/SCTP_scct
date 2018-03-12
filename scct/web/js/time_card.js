@@ -225,7 +225,7 @@ $(function(){
 });
 
   $( function() {
-    $( document ).tooltip();
+    $( ".off-btn" ).tooltip();
     
     if($('#multiple_submit_btn_id').hasClass('off-btn')){
 
