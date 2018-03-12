@@ -60,6 +60,10 @@ function applyTimeCardOnClickListeners() {
 function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').off('click').click(function (event) {
 
+         //apply css class that gives the tooltip gives
+         //the appearance of being disabled via css
+         //add returns false to prevent submission in
+         //this state.
          if($(this).hasClass('off-btn')){
             return false;
         }
@@ -78,10 +82,10 @@ function applyTimeCardSubmitButtonListener() {
         dateRange = $('[name="DynamicModel[dateRangeValue]"]').val();
         dateRange = dateRange.split(",");
 
-        /*console.log('/time-card/download-time-card-data?timeCardName='+timeCardName+
+        console.log('/time-card/download-time-card-data?timeCardName='+timeCardName+
                 '&projectName='+projectName+
                 '&weekStart='+dateRange[0]+
-                '&weekEnd='+$.trim(dateRange[1]));*/
+                '&weekEnd='+$.trim(dateRange[1]));
         console.log(timeCardName);
         console.log(payRollFileName);
 

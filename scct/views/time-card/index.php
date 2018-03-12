@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
-use kartik\popover\PopoverX;
+
 
 
 /* @var $this yii\web\View */
@@ -154,35 +154,13 @@ $column = [
                 </div>
                 <div class="row">
                     <div id="multiple_time_card_approve_btn">
-
-
-                   
                         <?php
-
-                          if(!$submitReady){
-                             echo Html::button('Submit',
+                            echo Html::button('Submit',
                                 [
-                                    'class' => 'btn btn-primary multiple_submit_btn off-btn',
+                                    'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
                                     'id' => 'multiple_submit_btn_id',
-                                    //'disabled' => $submitReady ? false : 'disabled',
-                                     'style' => 'opacity:0.7'
+                                    //'disabled' => $submitReady ? false : 'disabled'
                                 ]);
-                          } else {
-                      
-                             echo Html::button('Submit',
-                                [
-                                    'class' => 'btn btn-primary multiple_submit_btn',
-                                    'id' => 'multiple_submit_btn_id',
-                                    //'disabled' => $submitReady ? false : 'disabled',
-
-                                ]);
-                    
-                          }
-
-                           
-                        ?>  
-                   
-                        <?php
                             echo Html::button('Approve',
                                 [
                                     'class' => 'btn btn-primary multiple_approve_btn',
@@ -209,6 +187,7 @@ $column = [
                   <div class="col-md-2 projectFilterDD">
                      <?php $chosen = isset(Yii::$app->request->queryParams['DynamicModel']) ? Yii::$app->request->queryParams['DynamicModel'] : "";?>
                     <?=
+                    
                      $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
                      ['options' =>[
                         isset($chosen["projectName"]) ? $chosen["projectName"]:"" =>['selected'=>'true'] 
@@ -217,11 +196,7 @@ $column = [
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
-					<?php if($dateRangeValue == 'other'){ ?>
-						<div id="datePickerContainer" style="float: left; width: auto; display: block;" >
-					<?php } else { ?>
-						<div id="datePickerContainer" style="float: left; width: auto; display: none;" >
-					<?php } ?>
+                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
@@ -229,9 +204,9 @@ $column = [
                         ],
                         'name'=>'date_range_3',
                         'presetDropdown'=>true,
-                        //'hideInput'=>true,
+                        'hideInput'=>true,
                         'pluginEvents' => [
-                            "apply.daterangepicker" => "function(ev, picker) {
+                            "apply.daterangepicker" => "function() {
                                 "." var jqTCDropDowns = $('#timeCardDropdownContainer');
                                     var form = jqTCDropDowns.find(\"#TimeCardForm\");
                                     if (form.find(\".has-error\").length){
@@ -254,7 +229,8 @@ $column = [
                                     $('#timeCardGridview').on('pjax:error', function () {
                                         $('#loading').hide();
                                         location.reload();
-                                    }); "."
+                                    });
+                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
                             }"],
                     ]); ?>
                 </div>
@@ -291,11 +267,4 @@ $column = [
             <?php Pjax::end() ?>
         </div>
     </div>
-    <div id="myPopover6" class="popover popover-x popover-default">
-    <div class="arrow"></div>
-    <div class="popover-header popover-title"><button type="button" class="close" data-dismiss="popover-x">&times;</button>My Header</div>
-    <div class="popover-body popover-content">
-        <p class="text-justify">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-    </div>
-</div>
 </div>
