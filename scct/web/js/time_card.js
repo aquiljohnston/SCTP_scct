@@ -5,6 +5,7 @@ $(function(){
     var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
     var projectFilterDD     = $('#projectFilterDD');
     entries                 = [];           
+      
 	
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
@@ -65,12 +66,54 @@ $(function(){
         reloadTimeCardGridView();
     });
 
-    //reload table
-   
 
+    $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEntries tbody tr td',function (){
+      
+      seq_num       =$(this).attr('data-col-seq');
+      id            = $('#timeCardId').val();  
+      date          = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text(); 
+      taskName      = $(this).closest('tr').find("td[data-col-seq='0']").text();
+      //approve_status= $()   
+      var entries   = []; 
+      //clean up date format for sending
+      date = date.replace(/\-/g, '/');
 
+      //restrict click to only day of the week fields
+      //with values in the .text()
+      if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")){
 
-    //filter
+      var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
+        if (confirmBox) {
+        $('#loading').show();
+        //build and send payload to deactivate single entry
+        entries.push({taskName : taskName, day : date, timeCardID : id})
+        data = {entries};
+        $.ajax({
+            type: 'POST',
+            url: '/time-card/deactivate/',
+            data: data,
+            beforeSend: function() {
+            },
+            success: function(data) {
+                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
+
+            
+            }
+        });
+                
+        } else {
+            //nothing
+        }  
+
+                 $.each($('tbody tr td'),function(index,value){
+                    if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
+                     $(this).attr("title","Click to deactivate this time entry!")
+                     }
+                  })
+            $('#loading').hide();
+      }
+    });
+
 
     function reloadTimeCardGridView() {
         var form = jqTCDropDowns.find("#TimeCardForm");
@@ -225,11 +268,18 @@ $(function(){
 });
 
   $( function() {
-    $( ".off-btn" ).tooltip();
+    $( document ).tooltip();
     
     if($('#multiple_submit_btn_id').hasClass('off-btn')){
 
        $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
       
     }
+
+    //add tool tip to all time deactivatable time entries    
+   /* $.each($('tbody tr td'),function(index,value){
+         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
+           $(this).attr("title","Click to deactivate this time entry!")
+         }
+    })*/
 });
