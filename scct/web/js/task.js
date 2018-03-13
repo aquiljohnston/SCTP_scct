@@ -113,10 +113,67 @@ function TaskEntryCreation() {
         data: form.serialize(),
         success: function () {
             $('#loading').hide();
-            $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
+            $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+            applyToolTip();
+        });; //for pjax update
         },
         error  : function () {
             console.log("internal server error");
         }
     });
 }
+
+function applyToolTip(){
+     $.each($('#allTaskEntries tbody tr td'),function(index,value){
+         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
+            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
+           $(this).attr("title","Click to deactivate this time entry!")
+         }
+    })
+}
+
+    //I believe everything below this should probably be in the task.js file because it is limited to the task screen
+$(document).on('click','#deactive_timeEntry_btn_id',function(e){
+             $('#loading').show();
+        id = $('#timeCardId').val();
+
+       $(".entryData").each(function(k,value){
+
+         if($(this).is(":checked")){
+            
+            //var isThere = $.grep(entries, function(e){ return e.id == k; });
+
+            //if(isThere.length == 0){
+                 entries.push({
+                   /// id : k,
+                    taskName : $(this).attr('taskName'),
+                    day : $(this).attr('entry'),
+                    timeCardID : id
+                })
+            }
+       // }
+    })
+
+        data = {entries}
+
+         // console.log(data);
+        // return false;
+
+        $.ajax({
+            type: 'POST',
+            url: '/time-card/deactivate/',
+            data: data,
+            beforeSend: function(  ) {
+              applyToolTip();
+            },
+            success: function(data) {
+                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+            applyToolTip();
+        });; //for pjax update
+              
+                $('#loading').hide();
+                $('#deactive_timeEntry_btn_id').prop('disabled',true);
+            }
+        });
+    });
+

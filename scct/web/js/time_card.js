@@ -80,7 +80,8 @@ $(function(){
 
       //restrict click to only day of the week fields
       //with values in the .text()
-      if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")){
+      if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
+        && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
 
       var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
         if (confirmBox) {
@@ -95,21 +96,15 @@ $(function(){
             beforeSend: function() {
             },
             success: function(data) {
-                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
-
-            
+                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function (){
+                    applyToolTip();
+                });
             }
         });
                 
         } else {
             //nothing
         }  
-
-                 $.each($('tbody tr td'),function(index,value){
-                    if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
-                     $(this).attr("title","Click to deactivate this time entry!")
-                     }
-                  })
             $('#loading').hide();
       }
     });
@@ -147,47 +142,9 @@ $(function(){
         });
     }
 
-	//I believe everything below this should probably be in the task.js file because it is limited to the task screen
-    $(document).on('click','#deactive_timeEntry_btn_id',function(e){
-             $('#loading').show();
-        id = $('#timeCardId').val();
-
-       $(".entryData").each(function(k,value){
-
-         if($(this).is(":checked")){
-            
-            //var isThere = $.grep(entries, function(e){ return e.id == k; });
-
-            //if(isThere.length == 0){
-                 entries.push({
-                   /// id : k,
-                    taskName : $(this).attr('taskName'),
-                    day : $(this).attr('entry'),
-                    timeCardID : id
-                })
-            }
-       // }
-    })
-
-        data = {entries}
-
-         // console.log(data);
-        // return false;
-
-        $.ajax({
-            type: 'POST',
-            url: '/time-card/deactivate/',
-            data: data,
-            beforeSend: function(  ) {
-          
-            },
-            success: function(data) {
-                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}); //for pjax update
-                $('#loading').hide();
-                $('#deactive_timeEntry_btn_id').prop('disabled',true);
-            }
-        });
-    });
+    function reloadShowEntriesView(){
+        $.pjax.reload({container:"#ShowEntriesView", timeout: 99999})
+    }
 
 
     //iterate table row get row that has time entrydata
@@ -264,6 +221,16 @@ $(function(){
 		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
 		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
 	}
+
+    function applyToolTip(){
+        console.log('called')
+
+    $.each($('#allTaskEntries tbody tr td'),function(index,value){
+        if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
+            $(this).attr("title","Click to deactivate this time entry!")
+              }
+         })
+    }
 	
 });
 
@@ -277,9 +244,10 @@ $(function(){
     }
 
     //add tool tip to all time deactivatable time entries    
-   /* $.each($('tbody tr td'),function(index,value){
-         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
+   $.each($('#allTaskEntries tbody tr td'),function(index,value){
+         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
+            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
            $(this).attr("title","Click to deactivate this time entry!")
          }
-    })*/
+    })
 });
