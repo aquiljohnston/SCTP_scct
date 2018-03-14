@@ -196,7 +196,11 @@ $column = [
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
-                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
+					<?php if($dateRangeValue == 'other'){ ?>
+						<div id="datePickerContainer" style="float: left; width: auto; display: block;">
+					<?php } else { ?>
+						<div id="datePickerContainer" style="float: left; width: auto; display: none;">
+					<?php } ?>
                     <?= $form->field($model, 'DateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
