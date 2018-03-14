@@ -31,14 +31,14 @@ final class Constants
     const PROD_FTP_SERVER_ADDRESS = "sftp.southerncrossinc.com";
     const PROD_FTP_USERNAME = "ctfiletransfer";
     const PROD_FTP_PASSWORD = "lLiamiLENsCOPhAnceLLadwil";
-    const PROD_DEFAULT_FTP_PATH = "C:\\Inetpub\\wwwroot\\";
+    const PROD_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp";
 
     //DEV_FTP_CREDENTIALS
     const DEV_FTP_SERVER_ADDRESS = "10.100.10.10";
     const DEV_FTP_USERNAME = "ftpdev.southerncrosslighthouse.com|eigyan";
     const DEV_FTP_PASSWORD = "jumpyF@ng16";
     //FTP_DEFAULT_PATH
-    const DEV_DEFAULT_FTP_PATH = "C:\\Inetpub\\wwwroot\\";
+    const DEV_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp";
  
 	
 	private function __construct()
