@@ -13,7 +13,7 @@ final class Constants
     const SERVER_LOCALHOST = 'local';
     const SERVER_DEV = 'dev';
     const SERVER_STAGE = 'stage';
-	//prod has no additional distinguishing characters 
+	//prod has no additional distinguishing characters
     const SERVER_PRODUCTION = '';
 	
 	//api url for different environments
@@ -36,11 +36,9 @@ final class Constants
     //DEV_FTP_CREDENTIALS
     const DEV_FTP_SERVER_ADDRESS = "10.100.10.10";
     const DEV_FTP_USERNAME = "ftpdev.southerncrosslighthouse.com|eigyan";
-    const DEV_FTP_PASSWORD = "";
+    const DEV_FTP_PASSWORD = "jumpyF@ng16";
     //FTP_DEFAULT_PATH
-
     const DEV_DEFAULT_FTP_PATH = "C:\\Inetpub\\wwwroot\\";
-
  
 	
 	private function __construct()
