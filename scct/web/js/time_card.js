@@ -66,7 +66,6 @@ $(function(){
         reloadTimeCardGridView();
     });
 
-
     $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEntries tbody tr td',function (){
       
       seq_num       =$(this).attr('data-col-seq');
@@ -109,13 +108,13 @@ $(function(){
       }
     });
 
-
+    //reload table
     function reloadTimeCardGridView() {
-        var form = jqTCDropDowns.find("#TimeCardForm");
+        var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
         if (form.find(".has-error").length){
             return false;
         }
-        $('#loading').show();
+		$('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: form.attr("action"),
@@ -125,15 +124,15 @@ $(function(){
         });
         $('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
 			$.pjax.reload({
-				container: '#timeCardForm',
+				container: '#submitApproveButtons',
 				timeout:false
 			});
-			$('#timeCardForm').off('pjax:success').on('pjax:success', function () {
+			$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 				applyTimeCardOnClickListeners();
 				applyTimeCardSubmitButtonListener();
 				$('#loading').hide();
 			});
-			$('#timeCardForm').off('pjax:error').on('pjax:error', function () {
+			$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
 				location.reload();
 			});
 		});
