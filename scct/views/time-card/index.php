@@ -134,7 +134,6 @@ $column = [
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="timecard_filter">
             <div id="timeCardDropdownContainer">
-                <?php Pjax::begin(['id' => 'timeCardForm', 'timeout' => false]) ?>
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
                     'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
@@ -152,30 +151,31 @@ $column = [
                         <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                     </div>
                 </div>
-                <div class="row">
-                    <div id="multiple_time_card_approve_btn">
-                        <?php
-                            echo Html::button('Submit',
-                                [
-                                    'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
-                                    'id' => 'multiple_submit_btn_id',
-                                    //'disabled' => $submitReady ? false : 'disabled'
-                                ]);
-                            echo Html::button('Approve',
-                                [
-                                    'class' => 'btn btn-primary multiple_approve_btn',
-                                    'id' => 'multiple_approve_btn_id'
-                                ]);
-                        ?>
-                        <?php
-                        if ($pages->totalCount > 0) {
-                            ?>
-                            <a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-                               href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
-                        <?php } ?>
-
-                    </div>
-                </div>
+				<?php Pjax::begin(['id' => 'submitApproveButtons', 'timeout' => false]) ?>
+					<div class="row">
+						<div id="multiple_time_card_approve_btn">
+							<?php
+								echo Html::button('Submit',
+									[
+										'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
+										'id' => 'multiple_submit_btn_id',
+										//'disabled' => $submitReady ? false : 'disabled'
+									]);
+								echo Html::button('Approve',
+									[
+										'class' => 'btn btn-primary multiple_approve_btn',
+										'id' => 'multiple_approve_btn_id'
+									]);
+							?>
+							<?php
+							if ($pages->totalCount > 0) {
+								?>
+								<a id="export_timecard_btn" class="btn btn-primary" target="_blank"
+								   href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
+							<?php } ?>
+						</div>
+					</div>
+                <?php Pjax::end() ?>
                 <div class="col-md-3 col-md-offset-1 TimeCardSearch">
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
@@ -207,35 +207,40 @@ $column = [
                         'hideInput'=>true,
                         'pluginEvents' => [
                             "apply.daterangepicker" => "function() {
-                                "." var jqTCDropDowns = $('#timeCardDropdownContainer');
-                                    var form = jqTCDropDowns.find(\"#TimeCardForm\");
-                                    if (form.find(\".has-error\").length){
-                                        return false;
-                                    }
-                                    $('#loading').show();
-                                    $.pjax.reload({
-                                        type: 'GET',
-                                        url: form.attr(\"action\"),
-                                        container: '#timeCardGridview', // id to update content
-                                        data: form.serialize(),
-                                        timeout: 99999
-                                    });
-                                    $('#timeCardGridview').on('pjax:success', function () {
-										//these functions are declared in approve_multiple_timecard.js
-										applyTimeCardOnClickListeners();
-										applyTimeCardSubmitButtonListener();
-                                        $('#loading').hide();
-                                    });
-                                    $('#timeCardGridview').on('pjax:error', function () {
-                                        $('#loading').hide();
-                                        location.reload();
-                                    });
+                                "." var form = $('#timeCardDropdownContainer').find('#TimeCardForm');
+									if (form.find('.has-error').length){
+										return false;
+									}
+									$('#loading').show();
+									$.pjax.reload({
+										type: 'GET',
+										url: form.attr('action'),
+										container: '#timeCardGridview', // id to update content
+										data: form.serialize(),
+										timeout: 99999
+									});
+									$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
+										$.pjax.reload({
+											container: '#submitApproveButtons',
+											timeout:false
+										});
+										$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
+											applyTimeCardOnClickListeners();
+											applyTimeCardSubmitButtonListener();
+											$('#loading').hide();
+										});
+										$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
+											location.reload();
+										});
+									});
+									$('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
+										location.reload();
+									});
                                     $('#datePickerContainer').css(\"display\", \"block\"); "."
                             }"],
                     ]); ?>
                 </div>
                 <?php ActiveForm::end(); ?>
-                <?php Pjax::end() ?>
             </div>
         </div>
     </div>
