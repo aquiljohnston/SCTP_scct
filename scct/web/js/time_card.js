@@ -7,8 +7,11 @@ $(function(){
     entries                 = [];           
       
 	$(document).ready(function () {
-		//set to and from values for date picker based on current date range
-		refreshDatePicker();	
+		if(jqWeekSelection.length > 0)
+		{
+			//set to and from values for date picker based on current date range
+			refreshDatePicker();	
+		}
 	});
 	
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
