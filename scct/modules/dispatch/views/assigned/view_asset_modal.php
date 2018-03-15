@@ -217,9 +217,8 @@ use kartik\grid\GridView;
                     $('#loading').show();
                 }
             }).done(function () {
-                $('.modal-backdrop').remove();
-                viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=' + mapGridSelectedAssigned, '#modalViewAssetAssigned', '#modalContentViewAssetAssigned', mapGridSelectedAssigned);
-                $('#loading').hide();
+				//loading will be hidden in function call, 1 represents resetting to the first page after dispatch
+				reloadViewAssetsModal(1);
             });
         });
 
