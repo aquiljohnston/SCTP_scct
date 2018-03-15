@@ -41,6 +41,7 @@ use kartik\grid\GridView;
             <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
             <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
             <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
+            <input id="inspectionType" type="hidden" name="inspectionType"  value=<?php echo $inspectionType; ?> />
             <input id="viewAssignedAssetPageNumber" type="hidden" name="viewAssignedAssetPageNumber" value="1"/>
         </div>
         <?php ActiveForm::end(); ?>
@@ -240,13 +241,19 @@ use kartik\grid\GridView;
         var searchFilterVal = $('#viewAssetsSearchAssigned').val() == "/" ? "" : $('#viewAssetsSearchAssigned').val();
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+        var inspectionType = $('#inspectionType').val() == "/" ? "" : $('#inspectionType').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/assigned/view-asset',
             container: '#assetTablePjax', // id to update content
-            data: {searchFilterVal: searchFilterVal, mapGridSelected: mapGridSelected, sectionNumberSelected: sectionNumberSelected, viewAssignedAssetPageNumber:page},
+            data: {
+				searchFilterVal: searchFilterVal,
+				mapGridSelected: mapGridSelected,
+				sectionNumberSelected: sectionNumberSelected,
+				viewAssignedAssetPageNumber:page,
+				inspectionType:inspectionType},
             timeout: 99999,
             push: false,
             replace: false,
