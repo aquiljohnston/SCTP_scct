@@ -272,7 +272,6 @@ class AssignedController extends \app\controllers\BaseController
      */
     public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $inspectionType=null)
     {
-        Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
             'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
         ]);
@@ -315,7 +314,6 @@ class AssignedController extends \app\controllers\BaseController
 				'inspectionType'        => $inspectionType,
             ]);
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
         $data = DispatchController::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
 
