@@ -882,8 +882,8 @@ class TimeCardController extends BaseController
 
 
         // get FTP result
-        $time_upload_result = ftp_put($ftp_conn,Yii::$app->session['timeCardFileName'],$defaultPathTimeCard, FTP_BINARY);
-        $pay_upload_result  = ftp_put($ftp_conn,Yii::$app->session['payrollFileName'],$defaultPathPayRoll, FTP_BINARY);
+        $time_upload_result = ftp_put($ftp_conn,"/timecards_payroll/".Yii::$app->session['timeCardFileName'],$defaultPathTimeCard, FTP_BINARY);
+        $pay_upload_result  = ftp_put($ftp_conn,"/timecards_payroll/".Yii::$app->session['payrollFileName'],$defaultPathPayRoll, FTP_BINARY);
 
         // Error handling
          if(!$time_upload_result || !$pay_upload_result)
