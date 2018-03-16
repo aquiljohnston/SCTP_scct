@@ -130,7 +130,11 @@ $(function(){
 			$.pjax.reload({
 				container: '#submitApproveButtons',
 				timeout:false
-			});
+			}).done(function (){
+                if($('#multiple_submit_btn_id').hasClass('off-btn')){
+               $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+                }
+                 });
 			$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 				applyTimeCardOnClickListeners();
 				applyTimeCardSubmitButtonListener();
@@ -257,6 +261,8 @@ $(function(){
 
   $( function() {
     $( document ).tooltip();
+
+    console.log('called');
     
     if($('#multiple_submit_btn_id').hasClass('off-btn')){
 
