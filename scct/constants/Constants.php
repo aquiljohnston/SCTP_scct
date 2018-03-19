@@ -36,9 +36,12 @@ final class Constants
     //DEV_FTP_CREDENTIALS
     const DEV_FTP_SERVER_ADDRESS = "10.100.10.10";
     const DEV_FTP_USERNAME = "ftpdev.southerncrosslighthouse.com|eigyan";
-    const DEV_FTP_PASSWORD = "jumpyF@ng16";
+    const DEV_FTP_PASSWORD = "";
     //FTP_DEFAULT_PATH
-    const DEV_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp\\";
+    //const DEV_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp\\";
+    const DEV_DEFAULT_FTP_PATH = "/Users/Shared/";
+    const OASIS = "OASIS";
+	const QUICKBOOKS = "QB";
  
 	
 	private function __construct()
