@@ -62,9 +62,12 @@ use yii\helpers\Url;
                 'class' => 'col-sm-2 control-label'
             ]) ?>
             <div class="col-sm-4">
-                <?= $form->field($model, 'TaskName', [
+                <?= $form->field($model, 
+                    'TaskName', [
                     'showLabels' => false
-                ])->dropDownList($allTask); ?>
+                ])->dropDownList($allTask,
+                      array('prompt'=>'--Select A Task--')
+    ); ?>
             </div>
         </div>
         <div class="row">
@@ -101,7 +104,8 @@ use yii\helpers\Url;
             <div class="col-sm-4">
                 <?= $form->field($model, 'ChargeOfAccountType', [
                     'showLabels' => false
-                ])->dropDownList($chartOfAccountType); ?>
+                ])->dropDownList($chartOfAccountType,
+                     array('prompt'=>'--Select an Account Type--')); ?>
             </div>
         </div>
         <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $timeCardID]); ?>
