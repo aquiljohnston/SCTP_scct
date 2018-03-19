@@ -72,7 +72,7 @@ class TimeCardController extends BaseController
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model ->addRule('DateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
-            $model ->addRule('projectName', 'string', ['max' => 200]); //
+            $model ->addRule('projectName', 'integer'); //
 
             //get current and prior weeks date range
             $today = BaseController::getDate();
@@ -755,7 +755,8 @@ class TimeCardController extends BaseController
                 'week' => null,
                 'weekStart' => $weekStart,
                 'weekEnd' => $weekEnd,
-                'download' => true
+                'download' => true,
+                'type' => Constants::OASIS
                 ]);
 
 
@@ -800,7 +801,8 @@ class TimeCardController extends BaseController
                 'projectName' => $projectName,
                 'weekStart' => $weekStart,
                 'weekEnd' => $weekEnd,
-                'download' => true
+                'download' => true,
+                'type' => Constants::QUICKBOOKS
                 ]);
 
 
@@ -819,9 +821,9 @@ class TimeCardController extends BaseController
         if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE){
             //USE FTP WHEN IN DEV
             if(YII_ENV_DEV){
-                $this->ftpFiles();
+                //$this->ftpFiles();
             } else {
-                $this->sftpFiles();
+               // $this->sftpFiles();
             }
             
         }
