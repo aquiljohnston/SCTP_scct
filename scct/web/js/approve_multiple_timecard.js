@@ -1,36 +1,20 @@
 // BULK DELETE
 $(function () {
-
-    // disable single approve button once user clicked it
-    $('#enable_single_approve_btn_id_timecard').click(function (e) {
-        //$(this).addClass('disabled');
-    });
-
     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
 
-    $(document).off('click', "#timeCardGV input[type=checkbox]").on('click', "#timeCardGV input[type=checkbox]", function (e) {
-        var disable;
-        if ($("#timeCardGV .kv-row-select input:checked").length != 0) {
-            disable = false;
-        } else {
-            disable = true;
-        }
-        if (disable) {
-            $('#multiple_approve_btn_id').prop('disabled', true);
-        } else {
+    $(document).off('change', "#timeCardGV input[type=checkbox]").on('change', "#timeCardGV input[type=checkbox]", function (e) {
+        if ($("#GridViewForTimeCard").yiiGridView('getSelectedRows') != 0) {
             $('#multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
+        } else {
+            $('#multiple_approve_btn_id').prop('disabled', true);
         }
     });
 
     applyTimeCardOnClickListeners();
     applyTimeCardSubmitButtonListener();
-
 });
 
 function applyTimeCardOnClickListeners() {
-	if ($("#timeCardGV .kv-row-select input:checked").length == 0) {
-		$('#multiple_approve_btn_id').prop('disabled', true);
-	}
     $('#multiple_approve_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
