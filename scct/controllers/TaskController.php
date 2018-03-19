@@ -186,6 +186,7 @@ class TaskController extends BaseController
                     'StartTime' => $startTime24, 
                     'EndTime' => $endTime24,
                     'CreatedByUserName' => Yii::$app->session['UserName'],
+					'ChargeOfAccountType' => $model->ChargeOfAccountType,
                 );
 
 
