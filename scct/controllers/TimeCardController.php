@@ -825,6 +825,11 @@ class TimeCardController extends BaseController
             } else {
                // $this->sftpFiles();
             }
+            unset(Yii::$app->session['payrollFileWritten']);
+            unset(Yii::$app->session['payrollFileName']);
+            //Empty TimeCard Session Vars
+            unset(Yii::$app->session['timeCardFileWritten']);
+            unset(Yii::$app->session['timeCardFileName']);
             
         }
         else{
