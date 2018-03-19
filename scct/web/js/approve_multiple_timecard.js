@@ -71,7 +71,8 @@ function applyTimeCardSubmitButtonListener() {
         var name = 'timecard_history_';
         var payroll = 'payroll_history_'
         var thIndex = $('th:contains("Project Name")').index();
-        var projectName = $('table td').eq(thIndex).text();
+        var projectName = $('#projectFilterDD').val();
+       // var projectName = $('table td').eq(thIndex).text();
         var d = new Date();
         var minutes = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
         var hours = ((d.getHours() + 11) % 12 + 1);
@@ -88,6 +89,7 @@ function applyTimeCardSubmitButtonListener() {
                 '&weekEnd='+$.trim(dateRange[1]));
         console.log(timeCardName);
         console.log(payRollFileName);
+        console.log(projectName);
 
         //return false;
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
