@@ -25,9 +25,6 @@ use app\constants\Constants;
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
  */
-
-
-
 class TimeCardController extends BaseController
 {
     /**
@@ -37,10 +34,6 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-
-
-
-
     public function actionIndex()
     {
         //guest redirect
@@ -50,9 +43,15 @@ class TimeCardController extends BaseController
         }
 
         try {
+			//if request is not coming from time-card reset session variables. 
+			$referrer = Yii::$app->request->referrer;
+			if(!strpos($referrer,'time-card')){
+				unset(Yii::$app->session['timeCardFormData']);
+			}
+			
 			//Check if user has permission to view time card page
 			self::requirePermission("viewTimeCardMgmt");
-            // create curl for restful call.
+            //create curl for restful call.
             //get user role
             $userID = Yii::$app->session['userID'];
 
@@ -62,15 +61,15 @@ class TimeCardController extends BaseController
             $endDate = null;
 
             $model = new \yii\base\DynamicModel([
-                'pagesize',
+                'pageSize',
                 'filter',
                 'dateRangeValue',
-                'DateRangePicker',
+                'dateRangePicker',
                 'projectName'
             ]);
-            $model ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
-            $model ->addRule('DateRangePicker', 'string', ['max' => 32]);//get page number and records per page
+            $model ->addRule('dateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
             $model ->addRule('projectName', 'integer'); //
 
@@ -88,34 +87,38 @@ class TimeCardController extends BaseController
             ];
 
             // check if type was post, if so, get value from $model
-            if ($model->load(Yii::$app->request->queryParams)) {
-                $timeCardPageSizeParams = $model->pagesize;
-                $filter = $model->filter;
-                $projectName = $model->projectName;
-                $dateRangeValue = $model->dateRangeValue;
-                $dateRangePicker = $model->DateRangePicker;
-            } else {
-                    $timeCardPageSizeParams = 50;
-                    $filter 			= "";
-                    $projectName 		= "";
-                    $dateRangeValue 	= $priorWeek;
-                    $DateRangePicker 	= null;
+            if ($model->load(Yii::$app->request->queryParams)){
+				Yii::$app->session['timeCardFormData'] = $model;
+			}else{
+				//set defaults to session data if avaliable
+				if(Yii::$app->session['timeCardFormData'])
+				{
+					$model = Yii::$app->session['timeCardFormData'];
+				}
+				else
+				{
+					$model->pageSize		= 50;
+					$model->filter			= "";
+					$model->projectName		= "";
+					$model->dateRangeValue	= $priorWeek;
+					$model->dateRangePicker	= null;
+				}
             }
-
-            if ($dateRangeValue == "other") {
-                if ($dateRangePicker == null){
+			
+			//get start/end date based on dateRangeValue
+            if ($model->dateRangeValue == "other") {
+                if ($model->dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
-                    $dateData 	= SELF::dateRangeProcessor($dateRangePicker);
+                    $dateData 	= SELF::dateRangeProcessor($model->dateRangePicker);
                     $startDate 	= $dateData[0];
                     $endDate 	= $dateData[1];
                 }
             }else{
-                $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+                $dateRangeArray = BaseController::splitDateRange($model->dateRangeValue);
                 $startDate = $dateRangeArray['startDate'];
                 $endDate =  $dateRangeArray['endDate'];
             }
-
 
             //check current page at
             if (isset($_GET['timeCardPageNumber'])){
@@ -124,42 +127,40 @@ class TimeCardController extends BaseController
                 $page = 1;
             }
 
-            //get week
-            if (isset(Yii::$app->request->queryParams['weekTimeCard'])){
-                $week = Yii::$app->request->queryParams['weekTimeCard'];
-            } else {
-                $week = 'prior';
-            }
-
 			//url encode filter
-			$encodedFilter 		= urlencode($filter);
-			$encodedProjectName = urlencode($projectName);
+			$encodedFilter 		= urlencode($model->filter);
+			$encodedProjectName = urlencode($model->projectName);
 
             //build url with params
-            $url 				= "time-card%2Fget-cards&startDate=$startDate&endDate=$endDate&listPerPage=$timeCardPageSizeParams&page=$page&filter=$encodedFilter&projectName=$encodedProjectName";
-            $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response 			= json_decode($response, true);
-            $assets 			= $response['assets'];
-            $approvedTimeCardExist = $response['approvedTimeCardExist'];
-            $projectSize         = $response['projectsSize'];
-            //$showFilter         = $response['showFilter'];
-//
+			$url = 'time-card%2Fget-cards&' . http_build_query([
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+				'listPerPage' => $model->pageSize,
+				'page' => $page,
+				'filter' => $encodedFilter,
+				'projectName' => $encodedProjectName,
+			]);
+			$response 				= Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response 				= json_decode($response, true);
+            $assets 				= $response['assets'];
+            $approvedTimeCardExist 	= $response['approvedTimeCardExist'];
+            $projectSize        	= $response['projectsSize'];
+
             if(Yii::$app->session['projectDD']) {
-            $projectDropDown                    = Yii::$app->session['projectDD'];
-            $showFilter                         = Yii::$app->session['showFilter'];
-            //Yii::TRACE('SESSIONSZ READ');
+            $projectDropDown					= Yii::$app->session['projectDD'];
+            $showFilter							= Yii::$app->session['showFilter'];
             } else {
-            $resp                               = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $records                            = json_decode($resp, true);
-            $projectDropDown                    = $records['projectDropDown'];
-            Yii::$app->session['projectDD']     = $projectDropDown;
-            Yii::$app->session['showFilter']    =  $projectSize > 1 ? true : false;
-            $showFilter                         =   Yii::$app->session['showFilter'];
-            //Yii::TRACE('SESSIONSZ WRITE');
+            $resp								= Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $records							= json_decode($resp, true);
+            $projectDropDown					= $records['projectDropDown'];
+			$showFilter							= $projectSize > 1 ? true : false;
+            Yii::$app->session['projectDD']		= $projectDropDown;
+            Yii::$app->session['showFilter']	= $showFilter;
             }
 
+			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
-				'ProjectName' => [$projectName],
+				'ProjectName' => [$model->projectName],
 				'StartDate' => $startDate,
 				'EndDate' => $endDate,
 			);
@@ -227,12 +228,8 @@ class TimeCardController extends BaseController
 				return $this->renderAjax('index', [
 					'dataProvider' 				=> $dataProvider,
                     'dateRangeDD'				=> $dateRangeDD,
-                    'dateRangeValue' 			=> $dateRangeValue,
-                    'week' 						=> $week,
 					'model' 					=> $model,
-					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
 					'pages' 					=> $pages,
-					'timeCardFilterParams' 		=> $filter,
 					'projectDropDown' 			=> $projectDropDown,
 					'showFilter' 				=> $showFilter,
 					'approvedTimeCardExist'     => $approvedTimeCardExist,
@@ -242,12 +239,8 @@ class TimeCardController extends BaseController
 				return $this->render('index', [
 					'dataProvider' 				=> $dataProvider,
                     'dateRangeDD' 				=> $dateRangeDD,
-                    'dateRangeValue' 			=> $dateRangeValue,
-                    'week' 						=> $week,
 					'model' 					=> $model,
-					'timeCardPageSizeParams' 	=> $timeCardPageSizeParams,
 					'pages' 					=> $pages,
-					'timeCardFilterParams' 		=> $filter,
 					'projectDropDown' 			=> $projectDropDown,
 					'showFilter' 				=> $showFilter,
 					'approvedTimeCardExist'     => $approvedTimeCardExist,
@@ -406,26 +399,23 @@ class TimeCardController extends BaseController
     	 define('FROM_DATE_ZERO_INDEX',0);
     	 define('TO_DATE_FIRST_INDEX',1);
 
-
-
 		//guest redirect
 		if (Yii::$app->user->isGuest)
 		{
 			return $this->redirect(['/login']);
 		}
 
-		try{
-
+		try{			
 			//build api url paths
-			$time_card_url	         = 'time-card%2Fview&id='.$id;
-			$entries_url 	         = 'time-card%2Fshow-entries&cardID='.$id;
+			$time_card_url	= 'time-card%2Fview&id='.$id;
+			$entries_url	= 'time-card%2Fshow-entries&cardID='.$id;
 
 			//execute API request, should probably be able to combine these two calls into one.
-			$time_response 	               = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$resp 			               = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$time_response	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
+			$resp			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
 			
-			$card 		         = json_decode($time_response, true);
-			$entries 		     = json_decode($resp, true);
+			$card			= json_decode($time_response, true);
+			$entries		= json_decode($resp, true);
 			
 			//populate required values if not received from function call
 			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $card['TimeCardProjectID'];
@@ -434,9 +424,9 @@ class TimeCardController extends BaseController
 			$lName = $lName != null ? $lName : $card['UserLastName'];
 
 			//alter from and to dates a bit
-			$from   		=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
-			$to   			=	str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date7']);
-			$from 			= 	explode('/', $from);
+			$from	= str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
+			$to		= str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date7']);
+			$from	= explode('/', $from);
 
 			//holds dates that accompany table header ex. Sunday 10-23
 			$SundayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date1']);
@@ -453,30 +443,29 @@ class TimeCardController extends BaseController
 			]);
 
 			return $this -> render('show-entries', [
-											'model' 			=> $card,
-											'task' 				=> $allTask,
-											'from' 				=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
-											'to' 				=> $to,
-											'SundayDate' 		=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
-											'MondayDate' 		=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
-											'TuesdayDate' 		=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
-											'WednesdayDate' 	=> $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
-											'ThursdayDate' 		=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
-											'FridayDate' 		=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
-											'SaturdayDate' 		=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-                                            'projectName'   	=> $projectName,
-                                            'fName'   			=> $fName,
-                                            'lName'   			=> $lName,
-                                            'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date1']))),
-											'MondayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date2']))),
-											'TuesdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date3']))),
-											'WednesdayDateFull' =>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
-											'ThursdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
-											'FridayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
-											'SaturdayDateFull' 	=>  date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
-                                            'timeCardProjectID' => $timeCardProjectID
-
-									]);
+				'model' 			=> $card,
+				'task' 				=> $allTask,
+				'from' 				=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
+				'to' 				=> $to,
+				'SundayDate' 		=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+				'MondayDate' 		=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+				'TuesdayDate' 		=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+				'WednesdayDate' 	=> $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+				'ThursdayDate' 		=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+				'FridayDate' 		=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+				'SaturdayDate' 		=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+				'projectName'   	=> $projectName,
+				'fName'   			=> $fName,
+				'lName'   			=> $lName,
+				'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date1']))),
+				'MondayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date2']))),
+				'TuesdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date3']))),
+				'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
+				'ThursdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
+				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
+				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
+				'timeCardProjectID' => $timeCardProjectID
+			]);
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
@@ -625,21 +614,11 @@ class TimeCardController extends BaseController
 			);
 			$json_data = json_encode($data);
 
-			$referrer = Yii::$app->request->referrer;
-
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
 			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
-//
-			if(strpos($referrer,'show-entries')){
-				//return $this->redirect(['show-entries', 'id' => $responseTimeCardID]);
-			}else{
-				//return $this->redirect(['index']);
-			}
-
-			
 		}catch(ErrorException $e){
 			throw new \yii\web\HttpException(400);
 		}
