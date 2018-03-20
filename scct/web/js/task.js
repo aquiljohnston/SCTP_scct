@@ -134,15 +134,15 @@ function applyToolTip(){
 
     //I believe everything below this should probably be in the task.js file because it is limited to the task screen
 $(document).on('click','#deactive_timeEntry_btn_id',function(e){
-             $('#loading').show();
-        id = $('#timeCardId').val();
+        $('#loading').show();
+        var id           =   $('#timeCardId').val();
+        var tasks        =    []; 
+       
+       $(".entryData").each(function(k,value){   
+         if($(this).is(":checked")){ 
 
-       $(".entryData").each(function(k,value){
-
-         if($(this).is(":checked")){
-            
+              tasks.push($(this).attr('taskName'));
             //var isThere = $.grep(entries, function(e){ return e.id == k; });
-
             //if(isThere.length == 0){
                  entries.push({
                    /// id : k,
@@ -153,12 +153,13 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
             }
        // }
     })
-
+      
+        tasks.join(", ");
         data = {entries}
+        var confirmAction  =   confirm('Are you sure you want to deactivate all (' +tasks+ ')? Please confirm...');
+        //return false;
 
-         // console.log(data);
-        // return false;
-
+        if (confirmAction) {
         $.ajax({
             type: 'POST',
             url: '/time-card/deactivate/',
@@ -170,10 +171,17 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
                 $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
             applyToolTip();
         });; //for pjax update
-              
+
                 $('#loading').hide();
                 $('#deactive_timeEntry_btn_id').prop('disabled',true);
             }
         });
+
+    } else {
+         $('#loading').hide();
+         $('#deactive_timeEntry_btn_id').prop('disabled',true);
+         return false;
+    }
+
     });
 
