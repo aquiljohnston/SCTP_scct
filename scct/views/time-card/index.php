@@ -17,10 +17,9 @@ use kartik\daterange\DateRangePicker;
 $chosen = "";
 
 $this->title = 'Time Cards';
-//$this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
-        'dateRangeValue' => $dateRangeValue
+        'dateRangeValue' => $model->dateRangeValue
     ]);
 $column = [
     [
@@ -28,13 +27,7 @@ $column = [
         'attribute' => 'UserFullName',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-    ]/*,
-    [
-        'label' => 'User Last Name',
-        'attribute' => 'UserLastName',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-    ]*/,
+    ],
     [
         'label' => 'Project Name',
         'attribute' => 'ProjectName',
@@ -46,22 +39,8 @@ $column = [
         'attribute' => 'TimeCardDates',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-        /*'value' => function ($model) {
-            $date = date("m/d/Y", strtotime($model['TimeCardStartDate']))." - ".date("m/d/Y", strtotime($model['TimeCardEndDate'])); 
-            return $date;
-        }*/
-    ]/*,
-    [
-        'label' => 'End Date',
-        'attribute' => 'TimeCardEndDate',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['TimeCardEndDate']));
-        }
-    ]*/,
+    ],
     'SumHours',
-   
     [
         'label' => 'Oasis Submitted',
         'attribute' => 'TimeCardOasisSubmitted',
@@ -122,9 +101,6 @@ $column = [
 
             return $result;
         }
-        /*'pageSummary' => true,
-        'rowSelectedClass' => GridView::TYPE_SUCCESS,
-        'contentOptions'=>['style'=>'width: 0.5%'],*/
     ],
 ];
 ?>
@@ -145,7 +121,7 @@ $column = [
 
                 <div class="row">
                     <div style="float: right;margin-top: -2%;width: 21%;">
-                        <?= $form->field($model, 'pagesize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $timeCardPageSizeParams, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
+                        <?= $form->field($model, 'pageSize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
                             'class' => 'TimeCardRecordsPerPage'
                         ]); ?>
                         <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
@@ -177,11 +153,11 @@ $column = [
 					</div>
                 <?php Pjax::end() ?>
                 <div class="col-md-3 col-md-offset-1 TimeCardSearch">
-                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $timeCardFilterParams, 'id' => 'timeCardFilter'])->label("Search"); ?>
+                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 <div class="col-md-2 DateRangeDropDown">
-                    <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
+                    <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
                 <?php if($showFilter) : ?>
                   <div class="col-md-2 projectFilterDD">
@@ -196,12 +172,12 @@ $column = [
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
-					<?php if($dateRangeValue == 'other'){ ?>
+					<?php if($model->dateRangeValue == 'other'){ ?>
 						<div id="datePickerContainer" style="float: left; width: auto; display: block;">
 					<?php } else { ?>
 						<div id="datePickerContainer" style="float: left; width: auto; display: none;">
 					<?php } ?>
-                    <?= $form->field($model, 'DateRangePicker', [
+                    <?= $form->field($model, 'dateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
                         'pluginOptions' => [
