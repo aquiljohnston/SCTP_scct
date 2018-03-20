@@ -135,12 +135,12 @@ $column = [
 									[
 										'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
 										'id' => 'multiple_submit_btn_id',
-										//'disabled' => $submitReady ? false : 'disabled'
 									]);
 								echo Html::button('Approve',
 									[
 										'class' => 'btn btn-primary multiple_approve_btn',
-										'id' => 'multiple_approve_btn_id'
+										'id' => 'multiple_approve_btn_id',
+										'disabled' => true
 									]);
 							?>
 							<?php
