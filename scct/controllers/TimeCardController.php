@@ -65,6 +65,7 @@ class TimeCardController extends BaseController
                 'filter',
                 'dateRangeValue',
                 'dateRangePicker',
+				//need to update this key to projectID, the new value that it represents
                 'projectName'
             ]);
             $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
@@ -128,8 +129,7 @@ class TimeCardController extends BaseController
             }
 
 			//url encode filter
-			$encodedFilter 		= urlencode($model->filter);
-			$encodedProjectName = urlencode($model->projectName);
+			$encodedFilter = urlencode($model->filter);
 
             //build url with params
 			$url = 'time-card%2Fget-cards&' . http_build_query([
@@ -138,7 +138,7 @@ class TimeCardController extends BaseController
 				'listPerPage' => $model->pageSize,
 				'page' => $page,
 				'filter' => $encodedFilter,
-				'projectName' => $encodedProjectName,
+				'projectID' => $model->projectName,
 			]);
 			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 				        = json_decode($response, true);
