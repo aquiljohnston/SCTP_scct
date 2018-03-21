@@ -132,7 +132,6 @@ function applyToolTip(){
     })
 }
 
-    //I believe everything below this should probably be in the task.js file because it is limited to the task screen
 $(document).on('click','#deactive_timeEntry_btn_id',function(e){
         $('#loading').show();
         var id           =   $('#timeCardId').val();
