@@ -134,7 +134,8 @@ $column = [
 								echo Html::button('Submit',
 									[
 										'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
-										'id' => 'multiple_submit_btn_id',
+                                        'id' => 'multiple_submit_btn_id',
+										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
 								echo Html::button('Approve',
 									[

@@ -136,7 +136,11 @@ $(function(){
 			}).done(function (){
                 if($('#multiple_submit_btn_id').hasClass('off-btn')){
                $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+                } 
+                if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
+                     $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
                 }
+
                  });
 			$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 				applyTimeCardOnClickListeners();
@@ -264,13 +268,12 @@ $(function(){
 
   $( function() {
     $( document ).tooltip();
-
-    console.log('called');
     
     if($('#multiple_submit_btn_id').hasClass('off-btn')){
-
        $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
-      
+    } 
+    if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
+      $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
     }
 
     //add tool tip to all time deactivatable time entries    
