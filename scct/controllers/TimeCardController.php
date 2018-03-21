@@ -140,11 +140,12 @@ class TimeCardController extends BaseController
 				'filter' => $encodedFilter,
 				'projectName' => $encodedProjectName,
 			]);
-			$response 				= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response 				= json_decode($response, true);
-            $assets 				= $response['assets'];
-            $approvedTimeCardExist 	= $response['approvedTimeCardExist'];
-            $projectSize        	= $response['projectsSize'];
+			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response 				        = json_decode($response, true);
+            $assets 				        = $response['assets'];
+            $approvedTimeCardExist 	        = $response['approvedTimeCardExist'];
+            $projectSize                    = $response['projectsSize'];
+            $projectWasSubmitted        	= $response['projectSubmitted'];
 
             if(Yii::$app->session['projectDD']) {
             $projectDropDown					= Yii::$app->session['projectDD'];
@@ -233,7 +234,8 @@ class TimeCardController extends BaseController
 					'projectDropDown' 			=> $projectDropDown,
 					'showFilter' 				=> $showFilter,
 					'approvedTimeCardExist'     => $approvedTimeCardExist,
-                    'submitReady'               => $submitReady
+                    'submitReady'               => $submitReady,
+                    'projectSubmitted'          => $projectWasSubmitted
 				]);
 			}else{
 				return $this->render('index', [
@@ -244,7 +246,8 @@ class TimeCardController extends BaseController
 					'projectDropDown' 			=> $projectDropDown,
 					'showFilter' 				=> $showFilter,
 					'approvedTimeCardExist'     => $approvedTimeCardExist,
-                    'submitReady'               => $submitReady
+                    'submitReady'               => $submitReady,
+                    'projectSubmitted'          => $projectWasSubmitted
 				]);
 			}
         } catch (UnauthorizedHttpException $e){
