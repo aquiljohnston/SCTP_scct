@@ -151,7 +151,7 @@ use yii\widgets\Pjax;
                 'headerOptions' => ['class'=>$SaturdayDateFull],
             ],
                     [
-                        'header'            => 'Deactivate Task',
+                        'header'            => 'Deactivate All Task',
                         'class'             => 'kartik\grid\CheckboxColumn',
                         'contentOptions'    => [],
                         'checkboxOptions'   => function ($model, $key, $index, $column) {

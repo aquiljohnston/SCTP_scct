@@ -41,6 +41,13 @@ function applyTimeCardOnClickListeners() {
     });
 }
 
+
+
+    function reloadTGVContainer(){
+        $.pjax.reload({container:"#timeCardGridview", timeout: 99999})
+    }
+
+
 function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').off('click').click(function (event) {
 
@@ -67,13 +74,16 @@ function applyTimeCardSubmitButtonListener() {
         dateRange = $('[name="DynamicModel[dateRangeValue]"]').val();
         dateRange = dateRange.split(",");
 
-        console.log('/time-card/download-time-card-data?timeCardName='+timeCardName+
+       /* console.log('/time-card/download-time-card-data?timeCardName='+timeCardName+
                 '&projectName='+projectName+
                 '&weekStart='+dateRange[0]+
                 '&weekEnd='+$.trim(dateRange[1]));
         console.log(timeCardName);
         console.log(payRollFileName);
-        console.log(projectName);
+        console.log(projectName);*/
+
+         timeCardComplete = false;
+         payrollComplete = false;
 
         //return false;
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
@@ -86,17 +96,21 @@ function applyTimeCardSubmitButtonListener() {
         if (confirmBox) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
             //FORCE CSV DOWNLOAD
-            window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
+           timeCard = window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
                 '&projectName=' + projectName+
                 '&weekStart=' + dateRange[0]+
                 '&weekEnd=' + $.trim(dateRange[1]), '_blank');
 
-            window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
+           payroll =  window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
                 '&projectName=' + projectName+
                 '&weekStart=' + dateRange[0]+
                 '&weekEnd=' + $.trim(dateRange[1]), '_blank');
-        //INITIATE MOVE
-           //window.open('/time-card/ftp-files', '_blank');
+
+            //reload gridview
+            $(payroll).on("beforeunload", function() { reloadTGVContainer(); })
+
+
+ 
 
         } else {
             event.stopImmediatePropagation();
