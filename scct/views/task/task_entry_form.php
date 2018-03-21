@@ -154,19 +154,23 @@ use yii\helpers\Url;
 			var TaskName = $('#dynamicmodel-taskname').val();
 			var ChangeOfAccountType = $('#dynamicmodel-chargeofaccounttype').val();
 			//convert times to 24
-			var StartTime = ConvertToTwentyFourHourTime($('#dynamicmodel-starttime').val());
-			var EndTime = ConvertToTwentyFourHourTime($('#dynamicmodel-endtime').val());
+			var StartTime = $('#dynamicmodel-starttime').val();
+			var EndTime = $('#dynamicmodel-endtime').val();
 
-            if (date !="" && 
-                StartTime != "" &&
-                EndTime != "" &&
-                TaskName != "" && 
+            if (date !="" && StartTime != "" &&
+                EndTime != "" && TaskName != "" && 
                 ChangeOfAccountType != "" &&
 				//>= allows same start and end remove the = if this is not allowed.
-				EndTime > StartTime)
+				EndTime > StartTime){
+               //only convert when not empty
+                ConvertToTwentyFourHourTime(StartTime);
+                ConvertToTwentyFourHourTime(EndTime);
                 return true;
-            else
-                return false;
+            } else {
+                return false; 
+            }
+                
+            }
         }
 		
 		//expected format of "hh:mm AM/PM"
