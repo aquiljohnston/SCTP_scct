@@ -89,7 +89,7 @@ $column = [
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
             $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
-                || $model["SumHours"] == "0" || $model["TimeCardApprovedFlag"] == 1;
+                || $model["TimeCardApprovedFlag"] == 1;
             $result = [
                 'timecardid' => $model["TimeCardID"],
                 'approved' => $model["TimeCardApprovedFlag"],
