@@ -21,7 +21,6 @@ class HomeController extends BaseController
 
     public $notificationInfo;
     public $timeCardInfo;
-    public $mileageCardInfo;
 
     /**
      * Lists all home models.
@@ -40,17 +39,8 @@ class HomeController extends BaseController
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = json_decode($response, true);
 
-            if (!empty($dataProvider["firstName"]) && !empty($dataProvider["lastName"])) {
-                $firstName = $dataProvider["firstName"];
-                $lastName = $dataProvider["lastName"];
-            }else{
-                $firstName = "";
-                $lastName = "";
-            }
-
             $this->notificationInfo = [];
             $this->timeCardInfo = [];
-            $this->mileageCardInfo = [];
 
             try {
                 if ($dataProvider["notifications"] != null) {
@@ -58,9 +48,6 @@ class HomeController extends BaseController
                 }
                 if ($dataProvider["timeCards"] != null) {
                     $this->timeCardInfo = $dataProvider["timeCards"];
-                }
-                if ($dataProvider["mileageCards"] != null) {
-                    $this->mileageCardInfo = $dataProvider["mileageCards"];
                 }
             } catch (ErrorException $error) {
                 //Continue - Unable to retrieve equipment item
@@ -80,13 +67,6 @@ class HomeController extends BaseController
                 ]
             ]);
 
-            $mileageCardProvider = new ArrayDataProvider([
-                'allModels' => $this->mileageCardInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
-            ]);
-
             GridView::widget
             ([
                 'dataProvider' => $notificationProvider,
@@ -94,11 +74,8 @@ class HomeController extends BaseController
 
             return $this->render('index', [
                 'model' => $this->timeCardInfo,
-                'firstName' => $firstName,
-                'lastName' => $lastName,
                 'notificationProvider' => $notificationProvider,
-                'timeCardProvider' => $timeCardProvider,
-                'mileageCardProvider' => $mileageCardProvider]);
+                'timeCardProvider' => $timeCardProvider]);
         } catch (UnauthorizedHttpException $e){
             return Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
@@ -128,16 +105,16 @@ class HomeController extends BaseController
     public function getAllProjects() {
         $allProjectsString = '';
 
-        foreach ($this->mileageCardInfo as $value) {
+        foreach ($this->timeCardInfo as $value) {
             if (!($value['Project'] === 'Total')) { // Make sure we do not enter 'Total' into our search for all unapproved item(s)
                 if ($allProjectsString === '') { // The first string does not need to have a '|' character before concatenating the string
                     $allProjectsString = $this->trimString($value['Project']);
                 } else {
-                    $allProjectsString = $allProjectsString . '|' . $this->trimString($value['Project']);
+                    $allProjectsString = $allProjectsString . ', ' . $this->trimString($value['Project']);
                 }
             }
         }
 
-        return $allProjectsString;
+        return urlencode($allProjectsString);
     }
 }
