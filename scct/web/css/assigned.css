@@ -169,16 +169,8 @@
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s;
+    animation-duration: 0.4s
 }
-#unassigned-message .modal-dialog {
-	overflow-y: initial !important
-}
-#unassigned-message .modal-body {
-	height: 250px;
-	overflow-y: auto;
-}
-
 #modalViewAssetAssigned{
     padding: 0px 15px 15px 15px;!important;
 }
