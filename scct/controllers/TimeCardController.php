@@ -34,7 +34,7 @@ class TimeCardController extends BaseController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex()
+    public function actionIndex($projectID = null, $projectFilterString = null)
     {
         //guest redirect
         if (Yii::$app->user->isGuest)
@@ -99,8 +99,9 @@ class TimeCardController extends BaseController
 				else
 				{
 					$model->pageSize		= 50;
-					$model->filter			= "";
-					$model->projectName		= "";
+					//set filters if data passed from home screen
+					$model->filter			= $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->projectName		= $projectID != null ? $projectID : '';
 					$model->dateRangeValue	= $priorWeek;
 					$model->dateRangePicker	= null;
 				}
