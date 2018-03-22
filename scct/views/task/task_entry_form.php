@@ -132,6 +132,17 @@ use yii\helpers\Url;
                
         });
 
+        //fire check when user clicks away from input onto TaskEntryForm
+         $(document).off('click', '#TaskEntryForm').on('click', '#TaskEntryForm', function (){
+            if (InputFieldValidator()){
+                $('#create_task_entry_submit_btn').prop('disabled', false); 
+               }
+               else{
+                $('#create_task_entry_submit_btn').prop('disabled', true); 
+               }
+               
+        });
+
         $(document).off('click','#TaskEntryForm .glyphicon-remove').on('click', '#TaskEntryForm .glyphicon-remove', function (){
          
                $('#create_task_entry_submit_btn').prop('disabled', true); 
