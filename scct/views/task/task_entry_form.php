@@ -171,7 +171,7 @@ use yii\helpers\Url;
             }
                 
             }
-        }
+        
 		
 		//expected format of "hh:mm AM/PM"
 		//returns string in 24 hour format "hh:mm"
