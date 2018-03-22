@@ -159,18 +159,20 @@ use yii\helpers\Url;
 
             if (date !="" && StartTime != "" &&
                 EndTime != "" && TaskName != "" && 
-                ChangeOfAccountType != "" &&
+                ChangeOfAccountType != "")
 				//>= allows same start and end remove the = if this is not allowed.
-				EndTime > StartTime){
+				{
                //only convert when not empty
-                ConvertToTwentyFourHourTime(StartTime);
-                ConvertToTwentyFourHourTime(EndTime);
+                StartTime = ConvertToTwentyFourHourTime(StartTime);
+                EndTime = ConvertToTwentyFourHourTime(EndTime);
+                //now compare 
+                if(EndTime > StartTime)
                 return true;
             } else {
                 return false; 
             }
                 
-            }
+        }
         
 		
 		//expected format of "hh:mm AM/PM"
