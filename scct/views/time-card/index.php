@@ -154,7 +154,7 @@ $column = [
 					</div>
                 <?php Pjax::end() ?>
                 <div class="col-md-3 col-md-offset-1 TimeCardSearch">
-                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'id' => 'timeCardFilter'])->label("Search"); ?>
+                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 <div class="col-md-2 DateRangeDropDown">
