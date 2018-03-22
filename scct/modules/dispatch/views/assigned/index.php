@@ -237,21 +237,25 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
     <!-- The Modal -->
     <div id="unassigned-message" class="modal">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Do you want to<br>un-assign the selected surveyors?</h3>
-            </div>
-            <div class="modal-body">
-                <p>Press confirm to continue to un-assign <br> <span class="unassignedUserName"></span></p>
-                <div id="unassignedConfirmButton" class="unassignedbtn">
-                    <?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
-                </div>
-                <div id="unassignedCancelButton" class="unassignedbtn">
-                    <?php echo Html::button('Cancel', ['class' => 'btn', 'id' => 'unassignedCancelBtn']); ?>
-                </div>
-            </div>
-        </div>
+		<div class="modal-dialog">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Do you want to<br>un-assign the selected surveyors?</h3>
+				</div>
+				<div class="modal-body">
+					<p>Press confirm to continue to un-assign <br> <span class="unassignedUserName"></span></p>
+				</div>
+				<div class="modal-footer">
+					<div id="unassignedConfirmButton" class="unassignedbtn">
+						<?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
+					</div>
+					<div id="unassignedCancelButton" class="unassignedbtn">
+						<?php echo Html::button('Cancel', ['class' => 'btn', 'id' => 'unassignedCancelBtn']); ?>
+					</div>
+				</div>	
+			</div>
+		</div>
     </div>
 
     <!--View Asset Modal-->
