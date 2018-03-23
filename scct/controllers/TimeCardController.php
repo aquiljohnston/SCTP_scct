@@ -743,7 +743,7 @@ class TimeCardController extends BaseController
                 ]);
 
 
-            Yii::$app->session['timeCardFileWritten']     = $this->writeCSVfile($downloadUrl); 
+   
             Yii::$app->session['timeCardFileName']        = $timeCardName;
 
 
@@ -779,17 +779,7 @@ class TimeCardController extends BaseController
                 ]);
 
 
-            $downloadUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
-                'cardName' => $cardName,
-                'projectName' => $projectName,
-                'weekStart' => $weekStart,
-                'weekEnd' => $weekEnd,
-                'download' => true,
-                'type' => Constants::QUICKBOOKS
-                ]);
 
-
-            Yii::$app->session['payrollFileWritten']     = $this->writeCSVfile($downloadUrl); 
             Yii::$app->session['payrollFileName']        = $cardName; 
 
             Yii::TRACE('IS_WRITTEN ' . Yii::$app->session['payrollFileWritten'] );
@@ -801,23 +791,7 @@ class TimeCardController extends BaseController
 
             //This needs to run after the last file download
             //so if we add more files later we need to move this;
-        if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE){
-            //USE FTP WHEN IN DEV
-            if(YII_ENV_DEV){
-                //$this->ftpFiles();
-            } else {
-               // $this->sftpFiles();
-            }
-            unset(Yii::$app->session['payrollFileWritten']);
-            unset(Yii::$app->session['payrollFileName']);
-            //Empty TimeCard Session Vars
-            unset(Yii::$app->session['timeCardFileWritten']);
-            unset(Yii::$app->session['timeCardFileName']);
-            
-        }
-        else{
-                 throw new \yii\web\HttpException(500, 'System Error - FW-100');
-        }
+    
 
         } catch (ForbiddenHttpException $e) {
             throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
@@ -825,6 +799,66 @@ class TimeCardController extends BaseController
             Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');
         }
+    }
+
+    public function actionAjaxProcessCometTrackerFiles($timeCardName, $payrollFileName, $projectName, $weekStart, $weekEnd){
+
+        try{
+
+          //  Yii::$app->response->format = Response::FORMAT_RAW;
+
+            $response = [];
+
+            $writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
+                'projectName' => $projectName,
+                'timeCardName' => $timeCardName,
+                'week' => null,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'download' => true,
+                'type' => Constants::OASIS
+                ]);
+
+
+
+            $witePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
+                'cardName' => $payrollFileName,
+                'projectName' => $projectName,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'download' => true,
+                'type' => Constants::QUICKBOOKS
+                ]);
+
+
+            Yii::$app->session['timeCardFileWritten']     = $this->writeCSVfile($writeTimeCardFileUrl);
+            Yii::$app->session['payrollFileWritten']      = $this->writeCSVfile($witePayRollFileUrl);
+
+
+
+        if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE) {
+  
+             $response['success'] = TRUE;     
+            /*unset(Yii::$app->session['payrollFileWritten']);
+            unset(Yii::$app->session['payrollFileName']);
+            //Empty TimeCard Session Vars
+            unset(Yii::$app->session['timeCardFileWritten']);
+            unset(Yii::$app->session['timeCardFileName']);*/    
+            return json_encode($response);
+
+          } else {
+                   $response['success'] = FALSE; 
+                    return json_encode($response);
+                  // throw new \yii\web\HttpException(500, 'System Error - FW-100');
+           } 
+        
+        } catch (ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException('General System Error - FW-100');
+        } catch (\Exception $e) {
+            Yii::trace('EXCEPTION raised'.$e->getMessage());
+            // Yii::$app->runAction('login/user-logout');
+        }
+
     }
 
     /**

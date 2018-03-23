@@ -37,7 +37,7 @@ class BaseController extends Controller
     public static function prependURL($path, $version = Constants::DEFAULT_VERSION) {
 		$prefix = self::urlPrefix();
 	    //check if url prefix contains api target
-        if(strpos($prefix, Constants::SERVER_LOCALHOST) !== false) {
+       /* if(strpos($prefix, Constants::SERVER_LOCALHOST) !== false) {
             return Constants::API_LOCAL_URL . "$version%2F$path";
 		//checks for demo in dev check because name does not follow the standard convention
 		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
@@ -47,7 +47,7 @@ class BaseController extends Controller
         } else {
 			//if not distinguishing characters are present defaults to production
 			return Constants::API_PROD_URL . "$version%2F$path";
-        }
+        }*/ return Constants::API_DEV_URL . "$version%2F$path";
     }
 
 	//pull url prefix to determine environment 
@@ -68,7 +68,7 @@ class BaseController extends Controller
         )
         {
             //return "apidev";
-            return "scanadev";
+            return "scctdev";
         }
         else {
             return self::urlPrefix();
