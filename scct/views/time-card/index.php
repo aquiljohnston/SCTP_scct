@@ -56,6 +56,9 @@ $column = [
      [
         'label' => 'Approved',
         'attribute' => 'TimeCardApprovedFlag',
+		'value' => function($model, $key, $index, $column) {
+			return $model['TimeCardApprovedFlag'] == 0 ? 'No' : 'Yes';
+		},
     ],
     ['class' => 'kartik\grid\ActionColumn',
         'template' => '{view}', // does not include delete
@@ -88,8 +91,7 @@ $column = [
         'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
-            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
-                || $model["TimeCardApprovedFlag"] == 1;
+            $disabledBoolean = $model["TimeCardApprovedFlag"] == 1;
             $result = [
                 'timecardid' => $model["TimeCardID"],
                 'approved' => $model["TimeCardApprovedFlag"],
