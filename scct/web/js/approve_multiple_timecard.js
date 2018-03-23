@@ -102,7 +102,7 @@ function applyTimeCardSubmitButtonListener() {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
 
             $.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
-            
+                   
             $.ajax({
                 type: 'POST',
                 url: '/time-card/ajax-process-comet-tracker-files?timeCardName='+timeCardName+
@@ -113,29 +113,26 @@ function applyTimeCardSubmitButtonListener() {
                 success: function(data) {
                     data = JSON.parse(data);
                     if(data.success){
-                   
+                        $.ctGrowl.msg('The Process Completed Successfully!','Success','bg-success');
                         //
                         reloadTGVContainer();
                         
-                        $.ctGrowl.msg('Process Successful.','Success','bg-info');
+                        $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
                        
-                       /* setTimeout(function() {
+                        setTimeout(function() {
 
-           /*  timeCard = window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
-                '&projectName=' + projectName+
-                '&weekStart=' + weekStart+
-                '&weekEnd=' + weekEnd, '_blank');
+                         timeCard = window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
+                            '&projectName=' + projectName+
+                            '&weekStart=' + weekStart+
+                            '&weekEnd=' + weekEnd, '_blank');
 
-             payroll =  window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
-                '&projectName=' + projectName+
-                '&weekStart=' + weekStart+
-                '&weekEnd=' +  weekEnd, '_blank');          
+                         payroll =  window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
+                            '&projectName=' + projectName+
+                            '&weekStart=' + weekStart+
+                            '&weekEnd=' +  weekEnd, '_blank');               
+                                    }, 3000);
 
-                //
-
-                         $.ctGrowl.msg('File Download Success...','Success','bg-success');  
-                        }, 4000);*/
-
+                         $.ctGrowl.msg('File Download Success...','Success','bg-success');
 
                     } else {
 
