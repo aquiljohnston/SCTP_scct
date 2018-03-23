@@ -12,6 +12,8 @@ $notificationCol = [
     'Project',
     'Number of Items',
     ['class' => 'kartik\grid\ActionColumn',
+		//hiding for now until notification screen is fully implemented and we can redirect
+		'hidden' => true,
         'header' => 'View',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
