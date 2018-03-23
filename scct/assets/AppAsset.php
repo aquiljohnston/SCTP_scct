@@ -44,6 +44,7 @@ class AppAsset extends AssetBundle
         'https://vjs.zencdn.net/5.4.6/video-js.css',
         'css/cge.css',
         'css/task.css',
+        'css/notify.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -85,6 +86,7 @@ class AppAsset extends AssetBundle
         'js/cge.js',
         'js/clients.js',
         'js/task.js',
+        'js/notify.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

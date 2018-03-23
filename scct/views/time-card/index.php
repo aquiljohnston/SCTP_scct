@@ -56,9 +56,6 @@ $column = [
      [
         'label' => 'Approved',
         'attribute' => 'TimeCardApprovedFlag',
-		'value' => function($model, $key, $index, $column) {
-			return $model['TimeCardApprovedFlag'] == 0 ? 'No' : 'Yes';
-		},
     ],
     ['class' => 'kartik\grid\ActionColumn',
         'template' => '{view}', // does not include delete
@@ -91,7 +88,8 @@ $column = [
         'class' => 'kartik\grid\CheckboxColumn',
         'checkboxOptions' => function ($model, $key, $index, $column) {
             // Disable if already approved or SumHours is 0
-            $disabledBoolean = $model["TimeCardApprovedFlag"] == 1;
+            $disabledBoolean = strtoupper($model["TimeCardApprovedFlag"]) == "YES"
+                || $model["TimeCardApprovedFlag"] == 1;
             $result = [
                 'timecardid' => $model["TimeCardID"],
                 'approved' => $model["TimeCardApprovedFlag"],
@@ -163,11 +161,15 @@ $column = [
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
                 <?php if($showFilter) : ?>
-                <div class="col-md-2 projectFilterDD">
+                  <div class="col-md-2 projectFilterDD">
+                     <?php $chosen = isset(Yii::$app->request->queryParams['DynamicModel']) ? Yii::$app->request->queryParams['DynamicModel'] : "";?>
                     <?=
-						$form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
-						['value' => $model->projectName, 'id'=>'projectFilterDD'])->label('Project'); 
-					?>
+                    
+                     $form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
+                     ['options' =>[
+                        isset($chosen["projectName"]) ? $chosen["projectName"]:"" =>['selected'=>'true'] 
+                     ],"id"=>"projectFilterDD"]
+                     )->label("Project"); ?>
                 </div>
                  <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
             <?php endif; ?>
@@ -252,3 +254,13 @@ $column = [
         </div>
     </div>
 </div>
+<!--ctGrowl-->
+ <div id = "ctGrowlContainer"></div>
+ <ul id = "ct-growl-clone">
+ <ul>
+ <li class = "title"></li>
+ <li class = "msg"></li>
+ <li class = "icon"><span class="close">X</span></li>
+ </ul>
+ </ul>
+

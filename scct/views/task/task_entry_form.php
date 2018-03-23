@@ -42,16 +42,18 @@ use yii\helpers\Url;
                         'autoclose'=>true],
                     'type' => \kartik\widgets\DatePicker::TYPE_COMPONENT_APPEND,
                     'pluginEvents' => [
-                        "changeDate" => 'function(e) {  
-                            var Date = $("#dynamicmodel-date").val();
+                        "changeDate" => 'function(e) {
+                            var date = $("#dynamicmodel-date").val();
                             var StartTime = $("#dynamicmodel-starttime").val();
                             var EndTime = $("#dynamicmodel-endtime").val();
                             var TaskName = $("#dynamicmodel-taskname").val();
                             var ChangeOfAccountType = $("#dynamicmodel-chargeofaccounttype").val();
-                           
-                            if (Date.length != "" && StartTime.length != "" && EndTime.length != "" && TaskName.length != 0 && ChangeOfAccountType.length != 0){
-                                //$("#create_task_entry_submit_btn").prop("disabled", false);
-                            }
+
+                            if (date !="" && StartTime != "" &&
+                                EndTime != "" && TaskName != "" && 
+                                 ChangeOfAccountType != ""){
+                                      $("#create_task_entry_submit_btn").prop("disabled", false); 
+                                 }
                          }'
                     ]
                 ]); ?>
@@ -141,13 +143,19 @@ use yii\helpers\Url;
                 $('#create_task_entry_submit_btn').prop('disabled', true); 
                }
                
+        });   
+
+
+         $(document).off('click', '.table_condensed').on('click', '.table_condensed', function (){
+            if (InputFieldValidator()){
+                $('#create_task_entry_submit_btn').prop('disabled', false); 
+               }
+               else{
+                $('#create_task_entry_submit_btn').prop('disabled', true); 
+               }
+               
         });
 
-        $(document).off('click','#TaskEntryForm .glyphicon-remove').on('click', '#TaskEntryForm .glyphicon-remove', function (){
-         
-               $('#create_task_entry_submit_btn').prop('disabled', true); 
-        });
- 
 
         $('#create_task_entry_submit_btn').click(function (event) {
              if (InputFieldValidator()) {
