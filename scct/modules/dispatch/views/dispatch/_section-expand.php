@@ -80,7 +80,12 @@ use yii\bootstrap\Modal;
                 'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
-                        return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid']];
+                        return [
+							'SectionNumber' => $model['SectionNumber'],
+							'MapGrid' => $model['MapGrid'],
+							'BillingCode' => $model['BillingCode'],
+							'InspectionType' => $model['InspectionType']
+						];
                     else
                         return "";
                 }
