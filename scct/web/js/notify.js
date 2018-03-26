@@ -8,9 +8,8 @@ msg_ctr = 0;
  $.ctGrowl = {
  timer: false,
 
- init: function(position,sticky) {
+ init: function(position) {
  $("#ctGrowlContainer").css(position);
- var sticky = this.sticky;
  },
  
  msg: function(message, title, status,sticky=false) {
