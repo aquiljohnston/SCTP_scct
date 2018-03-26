@@ -834,22 +834,26 @@ class TimeCardController extends BaseController
             Yii::$app->session['timeCardFileWritten']     = $this->writeCSVfile($writeTimeCardFileUrl);
             Yii::$app->session['payrollFileWritten']      = $this->writeCSVfile($witePayRollFileUrl);
 
-
-
-        if(Yii::$app->session['timeCardFileWritten']==TRUE && Yii::$app->session['payrollFileWritten']==TRUE) {
   
-             $response['success'] = TRUE;     
-            /*unset(Yii::$app->session['payrollFileWritten']);
-            unset(Yii::$app->session['payrollFileName']);
-            //Empty TimeCard Session Vars
-            unset(Yii::$app->session['timeCardFileWritten']);
-            unset(Yii::$app->session['timeCardFileName']);*/    
-            return json_encode($response);
 
-          } else {
-                   $response['success'] = FALSE; 
-                    return json_encode($response);
-                  // throw new \yii\web\HttpException(500, 'System Error - FW-100');
+        if(strpos(Yii::$app->session['timeCardFileWritten'], 'Exception') !==false ||
+            strpos(Yii::$app->session['payrollFileWritten'], 'Exception') !==false ||
+            strpos(Yii::$app->session['payrollFileWritten'], 'Bad Request') !==false ||
+            strpos(Yii::$app->session['timeCardFileWritten'], 'Bad Request') !==false
+            ){
+  
+                  $response['success'] = FALSE; 
+                  return json_encode($response);
+
+             } else {
+              
+                $response['success'] = TRUE;        
+                unset(Yii::$app->session['payrollFileWritten']);
+                unset(Yii::$app->session['payrollFileName']);
+                //Empty TimeCard Session Vars
+                unset(Yii::$app->session['timeCardFileWritten']);
+                unset(Yii::$app->session['timeCardFileName']);  
+                return json_encode($response);
            } 
         
         } catch (ForbiddenHttpException $e) {
