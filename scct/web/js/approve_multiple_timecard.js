@@ -113,11 +113,12 @@ function applyTimeCardSubmitButtonListener() {
                 success: function(data) {
                     data = JSON.parse(data);
                     if(data.success){
+                        console.log(data)
                         $.ctGrowl.msg('The Process Completed Successfully!','Success','bg-success');
                         //
                         reloadTGVContainer();
                         
-                        $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
+                      //  $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
                        
                         setTimeout(function() {
 
@@ -132,11 +133,11 @@ function applyTimeCardSubmitButtonListener() {
                             '&weekEnd=' +  weekEnd, '_blank');               
                                     }, 3000);
 
-                         $.ctGrowl.msg('File Download Success...','Success','bg-success');
+                      //   $.ctGrowl.msg('File Download Success...','Success','bg-success');
 
                     } else {
 
-                            $.ctGrowl.msg('System Error Occurred.......','Success','bg-danger');
+                         $.ctGrowl.msg('System Error Occurred.......','Error','bg-danger');
                     }
                     
 
