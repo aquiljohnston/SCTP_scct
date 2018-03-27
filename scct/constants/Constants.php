@@ -27,19 +27,7 @@ final class Constants
 	const DEFAULT_VERSION = self::API_VERSION_1;
 
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
-    //PRODUCTION FTP CREDENTIALS
-    const PROD_FTP_SERVER_ADDRESS = "sftp.southerncrossinc.com";
-    const PROD_FTP_USERNAME = "ctfiletransfer";
-    const PROD_FTP_PASSWORD = "lLiamiLENsCOPhAnceLLadwil";
-    const PROD_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp\\";
 
-    //DEV_FTP_CREDENTIALS
-    const DEV_FTP_SERVER_ADDRESS = "10.100.10.10";
-    const DEV_FTP_USERNAME = "ftpdev.southerncrosslighthouse.com|eigyan";
-    const DEV_FTP_PASSWORD = "";
-    //FTP_DEFAULT_PATH
-    //const DEV_DEFAULT_FTP_PATH = "C:\\inetpub\\ftproot\\temp\\";
-    const DEV_DEFAULT_FTP_PATH = "/Users/Shared/";
     const OASIS = "OASIS";
 	const QUICKBOOKS = "QB";
  
