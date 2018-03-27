@@ -36,49 +36,6 @@
 	cursor: no-drop;
 }
 
-
-/*#modalContentSunday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentMonday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentTuesday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentWednesday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentThursday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentFriday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentSaturday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentSunday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentMonday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentTuesday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentWednesday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentThursday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentFriday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentSaturday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
 .approve {
     margin-top: 0;
 }
@@ -102,8 +59,8 @@ div[id^=modalContent] #loading {
 #multiple_time_card_approve_btn{
     padding-left:0;
 	float: right;
-	margin-top: -0.5%;
-	margin-right: 1%;
+	margin-top: -0.3%;
+	margin-right: 0.5%;
 	width: 12%;
 }
 #timeCardDropdownContainer{
@@ -169,13 +126,8 @@ div[id^=modalContent] #loading {
 	margin-left: 0px;!important;
 }
 #multiple_approve_btn_id {
-	/*padding-left: 31%;
-	padding-right: 31%;*/
-}
-#multiple_approve_btn_id_only {
-	margin-left: 21%;
-	padding-left: 25%;
-	padding-right: 24%;
+	padding-left: 9%;
+	padding-right: 9%;
 }
 .TimeCardSearch {
 	float: right;
@@ -187,18 +139,9 @@ div[id^=modalContent] #loading {
 	margin-top: -2.2%;
 }
 #multiple_submit_btn_id{
-	float: left;
+	float: right;
 	padding-left: 11%;
 	padding-right: 11%;
-	margin-right: 9%;
-	display: block;
-}
-#multiple_submit_btn_id_hidden{
-	float: left;
-	padding-left: 11%;
-	padding-right: 11%;
-	margin-right: 9%;
-	display: none;
 }
 #datePickerContainer{
 	margin-top: -5.2%;
@@ -223,13 +166,9 @@ and (min-width : 1900px) {
 }
 }
 /* Chrome 29+ */
+/*this seems unnecessary, tested in IE and needed to apply this same css to base values*/
 @media screen and (-webkit-min-device-pixel-ratio:0)
 and (min-resolution:.001dpcm) {
-	#multiple_approve_btn_id {
-		/*padding-left: 32%;
-		padding-right: 27%;
-		margin-top: 6%;*/
-	}
 	#multiple_time_card_approve_btn{
 	    float: right;
 		margin-top: -0.3%;
@@ -239,13 +178,5 @@ and (min-resolution:.001dpcm) {
 	#multiple_approve_btn_id {
 		padding-left: 9%;
 		padding-right: 9%;
-	}
-	#multiple_approve_btn_id_only {
-		padding-left: 20%;
-		margin-left: 29%;
-		padding-right: 21%;
-	}
-	#multiple_time_card_approve_btn{
-		width: 14%;
 	}
 }
