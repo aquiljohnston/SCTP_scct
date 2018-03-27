@@ -120,7 +120,7 @@ function applyTimeCardSubmitButtonListener() {
                         
                       //  $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
                        
-                        setTimeout(function() {
+                       /* setTimeout(function() {
 
                          timeCard = window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
                             '&projectName=' + projectName+
@@ -131,7 +131,7 @@ function applyTimeCardSubmitButtonListener() {
                             '&projectName=' + projectName+
                             '&weekStart=' + weekStart+
                             '&weekEnd=' +  weekEnd, '_blank');               
-                                    }, 3000);
+                                    }, 3000);*/
 
                       //   $.ctGrowl.msg('File Download Success...','Success','bg-success');
 

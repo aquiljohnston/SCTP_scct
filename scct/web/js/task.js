@@ -134,22 +134,26 @@ function applyToolTip(){
 
 $(document).on('click','#deactive_timeEntry_btn_id',function(e){
         var id           =   $('#timeCardId').val();
-        var tasks        =    []; 
+        var tasks        =    [];
+        var name         =    "";
        
        $(".entryData").each(function(k,value){   
          if($(this).is(":checked")){ 
 
-              tasks.push($(this).attr('taskName'));
-              //walk the line 
-
-                 entries.push({
-                   /// id : k,
-                    taskName : $(this).attr('taskName'),
-                    day : $(this).attr('entry'),
-                    timeCardID : id
-                })
+            //get task name for payload and confirm message
+            name = $(this).attr('taskName');
+            tasks.push(name);
+              
+            //walk each cell and build payload
+            $.each($(this).closest('tr').find('td'),function(index,value) {
+                if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0))
+                    {   
+                        entry_date = $(this).closest('table').find('th').eq(index).attr('class');
+                        entries.push({taskName:name, day:entry_date, timeCardID:id})
+                    }       
+                 }) 
             }
-    })
+        })
       
         tasks.join(', ');
         data = {entries}
