@@ -31,9 +31,6 @@ class AssignedController extends \app\controllers\BaseController
 
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
-
-                Yii::trace("assignedfilter " . $model->assignedfilter);
-                Yii::trace("pagesize " . $model->pagesize);
                 $assignedPageSizeParams = $model->pagesize;
                 $assignedFilterParams = $model->assignedfilter;
             } else {
@@ -71,9 +68,15 @@ class AssignedController extends \app\controllers\BaseController
             ([
                 'allModels' => $assignedData,
                 'pagination' => false,
-            ]);
+				'key' => function($assignedData){
+					return array(
+						'MapGrid' => $assignedData['MapGrid'],
+                        'InspectionType' => $assignedData['InspectionType'],
+                        'BillingCode' => $assignedData['BillingCode'],
 
-            $assignedDataProvider->key = 'MapGrid';
+					);
+				},
+            ]);
 
             // Sorting Unassign table
             $assignedDataProvider->sort = [
@@ -201,9 +204,6 @@ class AssignedController extends \app\controllers\BaseController
 
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
-
-            Yii::trace("assignedfilter " . $model->assignedfilter);
-            Yii::trace("pagesize " . $model->pagesize);
             $assignedPageSizeParams = $model->pagesize;
             $assignedFilterParams = $model->assignedfilter;
             $mapGridSelected = $model->mapGridSelected;
@@ -222,7 +222,9 @@ class AssignedController extends \app\controllers\BaseController
 
         // get the key to generate section table
         if (isset($_POST['expandRowKey']))
-            $mapGridSelected = $_POST['expandRowKey'];
+            //if we want to filter the section by inspection type and billing code
+            //we can do this here by using the other two keys avaliable in the array returned by expandRowKey
+            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
         else
             $mapGridSelected = "";
 
@@ -233,7 +235,6 @@ class AssignedController extends \app\controllers\BaseController
                 'page' => $pageAt
             ]);
         $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSIGNED SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['sections'];
 
         //set paging on assigned table
@@ -243,9 +244,14 @@ class AssignedController extends \app\controllers\BaseController
         ([
             'allModels' => $sectionData,
             'pagination' => false,
+			'key' => function ($sectionData) {
+                return array(
+                    'SectionNumber' => $sectionData['SectionNumber'],
+                    'InspectionType' => $sectionData['InspectionType'],
+                    'BillingCode' => $sectionData['BillingCode'],
+                );
+            },
         ]);
-
-        $sectionDataProvider->key = 'SectionNumber';
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
