@@ -101,6 +101,8 @@ function applyTimeCardSubmitButtonListener() {
         if (confirmBox) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
 
+            
+            //usage $.ctGrow(msg,title,boostrap text class)
             $.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
                    
             $.ajax({
@@ -113,7 +115,7 @@ function applyTimeCardSubmitButtonListener() {
                 success: function(data) {
                     data = JSON.parse(data);
                     if(data.success){
-                        console.log(data)
+           
                         $.ctGrowl.msg('The Process Completed Successfully!','Success','bg-success');
                         //
                         reloadTGVContainer();
