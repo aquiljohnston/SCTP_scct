@@ -211,14 +211,20 @@ class DispatchController extends \app\controllers\BaseController
         }
         // get the key to generate section table
         if (isset($_POST['expandRowKey']))
-			//if we want to filter the section by inspection type and billing code
-			//we can do this here by using the other two keys avaliable in the array returned by expandRowKey
+		{
             $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
-        else
-            $mapGridSelected = "";
+            $inspectionType = $_POST['expandRowKey']['InspectionType'];
+            $billingCode = $_POST['expandRowKey']['BillingCode'];
+		}else{
+			$mapGridSelected = '';
+			$inspectionType = '';
+			$billingCode = '';
+		}     
 
         $getUrl = 'dispatch%2Fget-available&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
+				'inspectionType' => $inspectionType,
+				'billingCode' => $billingCode,
                 'filter' => $sectionFilterParams,
                 'listPerPage' => $sectionPageSizeParams,
                 'page' => $pageAt,
