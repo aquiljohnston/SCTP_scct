@@ -46,13 +46,6 @@ function applyTimeCardOnClickListeners() {
     });
 }
 
-
-
-    function reloadTGVContainer(){
-        $.pjax.reload({container:"#timeCardGridview", timeout: 99999})
-    }
-
-
 function applyTimeCardSubmitButtonListener() {
     $('#multiple_submit_btn_id').off('click').click(function (event) {
 
@@ -117,8 +110,8 @@ function applyTimeCardSubmitButtonListener() {
                     if(data.success){
            
                         $.ctGrowl.msg('The Process Completed Successfully!','Success','bg-success');
-                        //
-                        reloadTGVContainer();
+                        //calls time_card.js reload function
+                        reloadTimeCardGridView();
                         
                       //  $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
                        

@@ -115,47 +115,6 @@ $(function(){
       }
     });
 
-    //reload table
-    function reloadTimeCardGridView() {
-        var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
-        if (form.find(".has-error").length){
-            return false;
-        }
-		$('#loading').show();
-        $.pjax.reload({
-            type: 'GET',
-            url: form.attr("action"),
-            container: '#timeCardGridview', // id to update content
-            data: form.serialize(),
-            timeout: 99999
-        });
-        $('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
-			$.pjax.reload({
-				container: '#submitApproveButtons',
-				timeout:false
-			}).done(function (){
-                if($('#multiple_submit_btn_id').hasClass('off-btn')){
-               $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
-                } 
-                if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-                     $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
-                }
-
-                 });
-			$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
-				applyTimeCardOnClickListeners();
-				applyTimeCardSubmitButtonListener();
-				$('#loading').hide();
-			});
-			$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
-				location.reload();
-			});
-		});
-        $('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
-            location.reload();
-        });
-    }
-
     function reloadShowEntriesView(){
         $.pjax.reload({container:"#ShowEntriesView", timeout: 99999})
     }
@@ -284,3 +243,44 @@ $(function(){
          }
     })
 });
+
+//reload table
+function reloadTimeCardGridView() {
+	var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
+	if (form.find(".has-error").length){
+		return false;
+	}
+	$('#loading').show();
+	$.pjax.reload({
+		type: 'GET',
+		url: form.attr("action"),
+		container: '#timeCardGridview', // id to update content
+		data: form.serialize(),
+		timeout: 99999
+	});
+	$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
+		$.pjax.reload({
+			container: '#submitApproveButtons',
+			timeout:false
+		}).done(function (){
+			if($('#multiple_submit_btn_id').hasClass('off-btn')){
+		   $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+			} 
+			if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
+				 $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
+			}
+
+			 });
+		$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
+			applyTimeCardOnClickListeners();
+			applyTimeCardSubmitButtonListener();
+			$('#loading').hide();
+		});
+		$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
+			location.reload();
+		});
+	});
+	$('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
+		location.reload();
+	});
+}
