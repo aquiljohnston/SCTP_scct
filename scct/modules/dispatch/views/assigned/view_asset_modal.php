@@ -136,7 +136,7 @@ use kartik\grid\GridView;
             ],
             [
                 'label' => 'Office Name',
-                'attribute' => 'BillingCode',
+                'attribute' => 'OfficeName',
                 'headerOptions' => ['class' => 'text-center'],
                 'contentOptions' => ['class' => 'text-center'],
             ],

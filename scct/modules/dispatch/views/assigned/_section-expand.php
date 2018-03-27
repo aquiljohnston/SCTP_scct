@@ -97,8 +97,15 @@ use yii\bootstrap\Modal;
                 'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
                 'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    return ['SectionNumber' => $key, 'MapGrid' => $model['MapGrid'], 'UserName' => $model['SearchString'], 'disabled' => $model['InProgressFlag'] != "1" ? false : 'disabled'];
-                }
+                    return [
+						'SectionNumber' => $model['SectionNumber'],
+						'MapGrid' => $model['MapGrid'],
+						'BillingCode' => $model['BillingCode'],
+						'InspectionType' => $model['InspectionType'],
+						'UserName' => $model['SearchString'],
+						'disabled' => $model['InProgressFlag'] != "1" ? false : 'disabled'
+					];
+				}
             ]
         ],
     ]); ?>
