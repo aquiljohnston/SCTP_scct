@@ -180,3 +180,12 @@ and (min-resolution:.001dpcm) {
 		padding-right: 9%;
 	}
 }
+
+/*custom style for show entries grid view hover*/
+#allTaskEntries table tbody tr:hover{
+	/*cancel out base style*/
+    background-color: none;
+}
+#allTaskEntries table tbody tr td:hover{
+    background-color: rgba(57, 12, 255, 0.25);
+}

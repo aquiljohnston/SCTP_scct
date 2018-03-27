@@ -19,7 +19,7 @@ table > thead > tr > th, table > tbody > tr > th, table > tfoot > tr > th,
 }
 
 table tbody tr:hover {
-    background-color: rgba(57, 12, 255, 0.25) !important;
+    background-color: rgba(57, 12, 255, 0.25);
 }
 
 .kv-table-caption {
