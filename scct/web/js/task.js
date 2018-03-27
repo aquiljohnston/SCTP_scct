@@ -133,7 +133,6 @@ function applyToolTip(){
 }
 
 $(document).on('click','#deactive_timeEntry_btn_id',function(e){
-        $('#loading').show();
         var id           =   $('#timeCardId').val();
         var tasks        =    []; 
        
@@ -141,8 +140,8 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
          if($(this).is(":checked")){ 
 
               tasks.push($(this).attr('taskName'));
-            //var isThere = $.grep(entries, function(e){ return e.id == k; });
-            //if(isThere.length == 0){
+              //walk the line 
+
                  entries.push({
                    /// id : k,
                     taskName : $(this).attr('taskName'),
@@ -150,16 +149,16 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
                     timeCardID : id
                 })
             }
-       // }
     })
       
-        tasks.join(", ");
+        tasks.join(', ');
         data = {entries}
-        var confirmAction  =   confirm('Are you sure you want to deactivate all (' +tasks+ ')? Please confirm...');
-        //return false;
-
-        if (confirmAction) {
-        $.ajax({
+       
+        krajeeDialog.defaults.confirm.title = 'Deactivate All Task';
+        krajeeDialog.confirm('Are you sure you want to deactivate all ' +tasks+ '? Please confirm...', function (resp) {
+        
+        if (resp) {
+            $.ajax({
             type: 'POST',
             url: '/time-card/deactivate/',
             data: data,
@@ -173,14 +172,15 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
 
                 $('#loading').hide();
                 $('#deactive_timeEntry_btn_id').prop('disabled',true);
-            }
+            },
+             error: function(data) {
+                console.log('error')
+             }
+        });
+            } else {
+                $('#w0').modal('toggle');
+                 return false;
+          }
         });
 
-    } else {
-         $('#loading').hide();
-         $('#deactive_timeEntry_btn_id').prop('disabled',true);
-         return false;
-    }
-
     });
-
