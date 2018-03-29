@@ -152,18 +152,14 @@ class TimeCardController extends BaseController
             $projectDropDown					= Yii::$app->session['projectDD'];
             $showFilter							= Yii::$app->session['showFilter'];
             } else {
-            $projectDropDown					= $response['projectDropDown'];
+            $resp								= Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $records							= json_decode($resp, true);
+            $projectDropDown					= $records['projectDropDown'];
 			$showFilter							= $projectSize > 1 ? true : false;
             Yii::$app->session['projectDD']		= $projectDropDown;
             Yii::$app->session['showFilter']	= $showFilter;
             }
-			
-			//get project id for time card submission if filter is not in place
-			if(!$showFilter)
-			{
-				$model->projectName = Yii::$app->session['ProjectID'];
-			}
-			
+
 			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
 				'ProjectName' => [$model->projectName],
@@ -648,20 +644,13 @@ class TimeCardController extends BaseController
 				$data 			= Yii::$app->request->post();	
 
 				$json_data 		= json_encode($data['entries']);
-
-				//var_dump($json_data);exit();
 				
 				// post url
 				$putUrl 		= 'time-entry%2Fdeactivate';
 				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
 				$obj 			= json_decode($putResponse, true);
 
-				//var_dump($obj);exit();
-
-
-				//return $this->redirect(['index', 'id' => $obj[0]['TimeEntryTimeCardID']]);
-				//fail gracefully if no response time card entry id
-				//return $this->redirect(['index']);
+		
 				
 			}catch(ErrorException $e){
 				throw new \yii\web\HttpException(400);
@@ -835,41 +824,68 @@ class TimeCardController extends BaseController
                 ]);
 
 
-
+            //call SPROC and attempt to write file
             $timeCardResponse = json_decode($this->writeCSVfile($writeTimeCardFileUrl),true);
 
-               // error_log(print_r($timeCardResponse,true));
-
-                var_dump($timeCardResponse);exit();
+                ///error_log(print_r($timeCardResponse,true));
           
-
-            //if timecard encountered exception
-              if((strpos($timeCardResponse['type'], 'Exception') !==false) || strpos($timeCardResponse['message'], 'Empty')!==false){
+            //if exception is due to empty file
+            if(isset($timeCardResponse['message'])){
+                 if(strpos($timeCardResponse['message'], 'Empty')!==false){
 
                  $response['success'] = FALSE; 
-                 $response['message'] = 'TimeCard Failure'; 
+                 $response['message'] = $timeCardResponse['message']; 
                   return json_encode($response);
 
               }
 
+          } elseif(isset($timeCardResponse['type'])) {
+              if(strpos($timeCardResponse['type'], 'Exception')!==false){
+
+                 $response['success'] = FALSE; 
+                 $response['message'] = $timeCardResponse['message']; 
+                  return json_encode($response);
+
+              }
+          }
+
+             
+            //OK so if we made it here then the time card file has encountered no issues
+            //Initiate the payroll process 
             $payRollResponse  = json_decode($this->writeCSVfile($witePayRollFileUrl),true);
 
-               error_log(print_r($payRollResponse,true));
-
-              if((strpos($$payRollResponse['type'], 'Exception') !==false) || strpos($payRollResponse['message'], 'Empty')!==false){
+               //if exception is due to empty payroll file
+            if(isset($payRollResponse['message'])){
+                 if(strpos($timeCardResponse['message'], 'Empty')!==false){
 
                  $response['success'] = FALSE; 
-                 $response['message'] = 'Payroll Failure'; 
+                 $response['message'] = $payRollResponse['message']; 
                   return json_encode($response);
 
               }
 
-          
-                  $response['success'] = FALSE; 
+          } elseif(isset($payRollResponse['type'])) {
+              if(strpos($payRollResponse['type'], 'Exception')!==false){
+
+                 $response['success'] = FALSE; 
+                 $response['message'] = $payRollResponse['message']; 
                   return json_encode($response);
 
+              }
+          }
+             
+
+                //no exception until this point so SUCCESS
+                //send success message
+                 $response['success'] = TRUE; 
+                 $response['message'] = 'Successfully Completed Time Card Process.'; 
+                 return json_encode($response);
+
         } catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException('General System Error - FW-100');
+              $response['success'] = FALSE; 
+              $response['message'] = 'Exception occurred.'; 
+                return json_encode($response);
+            //throw new ForbiddenHttpException('General System Error - FW-100');
         } catch (\Exception $e) {
             Yii::trace('EXCEPTION raised'.$e->getMessage());
             // Yii::$app->runAction('login/user-logout');

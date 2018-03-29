@@ -110,7 +110,7 @@ function applyTimeCardSubmitButtonListener() {
                     data = JSON.parse(data);
                     if(data.success){
            
-                        $.ctGrowl.msg('The Process Completed Successfully!','Success','bg-success');
+                        $.ctGrowl.msg(''+data.message,'Success','bg-success');
                         //calls time_card.js reload function
                         reloadTimeCardGridView();
                         
