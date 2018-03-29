@@ -27,19 +27,25 @@ $(function () {
     });
 	
 	$(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
-
         var weekStart   = $("table th").eq(1).attr('class');
         var weekEnd     = $("table th").eq(7).attr('class');
         var timeCardID = $('#timeCardId').val();
         var SundayDate = $('#SundayDate').val();
         var SaturdayDate = $('#SaturdayDate').val();
         var timeCardProjectID = $('#TimeCardProjectID').val();
-        $('#addTaskModal').modal('show')
-            .find('#modalAddTask').html("Loading...");
-        $('#addTaskModal').modal('show')
+      $('#addTaskModal').modal('show').find('#modalContentSpan').html("Loading...");
+        /* $('#addTaskModal').modal('show')
             .find('#modalAddTask')
-
             .load('/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID);
+       */
+       //Fetch modal content via pjax to prevent sync console warning and FF page flash
+       $.pjax.reload({
+        type: 'GET',
+        replace:false,
+        url: '/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID,
+        container: '#modalContentSpan', // id to update content
+        timeout: 99999
+        })
     });
 });
 
@@ -81,29 +87,6 @@ function reloadUserGridView() {
 
 function TaskEntryCreation() {
 	var form            = $('#TaskEntryForm');
-	var weekStartTest   = new Date($("table th").eq(1).attr('class').replace(/-/g, '\/'));
-	var weekStart       = $("table th").eq(1).attr('class');
-	var weekEndTest     = new Date($("table th").eq(7).attr('class').replace(/-/g, '\/'));
-	var weekEnd         = $("table th").eq(7).attr('class');
-	var date            = new Date ($('#dynamicmodel-date').val());
-
-    
-
-    if(date < weekStartTest  ||  date > weekEndTest){
-
-          var timeCardID = $('#timeCardId').val();
-        $('#addTaskModal').modal('show')
-            .find('#modalAddTask').html("Loading...");
-        $('#addTaskModal').modal('show')
-            .find('#modalAddTask')
-            .load('/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID );
-
-            $('span[id^="errorSpot"]').remove();
-            $('#TaskEntryForm, .modal-header').prepend('<span id="errorSpot" class="bg-warning">Date is not within week range!</span>');
-
-        return false;
-
-    }
 
     $('#loading').show();
 
@@ -113,9 +96,9 @@ function TaskEntryCreation() {
         data: form.serialize(),
         success: function () {
             $('#loading').hide();
-            $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
-            applyToolTip();
-        });; //for pjax update
+           $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+          applyToolTip();
+     });; //for pjax update
         },
         error  : function () {
             console.log("internal server error");
