@@ -106,6 +106,7 @@ function applyTimeCardSubmitButtonListener() {
                 '&weekStart=' + weekStart+
                 '&weekEnd=' + weekEnd,
                 success: function(data) {
+                    console.log(data)
                     data = JSON.parse(data);
                     if(data.success){
            
@@ -132,7 +133,7 @@ function applyTimeCardSubmitButtonListener() {
 
                     } else {
 
-                         $.ctGrowl.msg('System Error Occurred.......','Error','bg-danger');
+                         $.ctGrowl.msg(''+data.message,'Error','bg-danger');
                     }
                     
 
