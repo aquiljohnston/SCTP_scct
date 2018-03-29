@@ -152,14 +152,18 @@ class TimeCardController extends BaseController
             $projectDropDown					= Yii::$app->session['projectDD'];
             $showFilter							= Yii::$app->session['showFilter'];
             } else {
-            $resp								= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $records							= json_decode($resp, true);
-            $projectDropDown					= $records['projectDropDown'];
+            $projectDropDown					= $response['projectDropDown'];
 			$showFilter							= $projectSize > 1 ? true : false;
             Yii::$app->session['projectDD']		= $projectDropDown;
             Yii::$app->session['showFilter']	= $showFilter;
             }
-
+			
+			//get project id for time card submission if filter is not in place
+			if(!$showFilter)
+			{
+				$model->projectName = Yii::$app->session['ProjectID'];
+			}
+			
 			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
 				'ProjectName' => [$model->projectName],
