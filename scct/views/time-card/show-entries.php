@@ -163,14 +163,16 @@ use yii\widgets\Pjax;
     ]);
     ?>
     <?php Pjax::end() ?>
-
     <?php
+    Pjax::begin(['id' => 'showTime', 'timeout' => false]);
     Modal::begin([
         'header' => '<h4>ADD TASK</h4>',
         'id' => 'addTaskModal',
         'size' => 'modal-lg',
     ]);
-    echo "<div id='modalAddTask'>Loading...</div>";
+    echo "<div id='modalAddTask'><span id='modalContentSpan'></span></div>";
     Modal::end();
+    Pjax::end();
     ?>
+
 </div>
