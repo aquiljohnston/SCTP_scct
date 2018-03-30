@@ -83,7 +83,7 @@ $(document).ready(function () {
                     //console.log(JSON.stringify(data, null, 2));
                     NavBar(data);
                     navBarLoaded = true;
-                    checkAndProcessDispatchAndNavBarLoading();
+                    checkNavBarLoading();
                 },
                 error: function () {
                     //TODO: handle error
@@ -121,7 +121,7 @@ $(document).ready(function () {
                     $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
                 }
                 navBarLoaded = true;
-                checkAndProcessDispatchAndNavBarLoading();
+                checkNavBarLoading();
             }
         } else {
             ajaxLoadNavBar();
@@ -258,3 +258,7 @@ $(document).ready(function () {
         });
     }
 });
+
+function checkNavBarLoading() {
+	if(navBarLoaded) $("#loading").hide();
+}

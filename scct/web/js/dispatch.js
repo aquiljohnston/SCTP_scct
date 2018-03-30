@@ -1,4 +1,4 @@
-function initializeDispatch() {
+$(function () {
     var dispatchGV = $("#dispatchGV");
 
     $("#dispatchButton").prop('disabled', true);
@@ -103,13 +103,13 @@ function initializeDispatch() {
         });
     });
 
-    $('#loading').hide();
-
     $(document).off('click', '#dispatchSearchCleanFilterButton').on('click', '#dispatchSearchCleanFilterButton', function (){
         $('#dispatchFilter').val("");
         reloadDispatchGridView();
     });
-}
+	
+	checkNavBarLoading();
+});
 
 function reloadDispatchGridView() {
     var jqDispatchDropDowns = $('#dispatchTab');
@@ -120,7 +120,7 @@ function reloadDispatchGridView() {
     $('#loading').show();
     $.pjax.reload({
         type: 'GET',
-        url: '/dispatch/dispatch/heavy-dispatch',
+        url: '/dispatch/dispatch/index',
         container: '#dispatchUnassignedGridview', // id to update content
         data: form.serialize(),
         timeout: 99999
@@ -152,6 +152,7 @@ function getDispatchMapArray(assignedUserID) {
 			InspectionType: $(this).attr('InspectionType')
 		});
 	});
+	console.log('mapGridArray: ' + JSON.stringify(mapGridArray));
 	return mapGridArray;
 }
 
@@ -167,6 +168,7 @@ function getDispatchSectionArray(assignedUserID) {
 			InspectionType: $(this).attr("InspectionType")
 		});
 	});
+	console.log('dispatchSectionArray: ' + JSON.stringify(dispatchSectionArray));
 	return dispatchSectionArray;
 }
 
