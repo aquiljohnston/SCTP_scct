@@ -14,7 +14,7 @@ $(function () {
     applyTimeCardSubmitButtonListener();
 
 
-    $.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' }, 5000);
+    $.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
 
     
 });
@@ -30,8 +30,12 @@ function applyTimeCardOnClickListeners() {
         } else {
             quantifier = "these items?"
         }
-        var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
-        if (confirmBox) {
+       // var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
+
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
+        
+        if (resp) {
             $.ajax({
                 type: 'POST',
                 url: '/time-card/approve-multiple',
@@ -43,6 +47,7 @@ function applyTimeCardOnClickListeners() {
             event.stopImmediatePropagation();
             event.preventDefault();
         }
+      })
     });
 }
 
@@ -90,8 +95,12 @@ function applyTimeCardSubmitButtonListener() {
         } else {
             quantifier = "these items?"
         }
-        var confirmBox = confirm('Are you sure you want to submit ' + quantifier);
-        if (confirmBox) {
+       // var confirmBox = confirm('Are you sure you want to submit ' + quantifier);
+
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
+        
+        if (resp) {
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
 
             
@@ -110,7 +119,7 @@ function applyTimeCardSubmitButtonListener() {
                     data = JSON.parse(data);
                     if(data.success){
            
-                        $.ctGrowl.msg(''+data.message,'Success','bg-success');
+                        $.ctGrowl.msg(data.message,'Success','bg-success');
                         //calls time_card.js reload function
                         reloadTimeCardGridView();
                         
@@ -133,7 +142,7 @@ function applyTimeCardSubmitButtonListener() {
 
                     } else {
 
-                         $.ctGrowl.msg(''+data.message,'Error','bg-danger');
+                         $.ctGrowl.msg(data.message,'Error','bg-danger');
                     }
                     
 
@@ -145,6 +154,7 @@ function applyTimeCardSubmitButtonListener() {
             event.stopImmediatePropagation();
             event.preventDefault();
         }
+       }) 
     });
 }
 
