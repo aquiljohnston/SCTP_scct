@@ -16,10 +16,9 @@ use app\constants\Constants;
 
 class DispatchController extends \app\controllers\BaseController
 {
-    public function actionHeavyDispatch()
-    {
-
-        try {
+    public function actionIndex() 
+	{
+       try {
 
             // Check if user has permission to view dispatch page
             self::requirePermission("viewDispatch");
@@ -162,20 +161,6 @@ class DispatchController extends \app\controllers\BaseController
             return $this->redirect(['/login/index']);
         }
     }
-
-    public function actionIndex() {
-        try{
-            return $this->render('lightDispatch');
-        } catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-        } catch (Exception $e) {
-            Yii::$app->runAction('login/user-logout');
-            return "";
-        }
-    }
-
 
     /**
      * render expandable section row
