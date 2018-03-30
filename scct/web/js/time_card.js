@@ -89,8 +89,12 @@ $(function(){
       if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
         && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
 
-      var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
-        if (confirmBox) {
+     // var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
+
+        krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
+        krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
+        
+        if (resp) {
         $('#loading').show();
         //build and send payload to deactivate single entry
         entries.push({taskName : taskName, day : date, timeCardID : id})
@@ -104,13 +108,15 @@ $(function(){
             success: function(data) {
                 $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function (){
                     applyToolTip();
+                    $('#loading').hide();
                 });
             }
         });
                 
         } else {
-            //nothing
+              // return false;
         }  
+    })
             $('#loading').hide();
       }
     });
@@ -157,8 +163,10 @@ $(function(){
 
    $('#enable_single_approve_btn_id_timecard').click(function (e) {
         var timeCardId = $('#timeCardId').val();
-        var confirmBox = confirm('Are you sure you want to approve this?');
-        if (confirmBox) {
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve this?', function (resp) {
+        
+        if (resp) {
 
             $('#loading').show();
 
@@ -173,9 +181,9 @@ $(function(){
             }
             });
         } else {
-            event.stopImmediatePropagation();
-            event.preventDefault();
+            
         }
+    })
 
        
     });
