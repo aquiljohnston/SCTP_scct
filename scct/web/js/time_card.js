@@ -177,6 +177,7 @@ $(function(){
                  //$.pjax.reload({container:"#allTheButtons", timeout: 99999}); //for pjax update
                 $('#deactive_timeEntry_btn_id').prop('disabled',true);
                 $('#enable_single_approve_btn_id_timecard').addClass('disabled');
+				$('#add_task_btn_id').prop('disabled',true);
                 $('#loading').hide();
             }
             });
