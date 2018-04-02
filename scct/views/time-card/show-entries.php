@@ -22,31 +22,23 @@ use yii\widgets\Pjax;
     <input id="SaturdayDate" type="hidden" name="SaturdayDate" value=<?php echo $SaturdayDateFull; ?>>
     <input id="TimeCardProjectID" type="hidden" name="TimeCardProjectID" value=<?php echo $timeCardProjectID; ?>>
   
-
     <div class="lightBlueBar">
     <h3> <?= $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName; ?></h3>
 
-
-        <?php
-
-    //$approveUrl = urldecode(Url::to(['time-card/approve', 'id' => $model["TimeCardID"]]));
-    $approveUrl = "#";
-
-    if ($model["TimeCardApprovedFlag"] === "Yes") {
+    <?php
+    if ($model['TimeCardApprovedFlag'] == 1) {
         $approve_status = true;
     } else {
         $approve_status = false;
     }
-    //var_dump($task);
-    ?>
+	?>
     <p>
         <?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?php if ($model['TimeCardApprovedFlag'] == 'Yes') : ?>
+        <?php if ($approve_status) : ?>
             <?= Html::button('Approve', [
                 'class' => 'btn btn-primary',
                 'disabled' => true,
                 'id' => 'disable_single_approve_btn_id_timecard',
-
             ]) ?>
             <?= Html::button('Deactivate', [
                 'class' => 'btn btn-primary',
@@ -59,7 +51,7 @@ use yii\widgets\Pjax;
                 'id' => 'add_task_btn_id',
             ]) ?>
         <?php  else : ?>
-            <?= Html::a('Approve', $approveUrl, [
+            <?= Html::button('Approve', [
                 'class' => 'btn btn-primary',
                 'disabled' => false,
                 'id' => 'enable_single_approve_btn_id_timecard',
@@ -76,31 +68,10 @@ use yii\widgets\Pjax;
             ]) ?>
         <?php endif; ?>
        
-
         <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
-
-    <!--create new button start
-        <?= Html::button('Create New', ['value' =>'', 'class' => 'btn btn-success', 'id' => 'modalNewTimeEntry', 'disabled' => $approve_status]) ?>
-    create new button end-->
-
     </p>
     <br>
 
-
-      <!--modal start-->
-    <?php
-    Modal::begin([
-        'header' => '<h4>New Time Entry</h4>',
-        'id' => 'modalNewTimeEntry',
-        'size' => 'modal-lg',
-    ]);
-
-    echo "<div id='modalNewTimeEntryContent'></div>";
-
-    Modal::end();
-    ?>
-      <!--modal end-->
-  
     </div>
     <?php Pjax::begin(['id' => 'ShowEntriesView', 'timeout' => false]) ?>
     <?= \kartik\grid\GridView::widget([
