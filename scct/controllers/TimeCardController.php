@@ -145,7 +145,7 @@ class TimeCardController extends BaseController
             $response 				        = json_decode($response, true);
             $assets 				        = $response['assets'];
             $approvedTimeCardExist 	        = $response['approvedTimeCardExist'];
-            $projectSize                    = $response['projectsSize'];
+            $showProjectDropDown            = $response['showProjectDropDown'];
             $projectWasSubmitted        	= $response['projectSubmitted'];
 
             if(Yii::$app->session['projectDD']) {
@@ -153,7 +153,7 @@ class TimeCardController extends BaseController
             $showFilter							= Yii::$app->session['showFilter'];
             } else {
             $projectDropDown					= $response['projectDropDown'];
-			$showFilter							= $projectSize > 1 ? true : false;
+			$showFilter							= $showProjectDropDown;
             Yii::$app->session['projectDD']		= $projectDropDown;
             Yii::$app->session['showFilter']	= $showFilter;
             }
@@ -162,6 +162,11 @@ class TimeCardController extends BaseController
 			if(!$showFilter)
 			{
 				$model->projectName = Yii::$app->session['ProjectID'];
+			}
+			//get projectId if only one item is in the dropdown implying that 'all' is not(for supervisors with only one project)	
+			elseif(count($projectDropDown) === 1) 
+			{
+				$model->projectName = array_keys($projectDropDown)[0];
 			}
 			
 			//should consider moving submit check into its own function
