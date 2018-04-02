@@ -41,6 +41,13 @@ $column = [
         'contentOptions' => ['class' => 'text-center'],
     ],
     'SumHours',
+	[
+        'label' => 'Approved',
+        'attribute' => 'TimeCardApprovedFlag',
+		'value' => function($model, $key, $index, $column) {
+			return $model['TimeCardApprovedFlag'] == 0 ? 'No' : 'Yes';
+		},
+    ],
     [
         'label' => 'Oasis Submitted',
         'attribute' => 'TimeCardOasisSubmitted',
@@ -52,13 +59,6 @@ $column = [
         'attribute' => 'TimeCardQBSubmitted',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
-    ],
-     [
-        'label' => 'Approved',
-        'attribute' => 'TimeCardApprovedFlag',
-		'value' => function($model, $key, $index, $column) {
-			return $model['TimeCardApprovedFlag'] == 0 ? 'No' : 'Yes';
-		},
     ],
     ['class' => 'kartik\grid\ActionColumn',
         'template' => '{view}', // does not include delete
