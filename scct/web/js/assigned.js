@@ -260,7 +260,7 @@ function getAssignedUserIDs() {
 // Generate Assigned Map Array;
 function getAssignedMapArray() {
     var mapGridArray = [];
-	$('#assignedGV-container input:checked').each(function() {
+	$('#assignedGV-container .unassignCheckbox input:checked').each(function() {
 		mapGridArray.push({
 			MapGrid: $(this).attr('MapGrid'),
 			AssignedUserID: $(this).attr('AssignedToID'),
@@ -274,7 +274,7 @@ function getAssignedMapArray() {
 // Generate Assigned Section Array;
 function getAssignedSectionArray() {
     var assignedSectionArray = [];
-	$('#assignedSectionGV-container input:checked').each(function() {
+	$('#assignedSectionGV-container .assignedSectionCheckbox input:checked').each(function() {
 		assignedSectionArray.push({
 			MapGrid: $(this).attr('MapGrid'),
 			SectionNumber: $(this).attr('SectionNumber'),
