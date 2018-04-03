@@ -144,7 +144,7 @@ function ViewAssetClicked(url) {
 // Generate Dispatch Map Array;
 function getDispatchMapArray(assignedUserID) {
     var mapGridArray = [];
-	$('#dispatchUnassignedGridview input:checked').each(function() {
+	$('#dispatchGV-container .dispatchCheckbox input:checked').each(function() {
 		mapGridArray.push({
 			MapGrid: $(this).attr('MapGrid'),
 			AssignedUserID: assignedUserID,
@@ -152,14 +152,13 @@ function getDispatchMapArray(assignedUserID) {
 			InspectionType: $(this).attr('InspectionType')
 		});
 	});
-	console.log('mapGridArray: ' + JSON.stringify(mapGridArray));
 	return mapGridArray;
 }
 
 // Generate Dispatch Section Array;
 function getDispatchSectionArray(assignedUserID) {
     var dispatchSectionArray = [];
-	$('#dispatchUnassignedGridview #dispatchSectionGV input:checked').each(function() {
+	$('#dispatchSectionGV-container .dispatchSectionCheckbox input:checked').each(function() {
 		dispatchSectionArray.push({
 			MapGrid: $(this).attr("MapGrid"),
 			SectionNumber: $(this).attr("SectionNumber"),
@@ -168,7 +167,6 @@ function getDispatchSectionArray(assignedUserID) {
 			InspectionType: $(this).attr("InspectionType")
 		});
 	});
-	console.log('dispatchSectionArray: ' + JSON.stringify(dispatchSectionArray));
 	return dispatchSectionArray;
 }
 
