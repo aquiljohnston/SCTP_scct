@@ -798,11 +798,13 @@ class TimeCardController extends BaseController
         }
     }
 
-    public function actionAjaxProcessCometTrackerFiles($timeCardName, $payrollFileName, $projectName, $weekStart, $weekEnd){
+    public function actionAjaxProcessCometTrackerFiles($timeCardName, $payrollFileName, $projectName, $weekStart, $weekEnd,$adpFileName){
 
         try{
 
           //  Yii::$app->response->format = Response::FORMAT_RAW;
+
+        	$continueProcess = false;
 
             $response = [];
 
@@ -828,62 +830,65 @@ class TimeCardController extends BaseController
                 ]);
 
 
+            //Build ADP File URL
+            $writeADPFileUrl = 'time-card%2Fget-adp-data&' . http_build_query([
+                'adpFileName' => $adpFileName,
+                'projectName' => $projectName,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'download' => true,
+                'type' => Constants::ADP
+                ]);
+
+
             //call SPROC and attempt to write file
             $timeCardResponse = json_decode($this->writeCSVfile($writeTimeCardFileUrl),true);
 
-                ///error_log(print_r($timeCardResponse,true));
-          
-            //if exception is due to empty file
-            if(isset($timeCardResponse['message'])){
-                 if(strpos($timeCardResponse['message'], 'Empty')!==false){
+               //error_log(print_r($timeCardResponse,true));
 
-                 $response['success'] = FALSE; 
-                 $response['message'] = $timeCardResponse['message']; 
-                  return json_encode($response);
-
-              }
-
-          } elseif(isset($timeCardResponse['type'])) {
+          if(isset($timeCardResponse['type'])) {
               if(strpos($timeCardResponse['type'], 'Exception')!==false){
 
                  $response['success'] = FALSE; 
-                 $response['message'] = $timeCardResponse['message']; 
+                 $response['message'] = 'Exception'; 
                   return json_encode($response);
 
               }
           }
-
-             
             //OK so if we made it here then the time card file has encountered no issues
             //Initiate the payroll process 
             $payRollResponse  = json_decode($this->writeCSVfile($witePayRollFileUrl),true);
 
-               //if exception is due to empty payroll file
-            if(isset($payRollResponse['message'])){
-                 if(strpos($timeCardResponse['message'], 'Empty')!==false){
-
-                 $response['success'] = FALSE; 
-                 $response['message'] = $payRollResponse['message']; 
-                  return json_encode($response);
-
-              }
-
-          } elseif(isset($payRollResponse['type'])) {
+            //error_log(print_r($payRollResponse,true));
+       	  if(isset($payRollResponse['type'])) {
               if(strpos($payRollResponse['type'], 'Exception')!==false){
 
                  $response['success'] = FALSE; 
-                 $response['message'] = $payRollResponse['message']; 
+                 $response['message'] = 'Exception'; 
                   return json_encode($response);
-
               }
           }
-             
+
+           $adpResponse  = json_decode($this->writeCSVfile($writeADPFileUrl),true);
+
+            //error_log(print_r($adpResponse,true));
+
+       	  if(isset($adpResponse['type'])) {
+              if(strpos($adpResponse['type'], 'Exception')!==false){
+
+                 $response['success'] = FALSE; 
+                 $response['message'] = 'Exception'; 
+                  return json_encode($response);
+              }
+          }
+
 
                 //no exception until this point so SUCCESS
                 //send success message
                  $response['success'] = TRUE; 
                  $response['message'] = 'Successfully Completed Time Card Process.'; 
                  return json_encode($response);
+           
 
         } catch (ForbiddenHttpException $e) {
               $response['success'] = FALSE; 

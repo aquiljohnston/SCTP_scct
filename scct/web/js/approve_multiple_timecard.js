@@ -67,25 +67,27 @@ function applyTimeCardSubmitButtonListener() {
        // return false;
 
 
-        var quantifier = "";
-        var name = 'timecard_history_';
-        var payroll = 'payroll_history_'
-        var thIndex = $('th:contains("Project Name")').index();
+        var quantifier  = "";
+        var name        = 'timecard_history_';
+        var payroll     = 'payroll_history_';
+        var adp         = 'adp_history_';
+        var thIndex     = $('th:contains("Project Name")').index();
         var projectName = $('#projectFilterDD').val();
        // var projectName = $('table td').eq(thIndex).text();
-        var d = new Date();
-        var minutes = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
-        var hours = ((d.getHours() + 11) % 12 + 1);
-        dates = $.datepicker.formatDate('yy-mm-dd', new Date());
+        var d           = new Date();
+        var minutes     = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+        var hours       = ((d.getHours() + 11) % 12 + 1);
+        dates           = $.datepicker.formatDate('yy-mm-dd', new Date());
 
-        timeCardName    = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
-        payRollFileName = payroll+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
-        dateRange = $('[name="DynamicModel[dateRangeValue]"]').val();
-        dateRange = dateRange.split(",");
-        timeCardComplete = false;
-        payrollComplete = false;
-        weekStart       = dateRange[0];
-        weekEnd =       $.trim(dateRange[1]);
+        timeCardName        = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        payRollFileName     = payroll+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        adpFileName         = adp+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        dateRange           = $('[name="DynamicModel[dateRangeValue]"]').val();
+        dateRange           = dateRange.split(",");
+        timeCardComplete    = false;
+        payrollComplete     = false;
+        weekStart           = dateRange[0];
+        weekEnd             = $.trim(dateRange[1]);
 
 
         //return false;
@@ -113,7 +115,8 @@ function applyTimeCardSubmitButtonListener() {
                 '&payrollFileName=' + payRollFileName+
                 '&projectName=' + projectName+
                 '&weekStart=' + weekStart+
-                '&weekEnd=' + weekEnd,
+                '&weekEnd=' + weekEnd +
+                '&adpFileName=' + adpFileName,
                 success: function(data) {
                     console.log(data)
                     data = JSON.parse(data);
