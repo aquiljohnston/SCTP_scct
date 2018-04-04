@@ -1,9 +1,7 @@
 /*inspection css*/
 .inspection{
-    overflow-y: hidden;
     margin-top: 2%;
 }
-
 #inspectionTab{
     height: 105px;
     padding:10px;
@@ -13,39 +11,10 @@
     background-color: #E6F0F6;
     z-index: 3;
     border-bottom: 1px solid black;
-
-}
-.summary{
-    padding-left: 1%;
-}
-#inspectionTable{
-    position:relative;
-    float:left;
-    width:100%;
-    margin-right:0.5%;
-    height: 430px;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-
-#inspectionGV {
-    width: 100%;
-    float: left;
-    max-height: 51vh;/*360px;*/
-    overflow-y: auto;
-    margin: 0 auto;
-    overflow-x: hidden;
 }
 .title{
     margin-top: -5px;
     font-size: 20px;
-
-}
-#inspectionTab h3{
-    padding-left:1%;
-}
-.summary{
-    margin-top: 10px;
 }
 #inspectionGridViewContainer{
     position:relative;
@@ -54,6 +23,23 @@
     margin-top: 0.7%;
     z-index: 1;
 }
+#inspectionTable{
+    position:relative;
+    float:left;
+    width:100%;
+    margin-right:0.5%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+#inspectionGV {
+    width: 100%;
+    float: left;
+    height: 50vh;
+    overflow-y: auto;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
+/*this is applying to both the main table and expanded section*/
 #inspectionTable .table-responsive {
     margin-top:0px;
     width:100%;
@@ -75,37 +61,19 @@
     margin: -5px auto;
     width: 10%;
 }
-#inspectionTablePagination .pagination {
+#InspectionTablePagination .pagination {
     margin: 5px 0 0 0;
 }
-.field-dispatchFilter{
-    width: 100%;
+#sectionDetailTable{
+    overflow-y: scroll;
+    max-height: 25vh;
+	margin-right: 0.5vw;
 }
-.viewSectionDetailSearchcontainer{
-    position: relative;
-    float: left;
-    width: 43%;
+#inspectionSearchContainer{
+    float:left;
+    margin-left: 60%;
 }
-#sectionDetailModalCleanFilterButtonInspection{
-    margin-top: 0.5%;
-    width: 35px;
-    cursor: pointer;
-}#sectionDetailGV-container{
-     overflow-x: initial;
- }
- #sectionDetailTable{
-     overflow-y: scroll;
-     width: 101%;
-     max-height: 400px;
-
- }
- #sectionDetailGV{
-     max-height: 250px;
- }
- #inspectionSearchContainer{
-     float:left;
-     margin-left: 60%;
- }
+/*css for new image tab*/
 .showImage:active {
     -webkit-transform: scale(2);
 }
@@ -150,27 +118,11 @@
     ::i-block-chrome, #inspectionGV {
         width: 100%;
         float: left;
-        max-height: 530px;
+        max-height: 50vh;
         overflow-y: auto;
         margin: 0 auto;
         overflow-x: hidden;
     }
-
-    #inspectionTableTable {
-        height: 620px;
-        overflow-y: hidden;
-        overflow-x: hidden;
-    }
-
-    .chrome_only {
-        width: 100%;
-        float: left;
-        max-height: 360px;
-        overflow-y: auto;
-        margin: 0 auto;
-        overflow-x: hidden;
-    }
-
     .floatThead-col {
         height: 0 !important;
     }
@@ -178,7 +130,7 @@
 /* Chrome 29+ */
 @media screen and (-webkit-min-device-pixel-ratio:0)
 and (min-resolution:.001dpcm) {
-    #inspectionTablePagination .pagination {
-        margin: 3px 15% 0 0;
+    #InspectionTablePagination .pagination {
+        margin: 3px 0 0 0;
     }
 }
