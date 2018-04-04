@@ -813,6 +813,7 @@ class TimeCardController extends BaseController
 
             $response = [];
 
+            //initialize routes
             $writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
                 'projectName' => $projectName,
                 'timeCardName' => $timeCardName,
@@ -845,6 +846,13 @@ class TimeCardController extends BaseController
                 'type' => Constants::ADP
                 ]);
 
+             $resetUrl = 'time-card%2Freset-comet-tracker-process&' . http_build_query([
+                'projectName' => $projectName,
+                'weekStart' => $weekStart,
+                'weekEnd' => $weekEnd,
+                'process' => 'BOTH'
+                ]);
+
 
             //call SPROC and attempt to write file
             $timeCardResponse = json_decode($this->writeCSVfile($writeTimeCardFileUrl),true);
@@ -870,7 +878,9 @@ class TimeCardController extends BaseController
 
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
-                  return json_encode($response);
+
+                 $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
+                 return json_encode($response);
               }
           }
 
@@ -883,7 +893,8 @@ class TimeCardController extends BaseController
 
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
-                  return json_encode($response);
+                 $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
+                 return json_encode($response);
               }
           }
 
@@ -898,6 +909,7 @@ class TimeCardController extends BaseController
         } catch (ForbiddenHttpException $e) {
               $response['success'] = FALSE; 
               $response['message'] = 'Exception occurred.'; 
+              $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
                 return json_encode($response);
             //throw new ForbiddenHttpException('General System Error - FW-100');
         } catch (\Exception $e) {
@@ -963,6 +975,13 @@ class TimeCardController extends BaseController
         Yii::$app->response->format = Response::FORMAT_RAW;
         $csvReq = Parent::executeGetRequest($downloadUrl,Constants::API_VERSION_2);
         return $csvReq;
+        
+    }
+
+    private function resetCometTrackerProcess($resetUrl){
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        $response = Parent::executeGetRequest($resetUrl,Constants::API_VERSION_2);
+        return $response;
         
     }
 
