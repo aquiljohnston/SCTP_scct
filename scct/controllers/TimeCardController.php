@@ -861,7 +861,6 @@ class TimeCardController extends BaseController
 
           if(isset($timeCardResponse['type'])) {
               if(strpos($timeCardResponse['type'], 'Exception')!==false){
-
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
                   return json_encode($response);
@@ -875,10 +874,8 @@ class TimeCardController extends BaseController
             //error_log(print_r($payRollResponse,true));
        	  if(isset($payRollResponse['type'])) {
               if(strpos($payRollResponse['type'], 'Exception')!==false){
-
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
-
                  $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
                  return json_encode($response);
               }
@@ -890,7 +887,6 @@ class TimeCardController extends BaseController
 
        	  if(isset($adpResponse['type'])) {
               if(strpos($adpResponse['type'], 'Exception')!==false){
-
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
                  $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
