@@ -200,7 +200,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'view' => function($url, $model) {
                                 $modalViewAssetAssigned = "#modalViewAssetAssigned";
                                 $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid']."&inspectionType=".$model['InspectionType'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid']."&inspectionType=".$model['InspectionType'] . "&billingCode=".$model['BillingCode']. "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
