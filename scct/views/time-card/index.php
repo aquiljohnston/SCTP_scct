@@ -17,7 +17,7 @@ use kartik\daterange\DateRangePicker;
 $chosen = "";
 
 $this->title = 'Time Cards';
-$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
+$pageSize = ["50" => "50", "100" => "100", "200" => "200", "500" => "500", "750" => "750"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
         'dateRangeValue' => $model->dateRangeValue
     ]);
