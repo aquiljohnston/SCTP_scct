@@ -282,7 +282,7 @@ class AssignedController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $inspectionType=null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $billingCode = null, $sectionNumberSelected = null, $inspectionType=null)
     {
         $model = new \yii\base\DynamicModel([
             'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
@@ -302,6 +302,7 @@ class AssignedController extends \app\controllers\BaseController
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
 			$inspectionType             = $inspectionType; 
+			$billingCode				= $billingCode;
 			//should this not be hard coded?
             $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
@@ -324,6 +325,7 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
 				'inspectionType'        => $inspectionType,
+				'billingCode' => $billingCode
             ]);
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 
