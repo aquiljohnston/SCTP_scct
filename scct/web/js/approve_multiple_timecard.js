@@ -82,8 +82,17 @@ function applyTimeCardSubmitButtonListener() {
         timeCardName        = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
         payRollFileName     = payroll+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
         adpFileName         = adp+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
-        dateRange           = $('[name="DynamicModel[dateRangeValue]"]').val();
-        dateRange           = dateRange.split(",");
+        dateRangeDD         = $('[name="DynamicModel[dateRangeValue]"]').val();
+		//check if date picker is active
+		if(dateRangeDD == 'other')
+		{
+			dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
+			dateRange = dateRange.split(" - ");
+		}
+		else
+		{
+			dateRange = dateRangeDD.split(",");
+		}
         timeCardComplete    = false;
         payrollComplete     = false;
         weekStart           = dateRange[0];
