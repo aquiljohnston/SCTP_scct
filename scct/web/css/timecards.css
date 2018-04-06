@@ -126,6 +126,7 @@ div[id^=modalContent] #loading {
 	margin-left: 0px;!important;
 }
 #multiple_approve_btn_id {
+	float: right;
 	padding-left: 9%;
 	padding-right: 9%;
 }
@@ -176,6 +177,7 @@ and (min-resolution:.001dpcm) {
 		width: 12%;
     }
 	#multiple_approve_btn_id {
+		float: right;
 		padding-left: 9%;
 		padding-right: 9%;
 	}
