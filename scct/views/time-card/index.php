@@ -132,19 +132,23 @@ $column = [
 				<?php Pjax::begin(['id' => 'submitApproveButtons', 'timeout' => false]) ?>
 					<div class="row">
 						<div id="multiple_time_card_approve_btn">
-							<?php
-								echo Html::button('Submit',
+  
+							<?=
+                            $_SESSION['UserAppRoleType'] == 'Accountant' ? 
+								 Html::button('Submit',
 									[
 										'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
                                         'id' => 'multiple_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
-									]);
-								echo Html::button('Approve',
-									[
-										'class' => 'btn btn-primary multiple_approve_btn',
-										'id' => 'multiple_approve_btn_id',
-										'disabled' => true
-									]);
+									])
+                                :
+                                    Html::button('Approve',
+                                    [
+                                        'class' => 'btn btn-primary multiple_approve_btn',
+                                        'id' => 'multiple_approve_btn_id',
+                                        'disabled' => true
+                                    ]);;
+							
 							?>
 							<?php
 							if ($pages->totalCount > 0) {
