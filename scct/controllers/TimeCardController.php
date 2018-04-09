@@ -803,11 +803,13 @@ class TimeCardController extends BaseController
         }
     }
 
-    public function actionAjaxProcessCometTrackerFiles($timeCardName, $payrollFileName, $projectName, $weekStart, $weekEnd,$adpFileName){
+    public function actionAjaxProcessCometTrackerFiles(){
 
         try{
 
           //  Yii::$app->response->format = Response::FORMAT_RAW;
+
+        	$data 			= Yii::$app->request->post();	
 
         	$continueProcess = false;
 
@@ -815,42 +817,42 @@ class TimeCardController extends BaseController
 
             //initialize routes
             $writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
-                'projectName' => $projectName,
-                'timeCardName' => $timeCardName,
-                'week' => null,
-                'weekStart' => $weekStart,
-                'weekEnd' => $weekEnd,
-                'download' => true,
-                'type' => Constants::OASIS
+                'projectName' 	=> json_encode($data['projectName']),
+                'timeCardName' 	=> $data['timeCardName'],
+                'week' 			=> null,
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'download' 		=> true,
+                'type' 			=> Constants::OASIS
                 ]);
 
 
 
-            $witePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
-                'cardName' => $payrollFileName,
-                'projectName' => $projectName,
-                'weekStart' => $weekStart,
-                'weekEnd' => $weekEnd,
-                'download' => true,
-                'type' => Constants::QUICKBOOKS
+            $writePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
+                'cardName' 		=> $data['payRollFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'download' 		=> true,
+                'type' 			=> Constants::QUICKBOOKS
                 ]);
 
 
             //Build ADP File URL
-            $writeADPFileUrl = 'time-card%2Fget-adp-data&' . http_build_query([
-                'adpFileName' => $adpFileName,
-                'projectName' => $projectName,
-                'weekStart' => $weekStart,
-                'weekEnd' => $weekEnd,
-                'download' => true,
-                'type' => Constants::ADP
+            $writeADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
+                'adpFileName' 	=> $data['adpFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'download' 		=> true,
+                'type' 			=> Constants::ADP
                 ]);
 
-             $resetUrl = 'time-card%2Freset-comet-tracker-process&' . http_build_query([
-                'projectName' => $projectName,
-                'weekStart' => $weekStart,
-                'weekEnd' => $weekEnd,
-                'process' => 'BOTH'
+             $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'process' 		=> 'BOTH'
                 ]);
 
 
@@ -869,7 +871,7 @@ class TimeCardController extends BaseController
           }
             //OK so if we made it here then the time card file has encountered no issues
             //Initiate the payroll process 
-            $payRollResponse  = json_decode($this->writeCSVfile($witePayRollFileUrl),true);
+            $payRollResponse  = json_decode($this->writeCSVfile($writePayRollFileUrl),true);
 
             //error_log(print_r($payRollResponse,true));
        	  if(isset($payRollResponse['type'])) {
