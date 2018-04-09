@@ -52,8 +52,8 @@ class TimeCardController extends BaseController
 			//Check if user has permission to view time card page
 			self::requirePermission("viewTimeCardMgmt");
             //create curl for restful call.
-            //get user role
-            $userID = Yii::$app->session['userID'];
+            //check user role
+            $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 
             // Store start/end date data
             $dateData = [];
@@ -131,20 +131,35 @@ class TimeCardController extends BaseController
 
 			//url encode filter
 			$encodedFilter = urlencode($model->filter);
-
-            //build url with params
-			$url = 'time-card%2Fget-cards&' . http_build_query([
-				'startDate' => $startDate,
-				'endDate' => $endDate,
-				'listPerPage' => $model->pageSize,
-				'page' => $page,
-				'filter' => $encodedFilter,
-				'projectID' => $model->projectName,
-			]);
+			
+			if($isAccountant)
+			{
+				//build url with params
+				$url = 'time-card%2Fget-accountant-view&' . http_build_query([
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+					'listPerPage' => $model->pageSize,
+					'page' => $page,
+					'filter' => $encodedFilter,
+					'projectID' => $model->projectName,
+				]);
+			}
+			else
+			{
+				//build url with params
+				$url = 'time-card%2Fget-cards&' . http_build_query([
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+					'listPerPage' => $model->pageSize,
+					'page' => $page,
+					'filter' => $encodedFilter,
+					'projectID' => $model->projectName,
+				]);
+			}
 			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 				        = json_decode($response, true);
             $assets 				        = $response['assets'];
-            $approvedTimeCardExist 	        = $response['approvedTimeCardExist'];
+            $approvedTimeCardExist 	        = array_key_exists('approvedTimeCardExist', $response) ? $response['approvedTimeCardExist'] : false;
             $showProjectDropDown            = $response['showProjectDropDown'];
             $projectWasSubmitted        	= $response['projectSubmitted'];
 
@@ -189,47 +204,89 @@ class TimeCardController extends BaseController
 				'allModels' => $assets,
 				'pagination' => false
 			]);
+			
+			if($isAccountant)
+			{
+				// Sorting TimeCard table
+				$dataProvider->sort = [
+					'attributes' => [
+						'ProjectName' => [
+							'asc' => ['ProjectName' => SORT_ASC],
+							'desc' => ['ProjectName' => SORT_DESC]
+						],
+						'ProjectManager' => [
+							'asc' => ['ProjectManager' => SORT_ASC],
+							'desc' => ['ProjectManager' => SORT_DESC]
+						],
+						'StartDate' => [
+							'asc' => ['StartDate' => SORT_ASC],
+							'desc' => ['StartDate' => SORT_DESC]
+						],
+						'ApprovedBy' => [
+							'asc' => ['ApprovedBy' => SORT_ASC],
+							'desc' => ['ApprovedBy' => SORT_DESC]
+						],
+						'OasisSubmitted' => [
+							'asc' => ['OasisSubmitted' => SORT_ASC],
+							'desc' => ['OasisSubmitted' => SORT_DESC]
+						],
+						'QBSubmitted' => [
+							'asc' => ['QBSubmitted' => SORT_ASC],
+							'desc' => ['QBSubmitted' => SORT_DESC]
+						],
+						'ADPSubmitted' => [
+							'asc' => ['ADPSubmitted' => SORT_ASC],
+							'desc' => ['ADPSubmitted' => SORT_DESC]
+						],
+					]
+				];
 
-            // Sorting TimeCard table
-            $dataProvider->sort = [
-                'attributes' => [
-                    'UserFullName' => [
-                        'asc' => ['UserFullName' => SORT_ASC],
-                        'desc' => ['UserFullName' => SORT_DESC]
-                    ],
-                    'UserLastName' => [
-                        'asc' => ['UserLastName' => SORT_ASC],
-                        'desc' => ['UserLastName' => SORT_DESC]
-                    ],
-                    'ProjectName' => [
-                        'asc' => ['ProjectName' => SORT_ASC],
-                        'desc' => ['ProjectName' => SORT_DESC]
-                    ],
-                    'TimeCardDates' => [
-                        'asc' => ['TimeCardDates' => SORT_ASC],
-                        'desc' => ['TimeCardDates' => SORT_DESC]
-                    ],
-                    'TimeCardOasisSubmitted' => [
-                        'asc' => ['TimeCardOasisSubmitted' => SORT_ASC],
-                        'desc' => ['TimeCardOasisSubmitted' => SORT_DESC]
-                    ],
-                    'TimeCardQBSubmitted' => [
-                        'asc' => ['TimeCardQBSubmitted' => SORT_ASC],
-                        'desc' => ['TimeCardQBSubmitted' => SORT_DESC]
-                    ],
-                    'SumHours' => [
-                        'asc' => ['SumHours' => SORT_ASC],
-                        'desc' => ['SumHours' => SORT_DESC]
-                    ],
-                    'TimeCardApprovedFlag' => [
-                        'asc' => ['TimeCardApprovedFlag' => SORT_ASC],
-                        'desc' => ['TimeCardApprovedFlag' => SORT_DESC]
-                    ],
-                ]
-            ];
+				//set timecardid as id
+				$dataProvider->key = 'ProjectID';
+			}
+			else
+			{
+				// Sorting TimeCard table
+				$dataProvider->sort = [
+					'attributes' => [
+						'UserFullName' => [
+							'asc' => ['UserFullName' => SORT_ASC],
+							'desc' => ['UserFullName' => SORT_DESC]
+						],
+						'UserLastName' => [
+							'asc' => ['UserLastName' => SORT_ASC],
+							'desc' => ['UserLastName' => SORT_DESC]
+						],
+						'ProjectName' => [
+							'asc' => ['ProjectName' => SORT_ASC],
+							'desc' => ['ProjectName' => SORT_DESC]
+						],
+						'TimeCardDates' => [
+							'asc' => ['TimeCardDates' => SORT_ASC],
+							'desc' => ['TimeCardDates' => SORT_DESC]
+						],
+						'TimeCardOasisSubmitted' => [
+							'asc' => ['TimeCardOasisSubmitted' => SORT_ASC],
+							'desc' => ['TimeCardOasisSubmitted' => SORT_DESC]
+						],
+						'TimeCardQBSubmitted' => [
+							'asc' => ['TimeCardQBSubmitted' => SORT_ASC],
+							'desc' => ['TimeCardQBSubmitted' => SORT_DESC]
+						],
+						'SumHours' => [
+							'asc' => ['SumHours' => SORT_ASC],
+							'desc' => ['SumHours' => SORT_DESC]
+						],
+						'TimeCardApprovedFlag' => [
+							'asc' => ['TimeCardApprovedFlag' => SORT_ASC],
+							'desc' => ['TimeCardApprovedFlag' => SORT_DESC]
+						],
+					]
+				];
 
-            //set timecardid as id
-            $dataProvider->key = 'TimeCardID';
+				//set timecardid as id
+				$dataProvider->key = 'TimeCardID';
+			}
 
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
