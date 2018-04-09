@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use kartik\dialog\Dialog;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user */
@@ -17,10 +18,18 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Update', ['update', 'username' => $model['UserName']], ['class' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-primary disabled' : 'btn btn-primary']) ?>
-        <?= Html::a('Deactivate', ['deactivate', 'username' => $model['UserName']], [
-            'class' =>array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-danger disabled' : 'btn btn-danger',
-            'id' => 'deactivateUserBtn',
-        ]) ?>
+        <?php
+            echo Dialog::widget(['overrideYiiConfirm' => true]);
+            echo Html::a(
+                        'Deactivate', 
+                        ['deactivate', 'username' => $model['UserName']],
+                            [
+                                'data-confirm' => 'Are you sure to deactivate this user?',
+                                'data-method' => 'post',
+                                'aria-label' => Yii::t('yii', 'Deactivate'),
+                                'class' =>array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-danger disabled' : 'btn btn-danger'
+                            ]);
+        ?>
     </p>
 
     <?= DetailView::widget([
