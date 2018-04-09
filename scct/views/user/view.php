@@ -19,10 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Update', ['update', 'username' => $model['UserName']], ['class' => array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-primary disabled' : 'btn btn-primary']) ?>
         <?= Html::a('Deactivate', ['deactivate', 'username' => $model['UserName']], [
             'class' =>array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-danger disabled' : 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to deactivate this user?',
-                'method' => 'put',
-            ],
+            'id' => 'deactivateUserBtn',
         ]) ?>
     </p>
 
