@@ -72,7 +72,17 @@ function applyTimeCardSubmitButtonListener() {
         var payroll     = 'payroll_history_';
         var adp         = 'adp_history_';
         var thIndex     = $('th:contains("Project Name")').index();
-        var projectName = $('#projectFilterDD').val();
+        var projectIDs  = [];
+        
+        $('#projectFilterDD option').each(function(){
+            if($(this).val()!=""){
+                projectIDs.push($(this).val());
+            }
+            
+        })
+
+        console.log(projectIDs);
+        //return false;
        // var projectName = $('table td').eq(thIndex).text();
         var d           = new Date();
         var minutes     = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
@@ -117,15 +127,21 @@ function applyTimeCardSubmitButtonListener() {
             
             //usage $.ctGrow(msg,title,boostrap text class)
             $.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
+
+
+            payload = {
+                payRollFileName : payRollFileName,
+                timeCardName    : timeCardName,
+                projectName     : projectIDs,
+                weekStart       : weekStart,
+                weekEnd         : weekEnd,
+                adpFileName     : adpFileName
+            }
                    
             $.ajax({
                 type: 'POST',
-                url: '/time-card/ajax-process-comet-tracker-files?timeCardName='+timeCardName+
-                '&payrollFileName=' + payRollFileName+
-                '&projectName=' + projectName+
-                '&weekStart=' + weekStart+
-                '&weekEnd=' + weekEnd +
-                '&adpFileName=' + adpFileName,
+                url: '/time-card/ajax-process-comet-tracker-files',
+                data:payload,
                 success: function(data) {
                     console.log(data)
                     data = JSON.parse(data);
