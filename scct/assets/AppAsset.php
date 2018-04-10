@@ -73,7 +73,7 @@ class AppAsset extends AssetBundle
         '//cdn.datatables.net/1.10.12/js/jquery.dataTables.js',
         '//code.jquery.com/ui/1.12.1/jquery-ui.js',
         'js/geoxml3.js',
-        'js/geoxmlfull_v3.js',
+        //'js/geoxmlfull_v3.js',
         //'js/markerclusterer.js',
         'js/markerclusterer_compiled.js',
         'js/progressBar.js',
