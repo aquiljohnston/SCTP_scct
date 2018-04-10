@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'Deactivate', 
                         ['deactivate', 'username' => $model['UserName']],
                             [
-                                'data-confirm' => 'Are you sure to deactivate this user?',
+                                'data-confirm' => 'Are you sure you want to deactivate this user?',
                                 'data-method' => 'post',
                                 'aria-label' => Yii::t('yii', 'Deactivate'),
                                 'class' =>array_search($_SESSION['UserAppRoleType'], $userPermissionTable) > array_search($model['UserAppRoleType'], $userPermissionTable) ? 'btn btn-danger disabled' : 'btn btn-danger'
