@@ -123,6 +123,8 @@ function applyTimeCardSubmitButtonListener() {
         krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
         
         if (resp) {
+			$('#loading').show();
+			
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
 
             
