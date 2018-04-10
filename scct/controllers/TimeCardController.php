@@ -162,16 +162,8 @@ class TimeCardController extends BaseController
             $approvedTimeCardExist 	        = array_key_exists('approvedTimeCardExist', $response) ? $response['approvedTimeCardExist'] : false;
             $showProjectDropDown            = $response['showProjectDropDown'];
             $projectWasSubmitted        	= $response['projectSubmitted'];
-
-            if(Yii::$app->session['projectDD']) {
-            $projectDropDown					= Yii::$app->session['projectDD'];
-            $showFilter							= Yii::$app->session['showFilter'];
-            } else {
-            $projectDropDown					= $response['projectDropDown'];
-			$showFilter							= $showProjectDropDown;
-            Yii::$app->session['projectDD']		= $projectDropDown;
-            Yii::$app->session['showFilter']	= $showFilter;
-            }
+            $projectDropDown				= $response['projectDropDown'];
+			$showFilter						= $showProjectDropDown;
 			
 			//get project id for time card submission if filter is not in place
 			if(!$showFilter)
