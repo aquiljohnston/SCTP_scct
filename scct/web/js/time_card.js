@@ -238,10 +238,10 @@ $(function(){
     $( document ).tooltip();
     
     if($('#multiple_submit_btn_id').hasClass('off-btn')){
-       $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+       $('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
     } 
     if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-      $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
+      $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
     }
 
     //add tool tip to all time deactivatable time entries    
@@ -273,10 +273,10 @@ function reloadTimeCardGridView() {
 			timeout:false
 		}).done(function (){
 			if($('#multiple_submit_btn_id').hasClass('off-btn')){
-		   $('#multiple_submit_btn_id').attr("title", "Not all Time Cards have been Approved in the Specified Projects");
+		   $('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
 			} 
 			if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-				 $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted for this project.");
+				 $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
 			}
 
 			 });
