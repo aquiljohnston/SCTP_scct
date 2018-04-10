@@ -146,30 +146,13 @@ function applyTimeCardSubmitButtonListener() {
                 url: '/time-card/ajax-process-comet-tracker-files',
                 data:payload,
                 success: function(data) {
-                    console.log(data)
+                    //console.log(data)
                     data = JSON.parse(data);
                     if(data.success){
            
                         $.ctGrowl.msg(data.message,'Success','bg-success');
                         //calls time_card.js reload function
                         reloadTimeCardGridView();
-                        
-                      //  $.ctGrowl.msg('Intiating File Download......','Success','bg-info');
-                       
-                       /* setTimeout(function() {
-
-                         timeCard = window.open('/time-card/download-time-card-data?timeCardName='+timeCardName+
-                            '&projectName=' + projectName+
-                            '&weekStart=' + weekStart+
-                            '&weekEnd=' + weekEnd, '_blank');
-
-                         payroll =  window.open('/time-card/download-payroll-data?cardName='+payRollFileName+
-                            '&projectName=' + projectName+
-                            '&weekStart=' + weekStart+
-                            '&weekEnd=' +  weekEnd, '_blank');               
-                                    }, 3000);*/
-
-                      //   $.ctGrowl.msg('File Download Success...','Success','bg-success');
 
                     } else {
 
