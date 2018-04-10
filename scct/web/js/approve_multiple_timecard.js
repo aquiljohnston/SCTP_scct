@@ -68,7 +68,7 @@ function applyTimeCardSubmitButtonListener() {
 
 
         var quantifier  = "";
-        var name        = 'timecard_history_';
+        var name        = 'oasis_history_';
         var payroll     = 'payroll_history_';
         var adp         = 'adp_history_';
         var thIndex     = $('th:contains("Project Name")').index();
