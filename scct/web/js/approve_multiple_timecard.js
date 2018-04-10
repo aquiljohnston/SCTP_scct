@@ -36,6 +36,7 @@ function applyTimeCardOnClickListeners() {
         krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
         
         if (resp) {
+			$('#loading').show();
             $.ajax({
                 type: 'POST',
                 url: '/time-card/approve-multiple',
@@ -122,6 +123,8 @@ function applyTimeCardSubmitButtonListener() {
         krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
         
         if (resp) {
+			$('#loading').show();
+			
             var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
 
             
