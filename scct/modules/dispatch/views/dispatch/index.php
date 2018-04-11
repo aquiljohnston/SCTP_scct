@@ -65,7 +65,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
                 'export' => false,
                 'pjax' => true,
-                'floatHeader' => true,
+                //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
@@ -174,7 +174,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }
                     ]
                 ],
-                'floatOverflowContainer' => true,
             ]); ?>
             <div id="unassignedTablePagination">
                 <?php
