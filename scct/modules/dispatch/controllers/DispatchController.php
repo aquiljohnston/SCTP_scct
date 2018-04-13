@@ -16,10 +16,9 @@ use app\constants\Constants;
 
 class DispatchController extends \app\controllers\BaseController
 {
-    public function actionHeavyDispatch()
-    {
-
-        try {
+    public function actionIndex() 
+	{
+       try {
 
             // Check if user has permission to view dispatch page
             self::requirePermission("viewDispatch");
@@ -39,11 +38,6 @@ class DispatchController extends \app\controllers\BaseController
 
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
-
-                //Yii::trace("dispatchfilter " . $model->dispatchfilter);
-                //Yii::trace("pagesize " . $model->pagesize);
-                //Yii::trace("mapgridfilter " . $model->mapgridfilter);
-                //Yii::trace("sectionnumberfilter " . $model->sectionnumberfilter);
                 $dispatchPageSizeParams = $model->pagesize;
                 $dispatchFilterParams = $model->dispatchfilter;
                 $dispatchMapGridSelectedParams = $model->mapgridfilter;
@@ -79,12 +73,15 @@ class DispatchController extends \app\controllers\BaseController
             ([
                 'allModels' => $dispatchData,
                 'pagination' => false,
+				'key' => function ($dispatchData) {
+					return array(
+						'MapGrid' => $dispatchData['MapGrid'],
+						'InspectionType' => $dispatchData['InspectionType'],
+						'BillingCode' => $dispatchData['BillingCode'],
+					);
+				},
             ]);
-            // dispatch section data provider
 
-            $dispatchDataProvider->key = 'MapGrid';
-
-            //todo: set paging on both tables
             // set pages to dispatch table
             $pages = new Pagination($getDispatchDataResponse['pages']);
 
@@ -165,20 +162,6 @@ class DispatchController extends \app\controllers\BaseController
         }
     }
 
-    public function actionIndex() {
-        try{
-            return $this->render('lightDispatch');
-        } catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-        } catch (Exception $e) {
-            Yii::$app->runAction('login/user-logout');
-            return "";
-        }
-    }
-
-
     /**
      * render expandable section row
      * @return string|Response
@@ -198,9 +181,6 @@ class DispatchController extends \app\controllers\BaseController
 
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
-
-            Yii::trace("sectionfilter " . $model->sectionfilter);
-            Yii::trace("pagesize " . $model->pagesize);
             $sectionPageSizeParams = $model->pagesize;
             $sectionFilterParams = $model->sectionfilter;
         } else {
@@ -216,12 +196,20 @@ class DispatchController extends \app\controllers\BaseController
         }
         // get the key to generate section table
         if (isset($_POST['expandRowKey']))
-            $mapGridSelected = $_POST['expandRowKey'];
-        else
-            $mapGridSelected = "";
+		{
+            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
+            $inspectionType = $_POST['expandRowKey']['InspectionType'];
+            $billingCode = $_POST['expandRowKey']['BillingCode'];
+		}else{
+			$mapGridSelected = '';
+			$inspectionType = '';
+			$billingCode = '';
+		}     
 
         $getUrl = 'dispatch%2Fget-available&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
+				'inspectionType' => $inspectionType,
+				'billingCode' => $billingCode,
                 'filter' => $sectionFilterParams,
                 'listPerPage' => $sectionPageSizeParams,
                 'page' => $pageAt,
@@ -237,9 +225,14 @@ class DispatchController extends \app\controllers\BaseController
         ([
             'allModels' => $sectionData,
             'pagination' => false,
+			'key' => function ($sectionData) {
+				return array(
+					'SectionNumber' => $sectionData['SectionNumber'],
+					'InspectionType' => $sectionData['InspectionType'],
+					'BillingCode' => $sectionData['BillingCode'],
+				);
+			},
         ]);
-
-        $sectionDataProvider->key = 'SectionNumber';
 
         // set pages to dispatch table
         $pages = new Pagination($getSectionDataResponse['pages']);

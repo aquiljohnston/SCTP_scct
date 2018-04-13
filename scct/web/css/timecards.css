@@ -14,52 +14,28 @@
     margin-top: 2%;
 }
 
+
 .white_space {
     margin-top: 3%;
 }
 
-/*#modalContentSunday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentMonday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentTuesday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentWednesday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentThursday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentFriday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentSaturday .wrap #top-wrapper{*/
-/*display: none;*/
-/*}*/
-/*#modalContentSunday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentMonday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentTuesday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentWednesday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentThursday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentFriday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
-/*#modalContentSaturday .container{*/
-/*padding: 10px 15px 20px;*/
-/*}*/
+.projectFilterDD {
+    margin-top: -2.2%;
+}
+
+#clearProjectFilterButton  {
+    width: 32px;
+    cursor: pointer;
+    float: right;
+    margin-right: -1%;
+    margin-top: -2.2%;
+}
+
+.off-btn{
+	opacity: 0.65;
+	cursor: no-drop;
+}
+
 .approve {
     margin-top: 0;
 }
@@ -82,6 +58,10 @@ div[id^=modalContent] #loading {
 }
 #multiple_time_card_approve_btn{
     padding-left:0;
+	float: right;
+	margin-top: -0.3%;
+	margin-right: 0.5%;
+	width: 12%;
 }
 #timeCardDropdownContainer{
 	padding-right:0;
@@ -106,6 +86,10 @@ div[id^=modalContent] #loading {
 	max-height:58vh;
 	overflow-y:auto;
 	overflow-x: hidden;
+}
+#timeCardPageSize {
+	margin-left: 110%;
+	margin-top: 15%;
 }
 /*timeCard view page*/
 .timecard-view table{
@@ -133,10 +117,41 @@ div[id^=modalContent] #loading {
 #timeCardSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
+	float: right;
+	margin-right: -35%;
+	margin-top: -2.2%;
 }
 .field-dynamicmodel-daterangepicker{
 	float:right;!important;
 	margin-left: 0px;!important;
+}
+#multiple_approve_btn_id {
+	float: right;
+	padding-left: 9%;
+	padding-right: 9%;
+}
+.TimeCardSearch {
+	float: right;
+	margin-right: 22%;
+	margin-top: -2.2%;
+}
+.DateRangeDropDown {
+	margin-left: 10%;
+	margin-top: -2.2%;
+}
+#multiple_submit_btn_id{
+	float: right;
+	padding-left: 11%;
+	padding-right: 11%;
+}
+#datePickerContainer{
+	margin-top: -5.2%;
+	margin-left: -15%;
+}
+#create_task_entry_submit_btn {
+	margin-top: 1%;
+	float: right;
+	margin-right: 3%;
 }
 /*responsive css* for table*/
 @media only screen 
@@ -150,4 +165,29 @@ and (min-width : 1900px) {
 #GridViewForTimeCard{
 	max-height:62vh;
 }
+}
+/* Chrome 29+ */
+/*this seems unnecessary, tested in IE and needed to apply this same css to base values*/
+@media screen and (-webkit-min-device-pixel-ratio:0)
+and (min-resolution:.001dpcm) {
+	#multiple_time_card_approve_btn{
+	    float: right;
+		margin-top: -0.3%;
+		margin-right: 0.5%;
+		width: 12%;
+    }
+	#multiple_approve_btn_id {
+		float: right;
+		padding-left: 9%;
+		padding-right: 9%;
+	}
+}
+
+/*custom style for show entries grid view hover*/
+#allTaskEntries table tbody tr:hover{
+	/*cancel out base style*/
+    background-color: none;
+}
+#allTaskEntries table tbody tr td:hover{
+    background-color: rgba(57, 12, 255, 0.25);
 }

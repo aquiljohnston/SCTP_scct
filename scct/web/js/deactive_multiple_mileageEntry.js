@@ -79,9 +79,11 @@ $(function() {
 				
 				// triggered when checkbox selected
 				$('#deactive_mileageEntry_btn_id').click(function(e){
-					var confirmBox = confirm('Are you sure you want to deactivate this item?');
-					
-						if(confirmBox){
+					//var confirmBox = confirm('Are you sure you want to deactivate this item ?');
+		
+		krajeeDialog.defaults.confirm.title = 'Deactivate Mileage Entry';
+        krajeeDialog.confirm('Are you sure you want to deactivate this item?', function (resp) {
+        		if (resp) {
 							$.ajax({
 							type: 'POST',
 							url: '/mileage-card/deactivate',
@@ -96,7 +98,8 @@ $(function() {
 					}else{
 						e.stopImmediatePropagation();
 						e.preventDefault();
-					}   
+					}
+					});   
 				});
 			}else {
 					$('#deactive_mileageEntry_btn_id').prop('disabled', true);

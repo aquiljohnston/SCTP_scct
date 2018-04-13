@@ -25,6 +25,28 @@ $(function () {
         $('#userSearchField').val("");
         reloadUserGridView();
     });
+	
+	$(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
+        var weekStart   = $("table th").eq(1).attr('class');
+        var weekEnd     = $("table th").eq(7).attr('class');
+        var timeCardID = $('#timeCardId').val();
+        var SundayDate = $('#SundayDate').val();
+        var SaturdayDate = $('#SaturdayDate').val();
+        var timeCardProjectID = $('#TimeCardProjectID').val();
+      $('#addTaskModal').modal('show').find('#modalContentSpan').html("Loading...");
+        /* $('#addTaskModal').modal('show')
+            .find('#modalAddTask')
+            .load('/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID);
+       */
+       //Fetch modal content via pjax to prevent sync console warning and FF page flash
+       $.pjax.reload({
+        type: 'GET',
+        replace:false,
+        url: '/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID,
+        container: '#modalContentSpan', // id to update content
+        timeout: 99999
+        })
+    });
 });
 
 function reloadTaskGridView() {
@@ -62,3 +84,90 @@ function reloadUserGridView() {
         $('#loading').hide();
     });
 }
+
+function TaskEntryCreation() {
+	var form            = $('#TaskEntryForm');
+
+    $('#loading').show();
+
+    $.ajax({
+        type: 'GET',
+        url: form.attr("action"),
+        data: form.serialize(),
+        success: function () {
+            $('#loading').hide();
+           $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+          applyToolTip();
+     });; //for pjax update
+        },
+        error  : function () {
+            console.log("internal server error");
+        }
+    });
+}
+
+function applyToolTip(){
+     $.each($('#allTaskEntries tbody tr td'),function(index,value){
+         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
+            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
+           $(this).attr("title","Click to deactivate this time entry!")
+         }
+    })
+}
+
+$(document).on('click','#deactive_timeEntry_btn_id',function(e){
+        var id           =   $('#timeCardId').val();
+        var tasks        =    [];
+        var name         =    "";
+       
+       $(".entryData").each(function(k,value){   
+         if($(this).is(":checked")){ 
+
+            //get task name for payload and confirm message
+            name = $(this).attr('taskName');
+            tasks.push(name);
+              
+            //walk each cell and build payload
+            $.each($(this).closest('tr').find('td'),function(index,value) {
+                if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0))
+                    {   
+                        entry_date = $(this).closest('table').find('th').eq(index).attr('class');
+                        entries.push({taskName:name, day:entry_date, timeCardID:id})
+                    }       
+                 }) 
+            }
+        })
+      
+        tasks.join(', ');
+        data = {entries}
+       
+        krajeeDialog.defaults.confirm.title = 'Deactivate All Task';
+        krajeeDialog.confirm('Are you sure you want to deactivate all ' +tasks+ '? Please confirm...', function (resp) {
+        
+        if (resp) {
+            $.ajax({
+            type: 'POST',
+            url: '/time-card/deactivate/',
+            data: data,
+            beforeSend: function(  ) {
+              applyToolTip();
+            },
+            success: function(data) {
+                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+            applyToolTip();
+        });; //for pjax update
+
+                $('#loading').hide();
+                $('#deactive_timeEntry_btn_id').prop('disabled',true);
+            },
+             error: function(data) {
+                console.log('error')
+             }
+        });
+            } else {
+                $('#w0').modal('toggle');
+                 return false;
+          }
+        });
+
+    });

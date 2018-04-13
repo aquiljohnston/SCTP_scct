@@ -1,18 +1,14 @@
 .home-index{
 	margin-top:6%;
 }
-#equipmentWidget{
+#homeEquipmentWidget{
 	float: left;
-	width: 32%;
+	width: 49%;
 }
-#timeCardWidget{
+#homeTimeCardWidget{
 	float: left;
-	width: 32%;
+	width: 49%;
 	margin-left: 2%;
-}
-#mileageCardWidget{
-	float: right;
-	width: 32%;
 }
 .home-index tbody tr:last-child {
 	background: #f0f0f2;

@@ -30,10 +30,6 @@ $taskColumn = [
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'taskCheckbox'],
         'checkboxOptions' => function ($model, $key, $index, $column) {
-            /*if (empty($model['SectionNumber']))
-                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false];
-            else
-                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];*/
         }
     ]
 ];
@@ -52,10 +48,6 @@ $userColumn = [
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'userCheckbox'],
         'checkboxOptions' => function ($model, $key, $index, $column) {
-            /*if (empty($model['SectionNumber']))
-                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false];
-            else
-                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];*/
         }
     ]
 ];
@@ -65,9 +57,7 @@ $userColumn = [
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_HORIZONTAL,
-            'formConfig' => [/*'labelSpan' => 1,*/'showLabels' => false, 'deviceSize' => ActiveForm::SIZE_SMALL],
-            //'method' => 'get',
-            //'action' => Url::to(['task/index']),
+            'formConfig' => ['showLabels' => false, 'deviceSize' => ActiveForm::SIZE_SMALL],
             'options' => [
                 'id' => 'taskForm',
             ]
@@ -99,16 +89,6 @@ $userColumn = [
                     'summary' => false,
                     'columns' => $taskColumn
                 ]); ?>
-                <!--<div id="TaskPagination">
-            <?php
-                /*            echo LinkPager::widget([
-                                'pagination' => $taskPages,
-                            ]);
-                            */?>
-        </div>
-        <div class="TaskGridViewTotalNumber">
-            <?php /*echo "Showing " . ($taskPages->offset + 1) . " to " . ($taskPages->offset + $taskPages->getPageSize()) . " of " . $taskPages->totalCount . " entries"; */?>
-        </div>-->
                 <?php Pjax::end() ?>
             </div>
             <div class="col-sm-6 text-center">
@@ -122,16 +102,6 @@ $userColumn = [
                     'summary' => false,
                     'columns' => $userColumn
                 ]); ?>
-                <!--<div id="UserPagination">
-            <?php
-                /*            echo LinkPager::widget([
-                                'pagination' => $userPages,
-                            ]);
-                            */?>
-        </div>
-        <div class="UserGridViewTotalNumber">
-            <?php /*echo "Showing " . ($userPages->offset + 1) . " to " . ($userPages->offset + $userPages->getPageSize()) . " of " . $userPages->totalCount . " entries"; */?>
-        </div>-->
                 <?php Pjax::end() ?>
             </div>
         </div>

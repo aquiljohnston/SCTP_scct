@@ -25,7 +25,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
                 'options' => ['id' => 'dispatchActiveForm'],
-                'action' => '/dispatch/dispatch/heavy-dispatch'
+                'action' => '/dispatch/dispatch/index'
             ]); ?>
             <div id="dispatchUnassignedTableDropdown">
                 <span id="dispatchPageSizeLabel" style="float: right;">
@@ -65,7 +65,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
                 'export' => false,
                 'pjax' => true,
-                'floatHeader' => true,
+                //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
@@ -165,14 +165,15 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'class' => 'kartik\grid\CheckboxColumn',
                         'contentOptions' => ['class' => 'dispatchCheckbox'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
-                            if (empty($model['SectionNumber']))
-                                return ['SectionNumber' => '000', 'MapGrid' => $model['MapGrid'], 'disabled' => false];
-                            else
-                                return ['SectionNumber' => $model['SectionNumber'], 'MapGrid' => $model['MapGrid'], 'disabled' => false];
+                            return [
+								'MapGrid' => $model['MapGrid'],
+								'BillingCode' => $model['BillingCode'],
+								'InspectionType' => $model['InspectionType'],
+								'disabled' => false
+							];
                         }
                     ]
                 ],
-                'floatOverflowContainer' => true,
             ]); ?>
             <div id="unassignedTablePagination">
                 <?php
