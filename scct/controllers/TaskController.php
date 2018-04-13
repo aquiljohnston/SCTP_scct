@@ -120,4 +120,149 @@ class TaskController extends BaseController
         ]);
 
     }
+	
+	/**
+     * Add New Task Entry.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @param $TimeCardID
+     * @param $SundayDate
+     * @param null $SaturdayDate
+     * @param $timeCardProjectID
+     * @return string
+     * @throws \yii\web\HttpException
+     * @internal param $SatudayDate
+     */
+
+    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
+    {
+        //guest redirect
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        // convert SundayDate and SaturdayDate to MM/dd/YYYY format
+        $SundayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SundayDate)));
+        $SaturdayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SaturdayDate)));
+
+        self::requirePermission("timeEntryCreate");
+
+        $model = new \yii\base\DynamicModel([
+            'TimeCardID',
+            'TaskName',
+            'Date',
+            'StartTime',
+            'EndTime',
+            'ChargeOfAccountType'
+        ]);
+        $model -> addRule('TimeCardID', 'string', ['max' => 100], 'required');
+        $model -> addRule('TaskName', 'string', ['max' => 100], 'required');
+        $model -> addRule('Date', 'string', ['max' => 32], 'required');
+        $model -> addRule('StartTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('EndTime', 'string', ['max' => 100], 'required');
+        $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
+
+        try {
+			
+			$getAllTaskUrl = 'task%2Fget-all-task&timeCardProjectID='.$timeCardProjectID;
+			$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+			$allTask = json_decode($getAllTaskResponse, true);
+            $allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
+
+            //get chartOfAccountType for form dropdown
+            $getAllChartOfAccountTypeUrl = 'task%2Fget-charge-of-account-type';
+            $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
+            $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
+
+            if ($model->load(Yii::$app->request->queryParams) && $model->validate()) {
+				
+				// convert to 24 hour format
+				$startTime24 = date("H:i", strtotime($model->StartTime));
+				$endTime24 = date("H:i", strtotime($model->EndTime));
+			
+                $task_entry_data = array(
+                    'TimeCardID' => $model->TimeCardID,
+                    'TaskName' => 'Task ' . $model->TaskName,
+                    'Date' => $model->Date,
+                    'StartTime' => $startTime24, 
+                    'EndTime' => $endTime24,
+                    'CreatedByUserName' => Yii::$app->session['UserName'],
+					'ChargeOfAccountType' => $model->ChargeOfAccountType,
+                );
+
+
+                //date must be on or between week start and week end dates
+
+                $start = str_replace('-','/',$weekStart);
+                $end = str_replace('-','/',$weekEnd);
+
+                $testDate = date( "Y-m-d", strtotime(str_replace('-', '/',$model->Date)));
+
+                 // make sure date within range
+                if (strtotime($testDate) < strtotime($weekStart) || strtotime($testDate) > strtotime($weekEnd)) {
+						 throw new \yii\web\HttpException(400);
+
+                }
+				
+				//probably dont need this check here because there is a validation check on the form
+                // check difference between startTime and endTime 
+                if ($endTime24 >= $startTime24) {
+                    $json_data = json_encode($task_entry_data);
+                    try {
+                        // post url
+                        $url = 'task%2Fcreate-task-entry';
+                        $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
+                        $obj = json_decode($response, true);
+
+                    } catch (\Exception $e) {
+                        //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
+                    }
+                } else {
+                    //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
+                }
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    return $this->renderAjax('create_task_entry', [
+                        'model' => $model,
+                        'allTask' => $allTask,
+                        'chartOfAccountType' => $chartOfAccountType,
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
+                    ]);
+                } else {
+                    return $this->render('create_task_entry', [
+                        'model' => $model,
+                        'allTask' => $allTask,
+                        'chartOfAccountType' => $chartOfAccountType,
+                        'timeCardID' => $TimeCardID,
+                        'SundayDate' => $SundayDate,
+                        'SaturdayDate' => $SaturdayDate
+                    ]);
+                }
+            }
+
+        } catch (ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        }
+    }
+
+    /**Format Task Array
+     * @param $data
+     * @return array
+     */
+    private function FormatTaskData($data){
+        $namePairs = [];
+
+        // check which key exist TaskName or FilterName
+        $TaskName = array_key_exists('TaskName', $data[0]) ? 'TaskName' : 'FilterName';
+
+        if ($data != null) {
+            $codesSize = count($data);
+
+            for ($i = 0; $i < $codesSize; $i++) {
+                $namePairs[$data[$i][$TaskName]] = $data[$i][$TaskName];
+            }
+        }
+        return $namePairs;
+    }
 }

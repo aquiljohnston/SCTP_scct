@@ -31,9 +31,6 @@ class AssignedController extends \app\controllers\BaseController
 
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
-
-                Yii::trace("assignedfilter " . $model->assignedfilter);
-                Yii::trace("pagesize " . $model->pagesize);
                 $assignedPageSizeParams = $model->pagesize;
                 $assignedFilterParams = $model->assignedfilter;
             } else {
@@ -71,9 +68,15 @@ class AssignedController extends \app\controllers\BaseController
             ([
                 'allModels' => $assignedData,
                 'pagination' => false,
-            ]);
+				'key' => function($assignedData){
+					return array(
+						'MapGrid' => $assignedData['MapGrid'],
+                        'InspectionType' => $assignedData['InspectionType'],
+                        'BillingCode' => $assignedData['BillingCode'],
 
-            $assignedDataProvider->key = 'MapGrid';
+					);
+				},
+            ]);
 
             // Sorting Unassign table
             $assignedDataProvider->sort = [
@@ -201,9 +204,6 @@ class AssignedController extends \app\controllers\BaseController
 
         //check request
         if ($model->load(Yii::$app->request->queryParams)) {
-
-            Yii::trace("assignedfilter " . $model->assignedfilter);
-            Yii::trace("pagesize " . $model->pagesize);
             $assignedPageSizeParams = $model->pagesize;
             $assignedFilterParams = $model->assignedfilter;
             $mapGridSelected = $model->mapGridSelected;
@@ -222,18 +222,25 @@ class AssignedController extends \app\controllers\BaseController
 
         // get the key to generate section table
         if (isset($_POST['expandRowKey']))
-            $mapGridSelected = $_POST['expandRowKey'];
-        else
+		{
+            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
+			$inspectionType = $_POST['expandRowKey']['InspectionType'];
+            $billingCode = $_POST['expandRowKey']['BillingCode'];
+        }else{
             $mapGridSelected = "";
+			$inspectionType = '';
+			$billingCode = '';
+		}
 
         $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
                 'mapGridSelected' => $mapGridSelected,
+				'inspectionType' => $inspectionType,
+				'billingCode' => $billingCode,
                 'filter' => $assignedFilterParams,
                 'listPerPage' => $assignedPageSizeParams,
                 'page' => $pageAt
             ]);
         $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSIGNED SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['sections'];
 
         //set paging on assigned table
@@ -243,9 +250,14 @@ class AssignedController extends \app\controllers\BaseController
         ([
             'allModels' => $sectionData,
             'pagination' => false,
+			'key' => function ($sectionData) {
+                return array(
+                    'SectionNumber' => $sectionData['SectionNumber'],
+                    'InspectionType' => $sectionData['InspectionType'],
+                    'BillingCode' => $sectionData['BillingCode'],
+                );
+            },
         ]);
-
-        $sectionDataProvider->key = 'SectionNumber';
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
@@ -270,9 +282,8 @@ class AssignedController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $inspectionType=null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $billingCode = null, $sectionNumberSelected = null, $inspectionType=null)
     {
-        Yii::trace("CALL VIEW ASSET");
         $model = new \yii\base\DynamicModel([
             'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
         ]);
@@ -291,6 +302,7 @@ class AssignedController extends \app\controllers\BaseController
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
 			$inspectionType             = $inspectionType; 
+			$billingCode				= $billingCode;
 			//should this not be hard coded?
             $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
@@ -313,9 +325,9 @@ class AssignedController extends \app\controllers\BaseController
                 'listPerPage' => $viewAssetPageSizeParams,
                 'page' => $pageAt,
 				'inspectionType'        => $inspectionType,
+				'billingCode' => $billingCode
             ]);
         $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("ASSET DATA: ".json_encode($getAssetDataResponse));
 
         $data = DispatchController::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
 

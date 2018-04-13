@@ -28,7 +28,8 @@
 		"kartik-v/yii2-widgets": "*",
 		"kartik-v/yii2-widget-spinner": "@dev",
         "kartik-v/yii2-sortable-input": "*",
-        "kartik-v/yii2-date-range": "*"
+        "kartik-v/yii2-date-range": "*",
+        "kartik-v/yii2-popover-x": "dev-master"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",

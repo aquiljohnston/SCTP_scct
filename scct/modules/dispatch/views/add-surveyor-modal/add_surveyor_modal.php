@@ -8,24 +8,11 @@ use kartik\form\ActiveForm;
 ?>
 <div id="assignedaddsurveyordialogtitle">
     <div id="addSurveyorModalHeader" class="addsurveryContainer">
-    <?php
-       /* $count = 0;
-        if(count($MapPlat) < 2) {
-            echo $MapPlat[0] . "<input type=hidden name=IRUID value=".$IRUID[0].">";
-        }else{
-            foreach ($MapPlat as $item){
-                echo $item . "<input type=hidden name=IRUID value=".$IRUID[$count++].">";
-            }
-        }*/
-    ?>
     </div>
     <div id="add-surveyor-dropDownList-form">
         <?php yii\widgets\Pjax::begin(['id' => 'addSurveyorForm']) ?>
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
-            //'method' => 'post',
-            // 500 internal server error ->'data-pjax' => true,
-            //'action' => ['/dispatch/add-surveyor-modal'],
         ]); ?>
         <div class="addsurveryContainer">
             <div id="addsurveyorSearchcontainer" class="dropdowntitle">
@@ -105,8 +92,8 @@ use kartik\form\ActiveForm;
 
         $(".AddSurveyor input[type=checkbox]").click(function () {
             assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapData = getDispatchMapArray(dispatchMap_MapGrid, assignedUserID[0]);
-            dispatchSectionData = getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID[0]);
+            dispatchMapData = getDispatchMapArray(assignedUserID[0]);
+            dispatchSectionData = getDispatchSectionArray(assignedUserID[0]);
             console.log(assignedUserID.length);
             if (assignedUserID.length == 1) {
                 $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
@@ -125,14 +112,12 @@ use kartik\form\ActiveForm;
                     timeout: 99999,
                     url: '/dispatch/dispatch/dispatch',
                     data: {dispatchMap: dispatchMapData, dispatchSection: dispatchSectionData},
-                    //data: { MapGrid: mapGrid, AssignedUserID: assignedUserID, SectionNumber: sectionNumber },
                     type: 'POST',
                     beforeSend: function () {
                         $('#addSurveyorModal').modal("hide");
                         $('#loading').show();
                     }
                 }).done(function () {
-                    resetGlobalVariables();
                     $.pjax.reload({
                         container:'#dispatchUnassignedGridview',
                         timeout: 99999,

@@ -3,6 +3,7 @@
  */
 $(function () {
 
+	//may be able to eliminate some of these 'global' variables that don't provide much value
     var assignedGV = $("#assignedGV");
     assignedSection_SectionNumber = [];
     assignedSection_MapGrid = [];
@@ -77,6 +78,7 @@ $(function () {
         }
     });
 
+	//gets map data
     // set constrains:
     $(document).off('click', '.unassignCheckbox input[type=checkbox]').on('click', '.unassignCheckbox input[type=checkbox]', function () {
         assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
@@ -91,6 +93,7 @@ $(function () {
         console.log(assignedMap_MapGrid);
     });
 
+	//get section data
     //checkbox listener on section table
     $(document).off('click', '.assignedSectionCheckbox input[type=checkbox]').on('click', '.assignedSectionCheckbox input[type=checkbox]', function () {
         assignedSection_SectionNumber =$("#assignedGridview #assignedSectionGV").yiiGridView('getSelectedRows');
@@ -139,7 +142,7 @@ $(function () {
         $(document).off('click', '#unassignedConfirmBtn').on('click', '#unassignedConfirmBtn', function () {
         //$('#unassignedConfirmBtn').click(function () {
             $("#unassigned-message").css("display", "none");
-            unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber);
+            unassignButtonListener();
         });
     });
     $(document).off('click', '#UnassignedAssetsButton').on('click', '#UnassignedAssetsButton', function () {
@@ -169,12 +172,12 @@ $(function () {
     });
 });
 
-function unassignButtonListener(assignedMap_MapGrid, assignedSection_SectionNumber) {
+function unassignButtonListener() {
     var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
     var assignedGV = "assignedGV";
     var assignedSectionGV = "assignedSectionGV";
-    unassignMapData = getAssignedMapArray(assignedMap_MapGrid);
-    unassignSectionData = getAssignedSectionArray(assignedSection_SectionNumber);
+    unassignMapData = getAssignedMapArray();
+    unassignSectionData = getAssignedSectionArray();
     console.log("Checked Rows " + pks);
     var form = $("#AssignForm");
     $('#loading').show();
@@ -255,44 +258,32 @@ function getAssignedUserIDs() {
 // Asset modal view (not in use; using one in dispatch.js, sharing the same function)
 
 // Generate Assigned Map Array;
-function getAssignedMapArray(assignedMap_MapGrid) {
+function getAssignedMapArray() {
     var mapGridArray = [];
-    if (assignedMap_MapGrid.length > 0){
-        /*for (var i = 0; i < assignedMap_MapGrid.length; i++){
-            mapGridArray.push({
-                MapGrid: assignedMap_MapGrid[i],
-                AssignedUserID: assignedUserID
-            })
-        }*/
-        $('#assignedGV-container input:checked').each(function() {
-            console.log("SELECTED MAP: "+$(this).attr('MapGrid'));
-            mapGridArray.push({
-                MapGrid: $(this).attr('MapGrid'),
-                AssignedUserID: $(this).attr('AssignedToID')
-            })
-        });
-        return mapGridArray;
-    }else{
-        return mapGridArray;
-    }
+	$('#assignedGV-container .unassignCheckbox input:checked').each(function() {
+		mapGridArray.push({
+			MapGrid: $(this).attr('MapGrid'),
+			AssignedUserID: $(this).attr('AssignedToID'),
+			BillingCode: $(this).attr('BillingCode'),
+			InspectionType: $(this).attr('InspectionType')
+		})
+	});
+	return mapGridArray;
 }
 
 // Generate Assigned Section Array;
-function getAssignedSectionArray(assignedSection_SectionNumber) {
+function getAssignedSectionArray() {
     var assignedSectionArray = [];
-    if (assignedSection_SectionNumber.length > 0) {
-
-        $('#assignedSectionGV-container input:checked').each(function() {
-            console.log("SELECTED MAP - SECTION: "+$(this).attr('SectionNumber'));
-			assignedSectionArray.push({
-				MapGrid: $(this).attr('MapGrid'),
-				SectionNumber: $(this).attr('SectionNumber')
-			})
-        });
-        return assignedSectionArray;
-    }else{
-        return assignedSectionArray;
-    }
+	$('#assignedSectionGV-container .assignedSectionCheckbox input:checked').each(function() {
+		assignedSectionArray.push({
+			MapGrid: $(this).attr('MapGrid'),
+			SectionNumber: $(this).attr('SectionNumber'),
+			AssignedUserID: $(this).attr('AssignedToID'),
+			BillingCode: $(this).attr('BillingCode'),
+			InspectionType: $(this).attr('InspectionType')
+		})
+	});
+	return assignedSectionArray;
 }
 
 // Generate unAssign Data Array; combine mapGrid and section level
@@ -302,27 +293,32 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
     var selectedAssetsUser = "";
     if (assignedAssets_WorkOrderID != "" || assignedAssets_WorkOrderID.length > 0){
         for (var i = 0; i < assignedAssets_WorkOrderID.length; i++){
-            console.log("WORK ORDER ID: " + assignedAssets_WorkOrderID[i]);
-            console.log("ASSIGNED USER ID: " + assignedAssets_AssignedUserId[i]);
+			var assetAddress = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "][assigneduserid="+assignedAssets_AssignedUserId[i]+"]").attr("assetAddress");
             var userName_Assets = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "][assigneduserid="+assignedAssets_AssignedUserId[i]+"]").attr("AssignedTo");
-            var assetAddress = $("#assetGV input[workorderid=" + assignedAssets_WorkOrderID[i] + "][assigneduserid="+assignedAssets_AssignedUserId[i]+"]").attr("assetAddress");
             selectedAssetsUser += "<li>" + assetAddress + " : " + userName_Assets + "</li>";
         }
     }
 
     if (assignedMap_MapGrid != "" && assignedMap_MapGrid.length > 0 ) {
-        for (var i = 0; i < assignedMap_MapGrid.length; i++) {
-            var userName_MapGrid = $("#assignedGridview #assignedGV input[MapGrid=" + assignedMap_MapGrid[i] + "]").attr("UserName");
-            selectedMapGridUser += "<li>" + assignedMap_MapGrid[i] + " : " + userName_MapGrid + "</li>"
-        }
+		$('#assignedGV-container input:checked').each(function() {
+			//check if billing code is set
+			$billingCodeStr = $(this).attr('BillingCode') != null ? "<br>Billing Code: " + $(this).attr('BillingCode') : "";
+			selectedMapGridUser += "<li>Map: " + $(this).attr('MapGrid') 
+				+ "<br>Inspection Type: " + $(this).attr('InspectionType') 
+				+ $billingCodeStr
+				+ "<br>User: " + $(this).attr('UserName') + "</li>"
+		});
     }
     if (assignedSection_SectionNumber != "" || assignedSection_SectionNumber.length > 0) {
-        for (var j = 0; j < assignedSection_SectionNumber.length; j++) {
-            var userName_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("username");
-            var mapGrid_Section = $("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("mapgrid");
-            var sectionNumber = assignedSection_SectionNumber[j];/*$("#assignedGridview #assignedSectionGV input[SectionNumber=" + assignedSection_SectionNumber[j] + "][MapGrid$=" + assignedSection_MapGrid[j] + "]").attr("sectionnumber");*/
-            selectedSectionUser += "<li>MapGrid: " + mapGrid_Section + "<br>Section #: "+ sectionNumber+ "<br>UserName: " + userName_Section + "</li>"
-        }
+		$('#assignedSectionGV-container input:checked').each(function() {
+			//check if billing code is set
+			$billingCodeStr = $(this).attr('BillingCode') != null ? "<br>Billing Code: " + $(this).attr('BillingCode') : "";
+			selectedSectionUser += "<li>Map: " + $(this).attr('MapGrid')
+				+ "<br>Section: " + $(this).attr('SectionNumber')
+				+ "<br>Inspection Type: " + $(this).attr('InspectionType')
+				+ $billingCodeStr
+				+ "<br>User: " + $(this).attr('UserName') + "</li>"
+		});
     }
     var selectedUserNameList = "<ul>"+selectedMapGridUser+selectedSectionUser+selectedAssetsUser+"</ul>";
     return selectedUserNameList;

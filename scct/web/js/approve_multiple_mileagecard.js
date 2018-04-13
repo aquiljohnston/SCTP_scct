@@ -24,13 +24,15 @@ function applyOnClickListeners() {
 
     multipleMileageCardApproveButton.click(function (e) {
         var pks = $('#w0').yiiGridView('getSelectedRows');
-        var confirmBox;
+        var message;
         if (pks.length == 1) {
-            confirmBox = confirm('Are you sure you want to approve the selected mileage card?');
+            message = 'Are you sure you want to approve the selected mileage card?';
         } else {
-            confirmBox = confirm('Are you sure you want to approve all ' + pks.length + ' selected mileage cards?');
+            message = 'Are you sure you want to approve all ' + pks.length + ' selected mileage cards?';
         }
-        if (confirmBox) {
+       krajeeDialog.defaults.confirm.title = 'Approve Mileage Card';
+       krajeeDialog.confirm(message, function (resp) {
+        if (resp) {
             $('#loading').show();
             $.ajax({
                 type: 'POST',
@@ -45,7 +47,8 @@ function applyOnClickListeners() {
             e.stopImmediatePropagation();
             e.preventDefault();
         }
-    });
+    })
+          });
 
     checkboxSelector.click(function () {
         var primaryKeys = $('#w0').yiiGridView('getSelectedRows');

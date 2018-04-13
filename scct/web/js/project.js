@@ -168,6 +168,8 @@ $(document).on('click','#projectAddUserResetBtn',function(e){
 })
 
 
+
+
 function toggleCloudVisibility(cloud){
 
   if ( $('#'+cloud).children().length > 0 ) {
@@ -335,8 +337,6 @@ function projectGridViewAssignedReload() {
         $('#loading').hide();
     });
 }
-
-
 
 
 });

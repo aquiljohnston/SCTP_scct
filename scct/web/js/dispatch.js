@@ -1,7 +1,5 @@
-function initializeDispatch() {
+$(function () {
     var dispatchGV = $("#dispatchGV");
-    dispatchMap_MapGrid = [];
-    dispatchSection_SectionNumber = [];
 
     $("#dispatchButton").prop('disabled', true);
 
@@ -30,6 +28,7 @@ function initializeDispatch() {
             .load('/dispatch/add-surveyor-modal/add-surveyor-modal');
     });
 
+	//gets map data
     // set constrains: user can only dispatch one map to one surveyor at a time
     $(document).off('click', '.dispatchCheckbox input[type=checkbox]').on('click', '.dispatchCheckbox input[type=checkbox]', function () {
         dispatchMap_MapGrid = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
@@ -39,8 +38,10 @@ function initializeDispatch() {
             $("#dispatchButton").prop('disabled', true);
     });
 
+	//get section data
     //checkbox listener on section table
     $(document).off('click', '.dispatchSectionCheckbox input[type=checkbox]').on('click', '.dispatchSectionCheckbox input[type=checkbox]', function () {
+		dispatchMap_MapGrid = $("#dispatchUnassignedTable #dispatchGV").yiiGridView('getSelectedRows');
         dispatchSection_SectionNumber =$("#dispatchUnassignedTable #dispatchSectionGV").yiiGridView('getSelectedRows');
         // check to see if need to disable/enable add surveyor button
         if (dispatchMap_MapGrid.length > 0 || dispatchSection_SectionNumber.length > 0){
@@ -102,13 +103,13 @@ function initializeDispatch() {
         });
     });
 
-    $('#loading').hide();
-
     $(document).off('click', '#dispatchSearchCleanFilterButton').on('click', '#dispatchSearchCleanFilterButton', function (){
         $('#dispatchFilter').val("");
         reloadDispatchGridView();
     });
-}
+	
+	checkNavBarLoading();
+});
 
 function reloadDispatchGridView() {
     var jqDispatchDropDowns = $('#dispatchTab');
@@ -119,7 +120,7 @@ function reloadDispatchGridView() {
     $('#loading').show();
     $.pjax.reload({
         type: 'GET',
-        url: '/dispatch/dispatch/heavy-dispatch',
+        url: '/dispatch/dispatch/index',
         container: '#dispatchUnassignedGridview', // id to update content
         data: form.serialize(),
         timeout: 99999
@@ -141,37 +142,32 @@ function ViewAssetClicked(url) {
 }
 
 // Generate Dispatch Map Array;
-function getDispatchMapArray(dispatchMap_MapGrid, assignedUserID) {
+function getDispatchMapArray(assignedUserID) {
     var mapGridArray = [];
-    if (dispatchMap_MapGrid.length > 0){
-        for (var i = 0; i < dispatchMap_MapGrid.length; i++){
-            mapGridArray.push({
-                MapGrid: dispatchMap_MapGrid[i],
-                AssignedUserID: assignedUserID
-            })
-        }
-        return mapGridArray;
-    }else{
-        return mapGridArray;
-    }
+	$('#dispatchGV-container .dispatchCheckbox input:checked').each(function() {
+		mapGridArray.push({
+			MapGrid: $(this).attr('MapGrid'),
+			AssignedUserID: assignedUserID,
+			BillingCode: $(this).attr('BillingCode'),
+			InspectionType: $(this).attr('InspectionType')
+		});
+	});
+	return mapGridArray;
 }
 
 // Generate Dispatch Section Array;
-function getDispatchSectionArray(dispatchSection_SectionNumber, assignedUserID) {
+function getDispatchSectionArray(assignedUserID) {
     var dispatchSectionArray = [];
-    if (dispatchSection_SectionNumber.length > 0) {
-        for (var i = 0; i < dispatchSection_SectionNumber.length; i++) {
-            var MapGrid = $("#dispatchUnassignedGridview #dispatchSectionGV input[SectionNumber=" + dispatchSection_SectionNumber[i] + "]").attr("MapGrid");
-            dispatchSectionArray.push({
-                MapGrid: MapGrid,
-                SectionNumber: dispatchSection_SectionNumber[i],
-                AssignedUserID: assignedUserID
-            });
-        }
-        return dispatchSectionArray;
-    }else{
-        return dispatchSectionArray;
-    }
+	$('#dispatchSectionGV-container .dispatchSectionCheckbox input:checked').each(function() {
+		dispatchSectionArray.push({
+			MapGrid: $(this).attr("MapGrid"),
+			SectionNumber: $(this).attr("SectionNumber"),
+			AssignedUserID: assignedUserID,
+			BillingCode: $(this).attr("BillingCode"),
+			InspectionType: $(this).attr("InspectionType")
+		});
+	});
+	return dispatchSectionArray;
 }
 
 // View Asset Modal (Dispatch, Assigned)
@@ -181,11 +177,5 @@ function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid
     $(modalViewAsset).modal('show')
         .find(modalContentViewAsset).load(url);
 		document.getElementById('assetModalTitle').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
-}
-
-// Reset global variables
-function resetGlobalVariables() {
-    dispatchMap_MapGrid = [];
-    dispatchSection_SectionNumber = [];
 }
 

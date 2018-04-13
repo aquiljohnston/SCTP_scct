@@ -1,50 +1,42 @@
 // BULK DELETE
 $(function () {
-
-    // disable single approve button once user clicked it
-    $('#enable_single_approve_btn_id_timecard').click(function (e) {
-        $(this).addClass('disabled');
-    });
-
     $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
 
-    $(document).off('click', "#timeCardGV input[type=checkbox]").on('click', "#timeCardGV input[type=checkbox]", function (e) {
-        var disable;
-        if ($("#timeCardGV .kv-row-select input:checked").length != 0) {
-            disable = false;
-            $("#timeCardGV .kv-row-select input:checked").each(function () {
-                if ($(this).attr("approved").toUpperCase() == "YES" || $(this).attr("totalworkhours") == 0) {
-                    disable = true;
-                }
-            });
-        } else {
-            disable = true;
-        }
-        if (disable) {
-            $('#multiple_approve_btn_id').prop('disabled', true);
-            $('#export_timecard_btn').prop('disabled', true);
-        } else {
+    $(document).off('change', "#timeCardGV input[type=checkbox]").on('change', "#timeCardGV input[type=checkbox]", function (e) {
+        if ($("#GridViewForTimeCard").yiiGridView('getSelectedRows') != 0) {
             $('#multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
-            $('#export_timecard_btn').prop('disabled', false); //TO ENABLE
+        } else {
+            $('#multiple_approve_btn_id').prop('disabled', true);
         }
     });
 
     applyTimeCardOnClickListeners();
+    applyTimeCardSubmitButtonListener();
 
+
+    $.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
+
+    
 });
 
 function applyTimeCardOnClickListeners() {
-    $('#multiple_approve_btn_id').click(function () {
+    $('#multiple_approve_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
+
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
         } else {
             quantifier = "these items?"
         }
-        var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
-        if (confirmBox) {
+       // var confirmBox = confirm('Are you sure you want to approve ' + quantifier);
+
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
+        
+        if (resp) {
+			$('#loading').show();
             $.ajax({
                 type: 'POST',
                 url: '/time-card/approve-multiple',
@@ -52,38 +44,133 @@ function applyTimeCardOnClickListeners() {
                     timecardid: primaryKeys
                 }
             });
-            var win = window.open('/time-card/download-time-card-data?selectedTimeCardIDs='+primaryKeys, '_blank');
-            if (win) {
-                //Browser has allowed it to be opened
-                win.focus();
-                $.pjax.reload({
-                    container: '#timeCardGridview',
-                    timeout: false
-                });
-                $('#timeCardGridview').on('pjax:success', function() {
-                    $('#multiple_approve_btn_id').prop('disabled', true); //TO DISABLED
-                });
-            } else {
-                //Browser has blocked it
-                console.log('Please allow popups for this website');
-            }
         } else {
-            e.stopImmediatePropagation();
-            e.preventDefault();
+            event.stopImmediatePropagation();
+            event.preventDefault();
         }
+      })
     });
 }
 
-/*function appendQueryString(url, queryVars) {
-    var firstSeperator = (url.indexOf('?')==-1 ? '?' : '&');
-    var queryStringParts = new Array();
-    for(var key in queryVars) {
-        queryStringParts.push(key + '=' + queryVars[key]);
-    }
-    var queryString = queryStringParts.join('&');
-    return url + firstSeperator + queryString;
-}*/
+function applyTimeCardSubmitButtonListener() {
+    $('#multiple_submit_btn_id').off('click').click(function (event) {
 
+         //apply css class that gives the tooltip gives
+         //the appearance of being disabled via css
+         //add returns false to prevent submission in
+         //this state.
+         if($(this).hasClass('off-btn')){
+            return false;
+        }
+
+        // 
+
+       // return false;
+
+
+        var quantifier  = "";
+        var name        = 'oasis_history_';
+        var payroll     = 'payroll_history_';
+        var adp         = 'adp_history_';
+        var thIndex     = $('th:contains("Project Name")').index();
+        var projectIDs  = [];
+        
+        $('#projectFilterDD option').each(function(){
+            if($(this).val()!=""){
+                projectIDs.push($(this).val());
+            }
+            
+        })
+
+        console.log(projectIDs);
+        //return false;
+       // var projectName = $('table td').eq(thIndex).text();
+        var d           = new Date();
+        var minutes     = (d.getMinutes() < 10 ? "0" : "") + d.getMinutes();
+        var hours       = ((d.getHours() + 11) % 12 + 1);
+        dates           = $.datepicker.formatDate('yy-mm-dd', new Date());
+
+        timeCardName        = name+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        payRollFileName     = payroll+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        adpFileName         = adp+dates+"_"+hours+"_"+minutes+"_"+d.getSeconds();
+        dateRangeDD         = $('[name="DynamicModel[dateRangeValue]"]').val();
+		//check if date picker is active
+		if(dateRangeDD == 'other')
+		{
+			dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
+			dateRange = dateRange.split(" - ");
+		}
+		else
+		{
+			dateRange = dateRangeDD.split(",");
+		}
+        timeCardComplete    = false;
+        payrollComplete     = false;
+        weekStart           = dateRange[0];
+        weekEnd             = $.trim(dateRange[1]);
+
+
+        //return false;
+        var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+       // var confirmBox = confirm('Are you sure you want to submit ' + quantifier);
+
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
+        
+        if (resp) {
+			$('#loading').show();
+			
+            var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+
+            
+            //usage $.ctGrow(msg,title,boostrap text class)
+            $.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
+
+
+            payload = {
+                payRollFileName : payRollFileName,
+                timeCardName    : timeCardName,
+                projectName     : projectIDs,
+                weekStart       : weekStart,
+                weekEnd         : weekEnd,
+                adpFileName     : adpFileName
+            }
+                   
+            $.ajax({
+                type: 'POST',
+                url: '/time-card/ajax-process-comet-tracker-files',
+                data:payload,
+                success: function(data) {
+                    //console.log(data)
+                    data = JSON.parse(data);
+                    if(data.success){
+           
+                        $.ctGrowl.msg(data.message,'Success','bg-success');
+                        //calls time_card.js reload function
+                        reloadTimeCardGridView();
+
+                    } else {
+
+                         $.ctGrowl.msg(data.message,'Error','bg-danger');
+                    }
+                    
+
+            }
+            });
+           
+
+        } else {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+       }) 
+    });
+}
 
 /*Converts javascript array to CSV format */
 function ConvertToCSV(headerArray, dataArray) {

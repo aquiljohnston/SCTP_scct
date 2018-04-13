@@ -44,6 +44,7 @@ class AppAsset extends AssetBundle
         'https://vjs.zencdn.net/5.4.6/video-js.css',
         'css/cge.css',
         'css/task.css',
+        'css/notify.css',
     ];
     public $cssOptions = [
         'type' => 'text/css',
@@ -69,11 +70,10 @@ class AppAsset extends AssetBundle
         'js/assigned.js',
         'js/reports.js',
         'js/notification.js',
-        'js/lightDispatch.js',
         '//cdn.datatables.net/1.10.12/js/jquery.dataTables.js',
         '//code.jquery.com/ui/1.12.1/jquery-ui.js',
         'js/geoxml3.js',
-        'js/geoxmlfull_v3.js',
+        //'js/geoxmlfull_v3.js',
         //'js/markerclusterer.js',
         'js/markerclusterer_compiled.js',
         'js/progressBar.js',
@@ -85,6 +85,7 @@ class AppAsset extends AssetBundle
         'js/cge.js',
         'js/clients.js',
         'js/task.js',
+        'js/notify.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',
