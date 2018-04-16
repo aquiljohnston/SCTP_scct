@@ -43,6 +43,7 @@ class ReportsController extends BaseController
             return $this->render('index', [
                     'model' => $model,
                     'isAccountant' => $isAccountant,
+                    'projects'     => $this->getAllProjects() 
                 ]
             );
         } catch (ForbiddenHttpException $e) {
@@ -120,7 +121,7 @@ class ReportsController extends BaseController
                 $ParmInspector = $_POST['ParmVar'];
             }
             // post url
-            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
+            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']).'&isAccountant='.urlencode($_POST['isAccountant']);
             Yii::trace("reportUrl " . $url);
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
@@ -188,4 +189,12 @@ class ReportsController extends BaseController
             echo "";
         }
     }
+    public function getAllProjects(){
+            $projectsURL = 'project%2Fget-project-dropdowns';
+            $response = Parent::executeGetRequest($projectsURL, Constants::API_VERSION_2); // indirect rbac
+            $response = json_decode($response,TRUE);
+            unset($response[""]);
+            $all = array("< ALL >"=>"ALL");
+            return $all + $response;
+    }    
 }

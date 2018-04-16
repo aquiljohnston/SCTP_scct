@@ -16,6 +16,11 @@ use yii\bootstrap\Modal;
 $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style type="text/css">
+	.dataTables_wrapper{
+		margin-top: 55px;
+	}
+</style>
 <body id="reports-page">
 <div class="dispatchAid" id="reportsContainer">
 	<div class="containerByDropdown">
@@ -47,12 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
 			</select>
 		<?php else :?>
-			<label id="inspectorListHeader accountant" style="display: none;">Project Name:</label>
-			<select id="inspectorsDropdown accountant" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
+			<label id="inspectorListHeader" style="display: none;">Project Name:</label>
+			<select id="inspectorsDropdown" autocomplete="off" class="accountant"  style="display: none;">
+				<?php foreach ($projects as $p => $v) {
+					$selected = ($v =='ALL' ? 'selected="selected"' : '');
+					echo '<option '.$selected.' value="'.$p.'">'.$v.'</option>';
+				} ?>
 			</select>
 		<?php endif ;?>
 		</div>
-
 		<table id="reportTable" style="width:100%;">
 			<thead></thead>
 			<tbody></tbody>
