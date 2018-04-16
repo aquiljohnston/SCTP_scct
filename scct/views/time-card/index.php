@@ -26,6 +26,17 @@ if($isAccountant)
 {
 	$column = [
 		[
+			'class' => 'kartik\grid\ExpandRowColumn',
+			'expandAllTitle' => 'Expand all',
+			'collapseTitle' => 'Collapse all',
+			'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
+			'value' => function ($model, $key, $index, $column) {
+				return GridView::ROW_COLLAPSED;
+			},
+			'detailUrl' => Url::to(['time-card/view-accountant-detail']),
+			'detailAnimationDuration' => 'fast',
+		],
+		[
 			'label' => 'Project Name',
 			'attribute' => 'ProjectName',
 			'headerOptions' => ['class' => 'text-center'],
