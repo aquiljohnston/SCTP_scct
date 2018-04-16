@@ -45,16 +45,23 @@ use kartik\grid\GridView;
             [
                 'header' => '',
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{update}',
-                'urlCreator' => function ($action, $model, $key, $index) {
-					// if ($action === 'update') {
-						// $url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName']
-						// .'&fName='.$model['UserFirstName']
-						// .'&lName='.$model['UserLastName']
-						// .'&timeCardProjectID='.$model['TimeCardProjectID'];
-						// return $url;
-					// }
-				},
+				'template' => '{update}',
+				'buttons' => [
+					'update' => function ($url, $model, $key) {
+						$url = '/time-card/show-entries?id=' . $model['TimeCardID']
+						.'&projectName='.$model['ProjectName']
+						.'&fName='.$model['UserFirstName']
+						.'&lName='.$model['UserLastName']
+						.'&timeCardProjectID='.$model['TimeCardProjectID'];
+						
+						$options =[
+							'title' => Yii::t('yii', 'Update'),
+							'aria-label' => Yii::t('yii', 'Update'),
+							'data-confirm' => Yii::t('yii', 'Do you want to edit the time entries for ' . $model['UserFullName'] . '?'),
+						];
+						return html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, $options);
+					}
+				],
             ]
         ],
     ]); ?>
