@@ -36,9 +36,13 @@ class ReportsController extends BaseController
             //Check if user has permission to reports page
             //self::requirePermission("viewReportsMenu");
 
+            //set accountant bool
+            $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+
             $model = new Report();
             return $this->render('index', [
                     'model' => $model,
+                    'isAccountant' => $isAccountant,
                 ]
             );
         } catch (ForbiddenHttpException $e) {
