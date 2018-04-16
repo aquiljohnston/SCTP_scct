@@ -42,9 +42,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			<label id="mapGridListHeader" style="display: none;">MapGrid List: </label>
 			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 41%; width: 20%;">
 			</select>
+			<?php if(!$isAccountant) : ?>
 			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
 			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
 			</select>
+		<?php else :?>
+			<label id="inspectorListHeader accountant" style="display: none;">Project Name:</label>
+			<select id="inspectorsDropdown accountant" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
+			</select>
+		<?php endif ;?>
 		</div>
 
 		<table id="reportTable" style="width:100%;">
