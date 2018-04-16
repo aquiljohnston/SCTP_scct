@@ -194,7 +194,14 @@ class TimeCardController extends BaseController
             $dataProvider 		= new ArrayDataProvider
 			([
 				'allModels' => $assets,
-				'pagination' => false
+				'pagination' => false,
+				'key' => function ($assets) {
+					return array(
+						'ProjectID' => $assets['ProjectID'],
+						'StartDate' => $assets['StartDate'],
+						'EndDate' => $assets['EndDate'],
+					);
+				},
 			]);
 			
 			if($isAccountant)
@@ -214,6 +221,7 @@ class TimeCardController extends BaseController
 							'asc' => ['StartDate' => SORT_ASC],
 							'desc' => ['StartDate' => SORT_DESC]
 						],
+						'EndDate',
 						'ApprovedBy' => [
 							'asc' => ['ApprovedBy' => SORT_ASC],
 							'desc' => ['ApprovedBy' => SORT_DESC]
@@ -232,9 +240,6 @@ class TimeCardController extends BaseController
 						],
 					]
 				];
-
-				//set timecardid as id
-				$dataProvider->key = 'ProjectID';
 			}
 			else
 			{
@@ -320,6 +325,64 @@ class TimeCardController extends BaseController
         }
     }
 
+	/**
+	 *Displays time card details for expanded project
+	 *@throws \yii\web\HttpException
+	 *@returns mixed
+	 */
+	public function actionViewAccountantDetail()
+	{
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        // get the key to generate section table
+        if (isset($_POST['expandRowKey']))
+		{
+            $projectID = $_POST['expandRowKey']['ProjectID'];
+            $startDate = $_POST['expandRowKey']['StartDate'];
+            $endDate = $_POST['expandRowKey']['EndDate'];
+		}else{
+			$projectID = '';
+			$startDate = '';
+			$endDate = '';
+		}
+		
+		$queryParams = [
+                'projectID' => $projectID,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ];
+		yii::trace('Query Params: ' . json_encode($queryParams));
+
+        $getUrl = 'time-card%2Fget-accountant-details&' . http_build_query([
+                'projectID' => $projectID,
+                'startDate' => $startDate,
+                'endDate' => $endDate,
+            ]);
+        $getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+        $detailsData = $getResponseData['details'];
+
+        // Put data in data provider
+        $accountantDetialsDataProvider = new ArrayDataProvider
+        ([
+            'allModels' => $detailsData,
+            'pagination' => false,
+			'key' => 'TimeCardProjectID',
+        ]);
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_accountant-detail-expand', [
+                'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+            ]);
+        } else {
+            return $this->render('_accountant-detail-expand', [
+                'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+            ]);
+        }
+	}
+	
     /**
      * Displays a single TimeCard model.
      * @param string $id
