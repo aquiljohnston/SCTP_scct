@@ -163,18 +163,22 @@ $(function () {
 
                     var inspectors = []; //userid lastname firstname
 
-                    //clear existing dropdown
+                 
+                    if(!$("#inspectorsDropdown").hasClass('accountant'))
+                    {
+                           //clear existing dropdown
                     while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
                         inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
                     }
-
-                    $.each(results.inspectors, function (i, obj) {
+                         $.each(results.inspectors, function (i, obj) {
                         //console.log(obj);
                         var option = document.createElement("option");
                         option.innerHTML = obj;
                         option.value = obj;
                         inspectorsDropdown.appendChild(option);
                     });
+                    }
+                   
 
                     $('#inspectorsDropdown').on('change', function () {
                         if (oTable != null) {
@@ -205,14 +209,16 @@ $(function () {
                 starVal = null;
                 endVal = null;
             }
-            var parmDateOverride = isVisible(parmDropdown) ? $('#parmDropdown').val() : null;
-            var userLogin = isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null;
+            var parmDateOverride        = isVisible(parmDropdown) ? $('#parmDropdown').val() : null;
+            var userLogin               = isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null;
+            var parmDateOverrideCheck   = parmDateOverride != null ? 1 : 0;
+            var userLoginCheck          = userLoginCheck != null ? 1 : 0;
+            var parmVar                 = parmDateOverrideCheck > userLoginCheck ? parmDateOverride : userLogin;
+            var ParmInspector           = $('#inspectorsDropdown').val();
+            var isAccountant            =  $('#inspectorsDropdown').hasClass('accountant') ? true :false;
+              
 
-            var parmDateOverrideCheck = parmDateOverride != null ? 1 : 0;
-            var userLoginCheck = userLoginCheck != null ? 1 : 0;
-
-            var parmVar = parmDateOverrideCheck > userLoginCheck ? parmDateOverride : userLogin;
-            var ParmInspector = $('#inspectorsDropdown').val();
+             console.log(isAccountant);   
 
             $.ajax({
                 type: "POST",
@@ -232,6 +238,7 @@ $(function () {
                     ParmDate: parameters[3],
                     ParmInspector: ParmInspector,
                     ReportType: parameters[7],
+                    isAccountant: isAccountant
                 },
                 beforeSend: function () {
                     $('#loading').show();
@@ -240,7 +247,7 @@ $(function () {
                     $('#loading').hide();
                     $('#go').prop('disabled', false);
                     var results = JSON.parse(data);
-                    //console.log(results.data);
+                    console.log(results.data);
                     //console.log(parameters);
                     //console.log(results.data.length);
                     if (oTable != null) {
