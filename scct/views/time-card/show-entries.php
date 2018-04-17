@@ -34,7 +34,7 @@ use yii\widgets\Pjax;
 	?>
     <p>
         <?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?php if ($approve_status) : ?>
+        <?php if ($approve_status && !$isAccountant) : ?>
             <?= Html::button('Approve', [
                 'class' => 'btn btn-primary',
                 'disabled' => true,
@@ -48,6 +48,22 @@ use yii\widgets\Pjax;
             <?= Html::button('Add Task', [
                 'class' => 'btn btn-primary add_task_btn',
                 'disabled' => true,
+                'id' => 'add_task_btn_id',
+            ]) ?>
+        <?php elseif ($approve_status && $isAccountant) : ?>
+            <?= Html::button('Approve', [
+                'class' => 'btn btn-primary',
+                'disabled' => true,
+                'id' => 'disable_single_approve_btn_id_timecard',
+            ]) ?>
+            <?= Html::button('Deactivate', [
+                'class' => 'btn btn-primary',
+                'disabled' => false,
+                'id' => 'deactive_timeEntry_btn_id',
+            ]) ?>
+            <?= Html::button('Add Task', [
+                'class' => 'btn btn-primary add_task_btn',
+                'disabled' => false,
                 'id' => 'add_task_btn_id',
             ]) ?>
         <?php  else : ?>
@@ -69,6 +85,7 @@ use yii\widgets\Pjax;
         <?php endif; ?>
        
         <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
+        <input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
     </p>
     <br>
 

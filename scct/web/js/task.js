@@ -109,7 +109,9 @@ function TaskEntryCreation() {
 function applyToolTip(){
      $.each($('#allTaskEntries tbody tr td'),function(index,value){
          if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
-            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
+            && (!$('#disable_single_approve_btn_id_timecard').length > 0)
+            || (('#isAccountant').val())
+            ){
            $(this).attr("title","Click to deactivate this time entry!")
          }
     })
