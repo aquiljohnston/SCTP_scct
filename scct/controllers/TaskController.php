@@ -133,7 +133,7 @@ class TaskController extends BaseController
      * @internal param $SatudayDate
      */
 
-    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null)
+    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null, $inOvertime = 'false')
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
@@ -169,7 +169,7 @@ class TaskController extends BaseController
             $allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
 
             //get chartOfAccountType for form dropdown
-            $getAllChartOfAccountTypeUrl = 'task%2Fget-charge-of-account-type';
+            $getAllChartOfAccountTypeUrl = 'task%2Fget-charge-of-account-type&inOvertime=' . $inOvertime;
             $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
             $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
 

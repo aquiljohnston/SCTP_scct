@@ -33,16 +33,13 @@ $(function () {
         var SundayDate = $('#SundayDate').val();
         var SaturdayDate = $('#SaturdayDate').val();
         var timeCardProjectID = $('#TimeCardProjectID').val();
+		var inOvertime = $('#inOvertime').val();
       $('#addTaskModal').modal('show').find('#modalContentSpan').html("Loading...");
-        /* $('#addTaskModal').modal('show')
-            .find('#modalAddTask')
-            .load('/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID);
-       */
        //Fetch modal content via pjax to prevent sync console warning and FF page flash
        $.pjax.reload({
         type: 'GET',
         replace:false,
-        url: '/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID,
+        url: '/task/add-task-entry?weekStart='+weekStart+'&weekEnd='+weekEnd+'&TimeCardID=' + timeCardID + '&SundayDate=' + SundayDate + '&SaturdayDate=' + SaturdayDate + '&timeCardProjectID=' + timeCardProjectID + '&inOvertime=' + inOvertime,
         container: '#modalContentSpan', // id to update content
         timeout: 99999
         })
