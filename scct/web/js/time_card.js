@@ -87,7 +87,7 @@ $(function(){
       //restrict click to only day of the week fields
       //with values in the .text()
       if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
-        && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
+        && (!$('#disable_single_approve_btn_id_timecard').length > 0 || $('#isAccountant').val())){
 
      // var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
 
@@ -249,6 +249,12 @@ $(function(){
          if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
             && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
            $(this).attr("title","Click to deactivate this time entry!")
+         } else if($('#isAccountant').val() &&
+                $(this).attr('data-col-seq') >=1 && 
+                ($(this).text()!="") && 
+                ($(this).parent().attr('data-key')>0)
+            ){
+               $(this).attr("title","Click to deactivate this time entry!")
          }
     })
 });
