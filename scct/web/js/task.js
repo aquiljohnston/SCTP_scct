@@ -156,11 +156,11 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
             url: '/time-card/deactivate/',
             data: data,
             beforeSend: function(  ) {
-              applyToolTip();
+             
             },
             success: function(data) {
                 $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
-            applyToolTip();
+           
         });; //for pjax update
 
                 $('#loading').hide();
