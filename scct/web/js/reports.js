@@ -51,7 +51,7 @@ $(function () {
                     alert('Begin date cannot be greater than end date');
                 }
 
-                $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), beforeShowDay: $.datepicker.noWeekends, setDate: new Date(endDate)} );
+                $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), setDate: new Date(endDate)} );
 
                 var currentSelectedReport = $('#reportsDropdown').val();
                 var parms = reportsToParms[currentSelectedReport];
