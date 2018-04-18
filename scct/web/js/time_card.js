@@ -107,7 +107,7 @@ $(function(){
             },
             success: function(data) {
                 $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function (){
-                    applyToolTip();
+                   // applyToolTip();
                     $('#loading').hide();
                 });
             }
@@ -222,16 +222,6 @@ $(function(){
 		datePicker.setEndDate(to);
 	}
 	
-    function applyToolTip(){
-        console.log('called')
-
-    $.each($('#allTaskEntries tbody tr td'),function(index,value){
-        if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
-            $(this).attr("title","Click to deactivate this time entry!");
-            console.log('tooltip-',$('#isAccountant').val());
-              }
-         })
-    }
 	
 });
 
