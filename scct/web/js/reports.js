@@ -255,6 +255,8 @@ $(function () {
                         $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
                     }
 
+                    console.log(results.data);
+
                     if (results.data.length > 0) {
                         oTable = $('#reportTable').dataTable({
                             "pagingType": "full_numbers",
@@ -271,6 +273,9 @@ $(function () {
                             "lengthMenu": [10, 25, 50, 100, 250, 500],
                             "iDisplayLength": 250
                         });
+                    } else {
+                         $('#reportTable').css('margin-top','50px');
+                         $('#reportTable').html('<tr><td>No data available for the specified data range.</td></tr>');
                     }
 
                     //calculate height
