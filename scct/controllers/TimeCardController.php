@@ -514,7 +514,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null, $inOvertime = 'false')
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -591,7 +591,8 @@ class TimeCardController extends BaseController
 				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
 				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isAccountant' 		=> $isAccountant
+				'isAccountant' 		=> $isAccountant,
+				'inOvertime'		=> $inOvertime,
 
 			]);
 		}catch(ErrorException $e){
