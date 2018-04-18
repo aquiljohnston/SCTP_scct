@@ -69,7 +69,7 @@ use yii\widgets\Pjax;
         <?php  else : ?>
             <?= Html::button('Approve', [
                 'class' => 'btn btn-primary',
-                'disabled' => false,
+                'disabled' => $isAccountant ? true : false,
                 'id' => 'enable_single_approve_btn_id_timecard',
             ]) ?>
             <?= Html::button('Deactivate', [
