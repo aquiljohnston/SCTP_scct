@@ -54,9 +54,9 @@ $this->params['breadcrumbs'][] = $this->title;
 		<?php else :?>
 			<label id="inspectorListHeader" style="display: none;">Project Name:</label>
 			<select id="inspectorsDropdown" autocomplete="off" class="accountant"  style="display: none;">
+				<option value="< ALL >">ALL</option>
 				<?php foreach ($projects as $p => $v) {
-					$selected = ($v =='ALL' ? 'selected="selected"' : '');
-					echo '<option '.$selected.' value="'.$p.'">'.$v.'</option>';
+					echo '<option value="'.$p.'">'.$v.'</option>';
 				} ?>
 			</select>
 		<?php endif ;?>
