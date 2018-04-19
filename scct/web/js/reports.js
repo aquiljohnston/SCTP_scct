@@ -218,8 +218,6 @@ $(function () {
             var isAccountant            =  $('#inspectorsDropdown').hasClass('accountant') ? true :false;
               
 
-             console.log(isAccountant);   
-
             $.ajax({
                 type: "POST",
                 url: "reports/get-reports",
@@ -258,6 +256,9 @@ $(function () {
                     console.log(results.data);
 
                     if (results.data.length > 0) {
+                        //remove reportTable DOM generated when no result 0 
+                        $("#reportTable").length > 0 ? $('#reportTable').css('margin-top','0px').empty() : "";
+
                         oTable = $('#reportTable').dataTable({
                             "pagingType": "full_numbers",
                             "scrollX": true,
