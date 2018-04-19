@@ -86,7 +86,6 @@ use yii\widgets\Pjax;
        
         <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
         <input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
-		<input type="hidden" value=<?php echo $inOvertime ?> id="inOvertime">
     </p>
     <br>
 
@@ -151,6 +150,7 @@ use yii\widgets\Pjax;
         ]
     ]);
     ?>
+	<input type="hidden" value=<?php echo $inOvertime ?> id="inOvertime">
     <?php Pjax::end() ?>
     <?php
     Pjax::begin(['id' => 'showTime', 'timeout' => false]);

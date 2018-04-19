@@ -152,25 +152,20 @@ $(document).on('click','#deactive_timeEntry_btn_id',function(e){
         
         if (resp) {
             $.ajax({
-            type: 'POST',
-            url: '/time-card/deactivate/',
-            data: data,
-            beforeSend: function(  ) {
-             
-            },
-            success: function(data) {
-                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
-           
-        });; //for pjax update
-
-                $('#loading').hide();
-                $('#deactive_timeEntry_btn_id').prop('disabled',true);
-            },
-             error: function(data) {
-                console.log('error')
-             }
-        });
-            } else {
+				type: 'POST',
+				url: '/time-card/deactivate/',
+				data: data,
+				success: function(data) {
+					$.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+						$('#loading').hide();
+						$('#deactive_timeEntry_btn_id').prop('disabled',true);
+					});
+				},
+				error: function(data) {
+					console.log('error')
+				}
+			});
+        } else {
                 $('#w0').modal('toggle');
                  return false;
           }

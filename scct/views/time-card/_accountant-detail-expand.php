@@ -47,15 +47,12 @@ use kartik\grid\GridView;
                 'class' => 'kartik\grid\ActionColumn',
 				'template' => '{update}',
 				'buttons' => [
-					'update' => function ($url, $model, $key) {
-						$inOvertime = ($model['SumHours'] >= 40) ? 'true' : 'false';
-						
+					'update' => function ($url, $model, $key) {						
 						$url = '/time-card/show-entries?id=' . $model['TimeCardID']
 						.'&projectName='.$model['ProjectName']
 						.'&fName='.$model['UserFirstName']
 						.'&lName='.$model['UserLastName']
-						.'&timeCardProjectID='.$model['TimeCardProjectID']
-						.'&inOvertime='.$inOvertime;
+						.'&timeCardProjectID='.$model['TimeCardProjectID'];
 						
 						$options =[
 							'title' => Yii::t('yii', 'Update'),

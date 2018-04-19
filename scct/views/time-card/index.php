@@ -143,12 +143,10 @@ else
 			'template' => '{view}', // does not include delete
 			'urlCreator' => function ($action, $model, $key, $index) {
 				if ($action === 'view') {
-					$inOvertime = ($model['SumHours'] >= 40) ? 'true' : 'false';
 					$url = '/time-card/show-entries?id=' . $model["TimeCardID"].'&projectName='.$model['ProjectName']
 					.'&fName='.$model['UserFirstName']
 					.'&lName='.$model['UserLastName']
-					.'&timeCardProjectID='.$model['TimeCardProjectID']
-					.'&inOvertime='.$inOvertime;
+					.'&timeCardProjectID='.$model['TimeCardProjectID'];
 					return $url;
 				}
 			},
