@@ -194,7 +194,6 @@ class ReportsController extends BaseController
             $response = Parent::executeGetRequest($projectsURL, Constants::API_VERSION_2); // indirect rbac
             $response = json_decode($response,TRUE);
             unset($response[""]);
-            $all = array("< ALL >"=>"ALL");
-            return $all + $response;
+            return $response;
     }    
 }

@@ -141,6 +141,14 @@ $(function () {
         }
 
         function buildInspectorDropdown(beginDate, endDate, sp, parm, exports) {
+                //if accountant toggle menu - no fetch needed
+                if($("#inspectorsDropdown").hasClass('accountant'))
+                    {
+                        toggleVisible([goButton, exportButton,inspectorsDropdown], "inline");
+                        $('#inspectorListHeader').css('display', 'inline');
+                        $('#inspectorsDropdown').val('< ALL >');
+                        return false;
+                    }
 
             $.ajax({
                 type: "POST",
@@ -164,8 +172,7 @@ $(function () {
                     var inspectors = []; //userid lastname firstname
 
                  
-                    if(!$("#inspectorsDropdown").hasClass('accountant'))
-                    {
+                
                            //clear existing dropdown
                     while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
                         inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
@@ -177,7 +184,7 @@ $(function () {
                         option.value = obj;
                         inspectorsDropdown.appendChild(option);
                     });
-                    }
+              
                    
 
                     $('#inspectorsDropdown').on('change', function () {
@@ -195,6 +202,8 @@ $(function () {
                             toggleVisible([goButton, exportButton], "none");
                         }
                     });
+
+
                 }
             });
         }
@@ -256,7 +265,7 @@ $(function () {
                     console.log(results.data);
 
                     if (results.data.length > 0) {
-                        //remove reportTable DOM generated when no result 0 
+                        //remove reportTable DOM generated when no result 0
                         $("#reportTable").length > 0 ? $('#reportTable').css('margin-top','0px').empty() : "";
 
                         oTable = $('#reportTable').dataTable({
