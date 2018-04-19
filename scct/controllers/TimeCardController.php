@@ -514,7 +514,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null, $inOvertime = 'false')
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null)
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -541,6 +541,9 @@ class TimeCardController extends BaseController
 			
 			$card			= json_decode($time_response, true);
 			$entries		= json_decode($resp, true);
+			
+			//send entries to function to calculate if given card is in overtime
+			$inOvertime = self::calcInOvertime($entries);
 			
 			//populate required values if not received from function call
 			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $card['TimeCardProjectID'];
@@ -1006,5 +1009,31 @@ class TimeCardController extends BaseController
         return $response;
         
     }
+	
+	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
+	private function calcInOvertime($entriesArray)
+	{
+		define('FIRST_ENTRY_ROW',1);
+		define('FIRST_ENTRY_COLUMN',1);
+		
+		$totalSeconds = 0;
+		
+		foreach(array_slice($entriesArray, FIRST_ENTRY_ROW) as $rKey => $rVal)
+		{			
+			foreach(array_slice($rVal, FIRST_ENTRY_COLUMN) as $cKey => $cVal)
+			{
+				$time = $rVal[$cKey];
+				if($time != '')
+				{
+					$splitTime = explode(':', $time);
+					$totalSeconds += $splitTime[0] * 3600 + $splitTime[1] * 60;
+				}
+			}
+		}
+		
+		$totalHours = $totalSeconds/3600;
+		
+		return $totalHours >= 40 ? 'true' : 'false';
+	}
 
 }
