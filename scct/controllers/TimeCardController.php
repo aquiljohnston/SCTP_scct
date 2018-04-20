@@ -869,36 +869,7 @@ class TimeCardController extends BaseController
                 'weekEnd' 		=> $data['weekEnd'],
                 ]);
 
-            //WRITE URLS - TODO SEE ABOVE
-            $writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
-                'projectName' 	=> json_encode($data['projectName']),
-                'timeCardName' 	=> $data['timeCardName'],
-                'week' 			=> null,
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::OASIS
-                ]);
-
-            $writePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
-                'cardName' 		=> $data['payRollFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::QUICKBOOKS
-                ]);
-
-            //Build ADP File URL
-            $writeADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
-                'adpFileName' 	=> $data['adpFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::ADP
-                ]);
-
+       
 
 
             $timeCardResponse = json_decode($this->processTimeCardCSVfile($readTimeCardFileUrl),true);
@@ -944,17 +915,68 @@ class TimeCardController extends BaseController
                  return json_encode($response);
               }
 
+                 
+
           	//LETS WRITE SOME FILES IF THE ARE ready_to_write
           	if ($timeCardResponse['was_written'] == 'ready_to_write') {
-          		$tc = json_decode($this->processTimeCardCSVfile($writeTimeCardFileUrl),true);
+
+          		$writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
+                'projectName' 	=> json_encode($data['projectName']),
+                'timeCardName' 	=> $data['timeCardName'],
+                'week' 			=> null,
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'write' 		=> true,
+                'type' 			=> Constants::OASIS,
+                'data' 			=> $timeCardResponse['data']
+                ]);
+
+          	    try {
+          	    	$tc = json_decode($this->processTimeCardCSVfile($writeTimeCardFileUrl),true);
+          	    } catch (\Exception $e) {
+          	    	throw new \yii\web\HttpException(400);
+          	    }
+
           	}
 
           	if ($payRollResponse['was_written'] == 'ready_to_write') {
-          		$pay = json_decode($this->processTimeCardCSVfile($writePayRollFileUrl),true);
+
+            	$writePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
+                'cardName' 		=> $data['payRollFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'write' 		=> true,
+                'type' 			=> Constants::QUICKBOOKS,
+                'data' 			=> $payRollResponse['data']
+                ]);
+          		
+
+          		 try {
+          	    	$pay = json_decode($this->processTimeCardCSVfile($writePayRollFileUrl),true);
+          	    } catch (\Exception $e) {
+          	    	throw new \yii\web\HttpException(400);
+          	    }
+
           	}
 
           	if ($adpResponse['was_written'] == 'ready_to_write') {
-          		$adp = json_decode($this->processTimeCardCSVfile($writeADPFileUrl),true);
+          		$writeADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
+                'adpFileName' 	=> $data['adpFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                'write' 		=> true,
+                'type' 			=> Constants::ADP,
+                'data' 			=> $adpResponse['data']
+                ]);
+
+      
+          	try {
+          	    	$adp = json_decode($this->processTimeCardCSVfile($writeADPFileUrl),true);
+          	    } catch (\Exception $e) {
+          	    	throw new \yii\web\HttpException(400);
+          	    }
           	}
 
           	
