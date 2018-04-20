@@ -150,7 +150,7 @@ $(function(){
 
 	  if ($("#allTaskEntries-container input:checkbox:checked").length > 0){
 		 disableButton = $("#disable_single_approve_btn_id_timecard").prop("disabled");
-		 if(!disableButton){
+		 if(!disableButton || $('#isAccountant').val()){
 			$('#deactive_timeEntry_btn_id').prop('disabled',false);
 		 }
 			

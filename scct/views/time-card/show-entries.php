@@ -58,7 +58,7 @@ use yii\widgets\Pjax;
             ]) ?>
             <?= Html::button('Deactivate', [
                 'class' => 'btn btn-primary',
-                'disabled' => false,
+                'disabled' => true,
                 'id' => 'deactive_timeEntry_btn_id',
             ]) ?>
             <?= Html::button('Add Task', [
