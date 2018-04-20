@@ -514,7 +514,7 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      * @return mixed
      */
-    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null)
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null, $inOvertime = 'false')
     {		
     	//Defensive Programming - Magic Numbers
     	//declare constants to hold constant values	
@@ -541,9 +541,6 @@ class TimeCardController extends BaseController
 			
 			$card			= json_decode($time_response, true);
 			$entries		= json_decode($resp, true);
-			
-			//send entries to function to calculate if given card is in overtime
-			$inOvertime = self::calcInOvertime($entries);
 			
 			//populate required values if not received from function call
 			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $card['TimeCardProjectID'];
@@ -838,94 +835,124 @@ class TimeCardController extends BaseController
 
         	$data 			= Yii::$app->request->post();	
 
-        	$continueProcess = false;
-
             $response = [];
 
-            //initialize routes
+            //READ URLS
+            //TODO put all routes into a function to dynamically build URL params
+            //to clean this up a bit
+            $readTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
+                'projectName' 	=> json_encode($data['projectName']),
+                'timeCardName' 	=> $data['timeCardName'],
+                'week' 			=> null,
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                ]);
+
+            $readPayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
+                'cardName' 		=> $data['payRollFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                ]);
+
+            //Build ADP File URL
+            $readADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
+                'adpFileName' 	=> $data['adpFileName'],
+                'projectName' 	=> json_encode($data['projectName']),
+                'weekStart' 	=> $data['weekStart'],
+                'weekEnd' 		=> $data['weekEnd'],
+                ]);
+
+            //WRITE URLS - TODO SEE ABOVE
             $writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
                 'projectName' 	=> json_encode($data['projectName']),
                 'timeCardName' 	=> $data['timeCardName'],
                 'week' 			=> null,
                 'weekStart' 	=> $data['weekStart'],
                 'weekEnd' 		=> $data['weekEnd'],
-                'download' 		=> true,
+                'write' 		=> true,
                 'type' 			=> Constants::OASIS
                 ]);
-
-
 
             $writePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
                 'cardName' 		=> $data['payRollFileName'],
                 'projectName' 	=> json_encode($data['projectName']),
                 'weekStart' 	=> $data['weekStart'],
                 'weekEnd' 		=> $data['weekEnd'],
-                'download' 		=> true,
+                'write' 		=> true,
                 'type' 			=> Constants::QUICKBOOKS
                 ]);
-
 
             //Build ADP File URL
             $writeADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
                 'adpFileName' 	=> $data['adpFileName'],
                 'projectName' 	=> json_encode($data['projectName']),
                 'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'download' 		=> true,
+                'weekEnd' 		=> $data['weekEnd']
+                'write' 		=> true,
                 'type' 			=> Constants::ADP
                 ]);
 
-             $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'process' 		=> 'BOTH'
-                ]);
 
 
-            //call SPROC and attempt to write file
-            $timeCardResponse = json_decode($this->writeCSVfile($writeTimeCardFileUrl),true);
-
-               //error_log(print_r($timeCardResponse,true));
-
-          if(isset($timeCardResponse['type'])) {
+            $timeCardResponse = json_decode($this->processTimeCardCSVfile($readTimeCardFileUrl),true);
+ 
               if(strpos($timeCardResponse['type'], 'Exception')!==false){
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
-                  return json_encode($response);
+                 return json_encode($response);
+              } 
+ 
+            $payRollResponse  = json_decode($this->processTimeCardCSVfile($readPayRollFileUrl),true);
 
-              }
-          }
-            //OK so if we made it here then the time card file has encountered no issues
-            //Initiate the payroll process 
-            $payRollResponse  = json_decode($this->writeCSVfile($writePayRollFileUrl),true);
-
-            //error_log(print_r($payRollResponse,true));
-       	  if(isset($payRollResponse['type'])) {
               if(strpos($payRollResponse['type'], 'Exception')!==false){
+
+            	 $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
+                'projectName' 		=> json_encode($data['projectName']),
+                'weekStart' 		=> $data['weekStart'],
+                'weekEnd' 			=> $data['weekEnd'],
+                'process' 			=> 'OASIS'
+                ]);
+
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
                  $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
                  return json_encode($response);
-              }
-          }
 
-           $adpResponse  = json_decode($this->writeCSVfile($writeADPFileUrl),true);
+              } 
 
-            //error_log(print_r($adpResponse,true));
+           $adpResponse  = json_decode($this->processTimeCardCSVfile($readADPFileUrl),true);
 
-       	  if(isset($adpResponse['type'])) {
+
               if(strpos($adpResponse['type'], 'Exception')!==false){
+              	 $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
+                'projectName' 		=> json_encode($data['projectName']),
+                'weekStart' 		=> $data['weekStart'],
+                'weekEnd' 			=> $data['weekEnd'],
+                'process' 			=> 'ALL'
+                ]);
+
                  $response['success'] = FALSE; 
                  $response['message'] = 'Exception'; 
                  $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
                  return json_encode($response);
               }
-          }
 
+          	//LETS WRITE SOME FILES IF THE ARE ready_to_write
+          	if ($timeCardResponse['was_written'] == 'ready_to_write') {
+          		$tc = json_decode($this->processTimeCardCSVfile($writeTimeCardFileUrl),true);
+          	}
 
-                //no exception until this point so SUCCESS
-                //send success message
+          	if ($payRollResponse['was_written'] == 'ready_to_write') {
+          		$pay = json_decode($this->processTimeCardCSVfile($writePayRollFileUrl),true);
+          	}
+
+          	if ($adpResponse['was_written'] == 'ready_to_write') {
+          		$adp = json_decode($this->processTimeCardCSVfile($writeADPFileUrl),true);
+          	}
+
+          	
+
                  $response['success'] = TRUE; 
                  $response['message'] = 'Successfully Completed Time Card Process.'; 
                  return json_encode($response);
@@ -996,7 +1023,7 @@ class TimeCardController extends BaseController
         return $timeCardIDs;
     }
 
-    public function writeCSVfile($downloadUrl){
+    public function processTimeCardCSVfile($downloadUrl){
         Yii::$app->response->format = Response::FORMAT_RAW;
         $csvReq = Parent::executeGetRequest($downloadUrl,Constants::API_VERSION_2);
         return $csvReq;
@@ -1009,31 +1036,5 @@ class TimeCardController extends BaseController
         return $response;
         
     }
-	
-	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
-	private function calcInOvertime($entriesArray)
-	{
-		define('FIRST_ENTRY_ROW',1);
-		define('FIRST_ENTRY_COLUMN',1);
-		
-		$totalSeconds = 0;
-		
-		foreach(array_slice($entriesArray, FIRST_ENTRY_ROW) as $rKey => $rVal)
-		{			
-			foreach(array_slice($rVal, FIRST_ENTRY_COLUMN) as $cKey => $cVal)
-			{
-				$time = $rVal[$cKey];
-				if($time != '')
-				{
-					$splitTime = explode(':', $time);
-					$totalSeconds += $splitTime[0] * 3600 + $splitTime[1] * 60;
-				}
-			}
-		}
-		
-		$totalHours = $totalSeconds/3600;
-		
-		return $totalHours >= 40 ? 'true' : 'false';
-	}
 
 }
