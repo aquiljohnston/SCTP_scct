@@ -894,7 +894,7 @@ class TimeCardController extends BaseController
                 'adpFileName' 	=> $data['adpFileName'],
                 'projectName' 	=> json_encode($data['projectName']),
                 'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd']
+                'weekEnd' 		=> $data['weekEnd'],
                 'write' 		=> true,
                 'type' 			=> Constants::ADP
                 ]);
