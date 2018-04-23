@@ -833,175 +833,47 @@ class TimeCardController extends BaseController
 	}
 
 
-    public function actionAjaxProcessCometTrackerFiles(){
-
+    public function actionAjaxProcessCometTrackerFiles()
+	{
         try{
-
-          //  Yii::$app->response->format = Response::FORMAT_RAW;
-
-        	$data 			= Yii::$app->request->post();	
-
-            $response = [];
-
-            //READ URLS
-            //TODO put all routes into a function to dynamically build URL params
-            //to clean this up a bit
-            $readTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
-                'projectName' 	=> json_encode($data['projectName']),
-                'timeCardName' 	=> $data['timeCardName'],
-                'week' 			=> null,
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                ]);
-
-            $readPayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
-                'cardName' 		=> $data['payRollFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                ]);
-
-            //Build ADP File URL
-            $readADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
-                'adpFileName' 	=> $data['adpFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                ]);
-
-       
-
-
-            $timeCardResponse = json_decode($this->processTimeCardCSVfile($readTimeCardFileUrl),true);
- 
-              if(strpos($timeCardResponse['type'], 'Exception')!==false){
-                 $response['success'] = FALSE; 
-                 $response['message'] = 'Exception'; 
-                 return json_encode($response);
-              } 
- 
-            $payRollResponse  = json_decode($this->processTimeCardCSVfile($readPayRollFileUrl),true);
-
-              if(strpos($payRollResponse['type'], 'Exception')!==false){
-
-            	 $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
-                'projectName' 		=> json_encode($data['projectName']),
-                'weekStart' 		=> $data['weekStart'],
-                'weekEnd' 			=> $data['weekEnd'],
-                'process' 			=> 'OASIS'
-                ]);
-
-                 $response['success'] = FALSE; 
-                 $response['message'] = 'Exception'; 
-                 $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
-                 return json_encode($response);
-
-              } 
-
-           $adpResponse  = json_decode($this->processTimeCardCSVfile($readADPFileUrl),true);
-
-
-              if(strpos($adpResponse['type'], 'Exception')!==false){
-              	 $resetUrl 			= 'time-card%2Freset-comet-tracker-process&' . http_build_query([
-                'projectName' 		=> json_encode($data['projectName']),
-                'weekStart' 		=> $data['weekStart'],
-                'weekEnd' 			=> $data['weekEnd'],
-                'process' 			=> 'ALL'
-                ]);
-
-                 $response['success'] = FALSE; 
-                 $response['message'] = 'Exception'; 
-                 $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
-                 return json_encode($response);
-              }
-
-                 
-
-          	//LETS WRITE SOME FILES IF THE ARE ready_to_write
-          	if ($timeCardResponse['was_written'] == 'ready_to_write') {
-
-          		$writeTimeCardFileUrl = 'time-card%2Fget-time-cards-history-data&' . http_build_query([
-                'projectName' 	=> json_encode($data['projectName']),
-                'timeCardName' 	=> $data['timeCardName'],
-                'week' 			=> null,
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::OASIS,
-                'data' 			=> $timeCardResponse['data']
-                ]);
-
-          	    try {
-          	    	$tc = json_decode($this->processTimeCardCSVfile($writeTimeCardFileUrl),true);
-          	    } catch (\Exception $e) {
-          	    	throw new \yii\web\HttpException(400);
-          	    }
-
-          	}
-
-          	if ($payRollResponse['was_written'] == 'ready_to_write') {
-
-            	$writePayRollFileUrl = 'time-card%2Fget-payroll-data&' . http_build_query([
-                'cardName' 		=> $data['payRollFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::QUICKBOOKS,
-                'data' 			=> $payRollResponse['data']
-                ]);
-          		
-
-          		 try {
-          	    	$pay = json_decode($this->processTimeCardCSVfile($writePayRollFileUrl),true);
-          	    } catch (\Exception $e) {
-          	    	throw new \yii\web\HttpException(400);
-          	    }
-
-          	}
-
-          	if ($adpResponse['was_written'] == 'ready_to_write') {
-          		$writeADPFileUrl 	= 'time-card%2Fget-adp-data&' . http_build_query([
-                'adpFileName' 	=> $data['adpFileName'],
-                'projectName' 	=> json_encode($data['projectName']),
-                'weekStart' 	=> $data['weekStart'],
-                'weekEnd' 		=> $data['weekEnd'],
-                'write' 		=> true,
-                'type' 			=> Constants::ADP,
-                'data' 			=> $adpResponse['data']
-                ]);
-
-      
-          	try {
-          	    	$adp = json_decode($this->processTimeCardCSVfile($writeADPFileUrl),true);
-          	    } catch (\Exception $e) {
-          	    	throw new \yii\web\HttpException(400);
-          	    }
-          	}
-
-          	
-
-                 $response['success'] = TRUE; 
-                 $response['message'] = 'Successfully Completed Time Card Process.'; 
-                 return json_encode($response);
-           
-
-        } catch (ForbiddenHttpException $e) {
-              $response['success'] = FALSE; 
-              $response['message'] = 'Exception occurred.'; 
-              $data = json_decode($this->resetCometTrackerProcess($resetUrl),true);
+			//TODO clean up JS file so it wont post data that is no longer used. approve_multiple_timecard.js
+        	$data = Yii::$app->request->post();	
+			
+			$response = [];
+            $params['params'] = [
+			'projectIDArray' => json_encode($data['projectName']),
+			'startDate' => $data['weekStart'],
+			'endDate' => $data['weekEnd']
+			];
+			$jsonBody = json_encode($params);
+			
+            $tcSubmitUrl = 'time-card%2Fsubmit-time-cards';
+			
+			$submitResponse = json_decode(Parent::executePutRequest($tcSubmitUrl, $jsonBody, Constants::API_VERSION_2), true);
+			
+			if($submitResponse['success'] == 1)
+			{
+				$response['success'] = TRUE; 
+				$response['message'] = 'Successfully Completed Time Card Process.'; 
+				return json_encode($response);
+			} else {
+				$response['success'] = FALSE; 
+                $response['message'] = 'Exception'; 
                 return json_encode($response);
-            //throw new ForbiddenHttpException('General System Error - FW-100');
+			}
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
         } catch (\Exception $e) {
-            Yii::trace('EXCEPTION raised'.$e->getMessage());
-            // Yii::$app->runAction('login/user-logout');
+            $response['success'] = FALSE; 
+            $response['message'] = 'Exception occurred.'; 
+			return json_encode($response);
         }
-
     }
 
     /**
      * Export TimeCard Table To Excel File
      * @param $url
+	 * does not appear to be used.
      */
     public function requestAndOutputCsv($url){
         Yii::$app->response->format = Response::FORMAT_RAW;
@@ -1077,19 +949,4 @@ class TimeCardController extends BaseController
        
         return $timeCardIDs;
     }
-
-    public function processTimeCardCSVfile($downloadUrl){
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $csvReq = Parent::executeGetRequest($downloadUrl,Constants::API_VERSION_2);
-        return $csvReq;
-        
-    }
-
-    private function resetCometTrackerProcess($resetUrl){
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $response = Parent::executeGetRequest($resetUrl,Constants::API_VERSION_2);
-        return $response;
-        
-    }
-
 }
