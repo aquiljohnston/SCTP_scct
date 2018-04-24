@@ -35,15 +35,12 @@ class BaseController extends Controller
     }
 
     public static function prependURL($path, $version = Constants::DEFAULT_VERSION) {
-		$prefix = self::getXClient();
+		$prefix = self::urlPrefix();
 	    //check if url prefix contains api target
-        if(strpos($prefix, Constants::WEB_WITH_LOCAL_API_URL) !== false) {
+        if(strpos($prefix, Constants::SERVER_LOCALHOST) !== false) {
             return Constants::API_LOCAL_URL . "$version%2F$path";
-		} else if(strpos($prefix, Constants::WEB_WITH_DEV_API_PORT) !== false) {
-            return Constants::API_DEV_URL . "$version%2F$path";
-		}
 		//checks for demo in dev check because name does not follow the standard convention
-		else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
+		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
             return Constants::API_DEV_URL . "$version%2F$path";
         } else if(strpos($prefix, Constants::SERVER_STAGE) !== false){
             return Constants::API_STAGE_URL . "$version%2F$path";
@@ -70,7 +67,8 @@ class BaseController extends Controller
                 || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
         )
         {
-            return "scctdev";
+            return "apidev";
+            //return "scctdev";
         }
         else {
             return self::urlPrefix();
