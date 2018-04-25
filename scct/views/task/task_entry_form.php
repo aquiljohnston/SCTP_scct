@@ -16,9 +16,10 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<div id="taskWarningMessage" style="display:inline-block; color: red; display: none;">
+	<p></p>
+</div>
 <div class="time-entry-form">
-    <?php Pjax::begin(['id' => 'taskEntryModal', 'timeout' => false]) ?>
     <?php $form = ActiveForm::begin([
         'id' => 'TaskEntryForm',//$model->formName(),
         'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -112,55 +113,28 @@ use yii\helpers\Url;
         </div>
         <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $timeCardID]); ?>
     </div>
-    <input type="hidden" name="weekStart" value=<?=Yii::$app->getRequest()->getQueryParam('weekStart') ?> />
-    <input type="hidden" name="weekEnd" value=<?=Yii::$app->getRequest()->getQueryParam('weekEnd') ?> />
+		<input type="hidden" name="weekStart" value=<?=Yii::$app->getRequest()->getQueryParam('weekStart') ?> />
+		<input type="hidden" name="weekEnd" value=<?=Yii::$app->getRequest()->getQueryParam('weekEnd') ?> />
     <br>
     <br>
     <div class="form-group">
         <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'create_task_entry_submit_btn', 'disabled' => 'disabled']) ?>
     </div>
     <?php ActiveForm::end(); ?>
-    <?php Pjax::end() ?>
-
+	
     <script>
 
-        $(document).off('mouseleave', '#TaskEntryForm :input').on('mouseleave', '#TaskEntryForm :input', function (){
+        $(document).off('change', '#TaskEntryForm :input').on('change', '#TaskEntryForm :input', function (){
             if (InputFieldValidator()){
-                $('#create_task_entry_submit_btn').prop('disabled', false); 
-               }
-               else{
-                $('#create_task_entry_submit_btn').prop('disabled', true); 
-               }
-               
+				$('#create_task_entry_submit_btn').prop('disabled', false); 
+            }else{
+				$('#create_task_entry_submit_btn').prop('disabled', true); 
+            }   
         });
-
-        //fire check when user clicks away from input onto TaskEntryForm
-         $(document).off('click', '#TaskEntryForm').on('click', '#TaskEntryForm', function (){
-            if (InputFieldValidator()){
-                $('#create_task_entry_submit_btn').prop('disabled', false); 
-               }
-               else{
-                $('#create_task_entry_submit_btn').prop('disabled', true); 
-               }
-               
-        });   
-
-
-         $(document).off('click', '.table_condensed').on('click', '.table_condensed', function (){
-            if (InputFieldValidator()){
-                $('#create_task_entry_submit_btn').prop('disabled', false); 
-               }
-               else{
-                $('#create_task_entry_submit_btn').prop('disabled', true); 
-               }
-               
-        });
-
 
         $('#create_task_entry_submit_btn').click(function (event) {
              if (InputFieldValidator()) {
                 TaskEntryCreation();
-                $(this).closest('.modal-dialog').parent().modal('hide');//.dialog("close");
                 event.preventDefault();
                 return false;
             } else {

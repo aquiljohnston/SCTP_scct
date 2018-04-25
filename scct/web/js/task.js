@@ -83,7 +83,7 @@ function reloadUserGridView() {
 }
 
 function TaskEntryCreation() {
-	var form            = $('#TaskEntryForm');
+	var form = $('#TaskEntryForm');
 
     $('#loading').show();
 
@@ -91,29 +91,36 @@ function TaskEntryCreation() {
         type: 'GET',
         url: form.attr("action"),
         data: form.serialize(),
-        success: function () {
-            $('#loading').hide();
-           $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
-    //
-             $.each($('#ShowEntriesView tbody tr td'),function(index,value){
-                 if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
-                    && ($(this).parent().attr('data-key')>0) 
-                    && (!$('#disable_single_approve_btn_id_timecard').length > 0))
-                 {
-                    $(this).attr("title","Click to deactivate this time entry!");
-                 } 
-                 else if($('#isAccountant').val() &&
-                $(this).attr('data-col-seq') >=1 && 
-                ($(this).text()!="") && 
-                ($(this).parent().attr('data-key')>0)
-            ){
-               $(this).attr("title","Click to deactivate this time entry!")
-         }
-            })
-
-     });; //for pjax update
+        success: function (response) {
+			responseObj = JSON.parse(response);
+			if(responseObj.SuccessFlag == 1)
+			{
+				$.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+					$.each($('#ShowEntriesView tbody tr td'),function(index,value){
+						if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
+							&& ($(this).parent().attr('data-key')>0) 
+							&& (!$('#disable_single_approve_btn_id_timecard').length > 0))
+						{
+							$(this).attr("title","Click to deactivate this time entry!");
+						} 
+						else if($('#isAccountant').val() &&
+						$(this).attr('data-col-seq') >=1 && 
+						($(this).text()!="") && 
+						($(this).parent().attr('data-key')>0)
+						){
+						   $(this).attr("title","Click to deactivate this time entry!")
+						}
+					})
+					$('#create_task_entry_submit_btn').closest('.modal-dialog').parent().modal('hide');
+					$('#loading').hide();
+				});;
+			}else{
+				$('#taskWarningMessage').css("display", "block");
+				$('#taskWarningMessage').html(responseObj.warningMessage);
+				$('#loading').hide();
+			}
         },
-        error  : function () {
+        error : function (){
             console.log("internal server error");
         }
     });

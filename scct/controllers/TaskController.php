@@ -211,8 +211,7 @@ class TaskController extends BaseController
                         // post url
                         $url = 'task%2Fcreate-task-entry';
                         $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
-                        $obj = json_decode($response, true);
-
+						return $response;
                     } catch (\Exception $e) {
                         //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                     }
@@ -240,7 +239,6 @@ class TaskController extends BaseController
                     ]);
                 }
             }
-
         } catch (ErrorException $e) {
             throw new \yii\web\HttpException(400);
         }
