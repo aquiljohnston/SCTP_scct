@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\web\IdentityInterface;
 use app\controllers\BaseController;
+use app\constants\Constants;
 
 /**
  * This is the model class for a user.
@@ -186,7 +187,7 @@ class User extends \yii\base\model implements IdentityInterface
 			$userIdentity = Yii::$app->session['userIdentity'];
 		}else{
 			$url = 'user%2Fget-me';
-			$response = BaseController::executeGetRequest($url);
+			$response = BaseController::executeGetRequest($url, Constants::API_VERSION_2);
 			$decodedResponse = json_decode($response, true);
 			$userIdentity = new User();
 			if (array_key_exists("User",$decodedResponse))
