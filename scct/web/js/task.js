@@ -25,7 +25,13 @@ $(function () {
         $('#userSearchField').val("");
         reloadUserGridView();
     });
-	
+
+    $(".entryData").each(function(){
+        if ($('#isSubmitted').val()) {
+            $(this).prop('disabled',true);
+        }
+    });
+
 	$(document).off('click', '.add_task_btn').on('click', '.add_task_btn', function (){
         var weekStart   = $("table th").eq(1).attr('class');
         var weekEnd     = $("table th").eq(7).attr('class');
@@ -99,11 +105,12 @@ function TaskEntryCreation() {
 					$.each($('#ShowEntriesView tbody tr td'),function(index,value){
 						if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
 							&& ($(this).parent().attr('data-key')>0) 
-							&& (!$('#disable_single_approve_btn_id_timecard').length > 0))
+							&& (!$("#approve_timeCard_btn_id").prop("disabled")))
 						{
 							$(this).attr("title","Click to deactivate this time entry!");
 						} 
 						else if($('#isAccountant').val() &&
+                        !$('#isSubmitted').val() &&
 						$(this).attr('data-col-seq') >=1 && 
 						($(this).text()!="") && 
 						($(this).parent().attr('data-key')>0)

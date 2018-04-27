@@ -567,8 +567,7 @@ class TimeCardController extends BaseController
 			$ThursdayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date5']);
 			$FridayDate		=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date6']);
 			$SaturdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date7']);
-			$isAccountant 	= Yii::$app->session['UserAppRoleType'] == 'Accountant';
-		
+
 			$allTask = new ArrayDataProvider([
 				'allModels' => $entries,
                 'pagination'=> false,
@@ -597,7 +596,7 @@ class TimeCardController extends BaseController
 				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
 				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isAccountant' 		=> $isAccountant,
+				'isSubmitted' 		=> $card['TimeCardSubmittedOasis']!=null && $card['TimeCardSubmttedQuickBooks']!=null,
 				'inOvertime'		=> $inOvertime,
 
 			]);
