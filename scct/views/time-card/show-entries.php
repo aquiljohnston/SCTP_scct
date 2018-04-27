@@ -26,6 +26,7 @@ use yii\widgets\Pjax;
     <h3> <?= $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName; ?></h3>
 
     <?php
+    $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
     if ($model['TimeCardApprovedFlag'] == 1) {
         $approve_status = true;
     } else {
@@ -34,61 +35,23 @@ use yii\widgets\Pjax;
 	?>
     <p>
         <?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-        <?php if ($approve_status && !$isAccountant) : ?>
-            <?= Html::button('Approve', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'disable_single_approve_btn_id_timecard',
-            ]) ?>
-            <?= Html::button('Deactivate', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'deactive_timeEntry_btn_id',
-            ]) ?>
-            <?= Html::button('Add Task', [
-                'class' => 'btn btn-primary add_task_btn',
-                'disabled' => true,
-                'id' => 'add_task_btn_id',
-            ]) ?>
-        <?php elseif ($approve_status && $isAccountant) : ?>
-            <?= Html::button('Approve', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'disable_single_approve_btn_id_timecard',
-            ]) ?>
-            <?= Html::button('Deactivate', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'deactive_timeEntry_btn_id',
-            ]) ?>
-            <?= Html::button('Add Task', [
-                'class' => 'btn btn-primary add_task_btn',
-                'disabled' => false,
-                'id' => 'add_task_btn_id',
-            ]) ?>
-        <?php  else : ?>
-            <?= Html::button('Approve', [
-                'class' => 'btn btn-primary',
-                'disabled' => $isAccountant ? true : false,
-                'id' => 'enable_single_approve_btn_id_timecard',
-            ]) ?>
-            <?= Html::button('Deactivate', [
-                'class' => 'btn btn-primary',
-                'disabled' => true,
-                'id' => 'deactive_timeEntry_btn_id',
-            ]) ?>
-            <?= Html::button('Add Task', [
-                'class' => 'btn btn-primary add_task_btn',
-                'disabled' => false,
-                'id' => 'add_task_btn_id',
-            ]) ?>
-        <?php endif; ?>
-       
-        <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
-        <input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
+        <?= Html::button('Approve', [
+            'class' => 'btn btn-primary',
+            'disabled' => $approve_status || $isAccountant,
+            'id' => 'approve_timeCard_btn_id',
+        ]) ?>
+        <?= Html::button('Deactivate', [
+            'class' => 'btn btn-primary',
+            'disabled' => true,
+            'id' => 'deactive_timeEntry_btn_id',
+        ]) ?>
+        <?= Html::button('Add Task', [
+            'class' => 'btn btn-primary add_task_btn',
+            'disabled' => $approve_status && ($isSubmitted || !$isAccountant),
+            'id' => 'add_task_btn_id',
+        ]) ?>
     </p>
     <br>
-
     </div>
     <?php Pjax::begin(['id' => 'ShowEntriesView', 'timeout' => false]) ?>
     <?= \kartik\grid\GridView::widget([
@@ -138,18 +101,21 @@ use yii\widgets\Pjax;
                 'attribute' => 'Date7',
                 'headerOptions' => ['class'=>$SaturdayDateFull],
             ],
-                    [
-                        'header'            => 'Deactivate All Task',
-                        'class'             => 'kartik\grid\CheckboxColumn',
-                        'contentOptions'    => [],
-                        'checkboxOptions'   => function ($model, $key, $index, $column) {
-
-                            return ['timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),'disabled' => false,'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
-                        }
-                    ]
+            [
+                'header'            => 'Deactivate All Task',
+                'class'             => 'kartik\grid\CheckboxColumn',
+                'contentOptions'    => [],
+                'checkboxOptions'   => function ($model) {
+                    return ['timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),
+                        'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
+                }
+            ]
         ]
     ]);
     ?>
+    <input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
+    <input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
+    <input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">
 	<input type="hidden" value=<?php echo $inOvertime ?> id="inOvertime">
     <?php Pjax::end() ?>
     <?php

@@ -87,7 +87,8 @@ $(function(){
       //restrict click to only day of the week fields
       //with values in the .text()
       if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
-        && (!$('#disable_single_approve_btn_id_timecard').length > 0 || $('#isAccountant').val())){
+        && (!$("#approve_timeCard_btn_id").prop("disabled") || $('#isAccountant').val())
+        && !$('#isSubmitted').val()){
 
      // var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
 
@@ -149,7 +150,7 @@ $(function(){
 	function checkDeactivateBtn(){
 
 	  if ($("#allTaskEntries-container input:checkbox:checked").length > 0){
-		 disableButton = $("#disable_single_approve_btn_id_timecard").prop("disabled");
+		 disableButton = $("#approve_timeCard_btn_id").prop("disabled");
 		 if(!disableButton || $('#isAccountant').val()){
 			$('#deactive_timeEntry_btn_id').prop('disabled',false);
 		 }
@@ -161,7 +162,7 @@ $(function(){
 	}
 
 
-   $('#enable_single_approve_btn_id_timecard').click(function (e) {
+   $('#approve_timeCard_btn_id').click(function (e) {
         var timeCardId = $('#timeCardId').val();
         krajeeDialog.defaults.confirm.title = 'Approve';
         krajeeDialog.confirm('Are you sure you want to approve this?', function (resp) {
@@ -176,7 +177,7 @@ $(function(){
                 success: function(data) {
                  //$.pjax.reload({container:"#allTheButtons", timeout: 99999}); //for pjax update
                 $('#deactive_timeEntry_btn_id').prop('disabled',true);
-                $('#enable_single_approve_btn_id_timecard').addClass('disabled');
+                $('#approve_timeCard_btn_id').addClass('disabled');
 				$('#add_task_btn_id').prop('disabled',true);
                 $('#loading').hide();
             }
@@ -238,9 +239,9 @@ $(function(){
     //add tool tip to all time deactivatable time entries    
    $.each($('#allTaskEntries tbody tr td'),function(index,value){
          if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
-            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
+            && (!$("#approve_timeCard_btn_id").prop("disabled"))) {
            $(this).attr("title","Click to deactivate this time entry!")
-         } else if($('#isAccountant').val() &&
+         } else if($('#isAccountant').val() && !$('#isSubmitted').val() &&
                 $(this).attr('data-col-seq') >=1 && 
                 ($(this).text()!="") && 
                 ($(this).parent().attr('data-key')>0)
