@@ -74,23 +74,22 @@ function initListeners() {
             $('#dataMessage').empty();
         } else {
             getReport(reportsDropdown.val());
-            if(selectedReport.ParmInspectorFlag == 1) {
-                // reuse and rename the inspector dropdown
-                if(selectedReport.ReportSPName.includes("TimeCard")) {
-                    // show datepicker
-                    inspectorsListHeader.text("Project List: ");
-                } 
+            // reuse and rename the inspector dropdown
+            if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
+                // show datepicker
+                inspectorsListHeader.text("Project List: ");
                 toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
-            } if(selectedReport.ParmBetweenDateFlag == 1) {
+            } 
+            if(selectedReport.ParmBetweenDateFlag == 1) {
                 // mapgrids need data query
-                if(selectedReport.ParmDropDownFlag == 1) {
+                if(selectedReport.ParmDropDownFlag == 1 || selectedReport.Parm == 1) {
                     toggleVisible([beginDate[0],endDate[0]], "inline");
                 } else
                     toggleVisible([beginDate[0],endDate[0], submitButton[0]], "inline");
             } else {
                 // only show submit and export button
                 toggleVisible([submitButton[0]], "inline");
-            }
+            } 
         }
     });
     // datepickers
@@ -114,11 +113,17 @@ function initListeners() {
                 reportStartDate = reportStartDate.getUTCMonth()+1+"/"+reportStartDate.getUTCDate()+"/"+reportStartDate.getUTCFullYear();
                 reportEndDate = reportEndDate.getUTCMonth()+1+"/"+reportEndDate.getUTCDate()+"/"+reportEndDate.getUTCFullYear();
                 // get mapgrids
-                if(selectedReport.ParmDropDownFlag == 1)
+                if(selectedReport.ParmDropDownFlag == 1) {
                     dataSync("mapgrid",reportStartDate,reportEndDate, null, null); 
-            }  else
-                // show erro message            
-            submitButton.css('display', 'inline');
+                    toggleVisible([mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "inline");
+                } 
+                // get inspectors
+                if(selectedReport.ParmInspectorFlag == 1) {
+                    dataSync("inspector",reportStartDate,reportEndDate, null, null);
+                    toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0], submitButton[0]], "inline");
+                }
+                submitButton.css('display', 'inline');
+            }
         } else {
             endDatePicker.datepicker('setDate', null);
             // todo: show error message
@@ -127,34 +132,39 @@ function initListeners() {
     // Submit Report Action
     submitButton.on("click", function(){
         $("#reportTable_wrapper").empty();
+        $('#dataMessage').empty();
         // init variables
-        var reportName, reportType, reportStartDate=null, reportEndDate=null, reportProjectID=null, mapgrid=null;
+        var reportName, reportType, reportStartDate=null, reportEndDate=null, dropdownParam=null, mapgrid=null;
         reportName = selectedReport.ReportSPName;
         reportType = selectedReport.ReportType.trim();
-        // get dates
+        // set dates
         if(selectedReport.ParmBetweenDateFlag == 1) {
             reportStartDate = startDatePicker.datepicker("getDate");
             reportEndDate = endDatePicker.datepicker("getDate");
-            if(reportStartDate !== null && reportEndDate !== null) {
+            //  error check in OR condition: user did not select end date
+            if(reportStartDate !== null && reportEndDate !== null || reportStartDate !== null && reportEndDate == null) {
                 // format dates
-                reportStartDate = reportStartDate.getUTCMonth()+1+"/"+reportStartDate.getUTCDate()+"/"+reportStartDate.getUTCFullYear();
+                reportStartDate = reportStartDate.getUTCMonth()+1+"/"+reportStartDate.getUTCDate()+"/"+reportStartDate.getUTCFullYear(); 
+                if(reportEndDate == null){
+                    reportEndDate = new Date();
+                }
                 reportEndDate = reportEndDate.getUTCMonth()+1+"/"+reportEndDate.getUTCDate()+"/"+reportEndDate.getUTCFullYear();
             } 
         }
-        if(selectedReport.ParmInspectorFlag == 1) {
-            if(selectedReport.ReportSPName.includes("TimeCard")) {
-                if(!inspectorsDropdown.val().includes("< All >"))
-                    reportProjectID = "["+inspectorsDropdown.val()+"]";
-            } else {
-                console.log("else not timecard");
+        // set inspectors
+        if(selectedReport.ParmInspectorFlag == 1)
+            dropdownParam = inspectorsDropdown.val(); 
+        // set project timecards
+        if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
+            if(!inspectorsDropdown.val().includes("< All >")) {
+                dropdownParam = "["+inspectorsDropdown.val()+"]";
             }
-        }    
-        if(selectedReport.ParmDropDownFlag == 1) {
-            // get mapgrid
+        } 
+        // set mapgrid
+        if(selectedReport.ParmDropDownFlag == 1)
             mapgrid = mapGridDropdown.val();
-        }
         // execute server call   
-        dataSync("report",reportStartDate,reportEndDate, reportProjectID, mapgrid);
+        dataSync("report",reportStartDate,reportEndDate, dropdownParam, mapgrid);
     });
     // Export Report Data Action
 }
@@ -172,7 +182,7 @@ function resetDropdowns() {
     $('#reportTable').empty();
     selectedReport = null;
     toggleVisible([beginDate[0],endDate[0], inspectorsListHeader[0], inspectorsDropdown[0], 
-        mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "none");
+        mapGridListHeader[0], mapGridDropdown[0], submitButton[0], exportButton[0]], "none");
     
 }
 function toggleVisible(arr, display) {
@@ -217,7 +227,7 @@ function getReport(name) {
     });
 }
 // get map grids call
-function dataSync(ajaxCallType, reportStartDate, reportEndDate, reportProjectID, mapgrid){
+function dataSync(ajaxCallType, reportStartDate, reportEndDate, dropdownParam, mapgrid){
     $.ajax({
         type: "POST",
         url: "reports/get-report",
@@ -226,19 +236,19 @@ function dataSync(ajaxCallType, reportStartDate, reportEndDate, reportProjectID,
             ReportType: selectedReport.ReportType.trim(),
             StartDate: reportStartDate,
             EndDate: reportEndDate,
-            Project: reportProjectID,
+            Project: dropdownParam,
             Mapgrid: mapgrid
         },
         beforeSend: function () {
             $('#loading').show();
-            console.log("Starting query for " + ajaxCallType);
-            console.log("reportProjectID: " + reportProjectID + ", mapgrid: " + mapgrid + ", reportName: " + selectedReport.ReportSPName+ ", reportType: " + selectedReport.ReportType.trim() + ", reportStartDate: " + reportStartDate + ", reportEndDate: " + reportEndDate);  
         },
         success: function (data) {
             if(ajaxCallType === "mapgrid")
-                loadMapgrids(JSON.parse(data));
+                loadDropdowns(JSON.parse(data), mapGridDropdown);
             else if(ajaxCallType === "report")
                 loadTable(JSON.parse(data));
+            else
+                loadDropdowns(JSON.parse(data), inspectorsDropdown);
             $('#loading').hide();
         },
         error: function(xhr, textStatus, error) {
@@ -249,21 +259,21 @@ function dataSync(ajaxCallType, reportStartDate, reportEndDate, reportProjectID,
         }
     });
 }
-function loadMapgrids(data) {
+function loadDropdowns(data, dropdown){
     try {
-        mapGridDropdown.empty();
+        dropdown.empty();
         if (data.data.length > 0) {
             // load the projects dropdowns
             $.each(data.data, function(key, val) {
-                mapGridDropdown.append($('<option>', {
-                    value: key,
+                dropdown.append($('<option>', {
+                    value: val,
                     text : val 
                 }));
             });
         } else {
             // add < All > anyway
-            mapGridDropdown.append($('<option>', {
-                value: null,
+            dropdown.append($('<option>', {
+                value: "< ALL >",
                 text : "< ALL >"
             }));
         }
@@ -271,5 +281,4 @@ function loadMapgrids(data) {
         console.log("Ajax error, " + err);
         $("#dataMessage").text("An error occurred, please refresh your page and try again.");
     }
-    toggleVisible([mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "inline");
 }
