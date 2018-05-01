@@ -16,21 +16,16 @@ use yii\bootstrap\Modal;
 $this->title = 'Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<style type="text/css">
-	.dataTables_wrapper{
-		margin-top: 55px;
-	}
-</style>
 <body id="reports-page">
 <div class="dispatchAid" id="reportsContainer">
 	<div class="containerByDropdown">
 		<div class="reportsDropdown" >
 				Report:
-			<select id="reportsDropdown" class="reportsDropdown" style="width: 16%">
+			<select id="reportsDropdown" class="reportsDropdown" style="width: 16%; margin-bottom:1%;">
 				<option>Please make a selection</option>
 			</select>
-			<input type="button" id="go" name="go" value="Go" style="display: none;"/>
-			<input type="button" id="export" name="export" value="Export" style="display: none;"/>
+			<input type="button" id="go" name="go" value="Go" style="display: none; margin-left:1%;"/>
+			<input type="button" id="export" name="export" value="Export" style="display: none; margin-left:1%;"/>
 		</div>
 		<div id="noSelectionError" style="display:inline-block;color: red; display: none;">* No report selected.</div>
 		<div id="noDateError" style="display:inline-block;color: red; display: none;">* You must enter a date.</div>
@@ -39,32 +34,26 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div id="selectDate" class="reportsDropdown" style="width: 300px;height: 20px;display: block;padding-top: 5px; display: none;">Select a
 			Date: <input type="text" id="datePickerSelectDate" style="float: right;"></div>
-		<div id="beginDate" class="reportsDropdown" style="width: 300px;height: 20px;display: block;display: none;">Begin Date: 
-			<input type="text" id="datePickerBeginDate" style="float: right;"></div>
-		<div id="endDate" style="width: 300px;height:20px;display: block;padding-top: 5px; display: none; ">End Date:
-			<input type="text" class="reportsDropdown"  id="datePickerEndDate" style="float: right;"></div>
-		<div id="dropDownListView" style="width: 382px; height: 20px;padding-top: 20px;display: block;">
+		<div id="beginDate" class="reportsDropdown" style="width: 300px;height: 20px;display: block;display: none;">Start Date: 
+			<input type="text" id="datePickerBeginDate"></div>
+			<br /><br />
+		<div id="endDate" style="width: 300px;height:20px;display: block;padding-top: 5px; display: none; padding-left: 5px;">End Date:
+			<input type="text" class="reportsDropdown"  id="datePickerEndDate"></div>
+		<div id="dropDownListView" style="width: 382px; height: 20px;padding-top: 20px;display: block; margin-bottom:4%;">
 			<label id="mapGridListHeader" style="display: none;">MapGrid List: </label>
-			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 41%; width: 20%;">
-			</select>
-			<?php if(!$isAccountant) : ?>
-			<label id="inspectorListHeader" style="display: none;">Inspector List: </label>
-			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none; float: right; margin-right: 13%;">
-			</select>
-		<?php else :?>
-			<label id="inspectorListHeader" style="display: none;">Project Name:</label>
-			<select id="inspectorsDropdown" autocomplete="off" class="accountant"  style="display: none;">
-				<option value="< ALL >">ALL</option>
-				<?php foreach ($projects as $p => $v) {
-					echo '<option value="'.$p.'">'.$v.'</option>';
-				} ?>
-			</select>
-		<?php endif ;?>
+			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 41%; width: 20%;"></select>
+
+			<label id="inspectorListHeader" style="display: none; font-weight: normal;">Inspector List: </label>
+			<select id="inspectorsDropdown" class="reportsDropdown"  style="display: none;"></select>
 		</div>
-		<table id="reportTable" style="width:100%;">
+		<div id="tableDiv">
+			<p id="dataMessage"></p>
+			<table id="reportTable" style="width:100%;">
 			<thead></thead>
 			<tbody></tbody>
 		</table>
+		</div>
 	</div>
 </div>
+
 </body>
