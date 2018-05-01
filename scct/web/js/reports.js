@@ -1,782 +1,275 @@
 /**
- * Created by tzhang on 05/30/2016.
+ * Created by Jose Pinott on 4/24/2018.
  */
 
+ // init variables
+ function initVars() {
+    reportsArray = new Array();
+    reportsDropdown = $("#reportsDropdown"), 
+    mapGridListHeader = $("#mapGridListHeader"),
+    mapGridDropdown = $("#parmDropdown"),
+    inspectorsListHeader = $("#inspectorListHeader"),
+    inspectorsDropdown = $("#inspectorsDropdown"),  
+    parmDropdown = $("#parmDropdown"),
+    beginDate = $("#beginDate"),
+    endDate = $("#endDate"),
+    exportButton = $("#export"),
+    submitButton = $("#go"),
+    noSelectionError = $("#noSelectionError"),
+    noDateError = $("#noDateError"),
+    selectDateFirstError = $("#selectDateFirstError"),
+    startDatePicker = $("#datePickerBeginDate").datepicker({minDate: "1/1/"+(new Date()).getFullYear(), maxDate : 'now'}),
+    endDatePicker = $('#datePickerEndDate').datepicker({minDate: "1/31/"+(new Date()).getFullYear(), maxDate : 'now', maxDate : 'now'});
+    oTable = null;
+    selectedReport = new Object();
+ }
+
 $(function () {
-    const COMPLETED_WORK_ORDERS = "Completed Work Orders";
-    const COMPLETED_MAP_GRID = "Completed Map Grid";
-    var currentPath = window.location.pathname;
-    var reports = currentPath.replace(/\/+$/, "");//.substr(0, currentPath.length - 1);//.replace(/\/$/, "")
-    console.log(reports);
-    var oTable; //datatable variable
-    var reportsToSP = {}; //map of report names -> stored procedures
-    var reportsToParms = {}; //map of report names -> parm objects
-    var reportsToExports = {}; //map of report names -> export values
-    var selectedReport = null;
-
+    var reports = window.location.pathname.replace(/\/+$/, "");
     if (reports == "/reports") {
-
-        var displayedResults;
-        var reportsDropdown = document.getElementById("reportsDropdown");
-        var inspectorsDropdown = document.getElementById("inspectorsDropdown");
-        var parmDropdown = document.getElementById("parmDropdown");
-
-        var beginDate = document.getElementById('beginDate'),
-            endDate = document.getElementById('endDate'),
-            selectDate = document.getElementById('selectDate'),
-            exportButton = document.getElementById('export'),
-            goButton = document.getElementById('go'),
-            noSelectionError = document.getElementById('noSelectionError'),
-            noDateError = document.getElementById('noDateError'),
-            selectDateFirstError = document.getElementById('selectDateFirstError');
-
-        $('#datePickerEndDate').datepicker();
-        $("#datePickerBeginDate").datepicker({
-            changeMonth: true,
-            onSelect: function(date){
-                var selectedDate = new Date(date);
-                var msecsInADay = 86400000;
-                var endDate = new Date(selectedDate.getTime() /*+ msecsInADay*/);
-                var maxDate = new Date(selectedDate.getTime() + 27*msecsInADay);
-                var currentDate = new Date();
-                maxDate = maxDate >= currentDate ? currentDate: maxDate;
-                endDate = selectedDate.toDateString() == currentDate.toDateString() ? date: endDate;
-                var currentEndDate = $('#datePickerEndDate').datepicker("getDate");
-                if (selectedDate > currentEndDate && $('#datePickerEndDate').datepicker("getDate") != null){
-                    toggleVisible([goButton, exportButton, parmDropdown], "none");
-                    $('#datePickerBeginDate').val("");
-                    $('#datePickerEndDate').val("");
-                    $('#inspectorListHeader').css('display', 'none');
-                    $('#mapGridListHeader').css('display', 'none');
-                    alert('Begin date cannot be greater than end date');
-                }
-
-                $("#datePickerEndDate").datepicker( "option", { minDate: new Date(endDate), maxDate: new Date(maxDate), setDate: new Date(endDate)} );
-
-                var currentSelectedReport = $('#reportsDropdown').val();
-                var parms = reportsToParms[currentSelectedReport];
-                var sp = reportsToSP[currentSelectedReport];
-                if (parms['isMapGridDropDownRequired'] != 0 && parms['isMapGridDropDownRequired'] != null) {
-                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                        buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
-                    }
-                }else{
-                    if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" && parms['ReportDisplayName'] != COMPLETED_WORK_ORDERS && parms['ReportDisplayName'] != COMPLETED_MAP_GRID) {
-                        buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, "", true);
-                    }
-                }
-            }
-        });
-        $('#datePickerSelectDate').datepicker();
-
-        //helper functions
-        function toggleVisible(arr, display) {
-            var i = 0;
-            for (; i < arr.length; i++) {
-                arr[i].style.display = display;
-            }
-        }
-
-        //return true if visible, false if display:none
-        function isVisible(element) {
-            return element.style.display !== "none";
-        }
-
-        function buildParmDropdown(startDate, endDate, sp, parm, exports) {
-            //bookmark
-
-            $.ajax({
-                type: "POST",
-                url: "reports/get-parm-drop-down",
-                data: {
-                    //type: "parmDropdown",
-                    SPName: sp,
-                    startDate: startDate,
-                    endDate: endDate
-                },
-                beforeSend: function () {
-                    $('#ajax-busy').show();
-                },
-                success: function (data) {
-                    //console.log(JSON.stringify(data, null, 2));
-                    while (parmDropdown.lastChild && parmDropdown.lastChild.innerHTML !== "Please make a selection") {
-                        parmDropdown.removeChild(parmDropdown.lastChild);
-                    }
-                    $('#ajax-busy').hide();
-                    toggleVisible([goButton], "inline");
-                    $('#mapGridListHeader').css('display', 'inline');
-                    toggleVisible([parmDropdown], "inline");
-
-                    //added default option to inspector dropdown
-
-                    /*var firstOption = document.createElement("option");
-                    firstOption.innerHTML = "< All >";
-                    firstOption.value = "< All >";
-                    parmDropdown.appendChild(firstOption);*/
-
-
-                    var results = JSON.parse(data);
-                    $.each(results.options, function (i, obj) {
-                        var option = document.createElement("option");
-                        option.value = option.innerHTML = obj;
-                        parmDropdown.appendChild(option);
-                    });
-                    $('#parmDropdown').on('change', function () {
-                        if (oTable != null) {
-                            oTable.fnDestroy(); //have to be destory first, then rebuild
-                            $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                        }
-                        if ($('#parmDropdown').val() !== "Please select an inspector") {
-                            toggleVisible([goButton], "inline");
-                            if (exports) {
-                                toggleVisible([exportButton], "inline");
-                            }
-                        }
-                        else {
-                            toggleVisible([goButton, exportButton], "none");
-                        }
-                    });
-                }
-            });
-        }
-
-        function buildInspectorDropdown(beginDate, endDate, sp, parm, exports) {
-                //if accountant toggle menu - no fetch needed
-                if($("#inspectorsDropdown").hasClass('accountant'))
-                    {
-                        toggleVisible([goButton, exportButton,inspectorsDropdown], "inline");
-                        $('#inspectorListHeader').css('display', 'inline');
-                        $('#inspectorsDropdown').val('< ALL >');
-                        return false;
-                    }
-
-            $.ajax({
-                type: "POST",
-                url: "reports/get-inspector-drop-down",
-                data: {
-                    SPName: sp,
-                    startDate: beginDate || null,
-                    endDate: endDate || null,
-                    Parm: parm || null
-                },
-                beforeSend: function () {
-                    $('#ajax-busy').show();
-                },
-                success: function (data) {
-                    $('#ajax-busy').hide();
-                    var results = JSON.parse(data);
-                    toggleVisible([inspectorsDropdown], "block");
-                    toggleVisible([goButton], "inline");
-                    $('#inspectorListHeader').css('display', 'inline');
-
-                    var inspectors = []; //userid lastname firstname
-
-                 
-                
-                           //clear existing dropdown
-                    while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
-                        inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
-                    }
-                         $.each(results.inspectors, function (i, obj) {
-                        //console.log(obj);
-                        var option = document.createElement("option");
-                        option.innerHTML = obj;
-                        option.value = obj;
-                        inspectorsDropdown.appendChild(option);
-                    });
-              
-                   
-
-                    $('#inspectorsDropdown').on('change', function () {
-                        if (oTable != null) {
-                            oTable.fnDestroy(); //have to be destory first, then rebuild
-                            $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                        }
-                        if ($('#inspectorsDropdown').val() !== "Please select an inspector") {
-                            toggleVisible([goButton], "inline");
-                            if (exports) {
-                                toggleVisible([exportButton], "inline");
-                            }
-                        }
-                        else {
-                            toggleVisible([goButton, exportButton], "none");
-                        }
-                    });
-
-
-                }
-            });
-        }
-
-        function buildTable() {//
-            var starVal = null, endVal = null;
-            var parameters = $('#reportsDropdown').find(":selected").attr('id').split('-');
-            if (isVisible(beginDate) && isVisible(endDate)) {
-                starVal = $('#datePickerBeginDate').val();
-                endVal = $('#datePickerEndDate').val();
-            } else {
-                starVal = null;
-                endVal = null;
-            }
-            var parmDateOverride        = isVisible(parmDropdown) ? $('#parmDropdown').val() : null;
-            var userLogin               = isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null;
-            var parmDateOverrideCheck   = parmDateOverride != null ? 1 : 0;
-            var userLoginCheck          = userLoginCheck != null ? 1 : 0;
-            var parmVar                 = parmDateOverrideCheck > userLoginCheck ? parmDateOverride : userLogin;
-            var ParmInspector           = $('#inspectorsDropdown').val();
-            var isAccountant            =  $('#inspectorsDropdown').hasClass('accountant') ? true :false;
-              
-
-            $.ajax({
-                type: "POST",
-                url: "reports/get-reports",
-                //url: "script/report/get_reports_new.php",
-                data: {
-                    ReportName: parameters[0],
-                    type: "reports",
-                    ParmVar: parmVar,
-                    ParmDateOverride: isVisible(parmDropdown) ? $('#parmDropdown').val() : null,
-                    ParmDateOverrideFlag: parameters[6],
-                    UserLogin: isVisible(inspectorsDropdown) ? $('#inspectorsDropdown').val() : null,
-                    BeginDate: starVal || null,
-                    EndDate: endVal || $('#datePickerSelectDate').val() || null,
-                    Parm: parameters[1] || null,
-                    ParmBetweenDate: parameters[2],
-                    ParmDate: parameters[3],
-                    ParmInspector: ParmInspector,
-                    ReportType: parameters[7],
-                    isAccountant: isAccountant
-                },
-                beforeSend: function () {
-                    $('#loading').show();
-                },
-                success: function (data) {
-                    $('#loading').hide();
-                    $('#go').prop('disabled', false);
-                    var results = JSON.parse(data);
-                    console.log(results.data);
-                    //console.log(parameters);
-                    //console.log(results.data.length);
-                    if (oTable != null) {
-                        oTable.fnDestroy(); //have to be destory first, then rebuild
-                        $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                    }
-
-                    console.log(results.data);
-
-                    if (results.data.length > 0) {
-                        //remove reportTable DOM generated when no result 0
-                        $("#reportTable").length > 0 ? $('#reportTable').css('margin-top','0px').empty() : "";
-
-                        oTable = $('#reportTable').dataTable({
-                            "pagingType": "full_numbers",
-                            "scrollX": true,
-                            "data": results.data,
-                            "columns": results.columns,
-                            "columnDefs": [
-                                {
-                                    /*"targets": [1],
-                                     "visible": false,
-                                     "searchable": false*/
-                                }
-                            ],
-                            "lengthMenu": [10, 25, 50, 100, 250, 500],
-                            "iDisplayLength": 250
-                        });
-                    } else {
-                         $('#reportTable').css('margin-top','50px');
-                         $('#reportTable').html('<tr><td>No data available for the specified data range.</td></tr>');
-                    }
-
-                    //calculate height
-                    $(".dataTable thead").on("click", "th.sorting_asc", function (event) {
-                        $('.dataTables_scrollBody').css('height', window.innerHeight - 410 + "px");
-                    });
-
-                    //calcualate height
-                    $(".dataTable thead").on("click", "th.sorting_desc", function (event) {
-                        $('.dataTables_scrollBody').css('height', window.innerHeight - 410 + "px");
-                    });
-
-                    //windows resize height
-                    $(window).resize(function () {
-                        $('#reportTable').dataTable().fnAdjustColumnSizing(); //fix header resize doesn't align up problem
-                        $(".dataTables_scrollBody").height(window.innerHeight - 410 + "px");
-                    });
-
-                    displayedResults = results;
-                    //console.log(results);
-
-                    /*adjust the table size based on the selected report*/
-                    if (parameters[2] == 1){
-                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 42vh !important; overflow-y: auto');
-                    }else{
-                        $('#reportTable_wrapper .dataTables_scrollBody').attr('style', 'max-height: 54vh !important; overflow-y: auto');
-                    }
-                }
-            });
-        }
-
-        /*Converts javascript array to CSV format */
-        function ConvertToCSV(headerArray, dataArray) {
-            var header = typeof headerArray != 'object' ? JSON.parse(headerArray) : headerArray;
-            var array = typeof dataArray != 'object' ? JSON.parse(dataArray) : dataArray;
-
-            /* Get table headers */
-            var indexes = [];
-            for (var i = 0; i < header.length; i++) {
-                str += '<th scope="col">' + header[i]['title'] + '</th>';
-                indexes.push(header[i]['title']);
-            }
-
-            /* Data */
-            var str = '';
-            var strIndexes = '';
-
-            /* Write headers */
-            for (var j = 0; j < indexes.length; j++) {
-                if (j != indexes.length - 1 && isNaN(indexes[j])) {
-                    strIndexes += indexes[j] + ';';
-                }
-                else
-                    strIndexes += indexes[j];
-            }
-            str += strIndexes + '\r\n';
-
-            /* write data */
-            for (var i = 0; i < array.length; i++) {
-                var line = '';
-                for (var index in array[i]) {
-                    if (line != '') line += ';';
-
-                    line += (array[i][index] !== null) ? array[i][index] : ''; // Append the cell data
-                    // The ternary operator changes nulls to ''
-                }
-                str += line + '\r\n';
-            }
-
-            var today = new Date();
-            var dd = today.getDate();
-            var mm = today.getMonth() + 1; //January is 0!
-            var yyyy = today.getFullYear();
-
-            if (dd < 10) {
-                dd = '0' + dd
-            }
-
-            if (mm < 10) {
-                mm = '0' + mm
-            }
-            today = mm + '/' + dd + '/' + yyyy;
-
-            str = str.replace(/[^\x00-\x7F]/g, "");
-            str = 'sep=;\r\n' + str;
-            //using FileSaver.min.js
-            var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
-            saveAs(blob, "Report_" + today + ".csv");
-        }
-
+        initVars();
+        // tmp fix: need to consolidate reports and reports3 unto 1 file
+        initListeners();
         $.ajax({
             type: "GET",
-            url: "reports/build-drop-down",
+            url: "reports/get-dropdowns-data",
             beforeSend: function () {
                 $('#loading').show();
             },
             success: function (data) {
-                $('#loading').hide();
-                //console.log(JSON.stringify(data));
-                var results = JSON.parse(data);
-                $.each(results.reports, function (i, obj) {
-                    var option = document.createElement("option");
-                    option.innerHTML = obj["ReportDisplayName"];
-                    /*option.value = obj["ReportSPName"];*/
-                    option.value = obj["ReportDisplayName"];
-                    option.id = obj["ReportSPName"].trim();
-                    option.id += "-" + obj["Parm"] + "-" + obj["ParmBetweenDateFlag"] + "-" + obj["ParmDateFlag"] + "-" + obj["ParmInspectorFlag"]
-                        + "-" + obj["ParmDropDownFlag"] + "-" + obj["ParmDateOverrideFlag"] + "-" + obj["ReportType"];
-                    reportsDropdown.appendChild(option);
-                    var parms = {};
-                    parms["ParmDateFlag"] = obj["ParmDateFlag"];
-                    parms["ParmBetweenDateFlag"] = obj["ParmBetweenDateFlag"];
-                    parms["ParmInspectorFlag"] = obj["ParmInspectorFlag"];
-                    parms["Parm"] = obj["Parm"];
-                    parms["ParmDropDownFlag"] = obj["ParmDropDownFlag"];
-                    parms["ParmDateOverrideFlag"] = obj["ParmDateOverrideFlag"];
-                    parms["ReportType"] = obj["ReportType"];
-                    parms["isMapGridDropDownRequired"] = obj["ParmDropDownFlag"];
-                    reportsToParms[obj["ReportDisplayName"]] = parms;
-                    parms["ReportDisplayName"] = obj["ReportDisplayName"];
-                    if (obj["ExportFlag"] === "1") {
-                        reportsToExports[obj["ReportDisplayName"]] = obj["ExportFlag"];
-                    }
-                    reportsToSP[obj["ReportDisplayName"]] = obj["ReportSPName"];
+                var dataResultArray = JSON.parse(data);
+                // console.log("success called: " + JSON.stringify(dataResultArray));
+                // load the reports dropdowns
+                $.each(dataResultArray.dropdowns.reports, function (i, item) {
+                    // copy report to object
+                    reportsArray.push(item);
+                    reportsDropdown.append($('<option>', { 
+                        value: item.ReportSPName,
+                        text : item.ReportDisplayName 
+                    }));
                 });
-            }
-        });
-
-        $('#reportsDropdown').on('change', function () {
-            $('#go').prop('disabled', false);
-            selectedReport = $(this).val();
-            var parms = reportsToParms[selectedReport];
-            var exp = reportsToExports[selectedReport];
-            var sp = reportsToSP[selectedReport];
-            var dateSelected = false;
-            var inspectorSelected = false;
-            var parmDropdownSelected = false;
-            var parmType;
-            console.log(parms);
-
-            $('#inspectorsDropdown').val("Please select an inspector");
-            $('#datePickerSelectDate').val("");
-            $('#datePickerBeginDate').val("");
-            $('#datePickerEndDate').val("");
-
-            if (oTable != null) {
-                oTable.fnDestroy(); //have to be destory first, then rebuild
-                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-            }
-
-            if ($(this).val() == "Please make a selection") {
-                parms = undefined;
-                exp = undefined;
-                sp = undefined;
-                toggleVisible([goButton, exportButton], "none");
-            }
-
-            $('#inspectorListHeader').css('display', 'none');
-            $('#mapGridListHeader').css('display', 'none');
-            toggleVisible([beginDate, endDate, selectDate, goButton, exportButton, noSelectionError, noDateError, inspectorsDropdown, selectDateFirstError, parmDropdown], "none");
-
-            if (parms) { //parm == 1
-                console.log("parms has value!");
-                console.log(parms);
-
-                if (parms["ParmInspectorFlag"] === "1") { //parminspector == 1
-                    if (parms["ParmDateFlag"] === "1") { //parm == 1, parminspector == 1, parmdate == 1
-                        toggleVisible([selectDate], "block");
-                        $('#datePickerSelectDate').on('change', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerSelectDate').val() !== "") {
-                                buildInspectorDropdown(null, $('#datePickerSelectDate').val(), sp, null, exp);
-                            }
-                            else {
-                                $('#inspectorsDropdown').val("Please select an inspector");
-                                toggleVisible([goButton, exportButton, inspectorsDropdown], "none");
-                                while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
-                                    inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
-                                }
-                            }
-                        });
-                    }
-                    else if (parms["ParmBetweenDateFlag"] === "1") { //parminspector == 1 and parmbetweendate == 1
-                        console.log("Line453");
-                        toggleVisible([beginDate, endDate], "block");
-                        document.getElementById('inspectorsDropdown').style.display = "none";
-
-                        $(document).off('change', '#datePickerBeginDate').on('change', '#datePickerBeginDate', function () {
-                            console.log("Begin Date changed under inspector drop down");
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                                    dateSelected = true;
-                                    if (parms["ParmInspectorFlag"] === "1") {
-                                        console.log("Line 471");
-                                        buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms["Parm"], exp);
-                                    }
-                            }
-                            else {
-                                $('#inspectorsDropdown').val("Please select an inspector");
-                                toggleVisible([goButton, exportButton, inspectorsDropdown], "none");
-                                while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
-                                    inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
-                                }
-                            }
-                        });
-                        $(document).off('change', '#datePickerEndDate').on('change', '#datePickerEndDate', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                                dateSelected = true;
-                                toggleVisible([parmDropdown], "none");
-                                $('#mapGridListHeader').css("display", "none");
-                                if (parms["ParmInspectorFlag"] === "1") {
-                                    buildInspectorDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms["Parm"], exp);
-                                }
-                            }
-                            else {
-                                $('#inspectorsDropdown').val("Please select an inspector");
-                                toggleVisible([goButton, exportButton, inspectorsDropdown], "none");
-                                while (inspectorsDropdown.lastChild && inspectorsDropdown.lastChild.innerHTML !== "Please select an inspector") {
-                                    inspectorsDropdown.removeChild(inspectorsDropdown.lastChild);
-                                }
-                            }
-                        });
-                        $('#inspectorsDropdown').on('change', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if (dateSelected) {
-                                toggleVisible([selectDateFirstError], "none");
-                                if ($('#inspectorsDropdown').val() !== "Please select an inspector") {
-                                    inspectorSelected = true;
-                                }
-                                else {
-                                    inspectorSelected = false;
-                                }
-
-                                if (inspectorSelected) {
-                                    toggleVisible([goButton], "inline");
-                                    if (exp !== undefined) {
-                                        toggleVisible([exportButton], "inline");
-                                    }
-                                    parmType = "ParmBetweenDateFlag";
-                                }
-                                else {
-                                    toggleVisible([goButton, exportButton], "none");
-                                }
-                            }
-                            else {
-                                toggleVisible([goButton, exportButton], "none");
-                                toggleVisible([selectDateFirstError], "inline");
-                                $('#inspectorsDropdown').val("Please select an inspector");
-                            }
-                        });
-                    }
-                    else { //parmdate != 1 and parmbetweendate != 1, parminspector == 1
-                        toggleVisible([goButton], "inline");
-                        if (exp !== undefined) {
-                            toggleVisible([exportButton], "inline");
-                        }
-                    }
-                } //end if parmsinspector == 1
-                else if (parms["ParmDropDownFlag"] === "1") {
-                    if (parms["ParmBetweenDateFlag"] === "1") { //parminspector == 1 and parmbetweendate == 1
-                        console.log("Line453");
-                        toggleVisible([beginDate, endDate], "block");
-                        document.getElementById('parmDropdown').style.display = "none";
-
-                        $(document).off('change', '#datePickerBeginDate').on('change', '#datePickerBeginDate', function () {
-                            console.log("Begin Date changed under parm drop down");
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                                dateSelected = true;
-                                toggleVisible([parmDropdown], "none");
-                                $('#inspectorListHeader').css("display", "none");
-                                if (parms["isMapGridDropDownRequired"] == 1) {
-                                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
-                                }
-                            }
-                            else {
-                                toggleVisible([goButton, exportButton, parmDropdown], "none");
-                                while (parmDropdown.lastChild && parmDropdown.lastChild.innerHTML !== "Please select a Map Grid") {
-                                    parmDropdown.removeChild(parmDropdown.lastChild);
-                                }
-                            }
-                        });
-                        $(document).off('change', '#datePickerEndDate').on('change', '#datePickerEndDate', function () {
-                            console.log("End Date changed under parm drop down");
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                                dateSelected = true;
-                                if (parms["isMapGridDropDownRequired"] == 1) {
-                                    buildParmDropdown($('#datePickerBeginDate').val(), $('#datePickerEndDate').val(), sp, parms, exp);
-                                    //buildParmDropdown(sp, parms, exp);
-                                }
-                            }
-                            else {
-                                toggleVisible([goButton, exportButton, parmDropdown], "none");
-                                while (parmDropdown.lastChild && parmDropdown.lastChild.innerHTML !== "Please select a Map Grid") {
-                                    parmDropdown.removeChild(parmDropdown.lastChild);
-                                }
-                            }
-                        });
-                        $('#parmDropdown').on('change', function () {
-                            console.log("triggered parm drop down");
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if (dateSelected) {
-                                toggleVisible([selectDateFirstError], "none");
-                                if ($('#parmDropdown').val() !== "Please select a Map Grid") {
-                                    parmDropdownSelected = true;
-                                }
-                                else {
-                                    parmDropdownSelected = false;
-                                }
-
-                                if (parmDropdownSelected) {
-                                    toggleVisible([goButton], "inline");
-                                    if (exp !== undefined) {
-                                        toggleVisible([exportButton], "inline");
-                                    }
-                                    parmType = "ParmBetweenDateFlag";
-                                }
-                                else {
-                                    toggleVisible([goButton, exportButton], "none");
-                                }
-                            }
-                            else {
-                                toggleVisible([goButton, exportButton], "none");
-                                toggleVisible([selectDateFirstError], "inline");
-                                $('#parmDropdown').val("Please select a Map Grid");
-                            }
-                        });
-                    }
-                }
-                else { //parminspector == NULL
-                    if (parms["ParmDateFlag"] === "1") {
-                        toggleVisible([selectDate], "block");
-                        toggleVisible([beginDate, endDate], "none");
-                        //toggleVisible([beginDateView, endDateView], "none");
-                        $('#datePickerSelectDate').on('change', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerSelectDate').val() !== "") {
-                                dateSelected = true;
-                                toggleVisible([goButton], "inline");
-                                if (exp !== undefined) {
-                                    toggleVisible([exportButton], "inline");
-                                }
-                            }
-                            else {
-                                dateSelected = false;
-                                toggleVisible([goButton, exportButton], "none");
-                            }
-                        });
-                    }
-                    else if (parms["ParmBetweenDateFlag"] === "1") {
-                        console.log("call Viwe");
-                        if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS || parms["ReportDisplayName"] == COMPLETED_MAP_GRID){
-                            toggleVisible([goButton, exportButton], "inline");
-                        }
-                        toggleVisible([beginDate, endDate], "block");
-
-                        $(document).off('change', '#datePickerBeginDate').on('change', '#datePickerBeginDate', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" || parms["ReportDisplayName"] != COMPLETED_WORK_ORDERS) {
-                                dateSelected = true;
-                                toggleVisible([goButton], "inline");
-                                $('#go').prop('disabled', false);
-                                if (exp !== undefined) {
-                                    toggleVisible([exportButton], "inline");
-                                }
-                            }
-                            else {
-                                dateSelected = false;
-                                toggleVisible([goButton, exportButton], "none");
-                            }
-                        });
-                        $(document).off('change', '#datePickerEndDate').on('change', '#datePickerEndDate', function () {
-                            if (oTable != null) {
-                                oTable.fnDestroy(); //have to be destory first, then rebuild
-                                $("#reportTable").empty(); //need to remove its dom elements, otherwise there will be problems rebuilding the table
-                            }
-                            if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "" || parms["ReportDisplayName"] != COMPLETED_WORK_ORDERS) {
-                                dateSelected = true;
-                                $('#go').prop('disabled', false);
-                                toggleVisible([goButton], "inline");
-                                if (exp !== undefined) {
-                                    //toggleVisible([exportButton], "inline");
-                                }
-                            }
-                            else {
-                                dateSelected = false;
-                                toggleVisible([goButton, exportButton], "none");
-                            }
-                        });
-                    }
-                    else { //parmdate != 1, parmbetweendate != 1, parminspector != 1
-                        toggleVisible([goButton], "inline");
-                        toggleVisible([beginDate, endDate], "none");
-                        if (exp !== undefined) {
-                            toggleVisible([exportButton], "inline");
-                        }
-                    }
-                }
-            }
-            else { //parm != 1
-                toggleVisible([goButton], "inline");
-                if (exp !== undefined) {
-                    toggleVisible([exportButton], "inline");
-                }
-            }
-            //end reportsdropdown change
-
-            //go button
-
-            if ($(this).val() == "Please make a selection") {
-                toggleVisible([goButton, exportButton], "none");
-            }
-
-        });
-        $('#go').on('click', function () {
-            var parms = null;
-            if (selectedReport != null)
-                parms = reportsToParms[selectedReport];
-            toggleVisible([exportButton], "");
-            if (isVisible(beginDate)) {
-                if ($('#datePickerBeginDate').val() !== "" && $('#datePickerEndDate').val() !== "") {
-                    dateSelected = true;
-                }
-                else {
-                    dateSelected = false;
-                }
-            }
-            else if (isVisible(selectDate)) {
-                if ($('#datePickerSelectDate').val() !== "") {
-                    dateSelected = true;
-                }
-                else {
-                    dateSelected = false;
-                }
-            }
-            else { //Parm != 1
-                toggleVisible([noDateError, selectDateFirstError], "none");
-                dateSelected = true;
-            }
-            if (parms["ReportDisplayName"] == COMPLETED_WORK_ORDERS || parms["ReportDisplayName"] == COMPLETED_MAP_GRID){
-                buildTable();
-            }
-
-            if (dateSelected) {
-                buildTable();
-            }
-            $(this).prop('disabled', true);
-        });
-
-        console.log("The export listener is called below this line");
-        /*export to data to file with user specified name*/
-        $("#export").click(function (e) {
-            console.log("Export clicked!");
-            ConvertToCSV(displayedResults.columns, displayedResults.data);
-        });
-
-        $('#viewReportButton').click(function () {
-            $('#loading').show();
-            $('#reportDisplay').load('/reports/view', function () {
-                $('#reportDisplay').show();
+                // load the projects dropdowns
+                $.each(dataResultArray.projects, function(key, val) {
+                    inspectorsDropdown.append($('<option>', {
+                        value: key,
+                        text : val 
+                    }));
+                });
                 $('#loading').hide();
-            });
+            }
         });
     }
 });
+
+//--------------- Listeners ---------------//
+function initListeners() {
+    // report selected
+    reportsDropdown.on("change", function(){
+        resetDropdowns();
+        $("#reportTable_wrapper").empty();
+        if(reportsDropdown.val() == "Please make a selection") {
+            // reset values
+            toggleVisible([beginDate[0],endDate[0], inspectorsListHeader[0], inspectorsDropdown[0], 
+                    mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "none");
+            $('#dataMessage').empty();
+        } else {
+            getReport(reportsDropdown.val());
+            if(selectedReport.ParmInspectorFlag == 1) {
+                // reuse and rename the inspector dropdown
+                if(selectedReport.ReportSPName.includes("TimeCard")) {
+                    // show datepicker
+                    inspectorsListHeader.text("Project List: ");
+                } 
+                toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
+            } if(selectedReport.ParmBetweenDateFlag == 1) {
+                // mapgrids need data query
+                if(selectedReport.ParmDropDownFlag == 1) {
+                    toggleVisible([beginDate[0],endDate[0]], "inline");
+                } else
+                    toggleVisible([beginDate[0],endDate[0], submitButton[0]], "inline");
+            } else {
+                // only show submit and export button
+                toggleVisible([submitButton[0]], "inline");
+            }
+        }
+    });
+    // datepickers
+    startDatePicker.change(function(){
+        endDatePicker.datepicker('setDate', null);
+        if(startDatePicker.datepicker("getDate") != null)
+            endDatePicker.datepicker("option", "minDate", startDatePicker.datepicker("getDate"));
+        else 
+            submitButton.css('display', 'none');
+        if(selectedReport.ParmDropDownFlag == 1) {
+            toggleVisible([mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "none");
+            $('#dataMessage').empty();
+        }
+    });
+    endDatePicker.change(function(){
+        if(startDatePicker.datepicker("getDate") != null) {
+            reportStartDate = startDatePicker.datepicker("getDate");
+            reportEndDate = endDatePicker.datepicker("getDate");
+            if(reportStartDate !== null && reportEndDate !== null) {
+                // format dates
+                reportStartDate = reportStartDate.getUTCMonth()+1+"/"+reportStartDate.getUTCDate()+"/"+reportStartDate.getUTCFullYear();
+                reportEndDate = reportEndDate.getUTCMonth()+1+"/"+reportEndDate.getUTCDate()+"/"+reportEndDate.getUTCFullYear();
+                // get mapgrids
+                if(selectedReport.ParmDropDownFlag == 1)
+                    dataSync("mapgrid",reportStartDate,reportEndDate, null, null); 
+            }  else
+                // show erro message            
+            submitButton.css('display', 'inline');
+        } else {
+            endDatePicker.datepicker('setDate', null);
+            // todo: show error message
+        }
+    });
+    // Submit Report Action
+    submitButton.on("click", function(){
+        $("#reportTable_wrapper").empty();
+        // init variables
+        var reportName, reportType, reportStartDate=null, reportEndDate=null, reportProjectID=null, mapgrid=null;
+        reportName = selectedReport.ReportSPName;
+        reportType = selectedReport.ReportType.trim();
+        // get dates
+        if(selectedReport.ParmBetweenDateFlag == 1) {
+            reportStartDate = startDatePicker.datepicker("getDate");
+            reportEndDate = endDatePicker.datepicker("getDate");
+            if(reportStartDate !== null && reportEndDate !== null) {
+                // format dates
+                reportStartDate = reportStartDate.getUTCMonth()+1+"/"+reportStartDate.getUTCDate()+"/"+reportStartDate.getUTCFullYear();
+                reportEndDate = reportEndDate.getUTCMonth()+1+"/"+reportEndDate.getUTCDate()+"/"+reportEndDate.getUTCFullYear();
+            } 
+        }
+        if(selectedReport.ParmInspectorFlag == 1) {
+            if(selectedReport.ReportSPName.includes("TimeCard")) {
+                if(!inspectorsDropdown.val().includes("< All >"))
+                    reportProjectID = "["+inspectorsDropdown.val()+"]";
+            } else {
+                console.log("else not timecard");
+            }
+        }    
+        if(selectedReport.ParmDropDownFlag == 1) {
+            // get mapgrid
+            mapgrid = mapGridDropdown.val();
+        }
+        // execute server call   
+        dataSync("report",reportStartDate,reportEndDate, reportProjectID, mapgrid);
+    });
+    // Export Report Data Action
+}
+//--------------- helper functions ---------------//
+function resetDropdowns() {
+    inspectorsDropdown.val("");
+    startDatePicker.val("");
+    endDatePicker.val("");
+    noSelectionError.val("");
+    noDateError.val("");
+    selectDateFirstError.val("");
+    $('#dataMessage').empty();
+    if (oTable != null)
+        oTable.fnDestroy();
+    $('#reportTable').empty();
+    selectedReport = null;
+    toggleVisible([beginDate[0],endDate[0], inspectorsListHeader[0], inspectorsDropdown[0], 
+        mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "none");
+    
+}
+function toggleVisible(arr, display) {
+    for (var i = 0; i < arr.length; i++) {
+        arr[i].style.display = display;
+    }
+}
+//return true if visible, false if display:none
+function isVisible(element) {
+    return element.style.display !== "none";
+}
+// load json data
+function loadTable(data) {
+    try {
+        if (oTable != null) {
+            oTable.fnDestroy();
+            $('#reportTable').empty();
+        }
+        if (data.data.length > 0) {
+            oTable = $('#reportTable').dataTable({
+                "pagingType": "full_numbers",
+                "scrollX": true,
+                "data": data.data,
+                "columns": data.columns,
+                "lengthMenu": [10, 25, 50, 100, 250, 500],
+                "iDisplayLength": 250
+            });
+        } else {
+            $("#dataMessage").text("No data available for the specified data range.");
+        }
+    }
+    catch(err) {
+        console.log("Ajax error: " + err);
+        $("#dataMessage").text("An error occurred, please refresh your page and try again.");
+    }
+}
+// finds/returns report in reports array
+function getReport(name) {
+    reportsArray.forEach(element => {
+        if(element.ReportSPName === name)
+            selectedReport = element;
+    });
+}
+// get map grids call
+function dataSync(ajaxCallType, reportStartDate, reportEndDate, reportProjectID, mapgrid){
+    $.ajax({
+        type: "POST",
+        url: "reports/get-report",
+        data: {
+            ReportName: selectedReport.ReportSPName,
+            ReportType: selectedReport.ReportType.trim(),
+            StartDate: reportStartDate,
+            EndDate: reportEndDate,
+            Project: reportProjectID,
+            Mapgrid: mapgrid
+        },
+        beforeSend: function () {
+            $('#loading').show();
+            console.log("Starting query for " + ajaxCallType);
+            console.log("reportProjectID: " + reportProjectID + ", mapgrid: " + mapgrid + ", reportName: " + selectedReport.ReportSPName+ ", reportType: " + selectedReport.ReportType.trim() + ", reportStartDate: " + reportStartDate + ", reportEndDate: " + reportEndDate);  
+        },
+        success: function (data) {
+            if(ajaxCallType === "mapgrid")
+                loadMapgrids(JSON.parse(data));
+            else if(ajaxCallType === "report")
+                loadTable(JSON.parse(data));
+            $('#loading').hide();
+        },
+        error: function(xhr, textStatus, error) {
+            //Here the status code can be retrieved like;
+            console.log("Ajax error: " + error + ", report: " + ajaxCallType +", code: " + xhr.status);
+            $("#dataMessage").text("An error occurred, please refresh your page and try again.");
+            $('#loading').hide();
+        }
+    });
+}
+function loadMapgrids(data) {
+    try {
+        mapGridDropdown.empty();
+        if (data.data.length > 0) {
+            // load the projects dropdowns
+            $.each(data.data, function(key, val) {
+                mapGridDropdown.append($('<option>', {
+                    value: key,
+                    text : val 
+                }));
+            });
+        } else {
+            // add < All > anyway
+            mapGridDropdown.append($('<option>', {
+                value: null,
+                text : "< ALL >"
+            }));
+        }
+    } catch(err) {
+        console.log("Ajax error, " + err);
+        $("#dataMessage").text("An error occurred, please refresh your page and try again.");
+    }
+    toggleVisible([mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "inline");
+}
