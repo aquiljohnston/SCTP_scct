@@ -37,13 +37,11 @@ class ReportsController extends BaseController
             //self::requirePermission("viewReportsMenu");
 
             //set accountant bool
-            $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+            // $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 
             $model = new Report();
             return $this->render('index', [
-                    'model' => $model,
-                    'isAccountant' => $isAccountant,
-                    'projects'     => $this->getAllProjects() 
+                    'model' => $model
                 ]
             );
         } catch (ForbiddenHttpException $e) {
@@ -121,7 +119,8 @@ class ReportsController extends BaseController
                 $ParmInspector = $_POST['ParmVar'];
             }
             // post url
-            $url = 'reports%2Fget-report&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']).'&isAccountant='.urlencode($_POST['isAccountant']);
+            $url = 'reports%2Fget-report&reportType='.
+                urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']).'&isAccountant='.urlencode($_POST['isAccountant']);
             Yii::trace("reportUrl " . $url);
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             Yii::trace("GetReportResponse " . $response);
@@ -189,11 +188,48 @@ class ReportsController extends BaseController
             echo "";
         }
     }
-    public function getAllProjects(){
-            $projectsURL = 'project%2Fget-project-dropdowns';
-            $response = Parent::executeGetRequest($projectsURL, Constants::API_VERSION_2); // indirect rbac
-            $response = json_decode($response,TRUE);
-            unset($response[""]);
-            return $response;
-    }    
+
+    /**
+     * Get Dropdowns returns all reports and project in
+     * the both tables. No filters are used.
+     * @return JSON
+     */
+    public function actionGetDropdownsData(){
+        $dropdownsURL = 'reports%2Fget-report-drop-down';
+        $response["dropdowns"] = json_decode(Parent::executeGetRequest($dropdownsURL, Constants::API_VERSION_2)); // indirect rbac         
+        $projectsURL = 'project%2Fget-project-dropdowns';
+        $response["projects"] = json_decode(Parent::executeGetRequest($projectsURL, Constants::API_VERSION_2)); // indirect rbac
+        return json_encode($response, true);
+    }
+    
+    /**
+     * Get Report returns report data with the given parameters
+     * @param ReportName {String} report name, ReportType {String} type of report view or sp, 
+     *        StartDate {Date} report start, EndDate {Date} report end, Project {String} project id 
+     * @return JSON
+     * @throws Exception
+     */
+    public function actionGetReport(){
+        try {
+            $response = "{}";
+            if (isset($_POST['ReportName']) && isset($_POST['ReportType'])) {
+                // Todo: move URL to constants
+                $url = 'reports%2Fget-report&'. http_build_query([
+                    "reportType" => $_POST['ReportType'],
+                    "reportName" => $_POST['ReportName'],
+                    "startDate" => $_POST['StartDate'],
+                    "endDate" => $_POST['EndDate'],
+                    "ParmInspector" => $_POST['Project'],
+                    "parm" => $_POST['Mapgrid']
+                ]);
+                $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            } 
+            echo $response;
+        } catch(ForbiddenHttpException $e) {
+            throw new ForbiddenHttpException;
+        } catch(\Exception $e) {
+            var_dump($e);
+            // Yii::$app->runAction('login/user-logout');
+        }
+    }
 }
