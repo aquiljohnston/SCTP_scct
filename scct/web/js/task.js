@@ -84,51 +84,39 @@ $('#approve_timeCard_btn_id').click(function (e) {
 $(document).on('click','#deactive_timeEntry_btn_id',function(e){
     var name = "";
     var tasks = [];
-    var id = $('#timeCardId').val();
+	var entries = [];
+    var timeCardID = $('#timeCardId').val();
 
    $(".entryData").each(function(k,value){
-     if($(this).is(":checked")){
-
-        //get task name for payload and confirm message
-        name = $(this).attr('taskName');
-        tasks.push(name);
-
-        //walk each cell and build payload
-        $.each($(this).closest('tr').find('td'),function(index,value) {
-            if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0))
-                {
-                    entry_date = $(this).closest('table').find('th').eq(index).attr('class');
-                    entries.push({taskName:name, day:entry_date, timeCardID:id})
-                }
-             })
+		if($(this).is(":checked")){
+			//get task name for payload and confirm message
+			name = $(this).attr('taskName');
+			tasks.push(name);
         }
     });
-
+	entries.push({taskName : tasks, timeCardID : timeCardID});
     tasks.join(', ');
     data = {entries};
 
     krajeeDialog.defaults.confirm.title = 'Deactivate All Task';
     krajeeDialog.confirm('Are you sure you want to deactivate all ' +tasks+ '? Please confirm...', function (resp) {
-
-    if (resp) {
-        $.ajax({
-            type: 'POST',
-            url: '/time-card/deactivate/',
-            data: data,
-            success: function(data) {
-                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
-                    $('#loading').hide();
-                    $('#deactive_timeEntry_btn_id').prop('disabled',true);
-                });
-            },
-            error: function(data) {
-                console.log('error')
-            }
-        });
-    } else {
-        $('#w0').modal('toggle');
-         return false;
-        }
+		if (resp) {
+			$('#loading').show();
+			$.ajax({
+				type: 'POST',
+				url: '/time-card/deactivate/',
+				data: data,
+				success: function(data) {
+					$.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function(){
+						$('#loading').hide();
+						$('#deactive_timeEntry_btn_id').prop('disabled',true);
+					});
+				}
+			});
+		} else {
+			$('#w0').modal('toggle');
+			return false;
+		}
     });
 });
 
@@ -154,7 +142,6 @@ $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEnt
     seq_num = $(this).attr('data-col-seq');
     taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
     date = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
-    //approve_status= $()
     var entries = [];
     //clean up date format for sending
     date = date.replace(/\-/g, '/');
@@ -165,15 +152,12 @@ $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEnt
         && (!$("#approve_timeCard_btn_id").prop("disabled") || $('#isAccountant').val())
         && !$('#isSubmitted').val()){
 
-        // var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
-
         krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
         krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
-
             if (resp) {
                 $('#loading').show();
                 //build and send payload to deactivate single entry
-                entries.push({taskName : taskName, day : date, timeCardID : id})
+                entries.push({taskName : [taskName], day : date, timeCardID : id});
                 data = {entries};
                 $.ajax({
                     type: 'POST',
@@ -183,14 +167,10 @@ $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEnt
                     },
                     success: function(data) {
                         $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function (){
-                            // applyToolTip();
                             $('#loading').hide();
                         });
                     }
                 });
-
-            } else {
-                // return false;
             }
         });
         $('#loading').hide();
@@ -200,13 +180,15 @@ $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEnt
 function validateTaskToolTip() {
     $.each($('#allTaskEntries tbody tr td'),function(){
         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)
-            && (!$("#approve_timeCard_btn_id").prop("disabled"))) {
+            && (!$("#approve_timeCard_btn_id").prop("disabled"))) 
+		{
             $(this).attr("title","Click to deactivate this time entry!")
-        } else if($('#isAccountant').val() && !$('#isSubmitted').val() &&
-            $(this).attr('data-col-seq') >=1 &&
-            ($(this).text()!="") &&
-            ($(this).parent().attr('data-key')>0)
-        ){
+        } 
+		else if ($('#isAccountant').val() && !$('#isSubmitted').val() &&
+			$(this).attr('data-col-seq') >=1 &&
+			($(this).text()!="") &&
+			($(this).parent().attr('data-key')>0))
+		{
             $(this).attr("title","Click to deactivate this time entry!")
         }
     });
