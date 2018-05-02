@@ -383,131 +383,6 @@ class TimeCardController extends BaseController
         }
 	}
 	
-    /**
-     * Displays a single TimeCard model.
-     * @param string $id
-     * @throws \yii\web\HttpException
-     * @return mixed
-     */
-    public function actionView($id)
-    {		
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['/login']);
-		}
-
-		try{
-			// set default value 0 to duplicateFlag
-			// duplicationflag:
-			// 1: yes 0: no
-			// set duplicateFlag to 1, which means duplication happened.
-
-			$duplicateFlag = 0;
-			if (strpos($id, "yes") == true) {
-				$id = str_replace("yes", "", $id);
-				$duplicateFlag = 1;
-			}
-			$url = 'time-card%2Fget-entries&cardID='.$id;
-			$time_card_url = 'time-card%2Fview&id='.$id;
-
-			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // rbac check
-			$time_card_response = Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$model = json_decode($time_card_response, true);
-			$entryData = json_decode($response, true);
-			$ApprovedFlag = $entryData['ApprovedFlag'];
-			
-			$Sundaydata = $entryData['TimeEntries']['Sunday']['Entries'];
-			$SundayProvider = new ArrayDataProvider([
-				'allModels' => $Sundaydata,
-				'pagination' => false,
-			]);
-			$Total_Hours_Sun = $entryData['TimeEntries']['Sunday']['Total'];
-
-			$Mondaydata = $entryData['TimeEntries']['Monday']['Entries'];
-			$MondayProvider = new ArrayDataProvider([
-				'allModels' => $Mondaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Mon = $entryData['TimeEntries']['Monday']['Total'];
-
-			$Tuesdaydata = $entryData['TimeEntries']['Tuesday']['Entries'];
-			$TuesdayProvider = new ArrayDataProvider([
-				'allModels' => $Tuesdaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Tue = $entryData['TimeEntries']['Tuesday']['Total'];
-
-			$Wednesdaydata = $entryData['TimeEntries']['Wednesday']['Entries'];
-			$WednesdayProvider = new ArrayDataProvider([
-				'allModels' => $Wednesdaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Wed = $entryData['TimeEntries']['Wednesday']['Total'];
-
-			$Thursdaydata = $entryData['TimeEntries']['Thursday']['Entries'];
-			$ThursdayProvider = new ArrayDataProvider([
-				'allModels' => $Thursdaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Thu = $entryData['TimeEntries']['Thursday']['Total'];
-
-			$Fridaydata = $entryData['TimeEntries']['Friday']['Entries'];
-			$FridayProvider = new ArrayDataProvider([
-				'allModels' => $Fridaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Fri = $entryData['TimeEntries']['Friday']['Total'];
-
-			$Saturdaydata = $entryData['TimeEntries']['Saturday']['Entries'];
-			$SaturdayProvider = new ArrayDataProvider([
-				'allModels' => $Saturdaydata,
-                'pagination' => false,
-			]);
-			$Total_Hours_Sat = $entryData['TimeEntries']['Saturday']['Total'];
-
-			//calculation total hours for this timecardid
-			$Total_Hours_Current_TimeCard = $Total_Hours_Sun +
-											$Total_Hours_Mon +
-											$Total_Hours_Tue +
-											$Total_Hours_Wed +
-											$Total_Hours_Thu +
-											$Total_Hours_Fri +
-											$Total_Hours_Sat;
-			//set TimeEntryID as id
-			$SundayProvider->key ='TimeEntryID';
-			$MondayProvider->key ='TimeEntryID';
-			$TuesdayProvider->key ='TimeEntryID';
-			$WednesdayProvider->key ='TimeEntryID';
-			$ThursdayProvider->key ='TimeEntryID';
-			$FridayProvider->key ='TimeEntryID';
-			$SaturdayProvider->key ='TimeEntryID';
-
-			return $this -> render('view', [
-											'model' => $model,
-											'duplicateFlag' => $duplicateFlag,
-											'ApprovedFlag' => $ApprovedFlag,
-											'Total_Hours_Current_TimeCard' => $Total_Hours_Current_TimeCard,
-											'SundayProvider' => $SundayProvider,
-											'Total_Hours_Sun' => $Total_Hours_Sun,
-											'MondayProvider' => $MondayProvider,
-											'Total_Hours_Mon' => $Total_Hours_Mon,
-											'TuesdayProvider' => $TuesdayProvider,
-											'Total_Hours_Tue' => $Total_Hours_Tue,
-											'WednesdayProvider' => $WednesdayProvider,
-											'Total_Hours_Wed' => $Total_Hours_Wed,
-											'ThursdayProvider' => $ThursdayProvider,
-											'Total_Hours_Thu' => $Total_Hours_Thu,
-											'FridayProvider' => $FridayProvider,
-											'Total_Hours_Fri' => $Total_Hours_Fri,
-											'SaturdayProvider' => $SaturdayProvider,
-											'Total_Hours_Sat' => $Total_Hours_Sat,
-									]);
-		}catch(ErrorException $e){
-			throw new \yii\web\HttpException(400);
-		}
-    } 
-	
      /**
      * Displays all time entries for a given time card.
      * @param string $id
@@ -604,130 +479,7 @@ class TimeCardController extends BaseController
 			throw new \yii\web\HttpException(400);
 		}
     }
-
-    /**
-     * Creates a new TimeEntry model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param $id
-     * @param $TimeCardTechID
-     * @param $TimeEntryDate
-     * @return mixed
-     * @throws \yii\web\HttpException
-     */
-	public function actionCreateTimeEntry($id = null, $TimeCardTechID = null, $TimeEntryDate = null)
-	{
-		//guest redirect
-		if (Yii::$app->user->isGuest) {
-			return $this->redirect(['/login']);
-		}
-		self::requirePermission("timeEntryCreate");
-		try {
-
-			$timeEntryModel = new TimeEntry();
-			$activityModel = new Activity();
-            //$id = "";
-            //$TimeCardTechID = "";
-			//generate array for Active Flag dropdown
-			$flag =
-				[
-					1 => "Active",
-					0 => "Inactive",
-				];
-			$obj = "";
-
-			//GET DATA TO FILL FORM DROPDOWNS//
-			//get clients for form dropdown
-			$activityCodeUrl = "activity-code%2Fget-code-dropdowns";
-			$activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
-			$activityCode = json_decode($activityCodeResponse, true);
-
-			$activityPayCodeUrl = "pay-code%2Fget-code-dropdowns";
-			$activityPayCodeResponse = Parent::executeGetRequest($activityPayCodeUrl);
-			$activityPayCode = json_decode($activityPayCodeResponse, true);
-
-			if ($timeEntryModel->load(Yii::$app->request->post()) && $activityModel->load(Yii::$app->request->post())
-				&& $timeEntryModel->validate() && $activityModel->validate())
-			{
-				//create timeEntryTitle variable
-				$timeEntryTitle = "timeEntry";
-				// concatenate start time
-				$TimeEntryStartTimeConcatenate = new DateTime($TimeEntryDate . $timeEntryModel->TimeEntryStartTime);
-				$TimeEntryStartTimeConcatenate = $TimeEntryStartTimeConcatenate->format('Y-m-d H:i:s');
-
-				// concatenate end time
-				$TimeEntryEndTimeConcatenate = new DateTime($TimeEntryDate . $timeEntryModel->TimeEntryEndTime);
-				$TimeEntryEndTimeConcatenate = $TimeEntryEndTimeConcatenate->format('Y-m-d H:i:s');
-
-				// check user input validate startTime and endTime
-				$CheckStartTime = $TimeEntryStartTimeConcatenate;
-				$CheckEndTime = $TimeEntryEndTimeConcatenate;
-				$startTimeObj = new DateTime($CheckStartTime);
-				$endTimeObj = new DateTime($CheckEndTime);
-				//$interval = $datetimeObj1->diff($datetimeObj2);
-				//$dateTimeDiff = $interval->format('%R%a');
-
-				$time_entry_data[] = array(
-					'TimeEntryStartTime' => $TimeEntryStartTimeConcatenate,
-					'TimeEntryEndTime' => $TimeEntryEndTimeConcatenate,
-					'TimeEntryModifiedDate' => $timeEntryModel->TimeEntryModifiedDate,
-					'TimeEntryUserID' => $TimeCardTechID,
-					'TimeEntryTimeCardID' => $id,
-					'TimeEntryActivityID' => $timeEntryModel->TimeEntryActivityID,
-					'TimeEntryComment' => $timeEntryModel->TimeEntryComment,
-					'TimeEntryModifiedBy' => $timeEntryModel->TimeEntryModifiedBy,
-				);
-
-				// check difference between startTime and endTime
-				if ($endTimeObj > $startTimeObj) {
-					$mileage_entry_data = array();
-					$data[] = array(
-						'ActivityUID' => BaseController::generateUID($timeEntryTitle),
-						'ActivityTitle' => $timeEntryTitle,
-						'ActivityCreatedBy' => Yii::$app->session['userID'],
-						'ActivityPayCode' => $activityModel->ActivityPayCode,
-						'ActivityCode' => $activityModel->ActivityCode,
-						'timeEntry' => $time_entry_data,
-						'mileageEntry' => $mileage_entry_data,
-					);
-
-					$activity = array(
-						'activity' => $data,
-					);
-
-					$json_data = json_encode($activity);
-
-					try {
-						// post url
-						$url_send_activity = 'activity%2Fcreate';
-						$response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
-						$obj = json_decode($response_activity, true);
-
-                        /*return $this->renderAjax('view',[
-                            //'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"]
-                        ]);*/
-
-						return $this->redirect(['view', 'id' => $obj["activity"][0]["timeEntry"][0]["TimeEntryTimeCardID"], 'AjaxRender' => true]);
-					} catch (\Exception $e) {
-
-						$concatenate_id = $id . "yes";
-						return $this->redirect(['view', 'id' => $concatenate_id]);
-					}
-				} else {
-					return $this->redirect(['view', 'id' => $id]);
-				}
-			} else {
-				return $this->render('create_time_entry', [
-					'model' => $timeEntryModel,
-					'activityCode' => $activityCode,
-					'activityPayCode' => $activityPayCode,
-					'activityModel' => $activityModel,
-				]);
-			}
-		} catch (ErrorException $e) {
-			throw new \yii\web\HttpException(400);
-		}
-	}
-
+	
     /**
      * Approve an existing TimeEntry.
      * If approve is successful, the browser will be redirected to the 'view' page.
@@ -767,25 +519,17 @@ class TimeCardController extends BaseController
      *
      */
 	public function actionDeactivate(){
-
+		try{
+			$data = Yii::$app->request->post();	
+			$jsonData = json_encode($data);
 			
-			try{
-
-				$data 			= Yii::$app->request->post();	
-
-				$json_data 		= json_encode($data['entries']);
-				
-				// post url
-				$putUrl 		= 'time-entry%2Fdeactivate';
-				$putResponse 	= Parent::executePutRequest($putUrl, $json_data,Constants::API_VERSION_2); // indirect rbac
-				$obj 			= json_decode($putResponse, true);
-
-		
-				
-			}catch(ErrorException $e){
-				throw new \yii\web\HttpException(400);
-			}
-		
+			// post url
+			$putUrl = 'time-entry%2Fdeactivate';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_2); // indirect rbac
+			$obj = json_decode($putResponse, true);	
+		}catch(ErrorException $e){
+			throw new \yii\web\HttpException(400);
+		}
 	}
 
     /**
@@ -831,7 +575,6 @@ class TimeCardController extends BaseController
 		}
 	}
 
-
     public function actionAjaxProcessCometTrackerFiles()
 	{
         try{
@@ -868,26 +611,7 @@ class TimeCardController extends BaseController
 			return json_encode($response);
         }
     }
-
-    /**
-     * Export TimeCard Table To Excel File
-     * @param $url
-	 * does not appear to be used.
-     */
-    public function requestAndOutputCsv($url){
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $fp = fopen('php://temp','w');
-        header('Content-Type: text/csv;charset=UTF-8');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
-        rewind($fp);
-        echo stream_get_contents($fp);
-        fclose($fp);
-    }
-
- 
-
+	
     /**
      * Process Date Range Data
      * @param $dateRange
@@ -905,7 +629,7 @@ class TimeCardController extends BaseController
         return $dateData;
     }
 
-    	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
+	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
 	private function calcInOvertime($entriesArray)
 	{
 		define('FIRST_ENTRY_ROW',1);
@@ -930,7 +654,6 @@ class TimeCardController extends BaseController
 		
 		return $totalHours >= 40 ? 'true' : 'false';
 	}
-
 
 	/**
      * Collect all time card ids
