@@ -157,6 +157,7 @@ function applyTimeCardSubmitButtonListener() {
                     } else {
 
                          $.ctGrowl.msg(data.message,'Error','bg-danger');
+                         $('#loading').hide();
                     }
                     
 

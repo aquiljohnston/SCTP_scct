@@ -36,8 +36,6 @@ $(function(){
         return false;
     });
 
-
-
      $(document).off('change', '#projectFilterDD').on('change', '#projectFilterDD', function (event) {
         reloadTimeCardGridView();
         event.preventDefault();
@@ -73,122 +71,6 @@ $(function(){
         reloadTimeCardGridView();
     });
 
-    $(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEntries tbody tr td',function (){
-      
-      seq_num       =$(this).attr('data-col-seq');
-      id            = $('#timeCardId').val();  
-      date          = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text(); 
-      taskName      = $(this).closest('tr').find("td[data-col-seq='0']").text();
-      //approve_status= $()   
-      var entries   = []; 
-      //clean up date format for sending
-      date = date.replace(/\-/g, '/');
-
-      //restrict click to only day of the week fields
-      //with values in the .text()
-      if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") 
-        && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
-
-     // var confirmBox = confirm('Are you sure you want to deactivate this time entry for '+date+'?');
-
-        krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
-        krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
-        
-        if (resp) {
-        $('#loading').show();
-        //build and send payload to deactivate single entry
-        entries.push({taskName : taskName, day : date, timeCardID : id})
-        data = {entries};
-        $.ajax({
-            type: 'POST',
-            url: '/time-card/deactivate/',
-            data: data,
-            beforeSend: function() {
-            },
-            success: function(data) {
-                $.pjax.reload({container:"#ShowEntriesView", timeout: 99999}).done(function (){
-                    applyToolTip();
-                    $('#loading').hide();
-                });
-            }
-        });
-                
-        } else {
-              // return false;
-        }  
-    })
-            $('#loading').hide();
-      }
-    });
-
-    function reloadShowEntriesView(){
-        $.pjax.reload({container:"#ShowEntriesView", timeout: 99999})
-    }
-
-
-    //iterate table row get row that has time entrydata
-	$(document).on('change','.entryData', function (e) {
-
-		tr    = $(this).closest('tr')
-		input = $(this);
-
-		if($(this).is(":checked")){
-			tr.find('td').each(function(index,value){
-			  if(index != 0 && $(this).text()!=""){
-
-				 th_class = $(this).closest('table').find('th').eq(index).attr('class');
-
-				}
-
-			})
-			 input.attr('entry',th_class);
-		}
-		checkDeactivateBtn();
-	})
-
-	function checkDeactivateBtn(){
-
-	  if ($("#allTaskEntries-container input:checkbox:checked").length > 0){
-		 disableButton = $("#disable_single_approve_btn_id_timecard").prop("disabled");
-		 if(!disableButton){
-			$('#deactive_timeEntry_btn_id').prop('disabled',false);
-		 }
-			
-	  }
-	  else{
-			$('#deactive_timeEntry_btn_id').prop('disabled',true);
-		}
-	}
-
-
-   $('#enable_single_approve_btn_id_timecard').click(function (e) {
-        var timeCardId = $('#timeCardId').val();
-        krajeeDialog.defaults.confirm.title = 'Approve';
-        krajeeDialog.confirm('Are you sure you want to approve this?', function (resp) {
-        
-        if (resp) {
-
-            $('#loading').show();
-
-            $.ajax({
-                type: 'POST',
-                url: '/time-card/approve?id='+timeCardId,
-                success: function(data) {
-                 //$.pjax.reload({container:"#allTheButtons", timeout: 99999}); //for pjax update
-                $('#deactive_timeEntry_btn_id').prop('disabled',true);
-                $('#enable_single_approve_btn_id_timecard').addClass('disabled');
-				$('#add_task_btn_id').prop('disabled',true);
-                $('#loading').hide();
-            }
-            });
-        } else {
-            
-        }
-    })
-
-       
-    });
-
 	//function called when other is selected in week dropdown to reset widget to default
 	function resetDatePicker(){
 		//get date picker object
@@ -222,15 +104,6 @@ $(function(){
 		datePicker.setEndDate(to);
 	}
 	
-    function applyToolTip(){
-        console.log('called')
-
-    $.each($('#allTaskEntries tbody tr td'),function(index,value){
-        if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)){
-            $(this).attr("title","Click to deactivate this time entry!")
-              }
-         })
-    }
 	
 });
 
@@ -243,14 +116,6 @@ $(function(){
     if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
       $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
     }
-
-    //add tool tip to all time deactivatable time entries    
-   $.each($('#allTaskEntries tbody tr td'),function(index,value){
-         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0) 
-            && (!$('#disable_single_approve_btn_id_timecard').length > 0)){
-           $(this).attr("title","Click to deactivate this time entry!")
-         }
-    })
 });
 
 //reload table

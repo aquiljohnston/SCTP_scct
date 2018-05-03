@@ -516,6 +516,8 @@ class ProjectController extends BaseController
             $unassignedData 	= $users['unassignedUsers'];
             $assignedData 		= $users['assignedUsers'];
 
+            //var_dump($users);exit();
+
 
             
 
@@ -619,7 +621,7 @@ class ProjectController extends BaseController
 			$postResponse 				= Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
             //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
 			//refresh page
-			return $this->redirect(['add-user', 'id' 					=> $project->ProjectID]);
+			//return $this->redirect(['add-user', 'id' 					=> $project->ProjectID]);
 		}else{
             return $this->render('add_user', [
                                             'project' 					=> $project,

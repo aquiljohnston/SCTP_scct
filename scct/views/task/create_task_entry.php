@@ -23,7 +23,6 @@ if($allTask != null)
 				'SundayDate' => $SundayDate,
 				'SaturdayDate' => $SaturdayDate
 			]);
-	Yii::trace($body);
 }	
 else
 {
