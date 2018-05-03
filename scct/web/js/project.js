@@ -1,10 +1,8 @@
 //Taken from commit a09e6b8d7fed3035d888ade56ffd0e1a623f4c00 on PGE-Web
 $(function(){	
 
-    unAssignedUsersArray = [];
-    assignedUsersArray   = [];
-    unassignedTagCloud   = {};
-    assignedTagCloud     = {};
+    unassignedTagCloud = {};
+    assignedTagCloud = {};
 
 	var environment = getSubDomainEnvironment();
 	
@@ -20,12 +18,11 @@ $(function(){
 	});
 	
     $('#projectAddUserSubmitBtn').on('click',function(){
-        $(this).val('Please wait ...')
-            .attr('disabled','disabled');
+        $(this).val('Please wait ...').attr('disabled','disabled');
         $('#projectAddUserResetBtn').attr('disabled','disabled');
         addRemoveUser();
-        //$('#projectSortableInputForm').submit();
     });
+	
     $('#projectAddModuleSubmitBtn').on('click',function(){
         $(this).val('Please wait ...')
             .attr('disabled','disabled');
@@ -34,38 +31,29 @@ $(function(){
     });
 
     // project filter listener
-     $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
-         if (e.keyCode === 13 || e.keyCode === 10) {
-             e.preventDefault();
-             projectGridViewReload();
-         }
-     });
+    $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+            projectGridViewReload();
+        }
+    });
 
-     // projectFilterAssigned filter listener
-     $(document).off('keypress', '#projectFilterAssigned').on('keypress', '#projectFilterAssigned', function (e) {
-         if (e.keyCode === 13 || e.keyCode === 10) {
-             e.preventDefault();
-             projectGridViewAssignedReload();
-         }
-     });
+    // projectFilterAssigned filter listener
+    $(document).off('keypress', '#projectFilterAssigned').on('keypress', '#projectFilterAssigned', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+            projectGridViewAssignedReload();
+        }
+    });
 
     $(document).off('click', '#projectSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton', function (){
         a = $('#projectFilter');
-        //u = $('.projectFilterAssigned')
-         
-        /*if(u.val()!=""){
-              //clear input and trigger keypress on the input to only refresh the connected gridview
-              //not both grid views
-              u.val(""); 
-              projectGridViewReload()
-         
-        }*/
-         if(a.val()!=""){
-              //clear input and trigger keypress on the input to only refresh the connected gridview
-              //not both grid views
-              a.val(""); 
-              projectGridViewReload()
-     
+		
+        if(a.val()!=""){
+            //clear input and trigger keypress on the input to only refresh the connected gridview
+            //not both grid views
+            a.val(""); 
+            projectGridViewReload();     
         }
     });
 
@@ -78,266 +66,219 @@ $(function(){
               //not both grid views
               u.val(""); 
               projectGridViewAssignedReload()
-     
         }
     });
 
+	//move unassigned to the assigned table
+	$(document).on('change','.moveToAssigned', function (e) {
 
-///move unassigned to the assigned table
-$(document).on('change','.moveToAssigned', function (e) {
+		username = $(this).closest('tr').find('td').eq(0).text();
+		userid = $(this).attr('userid'); 
 
-    username  = $(this).closest('tr').find('td').eq(0).text();
-    userid    = $(this).attr('userid'); 
+		if($(this).is(":checked")){
 
-    if($(this).is(":checked")){
+			if(jQuery.inArray(userid,assignedTagCloud)){
+				$("#"+userid+"_uCloud").remove();
+				toggleCloudVisibility('unassignedTagCloud');
+			}
 
-      if(jQuery.inArray(userid,assignedTagCloud)){
+			//change classname for the return trip
+			$(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
+			var row = $(this).closest('tr').html();
+			$('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+			$(this).closest('tr').remove();
 
-        $("#"+userid+"_uCloud").remove();
+			addToAssignedTagCloud(userid,username);
 
-        toggleCloudVisibility('unassignedTagCloud');
-          
-      }
+			toggleCloudVisibility('assignedTagCloud');
 
+			$("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
+		}
+	});
 
+	//move assigned to the unassigned table
+	$(document).on('change','.moveToUnAssigned', function (e) {
 
+		username = $(this).closest('tr').find('td').eq(0).text();
+		userid = $(this).attr('userid'); 
 
-     //change classname for the return trip
-     $(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
-     var row = $(this).closest('tr').html();
-     $('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
-     $(this).closest('tr').remove();
+		if($(this).is(":checked")){
 
-     addToAssignedTagCloud(userid,username);
+			if(jQuery.inArray(userid,unassignedTagCloud)){
+				$("#"+userid+"_aCloud").remove();
+				toggleCloudVisibility('assignedTagCloud');
+			}
 
-     toggleCloudVisibility('assignedTagCloud');
+			//change classname for the return trip
+			$(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
+			var row = $(this).closest('tr').html();
+			$('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
+			$(this).closest('tr').remove();
+		
+			addToUnssignedTagCloud(userid,username);
 
-     $("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
+			toggleCloudVisibility('unassignedTagCloud');
 
+			$("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
+		}
+	});
 
-    }
-});
+	$(document).on('click','#projectAddUserResetBtn',function(e){
 
-//move assigned to the unassigned table
-$(document).on('change','.moveToUnAssigned', function (e) {
+		$('#projectFilter').val("");
+		$('#projectFilterAssigned').val("");
+		$('#unassignedTagCloud').html("");
+		$('#unassignedTagCloud').css({"display":"none"})
+		$('#assignedTagCloud').html("");
+		$('#assignedTagCloud').css({"display":"none"})
 
-    username  = $(this).closest('tr').find('td').eq(0).text();
-    userid    = $(this).attr('userid'); 
+		//add boolean flag means to refresh both grid views
+		//if true will call both reload routines in succession
+		//if not only one grid view will refresh
+		projectGridViewReload(true);
+	})
 
-    if($(this).is(":checked")){
-
-      if(jQuery.inArray(userid,unassignedTagCloud)){
-
-        $("#"+userid+"_aCloud").remove();
-        toggleCloudVisibility('assignedTagCloud');
-
-        //console.log("#"+userid+"_uCloud");
-          
-      }
-
-    //change classname for the return trip
-     $(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
-     var row = $(this).closest('tr').html();
-     $('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
-     $(this).closest('tr').remove();
-    
-    addToUnssignedTagCloud(userid,username);
-
-     toggleCloudVisibility('unassignedTagCloud');
-
-     $("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
-
-    }
-   
-});
-
-$(document).on('click','#projectAddUserResetBtn',function(e){
-
-    $('#projectFilter').val("");
-    $('.projectFilterAssigned').val("");
-    $('#unassignedTagCloud').html("");
-    $('#unassignedTagCloud').css({"display":"none"})
-    $('#assignedTagCloud').html("");
-    $('#assignedTagCloud').css({"display":"none"})
-
-    //add boolean flag means to refresh both grid views
-    //if true will call both reload routines in succession
-    //if not only one grid view will refresh
-    projectGridViewReload(true);
-
-})
-
-
-
-
-function toggleCloudVisibility(cloud){
-
-  if ( $('#'+cloud).children().length > 0 ) {
-    
-    $('#'+cloud).css({"display":"block"})
-
-    //console.log($('#'+cloud).children().length);
-
-  }
-
-  else{
-    $('#'+cloud).css({"display":"none"});
-    //console.log('ELSE',$('#'+cloud).children().length);
-    //console.log('Assign',$('#'+cloud));
-  }
-}
-
-function addToAssignedTagCloud(key,value){
-
-
-      tag = "<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>";
-
-      if(!$("#"+key+"_aCloud").length > 0){
-        if(!unassignedTagCloud[key]){
-        $('#assignedTagCloud').append(tag);
-        assignedTagCloud[key] = tag;
-      }
-    }
-
-}
-
-function addToUnssignedTagCloud(key,value){
-
-      tag = "<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>";
-
-      if(!$("#"+key+"_uCloud").length > 0){
-        if(!assignedTagCloud[key]){
-         $('#unassignedTagCloud').append(tag);
-          unassignedTagCloud[key] = tag;
-        }
- 
-    }
-
-}
-
-
-function getSubDomainEnvironment() {
-	//get environment variable
-	var urlPrefix = location.hostname.split( '.' )[0];
-	var environment = "";
-	
-	if (urlPrefix.indexOf("dev") >= 0 || urlPrefix.indexOf("localhost") >= 0){
-		environment = "dev";
+	function toggleCloudVisibility(cloud){
+		if ( $('#'+cloud).children().length > 0 ) {
+			$('#'+cloud).css({"display":"block"})
+		}
+		else{
+			$('#'+cloud).css({"display":"none"});
+		}
 	}
-	if (urlPrefix.indexOf("stage") >= 0){
-		environment = "stage";
+
+	function addToAssignedTagCloud(key,value){
+		tag = "<span id='"+key+"_aCloud' class='roundedTagSpan'>"+value+"</span>";
+
+		if(!$("#"+key+"_aCloud").length > 0){
+			if(!unassignedTagCloud[key]){
+				$('#assignedTagCloud').append(tag);
+				assignedTagCloud[key] = tag;
+			}
+		}
 	}
-	
-	return environment;
-}
 
-function reloadProjectGridView() {
-    var jqProjectAddUser = $('.project-add-user');
-    var form = jqProjectAddUser.find("#projectAdduserform");
-    if (form.find(".has-error").length) {
-        return false;
-    }
-    $('#loading').show();
-    $.pjax.reload({
-        type: 'GET',
-        url: '/project/add-user',
-        container: '#projectSortableView', // id to update content
-        data: form.serialize(),
-        timeout: 99999
-    }).done(function () {
-        $('#loading').hide();
-    });
-}
+	function addToUnssignedTagCloud(key,value){
+		tag = "<span id='"+key+"_uCloud' class='roundedTagSpan'>"+value+"</span>";
 
-function addRemoveUser() {
-    var jqProjectAddUser    = $('.project-add-user');
-    var form                = jqProjectAddUser.find("#projectSortableInputForm");
-    var projectID           = $('#projectID').val();
-    var unassignedVals      = [];
-    var assignedVals        = [];
-   // var csrf_param          = $("meta[name=csrf-param]");   
-    //var csrf_token          = $("meta[name=csrf-token]");
+		if(!$("#"+key+"_uCloud").length > 0){
+			if(!assignedTagCloud[key]){
+				$('#unassignedTagCloud').append(tag);
+				unassignedTagCloud[key] = tag;
+			}
+		}
+	}
 
+	function getSubDomainEnvironment() {
+		//get environment variable
+		var urlPrefix = location.hostname.split( '.' )[0];
+		var environment = "";
+		
+		if (urlPrefix.indexOf("dev") >= 0 || urlPrefix.indexOf("localhost") >= 0){
+			environment = "dev";
+		}
+		if (urlPrefix.indexOf("stage") >= 0){
+			environment = "stage";
+		}
+		return environment;
+	}
 
+	function reloadProjectGridView() {
+		var jqProjectAddUser = $('.project-add-user');
+		var form = jqProjectAddUser.find("#projectAdduserform");
+		if (form.find(".has-error").length) {
+			return false;
+		}
+		$('#loading').show();
+		$.pjax.reload({
+			type: 'GET',
+			url: '/project/add-user',
+			container: '#projectSortableView', // id to update content
+			data: form.serialize(),
+			timeout: 99999
+		}).done(function () {
+			$('#loading').hide();
+		});
+	}
 
-    if (form.find(".has-error").length) {
-        return false;
-    }
+	function addRemoveUser() {
+		var jqProjectAddUser = $('.project-add-user');
+		var form = jqProjectAddUser.find("#projectSortableInputForm");
+		var projectID = $('#projectID').val();
+		var unassignedVals = [];
+		var assignedVals = [];
 
-     //populate unassigned userid values
-    $(".moveToAssigned").each(function(key,value){unassignedVals.push($(this).val());})
-     //unAssignedUsersArray.push({unassignedVals});
+		if (form.find(".has-error").length) {
+			return false;
+		}
 
-    //populate assigned userid values
-    $(".moveToUnAssigned").each(function(key,value){assignedVals.push($(this).val());})
-      //assignedUsersArray.push({assignedVals});
+		//populate unassigned userid values
+		$(".moveToAssigned").each(function(key,value){unassignedVals.push($(this).val());})
 
-    data = {
-        assignedUsers:assignedVals.join(','),
-        unassignedUsers:unassignedVals.join(','),
-        projectID: projectID
-    }
+		//populate assigned userid values
+		$(".moveToUnAssigned").each(function(key,value){assignedVals.push($(this).val());})
 
-   console.log('DATA',data);
+		data = {
+			assignedUsers:assignedVals.join(','),
+			unassignedUsers:unassignedVals.join(','),
+			projectID: projectID
+		}
 
-    //return false;
+		console.log('DATA ' + JSON.stringify(data));
+		
+		$('#loading').show();
+		$.ajax({
+			type: 'POST',
+			url: '/project/add-user',
+			data: data,
+			timeout: 99999
+		}).done(function () {
+			//reset both buttons
+			$('#projectAddUserSubmitBtn').attr('disabled', false);
+			$('#projectAddUserResetBtn').attr('disabled', false);
+			//reset 'cloud' data
+			$('#assignedTagCloud').html("");
+			$('#assignedTagCloud').css({"display":"none"})
+			$('#unassignedTagCloud').html("");
+			$('#unassignedTagCloud').css({"display":"none"})
+			unassignedTagCloud = {};
+			assignedTagCloud = {};
+			//reload both tables
+			projectGridViewReload(true);
+		});
+	}
 
+	function projectGridViewReload(both=false) {
+		var form = $("#projectForm");
+		$('#loading').show();
+		$.pjax.reload({
+			container: "#projectGridView",
+			timeout: 99999,
+			url: form.attr("action"),
+			type: "GET",
+			data: form.serialize()
+		}).done(function () {
+			//special condition for reset button
+			if(both){
+				projectGridViewAssignedReload();
+			}else{
+				$('#loading').hide();
+			}
+		});
+	}
 
-    $('#loading').show();
-    $.ajax({
-        type: 'POST',
-        url: '/project/add-user',
-        //container: '#projectSortableView', // id to update content
-        data: data,
-        timeout: 99999
-    }).done(function () {
-        $('#loading').hide();
-        /*var jqProjectAddUser = $('.project-add-user');
-        var form = jqProjectAddUser.find("#projectAdduserform");
-        $.pjax.reload({
-            type: 'GET',
-            url: '/project/add-user',
-            container: '#projectSortableView', // id to update content
-            data: form.serialize(),
-            timeout: 99999
-        }).done(function () {
-            $('#loading').hide();
-        });*/
-    });
-}
-
-function projectGridViewReload(both=false) {
-    var form = $("#projectForm");
-    $('#loading').show();
-    $.pjax.reload({
-        container: "#projectGridView",
-        timeout: 99999,
-        url: form.attr("action"),
-        type: "GET",
-        data: form.serialize()
-    }).done(function () {
-        $('#loading').hide();
-        //special condition for reset button
-        if(both){
-          projectGridViewAssignedReload();
-        }
-    });
-}
-
-function projectGridViewAssignedReload() {
-    var form = $("#projectForm");
-    $('#loading').show();
-    $.pjax.reload({
-        container: "#projectGridViewAssigned",
-        timeout: 99999,
-        url: form.attr("action"),
-        type: "GET",
-        data: form.serialize()
-    }).done(function () {
-        $('#loading').hide();
-    });
-}
-
-
+	function projectGridViewAssignedReload() {
+		var form = $("#projectForm");
+		$('#loading').show();
+		$.pjax.reload({
+			container: "#projectGridViewAssigned",
+			timeout: 99999,
+			url: form.attr("action"),
+			type: "GET",
+			data: form.serialize()
+		}).done(function () {
+			$('#loading').hide();
+		});
+	}
 });
 

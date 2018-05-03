@@ -86,14 +86,8 @@ $(document).ready(function () {
                     checkNavBarLoading();
                 },
                 error: function () {
-                    //TODO: handle error
-                    if(ajaxNavBarTries <= 4) {
-                        setTimeout ( ajaxLoadNavBar, $.ajaxSetup().retryAfter );
-                        ajaxNavBarTries++;
-                    } else {
-                        $('#loading').hide();
-                        $('#nav').html("<div class='alert alert-warning'>We were unable to load the menu. Please logout and try again or call support.</div>");
-                    }
+					$('#loading').hide();
+					$('#nav').html("<div class='alert alert-warning'>We were unable to load the menu. Please logout and try again or call support.</div>");
                     console.error("Menu not loaded. Inspect the request for more info.");
                 }
             });

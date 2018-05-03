@@ -33,7 +33,6 @@ div.inline { float:left; }
                 'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
                 'options' => ['id' => 'projectForm']
             ]); ?>
-
      
             <div id="unassignedFilter" class="col-sm-2" style = "">
                  <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>  
@@ -43,123 +42,91 @@ div.inline { float:left; }
                 <img id="projectSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div> 
 
-
             <div class="col-sm-3" >
-                  
-            <span id="unassignedTagCloud" style="display: none;" class="tagCloud"></span>
+                  <span id="unassignedTagCloud" style="display: none;" class="tagCloud"></span>
             </div>
-    
 
             <div class="col-sm-2" id="assignedFilter" style = "">
                 <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilterAssigned', 'style' =>'width:auto'])->label('Search'); ?>       
             </div>
 
-             <div class="col-sm-1">
+            <div class="col-sm-1">
                  <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div>
 
-              <div class="col-sm-3" >
-                
-            <span id="assignedTagCloud" style="display: none;" class="tagCloud"></span>
+			<div class="col-sm-3" >
+				<span id="assignedTagCloud" style="display: none;" class="tagCloud"></span>
             </div>
             <br>
-   
     <?php ActiveForm::end(); ?>
 	</div>
-   
 
-		<div class="row">
-     <?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
-		<div id="unassignedTable">
-        <div id="unassignedTableGrid">
-   			<div class="col-sm-6">
-            <?= GridView::widget([
-                'id' 						=> 'unAssignedGV',
-                'dataProvider' 				=> $dataProviderUnassigned,
-                'export' 					=> false,
-                'pjax' 						=> false,
-                'floatHeader' 				=> true,
-                'summary' 					=> '',
-                'floatOverflowContainer' 	=> true,
-                'columns' => [
+	<div class="row">
+		<?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
+			<div class="col-sm-6">
+				<?= GridView::widget([
+					'id' => 'unAssignedGV',
+					'dataProvider' => $dataProviderUnassigned,
+					'export' => false,
+					'pjax' => false,
+					'floatHeader' => true,
+					'summary' => '',
+					'floatOverflowContainer' => true,
+					'columns' => [
+						[
+							'label' => 'Name',
+							'attribute' => 'content',
+						],
+						[
+							'header' => 'Assign User',
+							'class' => 'kartik\grid\CheckboxColumn',
+							'contentOptions' => [],
+							'checkboxOptions' => function ($model, $key, $index, $column) {
+								return ['userID' => $key,'disabled' => false,'class' => 'moveToAssigned'];
+							}
+						]
+					]
+				]); ?>
 
-                    [
-                        'label' 	=> 'Name',
-                        'attribute' => 'content',
-                    ],
-                    [
-                        'header' 			=> 'Assign User',
-                        'class' 			=> 'kartik\grid\CheckboxColumn',
-                        'contentOptions' 	=> [],
-                        'checkboxOptions' 	=> function ($model, $key, $index, $column) {
-
-                            return ['userID' => $key,'disabled' => false,'class' => 'moveToAssigned'];
-                        }
-                    ]
-                ]
-
-            ]  
-            
-              ); ?>
-        <div class="">
-
-        <?php echo "<b>Showing " . ($unassignedPagination->getOffset() + 1) . " to " .($unassignedPagination->getOffset() + $unassignedPagination->getPageSize()) . " of " . $unassignedPagination->totalCount . " entries</b>"
-        //var_dump($unassignedPagination); ?>
-            </div>
-          </div>
-
-        </div>
-     
-    </div>
-        <input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
-<?php Pjax::end() ?>
-<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
-    	   <div id="assignedTable">
-        <div id="assignedTableGrid">
-   			<div class="col-sm-6">
-            <?= GridView::widget([
-                'id' 				=> 'assignedGV',
-                'dataProvider' 		=> $dataProviderAssigned,
-                'export' 			=> false,
-                'pjax' 				=> false,
-                'floatHeader' 		=> true,
-                'summary' 			=> '',
-                'columns' 			=> [
-
-                    [
-                        'label' 	=> 'Name',
-                        'attribute' => 'content',
-                    ],
-                    [
-                        'header' 	=> 'Unassign User',
-                        'class' 	=> 'kartik\grid\CheckboxColumn',
-                        'contentOptions' => [],
-                        'checkboxOptions' => function ($model, $key, $index, $column) {
-
-                            return ['userID' => $key,'disabled' => false,'class' => 'moveToUnAssigned'];
-                        }
-                    ]
-                ],
-                'floatOverflowContainer' => true,
-            ]); ?>
-            <br>
-              <div class="">
-
-        <?php echo "<b>"."Showing " . ($assignedPagination->getOffset() + 1) . " to " .($assignedPagination->getOffset() + $assignedPagination->getPageSize()) . " of " . $assignedPagination->totalCount . " entries</b>"
-        //var_dump($unassignedPagination); ?>
-            </div>
-          </div>
-      
-          </div>
-        </div>
-    </div>
-
-
-
-
-		</div>
-		<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
-    <?php Pjax::end() ?>
+				<div>
+					<?php echo "<b>Showing " . ($unassignedPagination->getOffset() + 1) . " to " .($unassignedPagination->getOffset() + $unassignedPagination->getPageSize()) . " of " . $unassignedPagination->totalCount . " entries</b>" ?>
+				</div>
+			</div>
+			<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
+		<?php Pjax::end() ?>
+		<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
+			<div class="col-sm-6">
+				<?= GridView::widget([
+					'id' => 'assignedGV',
+					'dataProvider' => $dataProviderAssigned,
+					'export' => false,
+					'pjax' => false,
+					'floatHeader' => true,
+					'summary' => '',
+					'columns' => [
+						[
+							'label' => 'Name',
+							'attribute' => 'content',
+						],
+						[
+							'header' => 'Unassign User',
+							'class' => 'kartik\grid\CheckboxColumn',
+							'contentOptions' => [],
+							'checkboxOptions' => function ($model, $key, $index, $column) {
+								return ['userID' => $key,'disabled' => false,'class' => 'moveToUnAssigned'];
+							}
+						]
+					],
+					'floatOverflowContainer' => true,
+				]); ?>
+				<br>
+				<div>
+					<?php echo "<b>"."Showing " . ($assignedPagination->getOffset() + 1) . " to " .($assignedPagination->getOffset() + $assignedPagination->getPageSize()) . " of " . $assignedPagination->totalCount . " entries</b>" ?>
+				</div>
+			</div>
+			<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
+		<?php Pjax::end() ?>
+	</div>
 	<div class="form-group">
 		<?= Html::Button( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
 		<?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>
