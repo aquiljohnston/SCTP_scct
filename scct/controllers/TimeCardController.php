@@ -54,7 +54,9 @@ class TimeCardController extends BaseController
             //create curl for restful call.
             //check user role
             $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
-
+			$accountingSubmitReady = FALSE;
+			$pmSubmitReady = FALSE;
+			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
             // Store start/end date data
             $dateData = [];
             $startDate = null;
@@ -131,31 +133,21 @@ class TimeCardController extends BaseController
 
 			//url encode filter
 			$encodedFilter = urlencode($model->filter);
-			
+			//build params
+			$httpQuery = http_build_query([
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+				'listPerPage' => $model->pageSize,
+				'page' => $page,
+				'filter' => $encodedFilter,
+				'projectID' => $model->projectName,
+			]);
+			// set url
 			if($isAccountant)
-			{
-				//build url with params
-				$url = 'time-card%2Fget-accountant-view&' . http_build_query([
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-					'listPerPage' => $model->pageSize,
-					'page' => $page,
-					'filter' => $encodedFilter,
-					'projectID' => $model->projectName,
-				]);
-			}
+				$url = 'time-card%2Fget-accountant-view&' . $httpQuery;
 			else
-			{
-				//build url with params
-				$url = 'time-card%2Fget-cards&' . http_build_query([
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-					'listPerPage' => $model->pageSize,
-					'page' => $page,
-					'filter' => $encodedFilter,
-					'projectID' => $model->projectName,
-				]);
-			}
+				$url = 'time-card%2Fget-cards&' . $httpQuery;
+
 			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             $response 				        = json_decode($response, true);
             $assets 				        = $response['assets'];
@@ -181,6 +173,7 @@ class TimeCardController extends BaseController
 				'ProjectName' => [$model->projectName],
 				'StartDate' => $startDate,
 				'EndDate' => $endDate,
+				'isAccountant' => $isAccountant
 			);
 			$json_data = json_encode($submitCheckData);
 
@@ -188,7 +181,10 @@ class TimeCardController extends BaseController
 			$submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
 			$submit_button_ready = json_decode($submit_button_ready_response, true);
 			// get submit button status
-			$submitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
+			if($isAccountant)
+				$accountingSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
+			else
+				$pmSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
 
             // passing decode data into dataProvider
             $dataProvider 		= new ArrayDataProvider
@@ -202,82 +198,51 @@ class TimeCardController extends BaseController
 						'EndDate' => $assets['EndDate'],
 					);
 				},
+				'sort' => [
+					'attributes' => [
+						'UserFullName',
+						'UserLastName',
+						'ProjectName' => [
+							'asc' => ['ProjectName' => SORT_ASC],
+							'desc' => ['ProjectName' => SORT_DESC],
+							'default' => SORT_ASC
+						],
+						'TimeCardDates',
+						'TimeCardOasisSubmitted',
+						'TimeCardQBSubmitted',
+						'SumHours',
+						'TimeCardApprovedFlag'
+					]
+				]
 			]);
 			
-			if($isAccountant)
-			{
+			if($isAccountant) {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
 					'attributes' => [
-						'ProjectName' => [
-							'asc' => ['ProjectName' => SORT_ASC],
-							'desc' => ['ProjectName' => SORT_DESC]
-						],
-						'ProjectManager' => [
-							'asc' => ['ProjectManager' => SORT_ASC],
-							'desc' => ['ProjectManager' => SORT_DESC]
-						],
-						'StartDate' => [
-							'asc' => ['StartDate' => SORT_ASC],
-							'desc' => ['StartDate' => SORT_DESC]
-						],
+						'ProjectName',
+						'ProjectManager',
+						'StartDate' ,
 						'EndDate',
-						'ApprovedBy' => [
-							'asc' => ['ApprovedBy' => SORT_ASC],
-							'desc' => ['ApprovedBy' => SORT_DESC]
-						],
-						'OasisSubmitted' => [
-							'asc' => ['OasisSubmitted' => SORT_ASC],
-							'desc' => ['OasisSubmitted' => SORT_DESC]
-						],
-						'QBSubmitted' => [
-							'asc' => ['QBSubmitted' => SORT_ASC],
-							'desc' => ['QBSubmitted' => SORT_DESC]
-						],
+						'ApprovedBy',
+						'OasisSubmitted',
+						'QBSubmitted',
 						'ADPSubmitted' => [
-							'asc' => ['ADPSubmitted' => SORT_ASC],
-							'desc' => ['ADPSubmitted' => SORT_DESC]
-						],
+							'default' => SORT_ASC
+						]
 					]
 				];
-			}
-			else
-			{
+			} else {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
 					'attributes' => [
-						'UserFullName' => [
-							'asc' => ['UserFullName' => SORT_ASC],
-							'desc' => ['UserFullName' => SORT_DESC]
-						],
-						'UserLastName' => [
-							'asc' => ['UserLastName' => SORT_ASC],
-							'desc' => ['UserLastName' => SORT_DESC]
-						],
-						'ProjectName' => [
-							'asc' => ['ProjectName' => SORT_ASC],
-							'desc' => ['ProjectName' => SORT_DESC]
-						],
-						'TimeCardDates' => [
-							'asc' => ['TimeCardDates' => SORT_ASC],
-							'desc' => ['TimeCardDates' => SORT_DESC]
-						],
-						'TimeCardOasisSubmitted' => [
-							'asc' => ['TimeCardOasisSubmitted' => SORT_ASC],
-							'desc' => ['TimeCardOasisSubmitted' => SORT_DESC]
-						],
-						'TimeCardQBSubmitted' => [
-							'asc' => ['TimeCardQBSubmitted' => SORT_ASC],
-							'desc' => ['TimeCardQBSubmitted' => SORT_DESC]
-						],
-						'SumHours' => [
-							'asc' => ['SumHours' => SORT_ASC],
-							'desc' => ['SumHours' => SORT_DESC]
-						],
-						'TimeCardApprovedFlag' => [
-							'asc' => ['TimeCardApprovedFlag' => SORT_ASC],
-							'desc' => ['TimeCardApprovedFlag' => SORT_DESC]
-						],
+						'UserFullName',
+						'ProjectName',
+						'TimeCardDates',
+						'TimeCardOasisSubmitted',
+						'TimeCardQBSubmitted',
+						'SumHours',
+						'TimeCardApprovedFlag'
 					]
 				];
 
@@ -288,31 +253,25 @@ class TimeCardController extends BaseController
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
+			$dataArray = [
+				'dataProvider' => $dataProvider,
+				'dateRangeDD' => $dateRangeDD,
+				'model' => $model,
+				'pages' => $pages,
+				'projectDropDown' => $projectDropDown,
+				'showFilter' => $showFilter,
+				'approvedTimeCardExist' => $approvedTimeCardExist,
+				'submitReady' => $accountingSubmitReady,
+				'pmSubmitReady' => $pmSubmitReady,
+				'projectSubmitted' => $projectWasSubmitted,
+				'isProjectManager' => $isProjectManager,
+				'isAccountant' => $isAccountant
+			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
-				return $this->renderAjax('index', [
-					'dataProvider' 				=> $dataProvider,
-                    'dateRangeDD'				=> $dateRangeDD,
-					'model' 					=> $model,
-					'pages' 					=> $pages,
-					'projectDropDown' 			=> $projectDropDown,
-					'showFilter' 				=> $showFilter,
-					'approvedTimeCardExist'     => $approvedTimeCardExist,
-                    'submitReady'               => $submitReady,
-                    'projectSubmitted'          => $projectWasSubmitted
-				]);
+				return $this->renderAjax('index', $dataArray);
 			}else{
-				return $this->render('index', [
-					'dataProvider' 				=> $dataProvider,
-                    'dateRangeDD' 				=> $dateRangeDD,
-					'model' 					=> $model,
-					'pages' 					=> $pages,
-					'projectDropDown' 			=> $projectDropDown,
-					'showFilter' 				=> $showFilter,
-					'approvedTimeCardExist'     => $approvedTimeCardExist,
-                    'submitReady'               => $submitReady,
-                    'projectSubmitted'          => $projectWasSubmitted
-				]);
+				return $this->render('index', $dataArray);
 			}
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
@@ -321,7 +280,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException("An unknown error has occurred.");
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -569,6 +528,29 @@ class TimeCardController extends BaseController
 					return $this->redirect(['index']);
 			} catch (\Exception $e) {
 				throw new \yii\web\HttpException(400);
+			}
+		} else {
+			  throw new \yii\web\BadRequestHttpException;
+		}
+	}
+
+	public function actionPMSubmit() {
+		if (Yii::$app->request->isAjax) {
+			try{
+				$data = Yii::$app->request->post();			
+				// set body data
+				$body = array(
+						'projectIdArray' => $data['projectIDArray'],
+						'dateRangeArray' => $data['dateRangeArray'],
+					);		
+				$json_data = json_encode($body);
+				Yii::Trace("body data is: ". $json_data);
+				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit-time-cards', $json_data, Constants::API_VERSION_2); // indirect rbac
+				Yii::Trace("Response data: ". $putResponse);
+				return $this->redirect(['index']);
+			} catch (\Exception $e) {
+				return $e;
+				// throw new \yii\web\HttpException(400);
 			}
 		} else {
 			  throw new \yii\web\BadRequestHttpException;

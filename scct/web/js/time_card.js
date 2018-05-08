@@ -104,7 +104,42 @@ $(function(){
 		datePicker.setEndDate(to);
 	}
 	
-	
+	// redundant method; same as multiple_approve_btn_id in approve_multiple_timecard.js
+	$('#pm_submit_btn_id').on('click').click(function (event) {
+		var projectID = new Array();
+		if($('#projectFilterDD').val().toLowerCase() == 'All' || $('#projectFilterDD').val().toLowerCase() == '< All >') {
+			// get all project ids
+			projectID = new Array();
+			$.each($('#projectFilterDD'), function(i, item){
+				console.log("projectFilterDD item: " + item.val());
+				projectID.push(item.val());
+			});
+			console.log("projectIDs: " + JSON.stringify(projectID));
+		} else
+			projectID.push($('#projectFilterDD').val());
+		var dateRangeArray = $('#timeCardDateRange').val().split(',');
+		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
+			if (resp) {
+				$('#loading').show();
+				$.ajax({
+					type: 'POST',
+					url: '/time-card/p-m-submit',
+					data: {
+						projectIDArray: projectID,
+						dateRangeArray: dateRangeArray
+					},
+					success: function(data){
+						$('#loading').hide();
+					}
+				});
+			} else {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+			}
+    	});
+   });
 });
 
   $( function() {
