@@ -165,7 +165,7 @@ class UserController extends BaseController
 
         //get App Roles for form dropdown
         $rolesUrl = "app-roles%2Fget-roles-dropdowns";
-        $rolesResponse = Parent::executeGetRequest($rolesUrl);
+        $rolesResponse = Parent::executeGetRequest($rolesUrl, Constants::API_VERSION_1);
         $roles = json_decode($rolesResponse, true);
 
         //get types for form dropdown
@@ -257,7 +257,7 @@ class UserController extends BaseController
 
         //get App Roles for form dropdown
         $rolesUrl = "app-roles%2Fget-roles-dropdowns";
-        $rolesResponse = Parent::executeGetRequest($rolesUrl);
+        $rolesResponse = Parent::executeGetRequest($rolesUrl, Constants::API_VERSION_1);
         $roles = json_decode($rolesResponse, true);
 
         //get types for form dropdown
