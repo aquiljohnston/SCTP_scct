@@ -15,8 +15,6 @@ use kartik\daterange\DateRangePicker;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $chosen = "";
-$isAccountant = $_SESSION['UserAppRoleType'] == 'Accountant';
-
 $this->title = 'Time Cards';
 $pageSize = ["50" => "50", "100" => "100", "200" => "200", "500" => "500", "750" => "750"];
 $this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
@@ -211,23 +209,29 @@ else
 				<?php Pjax::begin(['id' => 'submitApproveButtons', 'timeout' => false]) ?>
 					<div class="row">
 						<div id="multiple_time_card_approve_btn">
-  
-							<?=
-                            $isAccountant ? 
-								 Html::button('Submit',
+							<?php 
+								$approveButton = [
+									'class' => 'btn btn-primary multiple_approve_btn',
+									'id' => 'multiple_approve_btn_id',
+									'disabled' => true
+								];
+								if($isAccountant) {
+									echo Html::button('Submit',
 									[
-										'class' => $submitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
-                                        'id' => 'multiple_submit_btn_id',
+										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
+										'id' => 'multiple_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
-									])
-                                :
-                                    Html::button('Approve',
-                                    [
-                                        'class' => 'btn btn-primary multiple_approve_btn',
-                                        'id' => 'multiple_approve_btn_id',
-                                        'disabled' => true
-                                    ]);;
-							
+									]);
+								} elseif($isProjectManager){
+									echo Html::button('Submit',
+									[
+										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+										'id' => 'pm_submit_btn_id',
+										'submitted' => $projectSubmitted ? 'true' : 'false'
+									]);
+									echo Html::button('Approve', $approveButton);
+								} else
+									echo Html::button('Approve',$approveButton);
 							?>
 							<?php
 							if ($pages->totalCount > 0) {
