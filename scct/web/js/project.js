@@ -68,60 +68,76 @@ $(function(){
               projectGridViewAssignedReload()
         }
     });
-
+	
 	//move unassigned to the assigned table
-	$(document).on('change','.moveToAssigned', function (e) {
-
-		username = $(this).closest('tr').find('td').eq(0).text();
-		userid = $(this).attr('userid'); 
-
-		if($(this).is(":checked")){
-
-			if(jQuery.inArray(userid,assignedTagCloud)){
-				$("#"+userid+"_uCloud").remove();
+    $(document).off('change', '#unAssignedGV input[type=checkbox]').on('change', '#unAssignedGV input[type=checkbox]', function () {
+		//get selected users
+        unassignedUsers = $("#unAssignedGV").yiiGridView('getSelectedRows');
+		
+		//loop users
+		unassignedUsers.forEach((user) => {
+			//get user row
+			currentTableRow = $("tr[data-key ='" + JSON.stringify(user) + "']");
+			username = currentTableRow.closest('tr').find('td').eq(0).text();
+			//change classname for new table
+			currentTableRow.closest('tr').find('td').find('input').removeClass('unAssignedUser').addClass('assignedUser');
+			//append to new table
+			var row = currentTableRow.closest('tr').html();
+			$('#assignedGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			//remove empty row if it exist
+			$('#assignedGV-container .empty').closest('tr').remove();
+			//remove old row
+			currentTableRow.closest('tr').remove();
+			//reset select all check box
+			$('#unAssignedGV .select-on-check-all').prop('checked', false);
+			
+			//remove from unassigned cloud tag
+			if(jQuery.inArray(user,assignedTagCloud)){
+				$("#"+user+"_uCloud").remove();
 				toggleCloudVisibility('unassignedTagCloud');
 			}
-
-			//change classname for the return trip
-			$(this).removeClass('moveToAssigned').addClass('moveToUnAssigned'); 
-			var row = $(this).closest('tr').html();
-			$('#assignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
-			$(this).closest('tr').remove();
-
-			addToAssignedTagCloud(userid,username);
-
+			
+			//add to assigned cloud tag
+			addToAssignedTagCloud(user,username);
 			toggleCloudVisibility('assignedTagCloud');
-
 			$("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
-		}
-	});
-
+		})
+    });
+	
 	//move assigned to the unassigned table
-	$(document).on('change','.moveToUnAssigned', function (e) {
-
-		username = $(this).closest('tr').find('td').eq(0).text();
-		userid = $(this).attr('userid'); 
-
-		if($(this).is(":checked")){
-
-			if(jQuery.inArray(userid,unassignedTagCloud)){
-				$("#"+userid+"_aCloud").remove();
+    $(document).off('change', '#assignedGV input[type=checkbox]').on('change', '#assignedGV input[type=checkbox]', function () {
+		//get selected users
+        assignedUsers = $("#assignedGV").yiiGridView('getSelectedRows');
+		
+		//loop users
+		assignedUsers.forEach((user) => {
+			//get user row
+			currentTableRow = $("tr[data-key ='" + JSON.stringify(user) + "']");
+			username = currentTableRow.closest('tr').find('td').eq(0).text();
+			//change classname for new table
+			currentTableRow.closest('tr').find('td').find('input').removeClass('assignedUser').addClass('unAssignedUser');  
+			//append to new table
+			var row = currentTableRow.closest('tr').html();
+			$('#unAssignedGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			//remove empty row if it exist
+			$('#unAssignedGV-container .empty').closest('tr').remove();
+			//remove old row
+			currentTableRow.closest('tr').remove();
+			//reset select all check box
+			$('#assignedGV .select-on-check-all').prop('checked', false);
+		
+			//remove from unassigned cloud tag
+			if(jQuery.inArray(user,unassignedTagCloud)){
+				$("#"+user+"_aCloud").remove();
 				toggleCloudVisibility('assignedTagCloud');
 			}
-
-			//change classname for the return trip
-			$(this).removeClass('moveToUnAssigned').addClass('moveToAssigned');    
-			var row = $(this).closest('tr').html();
-			$('#unAssignedGV-container table tbody').prepend('<tr>'+row+'</tr>');
-			$(this).closest('tr').remove();
 		
-			addToUnssignedTagCloud(userid,username);
-
+			//add to assigned cloud tag
+			addToUnssignedTagCloud(user,username);
 			toggleCloudVisibility('unassignedTagCloud');
-
 			$("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
-		}
-	});
+		})
+    });
 
 	$(document).on('click','#projectAddUserResetBtn',function(e){
 
@@ -213,18 +229,16 @@ $(function(){
 		}
 
 		//populate unassigned userid values
-		$(".moveToAssigned").each(function(key,value){unassignedVals.push($(this).val());})
+		$(".unAssignedUser").each(function(key,value){unassignedVals.push($(this).val());})
 
 		//populate assigned userid values
-		$(".moveToUnAssigned").each(function(key,value){assignedVals.push($(this).val());})
+		$(".assignedUser").each(function(key,value){assignedVals.push($(this).val());})
 
 		data = {
 			assignedUsers:assignedVals.join(','),
 			unassignedUsers:unassignedVals.join(','),
 			projectID: projectID
 		}
-
-		console.log('DATA ' + JSON.stringify(data));
 		
 		$('#loading').show();
 		$.ajax({
