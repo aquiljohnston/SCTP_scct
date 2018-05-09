@@ -70,9 +70,9 @@ $(function(){
     });
 	
 	//move unassigned to the assigned table
-    $(document).off('change', '#unAssignedGV input[type=checkbox]').on('change', '#unAssignedGV input[type=checkbox]', function () {
+    $(document).off('change', '#unassignedUserGV input[type=checkbox]').on('change', '#unassignedUserGV input[type=checkbox]', function () {
 		//get selected users
-        unassignedUsers = $("#unAssignedGV").yiiGridView('getSelectedRows');
+        unassignedUsers = $("#unassignedUserGV").yiiGridView('getSelectedRows');
 		
 		//loop users
 		unassignedUsers.forEach((user) => {
@@ -83,13 +83,13 @@ $(function(){
 			currentTableRow.closest('tr').find('td').find('input').removeClass('unAssignedUser').addClass('assignedUser');
 			//append to new table
 			var row = currentTableRow.closest('tr').html();
-			$('#assignedGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			$('#assignedUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
 			//remove empty row if it exist
-			$('#assignedGV-container .empty').closest('tr').remove();
+			$('#assignedUserGV-container .empty').closest('tr').remove();
 			//remove old row
 			currentTableRow.closest('tr').remove();
 			//reset select all check box
-			$('#unAssignedGV .select-on-check-all').prop('checked', false);
+			$('#unassignedUserGV .select-on-check-all').prop('checked', false);
 			
 			//remove from unassigned cloud tag
 			if(jQuery.inArray(user,assignedTagCloud)){
@@ -105,9 +105,9 @@ $(function(){
     });
 	
 	//move assigned to the unassigned table
-    $(document).off('change', '#assignedGV input[type=checkbox]').on('change', '#assignedGV input[type=checkbox]', function () {
+    $(document).off('change', '#assignedUserGV input[type=checkbox]').on('change', '#assignedUserGV input[type=checkbox]', function () {
 		//get selected users
-        assignedUsers = $("#assignedGV").yiiGridView('getSelectedRows');
+        assignedUsers = $("#assignedUserGV").yiiGridView('getSelectedRows');
 		
 		//loop users
 		assignedUsers.forEach((user) => {
@@ -118,13 +118,13 @@ $(function(){
 			currentTableRow.closest('tr').find('td').find('input').removeClass('assignedUser').addClass('unAssignedUser');  
 			//append to new table
 			var row = currentTableRow.closest('tr').html();
-			$('#unAssignedGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			$('#unassignedUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
 			//remove empty row if it exist
-			$('#unAssignedGV-container .empty').closest('tr').remove();
+			$('#unassignedUserGV-container .empty').closest('tr').remove();
 			//remove old row
 			currentTableRow.closest('tr').remove();
 			//reset select all check box
-			$('#assignedGV .select-on-check-all').prop('checked', false);
+			$('#assignedUserGV .select-on-check-all').prop('checked', false);
 		
 			//remove from unassigned cloud tag
 			if(jQuery.inArray(user,unassignedTagCloud)){
