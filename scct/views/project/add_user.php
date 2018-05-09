@@ -65,7 +65,7 @@ div.inline { float:left; }
 		<?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'unAssignedGV',
+					'id' => 'unassignedUserGV',
 					'dataProvider' => $dataProviderUnassigned,
 					'export' => false,
 					'pjax' => false,
@@ -99,7 +99,7 @@ div.inline { float:left; }
 		<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'assignedGV',
+					'id' => 'assignedUserGV',
 					'dataProvider' => $dataProviderAssigned,
 					'export' => false,
 					'pjax' => false,
