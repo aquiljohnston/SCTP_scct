@@ -269,15 +269,15 @@ function loadDropdowns(data, dropdown){
             // load the projects dropdowns
             $.each(data.data, function(key, val) {
                 dropdown.append($('<option>', {
-                    value: val,
-                    text : val 
+                    value: val[0],
+                    text : val[1] 
                 }));
             });
         } else {
             // add < All > anyway
             dropdown.append($('<option>', {
-                value: "< ALL >",
-                text : "< ALL >"
+                value: "<All>",
+                text : "ALL"
             }));
         }
     } catch(err) {
