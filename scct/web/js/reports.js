@@ -74,12 +74,6 @@ function initListeners() {
             $('#dataMessage').empty();
         } else {
             getReport(reportsDropdown.val());
-            // reuse and rename the inspector dropdown
-            if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
-                // show datepicker
-                inspectorsListHeader.text("Project List: ");
-                toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
-            } 
             if(selectedReport.ParmBetweenDateFlag == 1) {
                 // mapgrids need data query
                 if(selectedReport.ParmDropDownFlag == 1 || selectedReport.Parm == 1) {
@@ -122,6 +116,13 @@ function initListeners() {
                     dataSync("inspector",reportStartDate,reportEndDate, null, null);
                     toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0], submitButton[0]], "inline");
                 }
+                // reuse and rename the inspector dropdown
+                if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
+                    dataSync("timeCard", reportStartDate, reportEndDate, null, null);
+                    // show project dropdown
+                    inspectorsListHeader.text("Project List: ");
+                    toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
+                }
                 submitButton.css('display', 'inline');
             }
         } else {
@@ -156,9 +157,11 @@ function initListeners() {
             dropdownParam = inspectorsDropdown.val(); 
         // set project timecards
         if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
-            if(!inspectorsDropdown.val().includes("< All >")) {
+            if(!inspectorsDropdown.val().toLocaleLowerCase().includes("< All >".toLocaleLowerCase())) {
+                console.log("selected report: " + inspectorsDropdown.val());
                 dropdownParam = "["+inspectorsDropdown.val()+"]";
-            }
+            } else
+                dropdownParam = inspectorsDropdown.val();
         } 
         // set mapgrid
         if(selectedReport.ParmDropDownFlag == 1)
@@ -266,15 +269,15 @@ function loadDropdowns(data, dropdown){
             // load the projects dropdowns
             $.each(data.data, function(key, val) {
                 dropdown.append($('<option>', {
-                    value: val,
-                    text : val 
+                    value: val[0],
+                    text : val[1] 
                 }));
             });
         } else {
             // add < All > anyway
             dropdown.append($('<option>', {
-                value: "< ALL >",
-                text : "< ALL >"
+                value: "<All>",
+                text : "ALL"
             }));
         }
     } catch(err) {

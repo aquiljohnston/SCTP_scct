@@ -369,8 +369,8 @@ class ProjectController extends BaseController
 			return ['projects' => $projectDropdownResponse];
 		}
 	}
-	
-	/*public function actionAddUser($id = null)
+
+	public function actionAddUser($id = null)
 	{
 		//guest redirect
 		if (Yii::$app->user->isGuest)
@@ -384,20 +384,23 @@ class ProjectController extends BaseController
 
 		//create model for active form
 		$model = new \yii\base\DynamicModel([
-			'UnassignedUsers', 'AssignedUsers', 'uaFilter', 'aFilter' ]);
-		$model->addRule('UnassignedUsers', 'string')
-              ->addRule('AssignedUsers',  'string')
-              ->addRule('uaFilter', 'string', ['max' => 32])
+			'uaFilter',
+			'aFilter'
+		]);
+		$model->addRule('uaFilter', 'string', ['max' => 32])
               ->addRule('aFilter', 'string', ['max' => 32]);
 
         // receive get request to filter user list
-        if (Yii::$app->request->get()) {
-
+        if (Yii::$app->request->get()) 
+		{
             if (isset($_GET['projectID']))
                 $id = $_GET['projectID'];
+			
             $model->load(Yii::$app->request->queryParams);
+
             $uaFilterParam = $model->uaFilter;
             $aFilterParam = $model->aFilter;
+
             $url = 'project%2Fget-user-relationships&projectID='.$id.'&uaFilter='.$uaFilterParam.'&aFilter='.$aFilterParam;
             $projectUrl = 'project%2Fview&id='.$id;
 
@@ -409,149 +412,30 @@ class ProjectController extends BaseController
             //load get data into variables
             $unassignedData = $users['unassignedUsers'];
             $assignedData = $users['assignedUsers'];
-            return $this -> render('add_user', [
-                'project' => $project,
-                'model' => $model,
-                'unassignedData' => $unassignedData,
-                'assignedData' => $assignedData,
-                'unassignedFilterParams' => $uaFilterParam,
-                'assignedFilterParams' => $aFilterParam,
-            ]);
-        }else{
-            if (isset($_POST['projectID']))
-                $id = $_POST['projectID'];
-
-            $url = 'project%2Fget-user-relationships&projectID='.$id;
-            $projectUrl = 'project%2Fview&id='.$id;
-
-            //indirect rbac
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
-
-            $users = json_decode($response,true);
-            $project = json_decode($projectResponse);
-
-            //load get data into variables
-            $unassignedData = $users['unassignedUsers'];
-            $assignedData = $users['assignedUsers'];
-        }
-
-		if ($model->load(Yii::$app->request->post()))
-		{
-			//prepare arrays for post request
-			//explode strings from active form into arrays
-			$unassignedUsersArray = explode(',',$model->UnassignedUsers);
-			$assignedUsersArray = explode(',',$model->AssignedUsers);
-			//array diff new arrays with arrays previous to submission to get changes
-			$usersAdded = array_values(array_diff($assignedUsersArray,array_keys($assignedData)));
-			$usersRemoved = array_values(array_diff($unassignedUsersArray,array_keys($unassignedData)));
-			//load arrays of changes into post data
-			$data = [];
-			$data['usersRemoved'] = $usersRemoved;
-			$data['usersAdded'] = $usersAdded;
-
-
-
-			//encode data
-			$jsonData = json_encode($data);
-            //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
-			//set post url
-			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
-            //Yii::trace("ADD USER URL: ".$postUrl);
-			//execute post request
-			$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
-            //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
-			//refresh page
-			return $this->redirect(['add-user', 'id' => $project->ProjectID]);
-		}else{
-            return $this->render('add_user', [
-                                            'project' => $project,
-                                            'model' => $model,
-                                            'unassignedData' => $unassignedData,
-                                            'assignedData' => $assignedData,
-                                            'unassignedFilterParams' => $uaFilterParam,
-											'assignedFilterParams' => $aFilterParam,
-                                    ]);
-		}
-	}----deprecated---eigyan*/
-
-		public function actionAddUser($id = null)
-	{
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['/login']);
-		}
-		$uaFilterParam = null;
-		$aFilterParam = null;
-		
-		self::requirePermission('projectAddRemoveUsers');
-
-		//create model for active form
-		$model = new \yii\base\DynamicModel([
-			'UnassignedUsers', 'AssignedUsers', 'uaFilter', 'aFilter' ]);
-		$model->addRule('uaFilter', 'string', ['max' => 32])
-              ->addRule('aFilter', 'string', ['max' => 32]);
-
-        // receive get request to filter user list
-        if (Yii::$app->request->get()) {
-
-
-            if (isset($_GET['projectID']))
-                $id = $_GET['projectID'];
-            $model->load(Yii::$app->request->queryParams);
-
-            $uaFilterParam 		= $model->uaFilter;
-            $aFilterParam 		= $model->aFilter;
-
-            $url 				= 'project%2Fget-user-relationships&projectID='.$id.'&uaFilter='.$uaFilterParam.'&aFilter='.$aFilterParam;
-            $projectUrl 		= 'project%2Fview&id='.$id;
-
-            $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $projectResponse 	= Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
-
-            $users 				= json_decode($response,true);
-            $project 			= json_decode($projectResponse);
-            //load get data into variables
-            $unassignedData 	= $users['unassignedUsers'];
-            $assignedData 		= $users['assignedUsers'];
-
-            //var_dump($users);exit();
-
-
-            
 
             $unAssignedDataProvider = new ArrayDataProvider
             ([
-                'allModels'		 	=> $unassignedData,
-               	'pagination' 		=> [
-                'pageSize' 			=> 200
+                'allModels' => $unassignedData,
+               	'pagination' => [
+					'pageSize' => 200
             	]
-               
-            ]
-        	);
+            ]);
+			$unAssignedDataProvider->key = 'userID';
 
-        	 $assignedDataProvider = new ArrayDataProvider
+        	$assignedDataProvider = new ArrayDataProvider
             ([
-                'allModels'		 	=> $assignedData,
-               	'pagination' 		=> [   
-                'pageParam' 	    => 'pages',
-                'pageSize' 			=>  200 
+                'allModels' => $assignedData,
+               	'pagination' => [   
+					'pageParam' => 'pages',
+					'pageSize' =>  200 
             	]
-            ]
-        	);
-
-        	$unassignedPagination    	= $unAssignedDataProvider->getPagination();
-        	$assignedPagination 	    = $assignedDataProvider->getPagination();
-
-        	//$unassignedOffset 			= $unassignedPagination->getOffset();
-        	//$assignedOffset 			= $assignedPagination->getOffset();
-
-            // dispatch section data provider
-            $unAssignedDataProvider->key 	= 'userID';
-            $assignedDataProvider->key 		= 'userID';
+            ]);
+            $assignedDataProvider->key = 'userID';
 
 
+        	$unassignedPagination = $unAssignedDataProvider->getPagination();
+        	$assignedPagination = $assignedDataProvider->getPagination();
+			
             return $this -> render('add_user', [
                 'project' 								=> $project,
                 'model' 								=> $model,
@@ -563,78 +447,44 @@ class ProjectController extends BaseController
                 'assignedFilterParams' 					=> $aFilterParam, 
                 'unassignedPagination'					=> $unassignedPagination,
                 'assignedPagination' 					=> $assignedPagination,
-                //'unassignedOffset'						=> $unassignedOffset,
-                //'assignedOffset' 						=> $assignedOffset,
             ]);
-        }else{
-            if (isset($_POST['projectID']))
+        } elseif(Yii::$app->request->post()) {
+			if (isset($_POST['projectID']))
                 $id = $_POST['projectID'];
 
-            $url				= 'project%2Fget-user-relationships&projectID='.$id;
-            $projectUrl 		= 'project%2Fview&id='.$id;
+            $url = 'project%2Fget-user-relationships&projectID='.$id;
 
             //indirect rbac
-            $response 			= Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $projectResponse 	= Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
-
-            $users 				= json_decode($response,true);
-            $project 			= json_decode($projectResponse);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $users = json_decode($response,true);
 
             //load get data into variables
-            $unassignedData 	= $users['unassignedUsers'];
-            $assignedData 		= $users['assignedUsers'];
-        }
+            $unassignedData = $users['unassignedUsers'];
+            $assignedData = $users['assignedUsers'];
+			
+			$request = Yii::$app->request->post();
 
-		if (Yii::$app->request->post())
-		{
-
-
-			$request 					= Yii::$app->request->post();
-
-			 //convert assigned data values to string
-			$func 						= function($element) {return (string)$element;};
-
+			//convert assigned data values to string
+			$func = function($element) {return (string)$element;};
 
 			//prepare arrays for post request
 			//explode strings from active form into arrays
-			$unassignedUsersArray 		= explode(',',$request["unassignedUsers"]);
-			$assignedUsersArray 		= explode(',',$request["assignedUsers"]);
+			$unassignedUsersArray = explode(',',$request["unassignedUsers"]);
+			$assignedUsersArray = explode(',',$request["assignedUsers"]);
 			//array diff new arrays with arrays previous to submission to get changes
-			$usersAdded 				= array_values(array_diff($assignedUsersArray,array_map($func,array_keys($assignedData))));
-			$usersRemoved 				= array_values(array_diff($unassignedUsersArray,array_map($func,array_keys($unassignedData))));
+			$usersAdded = array_values(array_diff($assignedUsersArray,array_map($func,array_keys($assignedData))));
+			$usersRemoved = array_values(array_diff($unassignedUsersArray,array_map($func,array_keys($unassignedData))));
 			//load arrays of changes into post data
-			$data 						= [];
-			$data['usersRemoved'] 		= $usersRemoved;
-			$data['usersAdded'] 		= $usersAdded;
-
-
-
-			
+			$data = [];
+			$data['usersRemoved'] = $usersRemoved;
+			$data['usersAdded'] = $usersAdded;
 
 			//encode data
-			$jsonData 					= json_encode($data);
-            //Yii::trace("ADD REMOVE USER DATA: ".$jsonData);
+			$jsonData = json_encode($data);
 			//set post url
-			$postUrl					= 'project%2Fadd-remove-users&projectID='.$id;
-            //Yii::trace("ADD USER URL: ".$postUrl);
+			$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
 			//execute post request
-			$postResponse 				= Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
-            //Yii::trace("ADD REMOVE USER RESPONSE: ".$postResponse);
-			//refresh page
-			//return $this->redirect(['add-user', 'id' 					=> $project->ProjectID]);
-		}else{
-            return $this->render('add_user', [
-                                            'project' 					=> $project,
-                                            'model' 					=> $model,
-                                            'unassignedData' 			=> $unassignedData,
-                                            'assignedData' 				=> $assignedData,
-                                            'unassignedFilterParams' 	=> $uaFilterParam,
-											'assignedFilterParams' 		=> $aFilterParam,
-										    'unassignedPagination'		=> $unassignedPagination,
-                							'assignedPagination' 		=> $assignedPagination,
-                							//'unassignedOffset'			=> $unassignedOffset,
-                							//'assignedOffset' 			=> $assignedOffset,
-                                    ]);
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
 		}
 	}
 		
