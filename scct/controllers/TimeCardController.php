@@ -540,13 +540,12 @@ class TimeCardController extends BaseController
 				$data = Yii::$app->request->post();			
 				// set body data
 				$body = array(
-						'projectIdArray' => $data['projectIDArray'],
+						'projectIDArray' => $data['projectIDArray'],
 						'dateRangeArray' => $data['dateRangeArray'],
 					);		
 				$json_data = json_encode($body);
-				Yii::Trace("body data is: ". $json_data);
 				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit-time-cards', $json_data, Constants::API_VERSION_2); // indirect rbac
-				Yii::Trace("Response data: ". $putResponse);
+				Yii::Trace("Response data: ". json_encode($putResponse));
 				return $this->redirect(['index']);
 			} catch (\Exception $e) {
 				return $e;
