@@ -261,7 +261,7 @@ class TimeCardController extends BaseController
 				'projectDropDown' => $projectDropDown,
 				'showFilter' => $showFilter,
 				'approvedTimeCardExist' => $approvedTimeCardExist,
-				'submitReady' => $accountingSubmitReady,
+				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
 				'isProjectManager' => $isProjectManager,
