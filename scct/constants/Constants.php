@@ -24,7 +24,7 @@ final class Constants
 	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
 	const API_PROD_URL = 'http://azureapi.southerncrossinc.com/index.php?r=';
 	
-	const DEFAULT_VERSION = self::API_VERSION_1;
+	const DEFAULT_VERSION = self::API_VERSION_2;
 
     const UNAUTH_MESSAGE = "Please log in again. Your session has expired. Redirecting...";
 

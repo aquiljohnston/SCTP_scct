@@ -65,7 +65,7 @@ div.inline { float:left; }
 		<?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'unAssignedGV',
+					'id' => 'unassignedUserGV',
 					'dataProvider' => $dataProviderUnassigned,
 					'export' => false,
 					'pjax' => false,
@@ -74,15 +74,17 @@ div.inline { float:left; }
 					'floatOverflowContainer' => true,
 					'columns' => [
 						[
-							'label' => 'Name',
+							'label' => 'Unassigned Users',
 							'attribute' => 'content',
 						],
 						[
-							'header' => 'Assign User',
 							'class' => 'kartik\grid\CheckboxColumn',
-							'contentOptions' => [],
 							'checkboxOptions' => function ($model, $key, $index, $column) {
-								return ['userID' => $key,'disabled' => false,'class' => 'moveToAssigned'];
+								return [
+									'userID' => $key,
+									'disabled' => false,
+									'class' => 'unAssignedUser'
+								];
 							}
 						]
 					]
@@ -97,27 +99,29 @@ div.inline { float:left; }
 		<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'assignedGV',
+					'id' => 'assignedUserGV',
 					'dataProvider' => $dataProviderAssigned,
 					'export' => false,
 					'pjax' => false,
 					'floatHeader' => true,
 					'summary' => '',
+					'floatOverflowContainer' => true,
 					'columns' => [
 						[
-							'label' => 'Name',
+							'label' => 'Assigned Users',
 							'attribute' => 'content',
 						],
 						[
-							'header' => 'Unassign User',
 							'class' => 'kartik\grid\CheckboxColumn',
-							'contentOptions' => [],
 							'checkboxOptions' => function ($model, $key, $index, $column) {
-								return ['userID' => $key,'disabled' => false,'class' => 'moveToUnAssigned'];
+								return [
+									'userID' => $key,
+									'disabled' => false,
+									'class' => 'assignedUser'
+								];
 							}
 						]
 					],
-					'floatOverflowContainer' => true,
 				]); ?>
 				<br>
 				<div>
