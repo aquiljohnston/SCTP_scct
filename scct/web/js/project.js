@@ -3,7 +3,10 @@ $(function(){
 
     unassignedTagCloud = {};
     assignedTagCloud = {};
+    unassignedUserArray = [];
+    assignedUserArray = [];
 
+	//think this should be moved into the function below
 	var environment = getSubDomainEnvironment();
 	
 	//autofill url prefix based on project name
@@ -30,49 +33,47 @@ $(function(){
         $('#projectAddModuleform').submit();
     });
 
-    // project filter listener
-    $(document).off('keypress', '#projectFilter').on('keypress', '#projectFilter', function (e) {
+    // projectUserUnassignedFilter filter listener
+    $(document).off('keypress', '#projectUserUnassignedFilter').on('keypress', '#projectUserUnassignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
-            projectGridViewReload();
+            projectUserGridViewUnassingedReload();
         }
     });
 
-    // projectFilterAssigned filter listener
-    $(document).off('keypress', '#projectFilterAssigned').on('keypress', '#projectFilterAssigned', function (e) {
+    // projectUserAssignedFilter filter listener
+    $(document).off('keypress', '#projectUserAssignedFilter').on('keypress', '#projectUserAssignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
-            projectGridViewAssignedReload();
+            projectUserGridViewAssignedReload();
         }
     });
 
-    $(document).off('click', '#projectSearchCleanFilterButton').on('click', '#projectSearchCleanFilterButton', function (){
-        a = $('#projectFilter');
+    $(document).off('click', '#projectUserUnassignedFilterClear').on('click', '#projectUserUnassignedFilterClear', function (){
+        a = $('#projectUserUnassignedFilter');
 		
         if(a.val()!=""){
             //clear input and trigger keypress on the input to only refresh the connected gridview
-            //not both grid views
             a.val(""); 
-            projectGridViewReload();     
+            projectUserGridViewUnassingedReload();
         }
     });
 
     //separate gridview refresh filter 
-    $(document).off('click', '.assignedSearchCleanFilterButton').on('click', '.assignedSearchCleanFilterButton', function (){
-        u = $('#projectFilterAssigned');
+    $(document).off('click', '#projectUserAssignedFilterClear').on('click', '#projectUserAssignedFilterClear', function (){
+        u = $('#projectUserAssignedFilter');
 
          if(u.val()!=""){
               //clear input and trigger keypress on the input to only refresh the connected gridview
-              //not both grid views
               u.val(""); 
-              projectGridViewAssignedReload()
+              projectUserGridViewAssignedReload()
         }
     });
 	
 	//move unassigned to the assigned table
-    $(document).off('change', '#unassignedUserGV input[type=checkbox]').on('change', '#unassignedUserGV input[type=checkbox]', function () {
+    $(document).off('change', '#unassignedProjectUserGV input[type=checkbox]').on('change', '#unassignedProjectUserGV input[type=checkbox]', function () {
 		//get selected users
-        unassignedUsers = $("#unassignedUserGV").yiiGridView('getSelectedRows');
+        unassignedUsers = $("#unassignedProjectUserGV").yiiGridView('getSelectedRows');
 		
 		//loop users
 		unassignedUsers.forEach((user) => {
@@ -83,19 +84,16 @@ $(function(){
 			currentTableRow.closest('tr').find('td').find('input').removeClass('unAssignedUser').addClass('assignedUser');
 			//append to new table
 			var row = currentTableRow.closest('tr').html();
-			$('#assignedUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			$('#assignedProjectUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
 			//remove empty row if it exist
-			$('#assignedUserGV-container .empty').closest('tr').remove();
+			$('#assignedProjectUserGV-container .empty').closest('tr').remove();
 			//remove old row
 			currentTableRow.closest('tr').remove();
 			//reset select all check box
-			$('#unassignedUserGV .select-on-check-all').prop('checked', false);
+			$('#unassignedProjectUserGV .select-on-check-all').prop('checked', false);
 			
 			//remove from unassigned cloud tag
-			if(jQuery.inArray(user,assignedTagCloud)){
-				$("#"+user+"_uCloud").remove();
-				toggleCloudVisibility('unassignedTagCloud');
-			}
+			removeFromUnassignedTagCloud(user);
 			
 			//add to assigned cloud tag
 			addToAssignedTagCloud(user,username);
@@ -105,9 +103,9 @@ $(function(){
     });
 	
 	//move assigned to the unassigned table
-    $(document).off('change', '#assignedUserGV input[type=checkbox]').on('change', '#assignedUserGV input[type=checkbox]', function () {
+    $(document).off('change', '#assignedProjectUserGV input[type=checkbox]').on('change', '#assignedProjectUserGV input[type=checkbox]', function () {
 		//get selected users
-        assignedUsers = $("#assignedUserGV").yiiGridView('getSelectedRows');
+        assignedUsers = $("#assignedProjectUserGV").yiiGridView('getSelectedRows');
 		
 		//loop users
 		assignedUsers.forEach((user) => {
@@ -118,21 +116,18 @@ $(function(){
 			currentTableRow.closest('tr').find('td').find('input').removeClass('assignedUser').addClass('unAssignedUser');  
 			//append to new table
 			var row = currentTableRow.closest('tr').html();
-			$('#unassignedUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
+			$('#unassignedProjectUserGV-container table tbody').prepend('<tr data-key=' + JSON.stringify(user) + '>' + row + '</tr>');
 			//remove empty row if it exist
-			$('#unassignedUserGV-container .empty').closest('tr').remove();
+			$('#unassignedProjectUserGV-container .empty').closest('tr').remove();
 			//remove old row
 			currentTableRow.closest('tr').remove();
 			//reset select all check box
-			$('#assignedUserGV .select-on-check-all').prop('checked', false);
+			$('#assignedProjectUserGV .select-on-check-all').prop('checked', false);
 		
-			//remove from unassigned cloud tag
-			if(jQuery.inArray(user,unassignedTagCloud)){
-				$("#"+user+"_aCloud").remove();
-				toggleCloudVisibility('assignedTagCloud');
-			}
+			//remove from assigned cloud tag
+			removeFromAssignedTagCloud(user);
 		
-			//add to assigned cloud tag
+			//add to unassigned cloud tag
 			addToUnssignedTagCloud(user,username);
 			toggleCloudVisibility('unassignedTagCloud');
 			$("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
@@ -141,17 +136,17 @@ $(function(){
 
 	$(document).on('click','#projectAddUserResetBtn',function(e){
 
-		$('#projectFilter').val("");
-		$('#projectFilterAssigned').val("");
+		$('#projectUserUnassignedFilter').val("");
+		$('#projectUserAssignedFilter').val("");
 		$('#unassignedTagCloud').html("");
-		$('#unassignedTagCloud').css({"display":"none"})
+		$('#unassignedTagCloud').css({"display":"none"});
 		$('#assignedTagCloud').html("");
-		$('#assignedTagCloud').css({"display":"none"})
+		$('#assignedTagCloud').css({"display":"none"});
+		unassignedUserArray = [];
+		assignedUserArray = [];
 
-		//add boolean flag means to refresh both grid views
-		//if true will call both reload routines in succession
-		//if not only one grid view will refresh
-		projectGridViewReload(true);
+		//reload both gridviews
+		projectUserGridViewReload();
 	})
 
 	function toggleCloudVisibility(cloud){
@@ -170,6 +165,10 @@ $(function(){
 			if(!unassignedTagCloud[key]){
 				$('#assignedTagCloud').append(tag);
 				assignedTagCloud[key] = tag;
+				assignedUserArray.push({
+					'id' : key,
+					'name' : value
+				});
 			}
 		}
 	}
@@ -181,8 +180,44 @@ $(function(){
 			if(!assignedTagCloud[key]){
 				$('#unassignedTagCloud').append(tag);
 				unassignedTagCloud[key] = tag;
+				unassignedUserArray.push({
+					'id' : key,
+					'name' : value
+				});
 			}
 		}
+	}
+	
+	function removeFromUnassignedTagCloud(user)
+	{
+		//remove from tag cloud
+		if(jQuery.inArray(user,unassignedTagCloud)){
+			$("#"+user+"_uCloud").remove();
+			toggleCloudVisibility('unassignedTagCloud');
+		}
+		//remove from data array
+		unassignedUserArray.forEach(function(value, index){				
+			if(value['id'] == user)
+			{	
+				unassignedUserArray.splice(index,1);
+			}
+		});	
+	}
+	
+	function removeFromAssignedTagCloud(user)
+	{
+		//remove from tag cloud
+		if(jQuery.inArray(user,assignedTagCloud)){
+			$("#"+user+"_aCloud").remove();
+			toggleCloudVisibility('assignedTagCloud');
+		}
+		//remove from data array
+		assignedUserArray.forEach(function(value, index){			
+			if(value['id'] == user)
+			{
+				assignedUserArray.splice(index,1);
+			}
+		});	
 	}
 
 	function getSubDomainEnvironment() {
@@ -257,41 +292,114 @@ $(function(){
 			$('#unassignedTagCloud').css({"display":"none"})
 			unassignedTagCloud = {};
 			assignedTagCloud = {};
+			unassignedUserArray = [];
+			assignedUserArray = [];
 			//reload both tables
-			projectGridViewReload(true);
+			projectUserGridViewReload();
 		});
 	}
 
-	function projectGridViewReload(both=false) {
-		var form = $("#projectForm");
+	//want to look into a cleaner way to do this.	
+	function projectUserGridViewReload() {
+		var form = $("#projectUserForm");
 		$('#loading').show();
 		$.pjax.reload({
-			container: "#projectGridView",
+			container: "#unassignedProjectUserGridView",
 			timeout: 99999,
 			url: form.attr("action"),
 			type: "GET",
 			data: form.serialize()
 		}).done(function () {
-			//special condition for reset button
-			if(both){
-				projectGridViewAssignedReload();
-			}else{
-				$('#loading').hide();
-			}
+			updateUnassingedUsersFromCloudTag();
+			projectUserGridViewAssignedReload();
 		});
 	}
-
-	function projectGridViewAssignedReload() {
-		var form = $("#projectForm");
+	
+	function projectUserGridViewUnassingedReload() {
+		var form = $("#projectUserForm");
 		$('#loading').show();
 		$.pjax.reload({
-			container: "#projectGridViewAssigned",
+			container: "#unassignedProjectUserGridView",
 			timeout: 99999,
 			url: form.attr("action"),
 			type: "GET",
 			data: form.serialize()
 		}).done(function () {
+			updateUnassingedUsersFromCloudTag();
 			$('#loading').hide();
+		});
+	}
+
+	function projectUserGridViewAssignedReload() {
+		var form = $("#projectUserForm");
+		$('#loading').show();
+		$.pjax.reload({
+			container: "#assignedProjectUserGridView",
+			timeout: 99999,
+			url: form.attr("action"),
+			type: "GET",
+			data: form.serialize()
+		}).done(function () {
+			updateAssignedUsersFromCloudTag();
+			$('#loading').hide();
+		});
+	}
+	
+	function updateUnassingedUsersFromCloudTag()
+	{
+		//get filter value
+		filterString = $('#projectUserUnassignedFilter').val().toLowerCase();
+		//remove items that have been assigned
+		assignedUserArray.forEach(function(user){
+			//remove row
+			$("#unassignedProjectUserGV tr[data-key ='" + user.id + "']").closest('tr').remove();			
+		});
+		//add items that have been unassigned
+		unassignedUserArray.forEach(function(user){				
+			//check if item should be displayed with filter
+			if(user.name.toLowerCase().indexOf(filterString) !== -1)
+			{				
+				//remove empty row if it exist
+				$('#unassignedProjectUserGV .empty').closest('tr').remove();
+				//append to new table
+				var row = currentTableRow.closest('tr').html();
+				$('#unassignedProjectUserGV table tbody').prepend(
+					'<tr data-key=' + user.id + '>' + 
+						'<td data-col-seq="0">' + user.name + '</td>' + 
+						'<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
+						'<input type="checkbox" class="unAssignedUser kv-row-checkbox" name="selection[]" value="' + user.id + '" userid="' + user.id + '"></td>' +
+					'</tr>'
+				);
+			}
+		});	
+	}
+	
+	function updateAssignedUsersFromCloudTag()
+	{
+		//get filter value
+		filterString = $('#projectUserAssignedFilter').val().toLowerCase();
+		//remove items that have been unassigned
+		unassignedUserArray.forEach(function(user){
+			//remove row
+			$("#assignedProjectUserGV tr[data-key ='" + JSON.stringify(user.id) + "']").closest('tr').remove();			
+		});
+		//add items that have been assigned
+		assignedUserArray.forEach(function(user){
+			//check if item should be displayed with filter
+			if(user.name.toLowerCase().indexOf(filterString) !== -1)
+			{				
+				//remove empty row if it exist
+				$('#assignedProjectUserGV .empty').closest('tr').remove();
+				//append to new table
+				var row = currentTableRow.closest('tr').html();
+				$('#assignedProjectUserGV table tbody').prepend(
+					'<tr data-key=' + user.id + '>' + 
+						'<td data-col-seq="0">' + user.name + '</td>' + 
+						'<td class="skip-export kv-align-center kv-align-middle kv-row-select" style="width:50px;" data-col-seq="1">' +
+						'<input type="checkbox" class="assignedUser kv-row-checkbox" name="selection[]" value="' + user.id + '" userid="' + user.id + '"></td>' +
+					'</tr>'
+				);
+			}
 		});
 	}
 });
