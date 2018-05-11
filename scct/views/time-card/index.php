@@ -117,30 +117,27 @@ else
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
-		'SumHours',
 		[
-			'label' => 'Approved',
+			'label' => 'Sum Hours',
+			'attribute' => 'SumHours',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center']
+		],
+		[
+			'label' => 'Supervisor Approved',
 			'attribute' => 'TimeCardApprovedFlag',
 			'value' => function($model, $key, $index, $column) {
 				return $model['TimeCardApprovedFlag'] == 0 ? 'No' : 'Yes';
 			},
-		],
-		[
-			'label' => 'PMApproved',
-			'attribute' => 'TimeCardPMApprovedFlag',
-			'value' => function($model, $key, $index, $column) {
-				return $model['TimeCardPMApprovedFlag'] == 0 ? 'No' : 'Yes';
-			},
-		],
-		[
-			'label' => 'Oasis Submitted',
-			'attribute' => 'TimeCardOasisSubmitted',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
-			'label' => 'QB Submitted',
-			'attribute' => 'TimeCardQBSubmitted',
+			'label' => 'PM Approved',
+			'attribute' => 'TimeCardPMApprovedFlag',
+			'value' => function($model, $key, $index, $column) {
+				return $model['TimeCardPMApprovedFlag'] == 0 ? 'No' : 'Yes';
+			},
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
