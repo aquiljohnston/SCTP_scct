@@ -211,7 +211,8 @@ class TimeCardController extends BaseController
 						'TimeCardOasisSubmitted',
 						'TimeCardQBSubmitted',
 						'SumHours',
-						'TimeCardApprovedFlag'
+						'TimeCardApprovedFlag',
+						'TimeCardPMApprovedFlag'
 					]
 				]
 			]);
@@ -242,7 +243,8 @@ class TimeCardController extends BaseController
 						'TimeCardOasisSubmitted',
 						'TimeCardQBSubmitted',
 						'SumHours',
-						'TimeCardApprovedFlag'
+						'TimeCardApprovedFlag',
+						'TimeCardPMApprovedFlag'
 					]
 				];
 

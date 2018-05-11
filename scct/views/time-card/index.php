@@ -126,6 +126,13 @@ else
 			},
 		],
 		[
+			'label' => 'PMApproved',
+			'attribute' => 'TimeCardPMApprovedFlag',
+			'value' => function($model, $key, $index, $column) {
+				return $model['TimeCardPMApprovedFlag'] == 0 ? 'No' : 'Yes';
+			},
+		],
+		[
 			'label' => 'Oasis Submitted',
 			'attribute' => 'TimeCardOasisSubmitted',
 			'headerOptions' => ['class' => 'text-center'],
