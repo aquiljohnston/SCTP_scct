@@ -31,41 +31,38 @@ div.inline { float:left; }
          <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
                 'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
-                'options' => ['id' => 'projectForm']
+                'options' => ['id' => 'projectUserForm']
             ]); ?>
      
-            <div id="unassignedFilter" class="col-sm-2" style = "">
-                 <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectFilter', 'style' => 'width:auto'])->label('Search'); ?>  
+            <div class="col-sm-2">
+                <?= $form->field($model, 'uaFilter')->textInput(['value' => $unassignedFilterParams, 'id' => 'projectUserUnassignedFilter', 'style' => 'width:auto'])->label('Search'); ?>  
             </div>      
-            
             <div class="col-sm-1">
-                <img id="projectSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+                <img id="projectUserUnassignedFilterClear" class="projectUserClearFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div> 
-
             <div class="col-sm-3" >
-                  <span id="unassignedTagCloud" style="display: none;" class="tagCloud"></span>
+                <span id="unassignedTagCloud" style="display: none;" class="tagCloud"></span>
             </div>
 
-            <div class="col-sm-2" id="assignedFilter" style = "">
-                <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'class'=>'projectFilterAssigned', 'id' => 'projectFilterAssigned', 'style' =>'width:auto'])->label('Search'); ?>       
+            <div class="col-sm-2">
+                <?= $form->field($model, 'aFilter')->textInput(['value' => $assignedFilterParams, 'id' => 'projectUserAssignedFilter', 'style' =>'width:auto'])->label('Search'); ?>       
             </div>
-
             <div class="col-sm-1">
-                 <img class="assignedSearchCleanFilterButton" src="/logo/filter_clear_black.png" alt="">
+                <img id="projectUserAssignedFilterClear" class="projectUserClearFilterButton" src="/logo/filter_clear_black.png" alt="">
             </div>
-
 			<div class="col-sm-3" >
 				<span id="assignedTagCloud" style="display: none;" class="tagCloud"></span>
             </div>
+			
             <br>
     <?php ActiveForm::end(); ?>
 	</div>
 
 	<div class="row">
-		<?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
+		<?php Pjax::begin(['id' => 'unassignedProjectUserGridView', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'unassignedUserGV',
+					'id' => 'unassignedProjectUserGV',
 					'dataProvider' => $dataProviderUnassigned,
 					'export' => false,
 					'pjax' => false,
@@ -96,10 +93,10 @@ div.inline { float:left; }
 			</div>
 			<input type="hidden" value=<?php echo $project->ProjectID;?> name="projectID" id="projectID">
 		<?php Pjax::end() ?>
-		<?php Pjax::begin(['id' => 'projectGridViewAssigned', 'timeout' => false]) ?>
+		<?php Pjax::begin(['id' => 'assignedProjectUserGridView', 'timeout' => false]) ?>
 			<div class="col-sm-6">
 				<?= GridView::widget([
-					'id' => 'assignedUserGV',
+					'id' => 'assignedProjectUserGV',
 					'dataProvider' => $dataProviderAssigned,
 					'export' => false,
 					'pjax' => false,

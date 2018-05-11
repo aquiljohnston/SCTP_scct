@@ -101,7 +101,7 @@ $column = [
         ]); ?>
         <label id="projectFilter" style="width: 40%">
             <?= $form->field($model, 'filter')->textInput(['id' => 'projectSearchField'])->label("Search"); ?>
-            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectSearchCleanFilterButton']) ?>
+            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectSearchCleanFilterButton', 'class' => 'projectIndexClearFilterButton']) ?>
         </label>
         <?php ActiveForm::end(); ?>
     </div>

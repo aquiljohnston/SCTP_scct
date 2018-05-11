@@ -19,11 +19,17 @@
     margin-bottom: 10px;
 }
 
-#projectSearchCleanFilterButton {
+.projectUserClearFilterButton {
     width: 32px;
     cursor: pointer;
     margin-top: 1px;
     margin-left: -88px;
+}
+
+.projectIndexClearFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 1px;
 }
 
 .field-projectSearchField {
