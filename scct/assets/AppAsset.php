@@ -58,7 +58,6 @@ class AppAsset extends AssetBundle
         'js/mileage_entry_modal.js',
         'js/approve_multiple_timecard.js',
         'js/approve_multiple_mileagecard.js',
-        'js/approve_equipment.js',
         'js/deactive_multiple_timeEntry.js',
         'js/deactive_multiple_mileageEntry.js',
         'js/project.js',
