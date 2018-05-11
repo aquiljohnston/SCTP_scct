@@ -157,7 +157,7 @@ function initListeners() {
             dropdownParam = inspectorsDropdown.val(); 
         // set project timecards
         if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
-            if(!inspectorsDropdown.val().toLocaleLowerCase().includes("< All >".toLocaleLowerCase())) {
+            if(!inspectorsDropdown.val().toLocaleLowerCase().includes("<All>".toLocaleLowerCase())) {
                 console.log("selected report: " + inspectorsDropdown.val());
                 dropdownParam = "["+inspectorsDropdown.val()+"]";
             } else
