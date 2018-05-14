@@ -129,7 +129,7 @@ div.inline { float:left; }
 		<?php Pjax::end() ?>
 	</div>
 	<div class="form-group">
-		<?= Html::Button( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn']) ?>
-		<?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn']) ?>
+		<?= Html::Button( 'Submit', ['class' => 'btn btn-success','id' => 'projectAddUserSubmitBtn', 'disabled' => 'disabled']) ?>
+		<?= Html::resetButton('Reset', ['class' => 'btn btn-default','id' => 'projectAddUserResetBtn', 'disabled' => 'disabled']) ?>
 	</div>
 </div>
