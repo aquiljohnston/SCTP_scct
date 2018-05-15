@@ -83,7 +83,7 @@ use yii\helpers\Url;
                     'showLabels' => false
                 ])->widget(\kartik\widgets\TimePicker::classname(), [
                     'id' => 'StartTimePicker',
-                    'pluginOptions' => ['placeholder' => 'Enter time...',]
+                    'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE]
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -94,7 +94,7 @@ use yii\helpers\Url;
                 <?= $form->field($model, 'EndTime', [
                     'showLabels' => false
                 ])->widget(\kartik\widgets\TimePicker::classname(), [
-                    'pluginOptions' => ['placeholder' => 'Enter time...',]
+                    'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE]
                 ]); ?>
             </div>
         </div>
