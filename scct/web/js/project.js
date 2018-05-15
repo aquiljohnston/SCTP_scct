@@ -21,8 +21,6 @@ $(function(){
 	});
 	
     $('#projectAddUserSubmitBtn').on('click',function(){
-        $(this).val('Please wait ...').attr('disabled','disabled');
-        $('#projectAddUserResetBtn').attr('disabled','disabled');
         addRemoveUser();
     });
 	
@@ -99,6 +97,9 @@ $(function(){
 			addToAssignedTagCloud(user,username);
 			toggleCloudVisibility('assignedTagCloud');
 			$("#assignedTagCloud").scrollTop($("#assignedTagCloud").children().height());
+			
+			//set button avaliability
+			projectUserCheckButtons();
 		})
     });
 	
@@ -131,11 +132,17 @@ $(function(){
 			addToUnssignedTagCloud(user,username);
 			toggleCloudVisibility('unassignedTagCloud');
 			$("#unassignedTagCloud").scrollTop($("#unassignedTagCloud").children().height());
+			
+			//set button avaliability
+			projectUserCheckButtons();
 		})
     });
 
-	$(document).on('click','#projectAddUserResetBtn',function(e){
-
+	$(document).on('click','#projectAddUserResetBtn',function(e)
+	{
+		//reset both buttons and clear data
+		$('#projectAddUserSubmitBtn').attr('disabled', 'disabled');
+		$('#projectAddUserResetBtn').attr('disabled', 'disabled');
 		$('#projectUserUnassignedFilter').val("");
 		$('#projectUserAssignedFilter').val("");
 		$('#unassignedTagCloud').html("");
@@ -283,8 +290,8 @@ $(function(){
 			timeout: 99999
 		}).done(function () {
 			//reset both buttons
-			$('#projectAddUserSubmitBtn').attr('disabled', false);
-			$('#projectAddUserResetBtn').attr('disabled', false);
+			$('#projectAddUserSubmitBtn').attr('disabled', 'disabled');
+			$('#projectAddUserResetBtn').attr('disabled', 'disabled');
 			//reset 'cloud' data
 			$('#assignedTagCloud').html("");
 			$('#assignedTagCloud').css({"display":"none"})
@@ -401,6 +408,19 @@ $(function(){
 				);
 			}
 		});
+	}
+	
+	function projectUserCheckButtons(){
+		//unassignedUserArray
+		//assignedUserArray
+		if(unassignedUserArray.length + assignedUserArray.length > 0)
+		{
+			$('#projectAddUserSubmitBtn').attr('disabled', false);
+			$('#projectAddUserResetBtn').attr('disabled', false);
+		} else {
+			$('#projectAddUserSubmitBtn').attr('disabled', 'disabled');
+			$('#projectAddUserResetBtn').attr('disabled', 'disabled');
+		}
 	}
 });
 
