@@ -5,7 +5,7 @@ $(function(){
     var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
     var projectFilterDD     = $('#projectFilterDD');
     entries                 = [];           
-      
+    pmSubmit();
 	$(document).ready(function () {
 		if(jqWeekSelection.length > 0)
 		{
@@ -82,7 +82,7 @@ $(function(){
 		datePicker.setStartDate(fm);
 		datePicker.setEndDate(to);
 		//set default date range
-		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
+		daterange = fm.format('YYYY/MM/DD') + ' - ' + to.format('YYYY/MM/DD');
 		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
 	}
 	
@@ -103,7 +103,9 @@ $(function(){
 		datePicker.setStartDate(fm);
 		datePicker.setEndDate(to);
 	}
-	
+});
+
+function pmSubmit() {
 	// redundant method; same as multiple_approve_btn_id in approve_multiple_timecard.js
 	$('#pm_submit_btn_id').on('click').click(function (event) {
 		var projectID = new Array();
@@ -119,8 +121,8 @@ $(function(){
 			projectID.push($('#projectFilterDD').val());
 		var dateRangeArray = $('#timeCardDateRange').val().split(',');
 		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
-        krajeeDialog.defaults.confirm.title = 'Submit';
-        krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
+		krajeeDialog.defaults.confirm.title = 'Submit';
+		krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
 			if (resp) {
 				$('#loading').show();
 				$.ajax({
@@ -138,9 +140,9 @@ $(function(){
 				event.stopImmediatePropagation();
 				event.preventDefault();
 			}
-    	});
-   });
-});
+		});
+	});
+}
 
   $( function() {
     $( document ).tooltip();
@@ -183,6 +185,7 @@ function reloadTimeCardGridView() {
 		$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyTimeCardOnClickListeners();
 			applyTimeCardSubmitButtonListener();
+			pmSubmit();
 			$('#loading').hide();
 		});
 		$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
