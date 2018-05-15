@@ -299,6 +299,7 @@ else
 										$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 											applyTimeCardOnClickListeners();
 											applyTimeCardSubmitButtonListener();
+											pmSubmit();
 											$('#loading').hide();
 										});
 										$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
