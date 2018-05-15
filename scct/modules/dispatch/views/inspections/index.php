@@ -18,7 +18,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <div id="inspection-dropDownList-form">
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
-                'options' => ['id' => 'inspectionActiveForm']
+                'options' => ['id' => 'inspectionActiveForm'],
+				'action' => Url::to(['inspections/index'])
             ]); ?>
             <div id="inspectionTableDropdown">
                 <span id="inspectionPageSizeLabel" style="float: right;">

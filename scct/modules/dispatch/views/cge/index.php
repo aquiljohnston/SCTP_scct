@@ -25,6 +25,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
                 'options' => ['id' => 'cgeActiveForm', 'data-pjax' => true],
+				'action' => Url::to(['cge/index'])
             ]); ?>
             <span id="cgePageSizeLabel">
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
