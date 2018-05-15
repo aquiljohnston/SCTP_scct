@@ -200,6 +200,7 @@ else
                     'options' => [
                         'id' => 'TimeCardForm',
                     ],
+					'action' => Url::to(['time-card/index'])
                 ]); ?>
 
                 <div class="row">

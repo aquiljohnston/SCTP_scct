@@ -29,6 +29,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'type' => ActiveForm::TYPE_VERTICAL,
                 //'method' => 'get',
                 'options' => ['id' => 'AssignForm', 'data-pjax' => true],
+				'action' => Url::to(['assigned/index'])
             ]); ?>
                 <span id="AssignedPageSizeLabel">
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
