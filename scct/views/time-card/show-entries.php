@@ -113,6 +113,8 @@ use yii\widgets\Pjax;
 			]
 		]);
 		?>
+		<?= Html::label('Total Time: '. $model['SumHours'],
+			null, ['id' => 'task_sum_hours']) ?>
 		<input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
 		<input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">

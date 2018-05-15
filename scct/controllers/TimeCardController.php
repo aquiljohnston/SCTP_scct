@@ -368,49 +368,40 @@ class TimeCardController extends BaseController
 
 		try{			
 			//build api url paths
-			$time_card_url	= 'time-card%2Fview&id='.$id;
-			$entries_url	= 'time-card%2Fshow-entries&cardID='.$id;
-
-			//execute API request, should probably be able to combine these two calls into one.
-			$time_response	= Parent::executeGetRequest($time_card_url, Constants::API_VERSION_2); // rbac check
-			$resp			= Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
-			
-			$card			= json_decode($time_response, true);
-			$entries		= json_decode($resp, true);
-
-			//putback - eigyan
+			$entries_url = 'time-card%2Fshow-entries&cardID='.$id;
+			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$cardData = json_decode($resp, true);
 
 			//send entries to function to calculate if given card is in overtime
-			$inOvertime = self::calcInOvertime($entries);
-
+			$inOvertime = self::calcInOvertime($cardData['show-entries']);
 			
 			//populate required values if not received from function call
-			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $card['TimeCardProjectID'];
-			$projectName = $projectName != null ? $projectName : $card['ProjectName'];
-			$fName = $fName != null ? $fName : $card['UserFirstName'];
-			$lName = $lName != null ? $lName : $card['UserLastName'];
+			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $cardData['card']['TimeCardProjectID'];
+			$projectName = $projectName != null ? $projectName : $cardData['card']['ProjectName'];
+			$fName = $fName != null ? $fName : $cardData['card']['UserFirstName'];
+			$lName = $lName != null ? $lName : $cardData['card']['UserLastName'];
 
 			//alter from and to dates a bit
-			$from	= str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date1']);
-			$to		= str_replace('-','/',$entries[ENTRIES_ZERO_INDEX]['Date7']);
+			$from	= str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$to		= str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
 			$from	= explode('/', $from);
 
 			//holds dates that accompany table header ex. Sunday 10-23
-			$SundayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date1']);
-			$MondayDate		=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date2']);
-			$TuesdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date3']);
-			$WednesdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date4']);
-			$ThursdayDate 	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date5']);
-			$FridayDate		=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date6']);
-			$SaturdayDate	=  explode('-', $entries[ENTRIES_ZERO_INDEX]['Date7']);
+			$SundayDate 	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$MondayDate		=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']);
+			$TuesdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']);
+			$WednesdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']);
+			$ThursdayDate 	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
+			$FridayDate		=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
+			$SaturdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
 
 			$allTask = new ArrayDataProvider([
-				'allModels' => $entries,
+				'allModels' => $cardData['show-entries'],
                 'pagination'=> false,
 			]);
 
 			return $this -> render('show-entries', [
-				'model' 			=> $card,
+				'model' 			=> $cardData['card'],
 				'task' 				=> $allTask,
 				'from' 				=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
 				'to' 				=> $to,
@@ -424,15 +415,15 @@ class TimeCardController extends BaseController
 				'projectName'   	=> $projectName,
 				'fName'   			=> $fName,
 				'lName'   			=> $lName,
-				'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date1']))),
-				'MondayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date2']))),
-				'TuesdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date3']))),
-				'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date4']))),
-				'ThursdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date5']))),
-				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date6']))),
-				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $entries[ENTRIES_ZERO_INDEX]['Date7']))),
+				'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
+				'MondayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
+				'TuesdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
+				'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']))),
+				'ThursdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
+				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
+				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isSubmitted' 		=> $card['TimeCardSubmittedOasis']!=null && $card['TimeCardSubmttedQuickBooks']!=null,
+				'isSubmitted' 		=> $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardQBSubmitted']=='Yes',
 				'inOvertime'		=> $inOvertime,
 
 			]);
