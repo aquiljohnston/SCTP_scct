@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $project app\models\project */
@@ -28,10 +29,11 @@ div.inline { float:left; }
 	</p>
 
 	<div class="row">
-         <?php $form = ActiveForm::begin([
+        <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_VERTICAL,
                 'formConfig' => ['showLabels' => false,'deviceSize' => ActiveForm::SIZE_SMALL],
-                'options' => ['id' => 'projectUserForm']
+                'options' => ['id' => 'projectUserForm'],
+				'action' => Url::to(['project/add-user?id=' . $project->ProjectID])
             ]); ?>
      
             <div class="col-sm-2">
@@ -55,7 +57,7 @@ div.inline { float:left; }
             </div>
 			
             <br>
-    <?php ActiveForm::end(); ?>
+		<?php ActiveForm::end(); ?>
 	</div>
 
 	<div class="row">
