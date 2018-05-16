@@ -50,6 +50,7 @@ class AppAsset extends AssetBundle
         'type' => 'text/css',
     ];
     public $js = [
+		'js/confirm_modal.js',
         'js/header.js',
         'js/footer.js',
         //'js/add_surveyor_modal.js',
