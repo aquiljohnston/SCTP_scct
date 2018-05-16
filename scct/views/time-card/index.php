@@ -255,12 +255,14 @@ else
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
                 <?php if($showFilter){ ?>
+					<?php Pjax::begin(['id' => 'projectDropDownPjax', 'timeout' => false]) ?>
 					<div class="col-md-2 projectFilterDD">
 						<?=
 							$form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
 							['value' => $model->projectName, 'id'=>'projectFilterDD'])->label('Project'); 
 						?>
 					</div>
+					<?php Pjax::end() ?>
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
 				<?php }else{
 					echo "<input type='hidden' value=$model->projectName id='projectFilterDD'>";

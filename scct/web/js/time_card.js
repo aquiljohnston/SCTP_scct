@@ -174,8 +174,9 @@ function reloadTimeCardGridView() {
 	$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
 		$.pjax.reload({
 			container: '#submitApproveButtons',
-			timeout:false
+			timeout:false,
 		}).done(function (){
+			$.pjax.reload({container: '#projectDropDownPjax', async:false});
 			if($('#multiple_submit_btn_id').hasClass('off-btn')){
 		   $('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
 			} 
