@@ -140,21 +140,26 @@ $(function(){
 
 	$(document).on('click','#projectAddUserResetBtn',function(e)
 	{
-		//reset both buttons and clear data
-		$('#projectAddUserSubmitBtn').attr('disabled', 'disabled');
-		$('#projectAddUserResetBtn').attr('disabled', 'disabled');
-		$('#projectUserUnassignedFilter').val("");
-		$('#projectUserAssignedFilter').val("");
-		$('#unassignedTagCloud').html("");
-		$('#unassignedTagCloud').css({"display":"none"});
-		$('#assignedTagCloud').html("");
-		$('#assignedTagCloud').css({"display":"none"});
-		unassignedUserArray = [];
-		assignedUserArray = [];
+		krajeeDialog.defaults.confirm.title = 'Reset';
+        krajeeDialog.confirm('Resetting will cause you to lose all of your current changes. Are you sure?', function (resp) {
+            if (resp) {
+				//reset both buttons and clear data
+				$('#projectAddUserSubmitBtn').attr('disabled', 'disabled');
+				$('#projectAddUserResetBtn').attr('disabled', 'disabled');
+				$('#projectUserUnassignedFilter').val("");
+				$('#projectUserAssignedFilter').val("");
+				$('#unassignedTagCloud').html("");
+				$('#unassignedTagCloud').css({"display":"none"});
+				$('#assignedTagCloud').html("");
+				$('#assignedTagCloud').css({"display":"none"});
+				unassignedUserArray = [];
+				assignedUserArray = [];
 
-		//reload both gridviews
-		projectUserGridViewReload();
-	})
+				//reload both gridviews
+				projectUserGridViewReload();
+			}
+		});
+	});
 
 	function toggleCloudVisibility(cloud){
 		if ( $('#'+cloud).children().length > 0 ) {
