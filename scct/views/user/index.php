@@ -43,10 +43,10 @@ $column = [
         'contentOptions' => ['class' => 'text-center'],
     ],
     ['class' => 'kartik\grid\ActionColumn',
-        'template' => '{view} {delete}',
+        'template' => '{update} {delete}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view') {
-                $url = '/user/view?username=' . $model["UserName"];
+            if ($action === 'update') {
+                $url = '/user/update?username=' . $model["UserName"];
                 return $url;
             }
             if ($action === 'delete') {
