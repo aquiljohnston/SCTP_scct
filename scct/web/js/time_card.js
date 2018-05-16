@@ -120,6 +120,8 @@ function pmSubmit() {
 		} else
 			projectID.push($('#projectFilterDD').val());
 		var dateRangeArray = $('#timeCardDateRange').val().split(',');
+		if(dateRangeArray.length == 1)
+			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
 		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
 		krajeeDialog.defaults.confirm.title = 'Submit';
 		krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
