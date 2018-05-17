@@ -275,11 +275,17 @@ else
                     <?= $form->field($model, 'dateRangePicker', [
                         'showLabels' => false
                     ])->widget(DateRangePicker::classname(), [
+						'name'=>'date_range_3',
+						'hideInput'=>true,
+						'initRangeExpr' => true,
                         'pluginOptions' => [
+							'opens' => 'left',
+							'ranges' => [
+								"Last 30 Days" => ["moment().startOf('day').subtract(29, 'days')", "moment()"],
+								"This Month" => ["moment().startOf('month')", "moment().endOf('month')"],
+								"Last Month" => ["moment().subtract(1, 'month').startOf('month')", "moment().subtract(1, 'month').endOf('month')"],
+							]
                         ],
-                        'name'=>'date_range_3',
-                        'presetDropdown'=>true,
-                        'hideInput'=>true,
                         'pluginEvents' => [
                             "apply.daterangepicker" => "function() {
                                 "." var form = $('#timeCardDropdownContainer').find('#TimeCardForm');
