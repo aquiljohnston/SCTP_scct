@@ -74,7 +74,7 @@ $(function(){
 	//function called when other is selected in week dropdown to reset widget to default
 	function resetDatePicker(){
 		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').data('daterangepicker');
+		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
 		//create default start end
 		var fm = moment().startOf('day') || '';
 		var to = moment() || '';
@@ -82,7 +82,7 @@ $(function(){
 		datePicker.setStartDate(fm);
 		datePicker.setEndDate(to);
 		//set default date range
-		daterange = fm.format('YYYY/MM/DD') + ' - ' + to.format('YYYY/MM/DD');
+		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
 		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
 	}
 	
@@ -98,7 +98,7 @@ $(function(){
 		var fm = moment(dateRangeArray[0]);
 		var to = moment(dateRangeArray[2]);
 		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').data('daterangepicker');
+		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
 		//set date range values
 		datePicker.setStartDate(fm);
 		datePicker.setEndDate(to);
