@@ -300,7 +300,7 @@ class UserController extends BaseController
             $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
             $obj = json_decode($putResponse, true);
 
-            return $this->redirect(['view', 'username' => $username]);
+            return $this->redirect(['user/index']);
         } else {
             return $this->render('update', [
                 'model' => $model,
