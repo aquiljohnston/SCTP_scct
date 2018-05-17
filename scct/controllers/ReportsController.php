@@ -48,20 +48,6 @@ class ReportsController extends BaseController
             Yii::$app->response->redirect(['login/index']);
         }
 	}
-
-    /**
-     * Get Report Drop Down List
-     * @return mixed
-     * @throws Exception
-     */
-    // public function actionBuildDropDown(){
-
-    //     // Reading the response from the the api and filling the report drop down
-    //     $reportsUrl = 'reports%2Fget-report-drop-down';
-    //     $reportsUrlListResponse = Parent::executeGetRequest($reportsUrl, Constants::API_VERSION_2); // indirect rbac
-    //     $reportsList = $reportsUrlListResponse;//json_decode($reportsUrlListResponse, true);
-    //     echo $reportsList;
-    // }
 		 
     /**
      * Displays a single report.
@@ -102,38 +88,6 @@ class ReportsController extends BaseController
     }
 
     /**
-     * Get Reports
-     * @return mixed
-     * @throws Exception
-     */
-    // public function actionGetReports(){
-    //     try {
-    //         if ($_POST['ParmVar'] == ""){
-    //             $ParmInspector = "none";
-    //         }elseif($_POST['ParmVar'] == "null"){
-    //             $ParmInspector = null;
-    //         }else{
-    //             $ParmInspector = $_POST['ParmVar'];
-    //         }
-    //         // post url
-    //         $url = 'reports%2Fget-report&reportType='.
-    //             urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&ParmInspector='.urlencode($ParmInspector).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']).'&isAccountant='.urlencode($_POST['isAccountant']);
-    //         Yii::trace("reportUrl " . $url);
-    //         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-    //         Yii::trace("GetReportResponse " . $response);
-    //         echo $response;
-
-    //     } catch(ForbiddenHttpException $e)
-    //     {
-    //         throw new ForbiddenHttpException;
-    //     }
-    //     catch(\Exception $e)
-    //     {
-    //         Yii::$app->runAction('login/user-logout');
-    //     }
-    // }
-
-    /**
      * Export Report Table To Excel File
      * @param $url
      */
@@ -148,43 +102,6 @@ class ReportsController extends BaseController
         echo stream_get_contents($fp);
         fclose($fp);
     }
-
-    /**
-     * Get Parm Drop Down
-     * @return mixed
-     * @throws Exception
-     */
-    // public function actionGetParmDropDown(){
-    //     if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
-    //         // Reading the response from the the api and filling Parm Drop Down
-    //         $getParmDropDownUrl = 'reports%2Fget-parm-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
-    //         Yii::trace("MAP GRID URL: ".$getParmDropDownUrl);
-    //         $getParmDropDownResponse = Parent::executeGetRequest($getParmDropDownUrl, Constants::API_VERSION_2); // indirect rbac
-    //         Yii::trace("MAP GRID RESPONSE: ".$getParmDropDownResponse);
-    //         $ParmDropDownList = $getParmDropDownResponse;//json_decode($reportsUrlListResponse, true);
-    //         echo $ParmDropDownList;
-    //     }else{
-    //         echo "";
-    //     }
-    // }
-
-    /**
-     * Get Inspector Drop Down
-     * Use vUser view to pop inspector drop down list
-     * @return mixed
-     * @throws Exception
-     */
-    // public function actionGetInspectorDropDown(){
-    //     if (isset($_POST['SPName']) && isset($_POST['startDate']) && isset($_POST['endDate'])){
-    //         // Reading the response from the the api and filling Inspector Drop Down
-    //         $getInspectorDropDownUrl = 'reports%2Fget-inspector-dropdown&spName='.urlencode($_POST['SPName']).'&startDate='.urlencode($_POST['startDate']).'&endDate='.urlencode($_POST['endDate']);
-    //         $getInspectorDropDownResponse = Parent::executeGetRequest($getInspectorDropDownUrl, Constants::API_VERSION_2); // indirect rbac
-    //         $InspectorDropDownList = $getInspectorDropDownResponse;
-    //         echo $InspectorDropDownList;
-    //     }else{
-    //         echo "";
-    //     }
-    // }
 
     /**
      * Get Dropdowns returns all reports and project in
