@@ -98,6 +98,7 @@ class PermissionDictionary {
         'viewReportsMenu', // View reports
         'viewInspections', // view Inspection
         'viewTrackerMenu', // view Inspection
+		'timeCardPmSubmit', // pm submit time cards
     ];
 
     private static $scctTemplatePermissions = [
