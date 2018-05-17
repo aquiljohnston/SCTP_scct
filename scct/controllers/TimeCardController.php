@@ -56,7 +56,7 @@ class TimeCardController extends BaseController
             $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 			$accountingSubmitReady = FALSE;
 			$pmSubmitReady = FALSE;
-			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+			$isProjectManager = self::can("timeCardPmSubmit");
             // Store start/end date data
             $dateData = [];
             $startDate = null;
