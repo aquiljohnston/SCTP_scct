@@ -79,8 +79,13 @@ $(document).ready(function () {
                     $('#loading').show();
                 },
                 success: function (data) {
-                    data = $.parseJSON(data.navMenu);
-                    //console.log(JSON.stringify(data, null, 2));
+					try{
+						data = $.parseJSON(data.navMenu);
+					} catch(error){
+						$('#loading').hide();
+						$('#nav').html("<div class='alert alert-warning'>We were unable to load the menu. Please logout and try again or call support.</div>");
+						console.error("Menu not loaded. Inspect the request for more info.");
+					}
                     NavBar(data);
                     navBarLoaded = true;
                     checkNavBarLoading();
