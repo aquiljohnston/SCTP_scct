@@ -63,8 +63,8 @@ $('#approve_timeCard_btn_id').click(function (e) {
     var timeCardId = $('#timeCardId').val();
     krajeeDialog.defaults.confirm.title = 'Approve';
     krajeeDialog.confirm('Are you sure you want to approve this?', function (resp) {
-        $('#loading').show();
         if (resp) {
+			$('#loading').show();
             $.ajax({
                 type: 'POST',
                 url: '/time-card/approve?id='+timeCardId,
