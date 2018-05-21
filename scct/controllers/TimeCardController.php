@@ -170,7 +170,7 @@ class TimeCardController extends BaseController
 			
 			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
-				'ProjectName' => [$model->projectName],
+				'ProjectName' => [($model->projectName != null) ? $model->projectName : ''],
 				'StartDate' => $startDate,
 				'EndDate' => $endDate,
 				'isAccountant' => $isAccountant
