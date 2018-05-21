@@ -55,7 +55,7 @@ if($isAccountant)
 			},
 		],
 		[
-			'label' => 'Approved/Total',
+			'label' => 'Submitted/Total',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 			'value' => function($model, $key, $index, $column) {
@@ -63,7 +63,7 @@ if($isAccountant)
 			},
 		],
 		[
-			'label' => 'Approved By',
+			'label' => 'Submitted By',
 			'attribute' => 'ApprovedBy',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
