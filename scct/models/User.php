@@ -25,7 +25,8 @@ use app\constants\Constants;
  * @property string $UserCreatedDate
  * @property string $UserModifiedDate
  * @property integer $UserCreatedBy
- * @property integer $UserModifiedBy
+ * @property integer $UserModifiedBy 
+ * @property string $UserPreferredEmail 
  * @property string $UserCreatedDTLTOffset
  * @property integer $UserModifiedDTLTOffset
  * @property integer $UserInactiveDTLTOffset
@@ -63,6 +64,7 @@ class User extends \yii\base\model implements IdentityInterface
 	public $UserCreatedDTLTOffset;
 	public $UserModifiedDTLTOffset;
 	public $UserInactiveDTLTOffset;
+	public $UserPreferredEmail;
 
 	const MAX_NAME_LENGTH = 100;
 	const MAX_FIRST_NAME_LENGTH = 50;
@@ -82,6 +84,7 @@ class User extends \yii\base\model implements IdentityInterface
         return [
             [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreatedDTLTOffset'], 'string'],
             [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
+			['UserPreferredEmail', 'email'],
             ['UserPassword', 'string'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe'],
             ['UserName', 'string', 'max' => self::MAX_NAME_LENGTH],
@@ -122,6 +125,7 @@ class User extends \yii\base\model implements IdentityInterface
             'UserCreatedDTLTOffset' => 'User Created Dtltoffset',
             'UserModifiedDTLTOffset' => 'User Modified Dtltoffset',
             'UserInactiveDTLTOffset' => 'User Inactive Dtltoffset',
+            'UserPreferredEmail' => 'User Preferred Email',
         ];
     }
 

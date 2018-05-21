@@ -96,6 +96,15 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->dropDownList($roles); ?>
 				</div>
+				<?= Html::activeLabel($model, 'UserPreferredEmail', [
+					'label' => 'Email',
+					'class' => 'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'UserPreferredEmail', [
+						'showLabels' => false
+					])->textInput(['placeholder' => 'Email']); ?>
+				</div>
 				<?= Html::activeLabel($model, 'UserComments', [
 					'label'=>'Comments', 
 					'class'=>'col-sm-2 control-label'

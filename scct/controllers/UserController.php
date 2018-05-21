@@ -174,26 +174,8 @@ class UserController extends BaseController
         $types = json_decode($typeResponse, true);
 
         if ($model->load(Yii::$app->request->post())) {
-            $data = array(
-                'UserName' => $model->UserName,
-                'UserFirstName' => $model->UserFirstName,
-                'UserLastName' => $model->UserLastName,
-                'UserEmployeeType' => $model->UserEmployeeType,
-                'UserPhone' => $model->UserPhone,
-                'UserCompanyName' => $model->UserCompanyName,
-                'UserCompanyPhone' => $model->UserCompanyPhone,
-                'UserAppRoleType' => $model->UserAppRoleType,
-                'UserComments' => $model->UserComments,
-                'UserPassword' => $model->UserPassword,
-                'UserActiveFlag' => 1,
-                //'UserCreatedDate' => $model-> UserCreatedDate, Database auto populates this field on the HTTP post call
-                //'UserModifiedDate' => $model-> UserModifiedDate, Database auto populates this field on the HTTP post call
-                //'UserCreatedBy' => Yii::$app->session['userID'],
-                //'UserModifiedBy' => $model->UserModifiedBy,
-                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
-                'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
-                'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
-            );
+			$model->UserActiveFlag = 1;
+			$data = $model->attributes;
 
             //iv and secret key of openssl
             $iv = "abcdefghijklmnop";
@@ -266,23 +248,7 @@ class UserController extends BaseController
         $types = json_decode($typeResponse, true);
 
         if ($model->load(Yii::$app->request->post())) {
-            $data = array(
-                'UserName' => $model->UserName,
-                'UserFirstName' => $model->UserFirstName,
-                'UserLastName' => $model->UserLastName,
-                'UserEmployeeType' => $model->UserEmployeeType,
-                'UserPhone' => $model->UserPhone,
-                'UserCompanyName' => $model->UserCompanyName,
-                'UserCompanyPhone' => $model->UserCompanyPhone,
-                'UserAppRoleType' => $model->UserAppRoleType,
-                'UserComments' => $model->UserComments,
-                'UserPassword' => $model->UserPassword,
-                'UserCreatedDate' => $model->UserCreatedDate,
-                'UserModifiedDate' => $model->UserModifiedDate,
-                'UserCreatedDTLTOffset' => $model->UserCreatedDTLTOffset,
-                'UserModifiedDTLTOffset' => $model->UserModifiedDTLTOffset,
-                'UserInactiveDTLTOffset' => $model->UserInactiveDTLTOffset,
-            );
+			$data = $model->attributes;
 
             //iv and secret key of openssl
             $iv = "abcdefghijklmnop";
