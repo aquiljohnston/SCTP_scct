@@ -34,7 +34,7 @@ class ReportsController extends BaseController
             }
 
             //Check if user has permission to reports page
-            //self::requirePermission("viewReportsMenu");
+            self::requirePermission("viewReportsMenu");
 
             $model = new Report();
             return $this->render('index', [
@@ -42,8 +42,7 @@ class ReportsController extends BaseController
                 ]
             );
         } catch (ForbiddenHttpException $e) {
-            //Yii::$app->runAction('login/user-logout');
-            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+            Yii::$app->response->redirect(['login/index']);
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         }
