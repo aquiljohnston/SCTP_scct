@@ -109,14 +109,14 @@ function pmSubmit() {
 	// redundant method; same as multiple_approve_btn_id in approve_multiple_timecard.js
 	$('#pm_submit_btn_id').on('click').click(function (event) {
 		var projectID = new Array();
-		if($('#projectFilterDD').val().toLowerCase() == 'All' || $('#projectFilterDD').val().toLowerCase() == '< All >') {
+		if($('#projectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#projectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
 			// get all project ids
 			projectID = new Array();
-			$.each($('#projectFilterDD'), function(i, item){
-				console.log("projectFilterDD item: " + item.val());
-				projectID.push(item.val());
-			});
-			console.log("projectIDs: " + JSON.stringify(projectID));
+			for ( var i = 0, len = projectFilterDD.options.length; i < len; i++ ) {
+				opt = projectFilterDD.options[i];
+				if(opt.value.length > 0)
+					projectID.push(opt.value);
+			}
 		} else
 			projectID.push($('#projectFilterDD').val());
 		var dateRangeArray = $('#timeCardDateRange').val().split(',');
