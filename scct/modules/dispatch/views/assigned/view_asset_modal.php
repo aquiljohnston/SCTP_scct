@@ -42,6 +42,7 @@ use kartik\grid\GridView;
             <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
             <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
             <input id="inspectionType" type="hidden" name="inspectionType"  value=<?php echo $inspectionType; ?> />
+            <input id="billingCode" type="hidden" name="billingCode"  value=<?php echo $billingCode; ?> />
             <input id="viewAssignedAssetPageNumber" type="hidden" name="viewAssignedAssetPageNumber" value="1"/>
         </div>
         <?php ActiveForm::end(); ?>
@@ -241,23 +242,25 @@ use kartik\grid\GridView;
         var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
         var inspectionType = $('#inspectionType').val() == "/" ? "" : $('#inspectionType').val();
-        console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+        var billingCode = $('#billingCode').val() == "/" ? "" : $('#billingCode').val();
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
             url: '/dispatch/assigned/view-asset',
             container: '#assetTablePjax', // id to update content
             data: {
-				searchFilterVal: searchFilterVal,
-				mapGridSelected: mapGridSelected,
-				sectionNumberSelected: sectionNumberSelected,
-				viewAssignedAssetPageNumber:page,
-				inspectionType:inspectionType},
+				searchFilterVal : searchFilterVal,
+				mapGridSelected : mapGridSelected,
+				sectionNumberSelected : sectionNumberSelected,
+				viewAssignedAssetPageNumber : page,
+				inspectionType : inspectionType,
+				billingCode : billingCode,},
             timeout: 99999,
             push: false,
             replace: false,
             replaceRedirect: false
         }).done(function () {
+			$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
             $("body").css("cursor", "default");
             $('#loading').hide();
         });

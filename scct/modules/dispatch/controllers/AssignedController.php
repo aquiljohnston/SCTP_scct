@@ -301,8 +301,8 @@ class AssignedController extends \app\controllers\BaseController
             $viewAssetFilterParams = $searchFilterVal;
             $mapGridSelectedParam = $mapGridSelected;
             $sectionNumberSelectedParam = $sectionNumberSelected;
-			$inspectionType             = $inspectionType; 
-			$billingCode				= $billingCode;
+			$inspectionType = $inspectionType; 
+			$billingCode = $billingCode;
 			//should this not be hard coded?
             $viewAssetPageSizeParams = 200;
             $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
@@ -342,27 +342,20 @@ class AssignedController extends \app\controllers\BaseController
         //todo: set paging on both tables
         // set pages to dispatch table
         $pages = new Pagination($getAssetDataResponse['pages']);
-
+		$params = [
+			'assetDataProvider' => $assetDataProvider,
+			'model' => $model,
+			'pages' => $pages,
+			'searchFilterVal' => $viewAssetFilterParams,
+			'mapGridSelected' => $mapGridSelectedParam,
+			'sectionNumberSelected' => $sectionNumberSelectedParam,
+			'inspectionType' => $inspectionType,
+			'billingCode' => $billingCode,
+		];
         if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'searchFilterVal' => $viewAssetFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-				'inspectionType'        => $inspectionType,
-            ]);
+            return $this->renderAjax('view_asset_modal', $params);
         } else {
-            return $this->render('view_asset_modal', [
-                'assetDataProvider' => $assetDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'searchFilterVal' => $viewAssetFilterParams,
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-				'inspectionType'        => $inspectionType,
-            ]);
+            return $this->render('view_asset_modal', $params);
         }
     }
 
