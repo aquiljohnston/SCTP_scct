@@ -120,8 +120,12 @@ function pmSubmit() {
 		} else
 			projectID.push($('#projectFilterDD').val());
 		var dateRangeArray = $('#timeCardDateRange').val().split(',');
-		if(dateRangeArray.length == 1)
+		if(dateRangeArray.length == 1) {
 			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
+			var selectedDate = new Date(dateRangeArray[0]);
+			var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
+			dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
+		}
 		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
 		krajeeDialog.defaults.confirm.title = 'Submit';
 		krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
