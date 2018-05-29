@@ -94,8 +94,14 @@ $column = [
                 <div id="reactivateButtonUser" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-right: 0;padding-left: 0;margin-left: 2%;">
                     <?php echo Html::button('Reactivate', ['class' => 'btn btn-primary reactivate_btn', 'id' => 'reactivateButton']); ?>
                 </div>
-                <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0;">
-                    <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']) ?>
+                <div class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0;">
+                    <?php echo Html::button('Add/Remove Users', ['class' => 'btn btn-success', 'id' => 'addUserButton']);?>
+                </div>
+                <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0; margin-right: 2%;">
+                    <?php if($isAdmin) { 
+                        echo Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']);
+                        } 
+                    ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton']) ?>
                 <label id="userFilter" class="col-sm-7 col-md-7 col-lg-7" style="float:right;">
@@ -138,6 +144,25 @@ $column = [
         'id' => 'reactivateUserModal',
     ]);?>
     <div id='modalReactivateUser'>Loading...</div>
+    <?php 
+        Modal::end();
+    ?>
+    <!-- AddRemoveUserFromProject Modal -->
+    <?php
+    Modal::begin([
+        'header' => '<h4>Select Project</h4>',
+        'id' => 'AddRemoveUserFromProject',
+    ]);?>
+    <!-- Modal content-->
+    <div id='modalAddRemoveUserFromProjectBody' class="modal-body">
+        <?php 
+            foreach($projects as $row) {
+                echo '<p style="text-align: center; margin-right: 2%;">' 
+                    . Html::a($row['ProjectName'], ['project/add-user?id='.$row['ProjectID']], ['class' => 'btn btn-success', 'id' => 'createUserButton']) 
+                    . '</p>';
+            }
+        ?>
+    </div>
     <?php 
         Modal::end();
     ?>
