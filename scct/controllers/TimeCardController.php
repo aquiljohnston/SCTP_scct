@@ -157,20 +157,29 @@ class TimeCardController extends BaseController
             $projectDropDown				= $response['projectDropDown'];
 			$showFilter						= $showProjectDropDown;
 			
-			//get project id for time card submission if filter is not in place
-			if(!$showFilter)
-			{
-				$model->projectName = Yii::$app->session['ProjectID'];
-			}
-			//get projectId if only one item is in the dropdown implying that 'all' is not(for supervisors with only one project)	
-			elseif(count($projectDropDown) === 1) 
-			{
-				$model->projectName = array_keys($projectDropDown)[0];
-			}
-			
+			$projArray = array();
+			if(!$showFilter) {
+				$keys = array_keys($projectDropDown);
+				$projCounter=0;
+				try{
+					Yii::trace('ProjectName: ' . $model->projectName . ", filter: " . $showFilter);
+					Yii::trace('ProjectName: ' . $model->projectName . ", count: " . sizeof($model->projectName));
+					for($i=0;$i<sizeof($keys); $i++) {
+						if($keys[$i] !== "") {
+							$projArray[$projCounter] = $keys[$i];
+							++$projCounter;
+						}
+					}
+					Yii::trace('projArray is ' . json_encode($projArray));
+				} catch(Exception $e) {
+					$projArray = $keys;
+					Yii::trace('Error: ' . $e);
+				}
+			} else
+				$projArray[0] = Yii::$app->session['ProjectID'];
 			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
-				'ProjectName' => [($model->projectName != null) ? $model->projectName : ''],
+				'ProjectName' => $projArray,
 				'StartDate' => $startDate,
 				'EndDate' => $endDate,
 				'isAccountant' => $isAccountant
