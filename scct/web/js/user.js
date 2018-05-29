@@ -61,6 +61,11 @@ $(function() {
     }
 
     userManagementPaginationListener();
+
+    // AddRemoveUserFromProject Modal
+    $('#addUserButton').click(function () {
+        $('#AddRemoveUserFromProject').modal('show');
+    });
 });
 
 function firePageChangeHandler(event, page) {

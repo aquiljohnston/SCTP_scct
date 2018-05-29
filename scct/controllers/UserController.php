@@ -102,7 +102,18 @@ class UserController extends BaseController
 
             // Generate User Permission Table
             $userPermissionTable = SELF::getUserPermissionTable();
-
+            $isAdmin = Yii::$app->session['UserAppRoleType'] == 'Admin';
+            
+            //todo: create new route instead of using actionGetMe 
+            $url = "user%2Fget-me";
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response = json_decode($response, true);
+            $tmpArray = $response['Projects'];
+            $projects = array();
+            foreach($tmpArray as $project){
+                $tmp = array('ProjectID'=>$project['ProjectID'], 'ProjectName'=>$project['ProjectName']);
+                array_push($projects, $tmp);
+            }
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
@@ -110,7 +121,9 @@ class UserController extends BaseController
                 'filter' => $filterParam,
                 'userPageSizeParams' => $listPerPageParam,
                 'page' => $page,
-                'userPermissionTable' => $userPermissionTable
+                'userPermissionTable' => $userPermissionTable,
+                'isAdmin' => $isAdmin,
+                'projects' => $projects
             ]);
 
         } catch (UnauthorizedHttpException $e){
