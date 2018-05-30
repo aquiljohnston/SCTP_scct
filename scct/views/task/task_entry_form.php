@@ -6,12 +6,46 @@
  * Time: 16:42
  */
 
-use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\widgets\TimePicker;
 use kartik\datetime\DateTimePicker;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Html;
 use yii\helpers\Url;
+
+$columns = [
+		[
+			'label' => 'Task',
+			'attribute' => 'Task',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Date',
+			'attribute' => 'Date',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Start Time',
+			'attribute' => 'Start Time',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'End Time',
+			'attribute' => 'End Time',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Total Time',
+			'attribute' => 'Total Time',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		]
+	];
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,6 +53,23 @@ use yii\helpers\Url;
 <div id="taskWarningMessage" style="display:inline-block; color: red; display: none;">
 	<p></p>
 </div>
+<div class="hours-overview-table">
+	<h5><b>Hours Overview</b></h5>
+	<?php Pjax::begin(['id' => 'hoursOverviewPjaxContainer', 'timeout' => false]) ?>
+		<?= GridView::widget([
+			'id' => 'HoursOverviewGridview',
+			'dataProvider' => $hoursOverviewDataProvider,
+			'export' => false,
+			'bootstrap' => false,
+			'pjax' => true,
+			'summary' => '',
+			'showOnEmpty' => true,
+			'emptyText' => 'No results found!',
+			'columns' => $columns
+		]); ?>
+    <?php Pjax::end() ?>
+</div>
+<br>
 <div class="time-entry-form">
     <?php $form = ActiveForm::begin([
         'id' => 'TaskEntryForm',//$model->formName(),
@@ -115,6 +166,8 @@ use yii\helpers\Url;
     </div>
 		<input type="hidden" name="weekStart" value=<?=Yii::$app->getRequest()->getQueryParam('weekStart') ?> />
 		<input type="hidden" name="weekEnd" value=<?=Yii::$app->getRequest()->getQueryParam('weekEnd') ?> />
+		<input type="hidden" name="timeCardProjectID" value=<?=Yii::$app->getRequest()->getQueryParam('timeCardProjectID') ?> />
+		<input type="hidden" name="inOvertime" value=<?=Yii::$app->getRequest()->getQueryParam('inOvertime') ?> />
     <br>
     <br>
     <div class="form-group">
@@ -140,6 +193,10 @@ use yii\helpers\Url;
             } else {
                 $('#create_task_entry_submit_btn').prop('disabled', true);
             }
+        });
+		
+		$(document).off('change', '#TaskEntryForm #dynamicmodel-date').on('change', '#TaskEntryForm #dynamicmodel-date', function (){
+			reloadHoursOverview();
         });
 
         function InputFieldValidator() {
@@ -181,6 +238,26 @@ use yii\helpers\Url;
 			if(hours<10) sHours = "0" + sHours;
 			if(minutes<10) sMinutes = "0" + sMinutes;
 			return sHours + ":" + sMinutes;
+		}
+		
+		//reloads hours overview table in the task entry modal
+		function reloadHoursOverview()
+		{
+			var form = $('#TaskEntryForm');
+			$('#loading').show();
+			$.pjax.reload({
+				type: 'GET',
+				url: form.attr("action"),
+				container: '#hoursOverviewPjaxContainer', // id to update content
+				data: form.serialize(),
+				timeout: 99999,
+				push: false,
+				replace: false,
+				replaceRedirect: false
+			});
+			$('#hoursOverviewPjaxContainer').off('pjax:success').on('pjax:success', function () {
+				$('#loading').hide();
+			});
 		}
     </script>
 </div>
