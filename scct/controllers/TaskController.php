@@ -133,7 +133,7 @@ class TaskController extends BaseController
      * @internal param $SatudayDate
      */
 
-    public function actionAddTaskEntry($weekStart = null, $weekEnd = null,$TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null, $inOvertime = 'false')
+    public function actionAddTaskEntry($weekStart = null, $weekEnd = null, $TimeCardID = null, $SundayDate = null, $SaturdayDate = null, $timeCardProjectID = null, $inOvertime = 'false')
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
@@ -161,24 +161,12 @@ class TaskController extends BaseController
         $model -> addRule('EndTime', 'string', ['max' => 100], 'required');
         $model -> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
 
-        try {
-			
-			$getAllTaskUrl = 'task%2Fget-all-task&timeCardProjectID='.$timeCardProjectID;
-			$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
-			$allTask = json_decode($getAllTaskResponse, true);
-            $allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
-
-            //get chartOfAccountType for form dropdown
-            $getAllChartOfAccountTypeUrl = 'task%2Fget-charge-of-account-type&inOvertime=' . $inOvertime;
-            $getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
-            $chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
-
-            if ($model->load(Yii::$app->request->queryParams) && $model->validate()) {
-				
+        try {				
+            if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 				// convert to 24 hour format
 				$startTime24 = date("H:i", strtotime($model->StartTime));
 				$endTime24 = date("H:i", strtotime($model->EndTime));
-			
+
                 $task_entry_data = array(
                     'TimeCardID' => $model->TimeCardID,
                     'TaskName' => 'Task ' . $model->TaskName,
@@ -189,18 +177,13 @@ class TaskController extends BaseController
 					'ChargeOfAccountType' => $model->ChargeOfAccountType,
                 );
 
-
-                //date must be on or between week start and week end dates
-
-                $start = str_replace('-','/',$weekStart);
-                $end = str_replace('-','/',$weekEnd);
-
+				$weekStart = Yii::$app->request->post('weekStart');
+				$weekEnd = Yii::$app->request->post('weekEnd');
                 $testDate = date( "Y-m-d", strtotime(str_replace('-', '/',$model->Date)));
-
-                 // make sure date within range
+				
+                // make sure date within range
                 if (strtotime($testDate) < strtotime($weekStart) || strtotime($testDate) > strtotime($weekEnd)) {
-						 throw new \yii\web\HttpException(400);
-
+					throw new \yii\web\HttpException(400);
                 }
 				
 				//probably dont need this check here because there is a validation check on the form
@@ -219,6 +202,49 @@ class TaskController extends BaseController
                     //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                 }
             } else {
+				if($model->load(Yii::$app->request->queryParams)){
+					//format date for query
+					$hoursOverviewDate = date("Y-m-d", strtotime($model->Date));
+					//make route call with time card id and date params to get filtered overview data
+					$getHoursOverviewUrl = 'task%2Fget-hours-overview&timeCardID=' . $model->TimeCardID . '&date=' . $hoursOverviewDate;
+					$getHoursOverviewResponse = Parent::executeGetRequest($getHoursOverviewUrl, Constants::API_VERSION_2);
+					$hoursOverview = json_decode($getHoursOverviewResponse, true);
+					
+					$hoursOverviewDataProvider = new ArrayDataProvider
+					([
+						'allModels' => $hoursOverview['hoursOverview'],
+						'pagination' => false
+					]);
+
+					$hoursOverviewDataProvider->key = 'Task';
+					
+					$timeCardProjectID = Yii::$app->request->get('timeCardProjectID');
+					$inOvertime = Yii::$app->request->get('inOvertime');
+				} else {
+					//make route call with time card to get default overview data
+					$getHoursOverviewUrl = 'task%2Fget-hours-overview&timeCardID=' . $TimeCardID;
+					$getHoursOverviewResponse = Parent::executeGetRequest($getHoursOverviewUrl, Constants::API_VERSION_2);
+					$hoursOverview = json_decode($getHoursOverviewResponse, true);
+					
+					$hoursOverviewDataProvider = new ArrayDataProvider
+					([
+						'allModels' => $hoursOverview['hoursOverview'],
+						'pagination' => false
+					]);
+
+					$hoursOverviewDataProvider->key = 'Task';
+				}
+				
+				$getAllTaskUrl = 'task%2Fget-all-task&timeCardProjectID='.$timeCardProjectID;
+				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
+				$allTask = json_decode($getAllTaskResponse, true);
+				$allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
+
+				//get chartOfAccountType for form dropdown
+				$getAllChartOfAccountTypeUrl = 'task%2Fget-charge-of-account-type&inOvertime=' . $inOvertime;
+				$getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_2);
+				$chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
+				
                 if (Yii::$app->request->isAjax) {
                     return $this->renderAjax('create_task_entry', [
                         'model' => $model,
@@ -226,7 +252,8 @@ class TaskController extends BaseController
                         'chartOfAccountType' => $chartOfAccountType,
                         'timeCardID' => $TimeCardID,
                         'SundayDate' => $SundayDate,
-                        'SaturdayDate' => $SaturdayDate
+                        'SaturdayDate' => $SaturdayDate,
+						'hoursOverviewDataProvider' => $hoursOverviewDataProvider,
                     ]);
                 } else {
                     return $this->render('create_task_entry', [
@@ -235,7 +262,8 @@ class TaskController extends BaseController
                         'chartOfAccountType' => $chartOfAccountType,
                         'timeCardID' => $TimeCardID,
                         'SundayDate' => $SundayDate,
-                        'SaturdayDate' => $SaturdayDate
+                        'SaturdayDate' => $SaturdayDate,
+						'hoursOverviewDataProvider' => $hoursOverviewDataProvider,
                     ]);
                 }
             }

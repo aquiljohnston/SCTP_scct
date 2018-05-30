@@ -35,7 +35,7 @@ function TaskEntryCreation() {
     $('#loading').show();
 
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: form.attr("action"),
         data: form.serialize(),
         success: function (response) {

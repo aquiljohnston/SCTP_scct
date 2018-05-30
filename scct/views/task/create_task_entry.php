@@ -21,7 +21,8 @@ if($allTask != null)
 				'chartOfAccountType' => $chartOfAccountType,
 				'timeCardID' => $timeCardID,
 				'SundayDate' => $SundayDate,
-				'SaturdayDate' => $SaturdayDate
+				'SaturdayDate' => $SaturdayDate,
+				'hoursOverviewDataProvider' => $hoursOverviewDataProvider,
 			]);
 }	
 else
