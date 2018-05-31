@@ -38,23 +38,17 @@ $columns = [
 			'attribute' => 'End Time',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
-		],
-		[
-			'label' => 'Total Time',
-			'attribute' => 'Total Time',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
 		]
 	];
 
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<div id="taskWarningMessage" style="display:inline-block; color: red; display: none;">
+<div id="taskWarningMessage" style="color: red; display: none;">
 	<p></p>
 </div>
 <div class="hours-overview-table">
-	<h5><b>Hours Overview</b></h5>
+	<h5 id="HoursOverviewHeader" style="display: none;"><b>Hours Overview</b></h5>
 	<?php Pjax::begin(['id' => 'hoursOverviewPjaxContainer', 'timeout' => false]) ?>
 		<?= GridView::widget([
 			'id' => 'HoursOverviewGridview',
@@ -64,8 +58,11 @@ $columns = [
 			'pjax' => true,
 			'summary' => '',
 			'showOnEmpty' => true,
-			'emptyText' => 'No results found!',
-			'columns' => $columns
+			'emptyText' => 'No task entries exist for this day.',
+			'columns' => $columns,
+			'options' => [
+				'style' => 'display: none;'
+			]
 		]); ?>
     <?php Pjax::end() ?>
 </div>
@@ -251,11 +248,20 @@ $columns = [
 				container: '#hoursOverviewPjaxContainer', // id to update content
 				data: form.serialize(),
 				timeout: 99999,
+				//not sure how many of these three I actually need to prevent url overwrite
 				push: false,
 				replace: false,
 				replaceRedirect: false
 			});
 			$('#hoursOverviewPjaxContainer').off('pjax:success').on('pjax:success', function () {
+				if($('#TaskEntryForm #dynamicmodel-date').val() != '')
+				{
+					$('#HoursOverviewHeader').css("display", "block");
+					$('#HoursOverviewGridview').css("display", "block");
+				} else {
+					$('#HoursOverviewHeader').css("display", "none");
+					$('#HoursOverviewGridview').css("display", "none");
+				}
 				$('#loading').hide();
 			});
 		}
