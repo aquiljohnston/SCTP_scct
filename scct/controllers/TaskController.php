@@ -202,38 +202,26 @@ class TaskController extends BaseController
                     //return $this->redirect(['show-entries', 'id' => $model->TimeCardID]);
                 }
             } else {
-				if($model->load(Yii::$app->request->queryParams)){
+				$hoursOverview['hoursOverview'] = [];
+				if($model->load(Yii::$app->request->queryParams) && $model->Date != null){	
 					//format date for query
 					$hoursOverviewDate = date("Y-m-d", strtotime($model->Date));
 					//make route call with time card id and date params to get filtered overview data
 					$getHoursOverviewUrl = 'task%2Fget-hours-overview&timeCardID=' . $model->TimeCardID . '&date=' . $hoursOverviewDate;
 					$getHoursOverviewResponse = Parent::executeGetRequest($getHoursOverviewUrl, Constants::API_VERSION_2);
 					$hoursOverview = json_decode($getHoursOverviewResponse, true);
-					
-					$hoursOverviewDataProvider = new ArrayDataProvider
-					([
-						'allModels' => $hoursOverview['hoursOverview'],
-						'pagination' => false
-					]);
 
-					$hoursOverviewDataProvider->key = 'Task';
-					
 					$timeCardProjectID = Yii::$app->request->get('timeCardProjectID');
 					$inOvertime = Yii::$app->request->get('inOvertime');
-				} else {
-					//make route call with time card to get default overview data
-					$getHoursOverviewUrl = 'task%2Fget-hours-overview&timeCardID=' . $TimeCardID;
-					$getHoursOverviewResponse = Parent::executeGetRequest($getHoursOverviewUrl, Constants::API_VERSION_2);
-					$hoursOverview = json_decode($getHoursOverviewResponse, true);
-					
-					$hoursOverviewDataProvider = new ArrayDataProvider
-					([
-						'allModels' => $hoursOverview['hoursOverview'],
-						'pagination' => false
-					]);
-
-					$hoursOverviewDataProvider->key = 'Task';
 				}
+					
+				$hoursOverviewDataProvider = new ArrayDataProvider
+				([
+					'allModels' => $hoursOverview['hoursOverview'],
+					'pagination' => false
+				]);
+
+				$hoursOverviewDataProvider->key = 'Task';
 				
 				$getAllTaskUrl = 'task%2Fget-all-task&timeCardProjectID='.$timeCardProjectID;
 				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);

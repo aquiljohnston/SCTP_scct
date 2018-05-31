@@ -14,17 +14,6 @@
     overflow-y: scroll;
     max-height: 56vh;
 }
-/*.row.vdivide [class*='col-']:not(:last-child):after {
-    background: #e0e0e0;
-    width: 1px;
-    content: "";
-    display:block;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    right: 0;
-    min-height: 70px;
-}*/
 .vdivide{
     position: absolute;
 }
@@ -39,4 +28,9 @@
 }
 .task-index{
     margin-top: 2%;
+}
+/*table on add task modal*/
+#HoursOverviewGridview{
+	max-height: 20vh;
+	overflow-y: auto;
 }
