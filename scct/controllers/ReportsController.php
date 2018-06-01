@@ -63,46 +63,6 @@ class ReportsController extends BaseController
     }
 
     /**
-     * Get Reports
-     * @return mixed
-     * @throws Exception
-     */
-    public function actionGetReportsData(){
-        try {
-
-            // post url
-            $url = 'reports%2Fget-report-export-data&reportType='.urlencode($_POST['ReportType']).'&reportName='.urlencode($_POST['ReportName']).'&reportID='.urlencode($_POST['Parm']).'&parm='.urlencode($_POST['ParmVar']).'&startDate='.urlencode($_POST['BeginDate']).'&endDate='.urlencode($_POST['EndDate']);
-            Yii::trace("GetReportDataURL: ".$url);
-            header('Content-Disposition: attachment; filename="report_'.date('Y-m-d_h_i_s').'.csv"');
-            $this->requestAndOutputCsv($url);
-
-        } catch(ForbiddenHttpException $e)
-        {
-            throw new ForbiddenHttpException;
-        }
-        catch(\Exception $e)
-        {
-            Yii::$app->runAction('login/user-logout');
-        }
-    }
-
-    /**
-     * Export Report Table To Excel File
-     * @param $url
-     */
-    public function requestAndOutputCsv($url){
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $fp = fopen('php://temp','w');
-        header('Content-Type: text/csv;charset=UTF-8');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
-        rewind($fp);
-        echo stream_get_contents($fp);
-        fclose($fp);
-    }
-
-    /**
      * Get Dropdowns returns all reports and project in
      * the both tables. No filters are used.
      * @return JSON
