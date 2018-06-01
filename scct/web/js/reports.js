@@ -22,6 +22,7 @@
     endDatePicker = $('#datePickerEndDate').datepicker({minDate: "1/31/"+(new Date()).getFullYear(), maxDate : 'now', maxDate : 'now'});
     oTable = null;
     selectedReport = new Object();
+    queryResultsAray = null;
  }
 
 $(function () {
@@ -168,8 +169,14 @@ function initListeners() {
             mapgrid = mapGridDropdown.val();
         // execute server call   
         dataSync("report",reportStartDate,reportEndDate, dropdownParam, mapgrid);
+        if(selectedReport.ExportFlag == 1)
+            toggleVisible([exportButton[0]], "inline");
     });
     // Export Report Data Action
+    $("#export").click(function (e) {
+        console.log("Export clicked!");
+        convertToCSV();
+    });
 }
 //--------------- helper functions ---------------//
 function resetDropdowns() {
@@ -248,9 +255,10 @@ function dataSync(ajaxCallType, reportStartDate, reportEndDate, dropdownParam, m
         success: function (data) {
             if(ajaxCallType === "mapgrid")
                 loadDropdowns(JSON.parse(data), mapGridDropdown);
-            else if(ajaxCallType === "report")
-                loadTable(JSON.parse(data));
-            else
+            else if(ajaxCallType === "report") {
+                queryResultsAray = JSON.parse(data);
+                loadTable(queryResultsAray);
+            } else
                 loadDropdowns(JSON.parse(data), inspectorsDropdown);
             $('#loading').hide();
         },
@@ -284,4 +292,66 @@ function loadDropdowns(data, dropdown){
         console.log("Ajax error, " + err);
         $("#dataMessage").text("An error occurred, please refresh your page and try again.");
     }
+}
+
+/*Converts javascript array to CSV format */
+function convertToCSV() {
+    console.log("queryResultsAray obj: " + JSON.stringify(queryResultsAray));
+    console.log("columns: " + JSON.stringify(queryResultsAray.columns));
+    console.log("data: " + JSON.stringify(queryResultsAray.data));
+    var header = queryResultsAray.columns;
+    var array = queryResultsAray.data;
+
+    /* Get table headers */
+    var indexes = [];
+    for (var i = 0; i < header.length; i++) {
+        str += '<th scope="col">' + header[i]['title'] + '</th>';
+        indexes.push(header[i]['title']);
+    }
+
+    /* Data */
+    var str = '';
+    var strIndexes = '';
+
+    /* Write headers */
+    for (var j = 0; j < indexes.length; j++) {
+        if (j != indexes.length - 1 && isNaN(indexes[j])) {
+            strIndexes += indexes[j] + ';';
+        }
+        else
+            strIndexes += indexes[j];
+    }
+    str += strIndexes + '\r\n';
+
+    /* write data */
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ';';
+
+            line += (array[i][index] !== null) ? array[i][index] : ''; // Append the cell data
+            // The ternary operator changes nulls to ''
+        }
+        str += line + '\r\n';
+    }
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+    today = mm + '/' + dd + '/' + yyyy;
+
+    str = str.replace(/[^\x00-\x7F]/g, "");
+    str = 'sep=;\r\n' + str;
+    //using FileSaver.min.js
+    var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
+    saveAs(blob, "Report_" + today + ".csv");
 }
