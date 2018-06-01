@@ -152,31 +152,25 @@ class TimeCardController extends BaseController
             $response 				        = json_decode($response, true);
             $assets 				        = $response['assets'];
             $approvedTimeCardExist 	        = array_key_exists('approvedTimeCardExist', $response) ? $response['approvedTimeCardExist'] : false;
-            $showProjectDropDown            = $response['showProjectDropDown'];
+            $showFilter			            = $response['showProjectDropDown'];
             $projectWasSubmitted        	= $response['projectSubmitted'];
-            $projectDropDown				= $response['projectDropDown'];
-			$showFilter						= $showProjectDropDown;
+			$projectDropDown				= $response['projectDropDown'];
 			
 			$projArray = array();
-			if(!$showFilter) {
-				$keys = array_keys($projectDropDown);
-				$projCounter=0;
-				try{
-					Yii::trace('ProjectName: ' . $model->projectName . ", filter: " . $showFilter);
-					Yii::trace('ProjectName: ' . $model->projectName . ", count: " . sizeof($model->projectName));
-					for($i=0;$i<sizeof($keys); $i++) {
-						if($keys[$i] !== "") {
-							$projArray[$projCounter] = $keys[$i];
-							++$projCounter;
-						}
+			$keys = array_keys($projectDropDown);
+			$projCounter=0;
+			try{
+				for($i=0;$i<sizeof($keys); $i++) {
+					if($keys[$i] !== "") {
+						$projArray[$projCounter] = $keys[$i];
+						++$projCounter;
 					}
-					Yii::trace('projArray is ' . json_encode($projArray));
-				} catch(Exception $e) {
-					$projArray = $keys;
-					Yii::trace('Error: ' . $e);
 				}
-			} else
-				$projArray[0] = Yii::$app->session['ProjectID'];
+			} catch(Exception $e) {
+				$projArray = $keys;
+				Yii::trace('Error: ' . $e);
+			}
+
 			//should consider moving submit check into its own function
 			$submitCheckData['submitCheck'] = array(
 				'ProjectName' => $projArray,
@@ -185,7 +179,7 @@ class TimeCardController extends BaseController
 				'isAccountant' => $isAccountant
 			);
 			$json_data = json_encode($submitCheckData);
-
+		
 			$submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
 			$submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
 			$submit_button_ready = json_decode($submit_button_ready_response, true);
@@ -194,7 +188,7 @@ class TimeCardController extends BaseController
 				$accountingSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
 			else
 				$pmSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
-
+			Yii::trace("Submit button is: " . $submit_button_ready['SubmitReady']);
             // passing decode data into dataProvider
             $dataProvider 		= new ArrayDataProvider
 			([
