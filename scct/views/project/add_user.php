@@ -23,10 +23,14 @@ div.inline { float:left; }
 
 <div class="project-add-user" style="margin-top: 2%;">
     <h1 class="title"><?= Html::encode($this->title) ?></h1>
-
 	<p>
-		<?= Html::a('Back', ['view' , 'id' => $project->ProjectID], ['class' => 'btn btn-primary']) ?>
+	<?php if($isAdmin) {
+				echo Html::a('Back Project', ['view' , 'id' => $project->ProjectID], ['class' => 'btn btn-primary']); 
+			} 
+			echo Html::a('Back User Mgmt', ['/user'],['class' => 'btn btn-primary', 'style' => 'margin-left: .5%']);
+		?>
 	</p>
+	
 
 	<div class="row">
         <?php $form = ActiveForm::begin([

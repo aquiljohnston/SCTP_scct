@@ -446,7 +446,8 @@ class ProjectController extends BaseController
                 'unassignedFilterParams'				=> $uaFilterParam,
                 'assignedFilterParams' 					=> $aFilterParam, 
                 'unassignedPagination'					=> $unassignedPagination,
-                'assignedPagination' 					=> $assignedPagination,
+				'assignedPagination' 					=> $assignedPagination,
+				'isAdmin'								=> Yii::$app->session['UserAppRoleType'] == 'Admin'
             ]);
         } elseif(Yii::$app->request->post()) {
 			if (isset($_POST['projectID']))
