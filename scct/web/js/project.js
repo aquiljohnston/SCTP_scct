@@ -47,6 +47,16 @@ $(function(){
         }
     });
 
+	//clear search filter on project index screen
+	$(document).off('click', '#projectIndexClearFilterButton').on('click', '#projectIndexClearFilterButton', function (){
+		filter = $('#projectIndexSearchField');
+		
+		if(filter.val()!=""){
+            filter.val(""); 
+            projectIndexGridviewReload();
+        }
+	});
+	
     $(document).off('click', '#projectUserUnassignedFilterClear').on('click', '#projectUserUnassignedFilterClear', function (){
         a = $('#projectUserUnassignedFilter');
 		
@@ -246,6 +256,7 @@ $(function(){
 		return environment;
 	}
 
+	//what calls this?
 	function reloadProjectGridView() {
 		var jqProjectAddUser = $('.project-add-user');
 		var form = jqProjectAddUser.find("#projectAdduserform");
@@ -308,6 +319,21 @@ $(function(){
 			assignedUserArray = [];
 			//reload both tables
 			projectUserGridViewReload();
+		});
+	}
+	
+	//reload table on project index screen
+	function projectIndexGridviewReload() {
+		var form = $("#projectIndexForm");
+		$('#loading').show();
+		$.pjax.reload({
+			container: "#projectIndexGridView",
+			timeout: 99999,
+			url: form.attr("action"),
+			type: "GET",
+			data: form.serialize()
+		}).done(function () {
+			$('#loading').hide();
 		});
 	}
 

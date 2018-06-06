@@ -103,8 +103,10 @@ $column = [
                         } 
                     ?>
                 </div>
-                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton']) ?>
-                <label id="userFilter" class="col-sm-7 col-md-7 col-lg-7" style="float:right;">
+				<div class="col-sm-1 col-md-1 col-lg-1" style="float:right;">
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton', 'style' => 'float: left']) ?>
+				</div>
+                <label id="userFilter" class="col-sm-6 col-md-6 col-lg-6" style="float:right;">
                     <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search', 'id' => 'userSearchFilter'])->label(''); ?>
                 </label>
                 <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
