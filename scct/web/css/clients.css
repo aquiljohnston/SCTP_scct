@@ -10,11 +10,8 @@
 	max-height:59vh;
 	overflow-y:auto;
 }
-.field-clientSearchField{
-	float: left;
-	width: 90%;
-}
 #clientSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
+	margin-top: 1px;
 }

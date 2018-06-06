@@ -64,25 +64,26 @@ $column = [
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p style="float: left;">
+    <div class = 'col-sm-1' style='padding-left: 0px'>
         <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-
-    <?php $form = ActiveForm::begin([
-        'type' => ActiveForm::TYPE_HORIZONTAL,
-        'formConfig' => ['labelSpan' => 5, 'deviceSize' => ActiveForm::SIZE_SMALL],
-        'method' => 'get',
-        'action' => Url::to(['client/index']),
-        'options' => [
-            'id' => 'ClientForm',
-        ]
-    ]); ?>
-
-    <label id="clientFilter" style="width: 40%;;">
-        <?= $form->field($model, 'filter')->textInput(['value' => $filter, 'id' => 'clientSearchField' ])->label("Search"); ?>
-        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clientSearchCleanFilterButton']) ?>
-    </label>
-    <?php ActiveForm::end(); ?>
+    </div>
+	
+	<div class = 'col-sm-11' id="clientSearchContainer">
+		<?php $form = ActiveForm::begin([
+			'type' => ActiveForm::TYPE_HORIZONTAL,
+			'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
+			'method' => 'get',
+			'action' => Url::to(['client/index']),
+			'options' => [
+				'id' => 'ClientForm',
+			]
+		]); ?>
+		<label id='clientFilter' class='col-sm-4'>
+			<?= $form->field($model, 'filter')->textInput(['value' => $filter, 'id' => 'clientSearchField' ])->label("Search"); ?>
+		</label>
+		<?php ActiveForm::end(); ?>
+		<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clientSearchCleanFilterButton']) ?>
+	</div>
 
     <?php Pjax::begin(['id' => 'clientGridview', 'timeout' => false]) ?>
     <?= GridView::widget([
@@ -93,7 +94,7 @@ $column = [
         'columns' => $column,
         'id' => 'clientGV'
     ]); ?>
-    <div id="UserPagination">
+    <div class="clientIndexPagination">
         <?php
         echo LinkPager::widget([
             'pagination' => $pages,

@@ -82,38 +82,38 @@ $column = [
 <div class="project-index">
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
-    <p style="float: left;">
+    <div class = 'col-sm-1' style='padding-left: 0px'>
         <?php if ($canCreateProjects): ?>
             <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
         <?php else: ?>
             <?= Html::a('Create Project', null, ['class' => 'btn btn-success', 'disabled' => 'disabled']) ?>
         <?php endif; ?>
-    </p>
-    <div id="projectSearchContainer">
+    </div>
+    <div class = 'col-sm-11' id="projectSearchContainer">
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_HORIZONTAL,
-            'formConfig' => ['labelSpan' => 5, 'deviceSize' => ActiveForm::SIZE_SMALL],
+            'formConfig' => ['labelSpan' => 3, 'deviceSize' => ActiveForm::SIZE_SMALL],
             'method' => 'get',
             'action' => Url::to(['project/index']),
             'options' => [
-                'id' => 'projectForm',
+                'id' => 'projectIndexForm',
             ]
         ]); ?>
-        <label id="projectFilter" style="width: 40%">
-            <?= $form->field($model, 'filter')->textInput(['id' => 'projectSearchField'])->label("Search"); ?>
-            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectSearchCleanFilterButton', 'class' => 'projectIndexClearFilterButton']) ?>
+        <label id="projectFilter" class = 'col-sm-4'>
+            <?= $form->field($model, 'filter')->textInput(['id' => 'projectIndexSearchField'])->label("Search"); ?>
         </label>
         <?php ActiveForm::end(); ?>
+		<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectIndexClearFilterButton', 'class' => 'projectIndexClearFilterButton']) ?>
     </div>
 
-    <?php Pjax::begin(['id' => 'projectGridView', 'timeout' => false]) ?>
+    <?php Pjax::begin(['id' => 'projectIndexGridView', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
         'bootstrap' => false,
         'columns' => $column
     ]); ?>
-    <div id="UserPagination">
+    <div class="projectIndexPagination">
         <?php
         echo LinkPager::widget([
             'pagination' => $pages,
