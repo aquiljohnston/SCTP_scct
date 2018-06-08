@@ -102,7 +102,6 @@ class UserController extends BaseController
 
             // Generate User Permission Table
             $userPermissionTable = SELF::getUserPermissionTable();
-            $isAdmin = Yii::$app->session['UserAppRoleType'] == 'Admin';
             
             //todo: create new route instead of using actionGetMe 
             $url = "user%2Fget-me";
@@ -122,7 +121,6 @@ class UserController extends BaseController
                 'userPageSizeParams' => $listPerPageParam,
                 'page' => $page,
                 'userPermissionTable' => $userPermissionTable,
-                'isAdmin' => $isAdmin,
                 'projects' => $projects
             ]);
 

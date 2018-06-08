@@ -98,10 +98,7 @@ $column = [
                     <?php echo Html::button('Add/Remove Users', ['class' => 'btn btn-success', 'id' => 'addUserButton']);?>
                 </div>
                 <div id="userButtons" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-left: 0;padding-right: 0; margin-right: 2%;">
-                    <?php //if($isAdmin) { 
-                        echo Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']);
-                        //} 
-                    ?>
+                    <?php echo Html::a('Create User', ['create'], ['class' => 'btn btn-success', 'id' => 'createUserButton']);?>
                 </div>
 				<div class="col-sm-1 col-md-1 col-lg-1" style="float:right;">
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton', 'style' => 'float: left']) ?>
