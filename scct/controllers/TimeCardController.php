@@ -160,10 +160,15 @@ class TimeCardController extends BaseController
 			$keys = array_keys($projectDropDown);
 			$projCounter=0;
 			try{
-				for($i=0;$i<sizeof($keys); $i++) {
-					if($keys[$i] !== "") {
-						$projArray[$projCounter] = $keys[$i];
-						++$projCounter;
+				// need to check if we have filtered on project (Todo: review why projectID is always empty/null)
+				if($model->projectName != NULL)
+					$projArray[0] = $model->projectName;
+				else {
+					for($i=0;$i<sizeof($keys); $i++) {
+						if($keys[$i] !== "") {
+							$projArray[$projCounter] = $keys[$i];
+							++$projCounter;
+						}
 					}
 				}
 			} catch(Exception $e) {
