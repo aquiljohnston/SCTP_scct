@@ -64,8 +64,8 @@ $(function(){
         reloadTimeCardGridView();
     });
 
-    $(document).off('click', '#clearProjectFilterButton').on('click', '#clearProjectFilterButton',function (){
-        projectFilterDD.val("");
+    $(document).off('click', '#timeCardClearProjectFilterButton').on('click', '#timeCardClearProjectFilterButton',function (){
+        projectFilterDD.val("All");
 		//either or not both, first line returns you to the base screen /time-card second line reloads the page
         //window.location.href = window.location.href.split('?')[0];
         reloadTimeCardGridView();
