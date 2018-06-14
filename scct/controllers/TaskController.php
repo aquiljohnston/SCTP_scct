@@ -267,14 +267,11 @@ class TaskController extends BaseController
     private function FormatTaskData($data){
         $namePairs = [];
 
-        // check which key exist TaskName or FilterName
-        $TaskName = array_key_exists('TaskName', $data[0]) ? 'TaskName' : 'FilterName';
-
         if ($data != null) {
             $codesSize = count($data);
 
             for ($i = 0; $i < $codesSize; $i++) {
-                $namePairs[$data[$i][$TaskName]] = $data[$i][$TaskName];
+                $namePairs[$data[$i]['TaskName']] = $data[$i]['TaskName'];
             }
         }
         return $namePairs;
