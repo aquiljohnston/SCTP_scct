@@ -398,8 +398,17 @@ class BaseController extends Controller
 	//the last Sunday(begin) and next Saturday(end) based on the given date
 	public static function getWeekBeginEnd($date)
 	{
-		$lastSunday = date('m/d/Y', strtotime('last Sunday', strtotime($date)));
-		$nextSaturday = date('m/d/Y',strtotime('next Saturday', strtotime($date)));
+		if(date('N', strtotime($date)) == 7){
+			$lastSunday = date('m/d/Y', strtotime($date));
+		}else{
+			$lastSunday = date('m/d/Y', strtotime('last Sunday', strtotime($date)));
+		}
+		
+		if(date('N', strtotime($date)) == 6){
+			$nextSaturday = date('m/d/Y', strtotime($date));
+		}else{
+			$nextSaturday = date('m/d/Y',strtotime('next Saturday', strtotime($date)));
+		}
 		return "$lastSunday, $nextSaturday";
 	}
 	

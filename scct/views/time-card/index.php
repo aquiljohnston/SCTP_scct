@@ -263,7 +263,7 @@ else
 						?>
 					</div>
 					<?php Pjax::end() ?>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clearProjectFilterButton']) ?>
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearProjectFilterButton']) ?>
 				<?php }else{
 					echo "<input type='hidden' value=$model->projectName id='projectFilterDD'>";
 				} ?>
