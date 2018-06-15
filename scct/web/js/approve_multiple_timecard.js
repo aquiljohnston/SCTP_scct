@@ -20,6 +20,12 @@ $(function () {
 });
 
 function applyTimeCardOnClickListeners() {
+	$(document).off('click', '#timeCardClearProjectFilterButton').on('click', '#timeCardClearProjectFilterButton', function (){
+        $('#projectFilterDD').val("All");
+		$('#timeCardPageNumber').val(1);
+        reloadTimeCardGridView();
+    });
+	
     $('#multiple_approve_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
         var quantifier = "";
