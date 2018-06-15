@@ -124,7 +124,7 @@ $column = [
                 'summary' => '',
                 'columns' => $column
             ]); ?>
-            <div id="UserPagination">
+            <div id="UserPagination" class="UserPagination">
                 <?php
                 echo LinkPager::widget([
                     'pagination' => $pages,

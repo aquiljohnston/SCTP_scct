@@ -8,9 +8,14 @@
     margin-left: 1%;
 }
 
-.project-index .kv-grid-container {
-    max-height: 56vh;
-    overflow-y: auto;
+#projectIndexGridView-container{
+	max-height : 65vh;
+	width : 100%;
+    overflow: auto;
+}
+
+.projectIndexPagination{
+	margin-top: 1%;
 }
 
 .projectAddUserForms, .projectAddModuleForms {

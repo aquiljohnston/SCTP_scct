@@ -46,15 +46,28 @@ $(function(){
             projectUserGridViewAssignedReload();
         }
     });
+	
+	$(document).off('click', "#projectIndexPagination ul li a").on('click', "#projectIndexPagination ul li a", function (event) {
+        var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
+        $('#projectIndexPageNumber').val(page);
+        projectIndexGridviewReload();
+        event.preventDefault();
+        return false;
+    });
+
+    $(document).off('keypress', '#projectIndexSearchField').on('keypress', '#projectIndexSearchField', function (e) {
+        if (e.keyCode === 13 || e.keyCode === 10) {
+            e.preventDefault();
+			$('#projectIndexPageNumber').val(1);
+            projectIndexGridviewReload();
+        }
+    });
 
 	//clear search filter on project index screen
 	$(document).off('click', '#projectIndexClearFilterButton').on('click', '#projectIndexClearFilterButton', function (){
-		filter = $('#projectIndexSearchField');
-		
-		if(filter.val()!=""){
-            filter.val(""); 
-            projectIndexGridviewReload();
-        }
+		$('#projectIndexSearchField').val("");
+		$('#projectIndexPageNumber').val(1);
+        projectIndexGridviewReload();
 	});
 	
     $(document).off('click', '#projectUserUnassignedFilterClear').on('click', '#projectUserUnassignedFilterClear', function (){
@@ -327,7 +340,7 @@ $(function(){
 		var form = $("#projectIndexForm");
 		$('#loading').show();
 		$.pjax.reload({
-			container: "#projectIndexGridView",
+			container: "#projectIndexPjaxContainer",
 			timeout: 99999,
 			url: form.attr("action"),
 			type: "GET",

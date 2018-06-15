@@ -27,67 +27,50 @@ class ClientController extends BaseController
 		//Check if user has permission to view client page
 		self::requirePermission("viewClientMgmt");
         $model = new \yii\base\DynamicModel([
-            'filter', 'pagesize'
+            'filter', 'pagesize', 'page'
         ]);
         $model->addRule('filter', 'string', ['max' => 32])
-            ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            ->addRule('pagesize', 'integer')
+            ->addRule('page', 'integer');
 
-        $filterParam = "";
-        $userPageSizeParams = 50;
         // check if type was get, if so, get value from $model
-        if ($model->load(Yii::$app->request->get())) {
-            //$userPageSizeParams = $model->pagesize;
-            $filterParam = $model->filter;
-            $userPageSizeParams = $model->pagesize;
-        }
-        //Determine which page to show
-        if (isset($_GET['userPage'])) {
-            $page = $_GET['userPage'];
-        } else {
-            $page = 1;
+        if (!$model->load(Yii::$app->request->get())) {
+            $model->page = 1;
+            $model->pagesize = 100;
+            $model->filter = "";
         }
 
-        $nameFilterParam = Yii::$app->request->getQueryParam('filterclientname', '');
-        $cityFilterParam = Yii::$app->request->getQueryParam('filtercityname', '');
-        $stateFilterParam = Yii::$app->request->getQueryParam('filterstatename', '');
+		$searchModel = [
+            'ClientName' =>  Yii::$app->request->getQueryParam('filterclientname', ''),
+            'ClientCity' => Yii::$app->request->getQueryParam('filtercityname', ''),
+            'ClientState' => Yii::$app->request->getQueryParam('filterstatename', '')
+        ];
 
-        $url = "client%2Fget-all&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($userPageSizeParams)
-            . "&page=" . urlencode($page) . "&filterclientname=" . urlencode($nameFilterParam)
-            . "&filtercityname=" . urlencode($cityFilterParam) . "&filterstatename=" . urlencode($stateFilterParam);
+		$url = "client%2Fget-all&"
+            . http_build_query(
+                [
+                    'filter' => $model->filter,
+                    'listPerPage' => $model->pagesize,
+                    'page' => $model->page,
+                    'filterclientname' => $searchModel['ClientName'],
+                    'filtercityname' => $searchModel['ClientCity'],
+                    'filterstatename' => $searchModel['ClientState']
+                ]);
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // RBAC permissions checked indirectly via this call
         $response = json_decode($response, true);
         $assets = $response['assets'];
-        $searchModel = [
-            'ClientName' => $nameFilterParam,
-            'City' => $cityFilterParam,
-            'State' => $stateFilterParam
-        ];
+        
         //Passing data to the dataProvider and formating it in an associative array
         $dataProvider = new ArrayDataProvider
         ([
             'allModels' => $assets,
             'pagination' => [
-                'pageSize' => 100,
+                'pageSize' => $model->pagesize,
             ],
         ]);
-
-        $searchModel = [
-            'ClientName' => Yii::$app->request->getQueryParam('filterclientname', ''),
-            'ClientCity' => Yii::$app->request->getQueryParam('filtercity', ''),
-            'ClientState' => Yii::$app->request->getQueryParam('filterstate', ''),
-        ];
-        //Passing data to the dataProvider and formatting it in an associative array
-        $dataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $assets,
-            'pagination' => [
-                'pageSize' => 100,
-            ],
-        ]);
-
         //set pages
         $pages = new Pagination($response['pages']);
-
+		
         // Sorting Client table
         $dataProvider->sort = [
             'attributes' => [
@@ -114,9 +97,7 @@ class ClientController extends BaseController
             'dataProvider' => $dataProvider,
             'searchModel' => $searchModel,
             'model' => $model,
-            'pages' => $pages,
-            'filter' => $filterParam,
-            'userPageSizeParams' => $userPageSizeParams
+            'pages' => $pages
         ]);
 
     }

@@ -102,18 +102,23 @@ $column = [
         <label id="projectFilter" class = 'col-sm-4'>
             <?= $form->field($model, 'filter')->textInput(['id' => 'projectIndexSearchField'])->label("Search"); ?>
         </label>
-        <?php ActiveForm::end(); ?>
 		<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'projectIndexClearFilterButton', 'class' => 'projectIndexClearFilterButton']) ?>
+		<?= $form->field($model, 'page')->hiddenInput(['id' => 'projectIndexPageNumber', 'value' => $model->page])->label(false); ?>
+		<?= $form->field($model, 'pagesize')->hiddenInput(['value' => $model->pagesize])->label(false); ?>
+        <?php ActiveForm::end(); ?>
     </div>
 
-    <?php Pjax::begin(['id' => 'projectIndexGridView', 'timeout' => false]) ?>
+    <?php Pjax::begin(['id' => 'projectIndexPjaxContainer', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
         'bootstrap' => false,
+		'pjax' => false,
+		'summary' => '',
+		'id' => 'projectIndexGridView',
         'columns' => $column
     ]); ?>
-    <div class="projectIndexPagination">
+    <div id="projectIndexPagination" class="projectIndexPagination">
         <?php
         echo LinkPager::widget([
             'pagination' => $pages,

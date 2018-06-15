@@ -87,6 +87,9 @@ div[id^=modalContent] #loading {
 	overflow-y:auto;
 	overflow-x: hidden;
 }
+#TCPagination{
+	margin-top: 1%;
+}
 #timeCardPageSize {
 	margin-left: 110%;
 	margin-top: 15%;
