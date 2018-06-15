@@ -6,9 +6,13 @@
 	margin-top: 2%;
 	margin-left: 1%;
 }
-.client-index .kv-grid-container{
-	max-height:59vh;
-	overflow-y:auto;
+#clientIndexGridView-container{
+	max-height : 65vh;
+	width : 100%;
+    overflow: auto;
+}
+.clientIndexPagination{
+	margin-top: 1%;
 }
 #clientSearchCleanFilterButton{
 	width: 32px;

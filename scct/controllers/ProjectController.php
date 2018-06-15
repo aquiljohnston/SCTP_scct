@@ -35,34 +35,26 @@ class ProjectController extends BaseController
 		self::requirePermission("viewProjectMgmt");
 		
         $model = new \yii\base\DynamicModel([
-            'filter', 'pagesize'
+            'filter', 'pagesize', 'page'
         ]);
         $model->addRule('filter', 'string', ['max' => 32])
-            ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            ->addRule('page', 'integer')
+            ->addRule('pagesize', 'integer');
 
         // check if type was post, if so, get value from $model
-        if ($model->load(Yii::$app->request->get())) {
-
-            $listPerPageParam = $model->pagesize;
-            $filterParam = $model->filter;
-        } else {
-            $listPerPageParam = 50;
-            $filterParam = "";
+        if (!$model->load(Yii::$app->request->get())) {
+			$model->page = 1;
+            $model->pagesize = 100;
+            $model->filter = "";
         }
-        
-
-        $pageParam = Yii::$app->request->getQueryParam('userPage', '');
-
-		//errors out without this -eigyan
-        $pageParam = $pageParam == '' ? 1 : $pageParam;
 
 		// Reading the response from the the api and filling the GridView
         $url = "project%2Fget-all&"
             . http_build_query(
                 [
-                    'filter' => $filterParam,
-                    'listPerPage' => $listPerPageParam,
-                    "page" => $pageParam
+                    'filter' => $model->filter,
+                    'listPerPage' => $model->pagesize,
+                    'page' => $model->page
                 ]);
 		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
@@ -73,7 +65,7 @@ class ProjectController extends BaseController
 		$dataProvider = new ArrayDataProvider([
 			'allModels' => $resultData['assets'],
 			'pagination' => [
-				'pageSize' => 100,
+				'pageSize' => $model->pagesize,
 			],
 		]);
 
@@ -102,12 +94,11 @@ class ProjectController extends BaseController
                 ]
             ]
         ];
-
 		return $this -> render('index', [
 			'dataProvider' => $dataProvider,
 			'canCreateProjects' => self::can("projectCreate"),
             'model' => $model,
-            'pages' => $pages
+            'pages' => $pages,
 		]);
 
     }

@@ -62,7 +62,6 @@ $column = [
 <div class="client-index">
 
     <h3 class="title"><?= Html::encode($this->title) ?></h3>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <div class = 'col-sm-1' style='padding-left: 0px'>
         <?= Html::a('Create Client', ['create'], ['class' => 'btn btn-success']) ?>
@@ -79,22 +78,26 @@ $column = [
 			]
 		]); ?>
 		<label id='clientFilter' class='col-sm-4'>
-			<?= $form->field($model, 'filter')->textInput(['value' => $filter, 'id' => 'clientSearchField' ])->label("Search"); ?>
+			<?= $form->field($model, 'filter')->textInput(['value' => $model->filter, 'id' => 'clientSearchField' ])->label("Search"); ?>
 		</label>
-		<?php ActiveForm::end(); ?>
 		<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'clientSearchCleanFilterButton']) ?>
+		<?= $form->field($model, 'page')->hiddenInput(['id' => 'clientIndexPageNumber', 'value' => $model->page])->label(false); ?>
+		<?= $form->field($model, 'pagesize')->hiddenInput(['value' => $model->pagesize])->label(false); ?>
+		<?php ActiveForm::end(); ?>
 	</div>
 
-    <?php Pjax::begin(['id' => 'clientGridview', 'timeout' => false]) ?>
+    <?php Pjax::begin(['id' => 'clientIndexPjaxContainer', 'timeout' => false]) ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'export' => false,
         'bootstrap' => false,
+		'pjax' => false,
+		'summary' => '',
         'columns' => $column,
-        'id' => 'clientGV'
+		'id' => 'clientIndexGridView'
     ]); ?>
-    <div class="clientIndexPagination">
+    <div id="clientIndexPagination" class="clientIndexPagination">
         <?php
         echo LinkPager::widget([
             'pagination' => $pages,
