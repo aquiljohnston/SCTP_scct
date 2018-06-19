@@ -154,7 +154,7 @@ class LoginController extends BaseController
             $activity->ActivitySrcDTLT = BaseController::getDate();
             $activity->ActivityTitle = $activityTitle;
             $activity->ActivityCreateDate = BaseController::getDate();
-            $activity->ActivityCreatedUserUID = Yii::$app->session['userID'];
+            $activity->ActivityCreatedUserUID = Yii::$app->session['UserName'];
             $activity->ActivityAppVersion = 'Web_' . Constants::DEFAULT_VERSION;
             $activity->ActivityAppVersionName = 'Web_' . BaseController::urlPrefix() . '_' . Constants::DEFAULT_VERSION;
             //loop and format geolocation data
@@ -180,15 +180,21 @@ class LoginController extends BaseController
             } else {
                 $activity->ActivityComments = $geoLocationData;
             }
-
-            //populate timeEntry data
-            $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
-            $timeEntry->TimeEntryStartTime = BaseController::getDate();
-            $timeEntry->TimeEntryEndTime = BaseController::getDate();
-            $timeEntry->TimeEntryActiveFlag = "1";
-            $timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
-            $timeEntry->TimeEntryCreateDate = BaseController::getDate();
-            $timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
+			
+			//if time card is not avaliable set to null
+			if(Yii::$app->session['userTimeCard'] != null)
+			{
+				//populate timeEntry data
+				$timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
+				$timeEntry->TimeEntryStartTime = BaseController::getDate();
+				$timeEntry->TimeEntryEndTime = BaseController::getDate();
+				$timeEntry->TimeEntryActiveFlag = "1";
+				$timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
+				$timeEntry->TimeEntryCreateDate = BaseController::getDate();
+				$timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
+			} else {
+				$timeEntry = null;
+			}
 
             //build post json
             $postData = [];
@@ -196,7 +202,7 @@ class LoginController extends BaseController
             $timeEntryArray = [];
 
             //populate post data
-            $timeEntryArray[] = $timeEntry;
+            if($timeEntry != null) $timeEntryArray[] = $timeEntry;
             $activity['timeEntry'] = $timeEntryArray;
             $activityArray[] = $activity;
             $postData['activity'] = $activityArray;
@@ -216,12 +222,14 @@ class LoginController extends BaseController
 	private static function getSessionData()
 	{
 		//get users time card and store in session data
-		// $timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-card&userID=' . Yii::$app->session['userID']);
-		// $userTimeCard = json_decode($timeCardResponse, true);
-		// if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
-		// {
-			// Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
-		// }
+		$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-my-card');
+		yii::trace('Get Card Response ' . $timeCardResponse);
+		$userTimeCard = json_decode($timeCardResponse, true);
+		if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
+		{
+			yii::trace('Time Card ID ' . $userTimeCard['TimeCardID']);
+			Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
+		}
 		
 		//get web dropdowns and store in sesssion data
 		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', Constants::API_VERSION_2);
