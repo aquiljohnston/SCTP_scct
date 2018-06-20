@@ -223,7 +223,7 @@ class TaskController extends BaseController
 
 				$hoursOverviewDataProvider->key = 'Task';
 				
-				$getAllTaskUrl = 'task%2Fget-all-task&timeCardProjectID='.$timeCardProjectID;
+				$getAllTaskUrl = 'task%2Fget-by-project&projectID='.$timeCardProjectID;
 				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_2);
 				$allTask = json_decode($getAllTaskResponse, true);
 				$allTask = $allTask['assets'] != null ? $this->FormatTaskData($allTask['assets']): $allTask['assets'];
