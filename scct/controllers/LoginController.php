@@ -181,20 +181,22 @@ class LoginController extends BaseController
                 $activity->ActivityComments = $geoLocationData;
             }
 			
+			//removing, time entries should only be used for task, which currenly do not exist on the web. 
+			//Leaving code in place if this changes in the future.
 			//if time card is not avaliable set to null
-			if(Yii::$app->session['userTimeCard'] != null)
-			{
-				//populate timeEntry data
-				$timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
-				$timeEntry->TimeEntryStartTime = BaseController::getDate();
-				$timeEntry->TimeEntryEndTime = BaseController::getDate();
-				$timeEntry->TimeEntryActiveFlag = "1";
-				$timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
-				$timeEntry->TimeEntryCreateDate = BaseController::getDate();
-				$timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
-			} else {
+			// if(Yii::$app->session['userTimeCard'] != null)
+			// {
+				// //populate timeEntry data
+				// $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
+				// $timeEntry->TimeEntryStartTime = BaseController::getDate();
+				// $timeEntry->TimeEntryEndTime = BaseController::getDate();
+				// $timeEntry->TimeEntryActiveFlag = "1";
+				// $timeEntry->TimeEntryTimeCardID = Yii::$app->session['userTimeCard'];
+				// $timeEntry->TimeEntryCreateDate = BaseController::getDate();
+				// $timeEntry->TimeEntryCreatedBy = Yii::$app->session['userID'];
+			// } else {
 				$timeEntry = null;
-			}
+			// }
 
             //build post json
             $postData = [];
@@ -221,15 +223,15 @@ class LoginController extends BaseController
 	//and save values in session variables. 
 	private static function getSessionData()
 	{
-		//get users time card and store in session data
-		$timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-my-card');
-		yii::trace('Get Card Response ' . $timeCardResponse);
-		$userTimeCard = json_decode($timeCardResponse, true);
-		if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
-		{
-			yii::trace('Time Card ID ' . $userTimeCard['TimeCardID']);
-			Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
-		}
+		//get users time card and store in session data, removing because no task activities are generated on the web so time entries should not be used.
+		// $timeCardResponse = BaseController::executeGetRequest('time-card%2Fget-my-card');
+		// yii::trace('Get Card Response ' . $timeCardResponse);
+		// $userTimeCard = json_decode($timeCardResponse, true);
+		// if(is_array($userTimeCard) && array_key_exists('TimeCardID', $userTimeCard))
+		// {
+			// yii::trace('Time Card ID ' . $userTimeCard['TimeCardID']);
+			// Yii::$app->session->set('userTimeCard', $userTimeCard['TimeCardID']);
+		// }
 		
 		//get web dropdowns and store in sesssion data
 		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', Constants::API_VERSION_2);
