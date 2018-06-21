@@ -12,18 +12,6 @@ use kartik\form\ActiveForm;
 
 ?>
 <div id="assignedaddsurveyordialogtitle">
-    <div id="addSurveyorModalHeader" class="addsurveryContainer">
-        <?php
-        /* $count = 0;
-         if(count($MapPlat) < 2) {
-             echo $MapPlat[0] . "<input type=hidden name=IRUID value=".$IRUID[0].">";
-         }else{
-             foreach ($MapPlat as $item){
-                 echo $item . "<input type=hidden name=IRUID value=".$IRUID[$count++].">";
-             }
-         }*/
-        ?>
-    </div>
     <div id="add-surveyor-dropDownList-form">
         <?php yii\widgets\Pjax::begin(['id' => 'addSurveyorForm']) ?>
         <?php $form = ActiveForm::begin([
@@ -99,7 +87,7 @@ use kartik\form\ActiveForm;
         $('#addSurveyorSearchCge').prop('disabled', !enabled);
         resetCgeDispatchButtonState(); // make check enable / disable dispatch button
     }
-
+	
     function resetCgeDispatchButtonState()
     {
         $('.modalDispatchCgeBtn').prop('disabled', true); //TO DISABLED
@@ -107,8 +95,8 @@ use kartik\form\ActiveForm;
 
         $(".AddSurveyor input[type=checkbox]").click(function () {
             assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapGridData = getCgeDispatchMapGridData(cgeSelectedMapGrid, assignedUserID[0]);
-            dispatchAssetsData = getCgeDispatchAssetsData(cgeSelectedAssets, assignedUserID[0]);
+            dispatchMapGridData = getCgeDispatchMapGridData(assignedUserID[0]);
+            dispatchAssetsData = getCgeDispatchAssetsData(assignedUserID[0]);
             console.log(assignedUserID.length);
             if (assignedUserID.length == 1) {
                 $('.modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED

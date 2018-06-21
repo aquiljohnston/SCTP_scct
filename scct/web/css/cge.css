@@ -1,6 +1,21 @@
 #cgeGV-container{
     overflow-x: hidden;
 }
+#cgeGridViewContainer{
+	position:relative;
+    float:left;
+    width:100%;
+    margin-top: 0.7%;
+    z-index: 1;
+}
+#cgeGV {
+    width: 100%;
+    float: left;
+    max-height: 57vh;/*360px;*/
+    overflow-y: auto;
+    margin: 0 auto;
+    overflow-x: hidden;
+}
 #cgeDispatchButton{
     width: 110%;
     margin-top: 13px;

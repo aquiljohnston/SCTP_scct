@@ -26,27 +26,27 @@ use kartik\datetime\DateTimePicker;
             [
                 'label' => 'Inspector',
                 'attribute' => 'Inspector',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
             ],
              [
                 'label' => 'Customer Info',
                 'attribute' => 'CustomerInfo',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 17.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
             ],
             [
                 'label' => 'Address',
                 'attribute' => 'Address',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
             ],
             [
                 'label' => 'Last Inspection Date',
                 'attribute' => 'InspectionDateTime',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
             ],
             [
                 'label' => 'Scheduled Date',
@@ -55,55 +55,45 @@ use kartik\datetime\DateTimePicker;
                 'contentOptions' => ['class' => 'text-center ScheduledDate','style' => 'width: 20%;'],
                 'value' => function($model){
                         $uniqueID = uniqid();
-                    if ($model['ScheduleRequired'] == 1 ) {
                         return DateTimePicker::widget([
                             'name' => 'ScheduledDate',
                             'options' => [
-                                'placeholder' => Yii::t('app', 'Enter the date ...'),
+                                'placeholder' => Yii::t('app', 'Enter scheduled date ...'),
                                 'id' => $uniqueID,
                             ],
                             'pluginOptions' => [
                                 'autoclose' => true,
                                 'format' => 'mm/dd/yyyy hh:ii:ss',
                                 'todayHighlight' => true
-                            ],
-                            'pluginEvents' => [
-                                //"changeDate" => "function(e) {  alert('date changed'); }",
                             ]
                         ]);
-                    }else {
-                        return DateTimePicker::widget([
-                            'name' => 'ScheduledDate',
-                            'disabled' => true
-                        ]);
-                    }
                 },
                 'format' => 'raw'
             ],
             [
                 'label' => 'Inspection Type',
                 'attribute' => 'SurveyType',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
             ],
             [
                 'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
             ],
             [
                 'label' => 'Office Name',
                 'attribute' => 'OfficeName',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
             ],
             [
                 'attribute' => 'Image',
                 'format' => 'raw',
                 'label' => 'Image',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 3.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 3.5%;'],
                 'value' => function ($model) {
                     if ($model['Image'] != null)
                         return Html::a(Html::img(Yii::getAlias('@web/logo/linkIcon.png'), ['width' => '20px']),[Url::to('/../images/'.$model['Image'])], ['target'=>'_blank', 'data-pjax'=>"0"]);
@@ -133,11 +123,13 @@ use kartik\datetime\DateTimePicker;
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
                 'contentOptions' => ['class' => 'text-center cgeDispatchAssetsCheckbox','style' => 'width: 5%;'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
-                    /*if ($model['CGE'] == 1)
-                        return ['disabled' => true, 'checked' => true];
-                    else
-                        return ['disabled' => true, 'checked' => false];*/
-                    return ['ScheduledDate' => 'ScheduledDate', 'disabled' => 'disabled', 'WorkOrderID' => $model['WorkOrderID'], 'SectionNumber' =>$model['SectionNumber']];
+                    return [
+						'ScheduledDate' => '',
+						'ScheduleRequired' => $model['ScheduleRequired'],
+						'WorkOrderID' => $model['WorkOrderID'],
+						'SectionNumber' =>$model['SectionNumber'],
+						'disabled' => ($model['ScheduleRequired'] == 1 ? 'disabled' : false)
+					];
                 }
             ]
         ],
