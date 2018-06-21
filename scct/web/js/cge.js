@@ -4,8 +4,6 @@
 $(function () {
     // global variable
     var currentSelectedDate = null;
-        cgeSelectedMapGrid = "";
-        cgeSelectedAssets = "";
 
     //pagination listener on CGE page
     $(document).off('click', '#cgeTablePagination .pagination li a').on('click', '#cgeTablePagination .pagination li a', function (event) {
@@ -35,8 +33,8 @@ $(function () {
     $(document).off('change', '.ScheduledDate').on('change', '.ScheduledDate', function () {
         currentSelectedDate = $(this).find("input[name=ScheduledDate]").val();
         $(this).closest('tr').find('td.cgeDispatchAssetsCheckbox input[type="checkbox"]').attr("scheduleddate", currentSelectedDate);
-        //console.log("SCHEDULED DATE: "+$(this).closest('tr').find('td.cgeCheckBox input[type="checkbox"]').attr("scheduleddate"));
-        if (currentSelectedDate == "" || currentSelectedDate.length == 0){
+        scheduleRequired = $(this).closest('tr').find('td.cgeDispatchAssetsCheckbox input[type="checkbox"]').attr('ScheduleRequired');
+        if ((currentSelectedDate == "" || currentSelectedDate.length == 0) && scheduleRequired == 1){
             $(this).closest('tr').find('td.cgeDispatchAssetsCheckbox input[type="checkbox"]').prop("disabled", true);
         }else{
             $(this).closest('tr').find('td.cgeDispatchAssetsCheckbox input[type="checkbox"]').prop("disabled", false);
@@ -46,8 +44,7 @@ $(function () {
     // checkbox listener at map grid level
     $(document).off('click', '.cgeDispatchCheckbox input[type=checkbox]').on('click', '.cgeDispatchCheckbox input[type=checkbox]', function () {
         cgeSelectedMapGrid = $('#cgeGV').yiiGridView('getSelectedRows');
-        console.log("SELECTED MAP GRIDS: "+cgeSelectedMapGrid);
-        if (cgeSelectedMapGrid.length > 0 || cgeSelectedAssets.length > 0)
+        if (cgeSelectedMapGrid.length > 0)
             $("#cgeDispatchButton").prop('disabled', false);
         else
             $("#cgeDispatchButton").prop('disabled', true);
@@ -55,8 +52,8 @@ $(function () {
 
     // checkbox listener at assets table level
     $(document).off('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]').on('click', '.cgeDispatchAssetsCheckbox input[type=checkbox]', function () {
-        cgeSelectedAssets = $("#cgeGridview #cgeAssetsGV").yiiGridView('getSelectedRows');
-        console.log("SELECTED ASSETS: "+cgeSelectedAssets);
+        cgeSelectedMapGrid = $('#cgeGV').yiiGridView('getSelectedRows');
+		cgeSelectedAssets = $("#cgeGridview #cgeAssetsGV").yiiGridView('getSelectedRows');
         if (cgeSelectedMapGrid.length > 0 || cgeSelectedAssets.length > 0)
             $("#cgeDispatchButton").prop('disabled', false);
         else
@@ -98,38 +95,32 @@ function cgeGridViewReload() {
     });
 }
 
-function getCgeDispatchAssetsData(cgeSelectedAssets, AssignedUserID) {
+function getCgeDispatchAssetsData(assignedUserID) {
     var cgeDispatchAssetsData = [];
-    var SectionNumber = null;
-    var ScheduledDate = null;
-    if (cgeSelectedAssets.length > 0) {
-        for (var i = 0; i < cgeSelectedAssets.length; i++) {
-            ScheduledDate = $("#cgeAssetsGV input[workorderid=" + cgeSelectedAssets[i] + "]").attr("ScheduledDate");
-            SectionNumber = $("#cgeAssetsGV input[workorderid=" + cgeSelectedAssets[i] + "]").attr("SectionNumber");
-            cgeDispatchAssetsData.push({
-                WorkOrderID: cgeSelectedAssets[i],
-                AssignedUserID: AssignedUserID,
-                ScheduledDate: ScheduledDate,
-                SectionNumber: SectionNumber
-            });
-        }
-    }
+	$('#cgeAssetsGV-container .cgeDispatchAssetsCheckbox input:checked').each(function() {
+		cgeDispatchAssetsData.push({
+			WorkOrderID: $(this).attr("WorkOrderID"),
+			AssignedUserID: assignedUserID,
+			ScheduledDate: $(this).attr("ScheduledDate"),
+			SectionNumber: $(this).attr("SectionNumber")
+		});
+    });
+	console.log('AssetData '  + JSON.stringify(cgeDispatchAssetsData));
     return cgeDispatchAssetsData;
 }
 
-function getCgeDispatchMapGridData(cgeSelectedMapGrid, assignedUserID) {
+function getCgeDispatchMapGridData(assignedUserID) {
     var cgeDispatchMapGridData = [];
-    if (cgeSelectedMapGrid.length > 0){
-        for (var i = 0; i < cgeSelectedMapGrid.length; i++){
-            cgeDispatchMapGridData.push({
-                MapGrid: cgeSelectedMapGrid[i],
-                AssignedUserID: assignedUserID
-            })
-        }
-        return cgeDispatchMapGridData;
-    }else{
-        return cgeDispatchMapGridData;
-    }
+	$('#cgeGV-container .cgeDispatchCheckbox input:checked').each(function() {
+		cgeDispatchMapGridData.push({
+			MapGrid: $(this).attr("MapGrid"),
+			AssignedUserID: assignedUserID,
+			BillingCode: $(this).attr("BillingCode"),
+			InspectionType: $(this).attr("InspectionType")
+		});
+	});
+	console.log('MapGridData '  + JSON.stringify(cgeDispatchMapGridData));
+	return cgeDispatchMapGridData;
 }
 
 function resetCge_Global_Variable() {

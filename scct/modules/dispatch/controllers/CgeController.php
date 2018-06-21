@@ -72,9 +72,14 @@ class CgeController extends \app\controllers\BaseController
             ([
                 'allModels' => $cgeData,
                 'pagination' => false,
+				'key' => function ($cgeData) {
+					return array(
+						'MapGrid' => $cgeData['MapGrid'],
+						'InspectionType' => $cgeData['InspectionType'],
+						'BillingCode' => $cgeData['BillingCode'],
+					);
+				},
             ]);
-
-            $cgeDataProvider->key = 'MapGrid';
 
             // Sorting Dispatch table
             $cgeDataProvider->sort = [
@@ -134,8 +139,7 @@ class CgeController extends \app\controllers\BaseController
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
-            Yii::$app->runAction('login/user-logout');
-            //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
+           throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
         } catch (Exception $e) {
             Yii::$app->runAction('login/user-logout');
         }
@@ -153,23 +157,23 @@ class CgeController extends \app\controllers\BaseController
         }
 
         // get the key to generate section table
-        if (isset($_POST['expandRowKey']))
-            $mapGridSelected = $_POST['expandRowKey'];
-        else
-            $mapGridSelected = "";
-        //todo: get-history&workOrderID=x
+        if (isset($_POST['expandRowKey'])){
+            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
+            $inspectionType = $_POST['expandRowKey']['InspectionType'];
+            $billingCode = $_POST['expandRowKey']['BillingCode'];
+		}else{
+            $mapGridSelected = '';
+			$inspectionType = '';
+			$billingCode = '';
+		}
+		
         $getUrl = 'cge%2Fget-by-map&' . http_build_query([
-                'mapGrid' => $mapGridSelected,
-                /*'filter' => "",
-                'listPerPage' => 100,
-                'page' => 1*/
-            ]);
+			'mapGrid' => $mapGridSelected,
+			'inspectionType' => $inspectionType,
+			'billingCode' => $billingCode
+		]);
         $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        Yii::trace("GET SECTION: ".json_encode($getSectionDataResponseResponse));
         $sectionData = $getSectionDataResponseResponse['cges'];
-
-        //set paging on assigned table
-        //$pages = new Pagination($getSectionDataResponseResponse['pages']);
 
         $sectionDataProvider = new ArrayDataProvider
         ([
@@ -181,13 +185,11 @@ class CgeController extends \app\controllers\BaseController
 
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider,
-                //'pages' => $pages,
+                'sectionDataProvider' => $sectionDataProvider
             ]);
         } else {
             return $this->render('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider,
-                //'pages' => $pages,
+                'sectionDataProvider' => $sectionDataProvider
             ]);
         }
     }
@@ -207,8 +209,6 @@ class CgeController extends \app\controllers\BaseController
                 'workOrderID' => $workOrderID
             ]);
         $getHistoryDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-
-        Yii::trace("reGenerateAssetsData " . json_encode($getHistoryDataResponse));
 
         // Put data in data provider
         $historyDataProvider = new ArrayDataProvider
@@ -237,16 +237,9 @@ class CgeController extends \app\controllers\BaseController
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
                 $json_data = json_encode($data);
-                //Yii::trace("CGE DISPATCH DATA: " . $json_data);
-                $dispatchType = "DISPATCH_CGE_TYPE";
-
                 // post url
-                $postUrl = 'dispatch%2Fdispatch&'. http_build_query([
-                        'dispatchType' => $dispatchType,
-                    ]);
+                $postUrl = 'dispatch%2Fdispatch';
                 $postResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-                Yii::trace("cge dispatchpostResponse " . $postResponse);
-
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
