@@ -16,7 +16,6 @@ class PermissionDictionary {
     ];
 
     private static $ctPermissions = [
-        'activityCodeGetDropdown', // Get an associative array of Activity Codes
         'activityView', // View an activity
         'activityCreate', // Create an activity
         'appRoleGetDropdown', // Get an associative array of App Roles
@@ -48,7 +47,6 @@ class PermissionDictionary {
         'mileageEntryCreate', // Create a mileage entry
         'mileageEntryDeactivate', // Deactivate a mileage entry
         'notificationsGet', // Get notifications
-        'payCodeGetDropdown', // Get an associative array of pay codes
         'projectGetAll', // Get an array of all projects
         'projectView', // View a project
         'projectCreate', // Create a project
@@ -68,6 +66,8 @@ class PermissionDictionary {
         'timeEntryView', // View a time entry
         'timeEntryCreate', // Create a time entry
         'timeEntryDeactivate', // Deactivate a time entry
+		'getAllTask', //Get an array of all task
+		'createTaskEntry', //Create a task entry
         'userGetActive', // Get all active users
         'userView', // View a user
         'userCreate', // Create a user
@@ -79,7 +79,6 @@ class PermissionDictionary {
         'userUpdateProjectManager', // Update user of role type project manager
         'userUpdateAdmin', // Update user of role type admin
         'userDeactivate', // Deactivate user
-        'userGetDropdown', // Get an associative array of user id/name pairs
         'userGetMe', // Get equipment and project data for a user
         'viewClientMgmt', // View client management
         'viewProjectMgmt', // View project name
@@ -96,8 +95,9 @@ class PermissionDictionary {
         'viewDispatch', // View dispatch
         'viewAssigned', // View assigned
         'viewReportsMenu', // View reports
-        'viewInspections', // view Inspection
-        'viewTrackerMenu', // view Inspection
+        'viewInspections', // View Inspection
+        'viewTrackerMenu', // View Tracker
+		'viewTrainingMenu', // View Training Videos
 		'timeCardPmSubmit', // pm submit time cards
     ];
 

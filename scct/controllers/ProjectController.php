@@ -115,6 +115,10 @@ class ProjectController extends BaseController
 		{
 			return $this->redirect(['/login']);
 		}
+		
+		//Check if user has permissions
+		self::requirePermission("projectView");
+		
 		$url = "project%2Fview&joinNames=true&id=$id";
 		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
         Yii::trace("VIEW PROJECT : ".$response);

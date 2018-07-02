@@ -146,6 +146,10 @@ class UserController extends BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
+		
+		//Check if user has permissions
+		self::requirePermission("userView");
+		
         $url = 'user%2Fview&username=' . $username;
         $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 

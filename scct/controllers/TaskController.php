@@ -36,7 +36,7 @@ class TaskController extends BaseController
         }
 
         //Check if user has permission to view task page
-        //self::requirePermission("viewTaskMgmt");
+        self::requirePermission("getAllTask");
 
         $model = new \yii\base\DynamicModel([
             'taskfilter','userfilter', 'pagesize'
@@ -144,7 +144,7 @@ class TaskController extends BaseController
         $SundayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SundayDate)));
         $SaturdayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $SaturdayDate)));
 
-        self::requirePermission("timeEntryCreate");
+        self::requirePermission("createTaskEntry");
 
         $model = new \yii\base\DynamicModel([
             'TimeCardID',

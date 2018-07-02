@@ -21,6 +21,9 @@ class NotificationController extends \app\controllers\BaseController
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
+			
+			//Check if user has permissions
+			self::requirePermission("notificationsGet");
 
             $model = new \yii\base\DynamicModel([
                 'notificationfilter', 'pagesize',
