@@ -42,6 +42,9 @@ class TimeCardController extends BaseController
             return $this->redirect(['/login']);
         }
 
+		//Check if user has permissions
+		self::requirePermission("viewTimeCardMgmt");
+		
         try {
 			//if request is not coming from time-card reset session variables. 
 			$referrer = Yii::$app->request->referrer;
@@ -373,6 +376,9 @@ class TimeCardController extends BaseController
 		{
 			return $this->redirect(['/login']);
 		}
+		
+		//Check if user has permissions
+		self::requirePermission("timeCardGetEntries");
 
 		try{			
 			//build api url paths

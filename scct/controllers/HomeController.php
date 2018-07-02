@@ -33,6 +33,10 @@ class HomeController extends BaseController
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
+			
+			//Check if user has permissions
+			self::requirePermission("notificationsGet");
+			
             // Reading the response from the the api and filling the GridView
             $url = 'notification%2Fget-notifications';
             $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);

@@ -23,7 +23,7 @@ class CgeController extends \app\controllers\BaseController
     {
         try {
             //Check if user has permission to view cge page
-            //self::requirePermission("viewCGE");
+            self::requirePermission("viewCGE");
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {

@@ -65,7 +65,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $dispatchDataProvider, // Sent from DispatchController.php
                 'export' => false,
                 'pjax' => true,
-                //'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [

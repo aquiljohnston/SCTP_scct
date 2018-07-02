@@ -16,6 +16,10 @@ class TrainingController extends BaseController {
     public function actionIndex() {
         try {
             $this->isGuestUser();
+			
+			//Check if user has permissions
+			self::requirePermission("viewTrainingMenu");
+			
             return $this->render('index');
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);

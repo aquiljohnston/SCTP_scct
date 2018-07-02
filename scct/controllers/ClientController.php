@@ -114,6 +114,10 @@ class ClientController extends BaseController
 		{
 			return $this->redirect(['/login']);
 		}
+		
+		//Check if user has permissions
+		self::requirePermission("clientView");
+		
 		$url = 'client%2Fview&joinNames=true&id='.$id;
 		$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
