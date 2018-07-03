@@ -238,9 +238,11 @@ class ClientController extends BaseController
 		];
 		
 		//get clients for form dropdown
-		$clientAccountsUrl = "client-accounts%2Fget-client-account-dropdowns";
-		$clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
-		$clientAccounts = json_decode($clientAccountsResponse, true);
+		//Route is no longer in place may be re added in the future
+		// $clientAccountsUrl = "client-accounts%2Fget-client-account-dropdowns";
+		// $clientAccountsResponse = Parent::executeGetRequest($clientAccountsUrl);
+		// $clientAccounts = json_decode($clientAccountsResponse, true);
+		$clientAccounts = ['' => ''];
 		
 		//get states for form dropdown
 		$stateUrl = "dropdown%2Fget-state-codes-dropdown";
