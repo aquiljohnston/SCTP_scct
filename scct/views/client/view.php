@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Client Created By',
                 'attribute' => 'CreatedUserName',
                 'value' => call_user_func(function($model) {
-                        return Html::a($model->CreatedUserName, ['user/view', 'username' => $model->CreatedUserName]);
+                    return Html::a($model->CreatedUserName, ['user/view', 'username' => $model->CreatedUserName]);
                 }, $model),
                 'format' => 'html'
             ],
@@ -62,11 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Client Last Modified By',
                 'attribute' => 'ModifiedUserName',
                 'value' => call_user_func(function($model) {
-                    if($model->ModifiedUserName != '') {
-                        return Html::a($model->ModifiedUserName, ['user/view', 'username' => $model->ModifiedUserName]);;
-                    } else {
-                        return "Not modified since created";
-                    }
+                    return Html::a($model->ModifiedUserName, ['user/view', 'username' => $model->ModifiedUserName]);;
                 }, $model),
                 'format' => 'html'
             ],
