@@ -96,6 +96,7 @@ class PermissionDictionary {
         'viewAssigned', // View assigned
         'viewReportsMenu', // View reports
         'viewInspections', // View Inspection
+		'viewCGE', //View CGE
         'viewTrackerMenu', // View Tracker
 		'viewTrainingMenu', // View Training Videos
 		'timeCardPmSubmit', // pm submit time cards
