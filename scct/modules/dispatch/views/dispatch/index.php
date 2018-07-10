@@ -73,9 +73,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
                         'value' => function ($model, $key, $index, $column) {
-                            /*if ($model['sectionCount'] == null){
-                                return GridView::ROW_NONE;
-                            }*/
                             return GridView::ROW_COLLAPSED;
                         },
 
@@ -88,9 +85,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                        }*/
                     ],
 					[
                         'label' => 'Division',
@@ -106,9 +100,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
                     ],
                     [
                         'label' => 'Compliance End',
@@ -122,21 +113,19 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ], 
-                        //PROJECT-498 
                     [
                         'label' => 'Inspection Type',
                         'attribute' => 'InspectionType',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                        //PROJECT-501
-                     [
+                    [
                         'label' => 'Billing Code',
                         'attribute' => 'BillingCode',
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center'],
                     ],
-                     [
+                    [
                         'label' => 'Office Name',
                         'attribute' => 'OfficeName',
                         'headerOptions' => ['class' => 'text-center'],
@@ -188,6 +177,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
+	<!-- unused? -->
     <!-- The Modal -->
     <div id="dispatch-message" class="modal" style="display:none">
         <!-- Modal content -->
@@ -202,13 +192,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 </div>
             </div>
         </div>
-
     </div>
 
     <?php
 
     Modal::begin([
-        'header' => '<h4>ADD SURVEYORS TO FLOC SURVEY</h4>',
+        'header' => '<h4>ADD SURVEYORS TO SELECTED MAPS</h4>',
         'id' => 'addSurveyorModal',
     ]);
     echo "<div id='modalAddSurveyor'>Loading...</div>";
