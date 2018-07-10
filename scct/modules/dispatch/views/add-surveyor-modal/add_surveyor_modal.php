@@ -91,14 +91,13 @@ use kartik\form\ActiveForm;
         $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
 
         $(".AddSurveyor input[type=checkbox]").click(function () {
-            assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapData = getDispatchMapArray(assignedUserID[0]);
-            dispatchSectionData = getDispatchSectionArray(assignedUserID[0]);
-            console.log(assignedUserID.length);
-            if (assignedUserID.length == 1) {
+            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            dispatchMapData = getDispatchMapArray(assignedUserIDs);
+            dispatchSectionData = getDispatchSectionArray(assignedUserIDs);
+            console.log(assignedUserIDs.length);
+            if (assignedUserIDs.length > 0) {
                 $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
                 $('#addSurveyorModal').prop('disabled', false); //TO DISABLED
-
             } else {
                 $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
             }
@@ -106,7 +105,7 @@ use kartik\form\ActiveForm;
 
         $('.modalDispatchBtn').click(function () {
             var form = $("#dispatchActiveForm");
-            if (!assignedUserID || assignedUserID.length == 1) {
+            if (!assignedUserIDs || assignedUserIDs.length > 0) {
                 // Ajax post request to dispatch action
                 $.ajax({
                     timeout: 99999,
