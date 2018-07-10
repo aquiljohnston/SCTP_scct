@@ -234,11 +234,11 @@ class LoginController extends BaseController
 		// }
 		
 		//get web dropdowns and store in sesssion data
-		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-web-drop-downs', Constants::API_VERSION_2);
+		$dropdownResponse = BaseController::executeGetRequest('dropdown%2Fget-dropdowns&filter=Web', Constants::API_VERSION_3);
 		$dropdowns = json_decode($dropdownResponse, true);
-		if(is_array($dropdowns) && array_key_exists('WebDropDowns', $dropdowns))
+		if(is_array($dropdowns) && array_key_exists('Dropdowns', $dropdowns))
 		{
-			Yii::$app->session->set('webDropDowns', $dropdowns['WebDropDowns']);
+			Yii::$app->session->set('webDropDowns', $dropdowns['Dropdowns']);
 		}
 	}
 }
