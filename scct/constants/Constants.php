@@ -7,6 +7,7 @@ final class Constants
 	// VERSION contains the string for the SCAPI version that one wishes to target.
     const API_VERSION_1 = "v1";
     const API_VERSION_2 = "v2";
+    const API_VERSION_3 = "v3";
 	const DATE_FORMAT = 'Y-m-d H:i:s';
 	
 	//strings to be matched against url prefix, except prod which will be when no match occurs.
