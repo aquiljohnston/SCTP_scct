@@ -48,7 +48,7 @@ div[id^=modalContent] .wrap #top-wrapper {
 .mileagecard-view .grid-view .kv-grid-wrapper{
 	/*height:auto;
 	max-height:30vh;*/
-	height: auto;!important;
+	height: auto !important;
 	max-height: 40vh;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -66,8 +66,8 @@ div[id^=modalContent] .wrap #top-wrapper {
 	cursor: pointer;
 }
 .dynamicmodel-daterangepicker-container{
-	float:right;!important;
-	margin-left: 0px;!important;
+	float:right !important;
+	margin-left: 0px !important;
 }
 /*responsive css for table*/
 @media only screen 

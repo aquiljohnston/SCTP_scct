@@ -112,7 +112,7 @@ and (min-resolution: 192dpi) {
     }
 }
 /* ----------- Safari Browser ----------- */
-@media screen and (min-resolution:0dppx) {
+@media screen and (min-resolution: .001dppx) {
 
     ::i-block-chrome,#assignedTable .table-responsive {
         max-height: 60vh;

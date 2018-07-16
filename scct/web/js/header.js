@@ -43,12 +43,6 @@ $(document).ready(function () {
         + "<ul class='nav navbar-nav' id='nonav'></ul>");
     $(".loginMenu").prepend(login_head);
 
-	//Ajax call to retrieve all the projects for the project drop-down selection on the main menu
-    /*var nav7 = $("<li class='dropdown'><a href='' class='dropdown-toggle' data-toggle='dropdown' role='button' aria-expanded='false'>"
-     + "PROJECTS<b class='caret'></b></a>"
-     + "    <ul href='#' id='projects_dropdown' class='dropdown-menu' role='menu'>"
-     + "</ul></li>");*/
-
     // gather userID based on user role type
     var adminID = $(".adminMenu").attr("id");
     var middlePrivilegeID = $(".middlePrivilegeMenu").attr("id");

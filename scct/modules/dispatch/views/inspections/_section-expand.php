@@ -8,6 +8,7 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use kartik\grid\CheckboxColumn;
 use yii\bootstrap\Modal;
 
 ?>

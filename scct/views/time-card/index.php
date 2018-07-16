@@ -8,8 +8,7 @@ use yii\widgets\Pjax;
 use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
-
-
+use kartik\grid\CheckboxColumn;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */

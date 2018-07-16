@@ -56,7 +56,7 @@ html, body {
     /*clear: both;
 }*/
 
-/* hides the spin-button for firefox */
+/* hides the spin-button for safari */
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
