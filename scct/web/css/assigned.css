@@ -180,7 +180,7 @@
 }
 
 #modalViewAssetAssigned{
-    padding: 0px 15px 15px 15px;!important;
+    padding: 0px 15px 15px 15px !important;
 }
 
 /* Add Animation */
@@ -276,14 +276,13 @@
     }
 }
 /* Chrome 29+ */
-@media screen and (-webkit-min-device-pixel-ratio:0)
-and (min-resolution:.001dpcm) {
+@media screen and (min-resolution:.001dpcm) {
     #inspectionTablePagination .pagination {
-        margin: 3px 15% 0 0; !important;
+        margin: 3px 15% 0 0 !important;
     }
 }
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+@media screen and (min-resolution:.001dpcm) {
 
     ::i-block-chrome,#assignedTable .table-responsive {
         max-height: 580px;

@@ -172,12 +172,11 @@ function getDispatchSectionArray(assignedUserIDs) {
 	return dispatchSectionArray;
 }
 
-// View Asset Modal (Dispatch, Assigned)
+// View Asset Modal (Dispatch, Assigned, CGE, Inspection)
 function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid) {
-    $(modalViewAsset).modal('show')
-        .find(modalContentViewAsset).html("Loading...");
-    $(modalViewAsset).modal('show')
-        .find(modalContentViewAsset).load(url);
+    $(modalViewAsset).modal('show').find(modalContentViewAsset).html("Loading...");
+    $(modalViewAsset).modal('show').find(modalContentViewAsset).load(url);
+	if(document.getElementById('assetModalTitle') !=  null)
 		document.getElementById('assetModalTitle').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
 }
 

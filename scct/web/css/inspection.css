@@ -43,7 +43,7 @@
 #inspectionTable .table-responsive {
     margin-top:0px;
     width:100%;
-    overflow-x: hidden;!important;
+    overflow-x: hidden !important;
 }
 #inspection-dropDownList-form{
     width:99%;
@@ -112,7 +112,7 @@
 }
 /*Pending changes pop-up missing modal ends*/
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+@media screen and (min-resolution:.001dpcm) {
 
     /* Safari only override */
     ::i-block-chrome, #inspectionGV {
@@ -128,7 +128,7 @@
     }
 }
 /* Chrome 29+ */
-@media screen and (-webkit-min-device-pixel-ratio:0)
+@media screen and (min-resolution:.001dpcm)
 and (min-resolution:.001dpcm) {
     #InspectionTablePagination .pagination {
         margin: 3px 0 0 0;

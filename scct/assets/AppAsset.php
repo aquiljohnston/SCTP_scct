@@ -86,6 +86,12 @@ class AppAsset extends AssetBundle
         'js/clients.js',
         'js/task.js',
         'js/notify.js',
+		//preloaded scripts to avoid warning from sync ajax call on 
+		'assets/4a7fee2c/js/jquery.floatThead.js', //Dispatch and Assigned screens
+		'assets/31b3675a/js/bootstrap-datetimepicker.js', //CGE screen
+		'assets/ac3aa00/js/kv-widgets.js', //CGE screen
+		'assets/4a7fee2c/js/kv-grid-checkbox.js', //Inspection screen
+		
     ];
     public $depends = [
         'yii\web\YiiAsset',

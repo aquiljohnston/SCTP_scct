@@ -77,7 +77,7 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
     color: #ffffff;
 }
 #info-panel div {
-    magin-left:5px;
+    margin-left:5px;
 }
 /*h1 {
     font-family: MS Reference Sans Serif,Arial,Calibri,Helvetica;
@@ -194,12 +194,8 @@ input {
   background-image: -ms-linear-gradient(top, #000000, #000000);
   background-image: -o-linear-gradient(top, #000000, #000000);
   background-image: linear-gradient(to bottom, #000000, #000000);
-  -webkit-border-radius: 24;
-  -moz-border-radius: 24;
   border-radius: 10px;
   text-shadow: 3px 3px 4px #333033;
-  -webkit-box-shadow: 0px 1px 3px #666666;
-  -moz-box-shadow: 0px 1px 3px #666666;
   box-shadow: 0px 1px 3px #666666;
   font-family: Arial;
   color: #ffffff;

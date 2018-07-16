@@ -174,15 +174,17 @@ function reloadTimeCardGridView() {
 			container: '#submitApproveButtons',
 			timeout:false,
 		}).done(function (){
-			$.pjax.reload({container: '#projectDropDownPjax', async:false});
-			if($('#multiple_submit_btn_id').hasClass('off-btn')){
-		   $('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
-			} 
-			if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-				 $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
-			}
-
-			 });
+				//check if dropdown is available, not present in client web sites
+				if ($('#projectDropDownPjax').length) {
+					$.pjax.reload({container: '#projectDropDownPjax', async:false});
+					if($('#multiple_submit_btn_id').hasClass('off-btn')){
+						$('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
+					} 
+					if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
+						$('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
+					}
+				}
+			});
 		$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyTimeCardOnClickListeners();
 			applyTimeCardSubmitButtonListener();

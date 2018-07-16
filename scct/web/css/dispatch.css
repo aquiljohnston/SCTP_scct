@@ -231,11 +231,11 @@
     overflow-y: hidden;
 }
 #modalViewAssetDispatch.modal-open.modal{
-    padding: 0px 15px 15px 15px;!important;
+    padding: 0px 15px 15px 15px !important;
 }
 #assetsTable #assetGV-container{
-    overflow-y: scroll; !important;
-    max-height: 400px; !important;
+    overflow-y: scroll !important;
+    max-height: 400px !important;
 }
 #viewAssetModalContainer{
     margin-bottom: 3%;
@@ -311,7 +311,7 @@
     overflow-x: hidden;
 }*/
 
-@media screen and (-webkit-min-device-pixel-ratio:0) {
+@media screen and (min-resolution:.001dpcm) {
 
     /* Safari only override */
     ::i-block-chrome,#dispatchGV{
@@ -354,8 +354,7 @@
     }
 }
 /* Chrome 29+ */
-@media screen and (-webkit-min-device-pixel-ratio:0)
-and (min-resolution:.001dpcm) {
+@media screen and (min-resolution:.001dpcm) {
     #inspectionTablePagination .pagination {
         margin: 3px 15% 0 0;
     }

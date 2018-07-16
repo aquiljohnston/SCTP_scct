@@ -250,13 +250,6 @@ ul > li > a:hover {
     margin-top: 30px;
 }
 
-#projects_dropdown {
-    width: 150px;
-    height: auto;
-    max-height: 300px;
-    overflow: auto;
-}
-
 .modal {
     /*margin-top:10%;*/
     position: fixed;
@@ -384,20 +377,6 @@ and (max-width: 870px) {
         width: 100%;
         margin: 0;
     }
-
-    #projects_dropdown {
-        position: static;
-        float: none;
-        width: auto;
-        margin-top: 0;
-        background-color: transparent;
-        border: 0;
-    }
-
-    #projects_dropdown::-webkit-scrollbar, .navbar-collapse.in::-webkit-scrollbar {
-        display: none;
-    }
-
     /*-------End Header responsive------*/
 }
 

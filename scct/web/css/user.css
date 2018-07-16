@@ -49,7 +49,7 @@
 	overflow-y:auto;
 }
 #reactivateUserGV-container{
-    overflow-x: inherit;!important;
+    overflow-x: inherit !important;
 }
 #reactivateUserTable{
     overflow-y: auto;
