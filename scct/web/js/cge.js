@@ -111,12 +111,20 @@ function getCgeDispatchAssetsData(assignedUserID) {
 
 function getCgeDispatchMapGridData(assignedUserID) {
     var cgeDispatchMapGridData = [];
+	//todays date
+	var today = new Date();
+	var date = (today.getMonth()+1)+'/'+today.getDate()+'/'+today.getFullYear();
+	var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+	var scheduleddate = date+' '+time;
+	
 	$('#cgeGV-container .cgeDispatchCheckbox input:checked').each(function() {
 		cgeDispatchMapGridData.push({
 			MapGrid: $(this).attr("MapGrid"),
 			AssignedUserID: assignedUserID,
 			BillingCode: $(this).attr("BillingCode"),
-			InspectionType: $(this).attr("InspectionType")
+			InspectionType: $(this).attr("InspectionType"),
+			//hack to override dispatch in the event of a cge
+			ScheduledDate: scheduleddate
 		});
 	});
 	console.log('MapGridData '  + JSON.stringify(cgeDispatchMapGridData));
