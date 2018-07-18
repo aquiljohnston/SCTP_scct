@@ -48,8 +48,8 @@ use kartik\grid\GridView;
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
         <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -1.5%;">
-            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'assignedDispatchAssetsButton', 'disabled' => 'disabled']); ?>
+        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -0.5%;">
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'assignedDispatchAssetsButton', 'disabled' => 'disabled', 'style' => 'width: 100%']); ?>
         </div>
         <?php Pjax::end() ?>
     </div>
