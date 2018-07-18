@@ -137,20 +137,6 @@ use kartik\form\ActiveForm;
         });
     }
 
-    function addSurveyorCheckboxListener() {
-        $(".AddSurveyor input[type=checkbox]").click(function () {
-            add_surveyor_pks = $("#addSurveyorsGridview #w1").yiiGridView('getSelectedRows');
-            console.log(add_surveyor_pks.length);
-            if (add_surveyor_pks.length > 0) {
-                $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
-                $('#addSurveyorModal').prop('disabled', false); //TO DISABLED
-
-            } else {
-                $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
-            }
-        });
-    }
-
     // set trigger for search box in the add surveyor modal
     $(document).ready(function () {
         $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it

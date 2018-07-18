@@ -47,7 +47,7 @@ use kartik\form\ActiveForm;
             [
                 'class' => 'kartik\grid\CheckboxColumn',
                 'header' => 'Select',
-                'contentOptions' => ['class' => 'AddSurveyor'],
+                'contentOptions' => ['class' => 'cgeAddSurveyor'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($addSurveyorsDataProvider)) {
                         return ['UserID' => $model["UserID"]];
@@ -93,12 +93,12 @@ use kartik\form\ActiveForm;
         $('.modalDispatchCgeBtn').prop('disabled', true); //TO DISABLED
         $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
 
-        $(".AddSurveyor input[type=checkbox]").click(function () {
-            assignedUserID = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapGridData = getCgeDispatchMapGridData(assignedUserID[0]);
-            dispatchAssetsData = getCgeDispatchAssetsData(assignedUserID[0]);
-            console.log(assignedUserID.length);
-            if (assignedUserID.length == 1) {
+        $(".cgeAddSurveyor input[type=checkbox]").click(function () {
+            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            dispatchMapGridData = getCgeDispatchMapGridData(assignedUserIDs);
+            dispatchAssetsData = getCgeDispatchAssetsData(assignedUserIDs);
+            console.log(assignedUserIDs.length);
+            if (assignedUserIDs.length == 1) {
                 $('.modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED
                 $('#modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED
 
@@ -109,7 +109,7 @@ use kartik\form\ActiveForm;
 
         $('.modalDispatchCgeBtn').click(function () {
             var form = $("#cgeActiveForm");
-            if (!assignedUserID || assignedUserID.length == 1) {
+            if (!assignedUserIDs || assignedUserIDs.length == 1) {
                 // Ajax post request to dispatch action
                 $.ajax({
                     timeout: 99999,
