@@ -285,7 +285,7 @@ use kartik\grid\GridView;
                         dispatchAsset.push({
                             WorkOrderID: workOrderID,
                             SectionNumber: sectionNumber,
-                            AssignedUserID: AssignedUserID
+                            AssignedUserID: [AssignedUserID]
                         });
                     }
                 });
