@@ -47,8 +47,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
         <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -1.5%;">
-            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsButton', 'disabled' => 'disabled']); ?>
+        <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -0.5%;">
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsButton', 'disabled' => 'disabled', 'style' => 'width: 100%']); ?>
         </div>
         <?php Pjax::end() ?>
     </div>
