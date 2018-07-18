@@ -142,14 +142,12 @@ function ViewAssetClicked(url) {
 // Generate Dispatch Map Array;
 function getDispatchMapArray(assignedUserIDs) {
     var mapGridArray = [];
-	assignedUserIDs.forEach(function(userID){
-		$('#dispatchGV-container .dispatchCheckbox input:checked').each(function() {
-			mapGridArray.push({
-				MapGrid: $(this).attr('MapGrid'),
-				AssignedUserID: userID,
-				BillingCode: $(this).attr('BillingCode'),
-				InspectionType: $(this).attr('InspectionType')
-			});
+	$('#dispatchGV-container .dispatchCheckbox input:checked').each(function() {
+		mapGridArray.push({
+			MapGrid: $(this).attr('MapGrid'),
+			AssignedUserID: assignedUserIDs,
+			BillingCode: $(this).attr('BillingCode'),
+			InspectionType: $(this).attr('InspectionType')
 		});
 	});
 	return mapGridArray;
@@ -158,15 +156,13 @@ function getDispatchMapArray(assignedUserIDs) {
 // Generate Dispatch Section Array;
 function getDispatchSectionArray(assignedUserIDs) {
     var dispatchSectionArray = [];
-	assignedUserIDs.forEach(function(userID){
-		$('#dispatchSectionGV-container .dispatchSectionCheckbox input:checked').each(function() {
-			dispatchSectionArray.push({
-				MapGrid: $(this).attr("MapGrid"),
-				SectionNumber: $(this).attr("SectionNumber"),
-				AssignedUserID: userID,
-				BillingCode: $(this).attr("BillingCode"),
-				InspectionType: $(this).attr("InspectionType")
-			});
+	$('#dispatchSectionGV-container .dispatchSectionCheckbox input:checked').each(function() {
+		dispatchSectionArray.push({
+			MapGrid: $(this).attr("MapGrid"),
+			SectionNumber: $(this).attr("SectionNumber"),
+			AssignedUserID: assignedUserIDs,
+			BillingCode: $(this).attr("BillingCode"),
+			InspectionType: $(this).attr("InspectionType")
 		});
 	});
 	return dispatchSectionArray;

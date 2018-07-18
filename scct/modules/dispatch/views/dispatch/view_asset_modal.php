@@ -211,7 +211,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         $(document).off('click', '#dispatchAssetsButton').on('click', '#dispatchAssetsButton', function (event){
             var dispatchAsset = [];
             dispatchAsset = getDispatchAssetsData();
-            //console.log("DISPATCH ASSET " + dispatchAsset);
 
             // Ajax post request to dispatch assets
             $.ajax({
@@ -267,42 +266,42 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
     }
 
     function getDispatchAssetsData() {
-        var AssignedUserID = "";
         var workOrderID = "";
         var dispatchAsset = [];
         var surveyorSelectedForPipeline = null;
         var sectionNumber = null;
 
-        $('#assetGV-container tr').each(function () {
+        $('#assetGV-container tbody tr').each(function () {
+			var assignedUserIDs = [];
             if ($(this).find(".surveyorDropDown select").hasClass("assetPipelineSurveyorDropDown")) {
                 workOrderID = $(this).find('.assetPipelineSurveyorDropDown').attr("workorderid");
                 sectionNumber = $(this).find('.assetPipelineSurveyorDropDown').attr("SectionNumber");
                 surveyorSelectedForPipeline = $(this).find('.assetPipelineSurveyorDropDown').val();
                 mapGridSelected = $('#assetGV-container').find('.assetPipelineSurveyorDropDown').attr("mapgrid");
                 if(surveyorSelectedForPipeline != null && surveyorSelectedForPipeline.length > 0) {
-                    $(this).find(".assetPipelineSurveyorDropDown option:selected").each(function () {
-                        console.log("SELECTED SURVEYOR IS : " + $(this).val());
-                        console.log("SELECTED WORKORDER IS : " + workOrderID);
-                        AssignedUserID = $(this).val();
-                        if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
-                            dispatchAsset.push({
-                                WorkOrderID: workOrderID,
-                                SectionNumber: sectionNumber,
-                                AssignedUserID: AssignedUserID
-                            });
-                        }
-                    });
+					//get all selected users
+					$(this).find(".assetPipelineSurveyorDropDown option:selected").each(function () {
+						assignedUserIDs.push($(this).val());
+					});
+					if (assignedUserIDs != "null" && typeof assignedUserIDs != 'undefined') {
+						dispatchAsset.push({
+							WorkOrderID: workOrderID,
+							SectionNumber: sectionNumber,
+							AssignedUserID: assignedUserIDs
+						});
+					}
                 }
             }else {
-                AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
+				//this is code for single dispatch, do not believe it is currently used (7/18/18)
+                assignedUserIDs.push($(this).find('.assetSurveyorDropDown').val());
                 workOrderID = $(this).find('.assetSurveyorDropDown').attr("workorderid");
                 sectionNumber = $(this).find('.assetSurveyorDropDown').attr("SectionNumber");
                 mapGridSelected = $('#assetGV-container').find('.assetSurveyorDropDown').attr("mapgrid");
-                if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
+                if (assignedUserIDs != "null" && typeof assignedUserIDs != 'undefined') {
                      dispatchAsset.push({
                          WorkOrderID: workOrderID,
                          SectionNumber: sectionNumber,
-                         AssignedUserID: AssignedUserID
+                         AssignedUserID: assignedUserIDs
                      });
                  }
             }

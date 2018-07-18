@@ -95,28 +95,30 @@ function cgeGridViewReload() {
     });
 }
 
-function getCgeDispatchAssetsData(assignedUserID) {
+function getCgeDispatchAssetsData(assignedUserIDs) {
     var cgeDispatchAssetsData = [];
 	$('#cgeAssetsGV-container .cgeDispatchAssetsCheckbox input:checked').each(function() {
 		cgeDispatchAssetsData.push({
 			WorkOrderID: $(this).attr("WorkOrderID"),
-			AssignedUserID: assignedUserID,
+			AssignedUserID: assignedUserIDs,
 			ScheduledDate: $(this).attr("ScheduledDate"),
-			SectionNumber: $(this).attr("SectionNumber")
+			SectionNumber: $(this).attr("SectionNumber"),
+			IsCge: true
 		});
     });
 	console.log('AssetData '  + JSON.stringify(cgeDispatchAssetsData));
     return cgeDispatchAssetsData;
 }
 
-function getCgeDispatchMapGridData(assignedUserID) {
-    var cgeDispatchMapGridData = [];
+function getCgeDispatchMapGridData(assignedUserIDs) {
+    var cgeDispatchMapGridData = [];	
 	$('#cgeGV-container .cgeDispatchCheckbox input:checked').each(function() {
 		cgeDispatchMapGridData.push({
 			MapGrid: $(this).attr("MapGrid"),
-			AssignedUserID: assignedUserID,
+			AssignedUserID: assignedUserIDs,
 			BillingCode: $(this).attr("BillingCode"),
-			InspectionType: $(this).attr("InspectionType")
+			InspectionType: $(this).attr("InspectionType"),
+			IsCge: true
 		});
 	});
 	console.log('MapGridData '  + JSON.stringify(cgeDispatchMapGridData));

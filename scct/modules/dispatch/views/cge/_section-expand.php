@@ -72,7 +72,7 @@ use kartik\datetime\DateTimePicker;
             ],
             [
                 'label' => 'Inspection Type',
-                'attribute' => 'SurveyType',
+                'attribute' => 'InspectionType',
                 'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
                 'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
             ],
