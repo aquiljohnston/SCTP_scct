@@ -35,7 +35,19 @@ class DispatchController extends \app\controllers\BaseController
             if (Yii::$app->user->isGuest) {
                 return $this->redirect(['/login']);
             }
-
+			
+			//"sort":"-Division"
+			//get sort data
+			if (isset($_GET['sort'])){
+				$sort = $_GET['sort'];
+				//parse sort data
+				$sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+			} else {
+				$sortField = '';
+                $sortOrder = '';
+			}
+			
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
                 $dispatchPageSizeParams = $model->pagesize;
@@ -44,9 +56,9 @@ class DispatchController extends \app\controllers\BaseController
                 $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
             } else {
                 $dispatchPageSizeParams = 50;
-                $dispatchFilterParams = "";
-                $dispatchMapGridSelectedParams = "";
-                $dispatchSectionNumberSelectedParams = "";
+                $dispatchFilterParams = '';
+                $dispatchMapGridSelectedParams = '';
+                $dispatchSectionNumberSelectedParams = '';
             }
 
             // get the page number for assigned table
@@ -60,6 +72,8 @@ class DispatchController extends \app\controllers\BaseController
                     'filter' => $dispatchFilterParams,
                     'listPerPage' => $dispatchPageSizeParams,
                     'page' => $pageAt,
+					'sortField' => $sortField,
+					'sortOrder' => $sortOrder,
                 ]);
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
