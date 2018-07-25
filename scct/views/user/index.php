@@ -76,7 +76,7 @@ $column = [
         <div id="userDropdownContainer">
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
-                'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
+                'formConfig' => [ 'deviceSize' => ActiveForm::SIZE_SMALL],
                 'method' => 'get',
                 'options' => [
                     'id' => 'UserForm',
@@ -87,7 +87,7 @@ $column = [
             <div class="row" style="margin-left: 0;">
                 <h3 class="title" style="float: left;"><?= Html::encode($this->title) ?></h3>
                 <label id="userPageSizeLabel" class="col-sm-4 col-md-4 col-lg-4">
-                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize, ['value' => $userPageSizeParams, 'id' => 'userPageSize'])->label(""); ?>
+                    <?= $form->field($model, 'pageSize')->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'userPageSize'])->label(""); ?>
                 </label>
             </div>
             <div class="row" style="margin-left: 0;">
@@ -103,9 +103,17 @@ $column = [
 				<div class="col-sm-1 col-md-1 col-lg-1" style="float:right;">
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton', 'style' => 'float: left']) ?>
 				</div>
-                <label id="userFilter" class="col-sm-6 col-md-6 col-lg-6" style="float:right;">
+                <div id="userFilter" class="col-sm-2 col-md-2 col-lg-2" style="float:right;">
                     <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search', 'id' => 'userSearchFilter'])->label(''); ?>
-                </label>
+                </div>
+				<?php if($showProjectDropdown){ ?>
+					<div id="userProjectDropdown" class="col-sm-3 col-md-3 col-lg-3" style="float:right;">
+						<?=
+							$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropdown,
+							['value' => $model->projectID, 'id'=>'userProjectFilterDD'])->label('Project'); 
+						?>
+					</div>
+				<?php } ?>
                 <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
                 <?php Pjax::end() ?>
             </div>
