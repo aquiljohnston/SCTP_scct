@@ -38,18 +38,16 @@ class UserController extends BaseController
             self::requirePermission("viewUserMgmt");
 
             $model = new \yii\base\DynamicModel([
-                'filter', 'pagesize'
+                'filter', 'pageSize', 'projectID'
             ]);
             $model->addRule('filter', 'string', ['max' => 32])
-                ->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+                ->addRule('pageSize', 'string', ['max' => 32])//get page number and records per page
+				->addRule('projectID', 'integer');
 
-            if ($model->load(Yii::$app->request->get())) {
-
-                $listPerPageParam = $model->pagesize;
-                $filterParam = $model->filter;
-            } else {
-                $listPerPageParam = 50;
-                $filterParam = "";
+            if (!$model->load(Yii::$app->request->get())) {
+                $model->pageSize = 50;
+                $model->filter = "";
+				$model->projectID = null;
             }
 
             if (isset(Yii::$app->request->queryParams['UserManagementPageNumber'])) {
@@ -58,25 +56,28 @@ class UserController extends BaseController
                 $page = 1;
             }
 
-            //todo: http_build_query()
             //build url with params
-            $url = "user%2Fget-active&filter=" . urlencode($filterParam) . "&listPerPage=" . urlencode($listPerPageParam)
-                . "&page=" . urlencode($page);
-            Yii::trace("User index url: $url");
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response = json_decode($response, true);
-            $assets = $response['assets'];
+			$userQueryParams = http_build_query([
+				'filter' => $model->filter,
+				'listPerPage' => $model->pageSize,
+				'page' => $page,
+				'projectID' => $model->projectID,
+			]);
+            $userGetUrl = 'user%2Fget-active&' . $userQueryParams;
+            $userGetResponse = Parent::executeGetRequest($userGetUrl, Constants::API_VERSION_2);
+            $userGetResponse = json_decode($userGetResponse, true);
+            $assets = $userGetResponse['assets'];
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = new ArrayDataProvider
             ([
                 'allModels' => $assets,
                 'pagination' => [
-                    'pageSize' => 100,
+                    'pageSize' => $model->pageSize,
                 ],
             ]);
 
             // set pages to dispatch table
-            $pages = new Pagination($response['pages']);
+            $pages = new Pagination($userGetResponse['pages']);
 
             // Sorting User table
             $dataProvider->sort = [
@@ -113,25 +114,31 @@ class UserController extends BaseController
                 $tmp = array('ProjectID'=>$project['ProjectID'], 'ProjectName'=>$project['ProjectName']);
                 array_push($projects, $tmp);
             }
+			
+			//get project dropdown
+			$projectDropdownUrl = 'dropdown%2Fget-user-projects';
+			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, Constants::API_VERSION_2);
+			$projectDropdownResponse = json_decode($projectDropdownResponse, true);
+			$showProjectDropdown = $projectDropdownResponse['showProjectDropdown'];
+			$projectDropdown = $projectDropdownResponse['projects'];
+			
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'pages' => $pages,
-                'filter' => $filterParam,
-                'userPageSizeParams' => $listPerPageParam,
                 'page' => $page,
                 'userPermissionTable' => $userPermissionTable,
-                'projects' => $projects
+				//look into combining these
+                'projects' => $projects,
+				'projectDropdown' => $projectDropdown,
+				'showProjectDropdown' => $showProjectDropdown,
             ]);
-
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
             throw $e;
-        } catch (ErrorException $e) {
-            throw new \yii\web\HttpException(400);
         } catch (Exception $e) {
-            throw new ServerErrorHttpException;
+            throw new \yii\web\HttpException(400);
         }
     }
 

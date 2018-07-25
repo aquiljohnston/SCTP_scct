@@ -19,6 +19,12 @@ $(function() {
             }
         }
     });
+	
+    $(document).off('change', '#userProjectFilterDD').on('change', '#userProjectFilterDD', function (event) {
+        reloadGridView();
+        event.preventDefault();
+        return false;
+    });
 
     jqUserPageSize.on('change', function (event) {
         reloadGridView();
