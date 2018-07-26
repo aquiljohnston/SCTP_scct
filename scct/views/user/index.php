@@ -76,19 +76,23 @@ $column = [
         <div id="userDropdownContainer">
             <?php $form = ActiveForm::begin([
                 'type' => ActiveForm::TYPE_HORIZONTAL,
-                'formConfig' => [ 'deviceSize' => ActiveForm::SIZE_SMALL],
+                'formConfig' => ['deviceSize' => ActiveForm::SIZE_SMALL],
                 'method' => 'get',
                 'options' => [
                     'id' => 'UserForm',
                 ],
+				'fieldConfig' => ['template' => "{label}<div>{input}</div>"],
                 'action' => Url::to(['user/index'])
             ]); ?>
 
-            <div class="row" style="margin-left: 0;">
+            <div class="row" style="margin-left: 0; margin-bottom: 1vh">
                 <h3 class="title" style="float: left;"><?= Html::encode($this->title) ?></h3>
-                <label id="userPageSizeLabel" class="col-sm-4 col-md-4 col-lg-4">
-                    <?= $form->field($model, 'pageSize')->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'userPageSize'])->label(""); ?>
-                </label>
+                <div id="userPageSizeLabel" class="col-sm-1 col-md-1 col-lg-1">
+                    <?= $form->field($model, 'pageSize')->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'userPageSize'])
+						->label('Records Per Page', [
+                            'class' => 'recordsPerPage'
+                        ]); ?>
+                </div>
             </div>
             <div class="row" style="margin-left: 0;">
                 <div id="reactivateButtonUser" class="col-sm-1 col-md-1 col-lg-1" style="float:right;padding-right: 0;padding-left: 0;margin-left: 2%;">
@@ -104,15 +108,16 @@ $column = [
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'searchCleanFilterButton', 'style' => 'float: left']) ?>
 				</div>
                 <div id="userFilter" class="col-sm-2 col-md-2 col-lg-2" style="float:right;">
-                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search', 'id' => 'userSearchFilter'])->label(''); ?>
+                    <?= $form->field($model, 'filter')->textInput(['placeholder'=>'Search', 'id' => 'userSearchFilter'])->label(false); ?>
                 </div>
 				<?php if($showProjectDropdown){ ?>
-					<div id="userProjectDropdown" class="col-sm-3 col-md-3 col-lg-3" style="float:right;">
+					<div id="userProjectDropdown" class="col-sm-2 col-md-2 col-lg-2" style="float:right; margin-right:2%;">
 						<?=
-							$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropdown,
-							['value' => $model->projectID, 'id'=>'userProjectFilterDD'])->label('Project'); 
+							$form->field($model, 'projectID')->dropDownList($projectDropdown,
+							['value' => $model->projectID, 'id'=>'userProjectFilterDD'])->label(false); 
 						?>
 					</div>
+					<label class = 'control-label' style="float:right; margin-right: 1%">Project<label/>
 				<?php } ?>
                 <?php Pjax::begin(['id' => 'reactivateBtnPjax', 'timeout' => false]) ?>
                 <?php Pjax::end() ?>
@@ -163,7 +168,7 @@ $column = [
     <!-- Modal content-->
     <div id='modalAddRemoveUserFromProjectBody' class="modal-body">
         <?php 
-            foreach($projects as $row) {
+            foreach($addRemoveProjects as $row) {
                 echo '<p style="text-align: center; margin-right: 2%;">' 
                     . Html::a($row['ProjectName'], ['project/add-user?id='.$row['ProjectID']], ['class' => 'btn btn-success', 'id' => 'createUserButton']) 
                     . '</p>';

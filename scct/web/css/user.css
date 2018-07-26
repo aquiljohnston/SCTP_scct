@@ -16,6 +16,10 @@
     margin-bottom: 0.5%;
     padding:0.5%;
 }
+#modalAddRemoveUserFromProjectBody{
+	height: 20vh;
+	overflow-y: auto;
+}
 #userGridViewContainer{
     position: relative;
     float: left;
