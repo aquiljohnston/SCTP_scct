@@ -104,17 +104,6 @@ class UserController extends BaseController
             // Generate User Permission Table
             $userPermissionTable = SELF::getUserPermissionTable();
             
-            //todo: create new route instead of using actionGetMe 
-            $url = "user%2Fget-me";
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response = json_decode($response, true);
-            $tmpArray = $response['Projects'];
-            $projects = array();
-            foreach($tmpArray as $project){
-                $tmp = array('ProjectID'=>$project['ProjectID'], 'ProjectName'=>$project['ProjectName']);
-                array_push($projects, $tmp);
-            }
-			
 			//get project dropdown
 			$projectDropdownUrl = 'dropdown%2Fget-user-projects';
 			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, Constants::API_VERSION_2);
@@ -122,14 +111,22 @@ class UserController extends BaseController
 			$showProjectDropdown = $projectDropdownResponse['showProjectDropdown'];
 			$projectDropdown = $projectDropdownResponse['projects'];
 			
+            //populate add/remove modal options
+            $addRemoveProjects = array();
+			$tmpProjectArray = $projectDropdown;
+			if(array_key_exists('', $tmpProjectArray)) unset($tmpProjectArray['']);
+            foreach($tmpProjectArray as $projectID => $projectName){
+                $tmpProjectObj = array('ProjectID'=> $projectID, 'ProjectName'=> $projectName);
+                array_push($addRemoveProjects, $tmpProjectObj);
+            }
+
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'pages' => $pages,
                 'page' => $page,
                 'userPermissionTable' => $userPermissionTable,
-				//look into combining these
-                'projects' => $projects,
+                'addRemoveProjects' => $addRemoveProjects,
 				'projectDropdown' => $projectDropdown,
 				'showProjectDropdown' => $showProjectDropdown,
             ]);
