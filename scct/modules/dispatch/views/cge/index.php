@@ -81,7 +81,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'detailAnimationDuration' => 'fast'
                     ],
                     [
-                        'label' => 'MapGrid',
+                        'label' => 'Map Grid',
                         'attribute' => 'MapGrid',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 12.5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 12.5%'],
@@ -102,7 +102,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'format' => 'html'
                     ],
                     [
-                        'label' => 'Available WorkOrder Count',
+                        'label' => 'Available Work Order',
                         'attribute' => 'AvailableWorkOrderCount',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 12.5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 12.5%'],
