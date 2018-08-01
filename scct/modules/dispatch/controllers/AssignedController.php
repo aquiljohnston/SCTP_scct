@@ -8,6 +8,7 @@ use yii\data\Pagination;
 use app\constants\Constants;
 use yii\web\UnauthorizedHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
 use Exception;
 
 class AssignedController extends \app\controllers\BaseController
@@ -145,11 +146,12 @@ class AssignedController extends \app\controllers\BaseController
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        } catch (ForbiddenHttpException $e) {
-            Yii::$app->runAction('login/user-logout');
-            //throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-        } catch (Exception $e) {
-            Yii::$app->runAction('login/user-logout');
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -177,10 +179,12 @@ class AssignedController extends \app\controllers\BaseController
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        }catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException;
-        } catch (\Exception $e) {
-            Yii::$app->runAction('login/user-logout');
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -190,91 +194,101 @@ class AssignedController extends \app\controllers\BaseController
      */
     public function actionViewSection()
     {
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
 
-        $model = new \yii\base\DynamicModel([
-            'assignedfilter', 'pagesize', 'mapGridSelected'
-        ]);
-        $model->addRule('assignedfilter', 'string', ['max' => 32])
-            ->addRule('pagesize', 'string', ['max' => 32])
-            ->addRule('mapGridSelected', 'string', ['max' => 32]);
+			$model = new \yii\base\DynamicModel([
+				'assignedfilter', 'pagesize', 'mapGridSelected'
+			]);
+			$model->addRule('assignedfilter', 'string', ['max' => 32])
+				->addRule('pagesize', 'string', ['max' => 32])
+				->addRule('mapGridSelected', 'string', ['max' => 32]);
 
-        //check request
-        if ($model->load(Yii::$app->request->queryParams)) {
-            $assignedPageSizeParams = $model->pagesize;
-            $assignedFilterParams = $model->assignedfilter;
-            $mapGridSelected = $model->mapGridSelected;
-        } else {
-            $assignedPageSizeParams = 50;
-            $assignedFilterParams = "";
-            $mapGridSelected = "";
-        }
+			//check request
+			if ($model->load(Yii::$app->request->queryParams)) {
+				$assignedPageSizeParams = $model->pagesize;
+				$assignedFilterParams = $model->assignedfilter;
+				$mapGridSelected = $model->mapGridSelected;
+			} else {
+				$assignedPageSizeParams = 50;
+				$assignedFilterParams = "";
+				$mapGridSelected = "";
+			}
 
-        // get the page number for assigned table
-        if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
-            $pageAt = $_GET['assignedPageNumber'];
-        } else {
-            $pageAt = 1;
-        }
+			// get the page number for assigned table
+			if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
+				$pageAt = $_GET['assignedPageNumber'];
+			} else {
+				$pageAt = 1;
+			}
 
-        // get the key to generate section table
-        if (isset($_POST['expandRowKey']))
-		{
-            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
-			$inspectionType = $_POST['expandRowKey']['InspectionType'];
-            $billingCode = $_POST['expandRowKey']['BillingCode'];
-        }else{
-            $mapGridSelected = "";
-			$inspectionType = '';
-			$billingCode = '';
-		}
+			// get the key to generate section table
+			if (isset($_POST['expandRowKey']))
+			{
+				$mapGridSelected = $_POST['expandRowKey']['MapGrid'];
+				$inspectionType = $_POST['expandRowKey']['InspectionType'];
+				$billingCode = $_POST['expandRowKey']['BillingCode'];
+			}else{
+				$mapGridSelected = "";
+				$inspectionType = '';
+				$billingCode = '';
+			}
 
-        $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
-                'mapGridSelected' => $mapGridSelected,
-				'inspectionType' => $inspectionType,
-				'billingCode' => $billingCode,
-                'filter' => $assignedFilterParams,
-                'listPerPage' => $assignedPageSizeParams,
-                'page' => $pageAt
-            ]);
-        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        $sectionData = $getSectionDataResponseResponse['sections'];
+			$getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
+					'mapGridSelected' => $mapGridSelected,
+					'inspectionType' => $inspectionType,
+					'billingCode' => $billingCode,
+					'filter' => $assignedFilterParams,
+					'listPerPage' => $assignedPageSizeParams,
+					'page' => $pageAt
+				]);
+			$getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+			$sectionData = $getSectionDataResponseResponse['sections'];
 
-        //set paging on assigned table
-        $pages = new Pagination($getSectionDataResponseResponse['pages']);
+			//set paging on assigned table
+			$pages = new Pagination($getSectionDataResponseResponse['pages']);
 
-        $sectionDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $sectionData,
-            'pagination' => false,
-			'key' => function ($sectionData) {
-                return array(
-                    'SectionNumber' => $sectionData['SectionNumber'],
-                    'InspectionType' => $sectionData['InspectionType'],
-                    'BillingCode' => $sectionData['BillingCode'],
-                );
-            },
-        ]);
+			$sectionDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $sectionData,
+				'pagination' => false,
+				'key' => function ($sectionData) {
+					return array(
+						'SectionNumber' => $sectionData['SectionNumber'],
+						'InspectionType' => $sectionData['InspectionType'],
+						'BillingCode' => $sectionData['BillingCode'],
+					);
+				},
+			]);
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'assignedPageSizeParams' => $assignedPageSizeParams,
-                'assignedFilterParams' => $assignedFilterParams,
-            ]);
-        } else {
-            return $this->render('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider,
-                'model' => $model,
-                'pages' => $pages,
-                'assignedPageSizeParams' => $assignedPageSizeParams,
-                'assignedFilterParams' => $assignedFilterParams,
-            ]);
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('_section-expand', [
+					'sectionDataProvider' => $sectionDataProvider,
+					'model' => $model,
+					'pages' => $pages,
+					'assignedPageSizeParams' => $assignedPageSizeParams,
+					'assignedFilterParams' => $assignedFilterParams,
+				]);
+			} else {
+				return $this->render('_section-expand', [
+					'sectionDataProvider' => $sectionDataProvider,
+					'model' => $model,
+					'pages' => $pages,
+					'assignedPageSizeParams' => $assignedPageSizeParams,
+					'assignedFilterParams' => $assignedFilterParams,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -284,78 +298,88 @@ class AssignedController extends \app\controllers\BaseController
      */
     public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $billingCode = null, $sectionNumberSelected = null, $inspectionType=null)
     {
-        $model = new \yii\base\DynamicModel([
-            'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
-        ]);
-        $model->addRule('modalSearch', 'string', ['max' => 32])
-            ->addRule('mapGridSelected', 'string', ['max' => 32])
-            ->addRule('sectionNumberSelected', 'string', ['max' => 32]);
+		try{
+			$model = new \yii\base\DynamicModel([
+				'modalSearch', 'mapGridSelected', 'sectionNumberSelected',
+			]);
+			$model->addRule('modalSearch', 'string', ['max' => 32])
+				->addRule('mapGridSelected', 'string', ['max' => 32])
+				->addRule('sectionNumberSelected', 'string', ['max' => 32]);
 
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
 
-        if (Yii::$app->request->get()){
-            //todo: need to remove hard code value
-            $viewAssetFilterParams = $searchFilterVal;
-            $mapGridSelectedParam = $mapGridSelected;
-            $sectionNumberSelectedParam = $sectionNumberSelected;
-			$inspectionType = $inspectionType; 
-			$billingCode = $billingCode;
-			//should this not be hard coded?
-            $viewAssetPageSizeParams = 200;
-            $pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
-        }else{
-            $viewAssetFilterParams = "";
-            $viewAssetPageSizeParams = 200;
-            $pageAt = 1;
-        }
+			if (Yii::$app->request->get()){
+				//todo: need to remove hard code value
+				$viewAssetFilterParams = $searchFilterVal;
+				$mapGridSelectedParam = $mapGridSelected;
+				$sectionNumberSelectedParam = $sectionNumberSelected;
+				$inspectionType = $inspectionType; 
+				$billingCode = $billingCode;
+				//should this not be hard coded?
+				$viewAssetPageSizeParams = 200;
+				$pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
+			}else{
+				$viewAssetFilterParams = "";
+				$viewAssetPageSizeParams = 200;
+				$pageAt = 1;
+			}
 
-        $getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
-                'filter' => '',
-            ]);
-        $getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
+			$getSurveyorUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
+					'filter' => '',
+				]);
+			$getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
 
 
-        $getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
-                'mapGridSelected' => $mapGridSelectedParam,
-                'sectionNumberSelected' => $sectionNumberSelectedParam,
-                'filter' => $viewAssetFilterParams,
-                'listPerPage' => $viewAssetPageSizeParams,
-                'page' => $pageAt,
-				'inspectionType'        => $inspectionType,
-				'billingCode' => $billingCode
-            ]);
-        $getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+			$getUrl = 'dispatch%2Fget-assigned-assets&' . http_build_query([
+					'mapGridSelected' => $mapGridSelectedParam,
+					'sectionNumberSelected' => $sectionNumberSelectedParam,
+					'filter' => $viewAssetFilterParams,
+					'listPerPage' => $viewAssetPageSizeParams,
+					'page' => $pageAt,
+					'inspectionType'        => $inspectionType,
+					'billingCode' => $billingCode
+				]);
+			$getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 
-        $data = DispatchController::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
+			$data = DispatchController::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
 
-        // Put data in data provider
-        $assetDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $data,
-            'pagination' => false,
-        ]);
-        $assetDataProvider->key = 'WorkOrderID';
+			// Put data in data provider
+			$assetDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $data,
+				'pagination' => false,
+			]);
+			$assetDataProvider->key = 'WorkOrderID';
 
-        //todo: set paging on both tables
-        // set pages to dispatch table
-        $pages = new Pagination($getAssetDataResponse['pages']);
-		$params = [
-			'assetDataProvider' => $assetDataProvider,
-			'model' => $model,
-			'pages' => $pages,
-			'searchFilterVal' => $viewAssetFilterParams,
-			'mapGridSelected' => $mapGridSelectedParam,
-			'sectionNumberSelected' => $sectionNumberSelectedParam,
-			'inspectionType' => $inspectionType,
-			'billingCode' => $billingCode,
-		];
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('view_asset_modal', $params);
-        } else {
-            return $this->render('view_asset_modal', $params);
+			//todo: set paging on both tables
+			// set pages to dispatch table
+			$pages = new Pagination($getAssetDataResponse['pages']);
+			$params = [
+				'assetDataProvider' => $assetDataProvider,
+				'model' => $model,
+				'pages' => $pages,
+				'searchFilterVal' => $viewAssetFilterParams,
+				'mapGridSelected' => $mapGridSelectedParam,
+				'sectionNumberSelected' => $sectionNumberSelectedParam,
+				'inspectionType' => $inspectionType,
+				'billingCode' => $billingCode,
+			];
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('view_asset_modal', $params);
+			} else {
+				return $this->render('view_asset_modal', $params);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 

@@ -10,16 +10,17 @@ use app\models\TimeEntry;
 use app\controllers\BaseController;
 use yii\data\Pagination;
 use yii\base\Exception;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use yii\web\Request;
 use \DateTime;
+use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 use yii\base\Model;
 use yii\web\Response;
-use yii\web\ServerErrorHttpException;
 use app\constants\Constants;
 
 /**
@@ -36,16 +37,16 @@ class TimeCardController extends BaseController
      */
     public function actionIndex($projectID = null, $projectFilterString = null)
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest)
-        {
-            return $this->redirect(['/login']);
-        }
+		try {
+			//guest redirect
+			if (Yii::$app->user->isGuest)
+			{
+				return $this->redirect(['/login']);
+			}
 
-		//Check if user has permissions
-		self::requirePermission("viewTimeCardMgmt");
-		
-        try {
+			//Check if user has permissions
+			self::requirePermission("viewTimeCardMgmt");
+
 			//if request is not coming from time-card reset session variables. 
 			$referrer = Yii::$app->request->referrer;
 			if(!strpos($referrer,'time-card')){
@@ -304,54 +305,64 @@ class TimeCardController extends BaseController
 	 */
 	public function actionViewAccountantDetail()
 	{
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
 
-        // get the key to generate section table
-        if (isset($_POST['expandRowKey']))
-		{
-            $projectID = $_POST['expandRowKey']['ProjectID'];
-            $startDate = $_POST['expandRowKey']['StartDate'];
-            $endDate = $_POST['expandRowKey']['EndDate'];
-		}else{
-			$projectID = '';
-			$startDate = '';
-			$endDate = '';
-		}
-		
-		$queryParams = [
-                'projectID' => $projectID,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ];
-		yii::trace('Query Params: ' . json_encode($queryParams));
+			// get the key to generate section table
+			if (isset($_POST['expandRowKey']))
+			{
+				$projectID = $_POST['expandRowKey']['ProjectID'];
+				$startDate = $_POST['expandRowKey']['StartDate'];
+				$endDate = $_POST['expandRowKey']['EndDate'];
+			}else{
+				$projectID = '';
+				$startDate = '';
+				$endDate = '';
+			}
+			
+			$queryParams = [
+					'projectID' => $projectID,
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+				];
+			yii::trace('Query Params: ' . json_encode($queryParams));
 
-        $getUrl = 'time-card%2Fget-accountant-details&' . http_build_query([
-                'projectID' => $projectID,
-                'startDate' => $startDate,
-                'endDate' => $endDate,
-            ]);
-        $getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        $detailsData = $getResponseData['details'];
+			$getUrl = 'time-card%2Fget-accountant-details&' . http_build_query([
+					'projectID' => $projectID,
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+				]);
+			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+			$detailsData = $getResponseData['details'];
 
-        // Put data in data provider
-        $accountantDetialsDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $detailsData,
-            'pagination' => false,
-			'key' => 'TimeCardProjectID',
-        ]);
+			// Put data in data provider
+			$accountantDetialsDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $detailsData,
+				'pagination' => false,
+				'key' => 'TimeCardProjectID',
+			]);
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_accountant-detail-expand', [
-                'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
-            ]);
-        } else {
-            return $this->render('_accountant-detail-expand', [
-                'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
-            ]);
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			} else {
+				return $this->render('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
 	}
 	
@@ -363,24 +374,24 @@ class TimeCardController extends BaseController
      */
     public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $timeCardProjectID = null, $inOvertime = 'false')
     {		
-    	//Defensive Programming - Magic Numbers
-    	//declare constants to hold constant values	
-    	 define('ENTRIES_ZERO_INDEX',0);
-    	 define('DATES_ZERO_INDEX',0);
-    	 define('DATES_FIRST_INDEX',1);
-    	 define('FROM_DATE_ZERO_INDEX',0);
-    	 define('TO_DATE_FIRST_INDEX',1);
+		try{
+			//Defensive Programming - Magic Numbers
+			//declare constants to hold constant values	
+			 define('ENTRIES_ZERO_INDEX',0);
+			 define('DATES_ZERO_INDEX',0);
+			 define('DATES_FIRST_INDEX',1);
+			 define('FROM_DATE_ZERO_INDEX',0);
+			 define('TO_DATE_FIRST_INDEX',1);
 
-		//guest redirect
-		if (Yii::$app->user->isGuest)
-		{
-			return $this->redirect(['/login']);
-		}
-		
-		//Check if user has permissions
-		self::requirePermission("timeCardGetEntries");
-
-		try{			
+			//guest redirect
+			if (Yii::$app->user->isGuest)
+			{
+				return $this->redirect(['/login']);
+			}
+			
+			//Check if user has permissions
+			self::requirePermission("timeCardGetEntries");
+			
 			//build api url paths
 			$entries_url = 'time-card%2Fshow-entries&cardID='.$id;
 			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
@@ -411,7 +422,7 @@ class TimeCardController extends BaseController
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
-                'pagination'=> false,
+				'pagination'=> false,
 			]);
 
 			return $this -> render('show-entries', [
@@ -441,9 +452,15 @@ class TimeCardController extends BaseController
 				'inOvertime'		=> $inOvertime,
 
 			]);
-		}catch(ErrorException $e){
-			throw new \yii\web\HttpException(400);
-		}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
+        }
     }
 	
     /**
@@ -454,12 +471,12 @@ class TimeCardController extends BaseController
      * @throws \yii\web\HttpException
      */
 	public function actionApprove($id){
-		//guest redirect
-		if(Yii::$app->user->isGuest){
-			return $this->redirect(['/login']);
-		}
+		try{
+			//guest redirect
+			if(Yii::$app->user->isGuest){
+				return $this->redirect(['/login']);
+			}
 		
-		try{			
 			$cardIDArray[] = $id;
 			$data = array(
 				'cardIDArray' => $cardIDArray,
@@ -471,9 +488,15 @@ class TimeCardController extends BaseController
 			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
-		}catch(ErrorException $e){
-			throw new \yii\web\HttpException(400);
-		}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
+        }
 	}
 
     /**
@@ -493,9 +516,15 @@ class TimeCardController extends BaseController
 			$putUrl = 'time-entry%2Fdeactivate';
 			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_2); // indirect rbac
 			$obj = json_decode($putResponse, true);	
-		}catch(ErrorException $e){
-			throw new \yii\web\HttpException(400);
-		}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
+        }
 	}
 
     /**
@@ -533,8 +562,14 @@ class TimeCardController extends BaseController
 					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
 					Yii::trace("PutResponse: ".json_encode($putResponse));
 					return $this->redirect(['index']);
-			} catch (\Exception $e) {
+			} catch (UnauthorizedHttpException $e){
+				Yii::$app->response->redirect(['login/index']);
+			} catch(ForbiddenHttpException $e) {
+				throw $e;
+			} catch(ErrorException $e) {
 				throw new \yii\web\HttpException(400);
+			} catch(Exception $e) {
+				throw new ServerErrorHttpException($e);
 			}
 		} else {
 			  throw new \yii\web\BadRequestHttpException;
@@ -554,9 +589,14 @@ class TimeCardController extends BaseController
 				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit-time-cards', $json_data, Constants::API_VERSION_2); // indirect rbac
 				Yii::Trace("Response data: ". json_encode($putResponse));
 				return $this->redirect(['index']);
-			} catch (\Exception $e) {
-				return $e;
-				// throw new \yii\web\HttpException(400);
+			} catch (UnauthorizedHttpException $e){
+				Yii::$app->response->redirect(['login/index']);
+			} catch(ForbiddenHttpException $e) {
+				throw $e;
+			} catch(ErrorException $e) {
+				throw new \yii\web\HttpException(400);
+			} catch(Exception $e) {
+				throw new ServerErrorHttpException($e);
 			}
 		} else {
 			  throw new \yii\web\BadRequestHttpException;
@@ -591,7 +631,9 @@ class TimeCardController extends BaseController
                 $response['message'] = 'Exception'; 
                 return json_encode($response);
 			}
-        } catch (ForbiddenHttpException $e) {
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
             throw $e;
         } catch (\Exception $e) {
             $response['success'] = FALSE; 
