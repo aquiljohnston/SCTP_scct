@@ -160,6 +160,12 @@ class TimeCardController extends BaseController
             $projectWasSubmitted        	= $response['projectSubmitted'];
 			$projectDropDown				= $response['projectDropDown'];
 			
+			//set project for non scct web pm submit, may be a way to combine this with the submit check below
+			if(!$showFilter)
+			{
+				$model->projectName = current(array_keys($projectDropDown));
+			}
+			
 			$projArray = array();
 			$keys = array_keys($projectDropDown);
 			$projCounter=0;
