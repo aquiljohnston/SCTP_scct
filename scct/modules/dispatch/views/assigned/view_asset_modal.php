@@ -258,7 +258,6 @@ use kartik\grid\GridView;
             timeout: 99999,
             push: false,
             replace: false,
-            replaceRedirect: false
         }).done(function () {
 			$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
             $("body").css("cursor", "default");

@@ -12,6 +12,9 @@ use Yii;
 use yii\data\ArrayDataProvider;
 use yii\data\Pagination;
 use app\constants\Constants;
+use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 
 class CgeController extends \app\controllers\BaseController
 {
@@ -138,10 +141,12 @@ class CgeController extends \app\controllers\BaseController
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        } catch (ForbiddenHttpException $e) {
-           throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-        } catch (Exception $e) {
-            Yii::$app->runAction('login/user-logout');
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -151,46 +156,56 @@ class CgeController extends \app\controllers\BaseController
      */
     public function actionViewSection()
     {
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
 
-        // get the key to generate section table
-        if (isset($_POST['expandRowKey'])){
-            $mapGridSelected = $_POST['expandRowKey']['MapGrid'];
-            $inspectionType = $_POST['expandRowKey']['InspectionType'];
-            $billingCode = $_POST['expandRowKey']['BillingCode'];
-		}else{
-            $mapGridSelected = '';
-			$inspectionType = '';
-			$billingCode = '';
-		}
-		
-        $getUrl = 'cge%2Fget-by-map&' . http_build_query([
-			'mapGrid' => $mapGridSelected,
-			'inspectionType' => $inspectionType,
-			'billingCode' => $billingCode
-		]);
-        $getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-        $sectionData = $getSectionDataResponseResponse['cges'];
+			// get the key to generate section table
+			if (isset($_POST['expandRowKey'])){
+				$mapGridSelected = $_POST['expandRowKey']['MapGrid'];
+				$inspectionType = $_POST['expandRowKey']['InspectionType'];
+				$billingCode = $_POST['expandRowKey']['BillingCode'];
+			}else{
+				$mapGridSelected = '';
+				$inspectionType = '';
+				$billingCode = '';
+			}
+			
+			$getUrl = 'cge%2Fget-by-map&' . http_build_query([
+				'mapGrid' => $mapGridSelected,
+				'inspectionType' => $inspectionType,
+				'billingCode' => $billingCode
+			]);
+			$getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+			$sectionData = $getSectionDataResponseResponse['cges'];
 
-        $sectionDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $sectionData,
-            'pagination' => false,
-        ]);
+			$sectionDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $sectionData,
+				'pagination' => false,
+			]);
 
-        $sectionDataProvider->key = 'WorkOrderID';
+			$sectionDataProvider->key = 'WorkOrderID';
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider
-            ]);
-        } else {
-            return $this->render('_section-expand', [
-                'sectionDataProvider' => $sectionDataProvider
-            ]);
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('_section-expand', [
+					'sectionDataProvider' => $sectionDataProvider
+				]);
+			} else {
+				return $this->render('_section-expand', [
+					'sectionDataProvider' => $sectionDataProvider
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -200,32 +215,42 @@ class CgeController extends \app\controllers\BaseController
      */
     public function actionViewHistory($workOrderID = null)
     {
-        // Verify logged in
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
 
-        $getUrl = 'cge%2Fget-history&' . http_build_query([
-                'workOrderID' => $workOrderID
-            ]);
-        $getHistoryDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+			$getUrl = 'cge%2Fget-history&' . http_build_query([
+					'workOrderID' => $workOrderID
+				]);
+			$getHistoryDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 
-        // Put data in data provider
-        $historyDataProvider = new ArrayDataProvider
-        ([
-            'allModels' => $getHistoryDataResponse['cgeHistory'],
-            'pagination' => false,
-        ]);
-
-		if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('view_history_modal', [
-                'historyDataProvider' => $historyDataProvider
-            ]);
-        } else {
-			return $this->render('view_history_modal', [
-				'historyDataProvider' => $historyDataProvider
+			// Put data in data provider
+			$historyDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $getHistoryDataResponse['cgeHistory'],
+				'pagination' => false,
 			]);
-		}
+
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('view_history_modal', [
+					'historyDataProvider' => $historyDataProvider
+				]);
+			} else {
+				return $this->render('view_history_modal', [
+					'historyDataProvider' => $historyDataProvider
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
+        }
     }
 
     /**
@@ -243,10 +268,12 @@ class CgeController extends \app\controllers\BaseController
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        }catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException;
-        } catch (Exception $e) {
-            Yii::$app->runAction('login/user-logout');
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 }

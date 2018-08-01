@@ -169,8 +169,7 @@ use kartik\form\ActiveForm;
             data: {searchFilterVal: searchFilterVal},
             timeout: 99999,
             push: false,
-            replace: false,
-            replaceRedirect: false
+            replace: false
         }).done(function () {
             $("body").css("cursor", "default");
             enableDisableControls(true, searchFilterVal);

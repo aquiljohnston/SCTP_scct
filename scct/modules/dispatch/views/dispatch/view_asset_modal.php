@@ -258,7 +258,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             timeout: 99999,
             push: false,
             replace: false,
-            replaceRedirect: false
         }).done(function () {
             $("body").css("cursor", "default");
             $('#loading').hide();

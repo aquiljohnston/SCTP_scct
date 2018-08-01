@@ -14,6 +14,8 @@ use yii\data\Pagination;
 use yii\grid\GridView;
 use yii\base\Exception;
 use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 use app\constants\Constants;
 
 /**
@@ -29,11 +31,11 @@ class UserController extends BaseController
      */
     public function actionIndex()
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
         try {
+			 //guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
             //Check if user has permission to view user page
             self::requirePermission("viewUserMgmt");
 
@@ -132,10 +134,12 @@ class UserController extends BaseController
             ]);
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        } catch (ForbiddenHttpException $e) {
+        } catch(ForbiddenHttpException $e) {
             throw $e;
-        } catch (Exception $e) {
+        } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -146,24 +150,34 @@ class UserController extends BaseController
      */
     public function actionView($username)
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			
+			//Check if user has permissions
+			self::requirePermission("userView");
+			
+			$url = 'user%2Fview&username=' . $username;
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
+
+			// Generate User Permission Table
+			$userPermissionTable = SELF::getUserPermissionTable();
+
+			return $this->render('view', [
+				'model' => json_decode($response, true),
+				'userPermissionTable' => $userPermissionTable,
+			]);
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
-		
-		//Check if user has permissions
-		self::requirePermission("userView");
-		
-        $url = 'user%2Fview&username=' . $username;
-        $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
-
-        // Generate User Permission Table
-        $userPermissionTable = SELF::getUserPermissionTable();
-
-        return $this->render('view', [
-            'model' => json_decode($response, true),
-            'userPermissionTable' => $userPermissionTable,
-        ]);
     }
 
     /**
@@ -173,67 +187,77 @@ class UserController extends BaseController
      */
     public function actionCreate()
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
-        Yii::Trace("user id: " . Yii::$app->user->getId());
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			Yii::Trace("user id: " . Yii::$app->user->getId());
 
-        self::requirePermission('userCreate');
-        $model = new User();
+			self::requirePermission('userCreate');
+			$model = new User();
 
-        //get App Roles for form dropdown
-        $rolesUrl = "dropdown%2Fget-roles-dropdowns";
-        $rolesResponse = Parent::executeGetRequest($rolesUrl);
-        $roles = json_decode($rolesResponse, true);
+			//get App Roles for form dropdown
+			$rolesUrl = "dropdown%2Fget-roles-dropdowns";
+			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$roles = json_decode($rolesResponse, true);
 
-        //get types for form dropdown
-        $typeUrl = "dropdown%2Fget-employee-type-dropdown";
-        $typeResponse = Parent::executeGetRequest($typeUrl);
-        $types = json_decode($typeResponse, true);
+			//get types for form dropdown
+			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
 
-        if ($model->load(Yii::$app->request->post())) {
-			$model->UserActiveFlag = 1;
-			$data = $model->attributes;
+			if ($model->load(Yii::$app->request->post())) {
+				$model->UserActiveFlag = 1;
+				$data = $model->attributes;
 
-            //iv and secret key of openssl
-            $iv = "abcdefghijklmnop";
-            $secretKey = "sparusholdings12";
+				//iv and secret key of openssl
+				$iv = "abcdefghijklmnop";
+				$secretKey = "sparusholdings12";
 
-            //encrypt and encode password
-            $encryptedPassword = openssl_encrypt($data['UserPassword'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
-            $encodedPassword = base64_encode($encryptedPassword);
+				//encrypt and encode password
+				$encryptedPassword = openssl_encrypt($data['UserPassword'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+				$encodedPassword = base64_encode($encryptedPassword);
 
-            $data['UserPassword'] = $encodedPassword;
+				$data['UserPassword'] = $encodedPassword;
 
-            $json_data = json_encode($data);
+				$json_data = json_encode($data);
 
-            try {
-                // post url
-                $url = "user%2Fcreate";
-                $response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
-                $obj = json_decode($response, true);
+				try {
+					// post url
+					$url = "user%2Fcreate";
+					$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
+					$obj = json_decode($response, true);
 
-                return $this->redirect(['user/index']);
-            } catch (Exception $e) {
-                // duplicationflag:
-                // 1: yes 0: no
-                // set duplicateFlag to 1, which means duplication happened.
-                return $this->render('create', [
-                    'model' => $model,
-                    'roles' => $roles,
-                    'types' => $types,
-                    'duplicateFlag' => 1,
-                ]);
-            }
+					return $this->redirect(['user/index']);
+				} catch (Exception $e) {
+					// duplicationflag:
+					// 1: yes 0: no
+					// set duplicateFlag to 1, which means duplication happened.
+					return $this->render('create', [
+						'model' => $model,
+						'roles' => $roles,
+						'types' => $types,
+						'duplicateFlag' => 1,
+					]);
+				}
 
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'roles' => $roles,
-                'types' => $types,
-                'duplicateFlag' => 0,
-            ]);
+			} else {
+				return $this->render('create', [
+					'model' => $model,
+					'roles' => $roles,
+					'types' => $types,
+					'duplicateFlag' => 0,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 
@@ -245,55 +269,64 @@ class UserController extends BaseController
      */
     public function actionUpdate($username)
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			self::requirePermission("userUpdate");
+			$getUrl = 'user%2Fview&username=' . $username;
+			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
+
+			$model = new User();
+			$model->attributes = $getResponse;
+
+			//get App Roles for form dropdown
+			$rolesUrl = "dropdown%2Fget-roles-dropdowns";
+			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$roles = json_decode($rolesResponse, true);
+
+			//get types for form dropdown
+			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
+			$typeResponse = Parent::executeGetRequest($typeUrl);
+			$types = json_decode($typeResponse, true);
+
+			if ($model->load(Yii::$app->request->post())) {
+				$data = $model->attributes;
+
+				//iv and secret key of openssl
+				$iv = "abcdefghijklmnop";
+				$secretKey = "sparusholdings12";
+
+				//encrypt and encode password
+				$encryptedKey = openssl_encrypt($data['UserPassword'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
+				$encodedKey = base64_encode($encryptedKey);
+
+				$data['UserPassword'] = $encodedKey;
+
+				$json_data = json_encode($data);
+
+				$putUrl = 'user%2Fupdate&username=' . $username;
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
+				$obj = json_decode($putResponse, true);
+
+				return $this->redirect(['user/index']);
+			} else {
+				return $this->render('update', [
+					'model' => $model,
+					'roles' => $roles,
+					'types' => $types,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
-        self::requirePermission("userUpdate");
-        $getUrl = 'user%2Fview&username=' . $username;
-        $getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
-
-        $model = new User();
-        $model->attributes = $getResponse;
-
-        //get App Roles for form dropdown
-        $rolesUrl = "dropdown%2Fget-roles-dropdowns";
-        $rolesResponse = Parent::executeGetRequest($rolesUrl);
-        $roles = json_decode($rolesResponse, true);
-
-        //get types for form dropdown
-        $typeUrl = "dropdown%2Fget-employee-type-dropdown";
-        $typeResponse = Parent::executeGetRequest($typeUrl);
-        $types = json_decode($typeResponse, true);
-
-        if ($model->load(Yii::$app->request->post())) {
-			$data = $model->attributes;
-
-            //iv and secret key of openssl
-            $iv = "abcdefghijklmnop";
-            $secretKey = "sparusholdings12";
-
-            //encrypt and encode password
-            $encryptedKey = openssl_encrypt($data['UserPassword'], 'AES-128-CBC', $secretKey, OPENSSL_RAW_DATA, $iv);
-            $encodedKey = base64_encode($encryptedKey);
-
-            $data['UserPassword'] = $encodedKey;
-
-            $json_data = json_encode($data);
-
-            $putUrl = 'user%2Fupdate&username=' . $username;
-            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
-            $obj = json_decode($putResponse, true);
-
-            return $this->redirect(['user/index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-                'roles' => $roles,
-                'types' => $types,
-            ]);
-        }
-
     }
 
     /**
@@ -304,16 +337,26 @@ class UserController extends BaseController
      */
     public function actionDeactivate($username)
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			//calls route to deactivate user account
+			$url = 'user%2Fdeactivate&username=' . urlencode($username);
+			//empty body
+			$json_data = "";
+			Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2); // indirect rbac
+			$this->redirect('/user/');
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
-        //calls route to deactivate user account
-        $url = 'user%2Fdeactivate&username=' . urlencode($username);
-        //empty body
-        $json_data = "";
-        Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2); // indirect rbac
-        $this->redirect('/user/');
     }
     
     /**
@@ -369,14 +412,14 @@ class UserController extends BaseController
                     'searchFilterVal' => $searchFilterVal,
                 ]);
             }
-        }catch(ForbiddenHttpException $e)
-        {
-            throw new ForbiddenHttpException;
-        }
-        catch(\Exception $e)
-        {
-            yii::trace('Exception' . json_encode($e));
-            Yii::$app->runAction('login/user-logout');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
     
@@ -401,11 +444,14 @@ class UserController extends BaseController
                 $putUrl = 'user%2Freactivate';
                 $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
             }
-        } catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException;
-        } catch (Exception $e) {
-            //TODO implement alternative to logging out when a bad request is returned.
-            Yii::$app->runAction('login/user-logout');
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException($e);
         }
     }
 

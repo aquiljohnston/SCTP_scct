@@ -251,7 +251,6 @@ $columns = [
 				//not sure how many of these three I actually need to prevent url overwrite
 				push: false,
 				replace: false,
-				replaceRedirect: false
 			});
 			$('#hoursOverviewPjaxContainer').off('pjax:success').on('pjax:success', function () {
 				if($('#TaskEntryForm #dynamicmodel-date').val() != '')
