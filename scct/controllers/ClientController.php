@@ -110,7 +110,7 @@ class ClientController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -142,7 +142,7 @@ class ClientController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -238,7 +238,7 @@ class ClientController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -331,7 +331,7 @@ class ClientController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -359,7 +359,7 @@ class ClientController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 }

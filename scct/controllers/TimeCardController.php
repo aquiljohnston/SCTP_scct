@@ -300,7 +300,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -368,7 +368,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
 	}
 	
@@ -465,7 +465,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
     }
 	
@@ -501,7 +501,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
 	}
 
@@ -529,7 +529,7 @@ class TimeCardController extends BaseController
         } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
         } catch(Exception $e) {
-            throw new ServerErrorHttpException($e);
+            throw new ServerErrorHttpException();
         }
 	}
 
@@ -575,7 +575,7 @@ class TimeCardController extends BaseController
 			} catch(ErrorException $e) {
 				throw new \yii\web\HttpException(400);
 			} catch(Exception $e) {
-				throw new ServerErrorHttpException($e);
+				throw new ServerErrorHttpException();
 			}
 		} else {
 			  throw new \yii\web\BadRequestHttpException;
@@ -602,7 +602,7 @@ class TimeCardController extends BaseController
 			} catch(ErrorException $e) {
 				throw new \yii\web\HttpException(400);
 			} catch(Exception $e) {
-				throw new ServerErrorHttpException($e);
+				throw new ServerErrorHttpException();
 			}
 		} else {
 			  throw new \yii\web\BadRequestHttpException;
