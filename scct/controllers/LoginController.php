@@ -121,15 +121,12 @@ class LoginController extends BaseController
 
     public function actionUserLogout()
     {	
-		$id = Yii::$app->session['userID'];
-		
 		try {
 			//call function to create/send logout activity
 			self::logActivity('WebLogoutActivity');
-
+			
             $url = 'login%2Fuser-logout';
-            $version = "v2";
-            $response = Parent::executeGetRequest($url, $version);
+            $response = Parent::executeGetRequest($url);
             Yii::$app->user->logout();
         } catch(UnauthorizedHttpException $exception) {
             return $this->redirect(['index']);
@@ -137,7 +134,6 @@ class LoginController extends BaseController
             return $this->redirect(['index']);
         }
         return $this->redirect(['index']);
-        //return $this->redirect(['login/index']);
     }
 	
 	public function logActivity($activityTitle, $geoLocationData=null)
