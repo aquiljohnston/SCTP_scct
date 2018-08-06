@@ -218,7 +218,8 @@ function loadTable(data) {
                 "data": data.data,
                 "columns": data.columns,
                 "lengthMenu": [10, 25, 50, 100, 250, 500],
-                "iDisplayLength": 250
+                "iDisplayLength": 250,
+                "order": [[ 2, "asc" ]]
             });
         } else {
             $("#dataMessage").text("No data available for the specified data range.");
