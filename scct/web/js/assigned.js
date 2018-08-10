@@ -56,16 +56,16 @@ $(function () {
 
     //expandable row column listener
     $(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
-      //assignedGV.on('kvexprow.toggle.kvExpandRowColumn', function (event, ind, key, extra, state) {
-      //assignedGV.on('kvexprow:toggle', function (event, ind, key, extra, state) {
         console.log('Toggled expand row');
-        var isCheckDisabled = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').is(':disabled');
-        var inProgressFlag = $(this).find("[data-key='"+key+"']").find('input[type=checkbox]').attr('InProgressFlag');
+		keyStr = JSON.stringify(key);
+        var isCheckDisabled = $(this).find("[data-key='"+keyStr+"']").find('input[type=checkbox]').is(':disabled');
+        var inProgressFlag = $(this).find("[data-key='"+keyStr+"']").find('input[type=checkbox]').attr('InProgressFlag');
         if (isCheckDisabled){
             if (inProgressFlag != "1")
-                $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('disabled', false);
+                $(this).find("[data-key='"+keyStr+"']").find('.assignedCheckbox input[type=checkbox]').prop('disabled', false);
         }else{
-          $(this).find("[data-key='"+key+"']").find('.unassignCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
+			$(this).find("[data-key='"+keyStr+"']").removeClass('danger');
+			$(this).find("[data-key='"+keyStr+"']").find('.assignedCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
         }
         assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         console.log("assignedMap_MapGrid: " +assignedMap_MapGrid.length);
@@ -77,16 +77,23 @@ $(function () {
           $("#UnassignedButton").prop('disabled', true);
         }
     });
-
+	
 	//gets map data
-    // set constrains:
-    $(document).off('click', '.unassignCheckbox input[type=checkbox]').on('click', '.unassignCheckbox input[type=checkbox]', function () {
+    //checkbox listener on table mapgrids
+    $(document).off('click', '.assignedCheckbox input[type=checkbox]').on('click', '.assignedCheckbox input[type=checkbox]', function () {
+		//if checked un-check section items
+        if($(this).is(':checked')){
+            $(".kv-expanded-row[data-key='"+$(this).val()+"'] #assignedSectionGV-container>table>tbody>tr").removeClass('danger');
+            $(".kv-expanded-row[data-key='"+$(this).val()+"']").find('input[type=checkbox]').prop('checked', false);
+        }
         assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (assignedMap_MapGrid.length > 0) {
             $("#UnassignedButton").prop('disabled', false);
-        } else
+        } else {
             $("#UnassignedButton").prop('disabled', true);
-
+		}
+		
+		//what is this?
         assignedMap_MapGrid = assignedMap_MapGrid.filter( function( el ) {
             return assignedSection_SectionNumber.indexOf( el ) < 0;
         } );
@@ -94,7 +101,7 @@ $(function () {
     });
 
 	//get section data
-    //checkbox listener on section table
+    //checkbox listener on table sections
     $(document).off('click', '.assignedSectionCheckbox input[type=checkbox]').on('click', '.assignedSectionCheckbox input[type=checkbox]', function () {
         assignedSection_SectionNumber =$("#assignedGridview #assignedSectionGV").yiiGridView('getSelectedRows');
         var mapGridSelected = $(this).attr('MapGrid');
@@ -132,21 +139,11 @@ $(function () {
         unassignCheckboxListener();
 
     $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', function () {
-        $("#unassigned-message").find('span').html(getSelectedUserName(getUniqueMapGridKey(assignedSection_SectionNumber, assignedMap_MapGrid), assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
-        $("#unassigned-message").css("display", "block");
-        // When the user clicks buttons, close the modal
-        $(document).off('click', '#unassignedCancelBtn').on('click', '#unassignedCancelBtn', function () {
-        //$('#unassignedCancelBtn').click(function () {
-            $("#unassigned-message").css("display", "none");
-        });
-        $(document).off('click', '#unassignedConfirmBtn').on('click', '#unassignedConfirmBtn', function () {
-        //$('#unassignedConfirmBtn').click(function () {
-            $("#unassigned-message").css("display", "none");
-            unassignButtonListener();
-        });
+		$('#loading').show();
+		getUnassignConfirmationModal().done(initUnassignConfirmationModal);
     });
     $(document).off('click', '#UnassignedAssetsButton').on('click', '#UnassignedAssetsButton', function () {
-        $("#unassigned-message").find('span').html(getSelectedUserName("","", "",assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
+        $("#unassigned-message").find('span').html(getSelectedUserName(assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
         $("#unassigned-message").css("display", "block");
 		//get asset data before it get reset
 		unassignAssetsData = getAssignedAssetsArray();
@@ -172,13 +169,11 @@ $(function () {
     });
 });
 
+//bound to modal confirm for map/section level unassign
 function unassignButtonListener() {
-    var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
-    var assignedGV = "assignedGV";
-    var assignedSectionGV = "assignedSectionGV";
-    unassignMapData = getAssignedMapArray();
-    unassignSectionData = getAssignedSectionArray();
-    console.log("Checked Rows " + pks);
+	confirmedUnassignData = getUnassignConfirmedDataArray();
+    unassignMapData = confirmedUnassignData['unassignMapData'];
+    unassignSectionData = confirmedUnassignData['unassignSectionData'];
     var form = $("#AssignForm");
     $('#loading').show();
     $.ajax({
@@ -212,7 +207,7 @@ function unassignButtonListener() {
 }
 
 function unassignCheckboxListener() {
-    $(".unassignCheckbox input[type=checkbox]").click(function () {
+    $(".assignedCheckbox input[type=checkbox]").click(function () {
         var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (!pks || pks.length != 0) {
             $('#UnassignedButton').prop('disabled', false); //TO ENABLE
@@ -244,23 +239,10 @@ function reloadAssignedGridView() {
     });
 }
 
-function getAssignedUserIDs() {
-    var pks = $('#assignedGV').yiiGridView('getSelectedRows');
-    //alert("pks length is ：　"+pks.length);
-    var AssignedToIDs = [];
-    for(var i=0; i < pks.length; i++){
-        // get assignedUserID associate with current MapGrid
-        AssignedToIDs[i] = $(".kv-row-select input[MapGrid="+pks[i]+"]").attr("AssignedToID");
-    }
-    return AssignedToIDs;
-}
-
-// Asset modal view (not in use; using one in dispatch.js, sharing the same function)
-
 // Generate Assigned Map Array;
 function getAssignedMapArray() {
     var mapGridArray = [];
-	$('#assignedGV-container .unassignCheckbox input:checked').each(function() {
+	$('#assignedGV-container .assignedCheckbox input:checked').each(function() {
 		mapGridArray.push({
 			MapGrid: $(this).attr('MapGrid'),
 			AssignedUserID: $(this).attr('AssignedToID'),
@@ -286,10 +268,73 @@ function getAssignedSectionArray() {
 	return assignedSectionArray;
 }
 
-// Generate unAssign Data Array; combine mapGrid and section level
-function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber, assignedSection_MapGrid, assignedAssets_WorkOrderID, assignedAssets_AssignedUserId) {
-    var selectedMapGridUser = "";
-    var selectedSectionUser = "";
+//get confirmed unassign user data
+function getUnassignConfirmedDataArray() {
+	confirmedDataArray = {};
+	confirmedDataArray['unassignMapData'] = [];
+	confirmedDataArray['unassignSectionData'] = [];
+	$('.unassignedUserName input:checked').each(function(){
+		dataArray = JSON.parse($(this).val());
+		if('SectionNumber' in dataArray){
+			confirmedDataArray['unassignSectionData'].push(dataArray);
+		} else {
+			confirmedDataArray['unassignMapData'].push(dataArray);
+		}
+	});
+	return confirmedDataArray;
+}
+
+//get data to populate confirmation modal for map grid and section data
+function getUnassignConfirmationModal() {
+	assignedMapData = getAssignedMapArray();
+	assignedSectionData = getAssignedSectionArray();
+	assignedDataArray = assignedMapData.concat(assignedSectionData);
+	return $.ajax({
+        url: '/dispatch/assigned/view-unassign-confirmation',
+        data: {assignedUserMaps: assignedDataArray},
+        type: 'POST',
+    });
+}
+
+function initUnassignConfirmationModal(data){
+	$("#unassigned-message").find('span').html(formatUnassignConfirmationModal(data));
+	$("#unassigned-message").css("display", "block");
+	// When the user clicks buttons, close the modal
+	$(document).off('click', '#unassignedCancelBtn').on('click', '#unassignedCancelBtn', function () {
+		$("#unassigned-message").css("display", "none");
+	});
+	$(document).off('click', '#unassignedConfirmBtn').on('click', '#unassignedConfirmBtn', function () {
+		$("#unassigned-message").css("display", "none");
+		unassignButtonListener();
+	});
+}
+
+function formatUnassignConfirmationModal(data){
+	dataArray = JSON.parse(data);
+	modalHTML = '';
+	dataArray['assignedUserMaps'].forEach(function(element) {
+		//build map data
+		mapGridStr = element['MapGrid'] != null ? "Map Grid: " + element['MapGrid'] + "<br>" : "";
+		sectionStr = element['SectionNumber'] != null ? "Section Number: " + element['SectionNumber'] + "<br>" : "";
+		inspectionTypeStr = element['InspectionType'] != null ? "Inspection Type: " + element['InspectionType'] + "<br>" : "";
+		billingCodeStr = element['BillingCode'] != null ? "Billing Code: " + element['BillingCode'] + "<br>" : "";
+		userMapData = mapGridStr + sectionStr + inspectionTypeStr + billingCodeStr;
+		//build user data
+		userDataStr = 'Users:';
+		userData = element['Users'];
+		delete element['Users'];
+		userData.forEach(function(user){
+			element['AssignedUserID'] = user['UserID'];
+			userDataStr += "<br><span style='padding-left:3em'><input type='checkbox' value=" + JSON.stringify(element) +" checked='checked'> " +  user['UserFullName'] + "</span>";
+		});
+		modalHTML += "<li>" + userMapData + userDataStr + "</li>";
+	});
+	$('#loading').hide();
+	return "<ul>" + modalHTML + "</ul>";
+}
+
+// Generate unAssign Data Array; combine mapGrid and section level //here
+function getSelectedUserName(assignedAssets_WorkOrderID, assignedAssets_AssignedUserId) {
     var selectedAssetsUser = "";
     if (assignedAssets_WorkOrderID != "" || assignedAssets_WorkOrderID.length > 0){
         for (var i = 0; i < assignedAssets_WorkOrderID.length; i++){
@@ -298,29 +343,7 @@ function getSelectedUserName(assignedMap_MapGrid, assignedSection_SectionNumber,
             selectedAssetsUser += "<li>" + assetAddress + " : " + userName_Assets + "</li>";
         }
     }
-
-    if (assignedMap_MapGrid != "" && assignedMap_MapGrid.length > 0 ) {
-		$('#assignedGV-container input:checked').each(function() {
-			//check if billing code is set
-			$billingCodeStr = $(this).attr('BillingCode') != null ? "<br>Billing Code: " + $(this).attr('BillingCode') : "";
-			selectedMapGridUser += "<li>Map: " + $(this).attr('MapGrid') 
-				+ "<br>Inspection Type: " + $(this).attr('InspectionType') 
-				+ $billingCodeStr
-				+ "<br>User: " + $(this).attr('UserName') + "</li>"
-		});
-    }
-    if (assignedSection_SectionNumber != "" || assignedSection_SectionNumber.length > 0) {
-		$('#assignedSectionGV-container input:checked').each(function() {
-			//check if billing code is set
-			$billingCodeStr = $(this).attr('BillingCode') != null ? "<br>Billing Code: " + $(this).attr('BillingCode') : "";
-			selectedSectionUser += "<li>Map: " + $(this).attr('MapGrid')
-				+ "<br>Section: " + $(this).attr('SectionNumber')
-				+ "<br>Inspection Type: " + $(this).attr('InspectionType')
-				+ $billingCodeStr
-				+ "<br>User: " + $(this).attr('UserName') + "</li>"
-		});
-    }
-    var selectedUserNameList = "<ul>"+selectedMapGridUser+selectedSectionUser+selectedAssetsUser+"</ul>";
+    var selectedUserNameList = "<ul>"+selectedAssetsUser+"</ul>";
     return selectedUserNameList;
 }
 

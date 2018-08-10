@@ -164,15 +164,12 @@ class AssignedController extends \app\controllers\BaseController
     {
         try {
             if (Yii::$app->request->isAjax) {
-                Yii::trace("call Unassign");
                 $data = Yii::$app->request->post();
                 $json_data = json_encode($data);
-                Yii::trace("Unassigned Data: ".$json_data);
 
                 // post url
                 $deleteUrl = 'dispatch%2Funassign';
                 $deleteResponse = Parent::executeDeleteRequest($deleteUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-                Yii::trace("unassignputResponse " . $deleteResponse);
 
             } else {
                 throw new \yii\web\BadRequestHttpException;
@@ -372,6 +369,39 @@ class AssignedController extends \app\controllers\BaseController
 			} else {
 				return $this->render('view_asset_modal', $params);
 			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
+	
+	 /**
+     * get user data to populate unassign confirmation modal
+     */
+    public function actionViewUnassignConfirmation()
+    {
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+
+			if ($data = Yii::$app->request->post()){
+				$json_data = json_encode($data);
+
+				// post url
+                $url = 'dispatch%2Fget-assigned-user';
+                $response = Parent::executeDeleteRequest($url, $json_data); // indirect rbac
+
+				return $response;
+			} else {
+				throw new \yii\web\BadRequestHttpException;
+			}	
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {

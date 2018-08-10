@@ -73,7 +73,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'id' => 'assignedGV',
                 'summary' => false,
                 'pjax' => true,
-                //'floatHeader' => true,
                 'pjaxSettings' => [
                     'options' => [
                         'enablePushState' => false,
@@ -89,22 +88,11 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
                         'value' => function ($model, $key, $index, $column) {
-                            /*if ($model['sectionCount'] == null){
-                                return GridView::ROW_NONE;
-                            }*/
                             return GridView::ROW_COLLAPSED;
                         },
 
                         'detailUrl' => Url::to(['assigned/view-section']),
-                        'detailAnimationDuration' => 'fast'
-                        /*$searchModel = new CreateBookingsSearch();
-                        $searchModel->booking_id = $model ->id;
-                        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-                        return Yii::$app->controller->renderPartial('_expandrowview.php',[
-                            'searchModel' => $searchModel,
-                            'dataProvider' => $dataProvider,
-                        ]);*/
+                        'detailAnimationDuration' => 'fast',
                     ],
                     [
                         'label' => 'Map Grid',
@@ -112,9 +100,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Office<br/>" . $model['Division'] . "<br/>" . $model['MapGrid'];
-                        }*/
                     ],
                     [
                         'label' => 'Assigned User(s)',
@@ -129,9 +114,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
                     ],
                     [
                         'label' => 'Compliance End',
@@ -139,9 +121,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
                         'format' => 'html',
-                        /*'value' => function ($model) {
-                            return "Start: " . $model['ComplianceStartDate'] . "<br/>End: " . $model['ComplianceEndDate'];
-                        }*/
                     ],
                     [
                         'label' => 'Completed (%)',
@@ -208,7 +187,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'header' => 'Remove Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%; word-wrap: break-word;'],
-                        'contentOptions' => ['class' => 'text-center unassignCheckbox', 'style' => 'width: 5%'],
+                        'contentOptions' => ['class' => 'text-center assignedCheckbox', 'style' => 'width: 5%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if ($model['InProgressFlag'] != "1")
 								$disabled = false;
@@ -241,16 +220,18 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
+	
+	<!-- Add functionality to close when click off on background similar to user reactivate -->
     <!-- The Modal -->
     <div id="unassigned-message" class="modal">
 		<div class="modal-dialog">
 			<!-- Modal content -->
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3>Do you want to<br>un-assign the selected surveyors?</h3>
+					<h3>Please confirm the surveyors you wish to remove?</h3>
 				</div>
 				<div class="modal-body">
-					<p>Press confirm to continue to un-assign <br> <span class="unassignedUserName"></span></p>
+					<p><span class="unassignedUserName"></span></p>
 				</div>
 				<div class="modal-footer">
 					<div id="unassignedConfirmButton" class="unassignedbtn">
