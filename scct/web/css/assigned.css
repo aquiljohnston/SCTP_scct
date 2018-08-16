@@ -158,6 +158,34 @@
     margin-top: 1%;
 }
 
+/*unassign_confirmation_modal*/
+#unassignConfirmationListHeaders{
+	font-weight: bold;
+	padding-bottom: 1vh;
+}
+#unassignConfirmationList{
+	max-height: 250px;
+	width: 100%;
+	position: relative;
+	overflow-y: auto;
+}
+.unassignConfirmationColumn {
+    float: left;
+    width: 50%;
+}
+.unassignConfirmationRow:after {
+    content: "";
+    display: table;
+    clear: both;
+	padding-bottom: 2vh;
+}
+.unassignbtn{
+	position: relative;
+    float: right;
+    width: 15%;
+	padding-top: 1%;
+}
+
 /*unassigned dialog css*/
 #unassigned-message .modal-content {
     position: relative;
@@ -184,11 +212,6 @@
 }
 
 /* Add Animation */
-/* @-webkit-keyframes animatetop {
-    from {top:-300px; opacity:0}
-    to {top:0; opacity:1}
-} */
-
 @keyframes animatetop {
     from {
         top: -300px;
@@ -212,14 +235,14 @@
     background-color: white;
 }
 
-.unassignedbtn {
+.unassignAssetBtn {
     padding: 10px 0;
 }
 
-#unassigned-message .unassignedbtn {
+#unassigned-message .unassignAssetBtn {
     position: relative;
     float: right;
-    width: 30%;
+    width: 20%;
     color: #0067a6;
 }
 

@@ -197,6 +197,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 								'MapGrid' => $model['MapGrid'],
 								'BillingCode' => $model['BillingCode'],
 								'InspectionType' => $model['InspectionType'],
+								'OfficeName' => $model['OfficeName'],
 								'disabled' => $disabled,
 								'UserName' => $model['AssignedUser'],
 								'InProgressFlag' => $model['InProgressFlag'] 
@@ -220,25 +221,37 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
+	<!-- Unassign Confirmation modal -->
+	<?php
+		Modal::begin([
+			'header' => '<h4 id="unassignConfirmationModalTitle">PLEASE CONFIRM THE SURVEYORS YOU WISH TO REMOVE</h4>',
+			'id' => 'unassignConfirmationModal',
+		]);
+	?>
+    <div id='unassignConfirmationModalContent'>
+        Loading...
+    </div>
+    <?php
+		Modal::end();
+    ?>
 	
-	<!-- Add functionality to close when click off on background similar to user reactivate -->
-    <!-- The Modal -->
+	<!--still in use by asset level unassign-->
     <div id="unassigned-message" class="modal">
 		<div class="modal-dialog">
 			<!-- Modal content -->
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3>Please confirm the surveyors you wish to remove?</h3>
+					<h3>PLEASE CONFIRM THE SURVEYORS YOU WISH TO REMOVE</h3>
 				</div>
 				<div class="modal-body">
 					<p><span class="unassignedUserName"></span></p>
 				</div>
 				<div class="modal-footer">
-					<div id="unassignedConfirmButton" class="unassignedbtn">
-						<?php echo Html::button('Confirm', ['class' => 'btn', 'id' => 'unassignedConfirmBtn']); ?>
+					<div id="unassignConfirmButton" class="unassignAssetBtn">
+						<?php echo Html::button('Confirm', ['class' => 'btn btn-primary', 'id' => 'unassignedConfirmBtn']); ?>
 					</div>
-					<div id="unassignedCancelButton" class="unassignedbtn">
-						<?php echo Html::button('Cancel', ['class' => 'btn', 'id' => 'unassignedCancelBtn']); ?>
+					<div id="unassignCancelButton" class="unassignAssetBtn">
+						<?php echo Html::button('Cancel', ['class' => 'btn btn-primary', 'id' => 'unassignedCancelBtn']); ?>
 					</div>
 				</div>	
 			</div>
