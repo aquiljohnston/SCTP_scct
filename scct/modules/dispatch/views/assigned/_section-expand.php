@@ -102,6 +102,7 @@ use yii\bootstrap\Modal;
 						'MapGrid' => $model['MapGrid'],
 						'BillingCode' => $model['BillingCode'],
 						'InspectionType' => $model['InspectionType'],
+						'OfficeName' => $model['OfficeName'],
 						'UserName' => $model['SearchString'],
 						'disabled' => $model['InProgressFlag'] != "1" ? false : 'disabled'
 					];

@@ -397,8 +397,11 @@ class AssignedController extends \app\controllers\BaseController
 				// post url
                 $url = 'dispatch%2Fget-assigned-user';
                 $response = Parent::executeDeleteRequest($url, $json_data); // indirect rbac
+				$unassignConfirmationData = json_decode($response, true)['assignedUserMaps'];
 
-				return $response;
+				return $this->renderAjax('unassign_confirmation_modal', [
+                    'unassignConfirmationData' => $unassignConfirmationData
+                ]);
 			} else {
 				throw new \yii\web\BadRequestHttpException;
 			}	
