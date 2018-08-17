@@ -30,6 +30,18 @@ class AssignedController extends \app\controllers\BaseController
             $model->addRule('assignedfilter', 'string', ['max' => 32])
                 ->addRule('pagesize', 'string', ['max' => 32]);
 
+			//"sort":"-Division"
+            //get sort data
+            if (isset($_GET['sort'])){
+                $sort = $_GET['sort'];
+                //parse sort data
+                $sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+            } else {
+                $sortField = '';
+                $sortOrder = '';
+            }
+				
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
                 $assignedPageSizeParams = $model->pagesize;
@@ -49,7 +61,9 @@ class AssignedController extends \app\controllers\BaseController
             $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
                     'filter' => $assignedFilterParams,
                     'listPerPage' => $assignedPageSizeParams,
-                    'page' => $pageAt
+                    'page' => $pageAt,
+					'sortField' => $sortField,
+                    'sortOrder' => $sortOrder,
                 ]);
             $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
             Yii::trace("ASSIGNED DATA: " . json_encode($getAssignedDataResponse));
