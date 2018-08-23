@@ -30,7 +30,7 @@
 				unset($element['Users']);
 				forEach($userData as $user){
 					$element['AssignedUserID'] = $user['UserID'];
-					$unassignUserStr .= "<span><input type='checkbox' value=" . json_encode($element) ." checked='checked'> " .  $user['UserFullName'] . "</span><br>";
+					$unassignUserStr .= "<span><input type='checkbox' value='" . json_encode($element) ."' checked='checked'> " .  $user['UserFullName'] . "</span><br>";
 				}
 				$modalHTML .= "<div class='unassignConfirmationRow'><div class='unassignConfirmationColumn'>" . $unassignMapStr . "</div><div class='unassignConfirmationColumn'>" . $unassignUserStr . "</div></div>";
 			}
