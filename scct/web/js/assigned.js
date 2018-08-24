@@ -32,16 +32,21 @@ $(function () {
     $(document).off('click', '#assignedPagination .pagination li a').on('click', '#assignedPagination .pagination li a', function (event) {
         event.preventDefault();
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
-
-        $('#assignedPageNumber').val(page);
+		$('#assignedPageNumber').val(page);
         var form = $("#AssignForm");
+		//get sort value
+		var ascSort = $("#assignedGV-container").find(".asc").attr('data-sort');
+		var descSort = $("#assignedGV-container").find(".desc").attr('data-sort');
+		var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
+		//append sort to form values
+		var dataParams = form.serialize() + "&sort=" + sort;
         $('#loading').show();
         $.pjax.reload({
             container: "#assignedGridview",
             timeout: 99999,
             url: form.attr("action"),
             type: "GET",
-            data: form.serialize()
+            data: dataParams
         }).done(function () {
         });
         $('#assignedGridview').on('pjax:success', function (event, data, status, xhr, options) {

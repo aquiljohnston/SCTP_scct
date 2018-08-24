@@ -83,13 +83,19 @@ $(function () {
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
         $('#dispatchPageNumber').val(page);
         var form = $("#dispatchActiveForm");
+		//get sort value
+		var ascSort = $("#dispatchGV-container").find(".asc").attr('data-sort');
+		var descSort = $("#dispatchGV-container").find(".desc").attr('data-sort');
+		var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
+		//append sort to form values
+		var dataParams = form.serialize() + "&sort=" + sort;
         $('#loading').show();
         $.pjax.reload({
             container: "#dispatchUnassignedGridview",
             timeout: 99999,
             url: form.attr("action"),
             type: "GET",
-            data: form.serialize()
+            data: dataParams
         }).done(function () {
         });
         $('#dispatchUnassignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
