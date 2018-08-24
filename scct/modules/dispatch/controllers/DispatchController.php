@@ -44,8 +44,9 @@ class DispatchController extends \app\controllers\BaseController
 				$sortField = str_replace('-', '', $sort, $sortCount);
                 $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
 			} else {
-				$sortField = '';
-                $sortOrder = '';
+				//default sort values
+				$sortField = 'ComplianceEnd';
+                $sortOrder = 'ASC';
 			}
 			
             //check request
@@ -76,7 +77,6 @@ class DispatchController extends \app\controllers\BaseController
 					'sortOrder' => $sortOrder,
                 ]);
             $getDispatchDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-            //Yii::trace("DISPATCH DATA: " . json_encode($getDispatchDataResponse));
 
             $dispatchData = $getDispatchDataResponse['mapGrids'];
 			$divisionFlag = $getDispatchDataResponse['divisionFlag'];
@@ -104,39 +104,16 @@ class DispatchController extends \app\controllers\BaseController
 
             // Sorting Dispatch table
             $dispatchDataProvider->sort = [
+				'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
                 'attributes' => [
-                    'MapGrid' => [
-                        'asc' => ['MapGrid' => SORT_ASC],
-                        'desc' => ['MapGrid' => SORT_DESC]
-                    ],
-                    'Division' => [
-                        'asc' => ['Division' => SORT_ASC],
-                        'desc' => ['Division' => SORT_DESC]
-                    ],
-                    'ComplianceStart' => [
-                        'asc' => ['ComplianceStart' => SORT_ASC],
-                        'desc' => ['ComplianceStart' => SORT_DESC]
-                    ],
-                    'ComplianceEnd' => [
-                        'asc' => ['ComplianceEnd' => SORT_ASC],
-                        'desc' => ['ComplianceEnd' => SORT_DESC]
-                    ],
-                    'AvailableWorkOrderCount' => [
-                        'asc' => ['AvailableWorkOrderCount' => SORT_ASC],
-                        'desc' => ['AvailableWorkOrderCount' => SORT_DESC]
-                    ],
-                    'InspectionType' => [
-                        'asc' => ['InspectionType' => SORT_ASC],
-                        'desc' => ['InspectionType' => SORT_DESC]
-                    ],
-                    'BillingCode' => [
-                        'asc' => ['BillingCode' => SORT_ASC],
-                        'desc' => ['BillingCode' => SORT_DESC]
-                    ],
-                    'OfficeName' => [
-                        'asc' => ['OfficeName' => SORT_ASC],
-                        'desc' => ['OfficeName' => SORT_DESC]
-                    ]
+                    'MapGrid',
+                    'Division',
+                    'ComplianceStart',
+                    'ComplianceEnd',
+                    'AvailableWorkOrderCount',
+                    'InspectionType',
+                    'BillingCode',
+                    'OfficeName'
                 ]
             ];
 

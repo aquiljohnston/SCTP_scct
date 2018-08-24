@@ -38,8 +38,9 @@ class AssignedController extends \app\controllers\BaseController
                 $sortField = str_replace('-', '', $sort, $sortCount);
                 $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
             } else {
-                $sortField = '';
-                $sortOrder = '';
+                //default sort values
+                $sortField = 'ComplianceEnd';
+                $sortOrder = 'ASC';
             }
 				
             //check request
@@ -95,43 +96,17 @@ class AssignedController extends \app\controllers\BaseController
 
             // Sorting Unassign table
             $assignedDataProvider->sort = [
+				'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
                 'attributes' => [
-                    'MapGrid' => [
-                        'asc' => ['MapGrid' => SORT_ASC],
-                        'desc' => ['MapGrid' => SORT_DESC]
-                    ],
-                    'AssignedUser' => [
-                        'asc' => ['AssignedUser' => SORT_ASC],
-                        'desc' => ['AssignedUser' => SORT_DESC]
-                    ],
-                    'ComplianceStart' => [
-                        'asc' => ['ComplianceStart' => SORT_ASC],
-                        'desc' => ['ComplianceStart' => SORT_DESC]
-                    ],
-                    'ComplianceEnd' => [
-                        'asc' => ['ComplianceEnd' => SORT_ASC],
-                        'desc' => ['ComplianceEnd' => SORT_DESC]
-                    ],
-                    'Percent Completed' => [
-                        'asc' => ['Percent Completed' => SORT_ASC],
-                        'desc' => ['Percent Completed' => SORT_DESC]
-                    ],
-                    'Counts' => [
-                        'asc' => ['Counts' => SORT_ASC],
-                        'desc' => ['Counts' => SORT_DESC]
-                    ],
-                    'InspectionType' => [
-                        'asc' => ['InspectionType' => SORT_ASC],
-                        'desc' => ['InspectionType' => SORT_DESC]
-                    ],
-                    'BillingCode' => [
-                        'asc' => ['BillingCode' => SORT_ASC],
-                        'desc' => ['BillingCode' => SORT_DESC]
-                    ],
-                    'OfficeName' => [
-                        'asc' => ['OfficeName' => SORT_ASC],
-                        'desc' => ['OfficeName' => SORT_DESC]
-                    ]
+                    'MapGrid',
+                    'AssignedUser',
+                    'ComplianceStart',
+                    'ComplianceEnd',
+                    'Percent Completed',
+                    'Counts',
+                    'InspectionType',
+                    'BillingCode',
+                    'OfficeName'
                 ]
             ];
 
