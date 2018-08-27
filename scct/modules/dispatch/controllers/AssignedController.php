@@ -103,7 +103,7 @@ class AssignedController extends \app\controllers\BaseController
                     'ComplianceStart',
                     'ComplianceEnd',
                     'Percent Completed',
-                    'Counts',
+                    'Remaining',
                     'InspectionType',
                     'BillingCode',
                     'OfficeName'
