@@ -44,7 +44,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
                     <?php if ($canUnassign != 0) { ?>
                         <div id="assiunassignedButton">
-                            <?php echo Html::button('Remove Surveyor', ['class' => 'btn btn-primary',
+                            <?php echo Html::button('REMOVE SURVEYOR', ['class' => 'btn btn-primary',
                                 'id' => 'UnassignedButton']); ?>
                         </div>
                     <?php } else {

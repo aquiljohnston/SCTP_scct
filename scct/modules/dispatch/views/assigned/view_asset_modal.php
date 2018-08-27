@@ -33,7 +33,7 @@ use kartik\grid\GridView;
             <div id="assignedAssetsButtonContainer" style="float: right;margin: 0% auto;width: 16%;">
                 <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
                     <div id="assiunassignedButton">
-                        <?php echo Html::button('UN-ASSIGNED', ['class' => 'btn btn-primary',
+                        <?php echo Html::button('REMOVE SURVEYOR', ['class' => 'btn btn-primary',
                             'id' => 'UnassignedAssetsButton', 'disabled' => 'disabled']); ?>
                     </div>
                 <?php Pjax::end() ?>
@@ -114,16 +114,6 @@ use kartik\grid\GridView;
                 }
             ],
             [
-                'header' => 'Un-assigned',
-                'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'word-wrap: break-word;'],
-                'contentOptions' => ['class' => 'text-center unassignAssetsCheckbox'],
-                'checkboxOptions' => function ($model, $key, $index, $column) {
-                    $assetAddress = $model['HouseNumber']." ". $model['Street']." ". $model['AptSuite'].", ". $model['City']." ". $model['State'].", ". $model['Zip']."<br>";
-                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false, 'assetAddress' => $assetAddress, 'AssignedUserID' => $model['AssignedToID'] ];
-                }
-            ],
-            [
                 'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
                 'headerOptions' => ['class' => 'text-center'],
@@ -154,7 +144,17 @@ use kartik\grid\GridView;
                         }
                         return $dropDownListOpenSelect . $dropDownListCloseSelect;
                 }
-            ]
+            ],
+			[
+                'header' => 'Remove Surveyor',
+                'class' => 'kartik\grid\CheckboxColumn',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'word-wrap: break-word;'],
+                'contentOptions' => ['class' => 'text-center unassignAssetsCheckbox'],
+                'checkboxOptions' => function ($model, $key, $index, $column) {
+                    $assetAddress = $model['HouseNumber']." ". $model['Street']." ". $model['AptSuite'].", ". $model['City']." ". $model['State'].", ". $model['Zip']."<br>";
+                    return ['ClientWorkOrderID' => $model['ClientWorkOrderID'], 'AssignedTo' => $model['AssignedTo'],'WorkOrderID' => $model['WorkOrderID'], 'disabled' => $model['WorkQueueStatus'] == 101 ? 'disabled' : false, 'assetAddress' => $assetAddress, 'AssignedUserID' => $model['AssignedToID'] ];
+                }
+            ],
         ],
     ]); ?>
     <div id="assignedAssetsTablePagination" style="margin-top: 2%;">
