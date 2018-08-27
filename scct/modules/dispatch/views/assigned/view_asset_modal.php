@@ -205,8 +205,6 @@ use kartik\grid\GridView;
         $(document).off('click', '#assignedDispatchAssetsButton').on('click', '#assignedDispatchAssetsButton', function (event){
             var assignedDispatchAsset = [];
             assignedDispatchAsset = getAssignedDispatchAssetsData();
-            console.log("DISPATCH ASSET " + assignedDispatchAsset);
-
             // Ajax post request to dispatch assets
             $.ajax({
                 timeout: 99999,
@@ -214,7 +212,6 @@ use kartik\grid\GridView;
                 data: {dispatchMap: [], dispatchSection: [], dispatchAsset: assignedDispatchAsset},
                 type: 'POST',
                 beforeSend: function () {
-                    $('#modalViewAssetDispatch').modal("hide");
                     $('#loading').show();
                 }
             }).done(function () {
@@ -261,7 +258,7 @@ use kartik\grid\GridView;
         }).done(function () {
 			$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
             $("body").css("cursor", "default");
-            $('#loading').hide();
+			reloadAssignedGridView();
         });
     }
 
@@ -277,8 +274,6 @@ use kartik\grid\GridView;
                 sectionNumber = $(this).find('.assetSurveyorDropDown').attr("SectionNumber");
                 
                 $(this).find(".assetSurveyorDropDown option:selected").each(function () {
-                    console.log("SELECTED SURVEYOR IS : " + $(this).val());
-                    console.log("SELECTED WORKORDER IS : " + workOrderID);
                     AssignedUserID = $(this).val();
                     if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
                         dispatchAsset.push({
