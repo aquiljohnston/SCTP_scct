@@ -138,7 +138,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     ],
 					[
                         'label' => 'Remaining/Total',
-                        'attribute' => 'Counts',
+                        'attribute' => 'Remaining',
                         'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
                         'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
                         'format' => 'html',
