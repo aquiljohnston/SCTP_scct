@@ -35,9 +35,7 @@ $(function () {
 		$('#assignedPageNumber').val(page);
         var form = $("#AssignForm");
 		//get sort value
-		var ascSort = $("#assignedGV-container").find(".asc").attr('data-sort');
-		var descSort = $("#assignedGV-container").find(".desc").attr('data-sort');
-		var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
+		var sort = getAssignedIndexSortParams();
 		//append sort to form values
 		var dataParams = form.serialize() + "&sort=" + sort;
         $('#loading').show();
@@ -200,12 +198,16 @@ function reloadAssignedGridView() {
     if (form.find(".has-error").length) {
         return false;
     }
+	//get sort value
+	var sort = getAssignedIndexSortParams();
+	//append sort to form values
+	var dataParams = form.serialize() + "&sort=" + sort;
     $('#loading').show();
     $.pjax.reload({
         type: 'GET',
         url: form.attr("action"),
         container: '#assignedGridview', // id to update content
-        data: form.serialize(),
+        data: dataParams,
         timeout: 99999
     }).done(function () {
         $('#loading').hide();
@@ -291,13 +293,16 @@ function unassignAssetsButtonListener(unassignAssetsData) {
     }).done(function () {
         assignedAssets_WorkOrderID = [];
         assignedAssets_AssignedUserId = [];
-
+		//get sort value
+		var sort = getAssignedIndexSortParams();
+		//append sort to form values
+		var dataParams = form.serialize() + "&sort=" + sort;
         $.pjax.reload({
             container: '#assignedGridview',
             timeout: 99999,
             type: 'GET',
             url: form.attr("action"),
-            data: form.serialize()
+            data: dataParams
         });
         $('#assignedGridview').on('pjax:success', function () {
             $('#loading').hide();
@@ -327,4 +332,12 @@ function getAssignedAssetsArray() {
     }else{
         return assetsArray;
     }
+}
+
+//get sort params
+function getAssignedIndexSortParams()
+{
+	var ascSort = $("#assignedGV-container").find(".asc").attr('data-sort');
+	var descSort = $("#assignedGV-container").find(".desc").attr('data-sort');
+	return (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
 }

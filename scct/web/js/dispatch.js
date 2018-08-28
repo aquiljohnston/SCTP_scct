@@ -84,9 +84,7 @@ $(function () {
         $('#dispatchPageNumber').val(page);
         var form = $("#dispatchActiveForm");
 		//get sort value
-		var ascSort = $("#dispatchGV-container").find(".asc").attr('data-sort');
-		var descSort = $("#dispatchGV-container").find(".desc").attr('data-sort');
-		var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
+		var sort = getDispatchIndexSortParams();
 		//append sort to form values
 		var dataParams = form.serialize() + "&sort=" + sort;
         $('#loading').show();
@@ -121,12 +119,16 @@ function reloadDispatchGridView() {
     if (form.find(".has-error").length) {
         return false;
     }
+	//get sort value
+	var sort = getDispatchIndexSortParams();
+	//append sort to form values
+	var dataParams = form.serialize() + "&sort=" + sort;
     $('#loading').show();
     $.pjax.reload({
         type: 'GET',
         url: '/dispatch/dispatch/index',
         container: '#dispatchUnassignedGridview', // id to update content
-        data: form.serialize(),
+        data: dataParams,
         timeout: 99999
     }).done(function () {
         $('#dispatchTableRecordsUpdate').val(false);
@@ -180,5 +182,13 @@ function viewAssetRowClicked(url, modalViewAsset, modalContentViewAsset, mapGrid
     $(modalViewAsset).modal('show').find(modalContentViewAsset).load(url);
 	if(document.getElementById('assetModalTitle') !=  null)
 		document.getElementById('assetModalTitle').innerHTML = '<h4>' + mapGrid + ' - Assets</h4>';
+}
+
+//get sort params
+function getDispatchIndexSortParams()
+{
+	var ascSort = $("#dispatchGV-container").find(".asc").attr('data-sort');
+	var descSort = $("#dispatchGV-container").find(".desc").attr('data-sort');
+	return (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
 }
 
