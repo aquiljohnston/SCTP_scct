@@ -219,13 +219,39 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 data: {dispatchMap: [], dispatchSection: [], dispatchAsset: dispatchAsset},
                 type: 'POST',
                 beforeSend: function () {
-                    $('#modalViewAssetDispatch').modal("hide");
                     $('#loading').show();
                 }
             }).done(function () {
-                $('.modal-backdrop').remove();
-                viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode='+billingCode+'&inspectionType='+inspectionType+'&mapGridSelected=' + mapGridSelected, '#modalViewAssetDispatch', '#modalContentViewAssetDispatch', mapGridSelected);
-                $('#loading').hide();
+				var form = $('#viewAssetsFormDispatch');
+				var searchFilterVal = $('#viewAssetsSearchDispatch').val() == "/" ? "" : $('#viewAssetsSearchDispatch').val();
+				var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
+				var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+				var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
+				var inspectionType = $('#inspectionType').val();
+				var billingCode = $('#billingCode').val();
+				console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+				$('#loading').show();
+				$.pjax.reload({
+					type: 'GET',
+					url: '/dispatch/dispatch/view-asset',
+					container: '#assetTablePjax', // id to update content
+					data: {
+						searchFilterVal: searchFilterVal, 
+						mapGridSelected: mapGridSelected, 
+						sectionNumberSelected: sectionNumberSelected, 
+						//reset modal to first page
+						viewDispatchAssetPageNumber:1, 
+						recordsPerPageSelected: recordsPerPageSelected,
+						inspectionType: inspectionType,
+						billingCode: billingCode
+					},
+					timeout: 99999,
+					push: false,
+					replace: false,
+				}).done(function () {
+					$("body").css("cursor", "default");
+					reloadDispatchGridView();
+				});
             });
         });
     });
