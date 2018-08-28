@@ -105,6 +105,10 @@ use kartik\form\ActiveForm;
 
         $('.modalDispatchBtn').click(function () {
             var form = $("#dispatchActiveForm");
+			//get sort value
+			var sort = getDispatchIndexSortParams();
+			//append sort to form values
+			var dataParams = form.serialize() + "&sort=" + sort;
             if (!assignedUserIDs || assignedUserIDs.length > 0) {
                 // Ajax post request to dispatch action
                 $.ajax({
@@ -122,7 +126,7 @@ use kartik\form\ActiveForm;
                         timeout: 99999,
                         type: 'GET',
                         url: form.attr("action"),
-                        data: form.serialize()
+                        data: dataParams
                     });
                     $('#dispatchUnassignedGridview').on('pjax:success', function() {
                         console.log("Pjax success");

@@ -70,6 +70,9 @@
 		unassignMapData = confirmedUnassignData['unassignMapData'];
 		unassignSectionData = confirmedUnassignData['unassignSectionData'];
 		var form = $("#AssignForm");
+		var sort = getAssignedIndexSortParams();
+		//append sort to form values
+		var dataParams = form.serialize() + "&sort=" + sort;
 		$('#loading').show();
 		$.ajax({
 			url: '/dispatch/assigned/unassign',
@@ -84,7 +87,7 @@
 				timeout: 99999,
 				type: 'GET',
 				url: form.attr("action"),
-				data: form.serialize()
+				data: dataParams
 			});
 			$('#assignedGridview').on('pjax:success', function () {
 				$('#loading').hide();
