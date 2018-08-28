@@ -215,8 +215,33 @@ use kartik\grid\GridView;
                     $('#loading').show();
                 }
             }).done(function () {
-				//loading will be hidden in function call, 1 represents resetting to the first page after dispatch
-				reloadViewAssetsModal(1);
+				var form = $('#viewAssetsFormAssigned');
+				var searchFilterVal = $('#viewAssetsSearchAssigned').val() == "/" ? "" : $('#viewAssetsSearchAssigned').val();
+				var mapGridSelected = $('#mapGridSelected').val() == "/" ? "" : $('#mapGridSelected').val();
+				var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
+				var inspectionType = $('#inspectionType').val() == "/" ? "" : $('#inspectionType').val();
+				var billingCode = $('#billingCode').val() == "/" ? "" : $('#billingCode').val();
+				$('#loading').show();
+				$.pjax.reload({
+					type: 'GET',
+					url: '/dispatch/assigned/view-asset',
+					container: '#assetTablePjax', // id to update content
+					data: {
+						searchFilterVal : searchFilterVal,
+						mapGridSelected : mapGridSelected,
+						sectionNumberSelected : sectionNumberSelected,
+						//reset to first page
+						viewAssignedAssetPageNumber : 1,
+						inspectionType : inspectionType,
+						billingCode : billingCode,},
+					timeout: 99999,
+					push: false,
+					replace: false,
+				}).done(function () {
+					$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
+					$("body").css("cursor", "default");
+					reloadAssignedGridView();
+				});
             });
         });
 
@@ -258,7 +283,7 @@ use kartik\grid\GridView;
         }).done(function () {
 			$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
             $("body").css("cursor", "default");
-			reloadAssignedGridView();
+			$('#loading').hide();
         });
     }
 
