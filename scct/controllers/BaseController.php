@@ -371,21 +371,16 @@ class BaseController extends Controller
      * @return mixed
      * @throws ForbiddenHttpException
      */
-    public function actionGetNavMenu($id)
+    public function actionGetNavMenu()
     {
-        if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post();
+		$navMenuUrl = "menu%2Fget";//Switch for localhost
+		//get nav menu by calling API route
+		$navMenuResponse = self::executeGetRequest($navMenuUrl, Constants::API_VERSION_2); // indirect rbac
 
-            $navMenuUrl = "menu%2Fget";//Switch for localhost
-            //get nav menu by calling API route
-            $mavMenuResponse = self::executeGetRequest($navMenuUrl, Constants::API_VERSION_2); // indirect rbac
+		//set up response data type
+		Yii::$app->response->format = 'json';
 
-            //Yii::trace("JSONRESPONSE:".json_encode($mavMenuResponse));
-            //set up response data type
-            Yii::$app->response->format = 'json';
-
-            return ['navMenu' => $mavMenuResponse];
-        }
+		return ['navMenu' => $navMenuResponse];
     }
 	
 	//returns a date time in the const format

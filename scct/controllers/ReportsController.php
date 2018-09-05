@@ -97,7 +97,7 @@ class ReportsController extends BaseController
                 ]);
                 $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
             } 
-            echo $response;
+            return $response;
         } catch(ForbiddenHttpException $e) {
             throw new ForbiddenHttpException;
         } catch(\Exception $e) {
