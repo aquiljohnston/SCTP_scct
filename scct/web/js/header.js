@@ -54,21 +54,13 @@ $(document).ready(function () {
 
 		//should not be usign these hard coded values
         var AdminDropdown, DispatchDropdown, HomeDropdown;
-        var PrefixUrl = window.location.hostname;
-
-        // get prefix of current project
-        PrefixUrl = PrefixUrl.split(".");
-        PrefixUrl = PrefixUrl[0];
-        if (PrefixUrl === "localhost") {
-            PrefixUrl = "scctdev"; // for localhost
-        }
+		
         ajaxNavBarTries = 0;
         function ajaxLoadNavBar() {
             $.ajax({
                 type: "GET",
                 url: "/base/get-nav-menu",
                 dataType: "json",
-                data: {id: PrefixUrl},
                 beforeSend: function () {
                     $('#loading').show();
                 },
