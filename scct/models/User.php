@@ -217,8 +217,9 @@ class User extends \yii\base\model implements IdentityInterface
 
     public function getId()
     {
-		$userID = Yii::$app->session['userID'];
-        return $userID;
+		//using yii app session here causes an error with logging, so php variable is used instead
+		$userID = $_SESSION['userID'];
+		return $userID;	
     }
 
     public function getAuthKey()

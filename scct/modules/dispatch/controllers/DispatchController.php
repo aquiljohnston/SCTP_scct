@@ -19,7 +19,6 @@ class DispatchController extends \app\controllers\BaseController
     public function actionIndex() 
 	{
        try {
-
             // Check if user has permission to view dispatch page
             self::requirePermission("viewDispatch");
 
@@ -49,7 +48,7 @@ class DispatchController extends \app\controllers\BaseController
                 $sortOrder = 'ASC';
 			}
 			
-            //check request
+            //check request TODO look into implemening this cleaner similar to user controller index
             if ($model->load(Yii::$app->request->queryParams)) {
                 $dispatchPageSizeParams = $model->pagesize;
                 $dispatchFilterParams = $model->dispatchfilter;
