@@ -65,9 +65,9 @@ class TrackerController extends BaseController
                 ]);
             $getMapDataResponse = Parent::executeGetRequest($getUrl, Constants::API_VERSION_2); //indirect RBAC
             Yii::trace("ASSETS DATA: ".json_encode($getMapDataResponse));
-            echo $getMapDataResponse;
+            return $getMapDataResponse;
         }else{
-            echo null;
+            return null;
         }
     }
 }
