@@ -168,7 +168,11 @@ else
 		],
 		[
 			'class' => 'kartik\grid\CheckboxColumn',
-			'checkboxOptions' => function ($model, $key, $index, $column) {
+			'header' => Html::checkBox('selection_all', false, [
+				'class' => 'select-on-check-all',
+				'disabled' => ($unapprovedTimeCardExist)  ? false : true,
+			]),
+			'checkboxOptions' => function ($model, $key, $index, $column){
 				// Disable if already approved or SumHours is 0
 				$disabledBoolean = $model["TimeCardApprovedFlag"] == 1;
 				$result = [
@@ -177,7 +181,7 @@ else
 					'totalworkhours' => $model["SumHours"]
 				];
 				if ($disabledBoolean) {
-					$result['disabled'] = 'true';
+					$result['disabled'] = true;
 				}
 
 				return $result;
