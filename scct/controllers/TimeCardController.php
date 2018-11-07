@@ -152,13 +152,13 @@ class TimeCardController extends BaseController
 			else
 				$url = 'time-card%2Fget-cards&' . $httpQuery;
 
-			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response 				        = json_decode($response, true);
-            $assets 				        = $response['assets'];
-            $approvedTimeCardExist 	        = array_key_exists('approvedTimeCardExist', $response) ? $response['approvedTimeCardExist'] : false;
-            $showFilter			            = $response['showProjectDropDown'];
-            $projectWasSubmitted        	= $response['projectSubmitted'];
-			$projectDropDown				= $response['projectDropDown'];
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response = json_decode($response, true);
+            $assets = $response['assets'];
+            $unapprovedTimeCardExist = array_key_exists('unapprovedTimeCardExist', $response) ? $response['unapprovedTimeCardExist'] : false;
+            $showFilter = $response['showProjectDropDown'];
+            $projectWasSubmitted = $response['projectSubmitted'];
+			$projectDropDown = $response['projectDropDown'];
 			
 			//set project for non scct web pm submit, may be a way to combine this with the submit check below
 			if(!$showFilter)
@@ -205,7 +205,7 @@ class TimeCardController extends BaseController
 				$pmSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
 			Yii::trace("Submit button is: " . $submit_button_ready['SubmitReady']);
             // passing decode data into dataProvider
-            $dataProvider 		= new ArrayDataProvider
+            $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $assets,
 				'pagination' => false,
@@ -280,7 +280,7 @@ class TimeCardController extends BaseController
 				'pages' => $pages,
 				'projectDropDown' => $projectDropDown,
 				'showFilter' => $showFilter,
-				'approvedTimeCardExist' => $approvedTimeCardExist,
+				'unapprovedTimeCardExist' => $unapprovedTimeCardExist,
 				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
