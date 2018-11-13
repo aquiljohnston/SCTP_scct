@@ -60,9 +60,9 @@ class LoginController extends BaseController
 		} catch (UnauthorizedHttpException $exception) {
 			$isGuest = true;
 		}
-		/*if (!$isGuest) {
+		if (!$isGuest) {
 			return $this->redirect(['home/index']);
-		}else{	*/
+		}else{
 			$loginError = false;
 			$model = new LoginForm();
 			//$geoLocationData = [];
@@ -116,7 +116,7 @@ class LoginController extends BaseController
 				'model' => $model,
 				'loginError' => $loginError
 			]);	
-		//}
+		}
 	}
 
     public function actionUserLogout()

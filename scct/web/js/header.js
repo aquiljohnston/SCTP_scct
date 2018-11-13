@@ -21,19 +21,6 @@ $(document).ready(function () {
         + "</div><div class='clear'></div>");
     $(".menu").prepend(head);
 
-
-    // middle privilege (less than admin more than technician) head setting
-    var MiddlePrivilegeHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
-        + "<ul class='nav navbar-nav' id='middlePrivilegeNav'></ul>"
-        + "</div><div class='clear'></div>");
-    $(".middlePrivilegeMenu").prepend(MiddlePrivilegeHead);
-
-    // admin header setting
-    var adminHead = $(toggleButton + "<div id='navbar' class='navbar-collapse collapse'>"
-        + "<ul class='nav navbar-nav' id='adminNav'></ul>"
-        + "</div><div class='clear'></div>");
-    $(".adminMenu").prepend(adminHead);
-
     //set login logo link
     var sc_logout_logo = $("<a href='/'><img src='/logo/sc_logo.png' alt='' height='50' width='300' ></a>");
     $(".sc_logout_logo").prepend(sc_logout_logo);
@@ -44,18 +31,14 @@ $(document).ready(function () {
     $(".loginMenu").prepend(login_head);
 
     // gather userID based on user role type
-    var adminID = $(".adminMenu").attr("id");
-    var middlePrivilegeID = $(".middlePrivilegeMenu").attr("id");
     var defaultID = $(".menu").attr("id");
     var userRoleID = -1;
 
 	//check if user is logged in before trying to get menus
-    if (adminID != null || middlePrivilegeID != null || defaultID != null) {
-
+    if (defaultID != null) {	
 		//should not be usign these hard coded values
         var AdminDropdown, DispatchDropdown, HomeDropdown;
 		
-        ajaxNavBarTries = 0;
         function ajaxLoadNavBar() {
             $.ajax({
                 type: "GET",
@@ -96,17 +79,15 @@ $(document).ready(function () {
         }
         if(isLocalStorageNameSupported()) {
             //Build Table-Driven Navigation Menu
-            if (localStorage.getItem('scct-navbar-saved') != "true") {
-                $("#nav").addClass("blankNavBar");
-                ajaxLoadNavBar();
-            } else {
-                if (localStorage.getItem('navbar-blank') == "true") {
-                    $("#nav").addClass("blankNavBar");
-                } else {
-                    $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
-                }
+            if (localStorage.getItem('scct-navbar-saved') == "true") {
+				console.log('loading nav bar from storage');
+                $("#nav").prepend(localStorage.getItem('scct-navbar-data'));
                 navBarLoaded = true;
                 checkNavBarLoading();
+            } else {
+				console.log('getting nav bar from api');
+				$("#nav").addClass("blankNavBar");
+                ajaxLoadNavBar();
             }
         } else {
             ajaxLoadNavBar();
@@ -114,17 +95,13 @@ $(document).ready(function () {
 
         function NavBar(data) {
 			var modules = data.Modules[0];
-            var str = "";
             var SubNavigationStr = "";
             var dropdownFlag = 0;
             var baseUrl = "/";
 			var Dropdown = "";
 			var LocalStorageString = "";
 			var menuItems = [];
-            if (jQuery.isEmptyObject(data)) {
-                //this does nothing?
-				str = "Json array is empty";
-            } else {
+            if (!jQuery.isEmptyObject(data)) {
 				//loop all modules
 				for (var module in modules){
 					if (modules.hasOwnProperty(module)){
@@ -218,10 +195,8 @@ $(document).ready(function () {
 				}
 				if(isLocalStorageNameSupported()) {
 					localStorage.setItem('scct-navbar-data', LocalStorageString);
+					localStorage.setItem('scct-navbar-saved', 'true');
 				}
-            }
-            if(isLocalStorageNameSupported()) {
-                localStorage.setItem('scct-navbar-saved', 'true');
             }
         }
 
@@ -229,7 +204,7 @@ $(document).ready(function () {
         var url = $(location).attr('href').substring($(location).attr('href').lastIndexOf('/') + 1);
 
 
-        var listItems = $(".menu .adminMenu .middlePrivilegeMenu li a");
+        var listItems = $(".menu li a");
         listItems.each(function (idx, li) {
             var product = String($(li)[0]).substring(String($(li)[0]).lastIndexOf('/') + 1);
 
