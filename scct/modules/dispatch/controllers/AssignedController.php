@@ -190,25 +190,15 @@ class AssignedController extends \app\controllers\BaseController
 				'assignedfilter', 'pagesize', 'mapGridSelected'
 			]);
 			$model->addRule('assignedfilter', 'string', ['max' => 32])
-				->addRule('pagesize', 'string', ['max' => 32])
 				->addRule('mapGridSelected', 'string', ['max' => 32]);
 
 			//check request
 			if ($model->load(Yii::$app->request->queryParams)) {
-				$assignedPageSizeParams = $model->pagesize;
 				$assignedFilterParams = $model->assignedfilter;
 				$mapGridSelected = $model->mapGridSelected;
 			} else {
-				$assignedPageSizeParams = 50;
 				$assignedFilterParams = "";
 				$mapGridSelected = "";
-			}
-
-			// get the page number for assigned table
-			if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
-				$pageAt = $_GET['assignedPageNumber'];
-			} else {
-				$pageAt = 1;
 			}
 
 			// get the key to generate section table
@@ -227,16 +217,11 @@ class AssignedController extends \app\controllers\BaseController
 					'mapGridSelected' => $mapGridSelected,
 					'inspectionType' => $inspectionType,
 					'billingCode' => $billingCode,
-					'filter' => $assignedFilterParams,
-					'listPerPage' => $assignedPageSizeParams,
-					'page' => $pageAt
+					'filter' => $assignedFilterParams
 				]);
 			$getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 			$sectionData = $getSectionDataResponseResponse['sections'];
-
-			//set paging on assigned table
-			$pages = new Pagination($getSectionDataResponseResponse['pages']);
-
+			
 			$sectionDataProvider = new ArrayDataProvider
 			([
 				'allModels' => $sectionData,
@@ -254,16 +239,12 @@ class AssignedController extends \app\controllers\BaseController
 				return $this->renderAjax('_section-expand', [
 					'sectionDataProvider' => $sectionDataProvider,
 					'model' => $model,
-					'pages' => $pages,
-					'assignedPageSizeParams' => $assignedPageSizeParams,
 					'assignedFilterParams' => $assignedFilterParams,
 				]);
 			} else {
 				return $this->render('_section-expand', [
 					'sectionDataProvider' => $sectionDataProvider,
 					'model' => $model,
-					'pages' => $pages,
-					'assignedPageSizeParams' => $assignedPageSizeParams,
 					'assignedFilterParams' => $assignedFilterParams,
 				]);
 			}
