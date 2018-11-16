@@ -51,6 +51,7 @@ class TimeCardController extends BaseController
 			$referrer = Yii::$app->request->referrer;
 			if(!strpos($referrer,'time-card')){
 				unset(Yii::$app->session['timeCardFormData']);
+				unset(Yii::$app->session['timeCardSort']);
 			}
 			
 			//Check if user has permission to view time card page
@@ -92,6 +93,28 @@ class TimeCardController extends BaseController
                 $currentWeek => 'Current Week',
                 $other => 'Other'
             ];
+			
+			//"sort":"-UserFullName"
+            //get sort data
+            if (isset($_GET['sort'])){
+                $sort = $_GET['sort'];
+                //parse sort data
+                $sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+				Yii::$app->session['timeCardSort'] = [
+					'sortField' => $sortField,
+					'sortOrder' => $sortOrder
+				];
+            } else {
+				if(Yii::$app->session['timeCardSort']){
+					$sortField = Yii::$app->session['timeCardSort']['sortField'];
+					$sortOrder = Yii::$app->session['timeCardSort']['sortOrder'];
+				}else{
+					//default sort values
+					$sortField = ($isAccountant) ? 'ProjectName' : 'UserFullName';
+					$sortOrder = 'ASC';
+				}
+            }
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)){
@@ -145,6 +168,8 @@ class TimeCardController extends BaseController
 				'page' => $page,
 				'filter' => $encodedFilter,
 				'projectID' => $model->projectName,
+				'sortField' => $sortField,
+				'sortOrder' => $sortOrder,
 			]);
 			// set url
 			if($isAccountant)
@@ -215,29 +240,13 @@ class TimeCardController extends BaseController
 						'StartDate' => $assets['StartDate'],
 						'EndDate' => $assets['EndDate'],
 					);
-				},
-				'sort' => [
-					'attributes' => [
-						'UserFullName',
-						'UserLastName',
-						'ProjectName' => [
-							'asc' => ['ProjectName' => SORT_ASC],
-							'desc' => ['ProjectName' => SORT_DESC],
-							'default' => SORT_ASC
-						],
-						'TimeCardDates',
-						'TimeCardOasisSubmitted',
-						'TimeCardQBSubmitted',
-						'SumHours',
-						'TimeCardApprovedFlag',
-						'TimeCardPMApprovedFlag'
-					]
-				]
+				}
 			]);
 			
 			if($isAccountant) {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
 					'attributes' => [
 						'ProjectName',
 						'ProjectManager',
@@ -246,14 +255,13 @@ class TimeCardController extends BaseController
 						'ApprovedBy',
 						'OasisSubmitted',
 						'QBSubmitted',
-						'ADPSubmitted' => [
-							'default' => SORT_ASC
-						]
+						'ADPSubmitted'
 					]
 				];
 			} else {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
 					'attributes' => [
 						'UserFullName',
 						'ProjectName',
