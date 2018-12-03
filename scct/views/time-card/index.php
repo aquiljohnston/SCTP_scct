@@ -250,26 +250,34 @@ else
 						</div>
 					</div>
                 <?php Pjax::end() ?>
-                <div class="col-md-3 col-md-offset-1 TimeCardSearch">
+                <div class="col-md-3 TimeCardSearch">
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
                 <div class="col-md-2 DateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
-                <?php if($showFilter){ ?>
-					<?php Pjax::begin(['id' => 'projectDropDownPjax', 'timeout' => false]) ?>
-					<div class="col-md-2 projectFilterDD">
-						<?=
-							$form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
-							['value' => $model->projectName, 'id'=>'projectFilterDD'])->label('Project'); 
-						?>
-					</div>
-					<?php Pjax::end() ?>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearProjectFilterButton']) ?>
-				<?php }else{
-					echo "<input type='hidden' value=$model->projectName id='projectFilterDD'>";
-				} ?>
+				<?php Pjax::begin(['id' => 'timeCardDropDownPjax', 'timeout' => false]) ?>
+					<?php if($showFilter){ ?>
+						<div class="col-md-2 projectFilterDD">
+							<?=
+								$form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
+								['value' => $model->projectName, 'id'=>'projectFilterDD'])->label('Project'); 
+							?>
+						</div>
+					<?php }else{
+						echo "<input type='hidden' value=$model->projectName id='projectFilterDD'>";
+					} ?>
+					<?php if(!$isAccountant){ ?>
+						<div class="col-md-2 employeeFilterDD">
+							<?=
+								$form->field($model, 'employeeID', ['labelSpan' => 3])->dropDownList($employeeDropDown,
+								['value' => $model->employeeID, 'id'=>'employeeFilterDD'])->label('Employee'); 
+							?>
+						</div>
+					<?php } ?>
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearDropdownFilterButton']) ?>
+				<?php Pjax::end() ?>
 					<?php if($model->dateRangeValue == 'other'){ ?>
 						<div id="datePickerContainer" style="float: left; width: auto; display: block;">
 					<?php } else { ?>

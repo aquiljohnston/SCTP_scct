@@ -20,8 +20,9 @@ $(function () {
 });
 
 function applyTimeCardOnClickListeners() {
-	$(document).off('click', '#timeCardClearProjectFilterButton').on('click', '#timeCardClearProjectFilterButton', function (){
+	$(document).off('click', '#timeCardClearDropdownFilterButton').on('click', '#timeCardClearDropdownFilterButton', function (){
         $('#projectFilterDD').val("All");
+        $('#employeeFilterDD').val("All");
 		$('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
     });
