@@ -73,13 +73,15 @@ class TimeCardController extends BaseController
                 'dateRangeValue',
                 'dateRangePicker',
 				//need to update this key to projectID, the new value that it represents
-                'projectName'
+                'projectName',
+				'employeeID'
             ]);
             $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model ->addRule('dateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
             $model ->addRule('projectName', 'integer'); //
+            $model ->addRule('employeeID', 'integer'); //
 
             //get current and prior weeks date range
             $today = BaseController::getDate();
@@ -127,12 +129,14 @@ class TimeCardController extends BaseController
 				}
 				else
 				{
-					$model->pageSize		= 50;
-					//set filters if data passed from home screen
-					$model->filter			= $projectFilterString != null ? urldecode($projectFilterString): '';
-					$model->projectName		= $projectID != null ? $projectID : '';
-					$model->dateRangeValue	= $priorWeek;
+					//set default values
+					$model->pageSize = 50;
+					$model->employeeID = '';
+					$model->dateRangeValue = $priorWeek;
 					$model->dateRangePicker	= null;
+					//set filters if data passed from home screen
+					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->projectName = $projectID != null ? $projectID : '';
 				}
             }
 			
@@ -168,6 +172,7 @@ class TimeCardController extends BaseController
 				'page' => $page,
 				'filter' => $encodedFilter,
 				'projectID' => $model->projectName,
+				'employeeID' => $model->employeeID,
 				'sortField' => $sortField,
 				'sortOrder' => $sortOrder,
 			]);
@@ -184,6 +189,7 @@ class TimeCardController extends BaseController
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
+			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
 			
 			//set project for non scct web pm submit, may be a way to combine this with the submit check below
 			if(!$showFilter)
@@ -193,6 +199,7 @@ class TimeCardController extends BaseController
 			
 			$projArray = array();
 			$keys = array_keys($projectDropDown);
+			//TODO look into potentially removing this counter. May be able to replace with just array pushes. OR full rework.
 			$projCounter=0;
 			try{
 				// need to check if we have filtered on project (Todo: review why projectID is always empty/null)
@@ -287,6 +294,7 @@ class TimeCardController extends BaseController
 				'model' => $model,
 				'pages' => $pages,
 				'projectDropDown' => $projectDropDown,
+				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,
 				'unapprovedTimeCardExist' => $unapprovedTimeCardExist,
 				'accountingSubmitReady' => $accountingSubmitReady,
