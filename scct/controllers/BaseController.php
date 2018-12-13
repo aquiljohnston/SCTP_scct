@@ -41,11 +41,8 @@ class BaseController extends Controller
 			return Constants::API_DEV_URL . "$version%2F$path";
 		} else if(strcmp($_SERVER['SERVER_PORT'], Constants::WEB_WITH_LOCAL_API_PORT) === 0) {
 			return Constants::API_LOCAL_URL . "$version%2F$path";
-		} else if(strcmp($_SERVER['SERVER_PORT'], Constants::WEB_WITH_LOCAL_DEMO_API_PORT) === 0) {
-			return Constants::API_LOCAL_DEMO_URL . "$version%2F$path";
-		} else if(strpos($prefix, Constants::SERVER_DEMO) !== false){
-			return Constants::API_DEMO_URL . "$version%2F$path";
-		} else if(strpos($prefix, Constants::SERVER_DEV) !== false) {
+			//Todo: review check, checks for demo in dev check because name does not follow the standard convention
+		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
             return Constants::API_DEV_URL . "$version%2F$path";
         } else if(strpos($prefix, Constants::SERVER_STAGE) !== false){
             return Constants::API_STAGE_URL . "$version%2F$path";
@@ -72,11 +69,7 @@ class BaseController extends Controller
                 || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
 		) 
 		{
-			if(strcmp($_SERVER['SERVER_PORT'], Constants::WEB_WITH_LOCAL_DEMO_API_PORT) === 0){
-				return "demo";
-			}else{
-				return "scctdev";
-			}
+            return "scctdev";
         }
         else {
             return self::urlPrefix();
