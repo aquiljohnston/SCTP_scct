@@ -14,13 +14,17 @@ final class Constants
     const SERVER_LOCALHOST = 'local';
     const SERVER_DEV = 'dev';
     const SERVER_STAGE = 'stage';
+    const SERVER_DEMO = 'demo';
 	//prod has no additional distinguishing characters
     const SERVER_PRODUCTION = '';
 	
 	//api url for different environments
 	const WEB_WITH_LOCAL_API_PORT = 8888;
+	const WEB_WITH_LOCAL_DEMO_API_PORT = 8090;
 	const WEB_WITH_DEV_API_PORT = 8989;
 	const API_LOCAL_URL = 'http://localhost:8000/index.php?r=';
+	const API_LOCAL_DEMO_URL = 'http://localhost:8080/index.php?r=';
+	const API_DEMO_URL = 'http://apidemo.southerncrossinc.com/index.php?r=';
 	const API_DEV_URL = 'http://apidev.southerncrossinc.com/index.php?r=';
 	const API_STAGE_URL = 'http://apistage.southerncrossinc.com/index.php?r=';
 	const API_PROD_URL = 'http://azureapi.southerncrossinc.com/index.php?r=';
