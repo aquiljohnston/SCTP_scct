@@ -20,15 +20,17 @@
 }
 
 .projectFilterDD {
-    margin-top: -2.2%;
+    margin-top: -1.8%;
 }
 
-#timeCardClearProjectFilterButton  {
+.employeeFilterDD {
+	margin-top: -1.8%;
+}
+
+#timeCardClearDropdownFilterButton  {
     width: 32px;
     cursor: pointer;
-    float: right;
-    margin-right: -1%;
-    margin-top: -2.2%;
+    margin-top: -3%;
 }
 
 .off-btn{
@@ -121,8 +123,8 @@ div[id^=modalContent] #loading {
 	width: 32px;
 	cursor: pointer;
 	float: right;
-	margin-right: -35%;
-	margin-top: -2.2%;
+	margin-right: -26.5%;
+	margin-top: -1.8%;
 }
 .field-dynamicmodel-daterangepicker{
 	float:right !important;
@@ -136,11 +138,11 @@ div[id^=modalContent] #loading {
 .TimeCardSearch {
 	float: right;
 	margin-right: 22%;
-	margin-top: -2.2%;
+	margin-top: -1.8%;
 }
 .DateRangeDropDown {
-	margin-left: 10%;
-	margin-top: -2.2%;
+	margin-left: 1%;
+	margin-top: -1.8%;
 }
 #multiple_submit_btn_id{
 	float: right;
@@ -180,7 +182,7 @@ and (min-width : 1900px) {
 @media screen and (min-resolution: .001dpcm) {
 	#multiple_time_card_approve_btn{
 	    float: right;
-		margin-top: -0.3%;
+		margin-top: -1%;
 		margin-right: 0.5%;
 		width: 12%;
     }

@@ -36,7 +36,14 @@ $(function(){
         return false;
     });
 
-     $(document).off('change', '#projectFilterDD').on('change', '#projectFilterDD', function (event) {
+    $(document).off('change', '#projectFilterDD').on('change', '#projectFilterDD', function (event) {
+		$('#employeeFilterDD').val("All");
+        reloadTimeCardGridView();
+        event.preventDefault();
+        return false;
+    });
+	
+	$(document).off('change', '#employeeFilterDD').on('change', '#employeeFilterDD', function (event) {
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
@@ -158,6 +165,12 @@ function pmSubmit() {
 //reload table
 function reloadTimeCardGridView() {
 	var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
+	//get sort value
+	var ascSort = $("#GridViewForTimeCard-container").find(".asc").attr('data-sort');
+	var descSort = $("#GridViewForTimeCard-container").find(".desc").attr('data-sort');
+	var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
+	//append sort to form values
+	var dataParams = form.serialize() + "&sort=" + sort;
 	if (form.find(".has-error").length){
 		return false;
 	}
@@ -166,7 +179,7 @@ function reloadTimeCardGridView() {
 		type: 'GET',
 		url: form.attr("action"),
 		container: '#timeCardGridview', // id to update content
-		data: form.serialize(),
+		data: dataParams,
 		timeout: 99999
 	});
 	$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
@@ -174,15 +187,13 @@ function reloadTimeCardGridView() {
 			container: '#submitApproveButtons',
 			timeout:false,
 		}).done(function (){
-				//check if dropdown is available, not present in client web sites
-				if ($('#projectDropDownPjax').length) {
-					$.pjax.reload({container: '#projectDropDownPjax', async:false});
-					if($('#multiple_submit_btn_id').hasClass('off-btn')){
-						$('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
-					} 
-					if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-						$('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
-					}
+				//reload dropdown values
+				$.pjax.reload({container: '#timeCardDropDownPjax', async:false});
+				if($('#multiple_submit_btn_id').hasClass('off-btn')){
+					$('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
+				} 
+				if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
+					$('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
 				}
 			});
 		$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {

@@ -164,8 +164,7 @@ class DispatchController extends \app\controllers\BaseController
 			$model = new \yii\base\DynamicModel([
 				'sectionfilter', 'pagesize'
 			]);
-			$model->addRule('sectionfilter', 'string', ['max' => 32])
-				->addRule('pagesize', 'string', ['max' => 32]);
+			$model->addRule('sectionfilter', 'string', ['max' => 32]);
 
 			// Verify logged in
 			if (Yii::$app->user->isGuest) {
@@ -174,19 +173,11 @@ class DispatchController extends \app\controllers\BaseController
 
 			//check request
 			if ($model->load(Yii::$app->request->queryParams)) {
-				$sectionPageSizeParams = $model->pagesize;
 				$sectionFilterParams = $model->sectionfilter;
 			} else {
-				$sectionPageSizeParams = 10;
 				$sectionFilterParams = "";
 			}
 
-			// get the page number for assigned table
-			if (isset($_GET['userPage'])) {
-				$pageAt = $_GET['userPage'];
-			} else {
-				$pageAt = 1;
-			}
 			// get the key to generate section table
 			if (isset($_POST['expandRowKey']))
 			{
@@ -203,9 +194,7 @@ class DispatchController extends \app\controllers\BaseController
 					'mapGridSelected' => $mapGridSelected,
 					'inspectionType' => $inspectionType,
 					'billingCode' => $billingCode,
-					'filter' => $sectionFilterParams,
-					'listPerPage' => $sectionPageSizeParams,
-					'page' => $pageAt,
+					'filter' => $sectionFilterParams
 				]);
 
 			$getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
@@ -227,9 +216,6 @@ class DispatchController extends \app\controllers\BaseController
 				},
 			]);
 
-			// set pages to dispatch table
-			$pages = new Pagination($getSectionDataResponse['pages']);
-
 			//todo: check permission to dispatch work
 			$can = 1;
 
@@ -238,18 +224,14 @@ class DispatchController extends \app\controllers\BaseController
 					'sectionDataProvider' => $sectionDataProvider,
 					'model' => $model,
 					'can' => $can,
-					'pages' => $pages,
 					'sectionFilterParams' => $sectionFilterParams,
-					'sectionPageSizeParams' => $sectionPageSizeParams,
 				]);
 			} else {
 				return $this->render('_section-expand', [
 					'sectionDataProvider' => $sectionDataProvider,
 					'model' => $model,
 					'can' => $can,
-					'pages' => $pages,
 					'sectionFilterParams' => $sectionFilterParams,
-					'sectionPageSizeParams' => $sectionPageSizeParams
 				]);
 			}
 		} catch (UnauthorizedHttpException $e){

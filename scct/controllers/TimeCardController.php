@@ -51,6 +51,7 @@ class TimeCardController extends BaseController
 			$referrer = Yii::$app->request->referrer;
 			if(!strpos($referrer,'time-card')){
 				unset(Yii::$app->session['timeCardFormData']);
+				unset(Yii::$app->session['timeCardSort']);
 			}
 			
 			//Check if user has permission to view time card page
@@ -72,13 +73,15 @@ class TimeCardController extends BaseController
                 'dateRangeValue',
                 'dateRangePicker',
 				//need to update this key to projectID, the new value that it represents
-                'projectName'
+                'projectName',
+				'employeeID'
             ]);
             $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model ->addRule('dateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
             $model ->addRule('projectName', 'integer'); //
+            $model ->addRule('employeeID', 'integer'); //
 
             //get current and prior weeks date range
             $today = BaseController::getDate();
@@ -92,6 +95,28 @@ class TimeCardController extends BaseController
                 $currentWeek => 'Current Week',
                 $other => 'Other'
             ];
+			
+			//"sort":"-UserFullName"
+            //get sort data
+            if (isset($_GET['sort'])){
+                $sort = $_GET['sort'];
+                //parse sort data
+                $sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+				Yii::$app->session['timeCardSort'] = [
+					'sortField' => $sortField,
+					'sortOrder' => $sortOrder
+				];
+            } else {
+				if(Yii::$app->session['timeCardSort']){
+					$sortField = Yii::$app->session['timeCardSort']['sortField'];
+					$sortOrder = Yii::$app->session['timeCardSort']['sortOrder'];
+				}else{
+					//default sort values
+					$sortField = ($isAccountant) ? 'ProjectName' : 'UserFullName';
+					$sortOrder = 'ASC';
+				}
+            }
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)){
@@ -104,12 +129,14 @@ class TimeCardController extends BaseController
 				}
 				else
 				{
-					$model->pageSize		= 50;
-					//set filters if data passed from home screen
-					$model->filter			= $projectFilterString != null ? urldecode($projectFilterString): '';
-					$model->projectName		= $projectID != null ? $projectID : '';
-					$model->dateRangeValue	= $priorWeek;
+					//set default values
+					$model->pageSize = 50;
+					$model->employeeID = '';
+					$model->dateRangeValue = $priorWeek;
 					$model->dateRangePicker	= null;
+					//set filters if data passed from home screen
+					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->projectName = $projectID != null ? $projectID : '';
 				}
             }
 			
@@ -145,6 +172,9 @@ class TimeCardController extends BaseController
 				'page' => $page,
 				'filter' => $encodedFilter,
 				'projectID' => $model->projectName,
+				'employeeID' => $model->employeeID,
+				'sortField' => $sortField,
+				'sortOrder' => $sortOrder,
 			]);
 			// set url
 			if($isAccountant)
@@ -152,13 +182,14 @@ class TimeCardController extends BaseController
 			else
 				$url = 'time-card%2Fget-cards&' . $httpQuery;
 
-			$response 				        = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $response 				        = json_decode($response, true);
-            $assets 				        = $response['assets'];
-            $approvedTimeCardExist 	        = array_key_exists('approvedTimeCardExist', $response) ? $response['approvedTimeCardExist'] : false;
-            $showFilter			            = $response['showProjectDropDown'];
-            $projectWasSubmitted        	= $response['projectSubmitted'];
-			$projectDropDown				= $response['projectDropDown'];
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response = json_decode($response, true);
+            $assets = $response['assets'];
+            $unapprovedTimeCardExist = array_key_exists('unapprovedTimeCardExist', $response) ? $response['unapprovedTimeCardExist'] : false;
+            $showFilter = $response['showProjectDropDown'];
+            $projectWasSubmitted = $response['projectSubmitted'];
+			$projectDropDown = $response['projectDropDown'];
+			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
 			
 			//set project for non scct web pm submit, may be a way to combine this with the submit check below
 			if(!$showFilter)
@@ -168,6 +199,7 @@ class TimeCardController extends BaseController
 			
 			$projArray = array();
 			$keys = array_keys($projectDropDown);
+			//TODO look into potentially removing this counter. May be able to replace with just array pushes. OR full rework.
 			$projCounter=0;
 			try{
 				// need to check if we have filtered on project (Todo: review why projectID is always empty/null)
@@ -205,7 +237,7 @@ class TimeCardController extends BaseController
 				$pmSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
 			Yii::trace("Submit button is: " . $submit_button_ready['SubmitReady']);
             // passing decode data into dataProvider
-            $dataProvider 		= new ArrayDataProvider
+            $dataProvider = new ArrayDataProvider
 			([
 				'allModels' => $assets,
 				'pagination' => false,
@@ -215,29 +247,13 @@ class TimeCardController extends BaseController
 						'StartDate' => $assets['StartDate'],
 						'EndDate' => $assets['EndDate'],
 					);
-				},
-				'sort' => [
-					'attributes' => [
-						'UserFullName',
-						'UserLastName',
-						'ProjectName' => [
-							'asc' => ['ProjectName' => SORT_ASC],
-							'desc' => ['ProjectName' => SORT_DESC],
-							'default' => SORT_ASC
-						],
-						'TimeCardDates',
-						'TimeCardOasisSubmitted',
-						'TimeCardQBSubmitted',
-						'SumHours',
-						'TimeCardApprovedFlag',
-						'TimeCardPMApprovedFlag'
-					]
-				]
+				}
 			]);
 			
 			if($isAccountant) {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
 					'attributes' => [
 						'ProjectName',
 						'ProjectManager',
@@ -246,14 +262,13 @@ class TimeCardController extends BaseController
 						'ApprovedBy',
 						'OasisSubmitted',
 						'QBSubmitted',
-						'ADPSubmitted' => [
-							'default' => SORT_ASC
-						]
+						'ADPSubmitted'
 					]
 				];
 			} else {
 				// Sorting TimeCard table
 				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
 					'attributes' => [
 						'UserFullName',
 						'ProjectName',
@@ -279,8 +294,9 @@ class TimeCardController extends BaseController
 				'model' => $model,
 				'pages' => $pages,
 				'projectDropDown' => $projectDropDown,
+				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,
-				'approvedTimeCardExist' => $approvedTimeCardExist,
+				'unapprovedTimeCardExist' => $unapprovedTimeCardExist,
 				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,

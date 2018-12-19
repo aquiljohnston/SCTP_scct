@@ -85,15 +85,15 @@ class BaseController extends Controller
 
     //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url, $version = Constants::DEFAULT_VERSION)
-	{		
+	{
         $url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::getXClient(),
 			'Accept:application/json',
 			'Content-Type:application/json',
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
-			);
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].':')
+		);
 		//init new curl
 		$curl = curl_init();
 		//set curl options
@@ -106,9 +106,9 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401) // Not authenticated
 		{
+			Yii::$app->user->logout();
 			//should be able to check response for error message at this point if we end up having more unauthorized cases
             throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
-            //return Yii::$app->response->redirect(['login/index']);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -136,7 +136,7 @@ class BaseController extends Controller
             'X-Client:'.$prefix,
             'Accept:application/json',
             'Content-Type:application/json',
-            'Authorization: Basic '. base64_encode($token.': ')
+            'Authorization: Basic '. base64_encode($token.':')
         );
 
         //init new curl
@@ -156,10 +156,9 @@ class BaseController extends Controller
         Yii::trace("HTTP CODE: $httpCode");
         if($httpCode == 401) // Not authenticated
         {
+			Yii::$app->user->logout();
             //should be able to check response for error message at this point if we end up having more unauthorized cases
-            $url = '/login/user-logout';
-            Yii::$app->getResponse()->redirect($url)->send();
-            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
         }
         else if($httpCode == 403) // Inadequate permissions.
         {
@@ -186,8 +185,8 @@ class BaseController extends Controller
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($postData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
-			);
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].':')
+		);
 		//init new curl
 		$curl = curl_init();
 		//set curl options
@@ -202,10 +201,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
+			Yii::$app->user->logout();
             throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
-            /*$url = ['login/user-logout'];
-            Yii::$app->getResponse()->redirect($url)->send();*/
-            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -229,8 +226,8 @@ class BaseController extends Controller
 			'Accept:application/json',
 			'Content-Type:application/json',
 			'Content-Length: ' . strlen($putData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': '),
-			);
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].':'),
+		);
 		//init new curl
 		$curl = curl_init();
 		//set curl options
@@ -245,9 +242,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-            $url = ['login/user-logout'];
-            Yii::$app->getResponse()->redirect($url)->send();
-            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+			Yii::$app->user->logout();
+            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
@@ -268,8 +264,8 @@ class BaseController extends Controller
 			'Accept:application/json',
 			'Content-Type:application/json',
             'Content-Length: ' . strlen($putData),
-			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].': ')
-			);
+			'Authorization: Basic '. base64_encode(Yii::$app->session['token'].':')
+		);
 		//init new curl
 		$curl = curl_init();
 		//set curl options
@@ -284,9 +280,8 @@ class BaseController extends Controller
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		if($httpCode == 401)
 		{
-            $url = ['login/user-logout'];
-            Yii::$app->getResponse()->redirect($url)->send();
-            //throw new UnauthorizedHttpException("Please log in again. Your session has expired.");
+			Yii::$app->user->logout();
+            throw new UnauthorizedHttpException(Constants::UNAUTH_MESSAGE);
 		}
 		else if($httpCode == 403) // Inadequate permissions.
 		{
