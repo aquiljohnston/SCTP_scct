@@ -106,6 +106,7 @@ $(function(){
 	}
 });
 
+//TODO rename so unique for time card
 function pmSubmit() {
 	// redundant method; same as multiple_approve_btn_id in approve_multiple_timecard.js
 	$('#pm_submit_btn_id').on('click').click(function (event) {

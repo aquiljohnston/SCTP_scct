@@ -1,3 +1,8 @@
+#mileage_card_form {
+    margin-right: 9%;
+    margin-top: 3%;
+}
+
 #mileage_card_submit_btn {
     margin-top: 2%;
     margin-right: 2%;
@@ -8,6 +13,14 @@
     margin-top: 3%;
 }
 
+.mileageProjectFilterDD {
+    margin-top: -1.8%;
+}
+
+.mileageEmployeeFilterDD {
+	margin-top: -1.8%;
+}
+
 div[id^=modalContent] .container {
     padding: 10px 15px 0px;
 }
@@ -15,18 +28,56 @@ div[id^=modalContent] .container {
 div[id^=modalContent] .wrap #top-wrapper {
     display: none;
 }
+
+#mileageCardClearDropdownFilterButton  {
+    width: 32px;
+    cursor: pointer;
+    margin-top: -3%;
+}
+
 #mileageCardGridViewContainer,#mileage_card_filter{
 	position:relative;
 	width:100%;
 	float:left;
 }
-#mileage_card_approve_btn{
-	padding-left:0;
+#multiple_mileage_card_approve_btn{
+    padding-left:0;
+	float: right;
+	margin-top: -0.3%;
+	margin-right: 0.5%;
+	width: 12%;
 }
-
 #mileageCardGridview .kv-grid-container{
 	max-height:60vh;
 	overflow-y:auto;
+}
+#mileageCardDropdownContainer{
+	padding-right:0;
+}
+#mileageCardWeekContainer{
+	float:left;
+}
+#mileageCardPageSizeLabelContainer{
+	float:right;
+}
+#mileageCardDropdownContainer label{
+	padding-right:0;
+}
+#mileageCardDropdownContainer .form-control{
+	padding:6px 10px;
+}
+#GridViewForMileageCard{
+	width:100%;
+	max-height:58vh;
+	overflow-y:auto;
+	overflow-x: hidden;
+}
+#MCPagination{
+	margin-top: 1%;
+}
+#mileageCardPageSize {
+	margin-left: 110%;
+	margin-top: 15%;
 }
 
 .totalmileage {
@@ -46,9 +97,6 @@ div[id^=modalContent] .wrap #top-wrapper {
 	z-index: 2 !important;
 }
 .mileagecard-view .grid-view .kv-grid-wrapper{
-	/*height:auto;
-	max-height:30vh;*/
-	height: auto !important;
 	max-height: 40vh;
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -64,21 +112,50 @@ div[id^=modalContent] .wrap #top-wrapper {
 #mileageCardSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
+	float: right;
+	margin-right: -26.5%;
+	margin-top: -1.8%;
 }
-.dynamicmodel-daterangepicker-container{
-	float:right !important;
-	margin-left: 0px !important;
+.MileageCardSearch {
+	float: right;
+	margin-right: 22%;
+	margin-top: -1.8%;
+}
+#mileageDatePickerContainer{
+	margin-top: -5.2%;
+	margin-left: -15%;
 }
 /*responsive css for table*/
 @media only screen 
 and (min-width : 1360px) {
-#mileageCardGridview .kv-grid-container{
-	max-height:57vh;
-}
+	#GridViewForMileageCard{
+		max-height:57vh;
+	}
 }
 @media only screen 
 and (min-width : 1900px) {
-#mileageCardGridview .kv-grid-container{
-	max-height:62vh;
+	#GridViewForMileageCard{
+		max-height:62vh;
+	}
 }
+
+/* Chrome 29+ */
+/*this seems unnecessary, tested in IE and needed to apply this same css to base values*/
+/*this .001 dpcm is incredibly small*/
+@media screen and (min-resolution: .001dpcm) {
+	#multiple_mileage_card_approve_btn{
+	    float: right;
+		margin-top: -1%;
+		margin-right: 0.5%;
+		width: 12%;
+    }
+}
+
+/*custom style for show entries grid view hover*/
+#allMileageEntries table tbody tr:hover{
+	/*cancel out base style*/
+    background-color: transparent;
+}
+#allMileageEntries table tbody tr td:hover{
+    background-color: rgba(57, 12, 255, 0.25);
 }
