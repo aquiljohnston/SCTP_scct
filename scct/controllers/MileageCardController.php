@@ -71,7 +71,7 @@ class MileageCardController extends BaseController
 				'employeeID'
             ]);
 			$model->addRule('DateRangePicker', 'string', ['max' => 32]);
-            $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
+            $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]);
 			$model->addRule('projectID', 'integer'); //
@@ -138,6 +138,7 @@ class MileageCardController extends BaseController
                 if ($model->dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
+					//TODO extract this out to a higher level
                     $dateData = TimeCardController::dateRangeProcessor($model->dateRangePicker);
                     $startDate = $dateData[0];
                     $endDate = $dateData[1];
@@ -281,130 +282,95 @@ class MileageCardController extends BaseController
         }
     }
 
-    /**
-     * Displays a single MileageCard model.
-     * @param integer $id
-     * @return mixed
+	/**
+     * Displays all time entries for a given time card.
+     * @param string $id
      * @throws \yii\web\HttpException
+     * @return mixed
      */
-    public function actionView($id)
-    {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
+    public function actionShowEntries($id, $projectName = null, $fName = null, $lName = null, $mileageCardProjectID = null)
+    {		
+		try{
+			//Defensive Programming - Magic Numbers
+			//declare constants to hold constant values	
+			define('ENTRIES_ZERO_INDEX',0);
+			define('DATES_ZERO_INDEX',0);
+			define('DATES_FIRST_INDEX',1);
+			define('FROM_DATE_ZERO_INDEX',0);
+			define('TO_DATE_FIRST_INDEX',1);
 
-        try {
-            // set default value 0 to duplicateFlag
-            // duplicationflag:
-            // 1: yes 0: no
-            // set duplicateFlag to 1, which means duplication happened.
-
-            $duplicateFlag = 0;
-            if (strpos($id, "yes") == true) {
-                $id = str_replace("yes", "", $id);
-                $duplicateFlag = 1;
-            }
-            $url = 'mileage-card%2Fget-entries&cardID=' . $id;
-            $mileage_card_url = 'mileage-card%2Fview&id=' . $id;
-
-            //Indirect RBAC checks
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
-            $mileage_card_response = Parent::executeGetRequest($mileage_card_url, Constants::API_VERSION_2);
-            $model = json_decode($mileage_card_response, true);
-            $entryData = json_decode($response, true);
-            $ApprovedFlag = $entryData['ApprovedFlag'];
+			//guest redirect
+			if (Yii::$app->user->isGuest)
+			{
+				return $this->redirect(['/login']);
+			}
 			
-            $Sundaydata = $entryData['MileageEntries']['Sunday']['Entries'];
-            $SundayProvider = new ArrayDataProvider([
-                'allModels' => $Sundaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Sun = $entryData['MileageEntries']['Sunday']['Total'];
+			//Check if user has permissions
+			self::requirePermission("mileageCardGetEntries");
+			
+			//build api url paths
+			$entries_url = 'mileage-card%2Fshow-entries&cardID='.$id;
+			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
+			$cardData = json_decode($resp, true);
+			
+			//populate required values if not received from function call
+			$mileageCardProjectID = $mileageCardProjectID != null ? $mileageCardProjectID : $cardData['card']['mileageCardProjectID'];
+			$projectName = $projectName != null ? $projectName : $cardData['card']['ProjectName'];
+			$fName = $fName != null ? $fName : $cardData['card']['UserFirstName'];
+			$lName = $lName != null ? $lName : $cardData['card']['UserLastName'];
 
-            $Mondaydata = $entryData['MileageEntries']['Monday']['Entries'];
-            $MondayProvider = new ArrayDataProvider([
-                'allModels' => $Mondaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Mon = $entryData['MileageEntries']['Monday']['Total'];
+			//alter from and to dates a bit
+			$from = str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$to = str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
+			$from = explode('/', $from);
 
-            $Tuesdaydata = $entryData['MileageEntries']['Tuesday']['Entries'];
-            $TuesdayProvider = new ArrayDataProvider([
-                'allModels' => $Tuesdaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Tue = $entryData['MileageEntries']['Tuesday']['Total'];
+			//holds dates that accompany table header ex. Sunday 10-23
+			$SundayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$MondayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']);
+			$TuesdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']);
+			$WednesdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']);
+			$ThursdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
+			$FridayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
+			$SaturdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
 
-            $Wednesdaydata = $entryData['MileageEntries']['Wednesday']['Entries'];
-            $WednesdayProvider = new ArrayDataProvider([
-                'allModels' => $Wednesdaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Wed = $entryData['MileageEntries']['Wednesday']['Total'];
+			$allTask = new ArrayDataProvider([
+				'allModels' => $cardData['show-entries'],
+				'pagination'=> false,
+			]);
 
-            $Thursdaydata = $entryData['MileageEntries']['Thursday']['Entries'];
-            $ThursdayProvider = new ArrayDataProvider([
-                'allModels' => $Thursdaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Thr = $entryData['MileageEntries']['Thursday']['Total'];
-
-            $Fridaydata = $entryData['MileageEntries']['Friday']['Entries'];
-            $FridayProvider = new ArrayDataProvider([
-                'allModels' => $Fridaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Fri = $entryData['MileageEntries']['Friday']['Total'];
-
-            $Saturdaydata = $entryData['MileageEntries']['Saturday']['Entries'];
-            $SaturdayProvider = new ArrayDataProvider([
-                'allModels' => $Saturdaydata,
-                'pagination' => false,
-            ]);
-            $Total_Mileage_Sat = $entryData['MileageEntries']['Saturday']['Total'];
-
-            //calculation total miles for this mileage card
-            $Total_Mileage_Current_MileageCard = $Total_Mileage_Sun +
-                $Total_Mileage_Mon +
-                $Total_Mileage_Tue +
-                $Total_Mileage_Wed +
-                $Total_Mileage_Thr +
-                $Total_Mileage_Fri +
-                $Total_Mileage_Sat;
-
-            //set MileageEntryID as id
-            $SundayProvider->key = 'MileageEntryID';
-            $MondayProvider->key = 'MileageEntryID';
-            $TuesdayProvider->key = 'MileageEntryID';
-            $WednesdayProvider->key = 'MileageEntryID';
-            $ThursdayProvider->key = 'MileageEntryID';
-            $FridayProvider->key = 'MileageEntryID';
-            $SaturdayProvider->key = 'MileageEntryID';
-
-            return $this->render('view', [
-                'model' => $model,
-                'duplicateFlag' => $duplicateFlag,
-                'ApprovedFlag' => $ApprovedFlag,
-                'Total_Mileage_Current_MileageCard' => $Total_Mileage_Current_MileageCard,
-                'SundayProvider' => $SundayProvider,
-                'Total_Mileage_Sun' => $Total_Mileage_Sun,
-                'MondayProvider' => $MondayProvider,
-                'Total_Mileage_Mon' => $Total_Mileage_Mon,
-                'TuesdayProvider' => $TuesdayProvider,
-                'Total_Mileage_Tue' => $Total_Mileage_Tue,
-                'WednesdayProvider' => $WednesdayProvider,
-                'Total_Mileage_Wed' => $Total_Mileage_Wed,
-                'ThursdayProvider' => $ThursdayProvider,
-                'Total_Mileage_Thr' => $Total_Mileage_Thr,
-                'FridayProvider' => $FridayProvider,
-                'Total_Mileage_Fri' => $Total_Mileage_Fri,
-                'SaturdayProvider' => $SaturdayProvider,
-                'Total_Mileage_Sat' => $Total_Mileage_Sat,
-
-            ]);
-        } catch (ErrorException $e) {
+			return $this -> render('show-entries', [
+				'model' => $cardData['card'],
+				'task' => $allTask,
+				'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
+				'to' => $to,
+				'SundayDate' => $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+				'MondayDate' => $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+				'TuesdayDate' => $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+				'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+				'ThursdayDate' => $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+				'FridayDate' => $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+				'SaturdayDate' => $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+				'projectName' => $projectName,
+				'fName' => $fName,
+				'lName' => $lName,
+				'SundayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
+				'MondayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
+				'TuesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
+				'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']))),
+				'ThursdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
+				'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
+				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
+				'mileageCardProjectID' => $mileageCardProjectID,
+				'isSubmitted' => $cardData['card']['MileageCardOasisSubmitted']=='Yes',
+			]);
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
             throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -538,12 +504,17 @@ class MileageCardController extends BaseController
 
             // post url
             $putUrl = 'mileage-card%2Fapprove-cards';
-            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);  // indirect RBAC
+            $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3);  // indirect RBAC
             $obj = json_decode($putResponse, true);
             $responseMileageCardID = $obj[0]["MileageCardID"];
-            return $this->redirect(['view', 'id' => $responseMileageCardID]);
-        } catch (\Exception $e){
-            return $this->redirect(['view', 'id' => $id]);
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -557,34 +528,21 @@ class MileageCardController extends BaseController
     public function actionDeactivate()
     {
         try {
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-
-                // loop the data array to get all id's.
-                foreach ($data as $key) {
-                    foreach ($key as $keyitem) {
-
-                        $MileageEntryIDArray[] = $keyitem;
-                    }
-                }
-
-                $data = array(
-                    'entryArray' => $MileageEntryIDArray,
-                );
-                $json_data = json_encode($data);
-
-                // post url
-                $putUrl = 'mileage-entry%2Fdeactivate';
-                $putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
-                $obj = json_decode($putResponse, true);
-                $responseMileageCardID = $obj[0]["MileageEntryMileageCardID"];
-                return $this->redirect(['view', 'id' => $responseMileageCardID]);
-
-            } else {
-                throw new \yii\web\BadRequestHttpException;
-            }
-        } catch (\Exception $e){
-            return $this->redirect(['index']);
+            $data = Yii::$app->request->post();	
+			$jsonData = json_encode($data);
+			
+			// post url
+			$putUrl = 'mileage-entry%2Fdeactivate';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$obj = json_decode($putResponse, true);	
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
         }
     }
 
@@ -631,62 +589,6 @@ class MileageCardController extends BaseController
 		}
     }
 
-    /**
-     * Get MileageCard History Data
-     * @return \yii\web\Response
-     * @throws ForbiddenHttpException
-     */
-    public function actionDownloadMileageCardData() {
-        try {
-            // check if user has permission
-            //self::SCRequirePermission("downloadTimeCardData");  // TODO check if this is the right permission
-
-            //guest redirect
-            if (Yii::$app->user->isGuest) {
-                return $this->redirect(['/login']);
-            }
-
-            $model = new \yii\base\DynamicModel([
-                'dateRange'
-            ]);
-            $model->addRule('dateRange', 'string', ['max' => 64]);
-
-            if ($model->load(Yii::$app->request->queryParams,'')) {
-                $dateRange = $model->dateRange;
-            }
-			
-			$dateRangeArray = BaseController::splitDateRange($dateRange);
-			$startDate = $dateRangeArray['startDate'];
-			$endDate =  $dateRangeArray['endDate'];
-
-            $url = "mileage-card%2Fget-cards-export&startDate=$startDate&endDate=$endDate";
-			
-            header('Content-Disposition: attachment; filename="mileagecard_history_'.date('Y-m-d_h_i_s').'.csv"');
-            $this->requestAndOutputCsv($url);
-        } catch (ForbiddenHttpException $e) {
-            throw new ForbiddenHttpException('You do not have adequate permissions to perform this action.');
-        } catch (\Exception $e) {
-            //Yii::trace('EXCEPTION raised'.$e->getMessage());
-            // Yii::$app->runAction('login/user-logout');
-        }
-    }
-
-    /**
-     * Export TimeCard Table To Excel File
-     * @param $url
-     */
-    public function requestAndOutputCsv($url){
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        $fp = fopen('php://temp','w');
-        header('Content-Type: text/csv;charset=UTF-8');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        Parent::executeGetRequestToStream($url,$fp, Constants::API_VERSION_2);
-        rewind($fp);
-        echo stream_get_contents($fp);
-        fclose($fp);
-    }
-	
 	/**
 	 * Execute API request to get status for submit button
 	 * @param int $projectID id of currently selected project

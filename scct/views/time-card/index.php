@@ -205,7 +205,6 @@ else
                     ],
 					'action' => Url::to(['time-card/index'])
                 ]); ?>
-
                 <div class="row">
                     <div style="float: right;margin-top: -2%;width: 21%;">
                         <?= $form->field($model, 'pageSize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
@@ -337,6 +336,7 @@ else
             </div>
         </div>
     </div>
+	
     <div id="timeCardGridViewContainer">
         <div id="timeCardGV" class="timeCardForm">
             <?php Pjax::begin(['id' => 'timeCardGridview', 'timeout' => false]) ?>
