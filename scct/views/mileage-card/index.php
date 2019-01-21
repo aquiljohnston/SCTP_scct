@@ -2,181 +2,298 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
-use app\controllers\MileageCard;
+use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
+use app\controllers\MileageCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
+use kartik\grid\CheckboxColumn;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Mileage Cards';
-$this->params['breadcrumbs'][] = $this->title;
-$pageSize = ["50" => "50", "100" => "100", "200" => "200"];
-//TODO rework this to handle new params
-$this->params['download_url'] = '/mileage-card/download-mileage-card-data?' . http_build_query([
-        'dateRange' => $dateRangeValue
-    ]);
-$column = [
-    [
-        'label' => 'User First Name',
-        'attribute' => 'UserFirstName',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-    ],
-    [
-        'label' => 'User Last Name',
-        'attribute' => 'UserLastName',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-    ],
-    [
-        'label' => 'Project Name',
-        'attribute' => 'ProjectName',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-    ],
-    [
-        'label' => 'Start Date',
-        'attribute' => 'MileageStartDate',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['MileageStartDate']));
-        }
-    ],
-    [
-        'label' => 'End Date',
-        'attribute' => 'MileageEndDate',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['MileageEndDate']));
-        }
-    ],
-	[
-        'label' => 'Total Miles',
-        'attribute' => 'MileageCardAllMileage_calc',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-    ],
-    [
-        'label' => 'Approved',
-        'attribute' => 'MileageCardApproved',
-//        'filter' => $approvedInput
-    ],
-
-    ['class' => 'kartik\grid\ActionColumn',
-        'template' => '{view}',
-        'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view') {
-                $url = '/mileage-card/view?id=' . $model["MileageCardID"];
-                return $url;
-            }
-        },
-    ],
-    [
-        'class' => 'kartik\grid\CheckboxColumn',
-        'checkboxOptions' => function ($model, $key, $index, $column) {
-            // Disable if already approved or SumHours is 0
-            /*$disabledBoolean = strtoupper($model["MileageCardApproved"]) == "YES";
-            $result = [
-                'mileageCardId' => $model["MileageCardID"],
-                'approved' => $model["MileageCardApproved"],
-                'totalmileage' => $model["MileageCardAllMileage_calc"]
-            ];
-            if ($disabledBoolean) {
-                $result['disabled'] = 'true';
-            }
-
-            return $result;*/
-            //if (strtoupper($model["MileageCardApproved"]) == "YES")
-              if (strtoupper($model["MileageCardApproved"]) == "YES"
-                  || $model["MileageCardApproved"] == 1)
-                return ['disabled' => true];
-            else
-                return ['disabled' => false];
-        }
-    ],
-];
+$pageSize = ["50" => "50", "100" => "100", "200" => "200", "500" => "500", "750" => "750"];
+if($isAccountant)
+{
+	$column = [
+		[
+			'class' => 'kartik\grid\ExpandRowColumn',
+			'expandAllTitle' => 'Expand all',
+			'collapseTitle' => 'Collapse all',
+			'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
+			'value' => function ($model, $key, $index, $column) {
+				return GridView::ROW_COLLAPSED;
+			},
+			'detailUrl' => Url::to(['mileage-card/view-accountant-detail']),
+			'detailAnimationDuration' => 'fast',
+		],
+		[
+			'label' => 'Project Name',
+			'attribute' => 'ProjectName',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Project Manager',
+			'attribute' => 'ProjectManager',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Start Date - End Date',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+			'value' => function($model, $key, $index, $column) {
+				return $model['StartDate'] . ' - ' . $model['EndDate'];
+			},
+		],
+		[
+			'label' => 'Submitted/Total',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+			'value' => function($model, $key, $index, $column) {
+				return $model['Approved Time Cards'] . '/' . $model['Total Time Cards'];
+			},
+		],
+		[
+			'label' => 'Submitted By',
+			'attribute' => 'ApprovedBy',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Oasis Submitted',
+			'attribute' => 'OasisSubmitted',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		//may not need this field as it is the table key
+		[
+			'label' => 'Project ID',
+			'attribute' => 'ProjectID',
+			'visible' => false,
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+	];
+}else{
+	$column = [
+		[
+			'label' => 'User Full Name',
+			'attribute' => 'UserFullName',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Project Name',
+			'attribute' => 'ProjectName',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Start Date - End Date',
+			'attribute' => 'MileageCardDates',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Total Miles',
+			'attribute' => 'SumMiles',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Supervisor Approved',
+			'attribute' => 'MileageCardApprovedFlag',
+			'value' => function($model, $key, $index, $column) {
+				return $model['MileageCardApprovedFlag'] == 0 ? 'No' : 'Yes';
+			},
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'PM Approved',
+			'attribute' => 'MileageCardPMApprovedFlag',
+			'value' => function($model, $key, $index, $column) {
+				return $model['MileageCardPMApprovedFlag'] == 0 ? 'No' : 'Yes';
+			},
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		['class' => 'kartik\grid\ActionColumn',
+			'template' => '{view}', // does not include delete
+			'urlCreator' => function ($action, $model, $key, $index) {
+				if ($action === 'view') {
+					$url = '/mileage-card/show-entries?id=' . $model["MileageCardID"].'&projectName='.$model['ProjectName']
+					.'&fName='.$model['UserFirstName']
+					.'&lName='.$model['UserLastName']
+					.'&mileageCardProjectID='.$model['MileageCardProjectID'];
+					return $url;
+				}
+			},
+		],
+		[
+			'class' => 'kartik\grid\CheckboxColumn',
+			'header' => Html::checkBox('selection_all', false, [
+				'class' => 'select-on-check-all',
+				'disabled' => ($unapprovedMileageCardExist)  ? false : true,
+			]),
+			'checkboxOptions' => function ($model, $key, $index, $column) {
+				// Disable if already approved or SumHours is 0
+				$disabledBoolean = $model["MileageCardApprovedFlag"] == 1;
+				$result = [
+					'mileageCardId' => $model["MileageCardID"],
+					'approved' => $model["MileageCardApprovedFlag"],
+					'totalmileage' => $model["SumMiles"]
+				];
+				if ($disabledBoolean) {
+					$result['disabled'] = 'true';
+				}
+				return $result;
+			}
+		],
+	];
+}
 ?>
+
 <div class="mileagecard-index">
-    <div class="lightBlueBar">
+    <div class="lightBlueBar" style="height: 100px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="mileage_card_filter">
-            <div id="mileage_card_approve_btn" class="col-xs-4 col-md-2 col-lg-2">
-                <?php
-                echo Html::button('Approve',
-                    [
-                        'class' => 'btn btn-primary multiple_approve_btn',
-                        'id' => 'multiple_mileage_card_approve_btn',
-                    ]);
-                ?>
-                <?php if ($pages->totalCount > 0) { ?>
-                    <a id="export_mileagecard_btn" class="btn btn-primary" target="_blank"
-                       href="<?= $this->params['download_url']; ?>">Export</a>
-                <?php } ?>
-            </div>
-            <div id="mileageCardDropdownContainer" class="col-xs-8 col-md-10 col-lg-10">
-                <?php Pjax::begin(['id' => 'mileageCardForm', 'timeout' => false]) ?>
+            <div id="mileageCardDropdownContainer">
                 <?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
-                    'formConfig' => ['deviceSize' => ActiveForm::SIZE_SMALL],
+                    'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
                     'method' => 'get',
                     'options' => [
                         'id' => 'MileageCardForm',
-                    ]
+                    ],
+					'action' => Url::to(['mileage-card/index'])
                 ]); ?>
-				<div class="col-md-2">
-					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
-				</div>
-                <div id="datePickerContainer" style="float: left; width: auto; display: none;">
-                    <?= $form->field($model, 'DateRangePicker', [
-                        'showLabels' => false
-                    ])->widget(DateRangePicker::classname(), [
-                        'pluginOptions' => [
-                        ],
-                        'name'=>'date_range_2',
-                        'presetDropdown'=>true,
-                        'hideInput'=>true,
-                        'pluginEvents' => [
-                            "apply.daterangepicker" => "function(ev, picker) {
-                                "." var jqTCDropDowns = $('#mileageCardDropdownContainer');
-                                    var form = jqTCDropDowns.find(\"#MileageCardForm\");
-                                    if (form.find(\".has-error\").length){
-                                        return false;
-                                    }
-                                    $('#loading').show();
-                                    $.pjax.reload({
-                                        type: 'GET',
-                                        url: form.attr(\"action\"),
-                                        container: '#mileageCardGridview', // id to update content
-                                        data: form.serialize(),
-                                        timeout: 99999
-                                    });
-                                    $('#mileageCardGridview').on('pjax:success', function () {
-                                        $('#loading').hide();
-                                        applyOnClickListeners();
-                                    });
-                                    $('#mileageCardGridview').on('pjax:error', function () {
-                                        $('#loading').hide();
-                                        location.reload();
-                                    });
-                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
-                            }"],
-                    ]); ?>
+				<div class="row">
+                    <div style="float: right;margin-top: -2%;width: 21%;">
+                        <?= $form->field($model, 'pageSize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'mileageCardPageSize'])->label("Records Per Page", [
+                            'class' => 'MileageCardRecordsPerPage'
+                        ]); ?>
+                        <input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
+                    </div>
                 </div>
-				<div class="col-md-3">
-					<?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $mileageCardFilterParams, 'id' => 'mileageCardFilter'])->label("Search"); ?>
-				</div>
-                <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
-                <div class="col-md-3" style="float:right;">
-					<?= $form->field($model, 'pagesize', ['labelSpan' => 8])->dropDownList($pageSize, ['value' => $mileageCardPageSizeParams, 'id' => 'mileageCardPageSize'])->label("Records Per Page"); ?>
-					<input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>	
-				</div>				
-                <?php ActiveForm::end(); ?>
+				<?php Pjax::begin(['id' => 'mileageSubmitApproveButtons', 'timeout' => false]) ?>
+					<div class="row">
+						<div id="multiple_mileage_card_approve_btn">
+							<?php 
+								$approveButton = [
+									'class' => 'btn btn-primary multiple_approve_btn',
+									'id' => 'multiple_approve_btn_id',
+									'disabled' => true
+								];
+								if($isAccountant) {
+									echo Html::button('Submit',
+									[
+										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
+										'id' => 'multiple_submit_btn_id',
+										'submitted' => $projectSubmitted ? 'true' : 'false'
+									]);
+								} elseif($isProjectManager){
+									echo Html::button('Submit',
+									[
+										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+										'id' => 'pm_submit_btn_id',
+										'submitted' => $projectSubmitted ? 'true' : 'false'
+									]);
+									echo Html::button('Approve', $approveButton);
+								} else
+									echo Html::button('Approve',$approveButton);
+							?>
+						</div>
+					</div>
                 <?php Pjax::end() ?>
+				<div class="col-md-3 MileageCardSearch">
+                    <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'mileageCardFilter'])->label("Search"); ?>
+                </div>
+				<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
+				<div class="col-md-2 DateRangeDropDown">
+					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
+				</div>
+				<?php Pjax::begin(['id' => 'mileageCardDropDownPjax', 'timeout' => false]) ?>
+					<?php if($showFilter){ ?>
+						<div class="col-md-2 mileageProjectFilterDD">
+							<?=
+								$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
+								['value' => $model->projectID, 'id'=>'mileageProjectFilterDD'])->label('Project'); 
+							?>
+						</div>
+					<?php }else{
+						echo "<input type='hidden' value=$model->projectID id='mileageProjectFilterDD'>";
+					} ?>
+					<?php if(!$isAccountant){ ?>
+						<div class="col-md-2 mileageEmployeeFilterDD">
+							<?=
+								$form->field($model, 'employeeID', ['labelSpan' => 3])->dropDownList($employeeDropDown,
+								['value' => $model->employeeID, 'id'=>'mileageEmployeeFilterDD'])->label('Employee'); 
+							?>
+						</div>
+					<?php } ?>
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardClearDropdownFilterButton']) ?>
+				<?php Pjax::end() ?>
+				<?php if($model->dateRangeValue == 'other'){ ?>
+					<div id="mileageDatePickerContainer" style="float: left; width: auto; display: block;">
+				<?php } else { ?>
+					<div id="mileageDatePickerContainer" style="float: left; width: auto; display: none;">
+				<?php } ?>
+				<?= $form->field($model, 'dateRangePicker', [
+					'showLabels' => false
+				])->widget(DateRangePicker::classname(), [
+					'name'=>'date_range_3',
+					'hideInput'=>true,
+					'initRangeExpr' => true,
+					'pluginOptions' => [
+						'opens' => 'left',
+						'ranges' => [
+							"Last 30 Days" => ["moment().startOf('day').subtract(29, 'days')", "moment()"],
+							"This Month" => ["moment().startOf('month')", "moment().endOf('month')"],
+							"Last Month" => ["moment().subtract(1, 'month').startOf('month')", "moment().subtract(1, 'month').endOf('month')"],
+						]
+					],
+					'pluginEvents' => [
+						"apply.daterangepicker" => "function() {
+							"." var form = $('#mileageCardDropdownContainer').find('#MileageCardForm');
+							if (form.find('.has-error').length){
+								return false;
+							}
+							$('#loading').show();
+							$.pjax.reload({
+								type: 'GET',
+								url: form.attr('action'),
+								container: '#mileageCardGridview', // id to update content
+								data: form.serialize(),
+								timeout: 99999
+							});
+							$('#mileageCardGridview').off('pjax:success').on('pjax:success', function () {
+								$.pjax.reload({
+									container: '#mileageSubmitApproveButtons',
+									timeout:false
+								});
+								$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
+									applyMileageCardOnClickListeners();
+									applyMileageCardSubmitButtonListener();
+									mileageCardPmSubmit();
+									$('#loading').hide();
+								});
+								$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
+									location.reload();
+								});
+							});
+							$('#mileageCardGridview').off('pjax:error').on('pjax:error', function () {
+								location.reload();
+							});
+							$('#mileageDatePickerContainer').css(\"display\", \"block\"); "."
+						}"],
+					]); ?>
+				</div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
     </div>
@@ -185,11 +302,14 @@ $column = [
         <div id="mileageCardGV" class="mileageCardForm">
             <?php Pjax::begin(['id' => 'mileageCardGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
+				'id' => 'GridViewForMileageCard',
                 'dataProvider' => $dataProvider,
                 'export' => false,
                 'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
+				'showOnEmpty' => true,
+                'emptyText' => 'No results found!',
                 'columns' => $column
             ]); ?>
             <div id="MCPagination">
@@ -207,3 +327,13 @@ $column = [
         </div>
     </div>
 </div>
+<!--ctGrowl-->
+<!--submission toast messages-->
+<div id = "ctGrowlContainer"></div>
+<ul id = "ct-growl-clone">
+	<ul>
+		<li class = "title"></li>
+		<li class = "msg"></li>
+		<li class = "icon"><span class="close">X</span></li>
+	</ul>
+</ul>

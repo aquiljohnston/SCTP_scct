@@ -33,74 +33,120 @@ class MileageCardController extends BaseController
      * @throws ForbiddenHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex()
+    public function actionIndex($projectID = null, $projectFilterString = null)//variables for redirect defaults?
     {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
         try {
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+		
 			//Check if user has permission to view mileage card page
 			self::requirePermission("viewMileageCardMgmt");
+			
+			//if request is not coming from time-card reset session variables. 
+			$referrer = Yii::$app->request->referrer;
+			if(!strpos($referrer,'mileage-card')){
+				unset(Yii::$app->session['mileageCardFormData']);
+				unset(Yii::$app->session['mileageCardSort']);
+			}
+
+            //check user role
+            $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+			$accountingSubmitReady = FALSE;
+			$pmSubmitReady = FALSE;
+			//TODO make sure mileageCardPmSubmit permission exist
+			$isProjectManager = self::can("mileageCardPmSubmit");
+            // Store start/end date data
+            $dateData = [];
+            $startDate = null;
+            $endDate = null;
+			
             $model = new \yii\base\DynamicModel([
-                'DateRangePicker',
-				'pagesize',
+                'dateRangePicker',
+				'pageSize',
                 'filter',
-                'dateRangeValue'
+                'dateRangeValue',
+				'projectID',
+				'employeeID'
             ]);
-			$model->addRule('DateRangePicker', 'string', ['max' => 30]);
+			$model->addRule('DateRangePicker', 'string', ['max' => 32]);
             $model->addRule('pagesize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
-            $model->addRule('dateRangeValue', 'string', ['max' => 30]);
+            $model->addRule('dateRangeValue', 'string', ['max' => 100]);
+			$model->addRule('projectID', 'integer'); //
+            $model->addRule('employeeID', 'integer'); //
 			
 			//get current and prior weeks date range
 			$today = BaseController::getDate();
 			$priorWeek = BaseController::getWeekBeginEnd("$today -1 week");
 			$currentWeek = BaseController::getWeekBeginEnd($today);
             $other = "other";
-
-            // Store start/end date data
-            $dateData = [];
-            $startDate = null;
-            $endDate = null;
 			
 			//create default prior/current week values
 			$dateRangeDD = [
-			$priorWeek => 'Prior Week',
-			$currentWeek => 'Current Week',
-            $other => 'Other'
+				$priorWeek => 'Prior Week',
+				$currentWeek => 'Current Week',
+				$other => 'Other'
 			];
 			
-			//check current filtering values
-            if ($model->load(Yii::$app->request->queryParams)) {
-                $mileageCardPageSizeParams = $model->pagesize;
-                $filter = $model->filter;
-				$dateRangeValue = $model->dateRangeValue;
-                $dateRangePicker = $model->DateRangePicker;
-
+			//"sort":"-UserFullName"
+            //get sort data
+            if (isset($_GET['sort'])){
+                $sort = $_GET['sort'];
+                //parse sort data
+                $sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+				Yii::$app->session['mileageCardSort'] = [
+					'sortField' => $sortField,
+					'sortOrder' => $sortOrder
+				];
             } else {
-                $mileageCardPageSizeParams = 50;
-                $filter = "";
-				$dateRangeValue = $priorWeek;
-                $dateRangePicker = null;
+				if(Yii::$app->session['mileageCardSort']){
+					$sortField = Yii::$app->session['mileageCardSort']['sortField'];
+					$sortOrder = Yii::$app->session['mileageCardSort']['sortOrder'];
+				}else{
+					//default sort values
+					$sortField = ($isAccountant) ? 'ProjectName' : 'UserFullName';
+					$sortOrder = 'ASC';
+				}
+            }
+			
+			// check if type was post, if so, get value from $model
+            if ($model->load(Yii::$app->request->queryParams)){
+				Yii::$app->session['mileageCardFormData'] = $model;
+			}else{
+				//set defaults to session data if avaliable
+				if(Yii::$app->session['mileageCardFormData'])
+				{
+					$model = Yii::$app->session['mileageCardFormData'];
+				}
+				else
+				{
+					//set default values
+					$model->pageSize = 50;
+					$model->employeeID = '';
+					$model->dateRangeValue = $priorWeek;
+					$model->dateRangePicker	= null;
+					//set filters if data passed from home screen
+					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->projectID = $projectID != null ? $projectID : '';
+				}
             }
 
-            if ($dateRangeValue == "other") {
-                if ($dateRangePicker == null){
+            if ($model->dateRangeValue == "other") {
+                if ($model->dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
-                    $dateData = TimeCardController::dateRangeProcessor($dateRangePicker);
+                    $dateData = TimeCardController::dateRangeProcessor($model->dateRangePicker);
                     $startDate = $dateData[0];
                     $endDate = $dateData[1];
                 }
             } else {
-                $dateRangeArray = BaseController::splitDateRange($dateRangeValue);
+                $dateRangeArray = BaseController::splitDateRange($model->dateRangeValue);
                 $startDate = $dateRangeArray['startDate'];
                 $endDate =  $dateRangeArray['endDate'];
             }
-
-            Yii::trace("START DATE: ".$startDate);
-            Yii::trace("END DATE: ".$endDate);
 
             //check current page at
 			if (isset($_GET['mileageCardPageNumber'])){
@@ -109,82 +155,120 @@ class MileageCardController extends BaseController
                 $page = 1;
             }
 			
-			$encodedFilter = urlencode($filter);
-
-            //build url with params
-            $url = "mileage-card%2Fget-cards&startDate=$startDate&endDate=$endDate&filter=$encodedFilter&listPerPage=$mileageCardPageSizeParams&page=$page";
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
+			//url encode filter
+			$encodedFilter = urlencode($model->filter);
+			//build params
+			$httpQuery = http_build_query([
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+				'listPerPage' => $model->pageSize,
+				'page' => $page,
+				'filter' => $encodedFilter,
+				'projectID' => $model->projectID,
+				'employeeID' => $model->employeeID,
+				'sortField' => $sortField,
+				'sortOrder' => $sortOrder,
+			]);
+			//set url
+			if($isAccountant)
+				//TODO create this route on the api
+				$url = 'mileage-card%2Fget-accountant-view&' . $httpQuery;
+			else
+				$url = 'mileage-card%2Fget-cards&' . $httpQuery;
+			
+			//execute request
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_3); // indirect rbac
             $response = json_decode($response, true);
             $assets = $response['assets'];
+			
+			//extract format indicators from response data
+			$unapprovedMileageCardExist = array_key_exists('unapprovedMileageCardExist', $response) ? $response['unapprovedMileageCardExist'] : false;
+            $showFilter = $response['showProjectDropDown'];
+            $projectWasSubmitted = $response['projectSubmitted'];
+			$projectDropDown = $response['projectDropDown'];
+			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
+
+			//get submit button status
+			$isSubmitReady = self::getSubmitButtonStatus($model->projectID, $projectDropDown, $startDate, $endDate, $isAccountant);
+	
+			//set submit button status
+			if($isAccountant)
+				$accountingSubmitReady = $isSubmitReady;
+			else
+				$pmSubmitReady = $isSubmitReady;
 
             // passing decode data into dataProvider
-            $dataProvider = new ArrayDataProvider
-            ([
-                'allModels' => $assets,
-                'pagination' => false
-            ]);
+			$dataProvider = new ArrayDataProvider
+			([
+				'allModels' => $assets,
+				'pagination' => false,
+				'key' => function ($assets) {
+					return array(
+						'ProjectID' => $assets['ProjectID'],
+						'StartDate' => $assets['StartDate'],
+						'EndDate' => $assets['EndDate'],
+					);
+				}
+			]);
 
-            // Sorting MileageCard table
-            $dataProvider->sort = [
-                'attributes' => [
-                    'UserFirstName' => [
-                        'asc' => ['UserFirstName' => SORT_ASC],
-                        'desc' => ['UserFirstName' => SORT_DESC]
-                    ],
-                    'UserLastName' => [
-                        'asc' => ['UserLastName' => SORT_ASC],
-                        'desc' => ['UserLastName' => SORT_DESC]
-                    ],
-                    'ProjectName' => [
-                        'asc' => ['ProjectName' => SORT_ASC],
-                        'desc' => ['ProjectName' => SORT_DESC]
-                    ],
-                    'MileageStartDate' => [
-                        'asc' => ['MileageStartDate' => SORT_ASC],
-                        'desc' => ['MileageStartDate' => SORT_DESC]
-                    ],
-                    'MileageEndDate' => [
-                        'asc' => ['MileageEndDate' => SORT_ASC],
-                        'desc' => ['MileageEndDate' => SORT_DESC]
-                    ],
-                    'MileageCardAllMileage_calc' => [
-                        'asc' => ['MileageCardAllMileage_calc' => SORT_ASC],
-                        'desc' => ['MileageCardAllMileage_calc' => SORT_DESC]
-                    ],
-                    'MileageCardApproved' => [
-                        'asc' => ['MileageCardApproved' => SORT_ASC],
-                        'desc' => ['MileageCardApproved' => SORT_DESC]
-                    ],
-                ]
-            ];
+            if($isAccountant) {
+				// Sorting Accountant MileageCard table
+				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
+					'attributes' => [
+						'ProjectName',
+						'ProjectManager',
+						'StartDate' ,
+						'EndDate',
+						'ApprovedBy',
+						'OasisSubmitted',
+						'QBSubmitted',
+						'ADPSubmitted'
+					]
+				];
+			} else {
+				// Sorting Base MileageCard table
+				$dataProvider->sort = [
+					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
+					'attributes' => [
+						'UserFullName',
+						'ProjectName',
+						'MileageCardDates',
+						'MileageCardOasisSubmitted',
+						'MileageCardQBSubmitted',
+						'SumMiles',
+						'MileageCardApprovedFlag',
+						'MileageCardPMApprovedFlag'
+					]
+				];
 
-            //Set Mile Card ID On the JS Call
-            $dataProvider->key = 'MileageCardID';
+				//set timecardid as id
+				$dataProvider->key = 'MileageCardID';
+			}
 
             // set pages to dispatch table
             $pages = new Pagination($response['pages']);
 
+			$dataArray = [
+				'dataProvider' => $dataProvider,
+				'dateRangeDD' => $dateRangeDD,
+				'model' => $model,
+				'pages' => $pages,
+				'projectDropDown' => $projectDropDown,
+				'employeeDropDown' => $employeeDropDown,
+				'showFilter' => $showFilter,
+				'unapprovedMileageCardExist' => $unapprovedMileageCardExist,
+				'accountingSubmitReady' => $accountingSubmitReady,
+				'pmSubmitReady' => $pmSubmitReady,
+				'projectSubmitted' => $projectWasSubmitted,
+				'isProjectManager' => $isProjectManager,
+				'isAccountant' => $isAccountant
+			];
             //calling index page to pass dataProvider.
-			if (Yii::$app->request->isAjax) {
-				 return $this->renderAjax('index', [
-					'dataProvider' => $dataProvider,
-					'dateRangeDD' => $dateRangeDD,
-					'dateRangeValue' => $dateRangeValue,
-					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
-					'pages' => $pages,
-					'model' => $model,
-					'mileageCardFilterParams' => $filter
-				]);
+			if(Yii::$app->request->isAjax) {
+				return $this->renderAjax('index', $dataArray);
 			}else{
-				return $this->render('index', [
-					'dataProvider' => $dataProvider,
-					'dateRangeDD' => $dateRangeDD,
-					'dateRangeValue' => $dateRangeValue,
-					'mileageCardPageSizeParams' => $mileageCardPageSizeParams,
-					'pages' => $pages,
-					'model' => $model,
-					'mileageCardFilterParams' => $filter
-				]); 
+				return $this->render('index', $dataArray);
 			}
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
@@ -515,48 +599,36 @@ class MileageCardController extends BaseController
     {
         try {
             if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-
-                // loop the data array to get all id's.
-                foreach ($data as $key) {
-                    foreach ($key as $keyitem) {
-
-                        $MileageCardIDArray[] = $keyitem;
-                    }
-                }
-
-                $data = array(
-                    'cardIDArray' => $MileageCardIDArray,
-                );
-                $json_data = json_encode($data);
-
-                // post url
-                $putUrl = 'mileage-card%2Fapprove-cards';
-                $apiResponse = parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); //indirect rbac
-                $json_response_data = json_decode($apiResponse, true);
-                //create response
-                $response = Yii::$app->response;
-                $response->format = Response::FORMAT_JSON;
-                if ($json_response_data['success']) {
-                    $data = [];
-                    $data['cards'] = $json_response_data['cards'];
-                    $data['status'] = "200 Success";
-                    $data['success'] = true;
-                    $response->data = $data;
-                } else {
-                    $data = [];
-                    $data['cards'] = null;
-                    $data['status'] = "400 Bad Request";
-                    $data['success'] = false;
-                    $response->data = $data;
-                }
-                return $response;
+				$data = Yii::$app->request->post();					
+				 // loop the data array to get all id's.	
+				foreach ($data as $key) {
+					foreach($key as $keyitem){
+					
+					   $MileageCardIDArray[] = $keyitem;
+					}
+				}
+				
+				$data = array(
+						'cardIDArray' => $MileageCardIDArray,
+					);		
+				$json_data = json_encode($data);
+				
+				// post url
+				$putUrl = 'mileage-card%2Fapprove-cards';
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
+				return $this->redirect(['index']);
             } else {
                 throw new \yii\web\BadRequestHttpException;
             }
-        } catch (\Exception $e){
-            return $this->redirect(['index']);
-        }
+        } catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
+		}
     }
 
     /**
@@ -614,4 +686,48 @@ class MileageCardController extends BaseController
         echo stream_get_contents($fp);
         fclose($fp);
     }
+	
+	/**
+	 * Execute API request to get status for submit button
+	 * @param int $projectID id of currently selected project
+	 * @param array $projectDropDown array of dropdown key value pairs
+	 * @param string $startDate start of date range
+	 * @param string $endDate end of date range
+	 * @param boolean $isAccountant is current user of role type accountant
+	 * returns boolean status for submit button
+	 */
+	private static function getSubmitButtonStatus($projectID, $projectDropDown, $startDate, $endDate, $isAccountant)
+	{
+		$projArray = array();
+		$keys = array_keys($projectDropDown);
+		$keysCount = count($keys);
+		if($projectID != NULL){
+			$projArray[0] = $projectID;
+		}elseif($keysCount == 1) {
+			$projectID = $keys[0];
+		}else{
+			for($i=0;$i<$keysCount; $i++) {
+				if($keys[$i] !== "") {
+					$projArray[] = $keys[$i];
+				}
+			}
+		}
+
+		//build post body
+		$submitCheckData['submitCheck'] = array(
+			'ProjectName' => $projArray,
+			'StartDate' => $startDate,
+			'EndDate' => $endDate,
+			'isAccountant' => $isAccountant
+		);
+		$json_data = json_encode($submitCheckData);
+	
+		//execute api request
+		$url = 'time-card%2Fcheck-submit-button-status';
+		$response  = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
+		$decodedResponse = json_decode($response, true);
+		// get submit button status
+		$readyStatus = $decodedResponse['SubmitReady'] == "1" ? true : false;
+		return $readyStatus;
+	}
 }
