@@ -117,8 +117,9 @@ function initListeners() {
                     dataSync("inspector",reportStartDate,reportEndDate, null, null);
                     toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0], submitButton[0]], "inline");
                 }
-                // reuse and rename the inspector dropdown
-                if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
+				console.log(selectedReport);
+                // reuse and rename the inspector dropdown for project
+                if(selectedReport.ParmProjectFlag == 1) {
                     dataSync("timeCard", reportStartDate, reportEndDate, null, null);
                     // show project dropdown
                     inspectorsListHeader.text("Project List: ");
@@ -156,8 +157,8 @@ function initListeners() {
         // set inspectors
         if(selectedReport.ParmInspectorFlag == 1)
             dropdownParam = inspectorsDropdown.val(); 
-        // set project timecards
-        if(selectedReport.ReportSPName.includes("TimeCard") || selectedReport.ReportSPName.includes("Payroll")) {
+        // use inspector dropdown as project 
+        if(selectedReport.ParmProjectFlag == 1) {
             if(!inspectorsDropdown.val().toLocaleLowerCase().includes("<All>".toLocaleLowerCase())) {
                 console.log("selected report: " + inspectorsDropdown.val());
                 dropdownParam = "["+inspectorsDropdown.val()+"]";
