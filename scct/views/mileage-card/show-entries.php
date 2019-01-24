@@ -122,8 +122,8 @@ use yii\widgets\Pjax;
     <?php
     Pjax::begin(['id' => 'showMiles', 'timeout' => false]);
 		Modal::begin([
-			'header' => '<h4>ADD MILES</h4>',
-			'id' => 'addMilesModal',
+			'header' => '<h4>ADD MILEAGE</h4>',
+			'id' => 'addMileageModal',
 			'size' => 'modal-lg',
 		]);
 		echo "<div id='modalAddMiles'><span id='modalContentSpan'></span></div>";
