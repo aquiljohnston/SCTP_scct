@@ -193,14 +193,14 @@ if($isAccountant)
 									echo Html::button('Submit',
 									[
 										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
-										'id' => 'multiple_submit_btn_id',
+										'id' => 'mileage_multiple_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
 								} elseif($isProjectManager){
 									echo Html::button('Submit',
 									[
 										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
-										'id' => 'pm_submit_btn_id',
+										'id' => 'mileage_pm_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
 									echo Html::button('Approve', $approveButton);

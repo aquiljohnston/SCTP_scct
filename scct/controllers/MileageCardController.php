@@ -550,6 +550,32 @@ class MileageCardController extends BaseController
 		}
     }
 
+	public function actionPMSubmit() {
+		if (Yii::$app->request->isAjax) {
+			try{
+				$data = Yii::$app->request->post();			
+				// set body data
+				$body = array(
+						'projectIDArray' => $data['projectIDArray'],
+						'dateRangeArray' => $data['dateRangeArray'],
+					);		
+				$json_data = json_encode($body);
+				$putResponse = Parent::executePutRequest('mileage-card%2Fp-m-submit', $json_data, Constants::API_VERSION_3); // indirect rbac
+				return $this->redirect(['index']);
+			} catch (UnauthorizedHttpException $e){
+				Yii::$app->response->redirect(['login/index']);
+			} catch(ForbiddenHttpException $e) {
+				throw $e;
+			} catch(ErrorException $e) {
+				throw new \yii\web\HttpException(400);
+			} catch(Exception $e) {
+				throw new ServerErrorHttpException();
+			}
+		} else {
+			  throw new \yii\web\BadRequestHttpException;
+		}
+	}	
+	
 	/**
 	 * Execute API request to get status for submit button
 	 * @param int $projectID id of currently selected project
@@ -586,8 +612,8 @@ class MileageCardController extends BaseController
 		$json_data = json_encode($submitCheckData);
 	
 		//execute api request
-		$url = 'time-card%2Fcheck-submit-button-status';
-		$response  = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
+		$url = 'mileage-card%2Fcheck-submit-button-status';
+		$response  = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
 		$decodedResponse = json_decode($response, true);
 		// get submit button status
 		$readyStatus = $decodedResponse['SubmitReady'] == "1" ? true : false;

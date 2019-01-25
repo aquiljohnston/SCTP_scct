@@ -111,7 +111,7 @@ $(function(){
 
 function mileageCardPmSubmit() {
 	// redundant method; same as multiple_approve_btn_id in approve_multiple_mileagecard.js
-	$('#pm_submit_btn_id').on('click').click(function (event) {
+	$('#mileage_pm_submit_btn_id').on('click').click(function (event) {
 		var projectID = new Array();
 		if($('#mileageProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#mileageProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
 			// get all project ids
@@ -190,7 +190,7 @@ function reloadMileageCardGridView() {
 		$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyMileageCardOnClickListeners();
 			applyMileageCardSubmitButtonListener();
-			pmSubmit();
+			mileageCardPmSubmit();
 			$('#loading').hide();
 		});
 		$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
