@@ -54,7 +54,7 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 			'value' => function($model, $key, $index, $column) {
-				return $model['Approved Time Cards'] . '/' . $model['Total Time Cards'];
+				return $model['Approved Mileage Cards'] . '/' . $model['Total Mileage Cards'];
 			},
 		],
 		[

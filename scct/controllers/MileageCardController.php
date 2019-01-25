@@ -283,6 +283,74 @@ class MileageCardController extends BaseController
     }
 
 	/**
+	 *Displays mileage card details for expanded project
+	 *@throws \yii\web\HttpException
+	 *@returns mixed
+	 */
+	public function actionViewAccountantDetail()
+	{
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+
+			// get the key to generate section table
+			if (isset($_POST['expandRowKey']))
+			{
+				$projectID = $_POST['expandRowKey']['ProjectID'];
+				$startDate = $_POST['expandRowKey']['StartDate'];
+				$endDate = $_POST['expandRowKey']['EndDate'];
+			}else{
+				$projectID = '';
+				$startDate = '';
+				$endDate = '';
+			}
+			
+			$queryParams = [
+					'projectID' => $projectID,
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+				];
+			yii::trace('Query Params: ' . json_encode($queryParams));
+
+			$getUrl = 'mileage-card%2Fget-accountant-details&' . http_build_query([
+					'projectID' => $projectID,
+					'startDate' => $startDate,
+					'endDate' => $endDate,
+				]);
+			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
+			$detailsData = $getResponseData['details'];
+
+			// Put data in data provider
+			$accountantDetialsDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $detailsData,
+				'pagination' => false,
+				'key' => 'MileageCardProjectID',
+			]);
+
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			} else {
+				return $this->render('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
+	
+	/**
      * Displays all time entries for a given time card.
      * @param string $id
      * @throws \yii\web\HttpException
@@ -373,114 +441,7 @@ class MileageCardController extends BaseController
             throw new ServerErrorHttpException();
         }
     }
-
-    /**
-     * Creates a new MileageEntry model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @param $mileageCardId
-     * @param $mileageCardTechId
-     * @param $mileageCardDate
-     * @return mixed
-     */
-    public function actionCreateMileageEntry($mileageCardId, $mileageCardTechId, $mileageCardDate)
-    {
-        //guest redirect
-        if (Yii::$app->user->isGuest) {
-            return $this->redirect(['/login']);
-        }
-        //RBAC Check
-        self::requirePermission("mileageEntryCreate");
-        $model = new MileageEntry();
-
-        //GET DATA TO FILL FORM DROPDOWNS
-        $activityCodeUrl = "activity-code%2Fget-code-dropdowns";
-        $activityCodeResponse = Parent::executeGetRequest($activityCodeUrl);
-        $activityCode = json_decode($activityCodeResponse, true);
-
-        if ($model->load(Yii::$app->request->post())) {
-            //create timeEntryTitle variable
-            $mileageEntryTitle = "mileageEntry";
-
-            //concatenate start time
-            $MileageEntryStartTimeConcatenate = new DateTime($mileageCardDate . $model->MileageEntryStartDate);
-            $MileageEntryStartTimeConcatenate = $MileageEntryStartTimeConcatenate->format('Y-m-d H:i:s');
-
-            //concatenate end time
-            $MileageEntryEndTimeConcatenate = new DateTime($mileageCardDate . $model->MileageEntryEndDate);
-            $MileageEntryEndTimeConcatenate = $MileageEntryEndTimeConcatenate->format('Y-m-d H:i:s');
-
-            // check user input validate StartingMileage and EndingMileage
-            // MileageEntryStartTime and MileageEntryEndTime
-            $startMileageObj = $model->MileageEntryStartingMileage;
-            $endMileageObj = $model->MileageEntryEndingMileage;
-            $CheckStartTime = $MileageEntryStartTimeConcatenate;
-            $CheckEndTime = $MileageEntryEndTimeConcatenate;
-            $startTimeObj = new DateTime($CheckStartTime);
-            $endTimeObj = new DateTime($CheckEndTime);
-
-            $mileage_entry_data[] = array(
-                'MileageEntryUserID' => $mileageCardTechId,
-                'MileageEntryStartingMileage' => $model->MileageEntryStartingMileage,
-                'MileageEntryEndingMileage' => $model->MileageEntryEndingMileage,
-                'MileageEntryStartDate' => $MileageEntryStartTimeConcatenate,
-                'MileageEntryEndDate' => $MileageEntryEndTimeConcatenate,
-                'MileageEntryType' => '0', //Automatically set the mileage entry type to 0 for BUSINESS - Andre V.
-                'MileageEntryActivityID' => '3', //Automatically set the mileage entry activity type to 3 for PRODUCTION - Andre V.
-                'MileageEntryMileageCardID' => $mileageCardId,
-                'MileageEntryApprovedBy' => $model->MileageEntryApprovedBy,
-                'MileageEntryComment' => $model->MileageEntryComment,
-            );
-
-            // check difference between StartingMileage and EndingMileage
-            if ($endTimeObj > $startTimeObj && $endMileageObj > $startMileageObj) {
-                $time_entry_data = array();
-                $data[] = array(
-                    'ActivityUID' => BaseController::generateUID($mileageEntryTitle),
-                    'ActivityTitle' => $mileageEntryTitle,
-                    'ActivityCreatedBy' => Yii::$app->session['userID'],
-                    'timeEntry' => $time_entry_data,
-                    'mileageEntry' => $mileage_entry_data,
-                );
-
-                $activity = array(
-                    'activity' => $data,
-                );
-
-                $json_data = json_encode($activity);
-
-                try {
-                    // post url
-                    $url_send_activity = 'activity%2Fcreate';
-                    $response_activity = Parent::executePostRequest($url_send_activity, $json_data, Constants::API_VERSION_2);
-                    $obj = json_decode($response_activity, true);
-
-                    return $this->redirect(['view', 'id' => $obj["activity"][0]["mileageEntry"][0]["MileageEntryMileageCardID"]]);
-                } catch (\Exception $e) {
-                    $concatenate_id = $mileageCardId . "yes";
-                    return $this->redirect(['view', 'id' => $concatenate_id]);
-                }
-
-            } else {
-                return $this->redirect(['view', 'id' => $mileageCardId]);
-            }
-            /*
-            $json_data = json_encode($data);
-
-            //Execute the POST call
-            $url_send = "mileage-entry%2Fcreate";
-            Parent::executePostRequest($url_send, $json_data);
-
-            return $this->redirect(['view', 'id' => $mileageCardId]);
-            */
-        } else {
-            return $this->render('create_mileage_entry', [
-                'model' => $model,
-                'activityCode' => $activityCode,
-            ]);
-        }
-
-    }
-
+	
     /**
      * Approve an existing MileageCard.
      * If approve is successful, the browser will be redirected to the 'view' page.
