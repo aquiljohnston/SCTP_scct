@@ -46,6 +46,7 @@ class PermissionDictionary {
         'mileageEntryView', // View a mileage entry
         'mileageEntryCreate', // Create a mileage entry
         'mileageEntryDeactivate', // Deactivate a mileage entry
+		'mileageCardPmSubmit', // pm submit mileage cards
         'notificationsGet', // Get notifications
         'projectGetAll', // Get an array of all projects
         'projectView', // View a project
@@ -66,6 +67,7 @@ class PermissionDictionary {
         'timeEntryView', // View a time entry
         'timeEntryCreate', // Create a time entry
         'timeEntryDeactivate', // Deactivate a time entry
+		'timeCardPmSubmit', // pm submit time cards
 		'getAllTask', //Get an array of all task
 		'createTaskEntry', //Create a task entry
         'userGetActive', // Get all active users
@@ -99,7 +101,6 @@ class PermissionDictionary {
 		'viewCGE', //View CGE
         'viewTrackerMenu', // View Tracker
 		'viewTrainingMenu', // View Training Videos
-		'timeCardPmSubmit', // pm submit time cards
     ];
 
     private static $scctTemplatePermissions = [
