@@ -576,6 +576,44 @@ class MileageCardController extends BaseController
 		}
 	}	
 	
+	public function actionAccountantSubmit()
+	{
+        try{
+        	$data = Yii::$app->request->post();	
+			
+			$response = [];
+            $params['params'] = [
+				'projectIDArray' => json_encode($data['projectIDs']),
+				'startDate' => $data['weekStart'],
+				'endDate' => $data['weekEnd']
+			];
+			$jsonBody = json_encode($params);
+			
+            $mcSubmitUrl = 'mileage-card%2Faccountant-submit';
+			
+			$submitResponse = json_decode(Parent::executePutRequest($mcSubmitUrl, $jsonBody, Constants::API_VERSION_3), true);
+			
+			if($submitResponse['success'] == 1)
+			{
+				$response['success'] = TRUE; 
+				$response['message'] = 'Successfully Completed Mileage Card Process.'; 
+				return json_encode($response);
+			} else {
+				$response['success'] = FALSE; 
+                $response['message'] = 'Exception'; 
+                return json_encode($response);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch (\Exception $e) {
+            $response['success'] = FALSE; 
+            $response['message'] = 'Exception occurred.'; 
+			return json_encode($response);
+        }
+    }
+	
 	/**
 	 * Execute API request to get status for submit button
 	 * @param int $projectID id of currently selected project
