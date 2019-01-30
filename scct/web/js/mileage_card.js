@@ -6,6 +6,7 @@ $(function(){
 	var mileageProjectFilterDD = $('#mileageProjectFilterDD');
     mileageEntries = [];           
     mileageCardPmSubmit();
+	mileageCardAccountantSubmit();
 	
 	$(document).ready(function () {
 		if(jqWeekSelection.length > 0)
@@ -154,6 +155,90 @@ function mileageCardPmSubmit() {
 	});
 }
 
+function mileageCardAccountantSubmit() {
+	//apply tooltip for button status
+	$( document ).tooltip();
+    
+    if($('#mileage_acc_submit_btn_id').hasClass('off-btn')){
+       $('#mileage_acc_submit_btn_id').attr("title", "Not all mileage cards have been approved.");
+    } 
+    if($('#mileage_acc_submit_btn_id').attr('submitted') == 'true'){
+      $('#mileage_acc_submit_btn_id').attr("title", "All mileage cards have been submitted.");
+    }
+	
+    $('#mileage_acc_submit_btn_id').on('click').click(function (event) {
+        //apply css class that gives the tooltip gives
+        //the appearance of being disabled via css
+        //add returns false to prevent submission in
+        //this state.
+        if($(this).hasClass('off-btn')){
+			return false;
+        }
+
+        var quantifier  = "";
+        var projectIDs  = [];
+        
+        $('#mileageProjectFilterDD option').each(function(){
+            if($(this).val()!=""){
+				projectIDs.push($(this).val());
+            } 
+        })
+
+        dateRangeDD = $('[name="DynamicModel[dateRangeValue]"]').val();
+		//check if date picker is active
+		if(dateRangeDD == 'other'){
+			dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
+			dateRange = dateRange.split(" - ");
+		}else{
+			dateRange = dateRangeDD.split(",");
+		}
+        weekStart = dateRange[0];
+        weekEnd = $.trim(dateRange[1]);
+
+        var primaryKeys = $('#GridViewForMileageCard').yiiGridView('getSelectedRows');
+        if(primaryKeys.length <= 1 ) {
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (confirmation) {
+			if (confirmation) {
+				$('#loading').show();
+				
+				//usage $.ctGrow(msg,title,boostrap text class)
+				$.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
+
+				payload = {
+					projectIDs : projectIDs,
+					weekStart : weekStart,
+					weekEnd : weekEnd,
+				}
+				
+				$.ajax({
+					type: 'POST',
+					url: '/mileage-card/accountant-submit',
+					data:payload,
+					success: function(response) {
+						response = JSON.parse(response);
+						if(response.success){
+							$.ctGrowl.msg(response.message,'Success','bg-success');
+							reloadMileageCardGridView();
+						} else {
+							$.ctGrowl.msg(response.message,'Error','bg-danger');
+							$('#loading').hide();
+						}
+					}
+				});
+			} else {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+			}
+		}) 
+    });
+}
+
 function reloadMileageCardGridView() {
 	var form = $('#mileageCardDropdownContainer').find("#MileageCardForm");
 	//get sort value
@@ -189,7 +274,7 @@ function reloadMileageCardGridView() {
 			});
 		$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyMileageCardOnClickListeners();
-			applyMileageCardSubmitButtonListener();
+			mileageCardAccountantSubmit();
 			mileageCardPmSubmit();
 			$('#loading').hide();
 		});

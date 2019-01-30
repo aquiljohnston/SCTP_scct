@@ -121,6 +121,11 @@ div[id^=modalContent] .wrap #top-wrapper {
 	margin-right: 22%;
 	margin-top: -1.8%;
 }
+#mileage_acc_submit_btn_id{
+	float: right;
+	padding-left: 11%;
+	padding-right: 11%;
+}
 #mileageDatePickerContainer{
 	margin-top: -5.2%;
 	margin-left: -15%;
