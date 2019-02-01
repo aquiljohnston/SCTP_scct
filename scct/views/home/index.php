@@ -45,6 +45,25 @@ $timeCardCol = [
             }
         }
     ],
+];
+
+$mileageCardCol = [
+    'Project',
+    'Number of Items',
+    ['class' => 'kartik\grid\ActionColumn',
+        'header' => 'View',
+        'template' => '{view}',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view' && $model['Project'] === 'Total') {
+                $url = '/mileage-card/index?projectFilterString='
+				. $this->context->getAllProjects();
+                return $url;
+            } else {
+                $url = '/mileage-card/index?projectID=' . $model['ProjectID'];
+                return $url;
+            }
+        }
+    ],
 ]; ?>
 
 <div class="home-index">
@@ -56,7 +75,6 @@ $timeCardCol = [
         'bootstrap' => false,
         'export' => false,
         'caption' => 'Notifications',
-
         'columns' => $notificationCol
     ]); ?>
 
@@ -68,7 +86,17 @@ $timeCardCol = [
         'bootstrap' => false,
         'export' => false,
         'caption' => 'Unapproved Time Cards',
-
         'columns' => $timeCardCol
+    ]); ?>
+	
+	<!-- Table for Unapproved Mileage Cards -->
+    <?= GridView::widget([
+        'id' => 'homeMileageCardWidget',
+        'dataProvider' => $mileageCardProvider,
+        'layout' => "{items}\n{pager}",
+        'bootstrap' => false,
+        'export' => false,
+        'caption' => 'Unapproved Mileage Cards',
+        'columns' => $mileageCardCol
     ]); ?>
 </div>

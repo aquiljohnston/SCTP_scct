@@ -21,6 +21,7 @@ class HomeController extends BaseController
 
     public $notificationInfo;
     public $timeCardInfo;
+    public $mileageCardInfo;
 
     /**
      * Lists all home models.
@@ -45,6 +46,7 @@ class HomeController extends BaseController
 
             $this->notificationInfo = [];
             $this->timeCardInfo = [];
+            $this->mileageCardInfo = [];
 
             try {
                 if ($dataProvider["notifications"] != null) {
@@ -52,6 +54,9 @@ class HomeController extends BaseController
                 }
                 if ($dataProvider["timeCards"] != null) {
                     $this->timeCardInfo = $dataProvider["timeCards"];
+                }
+				if ($dataProvider["mileageCards"] != null) {
+                    $this->mileageCardInfo = $dataProvider["mileageCards"];
                 }
             } catch (ErrorException $error) {
                 //Continue - Unable to retrieve equipment item
@@ -70,16 +75,18 @@ class HomeController extends BaseController
                     'pageSize' => 10,
                 ]
             ]);
-
-            GridView::widget
-            ([
-                'dataProvider' => $notificationProvider,
+			
+			$mileageCardProvider = new ArrayDataProvider([
+                'allModels' => $this->mileageCardInfo,
+                'pagination' => [
+                    'pageSize' => 10,
+                ]
             ]);
-
+			
             return $this->render('index', [
-                'model' => $this->timeCardInfo,
                 'notificationProvider' => $notificationProvider,
-                'timeCardProvider' => $timeCardProvider]);
+                'timeCardProvider' => $timeCardProvider,
+				'mileageCardProvider' => $mileageCardProvider]);
         } catch (UnauthorizedHttpException $e){
             return Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
