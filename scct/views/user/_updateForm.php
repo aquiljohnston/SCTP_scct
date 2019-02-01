@@ -96,6 +96,15 @@ use kartik\form\ActiveForm;
 						'showLabels'=>false
 					])->dropDownList($roles); ?>
 				</div>
+				<?= Html::activeLabel($model, 'hasPersonalVehicle', [
+					'label' => 'Personal Vehicle',
+					'class' => 'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-2">
+					<?= $form->field($model, 'hasPersonalVehicle', [
+						'showLabels' => false
+					])->dropDownList($yesNo); ?>
+				</div>
 				<?= Html::activeLabel($model, 'UserPreferredEmail', [
 					'label' => 'Email',
 					'class' => 'col-sm-2 control-label'

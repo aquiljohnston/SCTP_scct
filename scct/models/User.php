@@ -65,6 +65,7 @@ class User extends \yii\base\model implements IdentityInterface
 	public $UserModifiedDTLTOffset;
 	public $UserInactiveDTLTOffset;
 	public $UserPreferredEmail;
+	public $hasPersonalVehicle;
 
 	const MAX_NAME_LENGTH = 100;
 	const MAX_FIRST_NAME_LENGTH = 50;
@@ -83,7 +84,7 @@ class User extends \yii\base\model implements IdentityInterface
     {
         return [
             [['UserName', 'UserFirstName', 'UserLastName', 'UserEmployeeType', 'UserPhone', 'UserCompanyName', 'UserCompanyPhone', 'UserAppRoleType', 'UserComments', 'UserKey', 'UserCreatedDTLTOffset'], 'string'],
-            [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy'], 'integer'],
+            [['UserID', 'UserActiveFlag', 'UserModifiedDTLTOffset', 'UserInactiveDTLTOffset', 'UserCreatedBy', 'UserModifiedBy', 'hasPersonalVehicle'], 'integer'],
 			['UserPreferredEmail', 'email'],
             ['UserPassword', 'string'],
             [['UserCreatedDate', 'UserModifiedDate'], 'safe'],
@@ -128,60 +129,6 @@ class User extends \yii\base\model implements IdentityInterface
             'UserPreferredEmail' => 'User Preferred Email',
         ];
     }
-
-    // /**
-     // * @return \yii\db\ActiveQuery
-     // */
-    // public function getEquipmentTbs()
-    // {
-        // return $this->hasMany(EquipmentTb::className(), ['EquipmentAssignedUserID' => 'UserID']);
-    // }
-
-    // /**
-     // * @return \yii\db\ActiveQuery
-     // */
-    // public function getProjectUserTbs()
-    // {
-        // return $this->hasMany(ProjectUserTb::className(), ['ProjUserUserID' => 'UserID']);
-    // }
-
-    // /**
-     // * @return \yii\db\ActiveQuery
-     // */
-    // public function getUserKey()
-    // {
-        // return $this->hasOne(KeyTb::className(), ['KeyID' => 'UserKey']);
-    // }
-	
-	
-	
-	// //////identity interface methods/////
-    // public static function findIdentity($id)
-    // {
-        // return static::findOne($id);
-    // }
-
-    // public static function findIdentityByAccessToken($token, $type = null)
-    // {
-        // return static::findOne(['access_token' => $token]);
-    // }
-
-    // public function getId()
-    // {
-		// //$userID = Yii::$app->session['userID'];
-        // //return $userID;
-		// return $this->UserID;
-    // }
-
-    // public function getAuthKey()
-    // {
-        // return $this->authKey;
-    // }
-
-    // public function validateAuthKey($authKey)
-    // {
-        // return $this->authKey === $authKey;
-    // }
 	
 	//identity interface methods
     public static function findIdentity($id)
