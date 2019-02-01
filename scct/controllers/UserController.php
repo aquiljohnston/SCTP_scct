@@ -192,13 +192,12 @@ class UserController extends BaseController
 			if (Yii::$app->user->isGuest) {
 				return $this->redirect(['/login']);
 			}
-			Yii::Trace("user id: " . Yii::$app->user->getId());
 
 			self::requirePermission('userCreate');
 			$model = new User();
 
 			//get App Roles for form dropdown
-			$rolesUrl = "dropdown%2Fget-roles-dropdowns";
+			$rolesUrl = 'dropdown%2Fget-roles-dropdowns';
 			$rolesResponse = Parent::executeGetRequest($rolesUrl);
 			$roles = json_decode($rolesResponse, true);
 
@@ -206,6 +205,11 @@ class UserController extends BaseController
 			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
+			
+			$yesNo = [
+				0 => 'No',
+				1 => 'Yes'
+			];
 
 			if ($model->load(Yii::$app->request->post())) {
 				$model->UserActiveFlag = 1;
@@ -238,6 +242,7 @@ class UserController extends BaseController
 						'model' => $model,
 						'roles' => $roles,
 						'types' => $types,
+						'yesNo' => $yesNo,
 						'duplicateFlag' => 1,
 					]);
 				}
@@ -247,6 +252,7 @@ class UserController extends BaseController
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
+					'yesNo' => $yesNo,
 					'duplicateFlag' => 0,
 				]);
 			}
@@ -290,6 +296,11 @@ class UserController extends BaseController
 			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
+			
+			$yesNo = [
+				0 => 'No',
+				1 => 'Yes'
+			];
 
 			if ($model->load(Yii::$app->request->post())) {
 				$data = $model->attributes;
@@ -316,6 +327,7 @@ class UserController extends BaseController
 					'model' => $model,
 					'roles' => $roles,
 					'types' => $types,
+					'yesNo' => $yesNo,
 				]);
 			}
 		} catch (UnauthorizedHttpException $e){
