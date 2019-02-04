@@ -88,11 +88,13 @@ class HomeController extends BaseController
                 'timeCardProvider' => $timeCardProvider,
 				'mileageCardProvider' => $mileageCardProvider]);
         } catch (UnauthorizedHttpException $e){
-            return Yii::$app->response->redirect(['login/index']);
+            Yii::$app->response->redirect(['login/index']);
         } catch (ForbiddenHttpException $e) {
-            return Yii::$app->response->redirect(['login/index']);
+            throw $e;
+        } catch (ErrorException $e) {
+            throw new \yii\web\HttpException(400);
         } catch (Exception $e) {
-            return Yii::$app->response->redirect(['login/index']);
+            throw new ServerErrorHttpException();
         }
     }
 
