@@ -615,6 +615,27 @@ class MileageCardController extends BaseController
     }
 	
 	/**
+     * render Image
+     * @param null $photoPath
+     * @return string|\yii\web\Response
+     */
+    public function actionViewImage($photoPath = null){
+        // Verify logged in
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('viewImage', [
+                'photoPath' => $photoPath
+            ]);
+        } else {
+            return $this->render('viewImage', [
+                'photoPath' => $photoPath
+            ]);
+        }
+    }
+	
+	/**
 	 * Execute API request to get status for submit button
 	 * @param int $projectID id of currently selected project
 	 * @param array $projectDropDown array of dropdown key value pairs
