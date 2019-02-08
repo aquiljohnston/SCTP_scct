@@ -12,12 +12,7 @@ use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 
 ?>
-<style>
-/*fix overflow header* -- eigyan*/
-    .kv-thead-float{
-    width: 100% !important;
-    }
-</style>
+
 <div id="viewAssetModalContainer">
     <div id="assetDispatchContainer">
         <?php yii\widgets\Pjax::begin(['id' => 'assetDispatchForm']) ?>
@@ -43,6 +38,7 @@ use kartik\grid\GridView;
             <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
             <input id="inspectionType" type="hidden" name="inspectionType"  value=<?php echo $inspectionType; ?> />
             <input id="billingCode" type="hidden" name="billingCode"  value=<?php echo $billingCode; ?> />
+            <input id="officeName" type="hidden" name="officeName"  value=<?php echo $officeName; ?> />
             <input id="viewAssignedAssetPageNumber" type="hidden" name="viewAssignedAssetPageNumber" value="1"/>
         </div>
         <?php ActiveForm::end(); ?>
@@ -221,6 +217,7 @@ use kartik\grid\GridView;
 				var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
 				var inspectionType = $('#inspectionType').val() == "/" ? "" : $('#inspectionType').val();
 				var billingCode = $('#billingCode').val() == "/" ? "" : $('#billingCode').val();
+				var officeName = $('#officeName').val() == "/" ? "" : $('#officeName').val();
 				$('#loading').show();
 				$.pjax.reload({
 					type: 'GET',
@@ -233,7 +230,9 @@ use kartik\grid\GridView;
 						//reset to first page
 						viewAssignedAssetPageNumber : 1,
 						inspectionType : inspectionType,
-						billingCode : billingCode,},
+						billingCode : billingCode,
+						officeName : officeName,
+					},
 					timeout: 99999,
 					push: false,
 					replace: false,
@@ -265,6 +264,7 @@ use kartik\grid\GridView;
         var sectionNumberSelected = $('#sectionNumberSelected').val() == "/" ? "" : $('#sectionNumberSelected').val();
         var inspectionType = $('#inspectionType').val() == "/" ? "" : $('#inspectionType').val();
         var billingCode = $('#billingCode').val() == "/" ? "" : $('#billingCode').val();
+        var officeName = $('#officeName').val() == "/" ? "" : $('#officeName').val();
         $('#loading').show();
         $.pjax.reload({
             type: 'GET',
@@ -276,7 +276,9 @@ use kartik\grid\GridView;
 				sectionNumberSelected : sectionNumberSelected,
 				viewAssignedAssetPageNumber : page,
 				inspectionType : inspectionType,
-				billingCode : billingCode,},
+				billingCode : billingCode,
+				officeName : officeName,
+			},
             timeout: 99999,
             push: false,
             replace: false,

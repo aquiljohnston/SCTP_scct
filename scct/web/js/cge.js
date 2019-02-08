@@ -106,7 +106,6 @@ function getCgeDispatchAssetsData(assignedUserIDs) {
 			IsCge: true
 		});
     });
-	console.log('AssetData '  + JSON.stringify(cgeDispatchAssetsData));
     return cgeDispatchAssetsData;
 }
 
@@ -118,10 +117,10 @@ function getCgeDispatchMapGridData(assignedUserIDs) {
 			AssignedUserID: assignedUserIDs,
 			BillingCode: $(this).attr("BillingCode"),
 			InspectionType: $(this).attr("InspectionType"),
+			OfficeName: $(this).attr("OfficeName"),
 			IsCge: true
 		});
 	});
-	console.log('MapGridData '  + JSON.stringify(cgeDispatchMapGridData));
 	return cgeDispatchMapGridData;
 }
 
