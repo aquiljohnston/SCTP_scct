@@ -87,7 +87,16 @@ use yii\bootstrap\Modal;
                     'view' => function($url, $model) {
                         $modalViewAssetAssigned = "#modalViewAssetAssigned";
                         $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?billingCode=".$model['BillingCode']."&inspectionType=".$model['InspectionType']."&mapGridSelected=" . $model['MapGrid'] ."&sectionNumberSelected=" . $model['SectionNumber'] . "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
+                        return Html::a('', null, [
+							'class' =>'glyphicon glyphicon-eye-open',
+							'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?billingCode=".$model['BillingCode']
+							."&inspectionType=".$model['InspectionType']
+							."&officeName=".$model['OfficeName']
+							."&mapGridSelected=" . $model['MapGrid']
+							."&sectionNumberSelected=" . $model['SectionNumber'] .
+							"','".$modalViewAssetAssigned 
+							."','".$modalContentViewAssetAssigned
+							."','".$model['MapGrid']."')"]);
                     }
                 ],
             ],

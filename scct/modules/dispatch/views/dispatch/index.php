@@ -142,7 +142,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                             'view' => function($url, $model) {
                                 $modalViewAssetDispatch = "#modalViewAssetDispatch";
                                 $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=".$model['BillingCode']."&inspectionType=".$model['InspectionType']."&mapGridSelected=" . $model['MapGrid']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."','".$model['MapGrid']."')"]);
+                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' =>
+									"viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=".$model['BillingCode']
+									."&inspectionType=".$model['InspectionType']
+									."&mapGridSelected=" . $model['MapGrid']
+									."&officeName=" . $model['OfficeName']
+									."','".$modalViewAssetDispatch 
+									."','".$modalContentViewAssetDispatch
+									."','".$model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
@@ -157,6 +164,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 								'MapGrid' => $model['MapGrid'],
 								'BillingCode' => $model['BillingCode'],
 								'InspectionType' => $model['InspectionType'],
+								'OfficeName' => $model['OfficeName'],
 								'disabled' => false
 							];
                         }

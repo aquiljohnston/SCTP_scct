@@ -12,12 +12,6 @@ use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
-<style>
-/*fix overflow header* -- eigyan*/
-    .kv-thead-float{
-    width: 100% !important;
-    }
-</style>
 
 <div id="viewAssetModalContainer">
     <div id="assetDispatchContainer">
@@ -43,6 +37,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
         <input id="inspectionType" type="hidden" name="inspectionType" value="<?php echo $inspectionType; ?>" />
         <input id="billingCode" type="hidden" name="billingCode" value="<?php echo $billingCode; ?>"/>
+        <input id="officeName" type="hidden" name="officeName" value="<?php echo $officeName; ?>"/>
         <input id="viewDispatchAssetPageNumber" type="hidden" name="viewDispatchAssetPageNumber" value="1"/>
         <?php ActiveForm::end(); ?>
         <?php yii\widgets\Pjax::end() ?>
@@ -229,7 +224,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 				var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
 				var inspectionType = $('#inspectionType').val();
 				var billingCode = $('#billingCode').val();
-				console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
+				var officeName = $('#officeName').val();
 				$('#loading').show();
 				$.pjax.reload({
 					type: 'GET',
@@ -243,7 +238,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 						viewDispatchAssetPageNumber:1, 
 						recordsPerPageSelected: recordsPerPageSelected,
 						inspectionType: inspectionType,
-						billingCode: billingCode
+						billingCode: billingCode,
+						officeName: officeName
 					},
 					timeout: 99999,
 					push: false,
@@ -266,6 +262,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         var recordsPerPageSelected = $('#dispatchAssetsPageSize').val();
         var inspectionType = $('#inspectionType').val();
         var billingCode = $('#billingCode').val();
+        var officeName = $('#officeName').val();
         console.log("searchFilterVal: "+searchFilterVal+" mapGridSelected: "+mapGridSelected+" sectionNumberSelected: "+sectionNumberSelected);
         $('#loading').show();
         $.pjax.reload({
@@ -279,7 +276,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 viewDispatchAssetPageNumber:page, 
                 recordsPerPageSelected: recordsPerPageSelected,
                 inspectionType: inspectionType,
-                billingCode: billingCode
+                billingCode: billingCode,
+                officeName: officeName
             },
             timeout: 99999,
             push: false,
