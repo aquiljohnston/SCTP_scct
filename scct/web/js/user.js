@@ -4,6 +4,7 @@ $(function() {
 
     $(document).off('click', '#searchCleanFilterButton').on('click', '#searchCleanFilterButton', function (){
         $('#userSearchFilter').val("");
+		$('#UserManagementPageNumber').val(1);
         reloadGridView();
     });
 
@@ -11,10 +12,9 @@ $(function() {
         var key = event.which;
         if (key == 13) {
             var searchFilterVal = $('#userSearchFilter').val();
-            console.log("about to call");
-            console.log("searchFilterVal: " + searchFilterVal);
             if (event.keyCode == 13) {
                 event.preventDefault();
+				$('#UserManagementPageNumber').val(1);
                 reloadGridView();
             }
         }
