@@ -59,7 +59,6 @@ $(function () {
 
     //expandable row column listener
     $(document).off('kvexprow:toggle', "#assignedTable #assignedGV").on('kvexprow:toggle', "#assignedTable #assignedGV", function (event, ind, key, extra, state) {
-        console.log('Toggled expand row');
 		keyStr = JSON.stringify(key);
         var isCheckDisabled = $(this).find("[data-key='"+keyStr+"']").find('input[type=checkbox]').is(':disabled');
         var inProgressFlag = $(this).find("[data-key='"+keyStr+"']").find('input[type=checkbox]').attr('InProgressFlag');
@@ -71,7 +70,6 @@ $(function () {
 			$(this).find("[data-key='"+keyStr+"']").find('.assignedCheckbox input[type=checkbox]').prop('checked', false).prop('disabled', true);
         }
         assignedMap_MapGrid =$("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
-        console.log("assignedMap_MapGrid: " +assignedMap_MapGrid.length);
 
         //check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0){

@@ -1,8 +1,4 @@
 /*dispatch css*/
-.dispatch{
-    overflow-y: hidden;
-}
-
 #dispatchTab{
     height: 140px;
     padding:10px;
@@ -58,9 +54,6 @@
     z-index: 3;
     border-bottom:1px solid black;
 }
-#dispatchTab h3{
-    padding-left:1%;
-}
 .summary{
     margin-top: 10px;
 }
@@ -83,6 +76,7 @@
     margin-right:0.5%;
 }
 #dispatchUnassignedTable .table-responsive {
+	max-height: 51vh;
     margin-top:0px;
     width:100%;
 }
