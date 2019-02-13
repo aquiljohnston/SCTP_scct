@@ -25,44 +25,45 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 12%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 12%;'],
             ],
             [
                 'label' => 'Location Type',
                 'attribute' => 'LocationType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 36.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 40%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 40%;'],
             ],
             [
                 'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-            ],
-            [   //PROJECT-498
-                'label' => '',
-                'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
-            ],
-            [   //PROJECT-501
-                'label' => '',
-                'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-            ],
-            [   //PROJECT-501
-                'label' => '',
-                'attribute' => 'OfficeName',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
             ],
             [
-                'header' => 'View Asset',
+                'label' => '',
+                'attribute' => 'InspectionType',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'label' => '',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'label' => '',
+                'attribute' => 'OfficeName',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'header' => '',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetDispatch = "#modalViewAssetDispatch";
@@ -81,10 +82,10 @@ use yii\bootstrap\Modal;
                 }
             ],
             [
-                'header' => 'Add Surveyor',
+                'header' => '',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
+                'contentOptions' => ['class' => 'text-center dispatchSectionCheckbox', 'style' => 'width: 4%;'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
                         return [

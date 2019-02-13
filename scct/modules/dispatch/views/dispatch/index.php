@@ -69,75 +69,72 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ExpandRowColumn',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:2%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:2%'],
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
                         'value' => function ($model, $key, $index, $column) {
                             return GridView::ROW_COLLAPSED;
                         },
-
                         'detailUrl' => Url::to(['dispatch/view-section']),
                         'detailAnimationDuration' => 'fast'
                     ],
                     [
                         'label' => 'Map Grid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
-                        'format' => 'html',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                     ],
 					[
                         'label' => 'Division',
                         'attribute' => 'Division',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
 						'visible' => $divisionFlag,
-                        'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
-                        'format' => 'html',
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15%'],
                     ],
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15%'],
                     ],
                     [
                         'label' => 'Available Work Order',
                         'attribute' => 'AvailableWorkOrderCount',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                     ], 
                     [
                         'label' => 'Inspection Type',
                         'attribute' => 'InspectionType',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                     ],
                     [
                         'label' => 'Billing Code',
                         'attribute' => 'BillingCode',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                     ],
                     [
                         'label' => 'Office Name',
                         'attribute' => 'OfficeName',
-                        'headerOptions' => ['class' => 'text-center'],
-                        'contentOptions' => ['class' => 'text-center'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                     ],
                     [
+						'header' => 'View<br/>Assets',
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
-                        'header' => 'View<br/>Assets',
-                        'contentOptions' => [
-                            'class' => 'ViewAssetBtn_DispatchMapGrid'
-                        ],
+						'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                        'contentOptions' => ['class' => 'text-center ViewAssetBtn_DispatchMapGrid', 'style' => 'width: 4%'],
                         'buttons' => [
                             'view' => function($url, $model) {
                                 $modalViewAssetDispatch = "#modalViewAssetDispatch";
@@ -156,9 +153,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         }
                     ],
                     [
-                        'header' => 'Add Surveyor',
+                        'header' => 'Add<br/>Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
-                        'contentOptions' => ['class' => 'dispatchCheckbox'],
+						'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                        'contentOptions' => ['class' => 'text-center dispatchCheckbox', 'style' => 'width: 4%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             return [
 								'MapGrid' => $model['MapGrid'],

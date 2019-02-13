@@ -22,67 +22,56 @@ use yii\bootstrap\Modal;
         //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 1.47%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 1.47%'],
-                'value' => function($model){
-                    return "";
-                }
-            ],
-            [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15.4%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.4%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 12%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 12%'],
             ],
             [
-                'label' => 'Assigned User(s)',
+                'label' => '',
                 'attribute' => 'SearchString',
-                //'attribute' => 'AssignedUser',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0; width:15.9%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%'],
-
-                'format' => 'html',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width:15%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15%'],
             ],
             [
                 'label' => 'Location Type',
                 'attribute' => 'LocationType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 38.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 38.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 27.5%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 27.5%'],
             ],
 			[
-				'label' => 'Remaining/Total',
+				'label' => '',
 				'attribute' => 'Counts',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;width: 6.5%'],
-				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.5%'],
-				'format' => 'html',
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%'],
+				'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%'],
 				'value' => function ($model) {
 					return $model['Remaining'] . "/" . $model['Total'];
 				}
 			],
             [
-                'label' => 'Inspection Type',
+                'label' => '',
                 'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%; opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 11.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
             ],
             [
-                'label' => 'Billing Code',
+                'label' => '',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%; opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
             ],
             [
                 'label' => '',
                 'attribute' => 'OfficeName',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.5%'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
             ],
             [
+				'header' => '',
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
-                'header' => 'View<br/>Assets',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0; width:6%;'],
-                'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection','style'=>'padding-right:19px;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedSection', 'style' => 'width: 4%'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetAssigned = "#modalViewAssetAssigned";
@@ -101,10 +90,10 @@ use yii\bootstrap\Modal;
                 ],
             ],
             [
-                'header' => 'Remove User',
+                'header' => '',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'opacity: 0;'],
-                'contentOptions' => ['class' => 'text-center assignedSectionCheckbox'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                'contentOptions' => ['class' => 'text-center assignedSectionCheckbox', 'style' => 'width: 4%'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     return [
 						'SectionNumber' => $model['SectionNumber'],
