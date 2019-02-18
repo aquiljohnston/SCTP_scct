@@ -132,7 +132,7 @@ class TimeCardController extends BaseController
 					//set default values
 					$model->pageSize = 50;
 					$model->employeeID = '';
-					$model->dateRangeValue = $priorWeek;
+					$model->dateRangeValue = $currentWeek;
 					$model->dateRangePicker	= null;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
