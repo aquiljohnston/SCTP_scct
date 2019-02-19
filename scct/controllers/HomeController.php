@@ -7,6 +7,7 @@ use yii\base\ErrorException;
 use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
 use Exception;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
