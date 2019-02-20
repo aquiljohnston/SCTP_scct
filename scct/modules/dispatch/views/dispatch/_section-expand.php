@@ -25,66 +25,75 @@ use yii\bootstrap\Modal;
             [
                 'label' => 'Section Number',
                 'attribute' => 'SectionNumber',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.7%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 12%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 12%;'],
             ],
             [
                 'label' => 'Location Type',
                 'attribute' => 'LocationType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 36.7%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 35.7%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 40%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 40%;'],
             ],
             [
                 'label' => '',
                 'attribute' => 'AvailableWorkOrderCount',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-            ],
-            [   //PROJECT-498
-                'label' => '',
-                'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15.9%;'],
-            ],
-            [   //PROJECT-501
-                'label' => '',
-                'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-            ],
-            [   //PROJECT-501
-                'label' => '',
-                'attribute' => 'OfficeName',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
-                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10.9%;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
             ],
             [
-                'header' => 'View Asset',
+                'label' => '',
+                'attribute' => 'InspectionType',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'label' => '',
+                'attribute' => 'BillingCode',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'label' => '',
+                'attribute' => 'OfficeName',
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+            ],
+            [
+                'header' => '',
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view}',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
+                'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
+                'contentOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
                 'buttons' => [
                     'view' => function($url, $model) {
                         $modalViewAssetDispatch = "#modalViewAssetDispatch";
                         $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
-                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=".$model['BillingCode']."&inspectionType=".$model['InspectionType']."&mapGridSelected=" . $model['MapGrid']."&sectionNumberSelected=".$model['SectionNumber']."','".$modalViewAssetDispatch ."','".$modalContentViewAssetDispatch."','".$model['MapGrid']."')"]);
+                        return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=".$model['BillingCode']
+							."&inspectionType=".$model['InspectionType']
+							."&mapGridSelected=" . $model['MapGrid']
+							."&sectionNumberSelected=".$model['SectionNumber']
+							."&officeName=".$model['OfficeName']
+							."','".$modalViewAssetDispatch 
+							."','".$modalContentViewAssetDispatch
+							."','".$model['MapGrid']."')"]);
                     }
                 ],
                 'urlCreator' => function ($action, $model, $key, $index) {
                 }
             ],
             [
-                'header' => 'Add Surveyor',
+                'header' => '',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center', 'style' => 'visibility: hidden;'],
-                'contentOptions' => ['class' => 'dispatchSectionCheckbox'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%;'],
+                'contentOptions' => ['class' => 'text-center dispatchSectionCheckbox', 'style' => 'width: 4%;'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     if (!empty($model))
                         return [
 							'SectionNumber' => $model['SectionNumber'],
 							'MapGrid' => $model['MapGrid'],
 							'BillingCode' => $model['BillingCode'],
-							'InspectionType' => $model['InspectionType']
+							'InspectionType' => $model['InspectionType'],
+							'OfficeName' => $model['OfficeName']
 						];
                     else
                         return "";

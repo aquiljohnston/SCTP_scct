@@ -35,7 +35,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
                             ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
                             ->label('Records Per Page', [
-                                'class' => ''
+                                'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
                 <span class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
@@ -82,51 +82,50 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ExpandRowColumn',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:5.1%'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:5.1%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width:2%'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width:2%'],
                         'expandAllTitle' => 'Expand all',
                         'collapseTitle' => 'Collapse all',
                         'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
                         'value' => function ($model, $key, $index, $column) {
                             return GridView::ROW_COLLAPSED;
                         },
-
                         'detailUrl' => Url::to(['assigned/view-section']),
                         'detailAnimationDuration' => 'fast',
                     ],
                     [
                         'label' => 'Map Grid',
                         'attribute' => 'MapGrid',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Assigned User(s)',
                         'attribute' => 'AssignedUser',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 15%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 15%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance Start',
                         'attribute' => 'ComplianceStart',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Compliance End',
                         'attribute' => 'ComplianceEnd',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 20%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 20%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Completed (%)',
                         'attribute' => 'Percent Completed',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%'],
                         'format' => 'raw',
                         'value' => function ($model, $key, $index) {
                             return Html::a(
@@ -139,8 +138,8 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					[
                         'label' => 'Remaining/Total',
                         'attribute' => 'Remaining',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%'],
                         'format' => 'html',
                         'value' => function ($model) {
                             return $model['Remaining'] . "/" . $model['Total'];
@@ -149,45 +148,53 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     [
                         'label' => 'Inspection Type',
                         'attribute' => 'InspectionType',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Billing Code',
                         'attribute' => 'BillingCode',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
                         'label' => 'Office Name',
                         'attribute' => 'OfficeName',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%;'],
-                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 16.3%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 10%;'],
+                        'contentOptions' => ['class' => 'text-center', 'style' => 'width: 10%'],
                         'format' => 'html',
                     ],
                     [
+						'header' => 'View<br/>Assets',
                         'class' => 'kartik\grid\ActionColumn',
                         'template' => '{view}',
-                        'header' => 'View<br/>Assets',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%'],
-                        'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedMapGrid', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                        'contentOptions' => ['class' => 'text-center ViewAssetBtn_AssignedMapGrid', 'style' => 'width: 4%'],
                         'buttons' => [
                             'view' => function($url, $model) {
                                 $modalViewAssetAssigned = "#modalViewAssetAssigned";
                                 $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
-                                return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid']."&inspectionType=".$model['InspectionType'] . "&billingCode=".$model['BillingCode']. "','".$modalViewAssetAssigned ."','".$modalContentViewAssetAssigned."','".$model['MapGrid']."')"]);
+                                return Html::a('', null, [
+									'class' =>'glyphicon glyphicon-eye-open',
+									'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid']
+									."&inspectionType=".$model['InspectionType'] 
+									."&billingCode=".$model['BillingCode']
+									."&officeName=".$model['OfficeName']
+									. "','".$modalViewAssetAssigned 
+									."','".$modalContentViewAssetAssigned
+									."','".$model['MapGrid']."')"]);
                             }
                         ],
                         'urlCreator' => function ($action, $model, $key, $index) {
                         }
                     ],
                     [
-                        'header' => 'Remove Surveyor',
+                        'header' => 'Remove<br/>Surveyor',
                         'class' => 'kartik\grid\CheckboxColumn',
-                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%; word-wrap: break-word;'],
-                        'contentOptions' => ['class' => 'text-center assignedCheckbox', 'style' => 'width: 5%'],
+                        'headerOptions' => ['class' => 'text-center', 'style' => 'width: 4%'],
+                        'contentOptions' => ['class' => 'text-center assignedCheckbox', 'style' => 'width: 4%'],
                         'checkboxOptions' => function ($model, $key, $index, $column) {
                             if ($model['InProgressFlag'] != "1")
 								$disabled = false;

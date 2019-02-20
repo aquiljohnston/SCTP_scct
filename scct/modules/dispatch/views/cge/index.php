@@ -135,6 +135,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 								'MapGrid' => $model['MapGrid'],
 								'BillingCode' => $model['BillingCode'],
 								'InspectionType' => $model['InspectionType'],
+								'OfficeName' => $model['OfficeName'],
 								'disabled' => ($model['ScheduleRequired'] == 1 ? 'disabled' : false)
 							];
                         }

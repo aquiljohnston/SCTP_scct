@@ -3,11 +3,16 @@
 }
 #homeEquipmentWidget{
 	float: left;
-	width: 49%;
+	width: 32%;
 }
 #homeTimeCardWidget{
 	float: left;
-	width: 49%;
+	width: 32%;
+	margin-left: 2%;
+}
+#homeMileageCardWidget{
+	float: left;
+	width: 32%;
 	margin-left: 2%;
 }
 .home-index tbody tr:last-child {

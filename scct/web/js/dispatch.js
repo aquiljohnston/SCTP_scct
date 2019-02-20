@@ -155,7 +155,8 @@ function getDispatchMapArray(assignedUserIDs) {
 			MapGrid: $(this).attr('MapGrid'),
 			AssignedUserID: assignedUserIDs,
 			BillingCode: $(this).attr('BillingCode'),
-			InspectionType: $(this).attr('InspectionType')
+			InspectionType: $(this).attr('InspectionType'),
+			OfficeName: $(this).attr("OfficeName")
 		});
 	});
 	return mapGridArray;
@@ -170,7 +171,8 @@ function getDispatchSectionArray(assignedUserIDs) {
 			SectionNumber: $(this).attr("SectionNumber"),
 			AssignedUserID: assignedUserIDs,
 			BillingCode: $(this).attr("BillingCode"),
-			InspectionType: $(this).attr("InspectionType")
+			InspectionType: $(this).attr("InspectionType"),
+			OfficeName: $(this).attr("OfficeName")
 		});
 	});
 	return dispatchSectionArray;

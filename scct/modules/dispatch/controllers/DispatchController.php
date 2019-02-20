@@ -91,6 +91,7 @@ class DispatchController extends \app\controllers\BaseController
 						'MapGrid' => $dispatchData['MapGrid'],
 						'InspectionType' => $dispatchData['InspectionType'],
 						'BillingCode' => $dispatchData['BillingCode'],
+						'OfficeName' => $dispatchData['OfficeName'],
 					);
 				},
             ]);
@@ -184,16 +185,19 @@ class DispatchController extends \app\controllers\BaseController
 				$mapGridSelected = $_POST['expandRowKey']['MapGrid'];
 				$inspectionType = $_POST['expandRowKey']['InspectionType'];
 				$billingCode = $_POST['expandRowKey']['BillingCode'];
+				$officeName = $_POST['expandRowKey']['OfficeName'];
 			}else{
 				$mapGridSelected = '';
 				$inspectionType = '';
 				$billingCode = '';
+				$officeName = '';
 			}     
 
 			$getUrl = 'dispatch%2Fget-available&' . http_build_query([
 					'mapGridSelected' => $mapGridSelected,
 					'inspectionType' => $inspectionType,
 					'billingCode' => $billingCode,
+					'officeName' => $officeName,
 					'filter' => $sectionFilterParams
 				]);
 
@@ -212,6 +216,7 @@ class DispatchController extends \app\controllers\BaseController
 						'SectionNumber' => $sectionData['SectionNumber'],
 						'InspectionType' => $sectionData['InspectionType'],
 						'BillingCode' => $sectionData['BillingCode'],
+						'OfficeName' => $sectionData['OfficeName'],
 					);
 				},
 			]);
@@ -249,11 +254,10 @@ class DispatchController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, $recordsPerPageSelected = 200, $inspectionType=null,$billingCode=null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $sectionNumberSelected = null, 
+		$recordsPerPageSelected = 200, $inspectionType = null, $billingCode = null, $officeName = null)
     {
 		try{
-			Yii::trace("CALL VIEW ASSET");
-
 			$model = new \yii\base\DynamicModel([
 				'modalSearch', 'mapGridSelected', 'sectionNumberSelected', 'pagesize'
 			]);
@@ -269,20 +273,16 @@ class DispatchController extends \app\controllers\BaseController
 
 			if (Yii::$app->request->get()){
 				//todo: need to remove hard code value
-				$viewAssetFilterParams      = $searchFilterVal;
-				$mapGridSelectedParam       = $mapGridSelected;
+				$viewAssetFilterParams = $searchFilterVal;
+				$mapGridSelectedParam = $mapGridSelected;
 				$sectionNumberSelectedParam = $sectionNumberSelected;
-				$viewAssetPageSizeParams    = $recordsPerPageSelected;
-				$inspectionType             = $inspectionType; 
-				$billingCode                = $billingCode; 
+				$viewAssetPageSizeParams = $recordsPerPageSelected;
+				$inspectionType = $inspectionType; 
+				$billingCode = $billingCode;
+				$officeName = $officeName;
 
 				$pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
 
-				//include inspection type and billingType for dispatch assets query
-				//$inspectionType = Yii::$app->getRequest()->getQueryParam('inspectionType');
-			   // $billingCode = Yii::$app->getRequest()->getQueryParam('billingCode');
-
-				Yii::trace('PAGE AT : '.$pageAt);
 			} else {
 				$viewAssetFilterParams = "";
 				$pageAt = 1;
@@ -295,21 +295,19 @@ class DispatchController extends \app\controllers\BaseController
 			$getSurveyorsResponse = json_decode(Parent::executeGetRequest($getSurveyorUrl, Constants::API_VERSION_2), true); // indirect rbac
 
 			$getUrl = 'dispatch%2Fget-available-assets&' . http_build_query([
-					'mapGridSelected'       => $mapGridSelectedParam,
+					'mapGridSelected' => $mapGridSelectedParam,
 					'sectionNumberSelected' => $sectionNumberSelectedParam,
-					'filter'                => $viewAssetFilterParams,
-					'listPerPage'           => $viewAssetPageSizeParams,
-					'page'                  => $pageAt,
-					'inspectionType'        => $inspectionType,
-					'billingCode'           => $billingCode
+					'filter' => $viewAssetFilterParams,
+					'listPerPage' => $viewAssetPageSizeParams,
+					'page' => $pageAt,
+					'inspectionType' => $inspectionType,
+					'billingCode' => $billingCode,
+					'officeName' => $officeName,
 				]);
 
 			$getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-
-			//var_dump($getAssetDataResponse); exit();
-
+			
 			$data = self::reGenerateAssetsData($getAssetDataResponse['assets'], $getSurveyorsResponse['users']);
-			Yii::trace("reGenerateAssetsData " . json_encode($data));
 
 			// Put data in data provider
 			$assetDataProvider = new ArrayDataProvider
@@ -325,28 +323,30 @@ class DispatchController extends \app\controllers\BaseController
 
 			if (Yii::$app->request->isAjax) {
 				return $this->renderAjax('view_asset_modal', [
-					'assetDataProvider'         => $assetDataProvider,
-					'model'                     => $model,
-					'pages'                     => $pages,
-					'searchFilterVal'           => $viewAssetFilterParams,
-					'mapGridSelected'           => $mapGridSelectedParam,
-					'sectionNumberSelected'     => $sectionNumberSelectedParam,
-					'viewAssetPageSizeParams'   => $viewAssetPageSizeParams,
-					'inspectionType'            => $inspectionType,
-					'billingCode'               => $billingCode
+					'assetDataProvider' => $assetDataProvider,
+					'model' => $model,
+					'pages' => $pages,
+					'searchFilterVal' => $viewAssetFilterParams,
+					'mapGridSelected' => $mapGridSelectedParam,
+					'sectionNumberSelected' => $sectionNumberSelectedParam,
+					'viewAssetPageSizeParams' => $viewAssetPageSizeParams,
+					'inspectionType' => $inspectionType,
+					'billingCode' => $billingCode,
+					'officeName' => $officeName
 
 				]);
 			} else {
 				return $this->render('view_asset_modal', [
-					'assetDataProvider'         => $assetDataProvider,
-					'model'                     => $model,
-					'pages'                     => $pages,
-					'searchFilterVal'           => $viewAssetFilterParams,
-					'mapGridSelected'           => $mapGridSelectedParam,
-					'sectionNumberSelected'     => $sectionNumberSelectedParam,
-					'viewAssetPageSizeParams'   => $viewAssetPageSizeParams,
-					'inspectionType'            => $inspectionType,
-					'billingCode'               => $billingCode
+					'assetDataProvider' => $assetDataProvider,
+					'model' => $model,
+					'pages' => $pages,
+					'searchFilterVal' => $viewAssetFilterParams,
+					'mapGridSelected' => $mapGridSelectedParam,
+					'sectionNumberSelected' => $sectionNumberSelectedParam,
+					'viewAssetPageSizeParams' => $viewAssetPageSizeParams,
+					'inspectionType' => $inspectionType,
+					'billingCode' => $billingCode,
+					'officeName' => $officeName
 				]);
 			}
 		} catch (UnauthorizedHttpException $e){
