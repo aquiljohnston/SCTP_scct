@@ -67,7 +67,6 @@ class AssignedController extends \app\controllers\BaseController
                     'sortOrder' => $sortOrder,
                 ]);
             $getAssignedDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("ASSIGNED DATA: " . json_encode($getAssignedDataResponse));
             $assignedData = $getAssignedDataResponse['mapGrids'];
 
             //todo: check permission to un-assign work
@@ -89,7 +88,7 @@ class AssignedController extends \app\controllers\BaseController
 						'MapGrid' => $assignedData['MapGrid'],
                         'InspectionType' => $assignedData['InspectionType'],
                         'BillingCode' => $assignedData['BillingCode'],
-
+                        'OfficeName' => $assignedData['OfficeName']
 					);
 				},
             ]);
@@ -207,16 +206,19 @@ class AssignedController extends \app\controllers\BaseController
 				$mapGridSelected = $_POST['expandRowKey']['MapGrid'];
 				$inspectionType = $_POST['expandRowKey']['InspectionType'];
 				$billingCode = $_POST['expandRowKey']['BillingCode'];
+				$officeName = $_POST['expandRowKey']['OfficeName'];
 			}else{
 				$mapGridSelected = "";
 				$inspectionType = '';
 				$billingCode = '';
+				$officeName = '';
 			}
 
 			$getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
 					'mapGridSelected' => $mapGridSelected,
 					'inspectionType' => $inspectionType,
 					'billingCode' => $billingCode,
+					'officeName' => $officeName,
 					'filter' => $assignedFilterParams
 				]);
 			$getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
@@ -231,6 +233,7 @@ class AssignedController extends \app\controllers\BaseController
 						'SectionNumber' => $sectionData['SectionNumber'],
 						'InspectionType' => $sectionData['InspectionType'],
 						'BillingCode' => $sectionData['BillingCode'],
+						'OfficeName' => $sectionData['OfficeName'],
 					);
 				},
 			]);
@@ -263,7 +266,8 @@ class AssignedController extends \app\controllers\BaseController
      * render asset modal
      * @return string|Response
      */
-    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $billingCode = null, $sectionNumberSelected = null, $inspectionType=null)
+    public function actionViewAsset($searchFilterVal = null, $mapGridSelected = null, $billingCode = null, $sectionNumberSelected = null
+		, $inspectionType = null, $officeName = null)
     {
 		try{
 			$model = new \yii\base\DynamicModel([
@@ -285,6 +289,7 @@ class AssignedController extends \app\controllers\BaseController
 				$sectionNumberSelectedParam = $sectionNumberSelected;
 				$inspectionType = $inspectionType; 
 				$billingCode = $billingCode;
+				$officeName = $officeName;
 				//should this not be hard coded?
 				$viewAssetPageSizeParams = 200;
 				$pageAt = Yii::$app->getRequest()->getQueryParam('viewAssignedAssetPageNumber');
@@ -306,8 +311,9 @@ class AssignedController extends \app\controllers\BaseController
 					'filter' => $viewAssetFilterParams,
 					'listPerPage' => $viewAssetPageSizeParams,
 					'page' => $pageAt,
-					'inspectionType'        => $inspectionType,
-					'billingCode' => $billingCode
+					'inspectionType' => $inspectionType,
+					'billingCode' => $billingCode,
+					'officeName' => $officeName
 				]);
 			$getAssetDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 
@@ -333,6 +339,7 @@ class AssignedController extends \app\controllers\BaseController
 				'sectionNumberSelected' => $sectionNumberSelectedParam,
 				'inspectionType' => $inspectionType,
 				'billingCode' => $billingCode,
+				'officeName' => $officeName,
 			];
 			if (Yii::$app->request->isAjax) {
 				return $this->renderAjax('view_asset_modal', $params);

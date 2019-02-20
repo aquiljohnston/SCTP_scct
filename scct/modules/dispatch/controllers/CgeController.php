@@ -80,6 +80,7 @@ class CgeController extends \app\controllers\BaseController
 						'MapGrid' => $cgeData['MapGrid'],
 						'InspectionType' => $cgeData['InspectionType'],
 						'BillingCode' => $cgeData['BillingCode'],
+						'OfficeName' => $cgeData['OfficeName'],
 					);
 				},
             ]);
@@ -167,16 +168,19 @@ class CgeController extends \app\controllers\BaseController
 				$mapGridSelected = $_POST['expandRowKey']['MapGrid'];
 				$inspectionType = $_POST['expandRowKey']['InspectionType'];
 				$billingCode = $_POST['expandRowKey']['BillingCode'];
+				$officeName = $_POST['expandRowKey']['OfficeName'];
 			}else{
 				$mapGridSelected = '';
 				$inspectionType = '';
 				$billingCode = '';
+				$officeName = '';
 			}
 			
 			$getUrl = 'cge%2Fget-by-map&' . http_build_query([
 				'mapGrid' => $mapGridSelected,
 				'inspectionType' => $inspectionType,
-				'billingCode' => $billingCode
+				'billingCode' => $billingCode,
+				'officeName' => $officeName
 			]);
 			$getSectionDataResponseResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
 			$sectionData = $getSectionDataResponseResponse['cges'];
