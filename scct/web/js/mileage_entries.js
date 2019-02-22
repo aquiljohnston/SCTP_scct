@@ -1,6 +1,3 @@
-/**
- * Created by tzhang on 12/20/2017.
- */
 $(function () {
     $(document).ready(function () {
         if ($('#ShowMileageEntriesView').length > 0) {
@@ -93,13 +90,11 @@ function applyMilageEntryListeners() {
 			!($("#allMileageEntries-container input:checkbox:checked").length > 0));
 	});
 	
-	//apply listeners on cells with data for deactivation
+	//apply listeners on cells with data for view entry by day modal
 	$(document).off('click', '#allMileageEntries tbody tr td').on('click', '#allMileageEntries tbody tr td',function (){
 		id = $('#mileageCardId').val();
 		seq_num = $(this).attr('data-col-seq');
-		taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
 		date = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
-		var entries = [];
 		//clean up date format for sending
 		date = date.replace(/\-/g, '/');
 
@@ -159,14 +154,14 @@ function validateMileageToolTip() {
         if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)
             && (!$("#approve_mileageCard_btn_id").prop("disabled"))) 
 		{
-            $(this).attr("title","Click to deactivate this mileage entry!")
+            $(this).attr("title","Click to view details.")
         } 
 		else if ($('#isAccountant').val() && !$('#isSubmitted').val() &&
 			$(this).attr('data-col-seq') >=1 &&
 			($(this).text()!="") &&
 			($(this).parent().attr('data-key')>0))
 		{
-            $(this).attr("title","Click to deactivate this mileage entry!")
+            $(this).attr("title","Click to view details.")
         }
     });
 }

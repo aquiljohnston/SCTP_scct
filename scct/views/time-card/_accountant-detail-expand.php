@@ -12,7 +12,6 @@ use kartik\grid\GridView;
         'export' => false,
         'id' => 'accountantDetailGV',
         'summary' => '',
-        //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
            
             [

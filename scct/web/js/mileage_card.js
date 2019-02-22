@@ -67,51 +67,22 @@ $(function(){
             reloadMileageCardGridView();
         }
     });
+	
+	$(document).off('click', '#mileageCardClearDropdownFilterButton').on('click', '#mileageCardClearDropdownFilterButton', function (){
+        $('#mileageProjectFilterDD').val("All");
+        $('#mileageEmployeeFilterDD').val("All");
+		$('#mileageCardPageNumber').val(1);
+        reloadMileageCardGridView();
+    });
 
     $(document).off('click', '#mileageCardSearchCleanFilterButton').on('click', '#mileageCardSearchCleanFilterButton', function (){
         $('#mileageCardFilter').val("");
 		$('#mileageCardPageNumber').val(1);
         reloadMileageCardGridView();
     }); 
-	
-	//TODO look into extracting out because of redundancies in time card js
-	//function called when other is selected in week dropdown to reset widget to default
-	function resetDatePicker(){
-		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
-		//create default start end
-		var fm = moment().startOf('day') || '';
-		var to = moment() || '';
-		//set default selections in widget
-		datePicker.setStartDate(fm);
-		datePicker.setEndDate(to);
-		//set default date range
-		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
-		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
-	}
-	
-	//TODO look into extracting out because of redundancies in time card js
-	//function to set to and from values for date picker based on current date range
-	function refreshDatePicker(){
-		//get current date range
-		dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
-		//probably a cleaner way to determine if is the initial page load vs refresh
-		//check if initial page load and skip refresh if this is the case
-		if(dateRange.indexOf('text-muted') > -1) return;
-		//parse date range
-		dateRangeArray = dateRange.split(' ');
-		var fm = moment(dateRangeArray[0]);
-		var to = moment(dateRangeArray[2]);
-		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
-		//set date range values
-		datePicker.setStartDate(fm);
-		datePicker.setEndDate(to);
-	}
 });
 
 function mileageCardPmSubmit() {
-	// redundant method; same as multiple_approve_btn_id in approve_multiple_mileagecard.js
 	$('#mileage_pm_submit_btn_id').on('click').click(function (event) {
 		var projectID = new Array();
 		if($('#mileageProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#mileageProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
@@ -131,7 +102,6 @@ function mileageCardPmSubmit() {
 			var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
 			dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
 		}
-		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
 		krajeeDialog.defaults.confirm.title = 'Submit';
 		krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
 			if (resp) {
@@ -160,10 +130,10 @@ function mileageCardAccountantSubmit() {
 	$( document ).tooltip();
     
     if($('#mileage_acc_submit_btn_id').hasClass('off-btn')){
-       $('#mileage_acc_submit_btn_id').attr("title", "Not all mileage cards have been approved.");
+		$('#mileage_acc_submit_btn_id').attr("title", "Not all mileage cards have been approved.");
     } 
     if($('#mileage_acc_submit_btn_id').attr('submitted') == 'true'){
-      $('#mileage_acc_submit_btn_id').attr("title", "All mileage cards have been submitted.");
+		$('#mileage_acc_submit_btn_id').attr("title", "All mileage cards have been submitted.");
     }
 	
     $('#mileage_acc_submit_btn_id').on('click').click(function (event) {
@@ -265,12 +235,6 @@ function reloadMileageCardGridView() {
 		}).done(function (){
 				//reload dropdown values
 				$.pjax.reload({container: '#mileageCardDropDownPjax', async:false});
-				if($('#multiple_submit_btn_id').hasClass('off-btn')){
-					$('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
-				} 
-				if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-					$('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
-				}
 			});
 		$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyMileageCardOnClickListeners();

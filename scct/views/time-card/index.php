@@ -13,12 +13,8 @@ use kartik\grid\CheckboxColumn;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$chosen = "";
 $this->title = 'Time Cards';
 $pageSize = ["50" => "50", "100" => "100", "200" => "200", "500" => "500", "750" => "750"];
-$this->params['download_url'] = '/time-card/download-time-card-data?' . http_build_query([
-        'dateRangeValue' => $model->dateRangeValue
-    ]);
 if($isAccountant)
 {
 	$column = [
@@ -151,20 +147,6 @@ else
 					return $url;
 				}
 			},
-			'buttons' => [
-				// Currently unused due to template string above
-				'delete' => function ($url, $model, $key) {
-					$url = '/time-card/delete?id=' . $model["TimeCardID"];
-					$options = [
-						'title' => Yii::t('yii', 'Delete'),
-						'aria-label' => Yii::t('yii', 'Delete'),
-						'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-						'data-method' => 'Delete',
-						'data-pjax' => '0',
-					];
-					return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
-				},
-			],
 		],
 		[
 			'class' => 'kartik\grid\CheckboxColumn',
@@ -183,7 +165,6 @@ else
 				if ($disabledBoolean) {
 					$result['disabled'] = true;
 				}
-
 				return $result;
 			}
 		],
@@ -213,39 +194,33 @@ else
                         <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                     </div>
                 </div>
-				<?php Pjax::begin(['id' => 'submitApproveButtons', 'timeout' => false]) ?>
+				<?php Pjax::begin(['id' => 'timeCardSubmitApproveButtons', 'timeout' => false]) ?>
 					<div class="row">
 						<div id="multiple_time_card_approve_btn">
 							<?php 
 								$approveButton = [
 									'class' => 'btn btn-primary multiple_approve_btn',
-									'id' => 'multiple_approve_btn_id',
+									'id' => 'tc_multiple_approve_btn_id',
 									'disabled' => true
 								];
 								if($isAccountant) {
 									echo Html::button('Submit',
 									[
 										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
-										'id' => 'multiple_submit_btn_id',
+										'id' => 'time_card_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
 								} elseif($isProjectManager){
 									echo Html::button('Submit',
 									[
 										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
-										'id' => 'pm_submit_btn_id',
+										'id' => 'time_card_pm_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
 									echo Html::button('Approve', $approveButton);
 								} else
 									echo Html::button('Approve',$approveButton);
 							?>
-							<?php
-							if ($pages->totalCount > 0) {
-								?>
-								<a id="export_timecard_btn" class="btn btn-primary" target="_blank"
-								   href="<?= $this->params['download_url']; ?>" style="display: none">Export</a>
-							<?php } ?>
 						</div>
 					</div>
                 <?php Pjax::end() ?>
@@ -253,34 +228,34 @@ else
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
-                <div class="col-md-2 DateRangeDropDown">
+                <div class="col-md-2 TimeCardDateRangeDropDown">
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
 				<?php Pjax::begin(['id' => 'timeCardDropDownPjax', 'timeout' => false]) ?>
 					<?php if($showFilter){ ?>
-						<div class="col-md-2 projectFilterDD">
+						<div class="col-md-2 timeCardProjectFilterDD">
 							<?=
-								$form->field($model, 'projectName', ['labelSpan' => 3])->dropDownList($projectDropDown,
-								['value' => $model->projectName, 'id'=>'projectFilterDD'])->label('Project'); 
+								$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
+								['value' => $model->projectID, 'id'=>'timeCardProjectFilterDD'])->label('Project'); 
 							?>
 						</div>
 					<?php }else{
-						echo "<input type='hidden' value=$model->projectName id='projectFilterDD'>";
+						echo "<input type='hidden' value=$model->projectID id='timeCardProjectFilterDD'>";
 					} ?>
 					<?php if(!$isAccountant){ ?>
-						<div class="col-md-2 employeeFilterDD">
+						<div class="col-md-2 timeCardEmployeeFilterDD">
 							<?=
 								$form->field($model, 'employeeID', ['labelSpan' => 3])->dropDownList($employeeDropDown,
-								['value' => $model->employeeID, 'id'=>'employeeFilterDD'])->label('Employee'); 
+								['value' => $model->employeeID, 'id'=>'timeCardEmployeeFilterDD'])->label('Employee'); 
 							?>
 						</div>
 					<?php } ?>
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearDropdownFilterButton']) ?>
 				<?php Pjax::end() ?>
 					<?php if($model->dateRangeValue == 'other'){ ?>
-						<div id="datePickerContainer" style="float: left; width: auto; display: block;">
+						<div id="timeCardDatePickerContainer" style="float: left; width: auto; display: block;">
 					<?php } else { ?>
-						<div id="datePickerContainer" style="float: left; width: auto; display: none;">
+						<div id="timeCardDatePickerContainer" style="float: left; width: auto; display: none;">
 					<?php } ?>
                     <?= $form->field($model, 'dateRangePicker', [
                         'showLabels' => false
@@ -312,23 +287,23 @@ else
 									});
 									$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
 										$.pjax.reload({
-											container: '#submitApproveButtons',
+											container: '#timeCardSubmitApproveButtons',
 											timeout:false
 										});
-										$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
+										$('#timeCardSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 											applyTimeCardOnClickListeners();
 											applyTimeCardSubmitButtonListener();
 											pmSubmit();
 											$('#loading').hide();
 										});
-										$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
+										$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
 											location.reload();
 										});
 									});
 									$('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
 										location.reload();
 									});
-                                    $('#datePickerContainer').css(\"display\", \"block\"); "."
+                                    $('#timeCardDatePickerContainer').css(\"display\", \"block\"); "."
                             }"],
                     ]); ?>
                 </div>
@@ -369,10 +344,9 @@ else
 <!--ctGrowl-->
  <div id = "ctGrowlContainer"></div>
  <ul id = "ct-growl-clone">
- <ul>
- <li class = "title"></li>
- <li class = "msg"></li>
- <li class = "icon"><span class="close">X</span></li>
+	 <ul>
+		 <li class = "title"></li>
+		 <li class = "msg"></li>
+		 <li class = "icon"><span class="close">X</span></li>
+	 </ul>
  </ul>
- </ul>
-
