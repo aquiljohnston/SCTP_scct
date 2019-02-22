@@ -1,17 +1,4 @@
-#mileage_card_form {
-    margin-right: 9%;
-    margin-top: 3%;
-}
-
-#mileage_card_submit_btn {
-    margin-top: 2%;
-    margin-right: 2%;
-	float:right;
-}
-
-.white_space {
-    margin-top: 3%;
-}
+/*mileage card index*/
 
 .mileageProjectFilterDD {
     margin-top: -1.8%;
@@ -19,14 +6,6 @@
 
 .mileageEmployeeFilterDD {
 	margin-top: -1.8%;
-}
-
-div[id^=modalContent] .container {
-    padding: 10px 15px 0px;
-}
-
-div[id^=modalContent] .wrap #top-wrapper {
-    display: none;
 }
 
 #mileageCardClearDropdownFilterButton  {
@@ -40,6 +19,7 @@ div[id^=modalContent] .wrap #top-wrapper {
 	width:100%;
 	float:left;
 }
+
 #multiple_mileage_card_approve_btn{
     padding-left:0;
 	float: right;
@@ -47,68 +27,40 @@ div[id^=modalContent] .wrap #top-wrapper {
 	margin-right: 0.5%;
 	width: 12%;
 }
+
 #mileageCardGridview .kv-grid-container{
 	max-height:60vh;
 	overflow-y:auto;
 }
+
 #mileageCardDropdownContainer{
 	padding-right:0;
 }
-#mileageCardWeekContainer{
-	float:left;
-}
-#mileageCardPageSizeLabelContainer{
-	float:right;
-}
+
 #mileageCardDropdownContainer label{
 	padding-right:0;
 }
+
 #mileageCardDropdownContainer .form-control{
 	padding:6px 10px;
 }
+
 #GridViewForMileageCard{
 	width:100%;
 	max-height:58vh;
 	overflow-y:auto;
 	overflow-x: hidden;
 }
+
 #MCPagination{
 	margin-top: 1%;
 }
+
 #mileageCardPageSize {
 	margin-left: 110%;
 	margin-top: 15%;
 }
 
-.totalmileage {
-    float: right;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 800;
-}
-
-/*mileageCard view page*/
-.mileagecard-view table{
-	margin-bottom:0px;
-}
-.mileagecard-view p{
-	margin-top:10px;
-}
-.mileagecard-view .grid-view .kv-thead-float{
-	z-index: 2 !important;
-}
-.mileagecard-view .grid-view .kv-grid-wrapper{
-	max-height: 40vh;
-	overflow-y: auto;
-	overflow-x: hidden;
-}
-.mileagecard-view .footerabove{
-	display:none;
-}
-#MileageCardView{
-	max-height: 450px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-}
 #mileageCardSearchCleanFilterButton{
 	width: 32px;
 	cursor: pointer;
@@ -116,29 +68,43 @@ div[id^=modalContent] .wrap #top-wrapper {
 	margin-right: -26.5%;
 	margin-top: -1.8%;
 }
+
 .MileageCardSearch {
 	float: right;
 	margin-right: 22%;
 	margin-top: -1.8%;
 }
+
+.MileageCardDateRangeDropDown {
+	margin-left: 1%;
+	margin-top: -1.8%;
+}
+
+#mc_multiple_approve_btn_id {
+	float: right;
+	padding-left: 9%;
+	padding-right: 9%;
+}
+
 #mileage_acc_submit_btn_id{
 	float: right;
 	padding-left: 11%;
 	padding-right: 11%;
 }
+
 #mileageDatePickerContainer{
 	margin-top: -5.2%;
 	margin-left: -15%;
 }
+
 /*responsive css for table*/
-@media only screen 
-and (min-width : 1360px) {
+@media only screen and (min-width : 1360px) {
 	#GridViewForMileageCard{
 		max-height:57vh;
 	}
 }
-@media only screen 
-and (min-width : 1900px) {
+
+@media only screen and (min-width : 1900px) {
 	#GridViewForMileageCard{
 		max-height:62vh;
 	}
@@ -154,6 +120,27 @@ and (min-width : 1900px) {
 		margin-right: 0.5%;
 		width: 12%;
     }
+	#mc_multiple_approve_btn_id {
+		float: right;
+		padding-left: 9%;
+		padding-right: 9%;
+	}
+}
+
+/* not sure what this is*/
+div[id^=modalContent] .container {
+    padding: 10px 15px 0px;
+}
+div[id^=modalContent] .wrap #top-wrapper {
+    display: none;
+}
+
+/*mileage card show entries*/
+
+#entries_sum_miles {
+	font-size: medium;
+	float: right;
+	margin-right: 1%;
 }
 
 /*custom style for show entries grid view hover*/
@@ -161,6 +148,15 @@ and (min-width : 1900px) {
 	/*cancel out base style*/
     background-color: transparent;
 }
+
 #allMileageEntries table tbody tr td:hover{
     background-color: rgba(57, 12, 255, 0.25);
+}
+
+/*time card task entry form*/
+
+#create_mileage_task_submit_btn{
+	margin-top: -5%;
+	float: right;
+	margin-right: 3%;
 }

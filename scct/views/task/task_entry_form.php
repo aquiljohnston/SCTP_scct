@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tzhang
- * Date: 2018/1/25
- * Time: 16:42
- */
 
 use kartik\form\ActiveForm;
 use kartik\widgets\TimePicker;
@@ -159,10 +153,10 @@ $columns = [
                      array('prompt'=>'--Select an Account Type--')); ?>
             </div>
         </div>
-        <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $timeCardID]); ?>
+        <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $model->TimeCardID]); ?>
+		<?= Html::activeHiddenInput($model, 'WeekStart', ['value' => $model->WeekStart]); ?>
+		<?= Html::activeHiddenInput($model, 'WeekEnd', ['value' => $model->WeekEnd]); ?>
     </div>
-		<input type="hidden" name="weekStart" value=<?=Yii::$app->getRequest()->getQueryParam('weekStart') ?> />
-		<input type="hidden" name="weekEnd" value=<?=Yii::$app->getRequest()->getQueryParam('weekEnd') ?> />
 		<input type="hidden" name="timeCardProjectID" value=<?=Yii::$app->getRequest()->getQueryParam('timeCardProjectID') ?> />
 		<input type="hidden" name="inOvertime" value=<?=Yii::$app->getRequest()->getQueryParam('inOvertime') ?> />
     <br>
@@ -264,5 +258,36 @@ $columns = [
 				$('#loading').hide();
 			});
 		}
+		
+		function TaskEntryCreation() {
+			var form = $('#TaskEntryForm');
+
+			$('#loading').show();
+
+			$.ajax({
+				type: 'POST',
+				url: form.attr("action"),
+				data: form.serialize(),
+				success: function (response) {
+					responseObj = JSON.parse(response);
+					if(responseObj.SuccessFlag == 1)
+					{
+						$.pjax.reload({container:"#ShowTimeEntriesView", timeout: 99999}).done(function(){
+							validateTaskToolTip();
+							$('#create_task_entry_submit_btn').closest('.modal-dialog').parent().modal('hide');
+							$('#loading').hide();
+						});
+					} else {
+						$('#taskWarningMessage').css("display", "block");
+						$('#taskWarningMessage').html(responseObj.warningMessage);
+						$('#loading').hide();
+					}
+				},
+				error : function (){
+					console.log("internal server error");
+				}
+			});
+		}
+
     </script>
 </div>

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tzhang
- * Date: 2018/1/25
- * Time: 16:42
- */
 
 use kartik\form\ActiveForm;
 use kartik\datetime\DateTimePicker;
@@ -61,7 +55,7 @@ use yii\helpers\Url;
 		</div>
 		<br>
 		<br>
-		<div class="form-group" style="margin-top: -5%; float: right; margin-right: 3%;">
+		<div class="form-group">
 			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'create_mileage_task_submit_btn', 'disabled' => 'disabled']) ?>
 		</div>
     <?php ActiveForm::end(); ?>
@@ -108,7 +102,6 @@ use yii\helpers\Url;
 				data: form.serialize(),
 				success: function (response) {
 					responseObj = JSON.parse(response);
-					console.log(responseObj.SuccessFlag);
 					if(responseObj.SuccessFlag == 1)
 					{
 						$.pjax.reload({container:"#ShowMileageEntriesView", timeout: 99999}).done(function(){

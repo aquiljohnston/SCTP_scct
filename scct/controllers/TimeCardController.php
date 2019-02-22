@@ -72,15 +72,14 @@ class TimeCardController extends BaseController
                 'filter',
                 'dateRangeValue',
                 'dateRangePicker',
-				//need to update this key to projectID, the new value that it represents
-                'projectName',
+                'projectID',
 				'employeeID'
             ]);
             $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model ->addRule('dateRangePicker', 'string', ['max' => 32]);//get page number and records per page
             $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
-            $model ->addRule('projectName', 'integer'); //
+            $model ->addRule('projectID', 'integer'); //
             $model ->addRule('employeeID', 'integer'); //
 
             //get current and prior weeks date range
@@ -136,7 +135,7 @@ class TimeCardController extends BaseController
 					$model->dateRangePicker	= null;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
-					$model->projectName = $projectID != null ? $projectID : '';
+					$model->projectID = $projectID != null ? $projectID : '';
 				}
             }
 			
@@ -171,7 +170,7 @@ class TimeCardController extends BaseController
 				'listPerPage' => $model->pageSize,
 				'page' => $page,
 				'filter' => $encodedFilter,
-				'projectID' => $model->projectName,
+				'projectID' => $model->projectID,
 				'employeeID' => $model->employeeID,
 				'sortField' => $sortField,
 				'sortOrder' => $sortOrder,
@@ -182,60 +181,27 @@ class TimeCardController extends BaseController
 			else
 				$url = 'time-card%2Fget-cards&' . $httpQuery;
 
-			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+			//execute request
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
             $response = json_decode($response, true);
             $assets = $response['assets'];
+			
+			//extract format indicators from response data
             $unapprovedTimeCardExist = array_key_exists('unapprovedTimeCardExist', $response) ? $response['unapprovedTimeCardExist'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
 			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
 			
-			//set project for non scct web pm submit, may be a way to combine this with the submit check below
-			if(!$showFilter)
-			{
-				$model->projectName = current(array_keys($projectDropDown));
-			}
-			
-			$projArray = array();
-			$keys = array_keys($projectDropDown);
-			//TODO look into potentially removing this counter. May be able to replace with just array pushes. OR full rework.
-			$projCounter=0;
-			try{
-				// need to check if we have filtered on project (Todo: review why projectID is always empty/null)
-				if($model->projectName != NULL)
-					$projArray[0] = $model->projectName;
-				else {
-					for($i=0;$i<sizeof($keys); $i++) {
-						if($keys[$i] !== "") {
-							$projArray[$projCounter] = $keys[$i];
-							++$projCounter;
-						}
-					}
-				}
-			} catch(Exception $e) {
-				$projArray = $keys;
-				Yii::trace('Error: ' . $e);
-			}
+			//get submit button status
+			$isSubmitReady = self::getSubmitButtonStatus($model->projectID, $projectDropDown, $startDate, $endDate, $isAccountant);
 
-			//should consider moving submit check into its own function
-			$submitCheckData['submitCheck'] = array(
-				'ProjectName' => $projArray,
-				'StartDate' => $startDate,
-				'EndDate' => $endDate,
-				'isAccountant' => $isAccountant
-			);
-			$json_data = json_encode($submitCheckData);
-		
-			$submit_button_ready_url = 'time-card%2Fcheck-submit-button-status';
-			$submit_button_ready_response  = Parent::executePostRequest($submit_button_ready_url, $json_data, Constants::API_VERSION_2);
-			$submit_button_ready = json_decode($submit_button_ready_response, true);
-			// get submit button status
+			//set submit button status
 			if($isAccountant)
-				$accountingSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
+				$accountingSubmitReady = $isSubmitReady;
 			else
-				$pmSubmitReady = $submit_button_ready['SubmitReady'] == "1" ? true : false;
-			Yii::trace("Submit button is: " . $submit_button_ready['SubmitReady']);
+				$pmSubmitReady = $isSubmitReady;
+			
             // passing decode data into dataProvider
             $dataProvider = new ArrayDataProvider
 			([
@@ -346,18 +312,17 @@ class TimeCardController extends BaseController
 			}
 			
 			$queryParams = [
-					'projectID' => $projectID,
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-				];
-			yii::trace('Query Params: ' . json_encode($queryParams));
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			];
 
 			$getUrl = 'time-card%2Fget-accountant-details&' . http_build_query([
-					'projectID' => $projectID,
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-				]);
-			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			]);
+			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
 			$detailsData = $getResponseData['details'];
 
 			// Put data in data provider
@@ -416,7 +381,7 @@ class TimeCardController extends BaseController
 			
 			//build api url paths
 			$entries_url = 'time-card%2Fshow-entries&cardID='.$id;
-			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_2); // rbac check
+			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
 			$cardData = json_decode($resp, true);
 
 			//send entries to function to calculate if given card is in overtime
@@ -429,18 +394,18 @@ class TimeCardController extends BaseController
 			$lName = $lName != null ? $lName : $cardData['card']['UserLastName'];
 
 			//alter from and to dates a bit
-			$from	= str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
-			$to		= str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
-			$from	= explode('/', $from);
+			$from = str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$to = str_replace('-','/',$cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
+			$from = explode('/', $from);
 
 			//holds dates that accompany table header ex. Sunday 10-23
-			$SundayDate 	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
-			$MondayDate		=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']);
-			$TuesdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']);
-			$WednesdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']);
-			$ThursdayDate 	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
-			$FridayDate		=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
-			$SaturdayDate	=  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
+			$SundayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']);
+			$MondayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']);
+			$TuesdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']);
+			$WednesdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']);
+			$ThursdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
+			$FridayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
+			$SaturdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -448,30 +413,30 @@ class TimeCardController extends BaseController
 			]);
 
 			return $this -> render('show-entries', [
-				'model' 			=> $cardData['card'],
-				'task' 				=> $allTask,
-				'from' 				=> $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
-				'to' 				=> $to,
-				'SundayDate' 		=> $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
-				'MondayDate' 		=> $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
-				'TuesdayDate' 		=> $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
-				'WednesdayDate' 	=> $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
-				'ThursdayDate' 		=> $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
-				'FridayDate' 		=> $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
-				'SaturdayDate' 		=> $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-				'projectName'   	=> $projectName,
-				'fName'   			=> $fName,
-				'lName'   			=> $lName,
-				'SundayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
-				'MondayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
-				'TuesdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
+				'model' => $cardData['card'],
+				'task' => $allTask,
+				'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
+				'to' => $to,
+				'SundayDate' => $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+				'MondayDate' => $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+				'TuesdayDate' => $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+				'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+				'ThursdayDate' => $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+				'FridayDate' => $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+				'SaturdayDate' => $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+				'projectName' => $projectName,
+				'fName' => $fName,
+				'lName' => $lName,
+				'SundayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
+				'MondayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
+				'TuesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
 				'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']))),
-				'ThursdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
-				'FridayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
-				'SaturdayDateFull' 	=> date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
+				'ThursdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
+				'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
+				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isSubmitted' 		=> $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardQBSubmitted']=='Yes',
-				'inOvertime'		=> $inOvertime,
+				'isSubmitted' => $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardQBSubmitted']=='Yes',
+				'inOvertime' => $inOvertime,
 
 			]);
 		} catch (UnauthorizedHttpException $e){
@@ -507,7 +472,7 @@ class TimeCardController extends BaseController
 
 			// post url
 			$putUrl = 'time-card%2Fapprove-cards';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
+			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);
 			$responseTimeCardID = $obj[0]["TimeCardID"];
 		} catch (UnauthorizedHttpException $e){
@@ -536,7 +501,7 @@ class TimeCardController extends BaseController
 			
 			// post url
 			$putUrl = 'time-entry%2Fdeactivate';
-			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_2); // indirect rbac
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
@@ -559,18 +524,13 @@ class TimeCardController extends BaseController
      *
      */
 	public function actionApproveMultiple() {
-		
-		if (Yii::$app->request->isAjax) {
-			
-			try{
-				
+		try{
+			if (Yii::$app->request->isAjax) {
 				$data = Yii::$app->request->post();					
 				 // loop the data array to get all id's.	
 				foreach ($data as $key) {
 					foreach($key as $keyitem){
-					
 					   $TimeCardIDArray[] = $keyitem;
-					   Yii::Trace("TimeCardid is ; ". $keyitem);
 					}
 				}
 				
@@ -580,27 +540,26 @@ class TimeCardController extends BaseController
 				$json_data = json_encode($data);
 				
 				// post url
-					$putUrl = 'time-card%2Fapprove-cards';
-					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-					Yii::trace("PutResponse: ".json_encode($putResponse));
-					return $this->redirect(['index']);
-			} catch (UnauthorizedHttpException $e){
-				Yii::$app->response->redirect(['login/index']);
-			} catch(ForbiddenHttpException $e) {
-				throw $e;
-			} catch(ErrorException $e) {
-				throw new \yii\web\HttpException(400);
-			} catch(Exception $e) {
-				throw new ServerErrorHttpException();
-			}
-		} else {
+				$putUrl = 'time-card%2Fapprove-cards';
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
+				return $this->redirect(['index']);
+			} else {
 			  throw new \yii\web\BadRequestHttpException;
+			}
+		} catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
 		}
 	}
 
 	public function actionPMSubmit() {
-		if (Yii::$app->request->isAjax) {
-			try{
+		try{
+			if (Yii::$app->request->isAjax) {			
 				$data = Yii::$app->request->post();			
 				// set body data
 				$body = array(
@@ -608,40 +567,38 @@ class TimeCardController extends BaseController
 						'dateRangeArray' => $data['dateRangeArray'],
 					);		
 				$json_data = json_encode($body);
-				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit-time-cards', $json_data, Constants::API_VERSION_2); // indirect rbac
-				Yii::Trace("Response data: ". json_encode($putResponse));
+				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit', $json_data, Constants::API_VERSION_3); // indirect rbac
 				return $this->redirect(['index']);
-			} catch (UnauthorizedHttpException $e){
-				Yii::$app->response->redirect(['login/index']);
-			} catch(ForbiddenHttpException $e) {
-				throw $e;
-			} catch(ErrorException $e) {
-				throw new \yii\web\HttpException(400);
-			} catch(Exception $e) {
-				throw new ServerErrorHttpException();
+			} else {
+				throw new \yii\web\BadRequestHttpException;
 			}
-		} else {
-			  throw new \yii\web\BadRequestHttpException;
+		} catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
 		}
 	}
 
-    public function actionAjaxProcessCometTrackerFiles()
+    public function actionAccountantSubmit()
 	{
         try{
-			//TODO clean up JS file so it wont post data that is no longer used. approve_multiple_timecard.js
         	$data = Yii::$app->request->post();	
 			
 			$response = [];
             $params['params'] = [
-			'projectIDArray' => json_encode($data['projectName']),
-			'startDate' => $data['weekStart'],
-			'endDate' => $data['weekEnd']
+				'projectIDArray' => json_encode($data['projectIDs']),
+				'startDate' => $data['weekStart'],
+				'endDate' => $data['weekEnd']
 			];
 			$jsonBody = json_encode($params);
 			
-            $tcSubmitUrl = 'time-card%2Fsubmit-time-cards';
+            $tcSubmitUrl = 'time-card%2Faccountant-submit';
 			
-			$submitResponse = json_decode(Parent::executePutRequest($tcSubmitUrl, $jsonBody, Constants::API_VERSION_2), true);
+			$submitResponse = json_decode(Parent::executePutRequest($tcSubmitUrl, $jsonBody, Constants::API_VERSION_3), true);
 			
 			if($submitResponse['success'] == 1)
 			{
@@ -673,8 +630,7 @@ class TimeCardController extends BaseController
         $data = explode(" ", $dateRange);
         $dateData = [];
         foreach ($data as $item){
-            if($item != "-"){
-                Yii::trace("ITEM: ".$item);
+            if($item != "-"){\
                 array_push($dateData, $item);
             }
         }
@@ -718,9 +674,52 @@ class TimeCardController extends BaseController
             //
              foreach ($assets as $item){
             $timeCardIDs[] = $item['TimeCardID'];
-        }
-    }
-       
+			}
+		}
         return $timeCardIDs;
     }
+	
+	/**
+	 * Execute API request to get status for submit button
+	 * @param int $projectID id of currently selected project
+	 * @param array $projectDropDown array of dropdown key value pairs
+	 * @param string $startDate start of date range
+	 * @param string $endDate end of date range
+	 * @param boolean $isAccountant is current user of role type accountant
+	 * returns boolean status for submit button
+	 */
+	private static function getSubmitButtonStatus($projectID, $projectDropDown, $startDate, $endDate, $isAccountant)
+	{
+		$projArray = array();
+		$keys = array_keys($projectDropDown);
+		$keysCount = count($keys);
+		if($projectID != NULL){
+			$projArray[0] = $projectID;
+		}elseif($keysCount == 1) {
+			$projectID = $keys[0];
+		}else{
+			for($i=0;$i<$keysCount; $i++) {
+				if($keys[$i] !== "") {
+					$projArray[] = $keys[$i];
+				}
+			}
+		}
+
+		//build post body
+		$submitCheckData['submitCheck'] = array(
+			'ProjectName' => $projArray,
+			'StartDate' => $startDate,
+			'EndDate' => $endDate,
+			'isAccountant' => $isAccountant
+		);
+		$json_data = json_encode($submitCheckData);
+	
+		//execute api request
+		$url = 'time-card%2Fcheck-submit-button-status';
+		$response  = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
+		$decodedResponse = json_decode($response, true);
+		// get submit button status
+		$readyStatus = $decodedResponse['SubmitReady'] == "1" ? true : false;
+		return $readyStatus;
+	}
 }
