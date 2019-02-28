@@ -140,10 +140,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 $modalViewAssetDispatch = "#modalViewAssetDispatch";
                                 $modalContentViewAssetDispatch = "#modalContentViewAssetDispatch";
                                 return Html::a('', null, ['class' =>'glyphicon glyphicon-eye-open', 'onclick' =>
-									"viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=".$model['BillingCode']
-									."&inspectionType=".$model['InspectionType']
-									."&mapGridSelected=" . $model['MapGrid']
-									."&officeName=" . $model['OfficeName']
+									"viewAssetRowClicked('/dispatch/dispatch/view-asset?billingCode=" . urlencode($model['BillingCode'])
+									."&inspectionType=" . urlencode($model['InspectionType'])
+									."&mapGridSelected=" . urlencode($model['MapGrid'])
+									."&officeName=" . urlencode($model['OfficeName'])
 									."','".$modalViewAssetDispatch 
 									."','".$modalContentViewAssetDispatch
 									."','".$model['MapGrid']."')"]);

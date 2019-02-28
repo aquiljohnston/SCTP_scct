@@ -178,10 +178,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 $modalContentViewAssetAssigned = "#modalContentViewAssetAssigned";
                                 return Html::a('', null, [
 									'class' =>'glyphicon glyphicon-eye-open',
-									'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . $model['MapGrid']
-									."&inspectionType=".$model['InspectionType'] 
-									."&billingCode=".$model['BillingCode']
-									."&officeName=".$model['OfficeName']
+									'onclick' => "viewAssetRowClicked('/dispatch/assigned/view-asset?mapGridSelected=" . urlencode($model['MapGrid'])
+									."&inspectionType=" . urlencode($model['InspectionType']) 
+									."&billingCode=" . urlencode($model['BillingCode'])
+									."&officeName=" . urlencode($model['OfficeName'])
 									. "','".$modalViewAssetAssigned 
 									."','".$modalContentViewAssetAssigned
 									."','".$model['MapGrid']."')"]);
