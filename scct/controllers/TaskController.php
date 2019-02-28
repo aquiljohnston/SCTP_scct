@@ -63,6 +63,11 @@ class TaskController extends BaseController
 			$model-> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
 			$model-> addRule('WeekStart', 'string', ['max' => 32], 'required');
 			$model-> addRule('WeekEnd', 'string', ['max' => 32], 'required');
+			
+			//set default hidden form values
+			$model->TimeCardID = $TimeCardID;
+			$model->WeekStart = $weekStart;
+			$model->WeekEnd = $weekEnd;
 				
 			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 				// convert to 24 hour format
