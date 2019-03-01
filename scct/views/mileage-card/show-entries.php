@@ -114,7 +114,7 @@ use yii\widgets\Pjax;
 		]);
 		?>
 		<?= Html::label('Total Miles: '. $model['SumMiles'],
-			null, ['id' => 'task_sum_hours']) ?>
+			null, ['id' => 'entries_sum_miles']) ?>
 		<input type="hidden" value=<?php echo $model["MileageCardID"]?> name="mileageCardId" id="mileageCardId">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
 		<input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">

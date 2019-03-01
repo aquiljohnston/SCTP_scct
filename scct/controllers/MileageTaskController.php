@@ -1,13 +1,6 @@
 <?php
 namespace app\controllers;
 
-/**
- * Created by PhpStorm.
- * User: tzhang
- * Date: 12/19/2017
- * Time: 9:29 AM
- */
-
 use Yii;
 use app\controllers\BaseController;
 use yii\data\Pagination;
@@ -44,7 +37,7 @@ class MileageTaskController extends BaseController
 				return $this->redirect(['/login']);
 			}
 
-			// convert sundayDate and saturdayDate to MM/dd/YYYY format
+			//convert sundayDate and saturdayDate to MM/dd/YYYY format
 			$sundayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $sundayDate)));
 			$saturdayDate = date( "m/d/Y", strtotime(str_replace('-', '/', $saturdayDate)));
 
@@ -57,11 +50,11 @@ class MileageTaskController extends BaseController
 				'WeekStart',
 				'WeekEnd'
 			]);
-			$model -> addRule('MileageCardID', 'integer', null, 'required');
-			$model -> addRule('Date', 'string', ['max' => 32], 'required');
-			$model -> addRule('TotalMiles', 'number', null, 'required');
-			$model -> addRule('WeekStart', 'string', ['max' => 32], 'required');
-			$model -> addRule('WeekEnd', 'string', ['max' => 32], 'required');
+			$model-> addRule('MileageCardID', 'integer', null, 'required');
+			$model-> addRule('Date', 'string', ['max' => 32], 'required');
+			$model-> addRule('TotalMiles', 'number', null, 'required');
+			$model-> addRule('WeekStart', 'string', ['max' => 32], 'required');
+			$model-> addRule('WeekEnd', 'string', ['max' => 32], 'required');
 				
 			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
 				$mileage_task_data = array(

@@ -115,6 +115,8 @@ function initListeners() {
                 // get inspectors
                 if(selectedReport.ParmInspectorFlag == 1) {
                     dataSync("inspector",reportStartDate,reportEndDate, null, null);
+					//show inspector dropdown
+                    inspectorsListHeader.text("Inspector List: ");
                     toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0], submitButton[0]], "inline");
                 }
 				console.log(selectedReport);
