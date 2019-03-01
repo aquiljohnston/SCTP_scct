@@ -186,7 +186,7 @@ if($isAccountant)
 							<?php 
 								$approveButton = [
 									'class' => 'btn btn-primary multiple_approve_btn',
-									'id' => 'multiple_approve_btn_id',
+									'id' => 'mc_multiple_approve_btn_id',
 									'disabled' => true
 								];
 								if($isAccountant) {
@@ -214,7 +214,7 @@ if($isAccountant)
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'mileageCardFilter'])->label("Search"); ?>
                 </div>
 				<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
-				<div class="col-md-2 DateRangeDropDown">
+				<div class="col-md-2 MileageCardDateRangeDropDown">
 					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
 				</div>
 				<?php Pjax::begin(['id' => 'mileageCardDropDownPjax', 'timeout' => false]) ?>

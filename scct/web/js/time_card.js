@@ -1,11 +1,12 @@
 $(function(){
-    var jqTimeCardFilter    = $('#timecard_filter');
-    var jqTCDropDowns       = $('#timeCardDropdownContainer');
-    var jqWeekSelection     = jqTimeCardFilter.find('#timeCardDateRange');
-    var jqTCPageSize        = jqTCDropDowns.find('#timeCardPageSize');
-    var projectFilterDD     = $('#projectFilterDD');
-    entries                 = [];           
-    pmSubmit();
+    var jqTimeCardFilter = $('#timecard_filter');
+    var jqTCDropDowns = $('#timeCardDropdownContainer');
+    var jqWeekSelection = jqTimeCardFilter.find('#timeCardDateRange');
+    var jqTCPageSize = jqTCDropDowns.find('#timeCardPageSize');
+    var timeCardProjectFilterDD = $('#timeCardProjectFilterDD');
+    entries = [];           
+    timeCardPmSubmit();
+    timeCardAccountantSubmit();
 	$(document).ready(function () {
 		if(jqWeekSelection.length > 0)
 		{
@@ -21,10 +22,10 @@ $(function(){
 			//reset date picker
 			resetDatePicker();
 			//show date picker
-            $('#datePickerContainer').css("display", "block");
+            $('#timeCardDatePickerContainer').css("display", "block");
         }else {
 			//hide date picker
-            $('#datePickerContainer').css("display", "none");
+            $('#timeCardDatePickerContainer').css("display", "none");
             reloadTimeCardGridView();
         }
     });
@@ -36,14 +37,14 @@ $(function(){
         return false;
     });
 
-    $(document).off('change', '#projectFilterDD').on('change', '#projectFilterDD', function (event) {
-		$('#employeeFilterDD').val("All");
+    $(document).off('change', '#timeCardProjectFilterDD').on('change', '#timeCardProjectFilterDD', function (event) {
+		$('#timeCardEmployeeFilterDD').val("All");
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
     });
 	
-	$(document).off('change', '#employeeFilterDD').on('change', '#employeeFilterDD', function (event) {
+	$(document).off('change', '#timeCardEmployeeFilterDD').on('change', '#timeCardEmployeeFilterDD', function (event) {
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
@@ -65,62 +66,34 @@ $(function(){
             reloadTimeCardGridView();
         }
     });
+	
+	$(document).off('click', '#timeCardClearDropdownFilterButton').on('click', '#timeCardClearDropdownFilterButton', function (){
+        $('#timeCardProjectFilterDD').val("All");
+        $('#timeCardEmployeeFilterDD').val("All");
+		$('#timeCardPageNumber').val(1);
+        reloadTimeCardGridView();
+    });
 
     $(document).off('click', '#timeCardSearchCleanFilterButton').on('click', '#timeCardSearchCleanFilterButton', function (){
         $('#timeCardFilter').val("");
 		$('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
     });
-
-	//function called when other is selected in week dropdown to reset widget to default
-	function resetDatePicker(){
-		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
-		//create default start end
-		var fm = moment().startOf('day') || '';
-		var to = moment() || '';
-		//set default selections in widget
-		datePicker.setStartDate(fm);
-		datePicker.setEndDate(to);
-		//set default date range
-		daterange = fm.format('YYYY-MM-DD') + ' - ' + to.format('YYYY-MM-DD');
-		$('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html(daterange);
-	}
-	
-	//function to set to and from values for date picker based on current date range
-	function refreshDatePicker(){
-		//get current date range
-		dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
-		//probably a cleaner way to determine if is the initial page load vs refresh
-		//check if initial page load and skip refresh if this is the case
-		if(dateRange.indexOf('text-muted') > -1) return;
-		//parse date range
-		dateRangeArray = dateRange.split(' ');
-		var fm = moment(dateRangeArray[0]);
-		var to = moment(dateRangeArray[2]);
-		//get date picker object
-		var datePicker = $('#dynamicmodel-daterangepicker-container').data('daterangepicker');
-		//set date range values
-		datePicker.setStartDate(fm);
-		datePicker.setEndDate(to);
-	}
 });
 
-//TODO rename so unique for time card
-function pmSubmit() {
-	// redundant method; same as multiple_approve_btn_id in approve_multiple_timecard.js
-	$('#pm_submit_btn_id').on('click').click(function (event) {
+function timeCardPmSubmit() {
+	$('#time_card_pm_submit_btn_id').on('click').click(function (event) {
 		var projectID = new Array();
-		if($('#projectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#projectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
+		if($('#timeCardProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#timeCardProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
 			// get all project ids
 			projectID = new Array();
-			for ( var i = 0, len = projectFilterDD.options.length; i < len; i++ ) {
-				opt = projectFilterDD.options[i];
+			for ( var i = 0, len = timeCardProjectFilterDD.options.length; i < len; i++ ) {
+				opt = timeCardProjectFilterDD.options[i];
 				if(opt.value.length > 0)
 					projectID.push(opt.value);
 			}
 		} else
-			projectID.push($('#projectFilterDD').val());
+			projectID.push($('#timeCardProjectFilterDD').val());
 		var dateRangeArray = $('#timeCardDateRange').val().split(',');
 		if(dateRangeArray.length == 1) {
 			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
@@ -128,7 +101,6 @@ function pmSubmit() {
 			var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
 			dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
 		}
-		console.log("date range: " + JSON.stringify(dateRangeArray) + ", projects: " + JSON.stringify(projectID));
 		krajeeDialog.defaults.confirm.title = 'Submit';
 		krajeeDialog.confirm('Are you sure you want to submit the selected items?', function (resp) {
 			if (resp) {
@@ -152,16 +124,92 @@ function pmSubmit() {
 	});
 }
 
-  $( function() {
-    $( document ).tooltip();
+function timeCardAccountantSubmit() {
+	//apply tooltip for button status
+	$( document ).tooltip();
     
-    if($('#multiple_submit_btn_id').hasClass('off-btn')){
-       $('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
+    if($('#time_card_submit_btn_id').hasClass('off-btn')){
+		$('#time_card_submit_btn_id').attr("title", "Not all time cards have been approved.");
     } 
-    if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-      $('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
+    if($('#time_card_submit_btn_id').attr('submitted') == 'true'){
+		$('#time_card_submit_btn_id').attr("title", "All time cards have been submitted.");
     }
-});
+	
+    $('#time_card_submit_btn_id').off('click').click(function (event) {
+        //apply css class that gives the tooltip gives
+        //the appearance of being disabled via css
+        //add returns false to prevent submission in
+        //this state.
+        if($(this).hasClass('off-btn')){
+            return false;
+        }
+
+        var quantifier = "";
+        var projectIDs = [];
+        
+        $('#timeCardProjectFilterDD option').each(function(){
+            if($(this).val()!=""){
+                projectIDs.push($(this).val());
+            }
+        })
+
+        dateRangeDD = $('[name="DynamicModel[dateRangeValue]"]').val();
+		//check if date picker is active
+		if(dateRangeDD == 'other'){
+			dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
+			dateRange = dateRange.split(" - ");
+		}else{
+			dateRange = dateRangeDD.split(",");
+		}
+        weekStart = dateRange[0];
+        weekEnd = $.trim(dateRange[1]);
+
+        var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
+			if (resp) {
+				$('#loading').show();
+				
+				var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+
+				//usage $.ctGrow(msg,title,boostrap text class)
+				$.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
+
+				payload = {
+					projectIDs : projectIDs,
+					weekStart : weekStart,
+					weekEnd : weekEnd
+				}
+					   
+				$.ajax({
+					type: 'POST',
+					url: '/time-card/accountant-submit',
+					data:payload,
+					success: function(data) {
+						data = JSON.parse(data);
+						if(data.success){
+							$.ctGrowl.msg(data.message,'Success','bg-success');
+							//calls time_card.js reload function
+							reloadTimeCardGridView();
+						} else {
+							$.ctGrowl.msg(data.message,'Error','bg-danger');
+							$('#loading').hide();
+						}
+					}
+				});
+			} else {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+			}
+		}) 
+    });
+}
 
 //reload table
 function reloadTimeCardGridView() {
@@ -185,25 +233,19 @@ function reloadTimeCardGridView() {
 	});
 	$('#timeCardGridview').off('pjax:success').on('pjax:success', function () {
 		$.pjax.reload({
-			container: '#submitApproveButtons',
+			container: '#timeCardSubmitApproveButtons',
 			timeout:false,
 		}).done(function (){
 				//reload dropdown values
 				$.pjax.reload({container: '#timeCardDropDownPjax', async:false});
-				if($('#multiple_submit_btn_id').hasClass('off-btn')){
-					$('#multiple_submit_btn_id').attr("title", "Not all time cards have been approved.");
-				} 
-				if($('#multiple_submit_btn_id').attr('submitted') == 'true'){
-					$('#multiple_submit_btn_id').attr("title", "All time cards have been submitted.");
-				}
 			});
-		$('#submitApproveButtons').off('pjax:success').on('pjax:success', function () {
+		$('#timeCardSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 			applyTimeCardOnClickListeners();
-			applyTimeCardSubmitButtonListener();
-			pmSubmit();
+			timeCardAccountantSubmit();
+			timeCardPmSubmit();
 			$('#loading').hide();
 		});
-		$('#submitApproveButtons').off('pjax:error').on('pjax:error', function () {
+		$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
 			location.reload();
 		});
 	});

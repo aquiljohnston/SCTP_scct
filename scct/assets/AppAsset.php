@@ -55,8 +55,6 @@ class AppAsset extends AssetBundle
         'js/footer.js',
         //'js/add_surveyor_modal.js',
         'js/logout_btn.js',
-        'js/time_entry_modal.js',
-        'js/mileage_entry_modal.js',
         'js/approve_multiple_timecard.js',
         'js/approve_multiple_mileagecard.js',
         'js/project.js',
@@ -85,6 +83,7 @@ class AppAsset extends AssetBundle
         'js/clients.js',
         'js/task.js',
         'js/notify.js',		
+        'js/datePicker.js',		
     ];
     public $depends = [
         'yii\web\YiiAsset',

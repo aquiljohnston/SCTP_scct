@@ -9,16 +9,18 @@ use app\models\MileageEntry;
 use app\controllers\BaseController;
 use yii\base\Exception;
 use yii\web\NotFoundHttpException;
+use yii\web\ForbiddenHttpException;
+use yii\web\ServerErrorHttpException;
+use yii\web\UnauthorizedHttpException;
 use yii\filters\VerbFilter;
 use yii\grid\GridView;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use yii\web\Request;
-use yii\web\ForbiddenHttpException;
 use \DateTime;
 use yii\data\Pagination;
 use yii\web\Response;
-use yii\web\ServerErrorHttpException;
+
 use app\constants\Constants;
 
 /**
@@ -172,7 +174,6 @@ class MileageCardController extends BaseController
 			]);
 			//set url
 			if($isAccountant)
-				//TODO create this route on the api
 				$url = 'mileage-card%2Fget-accountant-view&' . $httpQuery;
 			else
 				$url = 'mileage-card%2Fget-cards&' . $httpQuery;
@@ -308,17 +309,16 @@ class MileageCardController extends BaseController
 			}
 			
 			$queryParams = [
-					'projectID' => $projectID,
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-				];
-			yii::trace('Query Params: ' . json_encode($queryParams));
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			];
 
 			$getUrl = 'mileage-card%2Fget-accountant-details&' . http_build_query([
-					'projectID' => $projectID,
-					'startDate' => $startDate,
-					'endDate' => $endDate,
-				]);
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			]);
 			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
 			$detailsData = $getResponseData['details'];
 
@@ -522,7 +522,6 @@ class MileageCardController extends BaseController
 				 // loop the data array to get all id's.	
 				foreach ($data as $key) {
 					foreach($key as $keyitem){
-					
 					   $MileageCardIDArray[] = $keyitem;
 					}
 				}
@@ -551,8 +550,8 @@ class MileageCardController extends BaseController
     }
 
 	public function actionPMSubmit() {
-		if (Yii::$app->request->isAjax) {
-			try{
+		try{
+			if (Yii::$app->request->isAjax) {
 				$data = Yii::$app->request->post();			
 				// set body data
 				$body = array(
@@ -562,17 +561,17 @@ class MileageCardController extends BaseController
 				$json_data = json_encode($body);
 				$putResponse = Parent::executePutRequest('mileage-card%2Fp-m-submit', $json_data, Constants::API_VERSION_3); // indirect rbac
 				return $this->redirect(['index']);
-			} catch (UnauthorizedHttpException $e){
-				Yii::$app->response->redirect(['login/index']);
-			} catch(ForbiddenHttpException $e) {
-				throw $e;
-			} catch(ErrorException $e) {
-				throw new \yii\web\HttpException(400);
-			} catch(Exception $e) {
-				throw new ServerErrorHttpException();
+			} else {
+				throw new \yii\web\BadRequestHttpException;
 			}
-		} else {
-			  throw new \yii\web\BadRequestHttpException;
+		} catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
 		}
 	}	
 	

@@ -53,7 +53,7 @@ use yii\widgets\Pjax;
 		</p>
 		<br>
     </div>
-    <?php Pjax::begin(['id' => 'ShowEntriesView', 'timeout' => false]) ?>
+    <?php Pjax::begin(['id' => 'ShowTimeEntriesView', 'timeout' => false]) ?>
 		<?= \kartik\grid\GridView::widget([
 			'id' => 'allTaskEntries',
 			'dataProvider' => $task,
