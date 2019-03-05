@@ -92,9 +92,15 @@ function applyMilageEntryListeners() {
 	
 	//apply listeners on cells with data for view entry by day modal
 	$(document).off('click', '#allMileageEntries tbody tr td').on('click', '#allMileageEntries tbody tr td',function (){
+		//get row and column of this item
+		column = $(this).attr('data-col-seq');
+		row = $(this).closest('tr').attr('data-key');
+		
+		//get record values
 		id = $('#mileageCardId').val();
-		seq_num = $(this).attr('data-col-seq');
-		date = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
+		date = $("#allMileageEntries").find("tr[data-key='0']").find("td[data-col-seq='"+column+"']").text();
+		task = $("#allMileageEntries").find("tr[data-key='"+row+"']").find("td[data-col-seq='0']").text();
+		dateHeader = $('#allMileageEntries thead tr').find("th[data-col-seq='"+column+"']").text();
 		//clean up date format for sending
 		date = date.replace(/\-/g, '/');
 
@@ -102,29 +108,19 @@ function applyMilageEntryListeners() {
 		//with values in the .text()
 		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")
 			&& (!$("#approve_mileageCard_btn_id").prop("disabled") || $('#isAccountant').val())
-			&& !$('#isSubmitted').val()){
-				krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
-				krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
-					if (resp) {
-						$('#loading').show();
-						//build and send payload to deactivate single entry
-						entries.push({taskName : [taskName], day : date, mileageCardID : id});
-						data = {entries};
-						$.ajax({
-							type: 'POST',
-							url: '/mileage-card/deactivate/',
-							data: data,
-							beforeSend: function() {
-							},
-							success: function(data) {
-								$.pjax.reload({container:"#ShowMileageEntriesView", timeout: 99999}).done(function (){
-									$('#loading').hide();
-								});
-							}
-						});
-					}
-				});
-				$('#loading').hide();
+			&& !$('#isSubmitted').val())
+		{
+			$('#viewMileageModal').modal('show').find('#viewEntriesModalContentSpan').html("Loading...");
+			//set header values
+			$('#viewMileageModal').find('#viewMileageModalTitle').html(task);
+			$('#viewMileageModal').find('#viewMileageModalDate').html(dateHeader);
+			$.pjax.reload({
+				type: 'GET',
+				replace:false,
+				url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
+				container: '#viewEntriesModalContentSpan',
+				timeout: 99999
+			});
 		}
 	});
 	

@@ -4,12 +4,12 @@ namespace app\controllers;
 use Yii;
 use app\controllers\BaseController;
 use yii\data\Pagination;
+use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\ServerErrorHttpException;
 use yii\web\UnauthorizedHttpException;
-use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
 use app\constants\Constants;
 
@@ -104,4 +104,67 @@ class MileageTaskController extends BaseController
             throw new ServerErrorHttpException();
         }
     }
+	
+	public function actionViewMileageEntryTaskByDay($mileageCardID, $date){
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			
+			self::requirePermission("mileageEntryView");
+			
+			//create model form update form
+			$model = new \yii\base\DynamicModel([
+				'EntryID',
+				'StartTime',
+				'EndTime',
+				'StartingMileage',
+				'EndingMileage',
+				'PersonalMiles',
+				'AdminMiles'
+			]);
+			$model-> addRule('EntryID', 'integer', null, 'required');
+			$model-> addRule('StartTime', 'string', ['max' => 32], 'required');
+			$model-> addRule('EndTime', 'string', ['max' => 32], 'required');
+			$model-> addRule('StartingMileage', 'number', null, 'required');
+			$model-> addRule('EndingMileage', 'number', null, 'required');
+			$model-> addRule('PersonalMiles', 'number', null, 'required');
+			$model-> addRule('AdminMiles', 'number', null, 'required');
+			
+			//get entries for grid view
+			$getUrl = 'mileage-entry%2Fview-entries&' . http_build_query([
+				'cardID' => $mileageCardID,
+				'date' => $date
+			]);
+			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
+			$entries = $getResponseData['entries'];
+			
+			$mileageEntryDataProvider = new ArrayDataProvider([
+				'allModels' => $entries,
+				'key' => 'EntryID',
+				'pagination' => false
+			]);
+			
+			$dataArray = [
+				'mileageEntryDataProvider' => $mileageEntryDataProvider,
+				'model' => $model,
+			];	
+			
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('mileage_entry_view_modal', $dataArray);
+			} else {
+				return $this->render('mileage_entry_view_modal', $dataArray);
+			}
+			
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
 }
