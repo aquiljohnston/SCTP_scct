@@ -153,10 +153,40 @@ div[id^=modalContent] .wrap #top-wrapper {
     background-color: rgba(57, 12, 255, 0.25);
 }
 
-/*time card task entry form*/
+/*mileage card task entry form*/
 
 #create_mileage_task_submit_btn{
 	margin-top: -5%;
 	float: right;
+	margin-right: 3%;
+}
+
+/*mileage entry view form*/
+
+#mileageEntryGridView .kv-grid-container{
+	max-height: 12vh;
+	margin-bottom: 2%;
+	overflow-y: auto;
+}
+
+/*apply row hover highlight*/
+#mileageEntryGridView table tbody tr:hover{
+    background-color: rgba(57, 12, 255, 0.25);
+}
+
+.mileageViewModalImg{
+	width: 32%;
+    margin-left: 12%;
+    margin-bottom: 2%;
+}
+
+/*hide form on initial load*/
+#MileageEntryUpdateForm{
+	display:none;
+}
+
+#updateMileageEntryButtons{
+	float: right; 
+	margin-top: -6%; 
 	margin-right: 3%;
 }

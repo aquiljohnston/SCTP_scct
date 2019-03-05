@@ -130,5 +130,18 @@ use yii\widgets\Pjax;
 		Modal::end();
     Pjax::end();
     ?>
+	
+	<?php
+    Pjax::begin(['id' => 'showMileageEntries', 'timeout' => false]);
+		Modal::begin([
+			'header' => '<h4 id="viewMileageModalTitle" style="float:left;"></h4>
+				<h4 id="viewMileageModalDate" style="float:right;"></h4>',
+			'id' => 'viewMileageModal',
+			'size' => 'modal-lg',
+		]);
+		echo "<div id='modalViewMiles'><span id='viewEntriesModalContentSpan'></span></div>";
+		Modal::end();
+    Pjax::end();
+    ?>
 
 </div>
