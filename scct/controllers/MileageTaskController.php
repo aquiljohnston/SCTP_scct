@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use Yii;
 use app\controllers\BaseController;
+use app\models\MileageEntryTask;
 use yii\data\Pagination;
 use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
@@ -115,22 +116,10 @@ class MileageTaskController extends BaseController
 			self::requirePermission("mileageEntryView");
 			
 			//create model form update form
-			$model = new \yii\base\DynamicModel([
-				'EntryID',
-				'StartTime',
-				'EndTime',
-				'StartingMileage',
-				'EndingMileage',
-				'PersonalMiles',
-				'AdminMiles'
-			]);
-			$model-> addRule('EntryID', 'integer', null, 'required');
-			$model-> addRule('StartTime', 'string', ['max' => 32], 'required');
-			$model-> addRule('EndTime', 'string', ['max' => 32], 'required');
-			$model-> addRule('StartingMileage', 'number', null, 'required');
-			$model-> addRule('EndingMileage', 'number', null, 'required');
-			$model-> addRule('PersonalMiles', 'number', null, 'required');
-			$model-> addRule('AdminMiles', 'number', null, 'required');
+			$model = new MileageEntryTask;
+			
+			$model->Date = $date;
+			$model->CardID = $mileageCardID;
 			
 			//get entries for grid view
 			$getUrl = 'mileage-entry%2Fview-entries&' . http_build_query([
@@ -157,6 +146,56 @@ class MileageTaskController extends BaseController
 				return $this->render('mileage_entry_view_modal', $dataArray);
 			}
 			
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
+	
+	public function actionUpdate(){
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			
+			self::requirePermission('mileageEntryUpdate');
+			
+			//create model object
+			$model = new MileageEntryTask;
+			
+			//load and validate data
+			if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+				// convert time to 24 hour format
+				$startTime24 = date('H:i', strtotime($model->StartTime));
+				$endTime24 = date('H:i', strtotime($model->EndTime));
+				//combine date with time
+				$startDate = date('Y-m-d H:i:s', strtotime($model->Date . ' ' . $startTime24));
+				$endDate = date('Y-m-d H:i:s', strtotime($model->Date . ' ' . $endTime24));
+				
+				//build body object
+				$mileageEntryUpdateData = [
+					'MileageEntryID' => $model->EntryID,
+					'MileageEntryStartingMileage' => $model->StartingMileage,
+					'MileageEntryEndingMileage' => $model->EndingMileage,
+					'MileageEntryStartDate' => $startDate,
+					'MileageEntryEndDate' => $endDate,
+					'MileageEntryPersonalMiles' => $model->PersonalMiles,
+					'MileageEntryTotalMiles' => $model->AdminMiles,
+				];
+				
+				$jsonData = json_encode($mileageEntryUpdateData);
+			
+				//post url
+				$putUrl = 'mileage-entry%2Fupdate';
+				$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+				$obj = json_decode($putResponse, true);	
+			}
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {

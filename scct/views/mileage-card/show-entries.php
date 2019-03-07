@@ -60,7 +60,7 @@ use yii\widgets\Pjax;
 			'export' => false,
 			'pjax' => true,
 			'summary' => '',
-			'caption' => "",
+			'caption' => '',
 			'columns' => [
 				[
 					'label' => 'Task',

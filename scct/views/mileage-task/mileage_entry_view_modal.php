@@ -59,12 +59,12 @@ $columns = [
 
 ?>
 
-<div class="mileage-entry-view">
+<div class="mileage-entry-view">	
 	<!--mileage entry list-->
 	<?php Pjax::begin([
         'id' => 'mileageEntryGridViewPJAX',
         'timeout' => 10000,
-        'enablePushState' => false  ]) ?>
+        'enablePushState' => false ]) ?>
 
 		<?= GridView::widget([
 			'id' =>'mileageEntryGV',
@@ -128,7 +128,7 @@ $columns = [
 				<div class="col-sm-4">
 					<?= $form->field($model, 'StartingMileage', [
 						'showLabels' => false
-					])->textInput(['placeholder' => 'Starting Mileage', 'id'=> 'mileageEntryFormStartingMileage', 'type' => 'number', 'readonly' => true]); ?>
+					])->textInput(['placeholder' => 'Starting Mileage', 'type' => 'number', 'readonly' => true]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EndingMileage', [
 					'label' => 'Ending Mileage',
@@ -137,7 +137,7 @@ $columns = [
 				<div class="col-sm-4">
 					<?= $form->field($model, 'EndingMileage', [
 						'showLabels' => false
-					])->textInput(['placeholder' => 'Ending Mileage', 'id'=> 'mileageEntryFormEndingMileage', 'type' => 'number', 'readonly' => true]); ?>
+					])->textInput(['placeholder' => 'Ending Mileage', 'type' => 'number', 'readonly' => true]); ?>
 				</div><?= Html::activeLabel($model, 'PersonalMiles', [
 					'label' => 'Personal Miles',
 					'class' => 'col-sm-2 control-label'
@@ -145,7 +145,7 @@ $columns = [
 				<div class="col-sm-4">
 					<?= $form->field($model, 'PersonalMiles', [
 						'showLabels' => false
-					])->textInput(['placeholder' => 'Personal Miles', 'id'=> 'mileageEntryFormPersonalMiles', 'type' => 'number', 'readonly' => true]); ?>
+					])->textInput(['placeholder' => 'Personal Miles', 'type' => 'number', 'readonly' => true]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'AdminMiles', [
 					'label' => 'Admin Miles',
@@ -154,16 +154,17 @@ $columns = [
 				<div class="col-sm-4">
 					<?= $form->field($model, 'AdminMiles', [
 						'showLabels' => false
-					])->textInput(['placeholder' => 'Admin Miles', 'id'=> 'mileageEntryFormAdminMiles', 'type' => 'number', 'readonly' => true]); ?>
+					])->textInput(['placeholder' => 'Admin Miles', 'type' => 'number', 'readonly' => true]); ?>
 				</div>
-				<?= Html::activeHiddenInput($model, 'EntryID', ['id'=> 'mileageEntryFormEntryID', 'value' => $model->EntryID]); ?>
+				<?= Html::activeHiddenInput($model, 'EntryID', ['value' => $model->EntryID]); ?>
+				<?= Html::activeHiddenInput($model, 'CardID', ['value' => $model->CardID]); ?>
+				<?= Html::activeHiddenInput($model, 'Date', ['value' => $model->Date]); ?>
 			</div>
 		</div>
 		<br>
-		<br>
 		<div id="updateMileageEntryButtons" class="form-group">
 			<?= Html::Button('Cancel', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_cancel_btn']) ?>
-			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_submit_btn', 'disabled' => 'disabled']) ?>
+			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_submit_btn']) ?>
 		</div>
     <?php ActiveForm::end(); ?>
 	
@@ -173,18 +174,11 @@ $columns = [
 		$.each($('#mileageEntryGridView tbody tr'),function(){
 			$(this).attr("title","Click to edit.")
 		});
-		
-		//close form on cancel
-		$(document).off('click', '#update_mileage_entry_cancel_btn').on('click', '#update_mileage_entry_cancel_btn',function (){
-			$("#MileageEntryUpdateForm").css("display", "none");
-			$('#odometerImgs').css("display", "none");
-		});
-		
+			
 		//apply listeners on rows to select entry for edit
 		$(document).off('click', '#mileageEntryGridView tbody tr').on('click', '#mileageEntryGridView tbody tr',function (){
 			//get type of entry
 			type = $(this).find("td[data-col-seq='0']").text();
-			console.log('type ' + type);
 			
 			//if odometer display images
 			if(type == 'Odometer'){
@@ -209,30 +203,92 @@ $columns = [
 			personalMiles = $(this).find("td[data-col-seq='4']").text();
 			adminMiles = $(this).find("td[data-col-seq='5']").text();
 			//set values
-			$('#mileageEntryFormEntryID').val(entryID);
-			$('#dynamicmodel-starttime').data('timepicker').setTime(startTime);
-			$('#dynamicmodel-endtime').data('timepicker').setTime(endTime);
-			$('#mileageEntryFormStartingMileage').val(startMileage);
-			$('#mileageEntryFormEndingMileage').val(endMileage);
-			$('#mileageEntryFormPersonalMiles').val(personalMiles);
-			$('#mileageEntryFormAdminMiles').val(adminMiles);
+			$('#mileageentrytask-entryid').val(entryID);
+			$('#mileageentrytask-starttime').data('timepicker').setTime(startTime);
+			$('#mileageentrytask-endtime').data('timepicker').setTime(endTime);
+			$('#mileageentrytask-startingmileage').val(startMileage);
+			$('#mileageentrytask-endingmileage').val(endMileage);
+			$('#mileageentrytask-personalmiles').val(personalMiles);
+			$('#mileageentrytask-adminmiles').val(adminMiles);
 			//enable fields
 			if(type == 'Odometer'){
-				$('#dynamicmodel-starttime').attr("readonly", false);
-				$('#dynamicmodel-endtime').attr("readonly", false);
-				$('#mileageEntryFormStartingMileage').attr("readonly", false);
-				$('#mileageEntryFormEndingMileage').attr("readonly", false);
-				$('#mileageEntryFormPersonalMiles').attr("readonly", false);
-				$('#mileageEntryFormAdminMiles').attr("readonly", false);
+				$('#mileageentrytask-starttime').attr("readonly", false);
+				$('#mileageentrytask-endtime').attr("readonly", false);
+				$('#mileageentrytask-startingmileage').attr("readonly", false);
+				$('#mileageentrytask-endingmileage').attr("readonly", false);
+				$('#mileageentrytask-personalmiles').attr("readonly", false);
+				$('#mileageentrytask-adminmiles').attr("readonly", true);
 			}else{
-				$('#dynamicmodel-starttime').attr("readonly", true);
-				$('#dynamicmodel-endtime').attr("readonly", true);
-				$('#mileageEntryFormStartingMileage').attr("readonly", true);
-				$('#mileageEntryFormEndingMileage').attr("readonly", true);
-				$('#mileageEntryFormPersonalMiles').attr("readonly", true);
-				$('#mileageEntryFormAdminMiles').attr("readonly", false);
+				$('#mileageentrytask-starttime').attr("readonly", true);
+				$('#mileageentrytask-endtime').attr("readonly", true);
+				$('#mileageentrytask-startingmileage').attr("readonly", true);
+				$('#mileageentrytask-endingmileage').attr("readonly", true);
+				$('#mileageentrytask-personalmiles').attr("readonly", true);
+				$('#mileageentrytask-adminmiles').attr("readonly", false);
 			}	
 		});
+		
+		//close form on cancel
+		$(document).off('click', '#update_mileage_entry_cancel_btn').on('click', '#update_mileage_entry_cancel_btn',function (){
+			$("#MileageEntryUpdateForm").css("display", "none");
+			$('#odometerImgs').css("display", "none");
+		});
+		
+		//check for valid form to determine when submit should be available
+		$(document).off('change', '#MileageEntryUpdateForm :input').on('change', '#MileageEntryUpdateForm :input', function (){
+            if (mileageUpdateFormValidator()){
+				$('#update_mileage_entry_submit_btn').prop('disabled', false); 
+            }else{
+				$('#update_mileage_entry_submit_btn').prop('disabled', true); 
+            }   
+        });
+		
+		//submit form
+		$(document).off('click', '#update_mileage_entry_submit_btn').on('click', '#update_mileage_entry_submit_btn',function (){
+			if(mileageUpdateFormValidator()){
+				//get form data
+				var form = $('#MileageEntryUpdateForm');
+				$('#loading').show();
+				//post form data
+				$.ajax({
+					type: 'POST',
+					url: form.attr("action"),
+					data: form.serialize(),
+					success: function (response) {
+						//reload show entries gridview
+						$.pjax.reload({
+							container:"#ShowMileageEntriesView",
+							timeout: 99999
+						}).done(function(){
+							validateMileageToolTip();
+							//get params
+							id = $('#mileageentrytask-cardid').val();
+							date = $('#mileageentrytask-date').val();
+							//reload update modal gridview
+							$.pjax.reload({
+								type: 'GET',
+								url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
+								container:"#mileageEntryGridViewPJAX",
+								timeout: 99999,
+								push: false,
+								replace: false,
+							}).done(function(){
+								//hide form
+								$("#MileageEntryUpdateForm").css("display", "none");
+								$('#odometerImgs').css("display", "none");
+								$('#loading').hide();
+							});
+						});
+					}
+				});	
+			}else{
+				$('#update_mileage_entry_submit_btn').prop('disabled', true);
+			}			
+		});
+		
+		function mileageUpdateFormValidator(){
+			return true;
+		}
 		
 	</script>
 </div>
