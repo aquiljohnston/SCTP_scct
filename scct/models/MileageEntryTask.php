@@ -6,17 +6,21 @@ use Yii;
 
 /**
  * @property integer $EntryID
+ * @property integer $CardID
+ * @property string $Date
  * @property string $StartTime
  * @property string $EndTime
- * @property number $StartingMileage
- * @property number $EndingMileage
- * @property number $PersonalMiles
- * @property number $AdminMiles
+ * @property double $StartingMileage
+ * @property double $EndingMileage
+ * @property double $PersonalMiles
+ * @property double $AdminMiles
  */
-class MileageEntry extends \yii\base\model
+class MileageEntryTask extends \yii\base\model
 {
 
 	public $EntryID;
+	public $CardID;
+	public $Date;
 	public $StartTime;
 	public $EndTime;
 	public $StartingMileage;
@@ -30,10 +34,10 @@ class MileageEntry extends \yii\base\model
     public function rules()
     {
         return [
-            [['MileageEntryStartingMileage', 'MileageEntryEndingMileage'], 'number'],
-            [['MileageEntryID', 'MileageEntryType', 'MileageEntryMileageCardID', 'MileageEntryActivityID', 'MileageEntryStatus', 'MileageEntryUserID', 'MileageEntryCreatedBy', 'MileageEntryModifiedBy'], 'integer'],
-            [['MileageEntryApprovedBy', 'MileageEntryComment'], 'string'],
-            [['MileageEntryStartDate', 'MileageEntryEndDate',  'MileageEntryCreateDate', 'MileageEntryModifiedDate'], 'safe']
+			[['EntryID', 'StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles','StartTime', 'EndTime', 'CardID', 'Date'], 'required'],
+			[['EntryID', 'CardID'], 'integer'],
+            [['StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles'], 'number'],
+            [['StartTime', 'EndTime', 'Date'], 'string', 'max'=>32],
         ];
     }
 
@@ -44,6 +48,8 @@ class MileageEntry extends \yii\base\model
     {
         return [
             'EntryID' => 'Entry ID',
+            'CardID' => 'Card ID',
+            'Date' => 'Date',
 			'StartTime' => 'Start Time',
             'EndTime' => 'End Time',
             'StartingMileage' => 'Starting Mileage',

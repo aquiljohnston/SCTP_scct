@@ -405,8 +405,9 @@ class MileageCardController extends BaseController
 				'allModels' => $cardData['show-entries'],
 				'pagination'=> false,
 			]);
-
-			return $this -> render('show-entries', [
+			
+			//data to pass to view
+			$dataArray = [
 				'model' => $cardData['card'],
 				'task' => $allTask,
 				'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
@@ -430,7 +431,13 @@ class MileageCardController extends BaseController
 				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'mileageCardProjectID' => $mileageCardProjectID,
 				'isSubmitted' => $cardData['card']['MileageCardOasisSubmitted']=='Yes',
-			]);
+			];
+			
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('show-entries', $dataArray);
+			} else {
+				return $this->render('show-entries', $dataArray);
+			}
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {

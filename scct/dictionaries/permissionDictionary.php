@@ -45,6 +45,7 @@ class PermissionDictionary {
         'mileageCardApprove', // Approve a mileage card
         'mileageEntryView', // View a mileage entry
         'mileageEntryCreate', // Create a mileage entry
+        'mileageEntryUpdate', // Update a mileage entry
         'mileageEntryDeactivate', // Deactivate a mileage entry
 		'mileageCardPmSubmit', // pm submit mileage cards
         'notificationsGet', // Get notifications
