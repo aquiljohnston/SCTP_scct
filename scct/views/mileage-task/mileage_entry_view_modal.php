@@ -178,6 +178,8 @@ $columns = [
 			
 		//apply listeners on rows to select entry for edit
 		$(document).off('click', '#mileageEntryGridView tbody tr').on('click', '#mileageEntryGridView tbody tr',function (){
+			//apply selected highlight_file
+			$(this).addClass('mileageEntrySelectedRow').siblings().removeClass("mileageEntrySelectedRow");;
 			//set forPopulated to false to avoid validation errors
 			formPopulated = false;
 			//get type of entry
@@ -232,6 +234,13 @@ $columns = [
 			//set formPopulated to true to enable validation
 			formPopulated = true;
 			mileageUpdateSubmitButtonSetState();
+		});
+		
+		//link to image onclick
+		$(document).off('click', '.mileageViewModalImg').on('click', '.mileageViewModalImg',function (){
+			imgSrc = $(this).attr('src').substr(10);
+			url = window.location.protocol + "//" + window.location.host + "/" + "/mileage-card/view-image?photoPath=" + imgSrc;
+			win = window.open(url ,'_blank');
 		});
 		
 		//close form on cancel
