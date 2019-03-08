@@ -169,6 +169,7 @@ $columns = [
     <?php ActiveForm::end(); ?>
 	
 	<script>
+		formPopulated = false;
 	
 		//apply edit tooltip on table
 		$.each($('#mileageEntryGridView tbody tr'),function(){
@@ -177,6 +178,8 @@ $columns = [
 			
 		//apply listeners on rows to select entry for edit
 		$(document).off('click', '#mileageEntryGridView tbody tr').on('click', '#mileageEntryGridView tbody tr',function (){
+			//set forPopulated to false to avoid validation errors
+			formPopulated = false;
 			//get type of entry
 			type = $(this).find("td[data-col-seq='0']").text();
 			
@@ -225,7 +228,10 @@ $columns = [
 				$('#mileageentrytask-endingmileage').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
 				$('#mileageentrytask-adminmiles').attr("readonly", false);
-			}	
+			}
+			//set formPopulated to true to enable validation
+			formPopulated = true;
+			mileageUpdateSubmitButtonSetState();
 		});
 		
 		//close form on cancel
@@ -236,11 +242,9 @@ $columns = [
 		
 		//check for valid form to determine when submit should be available
 		$(document).off('change', '#MileageEntryUpdateForm :input').on('change', '#MileageEntryUpdateForm :input', function (){
-            if (mileageUpdateFormValidator()){
-				$('#update_mileage_entry_submit_btn').prop('disabled', false); 
-            }else{
-				$('#update_mileage_entry_submit_btn').prop('disabled', true); 
-            }   
+			if(formPopulated){
+				mileageUpdateSubmitButtonSetState();   
+			}
         });
 		
 		//submit form
@@ -286,9 +290,69 @@ $columns = [
 			}			
 		});
 		
+		//sets submit button state
+		function mileageUpdateSubmitButtonSetState(){
+			if (mileageUpdateFormValidator()){
+				$('#update_mileage_entry_submit_btn').prop('disabled', false); 
+            }else{
+				$('#update_mileage_entry_submit_btn').prop('disabled', true); 
+            }   
+		}
+		
+		//function returns boolean if form fields are valid input
 		function mileageUpdateFormValidator(){
+			//get form values
+			startTime = $('#mileageentrytask-starttime').val();
+			endTime = $('#mileageentrytask-endtime').val();
+			startMiles = $('#mileageentrytask-startingmileage').val();
+			endMiles = $('#mileageentrytask-endingmileage').val();
+			personalMiles = $('#mileageentrytask-personalmiles').val();
+			adminMiles = $('#mileageentrytask-adminmiles').val();
+			//not null
+			if(startTime == "" ||
+			endTime == "" ||
+			startMiles == "" ||
+			endMiles == "" ||
+			personalMiles == "" ||
+			adminMiles == ""){
+				return false;
+			}
+			//mileage >= 0
+			if(startMiles < 0 ||
+			endMiles < 0 ||
+			personalMiles < 0 ||
+			adminMiles < 0){
+				return false;
+			}
+			//end miles >= start miles
+			if(startMiles > endMiles){
+				return false;
+			}
+			//end time >= start time
+			//get 24 hour format
+			startTime24 = ConvertToTwentyFourHourTime(startTime);
+			endTime24 = ConvertToTwentyFourHourTime(endTime);
+			if(startTime24 > endTime24){
+				return false;
+			}
+			//return true if no rules are broken
 			return true;
 		}
 		
+		//also in task_entry_form should look to extract out
+		//expected format of "hh:mm AM/PM"
+		//returns string in 24 hour format "hh:mm"
+		function ConvertToTwentyFourHourTime(twelveHourTime) {
+			var hours = Number(twelveHourTime.match(/^(\d+)/)[1]);
+			var minutes = Number(twelveHourTime.match(/:(\d+)/)[1]);
+			var AMPM = twelveHourTime.match(/\s(.*)$/)[1];
+			if(AMPM == "PM" && hours<12) hours = hours+12;
+			if(AMPM == "AM" && hours==12) hours = hours-12;
+			var sHours = hours.toString();
+			var sMinutes = minutes.toString();
+			if(hours<10) sHours = "0" + sHours;
+			if(minutes<10) sMinutes = "0" + sMinutes;
+			return sHours + ":" + sMinutes;
+		}
 	</script>
 </div>
