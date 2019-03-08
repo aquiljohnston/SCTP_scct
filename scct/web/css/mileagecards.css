@@ -169,6 +169,11 @@ div[id^=modalContent] .wrap #top-wrapper {
 	overflow-y: auto;
 }
 
+/*applay selected row highlight*/
+#mileageEntryGridView table tbody tr.mileageEntrySelectedRow{
+	background-color: #f2dede;
+}
+
 /*apply row hover highlight*/
 #mileageEntryGridView table tbody tr:hover{
     background-color: rgba(57, 12, 255, 0.25);
