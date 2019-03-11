@@ -313,17 +313,24 @@ $columns = [
 			//get form values
 			startTime = $('#mileageentrytask-starttime').val();
 			endTime = $('#mileageentrytask-endtime').val();
-			startMiles = $('#mileageentrytask-startingmileage').val();
-			endMiles = $('#mileageentrytask-endingmileage').val();
-			personalMiles = $('#mileageentrytask-personalmiles').val();
-			adminMiles = $('#mileageentrytask-adminmiles').val();
+			startMiles = parseFloat($('#mileageentrytask-startingmileage').val());
+			endMiles = parseFloat($('#mileageentrytask-endingmileage').val());
+			personalMiles = parseFloat($('#mileageentrytask-personalmiles').val());
+			adminMiles = parseFloat($('#mileageentrytask-adminmiles').val());
 			//not null
 			if(startTime == "" ||
 			endTime == "" ||
-			startMiles == "" ||
-			endMiles == "" ||
-			personalMiles == "" ||
-			adminMiles == ""){
+			isNaN(startMiles) ||
+			isNaN(endMiles) ||
+			isNaN(personalMiles) ||
+			isNaN(adminMiles)){
+				return false;
+			}
+			//end time >= start time
+			//get 24 hour format
+			startTime24 = ConvertToTwentyFourHourTime(startTime);
+			endTime24 = ConvertToTwentyFourHourTime(endTime);
+			if(startTime24 > endTime24){
 				return false;
 			}
 			//mileage >= 0
@@ -337,13 +344,7 @@ $columns = [
 			if(startMiles > endMiles){
 				return false;
 			}
-			//end time >= start time
-			//get 24 hour format
-			startTime24 = ConvertToTwentyFourHourTime(startTime);
-			endTime24 = ConvertToTwentyFourHourTime(endTime);
-			if(startTime24 > endTime24){
-				return false;
-			}
+			
 			//return true if no rules are broken
 			return true;
 		}
