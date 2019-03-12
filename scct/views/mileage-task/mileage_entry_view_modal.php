@@ -54,7 +54,24 @@ $columns = [
 	],[
 		'attribute' => 'Photo2',
 		'hidden' => true,
-	]
+	],[
+		'class' => 'kartik\grid\ActionColumn',
+        'template' => '{delete}',
+		'header' => '',
+        'buttons' => [
+            'delete' => function ($url, $model, $key) {
+                // $url = '/mileage-task/deactivate?entryID=' . $model['EntryID'];
+                // $options = [
+                    // 'title' => Yii::t('yii', 'Deactivate'),
+                    // 'aria-label' => Yii::t('yii', 'Deactivate'),
+                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this entry?'),
+                    // 'data-method' => 'Put'
+                // ];
+                // return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+                return Html::a('<span id="mileageModalDeactivateAction" class="glyphicon glyphicon-trash"></span>');
+            },
+        ]
+    ],
 ];
 
 ?>
@@ -268,36 +285,61 @@ $columns = [
 					url: form.attr("action"),
 					data: form.serialize(),
 					success: function (response) {
-						//reload show entries gridview
-						$.pjax.reload({
-							container:"#ShowMileageEntriesView",
-							timeout: 99999
-						}).done(function(){
-							validateMileageToolTip();
-							//get params
-							id = $('#mileageentrytask-cardid').val();
-							date = $('#mileageentrytask-date').val();
-							//reload update modal gridview
-							$.pjax.reload({
-								type: 'GET',
-								url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
-								container:"#mileageEntryGridViewPJAX",
-								timeout: 99999,
-								push: false,
-								replace: false,
-							}).done(function(){
-								//hide form
-								$("#MileageEntryUpdateForm").css("display", "none");
-								$('#odometerImgs').css("display", "none");
-								$('#loading').hide();
-							});
-						});
+						reloadMileageGridViews();
 					}
 				});	
 			}else{
 				$('#update_mileage_entry_submit_btn').prop('disabled', true);
 			}			
 		});
+		
+		//deactivate entry
+		//submit form
+		$(document).off('click', '#mileageModalDeactivateAction').on('click', '#mileageModalDeactivateAction',function (){
+				//get entry id
+				var entryID = $(this).closest('tr').attr('data-key');
+				krajeeDialog.defaults.confirm.title = 'Deactivate';
+				krajeeDialog.confirm('Are you sure you want to deactivate this entry?', function (resp) {
+					if(resp){
+						$('#loading').show();
+						//post form data
+						$.ajax({
+							type: 'POST',
+							url: '/mileage-task/deactivate?entryID='+entryID,
+							success: function (response) {
+								reloadMileageGridViews();
+							}
+						});		
+					}
+				})
+		});
+		
+		function reloadMileageGridViews(){
+			//reload show entries gridview
+			$.pjax.reload({
+				container:"#ShowMileageEntriesView",
+				timeout: 99999
+			}).done(function(){
+				validateMileageToolTip();
+				//get params
+				id = $('#mileageentrytask-cardid').val();
+				date = $('#mileageentrytask-date').val();
+				//reload update modal gridview
+				$.pjax.reload({
+					type: 'GET',
+					url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
+					container:"#mileageEntryGridViewPJAX",
+					timeout: 99999,
+					push: false,
+					replace: false,
+				}).done(function(){
+					//hide form
+					$("#MileageEntryUpdateForm").css("display", "none");
+					$('#odometerImgs').css("display", "none");
+					$('#loading').hide();
+				});
+			});
+		}
 		
 		//sets submit button state
 		function mileageUpdateSubmitButtonSetState(){

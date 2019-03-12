@@ -487,32 +487,33 @@ class MileageCardController extends BaseController
     }
 
     /**
+	 * removed useage of this route 3/12/19
      * deactivate Multiple existing Mileage Card(s)
      * If deactivate is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @throws \yii\web\BadRequestHttpException
      * @throws Exception redirect user to mileage card index page
      */
-    public function actionDeactivate()
-    {
-        try {
-            $data = Yii::$app->request->post();	
-			$jsonData = json_encode($data);
+    // public function actionDeactivate()
+    // {
+        // try {
+            // $data = Yii::$app->request->post();	
+			// $jsonData = json_encode($data);
 			
-			// post url
-			$putUrl = 'mileage-entry%2Fdeactivate';
-			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
-			$obj = json_decode($putResponse, true);	
-        } catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch(ErrorException $e) {
-            throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
-            throw new ServerErrorHttpException();
-        }
-    }
+			// // post url
+			// $putUrl = 'mileage-entry%2Fdeactivate';
+			// $putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			// $obj = json_decode($putResponse, true);	
+        // } catch (UnauthorizedHttpException $e){
+            // Yii::$app->response->redirect(['login/index']);
+        // } catch(ForbiddenHttpException $e) {
+            // throw $e;
+        // } catch(ErrorException $e) {
+            // throw new \yii\web\HttpException(400);
+        // } catch(Exception $e) {
+            // throw new ServerErrorHttpException();
+        // }
+    // }
 
     /**
      * Approve Multiple existing Mileage Card(s)
