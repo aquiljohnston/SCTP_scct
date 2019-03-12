@@ -278,7 +278,7 @@ if($isAccountant)
 								});
 								$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 									applyMileageCardOnClickListeners();
-									applyMileageCardSubmitButtonListener();
+									mileageCardAccountantSubmit();
 									mileageCardPmSubmit();
 									$('#loading').hide();
 								});
