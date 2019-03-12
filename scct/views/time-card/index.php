@@ -292,8 +292,8 @@ else
 										});
 										$('#timeCardSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
 											applyTimeCardOnClickListeners();
-											applyTimeCardSubmitButtonListener();
-											pmSubmit();
+											timeCardAccountantSubmit();
+											timeCardPmSubmit();
 											$('#loading').hide();
 										});
 										$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
