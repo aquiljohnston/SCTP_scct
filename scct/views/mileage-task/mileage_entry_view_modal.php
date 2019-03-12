@@ -56,19 +56,14 @@ $columns = [
 		'hidden' => true,
 	],[
 		'class' => 'kartik\grid\ActionColumn',
-        'template' => '{delete}',
+        'template' => '{update} {delete}',
 		'header' => '',
         'buttons' => [
+			'update' => function ($url, $model, $key) {
+                return Html::a('<span id="mileageModalUpdateAction" class="glyphicon glyphicon-pencil" title="Edit"></span>');
+            },
             'delete' => function ($url, $model, $key) {
-                // $url = '/mileage-task/deactivate?entryID=' . $model['EntryID'];
-                // $options = [
-                    // 'title' => Yii::t('yii', 'Deactivate'),
-                    // 'aria-label' => Yii::t('yii', 'Deactivate'),
-                    // 'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this entry?'),
-                    // 'data-method' => 'Put'
-                // ];
-                // return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
-                return Html::a('<span id="mileageModalDeactivateAction" class="glyphicon glyphicon-trash"></span>');
+                return Html::a('<span id="mileageModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
             },
         ]
     ],
@@ -179,7 +174,7 @@ $columns = [
 			</div>
 		</div>
 		<br>
-		<div id="updateMileageEntryButtons" class="form-group">
+		<div id="updateMileageEntryButtons" class="form-group" style="display:none">
 			<?= Html::Button('Cancel', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_cancel_btn']) ?>
 			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_submit_btn']) ?>
 		</div>
@@ -187,10 +182,11 @@ $columns = [
 	
 	<script>
 		formPopulated = false;
+		isEdit = false;
 	
 		//apply edit tooltip on table
 		$.each($('#mileageEntryGridView tbody tr'),function(){
-			$(this).attr("title","Click to edit.")
+			$(this).attr("title","Click to view.")
 		});
 			
 		//apply listeners on rows to select entry for edit
@@ -232,22 +228,20 @@ $columns = [
 			$('#mileageentrytask-endingmileage').val(endMileage);
 			$('#mileageentrytask-personalmiles').val(personalMiles);
 			$('#mileageentrytask-adminmiles').val(adminMiles);
-			//enable fields
-			if(type == 'Odometer'){
-				$('#mileageentrytask-starttime').attr("readonly", false);
-				$('#mileageentrytask-endtime').attr("readonly", false);
-				$('#mileageentrytask-startingmileage').attr("readonly", false);
-				$('#mileageentrytask-endingmileage').attr("readonly", false);
-				$('#mileageentrytask-personalmiles').attr("readonly", false);
-				$('#mileageentrytask-adminmiles').attr("readonly", true);
-			}else{
+			
+			if(!isEdit){
 				$('#mileageentrytask-starttime').attr("readonly", true);
 				$('#mileageentrytask-endtime').attr("readonly", true);
 				$('#mileageentrytask-startingmileage').attr("readonly", true);
 				$('#mileageentrytask-endingmileage').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
-				$('#mileageentrytask-adminmiles').attr("readonly", false);
+				$('#mileageentrytask-adminmiles').attr("readonly", true);
+				
+				$("#updateMileageEntryButtons").css("display", "none");
+			} else {
+				isEdit = false;
 			}
+			
 			//set formPopulated to true to enable validation
 			formPopulated = true;
 			mileageUpdateSubmitButtonSetState();
@@ -260,10 +254,37 @@ $columns = [
 			win = window.open(url ,'_blank');
 		});
 		
-		//close form on cancel
+		//reset and disable form on cancel
 		$(document).off('click', '#update_mileage_entry_cancel_btn').on('click', '#update_mileage_entry_cancel_btn',function (){
-			$("#MileageEntryUpdateForm").css("display", "none");
-			$('#odometerImgs').css("display", "none");
+			//reset form
+			formPopulated = false;
+			//get selected row
+			row = $("#mileageEntryGridView tbody tr.mileageEntrySelectedRow");
+			//get values
+			entryID = row.find("td[data-col-seq='6']").text();
+			startTime = row.find("td[data-col-seq='7']").text();
+			endTime = row.find("td[data-col-seq='8']").text();
+			startMileage = row.find("td[data-col-seq='2']").text();
+			endMileage = row.find("td[data-col-seq='3']").text();
+			personalMiles = row.find("td[data-col-seq='4']").text();
+			adminMiles = row.find("td[data-col-seq='5']").text();
+			//set values
+			$('#mileageentrytask-entryid').val(entryID);
+			$('#mileageentrytask-starttime').data('timepicker').setTime(startTime);
+			$('#mileageentrytask-endtime').data('timepicker').setTime(endTime);
+			$('#mileageentrytask-startingmileage').val(startMileage);
+			$('#mileageentrytask-endingmileage').val(endMileage);
+			$('#mileageentrytask-personalmiles').val(personalMiles);
+			$('#mileageentrytask-adminmiles').val(adminMiles);
+			//disable fields
+			$('#mileageentrytask-starttime').attr("readonly", true);
+			$('#mileageentrytask-endtime').attr("readonly", true);
+			$('#mileageentrytask-startingmileage').attr("readonly", true);
+			$('#mileageentrytask-endingmileage').attr("readonly", true);
+			$('#mileageentrytask-personalmiles').attr("readonly", true);
+			$('#mileageentrytask-adminmiles').attr("readonly", true);
+			//hide buttons
+			$("#updateMileageEntryButtons").css("display", "none");
 		});
 		
 		//check for valid form to determine when submit should be available
@@ -293,8 +314,32 @@ $columns = [
 			}			
 		});
 		
+		//enable form for update entry
+		$(document).off('click', '#mileageModalUpdateAction').on('click', '#mileageModalUpdateAction',function (event){
+			type = $(this).closest('tr').find("td[data-col-seq='0']").text();
+			//enable fields
+			if(type == 'Odometer'){
+				$('#mileageentrytask-starttime').attr("readonly", false);
+				$('#mileageentrytask-endtime').attr("readonly", false);
+				$('#mileageentrytask-startingmileage').attr("readonly", false);
+				$('#mileageentrytask-endingmileage').attr("readonly", false);
+				$('#mileageentrytask-personalmiles').attr("readonly", false);
+				$('#mileageentrytask-adminmiles').attr("readonly", true);
+			}else{
+				$('#mileageentrytask-starttime').attr("readonly", true);
+				$('#mileageentrytask-endtime').attr("readonly", true);
+				$('#mileageentrytask-startingmileage').attr("readonly", true);
+				$('#mileageentrytask-endingmileage').attr("readonly", true);
+				$('#mileageentrytask-personalmiles').attr("readonly", true);
+				$('#mileageentrytask-adminmiles').attr("readonly", false);
+			}
+			$("#updateMileageEntryButtons").css("display", "block");
+			
+			//set is edit to allow row click event to populate fields without disabling form
+			isEdit = true;
+		});
+		
 		//deactivate entry
-		//submit form
 		$(document).off('click', '#mileageModalDeactivateAction').on('click', '#mileageModalDeactivateAction',function (){
 				//get entry id
 				var entryID = $(this).closest('tr').attr('data-key');
