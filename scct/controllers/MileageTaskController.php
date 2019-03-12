@@ -206,4 +206,26 @@ class MileageTaskController extends BaseController
             throw new ServerErrorHttpException();
         }
 	}
+	
+	/**
+	* deactivate mileage entry by id
+	* Pjax reload show entries table and modal table.
+	*/
+    public function actionDeactivate($entryID)
+    {
+        try {
+			//put url
+			$putUrl = 'mileage-entry%2Fdeactivate&entryID=' . $entryID;
+			$putResponse = Parent::executePutRequest($putUrl, '',Constants::API_VERSION_3); // indirect rbac
+			$obj = json_decode($putResponse, true);	
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
 }
