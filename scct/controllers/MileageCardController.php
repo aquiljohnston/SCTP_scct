@@ -72,7 +72,7 @@ class MileageCardController extends BaseController
 				'projectID',
 				'employeeID'
             ]);
-			$model->addRule('DateRangePicker', 'string', ['max' => 32]);
+			$model->addRule('dateRangePicker', 'string', ['max' => 32]);
             $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]);
