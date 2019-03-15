@@ -214,6 +214,8 @@ $columns = [
 			if($(this).find('td .createEntryRow').length>0){
 				//set isCreate true
 				isCreate = true;
+				//hide pictures
+				$('#odometerImgs').css("display", "none");
 				//display form
 				$("#MileageEntryModalForm").css("display", "block");
 				//set default values
