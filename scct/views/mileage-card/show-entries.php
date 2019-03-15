@@ -45,11 +45,6 @@ use yii\widgets\Pjax;
 				'disabled' => true,
 				'id' => 'deactive_mileageEntry_btn_id',
 			]) ?>-->
-			<?= Html::button('Add Mileage', [
-				'class' => 'btn btn-primary add_mileageEntry_btn',
-				'disabled' => $approve_status && ($isSubmitted || !$isAccountant),
-				'id' => 'add_mileage_btn_id',
-			]) ?>
 		</p>
 		<br>
     </div>

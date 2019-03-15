@@ -106,7 +106,7 @@ function applyMilageEntryListeners() {
 
 		//restrict click to only day of the week fields
 		//with values in the .text()
-		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")
+		if($(this).attr('data-col-seq') >=1
 			&& (!$("#approve_mileageCard_btn_id").prop("disabled") || $('#isAccountant').val())
 			&& !$('#isSubmitted').val())
 		{
@@ -123,31 +123,12 @@ function applyMilageEntryListeners() {
 			});
 		}
 	});
-	
-	//listener on add mileage button to launch modal and pass data to it
-	$(document).off('click', '#add_mileage_btn_id').on('click', '#add_mileage_btn_id', function (){
-		var weekStart = $("table th").eq(1).attr('class');
-		var weekEnd = $("table th").eq(7).attr('class');
-		var mileageCardID = $('#mileageCardId').val();
-		var SundayDate = $('#SundayDate').val();
-		var SaturdayDate = $('#SaturdayDate').val();
-		var mileageCardProjectID = $('#MileageCardProjectID').val();
-		$('#addMileageModal').modal('show').find('#modalContentSpan').html("Loading...");
-		//Fetch modal content via pjax to prevent sync console warning and FF page flash
-		$.pjax.reload({
-			type: 'GET',
-			replace:false,
-			url: '/mileage-task/add-mileage-entry-task?weekStart='+weekStart+'&weekEnd='+weekEnd+'&mileageCardID=' + mileageCardID + '&sundayDate=' + SundayDate + '&saturdayDate=' + SaturdayDate + '&mileageCardProjectID=' + mileageCardProjectID,
-			container: '#modalContentSpan', // id to update content
-			timeout: 99999
-		})
-    });
 }
 
 //determines if deactivate tooltip should be displayed on table cells
 function validateMileageToolTip() {
     $.each($('#allMileageEntries tbody tr td'),function(){
-        if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)
+        if($(this).attr('data-col-seq') >=1 && ($(this).parent().attr('data-key')>0)
             && (!$("#approve_mileageCard_btn_id").prop("disabled"))) 
 		{
             $(this).attr("title","Click to view details.")
