@@ -90,6 +90,11 @@ $columns = [
 				],
 			],
 			'columns' => $columns,
+			'emptyText' => 'Click to Add Mileage.',
+			'emptyTextOptions' => [
+				'class' => 'createEntryRow',
+				'style' => 'text-align:center'
+			],
 		]); ?>
 		
     <?php Pjax::end() ?>
@@ -102,9 +107,8 @@ $columns = [
 	
 	<!--selected mileage entry update form-->
 	<?php $form = ActiveForm::begin([
-        'id' => 'MileageEntryUpdateForm',
+        'id' => 'MileageEntryModalForm',
         'type' => ActiveForm::TYPE_HORIZONTAL,
-        'action' => Url::to('/mileage-task/update'),
         'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_SMALL],
     ]); ?>
 		<div class="form-group kv-fieldset-inline" id="mileage_entry_form">
@@ -174,7 +178,7 @@ $columns = [
 			</div>
 		</div>
 		<br>
-		<div id="updateMileageEntryButtons" class="form-group" style="display:none">
+		<div id="mileageEntryModalFormButtons" class="form-group" style="display:none">
 			<?= Html::Button('Cancel', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_cancel_btn']) ?>
 			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'update_mileage_entry_submit_btn']) ?>
 		</div>
@@ -183,63 +187,101 @@ $columns = [
 	<script>
 		formPopulated = false;
 		isEdit = false;
+		isCreate = false;
 	
 		//apply edit tooltip on table
 		$.each($('#mileageEntryGridView tbody tr'),function(){
-			$(this).attr("title","Click to view.")
+			//add click to view title to all non 'createEntryRow' rows
+			if(!$(this).find('div').hasClass('createEntryRow')){
+				$(this).attr("title","Click to view.")
+			}
 		});
+	
+		//add 'createEntryRow' row for adding mileage functionality if it does not exist
+		$(document).ready(function () {
+			//ensure 'createEntryRow' row is present
+			checkCreateEntryRow();
+		});		
 			
-		//apply listeners on rows to select entry for edit
+		//apply listeners on rows to select entry for view/create
 		$(document).off('click', '#mileageEntryGridView tbody tr').on('click', '#mileageEntryGridView tbody tr',function (){
 			//apply selected highlight_file
-			$(this).addClass('mileageEntrySelectedRow').siblings().removeClass("mileageEntrySelectedRow");;
+			$(this).addClass('mileageEntrySelectedRow').siblings().removeClass("mileageEntrySelectedRow");
 			//set forPopulated to false to avoid validation errors
 			formPopulated = false;
-			//get type of entry
-			type = $(this).find("td[data-col-seq='0']").text();
 			
-			//if odometer display images
-			if(type == 'Odometer'){
-				$("#odometerImgs").css("display", "block");
-				//set img src values
-				photo1 = $(this).find("td[data-col-seq='9']").text();
-				photo2 = $(this).find("td[data-col-seq='10']").text();
-				if(photo1 != '') $("#mileageViewModalPhoto1").attr('src', "../images/" + photo1);
-				if(photo2 != '') $("#mileageViewModalPhoto2").attr('src', "../images/" + photo2);
-			} else {
-				$('#odometerImgs').css("display", "none");
-			}
-
-			//display form
-			$("#MileageEntryUpdateForm").css("display", "block");
-			//get values
-			entryID = $(this).find("td[data-col-seq='6']").text();
-			startTime = $(this).find("td[data-col-seq='7']").text();
-			endTime = $(this).find("td[data-col-seq='8']").text();
-			startMileage = $(this).find("td[data-col-seq='2']").text();
-			endMileage = $(this).find("td[data-col-seq='3']").text();
-			personalMiles = $(this).find("td[data-col-seq='4']").text();
-			adminMiles = $(this).find("td[data-col-seq='5']").text();
-			//set values
-			$('#mileageentrytask-entryid').val(entryID);
-			$('#mileageentrytask-starttime').data('timepicker').setTime(startTime);
-			$('#mileageentrytask-endtime').data('timepicker').setTime(endTime);
-			$('#mileageentrytask-startingmileage').val(startMileage);
-			$('#mileageentrytask-endingmileage').val(endMileage);
-			$('#mileageentrytask-personalmiles').val(personalMiles);
-			$('#mileageentrytask-adminmiles').val(adminMiles);
-			
-			if(!isEdit){
+			//check if the clicked row is a 'createEntryRow'
+			if($(this).find('td .createEntryRow').length>0){
+				//set isCreate true
+				isCreate = true;
+				//display form
+				$("#MileageEntryModalForm").css("display", "block");
+				//set default values
+				$('#mileageentrytask-entryid').val(0);
+				$('#mileageentrytask-starttime').data('timepicker').setTime('12:00 AM');
+				$('#mileageentrytask-endtime').data('timepicker').setTime('12:00 AM');
+				$('#mileageentrytask-startingmileage').val('0.0');
+				$('#mileageentrytask-endingmileage').val('0.0');
+				$('#mileageentrytask-personalmiles').val('0.0');
+				$('#mileageentrytask-adminmiles').val('');
+				//enable/disable fields
 				$('#mileageentrytask-starttime').attr("readonly", true);
 				$('#mileageentrytask-endtime').attr("readonly", true);
 				$('#mileageentrytask-startingmileage').attr("readonly", true);
 				$('#mileageentrytask-endingmileage').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
-				$('#mileageentrytask-adminmiles').attr("readonly", true);
-				
-				$("#updateMileageEntryButtons").css("display", "none");
+				$('#mileageentrytask-adminmiles').attr("readonly", false);
+				//display form buttons
+				$("#mileageEntryModalFormButtons").css("display", "block");
 			} else {
-				isEdit = false;
+				//set isCreate false
+				isCreate = false;
+				//get type of entry
+				type = $(this).find("td[data-col-seq='0']").text();
+				
+				//if odometer display images
+				if(type == 'Odometer'){
+					$("#odometerImgs").css("display", "block");
+					//set img src values
+					photo1 = $(this).find("td[data-col-seq='9']").text();
+					photo2 = $(this).find("td[data-col-seq='10']").text();
+					if(photo1 != '') $("#mileageViewModalPhoto1").attr('src', "../images/" + photo1);
+					if(photo2 != '') $("#mileageViewModalPhoto2").attr('src', "../images/" + photo2);
+				} else {
+					$('#odometerImgs').css("display", "none");
+				}
+				
+				//get values
+				entryID = $(this).find("td[data-col-seq='6']").text();
+				startTime = $(this).find("td[data-col-seq='7']").text();
+				endTime = $(this).find("td[data-col-seq='8']").text();
+				startMileage = $(this).find("td[data-col-seq='2']").text();
+				endMileage = $(this).find("td[data-col-seq='3']").text();
+				personalMiles = $(this).find("td[data-col-seq='4']").text();
+				adminMiles = $(this).find("td[data-col-seq='5']").text();
+				//set values
+				$('#mileageentrytask-entryid').val(entryID);
+				$('#mileageentrytask-starttime').data('timepicker').setTime(startTime);
+				$('#mileageentrytask-endtime').data('timepicker').setTime(endTime);
+				$('#mileageentrytask-startingmileage').val(startMileage);
+				$('#mileageentrytask-endingmileage').val(endMileage);
+				$('#mileageentrytask-personalmiles').val(personalMiles);
+				$('#mileageentrytask-adminmiles').val(adminMiles);
+				
+				if(!isEdit){
+					$('#mileageentrytask-starttime').attr("readonly", true);
+					$('#mileageentrytask-endtime').attr("readonly", true);
+					$('#mileageentrytask-startingmileage').attr("readonly", true);
+					$('#mileageentrytask-endingmileage').attr("readonly", true);
+					$('#mileageentrytask-personalmiles').attr("readonly", true);
+					$('#mileageentrytask-adminmiles').attr("readonly", true);
+					
+					$("#mileageEntryModalFormButtons").css("display", "none");
+				} else {
+					isEdit = false;
+				}
+				//display form
+				$("#MileageEntryModalForm").css("display", "block");
 			}
 			
 			//set formPopulated to true to enable validation
@@ -254,9 +296,41 @@ $columns = [
 			win = window.open(url ,'_blank');
 		});
 		
+		//enable form for update entry
+		$(document).off('click', '#mileageModalUpdateAction').on('click', '#mileageModalUpdateAction',function (event){
+			type = $(this).closest('tr').find("td[data-col-seq='0']").text();
+			//enable fields
+			if(type == 'Odometer'){
+				$('#mileageentrytask-starttime').attr("readonly", false);
+				$('#mileageentrytask-endtime').attr("readonly", false);
+				$('#mileageentrytask-startingmileage').attr("readonly", false);
+				$('#mileageentrytask-endingmileage').attr("readonly", false);
+				$('#mileageentrytask-personalmiles').attr("readonly", false);
+				$('#mileageentrytask-adminmiles').attr("readonly", true);
+			}else{
+				$('#mileageentrytask-starttime').attr("readonly", true);
+				$('#mileageentrytask-endtime').attr("readonly", true);
+				$('#mileageentrytask-startingmileage').attr("readonly", true);
+				$('#mileageentrytask-endingmileage').attr("readonly", true);
+				$('#mileageentrytask-personalmiles').attr("readonly", true);
+				$('#mileageentrytask-adminmiles').attr("readonly", false);
+			}
+			$("#mileageEntryModalFormButtons").css("display", "block");
+			
+			//set is edit to allow row click event to populate fields without disabling form
+			isEdit = true;
+		});
+		
+		//check for valid form to determine when submit should be available
+		$(document).off('change', '#MileageEntryModalForm :input').on('change', '#MileageEntryModalForm :input', function (){
+			if(formPopulated){
+				mileageUpdateSubmitButtonSetState();   
+			}
+        });
+		
 		//reset and disable form on cancel
 		$(document).off('click', '#update_mileage_entry_cancel_btn').on('click', '#update_mileage_entry_cancel_btn',function (){
-			//reset form
+			//reset flags
 			formPopulated = false;
 			//get selected row
 			row = $("#mileageEntryGridView tbody tr.mileageEntrySelectedRow");
@@ -284,59 +358,50 @@ $columns = [
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
 			$('#mileageentrytask-adminmiles').attr("readonly", true);
 			//hide buttons
-			$("#updateMileageEntryButtons").css("display", "none");
-		});
-		
-		//check for valid form to determine when submit should be available
-		$(document).off('change', '#MileageEntryUpdateForm :input').on('change', '#MileageEntryUpdateForm :input', function (){
-			if(formPopulated){
-				mileageUpdateSubmitButtonSetState();   
+			$("#mileageEntryModalFormButtons").css("display", "none");
+			//hide form if was create//display form
+			if(isCreate){
+				$("#MileageEntryModalForm").css("display", "none");
+				//reset isCreate
+				isCreate = false;
 			}
-        });
+		});
 		
 		//submit form
 		$(document).off('click', '#update_mileage_entry_submit_btn').on('click', '#update_mileage_entry_submit_btn',function (){
 			if(mileageUpdateFormValidator()){
-				//get form data
-				var form = $('#MileageEntryUpdateForm');
-				$('#loading').show();
-				//post form data
-				$.ajax({
-					type: 'POST',
-					url: form.attr("action"),
-					data: form.serialize(),
-					success: function (response) {
-						reloadMileageGridViews();
-					}
-				});	
+				//check isCreate to determine route
+				if(isCreate){
+					console.log('creating beep boop');
+					//get form data
+					var form = $('#MileageEntryModalForm');
+					$('#loading').show();
+					//post form data
+					$.ajax({
+						type: 'POST',
+						url: '/mileage-task/add-mileage-entry-task',
+						data: form.serialize(),
+						success: function (response) {
+							reloadMileageGridViews();
+						}
+					});	
+				}else{
+					//get form data
+					var form = $('#MileageEntryModalForm');
+					$('#loading').show();
+					//post form data
+					$.ajax({
+						type: 'POST',
+						url: '/mileage-task/update',
+						data: form.serialize(),
+						success: function (response) {
+							reloadMileageGridViews();
+						}
+					});	
+				}
 			}else{
 				$('#update_mileage_entry_submit_btn').prop('disabled', true);
 			}			
-		});
-		
-		//enable form for update entry
-		$(document).off('click', '#mileageModalUpdateAction').on('click', '#mileageModalUpdateAction',function (event){
-			type = $(this).closest('tr').find("td[data-col-seq='0']").text();
-			//enable fields
-			if(type == 'Odometer'){
-				$('#mileageentrytask-starttime').attr("readonly", false);
-				$('#mileageentrytask-endtime').attr("readonly", false);
-				$('#mileageentrytask-startingmileage').attr("readonly", false);
-				$('#mileageentrytask-endingmileage').attr("readonly", false);
-				$('#mileageentrytask-personalmiles').attr("readonly", false);
-				$('#mileageentrytask-adminmiles').attr("readonly", true);
-			}else{
-				$('#mileageentrytask-starttime').attr("readonly", true);
-				$('#mileageentrytask-endtime').attr("readonly", true);
-				$('#mileageentrytask-startingmileage').attr("readonly", true);
-				$('#mileageentrytask-endingmileage').attr("readonly", true);
-				$('#mileageentrytask-personalmiles').attr("readonly", true);
-				$('#mileageentrytask-adminmiles').attr("readonly", false);
-			}
-			$("#updateMileageEntryButtons").css("display", "block");
-			
-			//set is edit to allow row click event to populate fields without disabling form
-			isEdit = true;
 		});
 		
 		//deactivate entry
@@ -378,8 +443,10 @@ $columns = [
 					push: false,
 					replace: false,
 				}).done(function(){
+					//ensure 'createEntryRow' row is present
+					checkCreateEntryRow();
 					//hide form
-					$("#MileageEntryUpdateForm").css("display", "none");
+					$("#MileageEntryModalForm").css("display", "none");
 					$('#odometerImgs').css("display", "none");
 					$('#loading').hide();
 				});
@@ -434,6 +501,13 @@ $columns = [
 			
 			//return true if no rules are broken
 			return true;
+		}
+		
+		function checkCreateEntryRow(){
+			if(!$('#mileageEntryGridView tr td .createEntryRow').length>0){
+				//append createEntryRow row
+				$('#mileageEntryGridView tbody tr:last').after('<tr><td colspan="12"><div class="createEntryRow" style="text-align: center">Click to Add Mileage.</div></td></tr>');
+			}
 		}
 		
 		//also in task_entry_form should look to extract out

@@ -153,14 +153,6 @@ div[id^=modalContent] .wrap #top-wrapper {
     background-color: rgba(57, 12, 255, 0.25);
 }
 
-/*mileage card task entry form*/
-
-#create_mileage_task_submit_btn{
-	margin-top: -5%;
-	float: right;
-	margin-right: 3%;
-}
-
 /*mileage entry view form*/
 
 #mileageEntryGridView .kv-grid-container{
@@ -186,11 +178,11 @@ div[id^=modalContent] .wrap #top-wrapper {
 }
 
 /*hide form on initial load*/
-#MileageEntryUpdateForm{
+#MileageEntryModalForm{
 	display:none;
 }
 
-#updateMileageEntryButtons{
+#mileageEntryModalFormButtons{
 	float: right; 
 	margin-top: -4.5%; 
 	margin-right: 1.5%;

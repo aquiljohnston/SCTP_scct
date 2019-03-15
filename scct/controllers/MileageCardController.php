@@ -400,6 +400,20 @@ class MileageCardController extends BaseController
 			$ThursdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
 			$FridayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
 			$SaturdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
+			
+			//add empty row if no netries exist
+			if(count($cardData['show-entries']) == 1){
+				$cardData['show-entries'][] = [
+					'Task' => 'MileageActivity',
+					'Date1' => '',
+					'Date2' => '',
+					'Date3' => '',
+					'Date4' => '',
+					'Date5' => '',
+					'Date6' => '',
+					'Date7' => '',
+				];
+			}
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
