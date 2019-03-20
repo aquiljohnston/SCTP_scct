@@ -44,7 +44,7 @@ class UserController extends BaseController
             ]);
             $model->addRule('filter', 'string', ['max' => 32])
                 ->addRule('pageSize', 'string', ['max' => 32])//get page number and records per page
-				->addRule('projectID', 'integer');
+				->addRule('projectID', 'string', ['max' => 32]);//set to string to accommodate all options
 
             if (!$model->load(Yii::$app->request->get())) {
                 $model->pageSize = 50;
@@ -69,6 +69,9 @@ class UserController extends BaseController
             $userGetResponse = Parent::executeGetRequest($userGetUrl, Constants::API_VERSION_2);
             $userGetResponse = json_decode($userGetResponse, true);
             $assets = $userGetResponse['assets'];
+			$showProjectDropdown = $userGetResponse['showProjectDropdown'];
+			$projectDropdown = $userGetResponse['projects'];			
+			
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = new ArrayDataProvider
             ([
@@ -105,18 +108,13 @@ class UserController extends BaseController
 
             // Generate User Permission Table
             $userPermissionTable = SELF::getUserPermissionTable();
-            
-			//get project dropdown
-			$projectDropdownUrl = 'dropdown%2Fget-user-projects';
-			$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, Constants::API_VERSION_2);
-			$projectDropdownResponse = json_decode($projectDropdownResponse, true);
-			$showProjectDropdown = $projectDropdownResponse['showProjectDropdown'];
-			$projectDropdown = $projectDropdownResponse['projects'];
 			
             //populate add/remove modal options
             $addRemoveProjects = array();
 			$tmpProjectArray = $projectDropdown;
-			if(array_key_exists('', $tmpProjectArray)) unset($tmpProjectArray['']);
+			//remove generic options from data set
+			if(array_key_exists('all', $tmpProjectArray)) unset($tmpProjectArray['all']);
+			if(array_key_exists('unassigned', $tmpProjectArray)) unset($tmpProjectArray['unassigned']);
             foreach($tmpProjectArray as $projectID => $projectName){
                 $tmpProjectObj = array('ProjectID'=> $projectID, 'ProjectName'=> $projectName);
                 array_push($addRemoveProjects, $tmpProjectObj);
@@ -469,6 +467,7 @@ class UserController extends BaseController
 
     /**
      * Generate userPermissionTable
+	 * TODO look into another way to handle this should not be derived from hardcoded web values
      * @return array $userPermissionTable
      */
     private function getUserPermissionTable(){
