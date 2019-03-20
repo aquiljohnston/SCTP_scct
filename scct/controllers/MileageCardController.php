@@ -72,7 +72,7 @@ class MileageCardController extends BaseController
 				'projectID',
 				'employeeID'
             ]);
-			$model->addRule('DateRangePicker', 'string', ['max' => 32]);
+			$model->addRule('dateRangePicker', 'string', ['max' => 32]);
             $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]);
@@ -400,6 +400,20 @@ class MileageCardController extends BaseController
 			$ThursdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']);
 			$FridayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
 			$SaturdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
+			
+			//add empty row if no netries exist
+			if(count($cardData['show-entries']) == 1){
+				$cardData['show-entries'][] = [
+					'Task' => 'MileageActivity',
+					'Date1' => '',
+					'Date2' => '',
+					'Date3' => '',
+					'Date4' => '',
+					'Date5' => '',
+					'Date6' => '',
+					'Date7' => '',
+				];
+			}
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -487,32 +501,33 @@ class MileageCardController extends BaseController
     }
 
     /**
+	 * removed useage of this route 3/12/19
      * deactivate Multiple existing Mileage Card(s)
      * If deactivate is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      * @throws \yii\web\BadRequestHttpException
      * @throws Exception redirect user to mileage card index page
      */
-    public function actionDeactivate()
-    {
-        try {
-            $data = Yii::$app->request->post();	
-			$jsonData = json_encode($data);
+    // public function actionDeactivate()
+    // {
+        // try {
+            // $data = Yii::$app->request->post();	
+			// $jsonData = json_encode($data);
 			
-			// post url
-			$putUrl = 'mileage-entry%2Fdeactivate';
-			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
-			$obj = json_decode($putResponse, true);	
-        } catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch(ErrorException $e) {
-            throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
-            throw new ServerErrorHttpException();
-        }
-    }
+			// // post url
+			// $putUrl = 'mileage-entry%2Fdeactivate';
+			// $putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			// $obj = json_decode($putResponse, true);	
+        // } catch (UnauthorizedHttpException $e){
+            // Yii::$app->response->redirect(['login/index']);
+        // } catch(ForbiddenHttpException $e) {
+            // throw $e;
+        // } catch(ErrorException $e) {
+            // throw new \yii\web\HttpException(400);
+        // } catch(Exception $e) {
+            // throw new ServerErrorHttpException();
+        // }
+    // }
 
     /**
      * Approve Multiple existing Mileage Card(s)
