@@ -40,16 +40,11 @@ use yii\widgets\Pjax;
 				'disabled' => $approve_status || $isAccountant,
 				'id' => 'approve_mileageCard_btn_id',
 			]) ?>
-			<?= Html::button('Deactivate', [
+			<!--<?= Html::button('Deactivate', [
 				'class' => 'btn btn-primary',
 				'disabled' => true,
 				'id' => 'deactive_mileageEntry_btn_id',
-			]) ?>
-			<?= Html::button('Add Mileage', [
-				'class' => 'btn btn-primary add_mileageEntry_btn',
-				'disabled' => $approve_status && ($isSubmitted || !$isAccountant),
-				'id' => 'add_mileage_btn_id',
-			]) ?>
+			]) ?>-->
 		</p>
 		<br>
     </div>
@@ -101,15 +96,16 @@ use yii\widgets\Pjax;
 					'attribute' => 'Date7',
 					'headerOptions' => ['class'=>$SaturdayDateFull],
 				],
-				[
-					'header'            => 'Deactivate Mileage',
-					'class'             => 'kartik\grid\CheckboxColumn',
-					'contentOptions'    => [],
-					'checkboxOptions'   => function ($model) {
-						return ['mileageCardId' => Yii::$app->getRequest()->getQueryParam('id'),
-							'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
-					}
-				]
+				// [
+					// 'header' => 'Deactivate Mileage',
+					// 'class' => 'kartik\grid\CheckboxColumn',
+					// 'hidden' => 'true',
+					// 'contentOptions' => [],
+					// 'checkboxOptions' => function ($model) {
+						// return ['mileageCardId' => Yii::$app->getRequest()->getQueryParam('id'),
+							// 'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
+					// }
+				// ]
 			]
 		]);
 		?>
