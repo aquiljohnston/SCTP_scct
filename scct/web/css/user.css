@@ -85,7 +85,7 @@
 /*-----------css for the 1920*1028 resolution---------------*/
 @media only screen and (min-width: 1900px) {
 #userGridview .kv-grid-container{
-	max-height: 60vh;
+	max-height: 55vh;
 }
 }
 /*-----------css for the 1920*1028 resolution ends---------------*/
