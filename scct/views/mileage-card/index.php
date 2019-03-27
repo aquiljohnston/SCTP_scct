@@ -69,6 +69,12 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
+		[
+			'label' => 'MSD Submitted',
+			'attribute' => 'MSDynamicsSubmitted',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
 		//may not need this field as it is the table key
 		[
 			'label' => 'Project ID',

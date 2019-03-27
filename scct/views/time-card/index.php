@@ -70,8 +70,8 @@ if($isAccountant)
 			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
-			'label' => 'QB Submitted',
-			'attribute' => 'QBSubmitted',
+			'label' => 'MSD Submitted',
+			'attribute' => 'MSDynamicsSubmitted',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],

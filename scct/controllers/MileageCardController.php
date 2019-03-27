@@ -220,11 +220,11 @@ class MileageCardController extends BaseController
 					'attributes' => [
 						'ProjectName',
 						'ProjectManager',
-						'StartDate' ,
+						'StartDate',
 						'EndDate',
 						'ApprovedBy',
 						'OasisSubmitted',
-						'QBSubmitted',
+						'MSDynamicsSubmitted',
 						'ADPSubmitted'
 					]
 				];

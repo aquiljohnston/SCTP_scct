@@ -227,7 +227,7 @@ class TimeCardController extends BaseController
 						'EndDate',
 						'ApprovedBy',
 						'OasisSubmitted',
-						'QBSubmitted',
+						'MSDynamicsSubmitted',
 						'ADPSubmitted'
 					]
 				];
