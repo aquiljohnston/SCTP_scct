@@ -374,9 +374,11 @@ $columns = [
 		//submit form
 		$(document).off('click', '#update_mileage_entry_submit_btn').on('click', '#update_mileage_entry_submit_btn',function (){
 			if(mileageUpdateFormValidator()){
+				//enable potentially disabled fields
+				$('#mileageentrytask-starttime').attr("disabled", false);
+				$('#mileageentrytask-endtime').attr("disabled", false);
 				//check isCreate to determine route
 				if(isCreate){
-					console.log('creating beep boop');
 					//get form data
 					var form = $('#MileageEntryModalForm');
 					$('#loading').show();
