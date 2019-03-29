@@ -122,7 +122,7 @@ $columns = [
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
 						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE],
-						'readonly' => true
+						'disabled' => true
 					]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EndTime', [
@@ -134,7 +134,7 @@ $columns = [
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
 						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE],
-						'readonly' => true
+						'disabled' => true
 					]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'StartingMileage', [
@@ -227,8 +227,8 @@ $columns = [
 				$('#mileageentrytask-personalmiles').val('0.0');
 				$('#mileageentrytask-adminmiles').val('');
 				//enable/disable fields
-				$('#mileageentrytask-starttime').attr("readonly", true);
-				$('#mileageentrytask-endtime').attr("readonly", true);
+				$('#mileageentrytask-starttime').attr("disabled", true);
+				$('#mileageentrytask-endtime').attr("disabled", true);
 				$('#mileageentrytask-startingmileage').attr("readonly", true);
 				$('#mileageentrytask-endingmileage').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
@@ -271,8 +271,8 @@ $columns = [
 				$('#mileageentrytask-adminmiles').val(adminMiles);
 				
 				if(!isEdit){
-					$('#mileageentrytask-starttime').attr("readonly", true);
-					$('#mileageentrytask-endtime').attr("readonly", true);
+					$('#mileageentrytask-starttime').attr("disabled", true);
+					$('#mileageentrytask-endtime').attr("disabled", true);
 					$('#mileageentrytask-startingmileage').attr("readonly", true);
 					$('#mileageentrytask-endingmileage').attr("readonly", true);
 					$('#mileageentrytask-personalmiles').attr("readonly", true);
@@ -303,15 +303,17 @@ $columns = [
 			type = $(this).closest('tr').find("td[data-col-seq='0']").text();
 			//enable fields
 			if(type == 'Odometer'){
-				$('#mileageentrytask-starttime').attr("readonly", false);
-				$('#mileageentrytask-endtime').attr("readonly", false);
+				$('#mileageentrytask-starttime').attr("disabled", false);
+				$('#mileageentrytask-endtime').attr("disabled", false);
+				//remove disabled class from time picker buttons that is not removed by setting disabled to false
+				$('.disabled-addon').removeClass('disabled-addon');
 				$('#mileageentrytask-startingmileage').attr("readonly", false);
 				$('#mileageentrytask-endingmileage').attr("readonly", false);
 				$('#mileageentrytask-personalmiles').attr("readonly", false);
 				$('#mileageentrytask-adminmiles').attr("readonly", true);
 			}else{
-				$('#mileageentrytask-starttime').attr("readonly", true);
-				$('#mileageentrytask-endtime').attr("readonly", true);
+				$('#mileageentrytask-starttime').attr("disabled", true);
+				$('#mileageentrytask-endtime').attr("disabled", true);
 				$('#mileageentrytask-startingmileage').attr("readonly", true);
 				$('#mileageentrytask-endingmileage').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
@@ -353,8 +355,8 @@ $columns = [
 			$('#mileageentrytask-personalmiles').val(personalMiles);
 			$('#mileageentrytask-adminmiles').val(adminMiles);
 			//disable fields
-			$('#mileageentrytask-starttime').attr("readonly", true);
-			$('#mileageentrytask-endtime').attr("readonly", true);
+			$('#mileageentrytask-starttime').attr("disabled", true);
+			$('#mileageentrytask-endtime').attr("disabled", true);
 			$('#mileageentrytask-startingmileage').attr("readonly", true);
 			$('#mileageentrytask-endingmileage').attr("readonly", true);
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
@@ -408,22 +410,22 @@ $columns = [
 		
 		//deactivate entry
 		$(document).off('click', '#mileageModalDeactivateAction').on('click', '#mileageModalDeactivateAction',function (){
-				//get entry id
-				var entryID = $(this).closest('tr').attr('data-key');
-				krajeeDialog.defaults.confirm.title = 'Deactivate';
-				krajeeDialog.confirm('Are you sure you want to deactivate this entry?', function (resp) {
-					if(resp){
-						$('#loading').show();
-						//post form data
-						$.ajax({
-							type: 'POST',
-							url: '/mileage-task/deactivate?entryID='+entryID,
-							success: function (response) {
-								reloadMileageGridViews();
-							}
-						});		
-					}
-				})
+			//get entry id
+			var entryID = $(this).closest('tr').attr('data-key');
+			krajeeDialog.defaults.confirm.title = 'Deactivate';
+			krajeeDialog.confirm('Are you sure you want to deactivate this entry?', function (resp) {
+				if(resp){
+					$('#loading').show();
+					//post form data
+					$.ajax({
+						type: 'POST',
+						url: '/mileage-task/deactivate?entryID='+entryID,
+						success: function (response) {
+							reloadMileageGridViews();
+						}
+					});		
+				}
+			})
 		});
 		
 		function reloadMileageGridViews(){
