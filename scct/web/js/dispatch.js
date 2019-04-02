@@ -2,8 +2,11 @@ $(function () {
 	$("#dispatchButton").prop('disabled', true);
 	
 	$( document ).ready(function() {
-		//pass date picker selector to handle page refreshes
-		refreshDispatchAssignedDatePicker('#dispatchDatePickerContainer #dynamicmodel-daterangepicker');
+		//check if date picker is present
+		if($('#dispatchDatePickerContainer #dynamicmodel-daterangepicker').length > 0){
+			//pass date picker selector to handle page refreshes
+			refreshDispatchAssignedDatePicker('#dispatchDatePickerContainer #dynamicmodel-daterangepicker');
+		}
 	}); 
 	
 	//date range listener

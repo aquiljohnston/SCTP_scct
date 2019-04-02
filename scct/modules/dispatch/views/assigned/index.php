@@ -1,13 +1,15 @@
 <?php
+
 use yii\helpers\Html;
-use kartik\grid\GridView;
-use app\controllers\Assigned;
-use kartik\widgets\DepDrop;
-use kartik\form\ActiveForm;
-use yii\widgets\LinkPager;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
+use yii\widgets\LinkPager;
+use app\controllers\Assigned;
+use kartik\form\ActiveForm;
+use kartik\widgets\DepDrop;
+use kartik\grid\GridView;
+use kartik\daterange\DateRangePicker;
 
 $this->title = 'Assigned';
 $this->params['breadcrumbs'][] = $this->title;
@@ -31,9 +33,24 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'options' => ['id' => 'AssignForm', 'data-pjax' => true],
 				'action' => Url::to(['assigned/index'])
             ]); ?>
+				<div id="assignedDatePickerContainer">
+					<?= $form->field($model, 'dateRangePicker', ['labelSpan' => 3])
+						->widget(DateRangePicker::classname(), [
+							'name'=>'date_range_3',
+							'hideInput'=>false,
+							//'initRangeExpr' => true,
+							'pluginOptions' => [
+								'opens' => 'right',
+							],
+						])
+						->label('Date Range', [
+							'class' => 'assignedDateRange'
+					]); ?>
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedClearDateRange']) ?>
+				</div>
                 <span id="AssignedPageSizeLabel">
-                        <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                            ['value' => $assignedPageSizeParams, 'id' => 'assignPageSize'])
+                        <?= $form->field($model, 'pageSize')->dropDownList($pageSize,
+                            ['value' => $model->pageSize, 'id' => 'assignPageSize'])
                             ->label('Records Per Page', [
                                 'class' => 'recordsPerPage'
                             ]); ?>
@@ -55,11 +72,10 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
                 <div id="assignedSearchContainer">
                     <div id="filtertitle" class="dropdowntitle">
-                        <?= $form->field($model, 'assignedfilter')->textInput(['value' => $assignedFilterParams, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
+                        <?= $form->field($model, 'assignedFilter')->textInput(['value' => $model->assignedFilter, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
                     <?php echo Html::img('@web/logo/filter_clear_black.png', ['class'=>'fixAssignFilter','id' => 'assignedSearchCleanFilterButton']) ?>
                 </div>
-            <input id="assignedTableRecordsUpdate" type="hidden" name="assignedTableRecordsUpdate" value="no" />
             <input id="assignedPageNumber" type="hidden" name="assignedPageNumber" value="1" />
             <?php ActiveForm::end(); ?>
         </div>
