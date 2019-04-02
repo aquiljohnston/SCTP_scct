@@ -1,13 +1,36 @@
 $(function () {
-    var dispatchGV = $("#dispatchGV");
-
-    $("#dispatchButton").prop('disabled', true);
-
+	$("#dispatchButton").prop('disabled', true);
+	
+	$( document ).ready(function() {
+		//pass date picker selector to handle page refreshes
+		refreshDispatchAssignedDatePicker('#dispatchDatePickerContainer #dynamicmodel-daterangepicker');
+	}); 
+	
+	//date range listener
+	$(document).off('change', '#dispatchDatePickerContainer #dynamicmodel-daterangepicker').on('change', '#dispatchDatePickerContainer #dynamicmodel-daterangepicker', function (){
+		$('#dispatchPageNumber').val(1);
+        reloadDispatchGridView();
+	});
+	
+	//clear date range filter
+	$(document).off('click', '#dispatchClearDateRange').on('click', '#dispatchClearDateRange', function (){
+		//get datepicker
+		var datePicker = $('#dispatchDatePickerContainer #dynamicmodel-daterangepicker').data('daterangepicker');
+		//create default start end
+		var fm = moment().startOf('day') || '';//today
+		var to = moment() || '';//none
+		//set default selections in widget
+		datePicker.setStartDate(fm);
+		datePicker.setEndDate(to);
+		currentVals =  $('#dispatchDatePickerContainer #dynamicmodel-daterangepicker').data();
+		dateValue = $('#dispatchDatePickerContainer #dynamicmodel-daterangepicker').val('');
+        reloadDispatchGridView();
+    });
+	
     // dispatch filter listener
     $(document).off('keypress', '#dispatchFilter').on('keypress', '#dispatchFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
-            //reset page number to 1
             $('#dispatchPageNumber').val(1);
             reloadDispatchGridView();
         }
@@ -15,7 +38,7 @@ $(function () {
 
     //page size listener
     $(document).off('change', '#dispatchPageSize').on('change', '#dispatchPageSize', function () {
-        $('#dispatchTableRecordsUpdate').val(true);
+		$('#dispatchPageNumber').val(1);
         reloadDispatchGridView();
     });
 
@@ -82,40 +105,21 @@ $(function () {
         event.preventDefault();
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
         $('#dispatchPageNumber').val(page);
-        var form = $("#dispatchActiveForm");
-		//get sort value
-		var sort = getDispatchIndexSortParams();
-		//append sort to form values
-		var dataParams = form.serialize() + "&sort=" + sort;
-        $('#loading').show();
-        $.pjax.reload({
-            container: "#dispatchUnassignedGridview",
-            timeout: 99999,
-            url: form.attr("action"),
-            type: "GET",
-            data: dataParams
-        }).done(function () {
-        });
-        $('#dispatchUnassignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
-            $('#loading').hide();
-        });
-        $('#dispatchUnassignedGridview').on('pjax:error', function (event, data, status, xhr, options) {
-            //window.location.reload();
-            console.log("Error");
-        });
+        reloadDispatchGridView();
     });
 
     $(document).off('click', '#dispatchSearchCleanFilterButton').on('click', '#dispatchSearchCleanFilterButton', function (){
         $('#dispatchFilter').val("");
+		$('#dispatchPageNumber').val(1);
         reloadDispatchGridView();
     });
 	
+	//don't think this should be necessary
 	checkNavBarLoading();
 });
 
 function reloadDispatchGridView() {
-    var jqDispatchDropDowns = $('#dispatchTab');
-    var form = jqDispatchDropDowns.find("#dispatchActiveForm");
+    var form = $("#dispatchActiveForm");
     if (form.find(".has-error").length) {
         return false;
     }
@@ -131,7 +135,6 @@ function reloadDispatchGridView() {
         data: dataParams,
         timeout: 99999
     }).done(function () {
-        $('#dispatchTableRecordsUpdate').val(false);
         $('#loading').hide();
     });
 }

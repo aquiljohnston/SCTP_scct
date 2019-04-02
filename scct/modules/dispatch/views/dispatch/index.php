@@ -6,6 +6,7 @@ use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
+use kartik\daterange\DateRangePicker;
 use yii\bootstrap\Modal;
 
 $this->title = 'Dispatch';
@@ -28,20 +29,34 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'action' => '/dispatch/dispatch/index'
             ]); ?>
             <div id="dispatchUnassignedTableDropdown">
+				<div id="dispatchDatePickerContainer">
+					<?= $form->field($model, 'dateRangePicker', ['labelSpan' => 3])
+						->widget(DateRangePicker::classname(), [
+							'name'=>'date_range_3',
+							'hideInput'=>false,
+							//'initRangeExpr' => true,
+							'pluginOptions' => [
+								'opens' => 'right',
+							],
+						])
+						->label('Date Range', [
+							'class' => 'dispatchDateRange'
+					]); ?>
+					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchClearDateRange']) ?>
+				</div>
                 <span id="dispatchPageSizeLabel" style="float: right;">
-                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                        ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+                    <?= $form->field($model, 'pageSize')->dropDownList($pageSize,
+                        ['value' => $model->pageSize, 'id' => 'dispatchPageSize'])
                         ->label('Records Per Page', [
                             'class' => 'recordsPerPage'
                         ]); ?>
                 </span>
                 <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
                     <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
-                        <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
+                        <?= $form->field($model, 'dispatchFilter')->textInput(['value' => $model->dispatchFilter, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
                 </div>
                 <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-                <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
             <?php ActiveForm::end(); ?>
             <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
             <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSearchCleanFilterButton']) ?>
