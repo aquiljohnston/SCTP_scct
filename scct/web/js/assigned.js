@@ -11,20 +11,48 @@ $(function () {
     assignedAssets_WorkOrderID = [];
     assignedAssets_AssignedUserId = [];
 
-
     $('#UnassignedButton').prop('disabled', true); //TO DISABLED
+	
+	$( document ).ready(function() {
+		//check if date picker is present
+		if($('#assignedDatePickerContainer #dynamicmodel-daterangepicker').length > 0){
+			//pass date picker selector to handle page refreshes
+			refreshDispatchAssignedDatePicker('#assignedDatePickerContainer #dynamicmodel-daterangepicker');
+		}
+    }); 
+    
+    //date range listener
+    $(document).off('change', '#assignedDatePickerContainer #dynamicmodel-daterangepicker').on('change', '#assignedDatePickerContainer #dynamicmodel-daterangepicker', function (){
+        $('#assignedPageNumber').val(1);
+        reloadAssignedGridView();
+    });
+    
+    //clear date range filter
+    $(document).off('click', '#assignedClearDateRange').on('click', '#assignedClearDateRange', function (){
+        //get datepicker
+        var datePicker = $('#assignedDatePickerContainer #dynamicmodel-daterangepicker').data('daterangepicker');
+        //create default start end
+        var fm = moment().startOf('day') || '';//today
+        var to = moment() || '';//none
+        //set default selections in widget
+        datePicker.setStartDate(fm);
+        datePicker.setEndDate(to);
+        currentVals =  $('#assignedDatePickerContainer #dynamicmodel-daterangepicker').data();
+        dateValue = $('#assignedDatePickerContainer #dynamicmodel-daterangepicker').val('');
+        reloadAssignedGridView();
+    });
+
 
     //assigned Seachfilter listener
     $(document).off('keypress', '#assignedFilter').on('keypress', '#assignedFilter', function (e) {
         if (e.keyCode === 13 || e.keyCode === 10) {
             e.preventDefault();
-            //reset page number to 1
             $('#assignedPageNumber').val(1);
             reloadAssignedGridView();
         }
     });
     $(document).off('change', '#assignPageSize').on('change', '#assignPageSize', function () {
-        $('#assignedTableRecordsUpdate').val(true);
+        $('#assignedPageNumber').val(1);
         reloadAssignedGridView();
     });
 
@@ -33,28 +61,7 @@ $(function () {
         event.preventDefault();
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
 		$('#assignedPageNumber').val(page);
-        var form = $("#AssignForm");
-		//get sort value
-		var sort = getAssignedIndexSortParams();
-		//append sort to form values
-		var dataParams = form.serialize() + "&sort=" + sort;
-        $('#loading').show();
-        $.pjax.reload({
-            container: "#assignedGridview",
-            timeout: 99999,
-            url: form.attr("action"),
-            type: "GET",
-            data: dataParams
-        }).done(function () {
-        });
-        $('#assignedGridview').on('pjax:success', function (event, data, status, xhr, options) {
-            console.log("Success");
-            $('#loading').hide();
-        });
-        $('#assignedGridview').on('pjax:error', function (event, data, status, xhr, options) {
-            console.log("Error");
-            //window.location.reload(); // Can't leave them stuck
-        });
+		reloadAssignedGridView();
     });
 
     //expandable row column listener
@@ -175,6 +182,7 @@ $(function () {
 
     $(document).off('click', '#assignedSearchCleanFilterButton').on('click', '#assignedSearchCleanFilterButton', function (){
         $('#assignedFilter').val("");
+        $('#assignedPageNumber').val(1);
         reloadAssignedGridView();
     });
 });
@@ -191,8 +199,7 @@ function unassignCheckboxListener() {
 }
 
 function reloadAssignedGridView() {
-    var jqAssignedDropDowns = $('#assignedDropdownContainer');
-    var form = jqAssignedDropDowns.find("#AssignForm");
+    var form = $("#AssignForm");
     if (form.find(".has-error").length) {
         return false;
     }
@@ -211,7 +218,6 @@ function reloadAssignedGridView() {
         $('#loading').hide();
         $('#addSurveyor').prop('disabled', true);
         $('#UnassignedButton').prop('disabled', true);
-        $('#assignedTableRecordsUpdate').val(false);
         unassignCheckboxListener();
     });
 }
