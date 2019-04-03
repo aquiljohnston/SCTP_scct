@@ -73,7 +73,7 @@
 	margin-top: -1.8%;
 }
 
-.field-dynamicmodel-daterangepicker{
+#timeCardDatePickerContainer .field-dynamicmodel-daterangepicker{
 	float:right !important;
 	margin-left: 0px !important;
 }

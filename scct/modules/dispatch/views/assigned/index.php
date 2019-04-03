@@ -42,12 +42,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 							'pluginOptions' => [
 								'opens' => 'right',
 							],
+							'options' => [
+								'placeholder' => 'Date Range',
+								'class' => 'form-control',
+							],
 						])
-						->label('Date Range', [
-							'class' => 'assignedDateRange'
-					]); ?>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedClearDateRange']) ?>
+						->label(''); ?>
 				</div>
+				<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedClearDateRange']) ?>
                 <span id="AssignedPageSizeLabel">
                         <?= $form->field($model, 'pageSize')->dropDownList($pageSize,
                             ['value' => $model->pageSize, 'id' => 'assignPageSize'])
@@ -55,10 +57,17 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
-                <span class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
+				<div id="assignedSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
+                    <div id="assignedSearchField">
+                        <?= $form->field($model, 'assignedFilter')->textInput(['value' => $model->assignedFilter, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
+                    </div>
+                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assignedSearchCleanFilterButton']) ?>
+                </div>
+				<input id="assignedPageNumber" type="hidden" name="assignedPageNumber" value="1" />
+				<?php ActiveForm::end(); ?>
+                <div class="col-xs-1 col-md-1 col-lg-1" id="assignedButtonContainer">
                     <label style="color: #0067a6;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
-
                     <?php if ($canUnassign != 0) { ?>
                         <div id="assiunassignedButton">
                             <?php echo Html::button('REMOVE SURVEYOR', ['class' => 'btn btn-primary',
@@ -68,16 +77,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         echo "";
                     } ?>
                     <?php Pjax::end() ?>
-                </span>
-
-                <div id="assignedSearchContainer">
-                    <div id="filtertitle" class="dropdowntitle">
-                        <?= $form->field($model, 'assignedFilter')->textInput(['value' => $model->assignedFilter, 'id' => 'assignedFilter', 'placeholder' => 'Search'])->label(''); ?>
-                    </div>
-                    <?php echo Html::img('@web/logo/filter_clear_black.png', ['class'=>'fixAssignFilter','id' => 'assignedSearchCleanFilterButton']) ?>
                 </div>
-            <input id="assignedPageNumber" type="hidden" name="assignedPageNumber" value="1" />
-            <?php ActiveForm::end(); ?>
         </div>
     </div>
 
