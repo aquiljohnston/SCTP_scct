@@ -14,23 +14,26 @@
     padding:10px;
 }
 
+#assignedDatePickerContainer{
+    float:left;
+	margin-right:1%;
+}
+
 #assignedDropdownTitlesContainer {
     position: relative;
     width: 100%;
 }
 
 #assignedSearchContainer {
-    position: relative;
     float: left;
-    width: 29%;
-    margin-left: 60%;
+    margin-left: 50%;
 }
 
-#assignedDropdownTitlesContainer .dropdowntitle {
-    position: relative;
-    float: left;
-    padding-right: 5px;
-    color: #0067a6;
+#Assigned-dropDownList-form{
+    width:98%;
+    margin-left:1%;
+    position:relative;
+    float:left;
 }
 
 #Assigned-dropDownList-form lable {
@@ -42,10 +45,19 @@
     margin-bottom: 5px;
 }
 
-#assignedSearchContainer .dropdowntitle {
-    float: left;
-    width: 80%;
-    color: #0067a6;
+#assignedSearchField{
+	float:left;
+    margin-right:1%;
+    position:relative;
+	width:90%;
+}
+
+#assignedSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -10px;
+	float: right;
 }
 
 #AssignedPageSizeLabel {
@@ -59,15 +71,10 @@
     display: inline !important;
 }
 
-#assignedCleanFilterButton, #assignedSearchCleanFilterButton, #SurveyorModalCleanFilterButton, #leakLogSearchClearFilterButton, .assignedSearchCleanFilterButton {
+#assignedCleanFilterButton, #SurveyorModalCleanFilterButton, #leakLogSearchClearFilterButton{
     margin-top: 25px;
     width: 32px;
     cursor: pointer;
-}
-
-.fixAssignFilter{
-    margin-top: 21px !important;
-    margin-left: 13px !important;
 }
 
 #assginedGridViewContainer {
@@ -268,16 +275,17 @@
     width: 35px;
     cursor: pointer;
 }
+#assignedClearDateRange{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -10px;
+	float:left;
+}
 #assignedButtonContainer{
     float: right;
     margin: 13px auto;
     width: 11%;
-}
-#assignedSearchCleanFilterButton, .assignedSearchCleanFilterButton{
-    width: 32px;
-    cursor: pointer;
-    margin-top: 1px;
-    margin-left: -88px;
 }
 #assignedDispatchAssetsButton{
     padding-left: 25%;
