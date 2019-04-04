@@ -20,15 +20,18 @@ class AssignedController extends \app\controllers\BaseController
             self::requirePermission("viewAssigned");
 
             // Verify logged in
-            if (Yii::$app->user->isGuest) {
+            if (Yii::$app->user->isGuest) {	
                 return $this->redirect(['/login']);
             }
 
             $model = new \yii\base\DynamicModel([
-                'assignedfilter', 'pagesize'
+                'assignedFilter',
+				'pageSize',
+				'dateRangePicker'
             ]);
-            $model->addRule('assignedfilter', 'string', ['max' => 32])
-                ->addRule('pagesize', 'string', ['max' => 32]);
+            $model->addRule('assignedFilter', 'string', ['max' => 32])
+                ->addRule('pageSize', 'string', ['max' => 32])
+                ->addRule('dateRangePicker', 'string', ['max' => 32]);
 
 			//"sort":"-Division"
             //get sort data
@@ -42,26 +45,25 @@ class AssignedController extends \app\controllers\BaseController
                 $sortField = 'ComplianceEnd';
                 $sortOrder = 'ASC';
             }
-				
-            //check request
-            if ($model->load(Yii::$app->request->queryParams)) {
-                $assignedPageSizeParams = $model->pagesize;
-                $assignedFilterParams = $model->assignedfilter;
-            } else {
-                $assignedPageSizeParams = 50;
-                $assignedFilterParams = "";
+			
+			//check request
+            if (!$model->load(Yii::$app->request->queryParams)) {
+                $model->pageSize = 50;
+                $model->assignedFilter = '';
+                $model->dateRangePicker = '';
             }
 
             // get the page number for assigned table
-            if (isset($_GET['assignedPageNumber']) && $_GET['assignedTableRecordsUpdate'] != "true") {
+            if (isset($_GET['assignedPageNumber'])) {
                 $pageAt = $_GET['assignedPageNumber'];
             } else {
                 $pageAt = 1;
             }
 
             $getUrl = 'dispatch%2Fget-assigned&' . http_build_query([
-                    'filter' => $assignedFilterParams,
-                    'listPerPage' => $assignedPageSizeParams,
+					'dateRange' => $model->dateRangePicker,
+                    'filter' => $model->assignedFilter,
+                    'listPerPage' => $model->pageSize,
                     'page' => $pageAt,
 					'sortField' => $sortField,
                     'sortOrder' => $sortOrder,
@@ -108,29 +110,20 @@ class AssignedController extends \app\controllers\BaseController
                     'OfficeName'
                 ]
             ];
+			
+			$dataArray = [
+				'assignedDataProvider' => $assignedDataProvider,
+				'model' => $model,
+				'pages' => $pages,
+				'canUnassign' => $canUnassign,
+				'canAddSurveyor' => $canAddSurveyor,
+				'divisionParams' => $divisionParams,
+			];
 
             if (Yii::$app->request->isAjax) {
-                return $this->render('index', [
-                    'assignedDataProvider' => $assignedDataProvider,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'canUnassign' => $canUnassign,
-                    'canAddSurveyor' => $canAddSurveyor,
-                    'divisionParams' => $divisionParams,
-                    'assignedPageSizeParams' => $assignedPageSizeParams,
-                    'assignedFilterParams' => $assignedFilterParams,
-                ]);
+                return $this->renderAjax('index', $dataArray);
             } else {
-                return $this->render('index', [
-                    'assignedDataProvider' => $assignedDataProvider,
-                    'model' => $model,
-                    'pages' => $pages,
-                    'canUnassign' => $canUnassign,
-                    'canAddSurveyor' => $canAddSurveyor,
-                    'divisionParams' => $divisionParams,
-                    'assignedPageSizeParams' => $assignedPageSizeParams,
-                    'assignedFilterParams' => $assignedFilterParams,
-                ]);
+                return $this->render('index', $dataArray);
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);

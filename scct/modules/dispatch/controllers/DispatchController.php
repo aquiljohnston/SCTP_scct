@@ -23,12 +23,13 @@ class DispatchController extends \app\controllers\BaseController
             self::requirePermission("viewDispatch");
 
             $model = new \yii\base\DynamicModel([
-                'dispatchfilter', 'pagesize', 'mapgridfilter', 'sectionnumberfilter'
+                'dispatchFilter',
+				'pageSize',
+				'dateRangePicker'
             ]);
-            $model->addRule('mapgridfilter', 'string', ['max' => 32])
-                ->addRule('sectionnumberfilter', 'string', ['max' => 32])
-                ->addRule('dispatchfilter', 'string', ['max' => 32])
-                ->addRule('pagesize', 'string', ['max' => 32]);
+            $model->addRule('dispatchFilter', 'string', ['max' => 32])
+                ->addRule('pageSize', 'string', ['max' => 32])
+                ->addRule('dateRangePicker', 'string', ['max' => 32]);
 
             // Verify logged in
             if (Yii::$app->user->isGuest) {
@@ -48,29 +49,24 @@ class DispatchController extends \app\controllers\BaseController
                 $sortOrder = 'ASC';
 			}
 			
-            //check request TODO look into implemening this cleaner similar to user controller index
-            if ($model->load(Yii::$app->request->queryParams)) {
-                $dispatchPageSizeParams = $model->pagesize;
-                $dispatchFilterParams = $model->dispatchfilter;
-                $dispatchMapGridSelectedParams = $model->mapgridfilter;
-                $dispatchSectionNumberSelectedParams = $model->sectionnumberfilter;
-            } else {
-                $dispatchPageSizeParams = 50;
-                $dispatchFilterParams = '';
-                $dispatchMapGridSelectedParams = '';
-                $dispatchSectionNumberSelectedParams = '';
+            //check request
+            if (!$model->load(Yii::$app->request->queryParams)) {
+                $model->pageSize = 50;
+                $model->dispatchFilter = '';
+                $model->dateRangePicker = '';
             }
-
+			
             // get the page number for assigned table
-            if (isset($_GET['dispatchPageNumber']) && $_GET['dispatchTableRecordsUpdate'] != "true") {
+            if (isset($_GET['dispatchPageNumber'])) {
                 $pageAt = $_GET['dispatchPageNumber'];
             } else {
                 $pageAt = 1;
             }
 
             $getUrl = 'dispatch%2Fget-available&' . http_build_query([
-                    'filter' => $dispatchFilterParams,
-                    'listPerPage' => $dispatchPageSizeParams,
+					'dateRange' =>  $model->dateRangePicker,
+                    'filter' => $model->dispatchFilter,
+                    'listPerPage' => $model->pageSize,
                     'page' => $pageAt,
 					'sortField' => $sortField,
 					'sortOrder' => $sortOrder,
@@ -116,6 +112,14 @@ class DispatchController extends \app\controllers\BaseController
                     'OfficeName'
                 ]
             ];
+			
+			$dataArray = [
+				'dispatchDataProvider' => $dispatchDataProvider,
+				'divisionFlag' => $divisionFlag,
+				'model' => $model,
+				'can' => $can,
+				'pages' => $pages,
+			];
 
             if (Yii::$app->request->isAjax) {
                 //Prevent CSS from being loaded twice, causing a visual bug
@@ -124,25 +128,9 @@ class DispatchController extends \app\controllers\BaseController
                     'yii\bootstrap\BootstrapAsset' => false,
                     'yii\web\JqueryAsset' => false,
                 ];
-                return $this->renderAjax('index', [
-                    'dispatchDataProvider' => $dispatchDataProvider,
-					'divisionFlag' => $divisionFlag,
-                    'model' => $model,
-                    'can' => $can,
-                    'pages' => $pages,
-                    'dispatchFilterParams' => $dispatchFilterParams,
-                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
-                ]);
+                return $this->renderAjax('index', $dataArray);
             } else {
-                return $this->render('index', [
-                    'dispatchDataProvider' => $dispatchDataProvider,
-					'divisionFlag' => $divisionFlag,
-                    'model' => $model,
-                    'can' => $can,
-                    'pages' => $pages,
-                    'dispatchFilterParams' => $dispatchFilterParams,
-                    'dispatchPageSizeParams' => $dispatchPageSizeParams,
-                ]);
+                return $this->render('index', $dataArray);
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);

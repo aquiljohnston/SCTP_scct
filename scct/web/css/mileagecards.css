@@ -69,6 +69,11 @@
 	margin-top: -1.8%;
 }
 
+#mileageDatePickerContainer .field-dynamicmodel-daterangepicker{
+	float:right !important;
+	margin-left: 0px !important;
+}
+
 .MileageCardSearch {
 	float: right;
 	margin-right: 22%;

@@ -1,21 +1,23 @@
 <?php
-use kartik\form\ActiveForm;
+
 use yii\helpers\Html;
-use kartik\widgets\DepDrop;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
-use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use kartik\form\ActiveForm;
+use kartik\widgets\DepDrop;
+use kartik\grid\GridView;
+use kartik\daterange\DateRangePicker;
 
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
 <style>
-  .modal-xl {
-    width: 90%;
-   max-width:1200px;
+.modal-xl{
+	width: 90%;
+	max-width:1200px;
 }
 </style>
 <div class="dispatch">
@@ -28,23 +30,39 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'action' => '/dispatch/dispatch/index'
             ]); ?>
             <div id="dispatchUnassignedTableDropdown">
-                <span id="dispatchPageSizeLabel" style="float: right;">
-                    <?= $form->field($model, 'pagesize')->dropDownList($pageSize,
-                        ['value' => $dispatchPageSizeParams, 'id' => 'dispatchPageSize'])
+				<div id="dispatchDatePickerContainer">
+					<?= $form->field($model, 'dateRangePicker')
+						->widget(DateRangePicker::classname(), [
+							'name'=>'date_range_3',
+							'hideInput'=>false,
+							//'initRangeExpr' => true,
+							'pluginOptions' => [
+								'opens' => 'right',
+							],
+							'options' => [
+								'placeholder' => 'Date Range',
+								'class' => 'form-control',
+							],
+						])
+						->label(''); ?>
+				</div>
+				<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchClearDateRange']) ?>
+                <span id="dispatchPageSizeLabel">
+                    <?= $form->field($model, 'pageSize')->dropDownList($pageSize,
+                        ['value' => $model->pageSize, 'id' => 'dispatchPageSize'])
                         ->label('Records Per Page', [
                             'class' => 'recordsPerPage'
                         ]); ?>
                 </span>
                 <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
-                    <div id="filtertitle" class="dropdowntitle" style="width: 100%;">
-                        <?= $form->field($model, 'dispatchfilter')->textInput(['value' => $dispatchFilterParams, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
+                    <div id="dispatchSearchField">
+                        <?= $form->field($model, 'dispatchFilter')->textInput(['value' => $model->dispatchFilter, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
                     </div>
+					 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSearchCleanFilterButton']) ?>
                 </div>
                 <input id="dispatchPageNumber" type="hidden" name="dispatchPageNumber" value="1"/>
-                <input id="dispatchTableRecordsUpdate" type="hidden" name="dispatchTableRecordsUpdate"value="false">
             <?php ActiveForm::end(); ?>
             <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
-            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSearchCleanFilterButton']) ?>
             <div id="addSurveyorButtonDispatch" class="col-xs-1 col-md-1 col-lg-1">
                 <?php if ($can != 0) { ?>
                     <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary dispatch_btn', 'id' => 'dispatchButton']); ?>

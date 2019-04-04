@@ -127,6 +127,13 @@ function initListeners() {
                     inspectorsListHeader.text("Project List: ");
                     toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
                 }
+				// custom logic for taskout report
+                if(selectedReport.ReportSPName == 'spRptEmployeeTaskOutDetails') {
+                    dataSync("taskOut", reportStartDate, reportEndDate, null, null);
+                    // show project dropdown
+                    inspectorsListHeader.text("Task Types: ");
+                    toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
+                }
                 submitButton.css('display', 'inline');
             }
         } else {
