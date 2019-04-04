@@ -3,19 +3,30 @@
     height: 140px;
     padding:10px;
     margin-bottom: 5px;
+	float:left;
+    width: 100%;
+    background-color: #E6F0F6;
+    z-index: 3;
+    border-bottom:1px solid black;
 }
 .summary{
     padding-left: 1%;
+	margin-top: 10px;
 }
 #dispatchUnassignedTable{
+	position:relative;
+    float:left;
+    width:100%;
+    margin-right:0.5%;
     height: 62vh;
     overflow-y: hidden;
     overflow-x: hidden;
 }
-.dispatch, .dispatch-assigned, .dispatch-assets {
-    margin-top: 2%;
+#dispatchUnassignedTable .table-responsive {
+	max-height: 51vh;
+    margin-top:0px;
+    width:100%;
 }
-
 #dispatchGV {
     width: 100%;
     float: left;
@@ -24,38 +35,23 @@
     margin: 0 auto;
     overflow-x: hidden;
 }
+.dispatch, .dispatch-assigned, .dispatch-assets {
+    margin-top: 2%;
+}
 .title{
     margin-top: -5px;
     font-size: 20px;
-
 }
-
 #surveyorsGV {
     width: 100%;
     float: right;
 }
-
 #dispatchAssetsBackButton {
     margin-bottom: 5px;
 }
-
-.dispatch .dispatch-assigned #addSurveyorsButton {
-    position: fixed;
-    bottom: 32px;
-    right: 20px;
-    z-index: 42;
-}
-
-/*pending changes start*/
-#dispatchTab{
-    float:left;
-    width: 100%;
-    background-color: #E6F0F6;
-    z-index: 3;
-    border-bottom:1px solid black;
-}
-.summary{
-    margin-top: 10px;
+#dispatchDatePickerContainer{
+	float:left;
+	margin-right:1%;
 }
 #dispatchGridViewContainer{
     position:relative;
@@ -64,31 +60,32 @@
     margin-top: 0.7%;
     z-index: 1;
 }
-#dispatch-dropDownList-form .dropdowntitle{
-    position:relative;
-    padding-right:5px;
-    color:#0067a6;
-}
-#dispatchUnassignedTable{
-    position:relative;
+#dispatchSearchContainer{
     float:left;
-    width:100%;
-    margin-right:0.5%;
-}
-#dispatchUnassignedTable .table-responsive {
-	max-height: 51vh;
-    margin-top:0px;
-    width:100%;
-}
-#dispatchSurveyorsGridview .table-responsive{
-    max-height:500px;
-    overflow:auto;
+    margin-left: 50%;
 }
 #dispatch-dropDownList-form{
     width:99%;
     margin-left:1%;
     position:relative;
     float:left;
+}
+#dispatchSearchField{
+	float:left;
+    margin-right:1%;
+	width:90%;
+    position:relative;
+}
+#dispatchSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -10px;
+	float: right;
+}
+#dispatchSurveyorsGridview .table-responsive{
+    max-height:500px;
+    overflow:auto;
 }
 #dispatchUnassignedTableDropdown{
     position:relative;
@@ -108,13 +105,6 @@
 }
 #unAssignedPageSizeLabel .form-group ,#dispatchSurveyorPageSizeLabel .form-group,#dispatchUnassignedTableDropdown #filtertitle .form-group {
     float:right;
-}
-#dispatchUnassignedTableDropdown .compliancemonth{
-    width:19%;
-}
-#dispatchUnassignedTableDropdown #filtertitle{
-    float:right;
-    margin-right:1%;
 }
 #dispatchSurveyorTableDropdown{
     position:relative;
@@ -201,6 +191,7 @@
 #dispatchPageSizeLabel{
     margin: -39px auto;
     width: 10%;
+	float: right;
 }
 #unassignedTablePagination .pagination {
     margin: 5px 0 0 0;
@@ -255,10 +246,6 @@
     height: auto !important;
     max-height: 51vh !important;
 }
-#dispatchSearchContainer{
-    float:left;
-    margin-left: 60%;
-}
 #addSurveyorButtonDispatch{
     float: right;
     margin: 38px auto;
@@ -271,11 +258,12 @@
     padding-left: 25%;
     padding-right: 25%;
 }
-#dispatchSearchCleanFilterButton{
-    width: 32px;
+#dispatchClearDateRange{
+	width: 32px;
     cursor: pointer;
     margin-top: 20px;
-    margin-left: -15px;
+    margin-left: -10px;
+	float: left;
 }
 
 @media (max-width: 760px) {
@@ -285,6 +273,7 @@
     #dispatchPageSizeLabel {
         margin: -39px auto;
         width: 20%;
+		float: right;
     }
     #dispatchSearchContainer{
         margin-left: 40%;
