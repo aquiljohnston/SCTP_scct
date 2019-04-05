@@ -266,21 +266,28 @@
 	float: left;
 }
 
-@media (max-width: 760px) {
+/*css for the 1366*768 resolution*/
+@media (max-width: 1360px) {
     #addSurveyorButtonDispatch{
-        width: 22%;
+        width: 14%;
     }
     #dispatchPageSizeLabel {
-        margin: -39px auto;
-        width: 20%;
-		float: right;
+        width: 13%;
     }
     #dispatchSearchContainer{
         margin-left: 40%;
     }
+	
+	#dispatchSearchField {
+		width: 88%;
+	}
     .kv-grid-wrapper {
         overflow-x: hidden;
     }
+	
+	#dispatchUnassignedTable .table-responsive {
+		max-height: 37vh;
+	}
 }
 
 /* Safari 7.1+ */
