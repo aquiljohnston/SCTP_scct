@@ -295,16 +295,22 @@
     width: 100%;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 1360px) {
     #assignedButtonContainer{
-        width: 22%;
+        width: 14%;
     }
     #AssignedPageSizeLabel {
-        width: 20%;
+        width: 13%;
     }
     #assignedSearchContainer{
         margin-left: 40%;
     }
+	#assignedSearchField {
+		width: 88%;
+	}
+	#assignedTable .table-responsive {
+		max-height: 37vh;
+	}
 }
 /* Chrome 29+ */
 @media screen and (min-resolution:.001dpcm) {
