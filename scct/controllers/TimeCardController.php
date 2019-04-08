@@ -26,7 +26,7 @@ use app\constants\Constants;
 /**
  * TimeCardController implements the CRUD actions for TimeCard model.
  */
-class TimeCardController extends BaseController
+class TimeCardController extends BaseCardController
 {
     /**
      * Lists all TimeCard models.
@@ -54,9 +54,6 @@ class TimeCardController extends BaseController
 				unset(Yii::$app->session['timeCardSort']);
 			}
 			
-			//Check if user has permission to view time card page
-			self::requirePermission("viewTimeCardMgmt");
-            //create curl for restful call.
             //check user role
             $isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 			$accountingSubmitReady = FALSE;
@@ -364,11 +361,11 @@ class TimeCardController extends BaseController
 		try{
 			//Defensive Programming - Magic Numbers
 			//declare constants to hold constant values	
-			 define('ENTRIES_ZERO_INDEX',0);
-			 define('DATES_ZERO_INDEX',0);
-			 define('DATES_FIRST_INDEX',1);
-			 define('FROM_DATE_ZERO_INDEX',0);
-			 define('TO_DATE_FIRST_INDEX',1);
+			define('ENTRIES_ZERO_INDEX',0);
+			define('DATES_ZERO_INDEX',0);
+			define('DATES_FIRST_INDEX',1);
+			define('FROM_DATE_ZERO_INDEX',0);
+			define('TO_DATE_FIRST_INDEX',1);
 
 			//guest redirect
 			if (Yii::$app->user->isGuest)
@@ -449,42 +446,6 @@ class TimeCardController extends BaseController
             throw new ServerErrorHttpException();
         }
     }
-	
-    /**
-     * Approve an existing TimeEntry.
-     * If approve is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     * @throws \yii\web\HttpException
-     */
-	public function actionApprove($id){
-		try{
-			//guest redirect
-			if(Yii::$app->user->isGuest){
-				return $this->redirect(['/login']);
-			}
-		
-			$cardIDArray[] = $id;
-			$data = array(
-				'cardIDArray' => $cardIDArray,
-			);
-			$json_data = json_encode($data);
-
-			// post url
-			$putUrl = 'time-card%2Fapprove-cards';
-			$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
-			$obj = json_decode($putResponse, true);
-			$responseTimeCardID = $obj[0]["TimeCardID"];
-		} catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch(ErrorException $e) {
-            throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
-            throw new ServerErrorHttpException();
-        }
-	}
 
     /**
      * Deactivate an existing TimeEntry.
@@ -513,113 +474,6 @@ class TimeCardController extends BaseController
             throw new ServerErrorHttpException();
         }
 	}
-
-    /**
-     * Approve Multiple existing TimeCard.
-     * If approve is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     * @throws \yii\web\BadRequestHttpException
-     * @throws \yii\web\HttpException
-     * @internal param string $id
-     *
-     */
-	public function actionApproveMultiple() {
-		try{
-			if (Yii::$app->request->isAjax) {
-				$data = Yii::$app->request->post();					
-				 // loop the data array to get all id's.	
-				foreach ($data as $key) {
-					foreach($key as $keyitem){
-					   $TimeCardIDArray[] = $keyitem;
-					}
-				}
-				
-				$data = array(
-						'cardIDArray' => $TimeCardIDArray,
-					);		
-				$json_data = json_encode($data);
-				
-				// post url
-				$putUrl = 'time-card%2Fapprove-cards';
-				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
-				return $this->redirect(['index']);
-			} else {
-			  throw new \yii\web\BadRequestHttpException;
-			}
-		} catch (UnauthorizedHttpException $e){
-			Yii::$app->response->redirect(['login/index']);
-		} catch(ForbiddenHttpException $e) {
-			throw $e;
-		} catch(ErrorException $e) {
-			throw new \yii\web\HttpException(400);
-		} catch(Exception $e) {
-			throw new ServerErrorHttpException();
-		}
-	}
-
-	public function actionPMSubmit() {
-		try{
-			if (Yii::$app->request->isAjax) {			
-				$data = Yii::$app->request->post();			
-				// set body data
-				$body = array(
-						'projectIDArray' => $data['projectIDArray'],
-						'dateRangeArray' => $data['dateRangeArray'],
-					);		
-				$json_data = json_encode($body);
-				$putResponse = Parent::executePutRequest('time-card%2Fp-m-submit', $json_data, Constants::API_VERSION_3); // indirect rbac
-				return $this->redirect(['index']);
-			} else {
-				throw new \yii\web\BadRequestHttpException;
-			}
-		} catch (UnauthorizedHttpException $e){
-			Yii::$app->response->redirect(['login/index']);
-		} catch(ForbiddenHttpException $e) {
-			throw $e;
-		} catch(ErrorException $e) {
-			throw new \yii\web\HttpException(400);
-		} catch(Exception $e) {
-			throw new ServerErrorHttpException();
-		}
-	}
-
-    public function actionAccountantSubmit()
-	{
-        try{
-        	$data = Yii::$app->request->post();	
-			
-			$response = [];
-            $params['params'] = [
-				'projectIDArray' => json_encode($data['projectIDs']),
-				'startDate' => $data['weekStart'],
-				'endDate' => $data['weekEnd']
-			];
-			$jsonBody = json_encode($params);
-			
-            $tcSubmitUrl = 'time-card%2Faccountant-submit';
-			
-			$submitResponse = json_decode(Parent::executePutRequest($tcSubmitUrl, $jsonBody, Constants::API_VERSION_3), true);
-			
-			if($submitResponse['success'] == 1)
-			{
-				$response['success'] = TRUE; 
-				$response['message'] = 'Successfully Completed Time Card Process.'; 
-				return json_encode($response);
-			} else {
-				$response['success'] = FALSE; 
-                $response['message'] = 'Exception'; 
-                return json_encode($response);
-			}
-		} catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch (\Exception $e) {
-            $response['success'] = FALSE; 
-            $response['message'] = 'Exception occurred.'; 
-			return json_encode($response);
-        }
-    }
 	
     /**
      * Process Date Range Data
@@ -678,48 +532,4 @@ class TimeCardController extends BaseController
 		}
         return $timeCardIDs;
     }
-	
-	/**
-	 * Execute API request to get status for submit button
-	 * @param int $projectID id of currently selected project
-	 * @param array $projectDropDown array of dropdown key value pairs
-	 * @param string $startDate start of date range
-	 * @param string $endDate end of date range
-	 * @param boolean $isAccountant is current user of role type accountant
-	 * returns boolean status for submit button
-	 */
-	private static function getSubmitButtonStatus($projectID, $projectDropDown, $startDate, $endDate, $isAccountant)
-	{
-		$projArray = array();
-		$keys = array_keys($projectDropDown);
-		$keysCount = count($keys);
-		if($projectID != NULL){
-			$projArray[0] = $projectID;
-		}elseif($keysCount == 1) {
-			$projectID = $keys[0];
-		}else{
-			for($i=0;$i<$keysCount; $i++) {
-				if($keys[$i] !== "") {
-					$projArray[] = $keys[$i];
-				}
-			}
-		}
-
-		//build post body
-		$submitCheckData['submitCheck'] = array(
-			'ProjectName' => $projArray,
-			'StartDate' => $startDate,
-			'EndDate' => $endDate,
-			'isAccountant' => $isAccountant
-		);
-		$json_data = json_encode($submitCheckData);
-	
-		//execute api request
-		$url = 'time-card%2Fcheck-submit-button-status';
-		$response  = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
-		$decodedResponse = json_decode($response, true);
-		// get submit button status
-		$readyStatus = $decodedResponse['SubmitReady'] == "1" ? true : false;
-		return $readyStatus;
-	}
 }
