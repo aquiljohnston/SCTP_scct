@@ -56,9 +56,9 @@ class BaseCardController extends BaseController
 			$obj = json_decode($putResponse, true);
 			
 			//currently nothing is being done with response 4/5/19
-			if($requestType = self::TYPE_TIME){
+			if($requestType == self::TYPE_TIME){
 				return $obj[0]['TimeCardID'];
-			}elseif($requestType = self::TYPE_MILEAGE){
+			}elseif($requestType == self::TYPE_MILEAGE){
 				return $obj[0]['MileageCardID'];
 			}
 		} catch (UnauthorizedHttpException $e){
