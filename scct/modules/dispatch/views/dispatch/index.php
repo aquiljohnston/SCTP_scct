@@ -34,14 +34,14 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					<?= $form->field($model, 'dateRangePicker')
 						->widget(DateRangePicker::classname(), [
 							'name'=>'date_range_3',
-							'hideInput'=>false,
-							//'initRangeExpr' => true,
+							'readonly'=>true,
 							'pluginOptions' => [
 								'opens' => 'right',
 							],
 							'options' => [
 								'placeholder' => 'Date Range',
 								'class' => 'form-control',
+								'style' => 'background-color: #fff',
 							],
 						])
 						->label(''); ?>
