@@ -330,7 +330,7 @@ $gridViewSettingsArray['columns'] = $columns;
 		});
 		
 		//check for valid form to determine when submit should be available
-		$(document).off('change', '#MileageEntryModalForm :input').on('change', '#MileageEntryModalForm :input', function (){
+		$('#MileageEntryModalForm :input').keyup(function (){
 			if(formPopulated){
 				mileageUpdateSubmitButtonSetState();   
 			}
