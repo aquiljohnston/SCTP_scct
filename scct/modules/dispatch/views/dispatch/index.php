@@ -56,7 +56,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 </span>
                 <div id="dispatchSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
                     <div id="dispatchSearchField">
-                        <?= $form->field($model, 'dispatchFilter')->textInput(['value' => $model->dispatchFilter, 'id' => 'dispatchFilter', 'placeholder' => 'Search'])->label(''); ?>
+                        <?= $form->field($model, 'dispatchFilter')->textInput(['value' => $model->dispatchFilter, 'id' => 'dispatchFilter', 'placeholder' => 'Search - Example: Map Grid, Inspection Type'])->label(''); ?>
                     </div>
 					 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'dispatchSearchCleanFilterButton']) ?>
                 </div>
