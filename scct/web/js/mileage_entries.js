@@ -106,10 +106,9 @@ function applyMilageEntryListeners() {
 
 		//restrict click to only day of the week fields
 		//with values in the .text()
-		if($(this).attr('data-col-seq') >=1
-			&& (!$("#approve_mileageCard_btn_id").prop("disabled") || $('#isAccountant').val())
-			&& !$('#isSubmitted').val())
-		{
+		if($(this).attr('data-col-seq') >=1){
+			//set readOnly status based on role and approved/submitted state
+			readOnly = (($("#approve_mileageCard_btn_id").prop("disabled") && !$('#isAccountant').val()) || $('#isSubmitted').val()) ? 1 : 0;
 			$('#viewMileageModal').modal('show').find('#viewEntriesModalContentSpan').html("Loading...");
 			//set header values
 			$('#viewMileageModal').find('#viewMileageModalTitle').html(task);
@@ -117,7 +116,7 @@ function applyMilageEntryListeners() {
 			$.pjax.reload({
 				type: 'GET',
 				replace:false,
-				url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
+				url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date+'&readOnly='+readOnly,
 				container: '#viewEntriesModalContentSpan',
 				timeout: 99999
 			});
