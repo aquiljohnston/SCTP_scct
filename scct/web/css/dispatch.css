@@ -266,8 +266,24 @@
 	float: left;
 }
 
+/*css for the 1600*900 resolution*/
+@media (max-width: 1600px) {
+    #addSurveyorButtonDispatch{
+        width: 12%;
+    }
+    #dispatchPageSizeLabel {
+        width: 11%;
+    }
+    #dispatchSearchContainer{
+        margin-left: 46%;
+    }
+	#dispatchUnassignedTable .table-responsive {
+		max-height: 45vh;
+	}
+}
+
 /*css for the 1366*768 resolution*/
-@media (max-width: 1360px) {
+@media (max-width: 1366px) {
     #addSurveyorButtonDispatch{
         width: 14%;
     }
