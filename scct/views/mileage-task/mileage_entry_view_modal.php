@@ -335,6 +335,11 @@ $gridViewSettingsArray['columns'] = $columns;
 				mileageUpdateSubmitButtonSetState();   
 			}
         });
+		$(document).off('change', '#MileageEntryModalForm :input').on('change', '#MileageEntryModalForm :input', function (){
+			if(formPopulated){
+				mileageUpdateSubmitButtonSetState();   
+			}
+        });
 		
 		//reset and disable form on cancel
 		$(document).off('click', '#update_mileage_entry_cancel_btn').on('click', '#update_mileage_entry_cancel_btn',function (){
