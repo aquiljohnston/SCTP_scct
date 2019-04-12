@@ -33,9 +33,6 @@ class NotificationController extends \app\controllers\BaseController
 
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
-
-                Yii::trace("notificationfilter " . $model->notificationfilter);
-                Yii::trace("pagesize " . $model->pagesize);
                 $notificationPageSizeParams = $model->pagesize;
                 $notificationFilterParams = $model->notificationfilter;
             } else {
@@ -56,7 +53,6 @@ class NotificationController extends \app\controllers\BaseController
                     'page' => $pageAt,
                 ]);
             $getNotificationDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("NOTIFICATION DATA: " . json_encode($getNotificationDataResponse));
 
             if ($getNotificationDataResponse != null) {
                 $notificationData = $getNotificationDataResponse['notification'];

@@ -190,7 +190,6 @@ class DispatchController extends \app\controllers\BaseController
 				]);
 
 			$getSectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-			//Yii::trace("DISPATCH DATA: " . json_encode($getSectionDataResponse));
 			$sectionData = $getSectionDataResponse['sections'];
 
 			// Put data in data provider
@@ -268,9 +267,7 @@ class DispatchController extends \app\controllers\BaseController
 				$inspectionType = $inspectionType; 
 				$billingCode = $billingCode;
 				$officeName = $officeName;
-
 				$pageAt = Yii::$app->getRequest()->getQueryParam('viewDispatchAssetPageNumber');
-
 			} else {
 				$viewAssetFilterParams = "";
 				$pageAt = 1;
@@ -358,13 +355,10 @@ class DispatchController extends \app\controllers\BaseController
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
                 $json_data = json_encode($data);
-                Yii::trace("DISPATCH DATA: " . $json_data);
 
                 // post url
                 $putUrl = 'dispatch%2Fdispatch';
                 $putResponse = Parent::executePostRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-                Yii::trace("dispatchputResponse " . $putResponse);
-
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
@@ -386,7 +380,6 @@ class DispatchController extends \app\controllers\BaseController
      */
     public function CheckExistingDivision($divisionDefaultVal = null, $workCenterDefaultVal = null, $ErrorMsg = null)
     {
-
         $divisionDefaultSelectedUrl = 'pge%2Fdropdown%2Fget-default-filter&screen=dispatch';
         $divisionDefaultSelectedResponse = Parent::executeGetRequest($divisionDefaultSelectedUrl); // indirect rbac
         $divisionDefaultSelection = json_decode($divisionDefaultSelectedResponse, true);
