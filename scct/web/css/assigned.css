@@ -295,7 +295,24 @@
     width: 100%;
 }
 
-@media (max-width: 1360px) {
+/*css for the 1600*900 resolution*/
+@media (max-width: 1600px) {
+    #assignedButtonContainer{
+        width: 12%;
+    }
+    #AssignedPageSizeLabel {
+        width: 11%;
+    }
+    #assignedSearchContainer{
+        margin-left: 46%;
+    }
+	#assignedTable .table-responsive {
+		max-height: 45vh;
+	}
+}
+
+/*css for the 1366*768 resolution*/
+@media (max-width: 1366px) {
     #assignedButtonContainer{
         width: 14%;
     }
