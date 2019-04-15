@@ -167,13 +167,21 @@ $columns = [
     <?php ActiveForm::end(); ?>
 	
     <script>
-
-        $(document).off('change', '#TaskEntryForm :input').on('change', '#TaskEntryForm :input', function (){
-            if (InputFieldValidator()){
+		
+		//check for valid form to determine when submit should be available
+		$('#TaskEntryForm :input').keyup(function (){
+			if (InputFieldValidator()){
 				$('#create_task_entry_submit_btn').prop('disabled', false); 
             }else{
 				$('#create_task_entry_submit_btn').prop('disabled', true); 
-            }   
+            }
+        });
+		$(document).off('change', '#TaskEntryForm :input').on('change', '#TaskEntryForm :input', function (){
+			if (InputFieldValidator()){
+				$('#create_task_entry_submit_btn').prop('disabled', false); 
+            }else{
+				$('#create_task_entry_submit_btn').prop('disabled', true); 
+            }
         });
 
         $('#create_task_entry_submit_btn').click(function (event) {

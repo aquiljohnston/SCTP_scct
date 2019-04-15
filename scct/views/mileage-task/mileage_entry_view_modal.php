@@ -54,49 +54,53 @@ $columns = [
 	],[
 		'attribute' => 'Photo2',
 		'hidden' => true,
-	],[
-		'class' => 'kartik\grid\ActionColumn',
-        'template' => '{update} {delete}',
-		'header' => '',
-        'buttons' => [
-			'update' => function ($url, $model, $key) {
-                return Html::a('<span id="mileageModalUpdateAction" class="glyphicon glyphicon-pencil" title="Edit"></span>');
-            },
-            'delete' => function ($url, $model, $key) {
-                return Html::a('<span id="mileageModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
-            },
-        ]
-    ],
+	],
 ];
-
+$gridViewSettingsArray = [
+	'id' =>'mileageEntryGV',
+	'dataProvider' => $mileageEntryDataProvider,
+	'summary' => '',
+	'export' => false,
+	'pjax' =>true,
+	'pjaxSettings' => [
+		'options' => [
+			'id' => 'mileageEntryGridView',
+		],
+	],
+];
+//add create, delete, and update options if not in readOnly state
+if($readOnly == 0){
+	$columns[] = [
+		'class' => 'kartik\grid\ActionColumn',
+		'template' => '{update} {delete}',
+		'header' => '',
+		'buttons' => [
+			'update' => function ($url, $model, $key) {
+				return Html::a('<span id="mileageModalUpdateAction" class="glyphicon glyphicon-pencil" title="Edit"></span>');
+			},
+			'delete' => function ($url, $model, $key) {
+				return Html::a('<span id="mileageModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
+			},
+		]
+	];
+	$gridViewSettingsArray['emptyText'] = 'Click to Add Mileage.';
+	$gridViewSettingsArray['emptyTextOptions'] = [
+		'class' => 'createEntryRow',
+		'style' => 'text-align:center'
+	];
+}
+//add columns to gridview settings after check for read only status
+$gridViewSettingsArray['columns'] = $columns;
 ?>
 
-<div class="mileage-entry-view">	
+<div class="mileage-entry-view">
+	<input type="hidden" value=<?php echo $readOnly ?> id="viewMileageReadOnly">	
 	<!--mileage entry list-->
 	<?php Pjax::begin([
         'id' => 'mileageEntryGridViewPJAX',
         'timeout' => 10000,
         'enablePushState' => false ]) ?>
-
-		<?= GridView::widget([
-			'id' =>'mileageEntryGV',
-			'dataProvider' => $mileageEntryDataProvider,
-			'summary' => '',
-			'export' => false,
-			'pjax' =>true,
-			'pjaxSettings' => [
-				'options' => [
-					'id' => 'mileageEntryGridView',
-				],
-			],
-			'columns' => $columns,
-			'emptyText' => 'Click to Add Mileage.',
-			'emptyTextOptions' => [
-				'class' => 'createEntryRow',
-				'style' => 'text-align:center'
-			],
-		]); ?>
-		
+		<?= GridView::widget($gridViewSettingsArray); ?>
     <?php Pjax::end() ?>
 	
 	<!--selected mileage entry images-->
@@ -326,6 +330,11 @@ $columns = [
 		});
 		
 		//check for valid form to determine when submit should be available
+		$('#MileageEntryModalForm :input').keyup(function (){
+			if(formPopulated){
+				mileageUpdateSubmitButtonSetState();   
+			}
+        });
 		$(document).off('change', '#MileageEntryModalForm :input').on('change', '#MileageEntryModalForm :input', function (){
 			if(formPopulated){
 				mileageUpdateSubmitButtonSetState();   
@@ -440,10 +449,11 @@ $columns = [
 				//get params
 				id = $('#mileageentrytask-cardid').val();
 				date = $('#mileageentrytask-date').val();
+				readOnly = $('#viewMileageReadOnly').val();
 				//reload update modal gridview
 				$.pjax.reload({
 					type: 'GET',
-					url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date,
+					url: '/mileage-task/view-mileage-entry-task-by-day?mileageCardID='+id+'&date='+date+'&readOnly='+readOnly,
 					container:"#mileageEntryGridViewPJAX",
 					timeout: 99999,
 					push: false,
@@ -510,7 +520,7 @@ $columns = [
 		}
 		
 		function checkCreateEntryRow(){
-			if(!$('#mileageEntryGridView tr td .createEntryRow').length>0){
+			if(!$('#mileageEntryGridView tr td .createEntryRow').length > 0 && $('#viewMileageReadOnly').val() == 0){
 				//append createEntryRow row
 				$('#mileageEntryGridView tbody tr:last').after('<tr><td colspan="12"><div class="createEntryRow" style="text-align: center">Click to Add Mileage.</div></td></tr>');
 			}

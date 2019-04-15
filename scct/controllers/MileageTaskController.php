@@ -69,7 +69,7 @@ class MileageTaskController extends BaseController
         }
     }
 	
-	public function actionViewMileageEntryTaskByDay($mileageCardID, $date){
+	public function actionViewMileageEntryTaskByDay($mileageCardID, $date, $readOnly){
 		try{
 			//guest redirect
 			if (Yii::$app->user->isGuest) {
@@ -101,6 +101,7 @@ class MileageTaskController extends BaseController
 			$dataArray = [
 				'mileageEntryDataProvider' => $mileageEntryDataProvider,
 				'model' => $model,
+				'readOnly' => $readOnly,
 			];	
 			
 			if (Yii::$app->request->isAjax) {
