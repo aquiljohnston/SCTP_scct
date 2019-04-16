@@ -311,7 +311,6 @@ if($isAccountant)
 				'id' => 'GridViewForMileageCard',
                 'dataProvider' => $dataProvider,
                 'export' => false,
-                'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
 				'showOnEmpty' => true,
