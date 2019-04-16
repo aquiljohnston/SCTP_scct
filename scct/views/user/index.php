@@ -131,7 +131,6 @@ $column = [
             <?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'bootstrap' => false,
                 'export' => false,
                 'pjax' => false,
                 'summary' => '',
