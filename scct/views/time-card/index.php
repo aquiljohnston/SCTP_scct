@@ -319,7 +319,6 @@ else
                 'id' => 'GridViewForTimeCard',
                 'dataProvider' => $dataProvider,
                 'export' => false,
-                'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
                 'showOnEmpty' => true,
