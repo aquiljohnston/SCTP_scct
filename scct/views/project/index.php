@@ -112,7 +112,6 @@ $column = [
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
-        'bootstrap' => false,
 		'pjax' => false,
 		'summary' => '',
 		'id' => 'projectIndexGridView',

@@ -91,7 +91,6 @@ $column = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'export' => false,
-        'bootstrap' => false,
 		'pjax' => false,
 		'summary' => '',
         'columns' => $column,
