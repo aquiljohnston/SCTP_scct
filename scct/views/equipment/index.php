@@ -7,6 +7,10 @@ use app\controllers\BaseController;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
+use app\assets\EquipmentAsset;
+
+//register assets
+EquipmentAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\EquipmentSearch */

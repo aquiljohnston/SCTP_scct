@@ -9,6 +9,10 @@ use kartik\form\ActiveForm;
 use kartik\widgets\DepDrop;
 use kartik\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use app\modules\dispatch\assets\DispatchAsset;
+
+//register assets
+DispatchAsset::register($this);
 
 $this->title = 'Dispatch';
 $this->params['breadcrumbs'][] = $this->title;

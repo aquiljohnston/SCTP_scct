@@ -7,6 +7,10 @@ use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use app\modules\dispatch\assets\InspectionAsset;
+
+//register assets
+InspectionAsset::register($this);
 
 $this->title = 'Inspection';
 $this->params['breadcrumbs'][] = $this->title;

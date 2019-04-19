@@ -7,6 +7,10 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
 use yii\bootstrap\Modal;
+use app\assets\UserAsset;
+
+//register assets
+UserAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
