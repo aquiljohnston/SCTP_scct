@@ -79,7 +79,7 @@ $this->title = 'Map View';
             var grid_pipeline = "";
 
             // Initialize map
-            google.maps.event.addDomListener(window, 'load', initialize);
+            google.maps.event.addDomListener(window, 'load', initialize());
 
             //Initialize GoogleMap
             function initialize() {
