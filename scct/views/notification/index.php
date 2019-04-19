@@ -13,6 +13,10 @@ use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use app\assets\NotificationAsset;
+
+//register assets
+NotificationAsset::register($this);
 
 $this->title = 'Notification';
 $this->params['breadcrumbs'][] = $this->title;

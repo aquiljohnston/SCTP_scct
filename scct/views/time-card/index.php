@@ -9,6 +9,10 @@ use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use kartik\grid\CheckboxColumn;
+use app\assets\TimeCardAsset;
+
+//register assets
+TimeCardAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */

@@ -28,7 +28,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                         'class' => 'recordsPerPage'
                     ]); ?>
         </span>
-        <div class="viewAssetsSearchcontainer dropdowntitle">
+        <div class="viewAssetsSearchcontainer">
             <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
         </div>
         <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButtonDispatch']) ?>

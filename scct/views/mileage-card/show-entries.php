@@ -5,6 +5,10 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use app\assets\MileageCardAsset;
+
+//register assets
+MileageCardAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\mileage-card */

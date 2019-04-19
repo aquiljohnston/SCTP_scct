@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\sortinput\SortableInput;
+use app\assets\ProjectAsset;
+
+//register assets
+ProjectAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $project app\models\project */

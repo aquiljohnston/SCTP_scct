@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\ProjectAsset;
 
+//register assets
+ProjectAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\project */

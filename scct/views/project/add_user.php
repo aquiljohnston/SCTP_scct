@@ -5,6 +5,10 @@ use kartik\form\ActiveForm;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use app\assets\ProjectAsset;
+
+//register assets
+ProjectAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $project app\models\project */

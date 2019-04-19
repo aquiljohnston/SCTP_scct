@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\assets\ProjectAsset;
+
+//register assets
+ProjectAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\project */
