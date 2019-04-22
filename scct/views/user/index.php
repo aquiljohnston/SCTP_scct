@@ -136,7 +136,7 @@ $column = [
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'export' => false,
-                'pjax' => false,
+                'pjax' => true,
                 'summary' => '',
                 'columns' => $column
             ]); ?>
