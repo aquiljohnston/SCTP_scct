@@ -6,6 +6,10 @@ use yii\widgets\LinkPager;
 use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use app\assets\ClientAsset;
+
+//register assets
+ClientAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ClientSearch */
@@ -91,7 +95,6 @@ $column = [
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'export' => false,
-        'bootstrap' => false,
 		'pjax' => false,
 		'summary' => '',
         'columns' => $column,

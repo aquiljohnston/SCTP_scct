@@ -376,7 +376,9 @@ class MileageCardController extends BaseCardController
 			self::requirePermission("mileageCardGetEntries");
 			
 			//build api url paths
-			$entries_url = 'mileage-card%2Fshow-entries&cardID='.$id;
+			$entries_url = 'mileage-card%2Fshow-entries&' . http_build_query([
+				'cardID' => $id,
+			]);
 			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
 			$cardData = json_decode($resp, true);
 			

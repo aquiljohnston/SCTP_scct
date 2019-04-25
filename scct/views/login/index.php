@@ -8,6 +8,10 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 use kartik\widgets\Spinner;
+use app\assets\LoginAsset;
+
+//register assets
+LoginAsset::register($this);
 
 $this->title = 'Login';
 $this->params['breadcrumbs'][] = $this->title;

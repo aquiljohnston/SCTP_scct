@@ -5,6 +5,12 @@
  * Date: 7/13/2017
  * Time: 2:38 PM
  */
+ 
+use app\assets\MapAsset;
+
+//register assets
+MapAsset::register($this);
+ 
 $this->title = 'Map View';
 ?>
 <!--

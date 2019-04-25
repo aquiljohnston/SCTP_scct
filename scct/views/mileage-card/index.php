@@ -9,6 +9,10 @@ use app\controllers\MileageCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use kartik\grid\CheckboxColumn;
+use app\assets\MileageCardAsset;
+
+//register assets
+MileageCardAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -311,7 +315,6 @@ if($isAccountant)
 				'id' => 'GridViewForMileageCard',
                 'dataProvider' => $dataProvider,
                 'export' => false,
-                'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
 				'showOnEmpty' => true,

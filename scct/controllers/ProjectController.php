@@ -52,13 +52,12 @@ class ProjectController extends BaseController
 			}
 
 			// Reading the response from the the api and filling the GridView
-			$url = "project%2Fget-all&"
-				. http_build_query(
-					[
-						'filter' => $model->filter,
-						'listPerPage' => $model->pagesize,
-						'page' => $model->page
-					]);
+			$url = 'project%2Fget-all&' . http_build_query(
+			[
+				'filter' => $model->filter,
+				'listPerPage' => $model->pagesize,
+				'page' => $model->page
+			]);
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
 			Yii::trace("Response from ProjectController: $response");
@@ -123,17 +122,18 @@ class ProjectController extends BaseController
     {
 		try{
 			//guest redirect
-			if (Yii::$app->user->isGuest)
-			{
+			if (Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
 			
 			//Check if user has permissions
 			self::requirePermission("projectView");
 			
-			$url = "project%2Fview&joinNames=true&id=$id";
+			$url = 'project%2Fview&' . http_build_query([
+				'joinNames' => true,
+				'id' => $id,
+			]);
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
-			Yii::trace("VIEW PROJECT : ".$response);
 
 			return $this -> render('view', ['model' => json_decode($response), true]);
 		} catch (UnauthorizedHttpException $e){
@@ -257,12 +257,13 @@ class ProjectController extends BaseController
     {
 		try{
 			//guest redirect
-			if (Yii::$app->user->isGuest)
-			{
+			if (Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
 			self::requirePermission("projectUpdate");
-			$getUrl = 'project%2Fview&id='.$id;
+			$getUrl = 'project%2Fview&' . http_build_query([
+				'id' => $id,
+			]);
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
 			$model  = new Project();
@@ -316,7 +317,9 @@ class ProjectController extends BaseController
 
 				$json_data = json_encode($data);
 				try {
-					$putUrl = 'project%2Fupdate&id='.$id;
+					$putUrl = 'project%2Fupdate&' . http_build_query([
+						'id' => $id,
+					]);
 					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 					
 					$obj = json_decode($putResponse, true);
@@ -378,7 +381,9 @@ class ProjectController extends BaseController
 			{
 				return $this->redirect(['/login']);
 			}
-			$url = 'project%2Fdeactivate&id='.$id;
+			$url = 'project%2Fdeactivate&' . http_build_query([
+				'id' => '$id',
+			]);
 			Parent::executePostRequest($url, "", Constants::API_VERSION_2); //indirect RBAC
 			$this->redirect(['project/index']);
 		} catch (UnauthorizedHttpException $e){
@@ -406,7 +411,7 @@ class ProjectController extends BaseController
 			if (Yii::$app->request->isAjax) {
 				$data = Yii::$app->request->post();
 				
-				$projectDropdownUrl = "project%2Fget-all";
+				$projectDropdownUrl = 'project%2Fget-all';
 				//get projects by calling API route
 				$projectDropdownResponse = Parent::executeGetRequest($projectDropdownUrl, Constants::API_VERSION_2); // indirect rbac
 				//set up response data type
@@ -457,8 +462,15 @@ class ProjectController extends BaseController
 				$uaFilterParam = $model->uaFilter;
 				$aFilterParam = $model->aFilter;
 
-				$url = 'project%2Fget-user-relationships&projectID='.$id.'&uaFilter='.$uaFilterParam.'&aFilter='.$aFilterParam;
-				$projectUrl = 'project%2Fview&id='.$id;
+				$url = 'project%2Fget-user-relationships&' . http_build_query([
+					'projectID' => $id,
+					'uaFilter' => $uaFilterParam,
+					'aFilter' => $aFilterParam,
+				]);
+
+				$projectUrl = 'project%2Fview&' . http_build_query([
+					'id' => $id,
+				]);
 
 				$response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
 				$projectResponse = Parent::executeGetRequest($projectUrl, Constants::API_VERSION_2);
@@ -509,7 +521,9 @@ class ProjectController extends BaseController
 				if (isset($_POST['projectID']))
 					$id = $_POST['projectID'];
 
-				$url = 'project%2Fget-user-relationships&projectID='.$id;
+				$url = 'project%2Fget-user-relationships&' . http_build_query([
+					'projectID' => $id,
+				]);
 
 				//indirect rbac
 				$response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
@@ -539,7 +553,9 @@ class ProjectController extends BaseController
 				//encode data
 				$jsonData = json_encode($data);
 				//set post url
-				$postUrl = 'project%2Fadd-remove-users&projectID='.$id;
+				$postUrl = 'project%2Fadd-remove-users&' . http_build_query([
+					'projectID' => $id,
+				]);
 				//execute post request
 				$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
 			}
@@ -566,8 +582,13 @@ class ProjectController extends BaseController
 			self::requirePermission("projectAddRemoveModules");
 			
 			//TODO change urls
-			$moduleUrl = 'project%2Fget-project-modules&projectID='.$id;
-			$projectUrl = 'project%2Fview&id='.$id;
+			$moduleUrl = 'project%2Fget-project-modules&' . http_build_query([
+				'projectID' => $id,
+			]);
+			
+			$projectUrl = 'project%2Fview&' . http_build_query([
+				'id' => $id,
+			]);
 
 			//indirect rbac
 			$moduleResponse = Parent::executeGetRequest($moduleUrl, Constants::API_VERSION_2);
@@ -609,7 +630,9 @@ class ProjectController extends BaseController
 
 				//set post url
 				//TODO change url
-				$postUrl = 'project%2Fadd-remove-module&projectID='.$id;
+				$postUrl = 'project%2Fadd-remove-module&' . http_build_query([
+					'projectID' => $id,
+				]);
 				//execute post request
 				$postResponse = Parent::executePostRequest($postUrl, $jsonData, Constants::API_VERSION_2);
 				//refresh page
@@ -618,11 +641,11 @@ class ProjectController extends BaseController
 			else
 			{
 			return $this -> render('add_module', [
-											'project' => $project,
-											'model' => $model,
-											'inactiveData' => $inactiveData,
-											'activeData' => $activeData,
-									]);
+				'project' => $project,
+				'model' => $model,
+				'inactiveData' => $inactiveData,
+				'activeData' => $activeData,
+			]);
 			}
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);

@@ -1,6 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\EquipmentAsset;
+
+//register assets
+EquipmentAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\equipment */
