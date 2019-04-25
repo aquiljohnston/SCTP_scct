@@ -5,6 +5,10 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
+use app\assets\TimeCardAsset;
+
+//register assets
+TimeCardAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\time-card */

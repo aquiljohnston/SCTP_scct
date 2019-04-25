@@ -41,9 +41,6 @@ class CgeController extends \app\controllers\BaseController
 
             //check request
             if ($model->load(Yii::$app->request->queryParams)) {
-
-                Yii::trace("cgefilter " . $model->cgefilter);
-                Yii::trace("pagesize " . $model->pagesize);
                 $cgePageSizeParams = $model->pagesize;
                 $cgeFilterParams = $model->cgefilter;
             } else {
@@ -63,9 +60,7 @@ class CgeController extends \app\controllers\BaseController
                     'listPerPage' => $cgePageSizeParams,
                     'page' => $pageAt
                 ]);
-            Yii::trace("GET CGE URL: ".$getUrl);
             $getCGEDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("cge DATA: " . json_encode($getCGEDataResponse));
             $cgeData = $getCGEDataResponse['mapGrids'];
 
             //set paging on cge table

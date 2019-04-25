@@ -167,3 +167,7 @@ div[id^=modalContent] #loading {
 	float: right;
 	margin-right: 3%;
 }
+#HoursOverviewGridview{
+	max-height: 20vh;
+	overflow-y: auto;
+}

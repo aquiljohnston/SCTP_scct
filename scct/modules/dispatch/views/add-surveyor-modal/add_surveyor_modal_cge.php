@@ -18,7 +18,7 @@ use kartik\form\ActiveForm;
             'type' => ActiveForm::TYPE_VERTICAL,
         ]); ?>
         <div class="addsurveryContainer">
-            <div id="addsurveyorSearchcontainer" class="dropdowntitle">
+            <div id="addsurveyorSearchcontainer">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'addSurveyorSearchCge', 'placeholder'=>'Search'])->label('Surveyor / Inspector'); ?>
             </div>
             <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'SurveyorModalCleanFilterButton']) ?>

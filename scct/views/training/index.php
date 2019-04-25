@@ -1,4 +1,13 @@
-<?php $this->title = 'Training'; ?>
+<?php 
+
+use app\assets\trainingAsset;
+
+//register assets
+trainingAsset::register($this);
+
+$this->title = 'Training'; 
+?>
+<!--may want to move this to a css file to match conventions-->
 <style>
 #embedVideo{
 	padding: 0 8% 8% 3%;
@@ -30,7 +39,7 @@
 ul{
 	text-align: left;
 }
-#dispatchTab {
+#trainingTab {
 	border-bottom: none;
 	padding: 1%;
 	float: none;
@@ -44,7 +53,7 @@ ul{
 </style>
 <!--video path app/web/videos-->
 <div class="site-index">
-    <div class="jumbotron intro" id="dispatchTab">
+    <div class="jumbotron intro" id="trainingTab">
         <h2>Training Section</h2>
     </div>
     <div class="body-content">
