@@ -1,4 +1,8 @@
 /*time card index*/
+.title{
+    margin-top: -5px;
+    font-size: 20px;
+}
 
 .timeCardProjectFilterDD {
     margin-top: -1.8%;
