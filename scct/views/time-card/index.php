@@ -177,7 +177,7 @@ else
 ?>
 
 <div class="timecard-index">
-    <div class="lightBlueBar" style="height: 100px;">
+    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="timecard_filter">
             <div id="timeCardDropdownContainer">
