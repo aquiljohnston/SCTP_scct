@@ -187,6 +187,10 @@ div[id^=modalContent] .wrap #top-wrapper {
 	display:none;
 }
 
+#MileageEntryModalForm .control-label{
+	padding-right: 0px;
+}
+
 #mileageEntryModalFormButtons{
 	float: right; 
 	margin-top: -4.5%; 
