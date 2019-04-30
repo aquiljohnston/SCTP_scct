@@ -169,7 +169,7 @@ if($isAccountant)
 ?>
 
 <div class="mileagecard-index">
-    <div class="lightBlueBar" style="height: 100px;">
+    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="mileage_card_filter">
             <div id="mileageCardDropdownContainer">
