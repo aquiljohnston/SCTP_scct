@@ -1,6 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use app\assets\ClientAsset;
+
+//register assets
+ClientAsset::register($this);
 
 
 /* @var $this yii\web\View */

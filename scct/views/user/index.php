@@ -7,6 +7,10 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
 use yii\bootstrap\Modal;
+use app\assets\UserAsset;
+
+//register assets
+UserAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
@@ -131,9 +135,8 @@ $column = [
             <?php Pjax::begin(['id' => 'userGridview', 'timeout' => false]) ?>
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
-                'bootstrap' => false,
                 'export' => false,
-                'pjax' => false,
+                'pjax' => true,
                 'summary' => '',
                 'columns' => $column
             ]); ?>

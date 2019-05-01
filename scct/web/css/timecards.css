@@ -1,4 +1,8 @@
 /*time card index*/
+.title{
+    margin-top: -5px;
+    font-size: 20px;
+}
 
 .timeCardProjectFilterDD {
     margin-top: -1.8%;
@@ -166,4 +170,8 @@ div[id^=modalContent] #loading {
 	margin-top: 1%;
 	float: right;
 	margin-right: 3%;
+}
+#HoursOverviewGridview{
+	max-height: 20vh;
+	overflow-y: auto;
 }

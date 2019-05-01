@@ -157,7 +157,9 @@ class UserController extends BaseController
 			//Check if user has permissions
 			self::requirePermission("userView");
 			
-			$url = 'user%2Fview&username=' . $username;
+			$url = 'user%2Fview&' . http_build_query([
+					'username' => $username,
+				]);
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
 			// Generate User Permission Table
@@ -200,7 +202,7 @@ class UserController extends BaseController
 			$roles = json_decode($rolesResponse, true);
 
 			//get types for form dropdown
-			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
+			$typeUrl = 'dropdown%2Fget-employee-type-dropdown';
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
 			
@@ -227,7 +229,7 @@ class UserController extends BaseController
 
 				try {
 					// post url
-					$url = "user%2Fcreate";
+					$url = 'user%2Fcreate';
 					$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
 					$obj = json_decode($response, true);
 
@@ -279,19 +281,21 @@ class UserController extends BaseController
 				return $this->redirect(['/login']);
 			}
 			self::requirePermission("userUpdate");
-			$getUrl = 'user%2Fview&username=' . $username;
+			$getUrl = 'user%2Fview&' . http_build_query([
+				'username' => $username,
+			]);
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
 			$model = new User();
 			$model->attributes = $getResponse;
 
 			//get App Roles for form dropdown
-			$rolesUrl = "dropdown%2Fget-roles-dropdowns";
+			$rolesUrl = 'dropdown%2Fget-roles-dropdowns';
 			$rolesResponse = Parent::executeGetRequest($rolesUrl);
 			$roles = json_decode($rolesResponse, true);
 
 			//get types for form dropdown
-			$typeUrl = "dropdown%2Fget-employee-type-dropdown";
+			$typeUrl = 'dropdown%2Fget-employee-type-dropdown';
 			$typeResponse = Parent::executeGetRequest($typeUrl);
 			$types = json_decode($typeResponse, true);
 			
@@ -315,7 +319,9 @@ class UserController extends BaseController
 
 				$json_data = json_encode($data);
 
-				$putUrl = 'user%2Fupdate&username=' . $username;
+				$putUrl = 'user%2Fupdate&' . http_build_query([
+					'username' => $username,
+				]);
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 				$obj = json_decode($putResponse, true);
 
@@ -353,7 +359,9 @@ class UserController extends BaseController
 				return $this->redirect(['/login']);
 			}
 			//calls route to deactivate user account
-			$url = 'user%2Fdeactivate&username=' . urlencode($username);
+			$url = 'user%2Fdeactivate&' . http_build_query([
+				'username' => $username,
+			]);
 			//empty body
 			$json_data = "";
 			Parent::executePutRequest($url, $json_data, Constants::API_VERSION_2); // indirect rbac
@@ -397,8 +405,8 @@ class UserController extends BaseController
 
             // Reading the response from the the api and filling the surveyorGridView
             $getUrl = 'user%2Fget-inactive&' . http_build_query([
-                    'filter' => $searchFilterVal,
-                ]);
+				'filter' => $searchFilterVal,
+			]);
             $usersResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
 
             $dataProvider = new ArrayDataProvider

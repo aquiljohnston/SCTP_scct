@@ -61,7 +61,6 @@ class InspectionsController extends \app\controllers\BaseController
                     'page' => $pageAt,
                 ]);
             $getInspectionDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-            Yii::trace("INSPECTION INDEX DATA: ".json_encode($getInspectionDataResponse));
 
             $inspectionData = $getInspectionDataResponse['mapGrids'];
 
@@ -155,9 +154,6 @@ class InspectionsController extends \app\controllers\BaseController
 
 			//check request
 			if ($model->load(Yii::$app->request->queryParams)) {
-
-				Yii::trace("sectionfilter " . $model->sectionfilter);
-				Yii::trace("pagesize " . $model->pagesize);
 				$sectionPageSizeParams = $model->pagesize;
 				$sectionFilterParams = $model->sectionfilter;
 			} else {
@@ -274,7 +270,6 @@ class InspectionsController extends \app\controllers\BaseController
 					'page' => $pageAt,
 				]);
 			$getSectionDetailDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-			Yii::trace("SECTION DETAIL DATA: ".json_encode($getSectionDetailDataResponse));
 
 			// Put data in data provider
 			$sectionDetailDataProvider = new ArrayDataProvider
@@ -329,9 +324,6 @@ class InspectionsController extends \app\controllers\BaseController
 
 			//check request
 			if ($model->load(Yii::$app->request->queryParams)) {
-
-				Yii::trace("eventfilter " . $model->eventfilter);
-				Yii::trace("pagesize " . $model->pagesize);
 				$eventPageSizeParams = $model->pagesize;
 				$eventFilterParams = $model->eventfilter;
 			} else {
@@ -354,9 +346,7 @@ class InspectionsController extends \app\controllers\BaseController
 					'listPserPage' => $eventPageSizeParams,
 					'page' => $pageAt,
 				]);
-			Yii::trace("EVENT URL: ".$getUrl);
 			$getEventDataResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); //indirect RBAC
-			Yii::trace("EVENT DATA: ".json_encode($getEventDataResponse));
 			$eventData = $getEventDataResponse['events'];
 
 			// Put data in data provider
@@ -415,9 +405,6 @@ class InspectionsController extends \app\controllers\BaseController
         if (Yii::$app->user->isGuest) {
             return $this->redirect(['/login']);
         }
-
-        Yii::trace("CALL VIEW IMAGE ACTION.");
-
         if (Yii::$app->request->isAjax) {
             return $this->renderAjax('viewImage', [
                 'Photo1Path' => $Photo1Path

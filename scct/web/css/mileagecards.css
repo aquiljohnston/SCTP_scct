@@ -1,4 +1,8 @@
 /*mileage card index*/
+.title{
+    margin-top: -5px;
+    font-size: 20px;
+}
 
 .mileageProjectFilterDD {
     margin-top: -1.8%;

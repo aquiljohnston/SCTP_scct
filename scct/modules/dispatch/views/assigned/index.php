@@ -10,6 +10,10 @@ use kartik\form\ActiveForm;
 use kartik\widgets\DepDrop;
 use kartik\grid\GridView;
 use kartik\daterange\DateRangePicker;
+use app\modules\dispatch\assets\AssignedAsset;
+
+//register assets
+AssignedAsset::register($this);
 
 $this->title = 'Assigned';
 $this->params['breadcrumbs'][] = $this->title;

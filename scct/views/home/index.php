@@ -2,7 +2,10 @@
 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+use app\assets\HomeAsset;
 
+//register assets
+HomeAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 

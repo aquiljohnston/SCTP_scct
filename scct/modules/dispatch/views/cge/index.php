@@ -13,6 +13,10 @@ use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use app\modules\dispatch\assets\CGEAsset;
+
+//register assets
+CGEAsset::register($this);
 
 $this->title = 'CGE';
 $this->params['breadcrumbs'][] = $this->title;
