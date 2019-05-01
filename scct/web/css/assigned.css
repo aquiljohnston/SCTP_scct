@@ -4,6 +4,10 @@
     float: left;
 }
 
+.dispatch-assigned{
+    margin-top: 2%;
+}
+
 /*updated css */
 #assignedDropdownContainer {
     float: left;
@@ -12,6 +16,11 @@
     z-index: 3;
     border-bottom: 1px solid black;
     padding:10px;
+}
+
+.title{
+    margin-top: -5px;
+    font-size: 20px;
 }
 
 #assignedDatePickerContainer{
@@ -132,13 +141,6 @@
     position: relative;
     float: left;
     width: 100%;
-}
-
-#assignedaddsurveyordialogtitle .dropdowntitle {
-    position: relative;
-    float: left;
-    width: 40%;
-    padding-right: 1%;
 }
 
 #modalAddSurveyor #w0-container {
@@ -264,17 +266,35 @@
 .ViewAssetBtn_AssignedSection{
     cursor: pointer;
 }
+
+
+/*used in multiple asset modals consider extracting out*/
 .viewAssetsSearchcontainer{
     position: relative;
     float: left;
     width: 65%;
-
 }
 #assetsModalCleanFilterButtonAssigned{
     margin-top: 21px;
     width: 35px;
     cursor: pointer;
 }
+#viewAssetModalContainer{
+    margin-bottom: 3%;
+}
+#assetTablePjax{
+    margin-bottom:6%;
+}
+#assetsTable #assetGV-container{
+    overflow-y: scroll !important;
+    max-height: 400px !important;
+}
+.kv-grid-wrapper {
+    height: auto !important;
+    max-height: 51vh !important;
+}
+
+
 #assignedClearDateRange{
     width: 32px;
     cursor: pointer;

@@ -179,7 +179,9 @@ class MileageTaskController extends BaseController
     {
         try {
 			//put url
-			$putUrl = 'mileage-entry%2Fdeactivate&entryID=' . $entryID;
+			$putUrl = 'mileage-entry%2Fdeactivate&' . http_build_query([
+				'entryID' => $entryID,
+			]);
 			$putResponse = Parent::executePutRequest($putUrl, '',Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
         } catch (UnauthorizedHttpException $e){

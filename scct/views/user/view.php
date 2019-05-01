@@ -3,6 +3,10 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use kartik\dialog\Dialog;
+use app\assets\UserAsset;
+
+//register assets
+UserAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $model app\models\user */

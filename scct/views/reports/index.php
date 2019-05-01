@@ -8,6 +8,10 @@ use kartik\form\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
+use app\assets\ReportAsset;
+
+//register assets
+ReportAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\AocSearch */

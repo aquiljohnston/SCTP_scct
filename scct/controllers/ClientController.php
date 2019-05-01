@@ -50,16 +50,14 @@ class ClientController extends BaseController
 				'ClientState' => Yii::$app->request->getQueryParam('filterstatename', '')
 			];
 
-			$url = "client%2Fget-all&"
-				. http_build_query(
-					[
-						'filter' => $model->filter,
-						'listPerPage' => $model->pagesize,
-						'page' => $model->page,
-						'filterclientname' => $searchModel['ClientName'],
-						'filtercityname' => $searchModel['ClientCity'],
-						'filterstatename' => $searchModel['ClientState']
-					]);
+			$url = "client%2Fget-all&" . http_build_query([
+				'filter' => $model->filter,
+				'listPerPage' => $model->pagesize,
+				'page' => $model->page,
+				'filterclientname' => $searchModel['ClientName'],
+				'filtercityname' => $searchModel['ClientCity'],
+				'filterstatename' => $searchModel['ClientState']
+			]);
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // RBAC permissions checked indirectly via this call
 			$response = json_decode($response, true);
 			$assets = $response['assets'];
@@ -131,7 +129,10 @@ class ClientController extends BaseController
 			//Check if user has permissions
 			self::requirePermission("clientView");
 			
-			$url = 'client%2Fview&joinNames=true&id='.$id;
+			$url = 'client%2Fview&' . http_build_query([
+				'joinNames' => 'true',
+				'id' => $id,
+			]);
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
 
 			return $this -> render('view', ['model' => json_decode($response), true]);
@@ -178,7 +179,7 @@ class ClientController extends BaseController
 			$clientAccounts = ['' => ''];
 			
 			//get states for form dropdown
-			$stateUrl = "dropdown%2Fget-state-codes-dropdown";
+			$stateUrl = 'dropdown%2Fget-state-codes-dropdown';
 			$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 			$states = json_decode($stateResponse, true);
 				  
@@ -207,7 +208,7 @@ class ClientController extends BaseController
 				$json_data = json_encode($data);
 
 				// post url
-				$url= "client%2Fcreate";
+				$url= 'client%2Fcreate';
 				
 				$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_2);
 				$obj = json_decode($response, true);
@@ -257,7 +258,9 @@ class ClientController extends BaseController
 				return $this->redirect(['/login']);
 			}
 			self::requirePermission("clientUpdate");
-			$getUrl = 'client%2Fview&id='.$id;
+			$getUrl = 'client%2Fview&' . http_build_query([
+				'id' => $id,
+			]);
 			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
 
 			$model = new Client();
@@ -278,7 +281,7 @@ class ClientController extends BaseController
 			$clientAccounts = ['' => ''];
 			
 			//get states for form dropdown
-			$stateUrl = "dropdown%2Fget-state-codes-dropdown";
+			$stateUrl = 'dropdown%2Fget-state-codes-dropdown';
 			$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
 			$states = json_decode($stateResponse, true);
 				  
@@ -310,7 +313,9 @@ class ClientController extends BaseController
 
 				$json_data = json_encode($data);
 				
-				$putUrl = 'client%2Fupdate&id='.$id;
+				$putUrl = 'client%2Fupdate&' . http_build_query([
+					'id' => $id,
+				]);
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
 				
 				$obj = json_decode($putResponse, true);
@@ -349,7 +354,9 @@ class ClientController extends BaseController
 			{
 				return $this->redirect(['/login']);
 			}
-			$url = 'client%2Fdeactivate&id='.$id;
+			$url = 'client%2Fdeactivate&' . http_build_query([
+				'id' => $id,
+			]);
 			Parent::executePostRequest($url, ""); //indirect RBAC
 			$this->redirect(['client/index']);
 		} catch (UnauthorizedHttpException $e){

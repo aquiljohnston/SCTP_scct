@@ -9,6 +9,10 @@ use app\controllers\TimeCard;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use kartik\grid\CheckboxColumn;
+use app\assets\TimeCardAsset;
+
+//register assets
+TimeCardAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -173,7 +177,7 @@ else
 ?>
 
 <div class="timecard-index">
-    <div class="lightBlueBar" style="height: 100px;">
+    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="timecard_filter">
             <div id="timeCardDropdownContainer">
@@ -319,7 +323,6 @@ else
                 'id' => 'GridViewForTimeCard',
                 'dataProvider' => $dataProvider,
                 'export' => false,
-                'bootstrap' => false,
                 'pjax' => true,
                 'summary' => '',
                 'showOnEmpty' => true,

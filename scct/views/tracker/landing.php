@@ -6,6 +6,10 @@
  * Time: 4:04 PM
  */
 use yii\bootstrap\Html;
+use app\assets\MapAsset;
+
+//register assets
+MapAsset::register($this);
 
 $this->title = 'Tracker';
 $this->params['breadcrumbs'][] = $this->title;

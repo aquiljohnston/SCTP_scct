@@ -42,9 +42,7 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
             $getUrl = 'dispatch%2Fget-surveyors&' . http_build_query([
                     'filter' => $searchFilterVal,
                 ]);
-            Yii::trace("surveyors " . $getUrl);
             $surveyorsResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true); // indirect rbac
-            Yii::trace("Surveyors response " . json_encode($surveyorsResponse));
 
             $dataProvider = new ArrayDataProvider
             ([

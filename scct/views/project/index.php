@@ -7,6 +7,10 @@ use kartik\form\ActiveForm;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
+use app\assets\ProjectAsset;
+
+//register assets
+ProjectAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\ProjectSearch */
@@ -112,7 +116,6 @@ $column = [
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
-        'bootstrap' => false,
 		'pjax' => false,
 		'summary' => '',
 		'id' => 'projectIndexGridView',
