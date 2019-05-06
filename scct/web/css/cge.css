@@ -57,6 +57,25 @@
     overflow-x: hidden;
 }
 
+/*css for the 1600*900 resolution*/
+@media (max-width: 1600px) {
+    #cgePageSizeLabel{
+        width: 11%;
+    }
+    #cgeSearchContainer{
+        margin-left: 62%;
+    }
+	#cgeSearchField{
+		width: 85%;
+	}
+	#cgeButtonContainer{
+        width: 12%;
+    }
+	#cgeGV{
+		max-height: 45vh;
+	}
+}
+
 @media (max-width: 960px) {
     #cgeButtonContainer{
         float: right;
