@@ -11,7 +11,7 @@ $(function () {
     assignedAssets_WorkOrderID = [];
     assignedAssets_AssignedUserId = [];
 
-    $('#UnassignedButton').prop('disabled', true); //TO DISABLED
+    $('#removeSurveyorButton').prop('disabled', true); //TO DISABLED
 	
 	$( document ).ready(function() {
 		//check if date picker is present
@@ -80,9 +80,9 @@ $(function () {
 
         //check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0){
-          $("#UnassignedButton").prop('disabled', false);
+          $("#removeSurveyorButton").prop('disabled', false);
         }else {
-          $("#UnassignedButton").prop('disabled', true);
+          $("#removeSurveyorButton").prop('disabled', true);
         }
     });
 	
@@ -96,9 +96,9 @@ $(function () {
         }
         assignedMap_MapGrid = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (assignedMap_MapGrid.length > 0) {
-            $("#UnassignedButton").prop('disabled', false);
+            $("#removeSurveyorButton").prop('disabled', false);
         } else {
-            $("#UnassignedButton").prop('disabled', true);
+            $("#removeSurveyorButton").prop('disabled', true);
 		}
 		
 		//what is this?
@@ -124,9 +124,9 @@ $(function () {
         }
         // check to see if need to disable/enable add surveyor button
         if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0){
-            $("#UnassignedButton").prop('disabled', false);
+            $("#removeSurveyorButton").prop('disabled', false);
         }else{
-            $("#UnassignedButton").prop('disabled', true);
+            $("#removeSurveyorButton").prop('disabled', true);
         }
     });
 
@@ -138,16 +138,16 @@ $(function () {
             assignedAssets_AssignedUserId.push($(this).attr('assigneduserid'));
         }
         if (assignedAssets_WorkOrderID.length > 0) {
-            $("#UnassignedAssetsButton").prop('disabled', false);
+            $("#assignedAssetRemoveSurveyorButton").prop('disabled', false);
         } else
-            $("#UnassignedAssetsButton").prop('disabled', true);
+            $("#assignedAssetRemoveSurveyorButton").prop('disabled', true);
     });
 	
     if (assignedMap_MapGrid.length > 0 || assignedSection_SectionNumber.length > 0)
         unassignCheckboxListener();
 	
 	//remove surveyor button on assigned index
-    $(document).off('click', '#UnassignedButton').on('click', '#UnassignedButton', function () {
+    $(document).off('click', '#removeSurveyorButton').on('click', '#removeSurveyorButton', function () {
         $('#unassignConfirmationModal').modal('show')
 			.find('#unassignConfirmationModalContent').html("Loading...");;
 		//probably need to update these two function calls to return office name
@@ -159,7 +159,7 @@ $(function () {
             .load('/dispatch/assigned/view-unassign-confirmation', {assignedUserMaps: assignedDataArray});
     });	
 
-    $(document).off('click', '#UnassignedAssetsButton').on('click', '#UnassignedAssetsButton', function () {
+    $(document).off('click', '#assignedAssetRemoveSurveyorButton').on('click', '#assignedAssetRemoveSurveyorButton', function () {
         $("#unassigned-message").find('span').html(getSelectedUserName(assignedAssets_WorkOrderID, assignedAssets_AssignedUserId));
         $("#unassigned-message").css("display", "block");
 		//get asset data before it get reset
@@ -191,9 +191,9 @@ function unassignCheckboxListener() {
     $(".assignedCheckbox input[type=checkbox]").click(function () {
         var pks = $("#assignedGridview #assignedGV").yiiGridView('getSelectedRows');
         if (!pks || pks.length != 0) {
-            $('#UnassignedButton').prop('disabled', false); //TO ENABLE
+            $('#removeSurveyorButton').prop('disabled', false); //TO ENABLE
         } else {
-            $('#UnassignedButton').prop('disabled', true);
+            $('#removeSurveyorButton').prop('disabled', true);
         }
     });
 }
@@ -217,7 +217,7 @@ function reloadAssignedGridView() {
     }).done(function () {
         $('#loading').hide();
         $('#addSurveyor').prop('disabled', true);
-        $('#UnassignedButton').prop('disabled', true);
+        $('#removeSurveyorButton').prop('disabled', true);
         unassignCheckboxListener();
     });
 }
@@ -319,7 +319,7 @@ function unassignAssetsButtonListener(unassignAssetsData) {
     });
 
     // disable remove surveyor button again
-    $('#UnassignedAssetsButton').prop('disabled', true); //TO DISABLED
+    $('#assignedAssetRemoveSurveyorButton').prop('disabled', true); //TO DISABLED
 }
 
 // get Selected Assets

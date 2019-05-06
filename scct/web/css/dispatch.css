@@ -1,4 +1,7 @@
 /*dispatch css*/
+.dispatch{
+    margin-top: 2%;
+}
 #dispatchTab{
     height: 140px;
     padding:10px;
@@ -9,45 +12,57 @@
     z-index: 3;
     border-bottom:1px solid black;
 }
-#dispatchUnassignedTable{
-	position:relative;
-    float:left;
-    width:100%;
-    margin-right:0.5%;
-    height: 62vh;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-#dispatchUnassignedTable .table-responsive {
-	max-height: 51vh;
-    margin-top:0px;
-    width:100%;
-}
-#dispatchGV {
-    width: 100%;
-    float: left;
-    max-height: 57vh;/*360px;*/
-    overflow-y: auto;
-    margin: 0 auto;
-    overflow-x: hidden;
-}
-.dispatch, .dispatch-assets {
-    margin-top: 2%;
-}
 .title{
     margin-top: -5px;
     font-size: 20px;
 }
-#surveyorsGV {
-    width: 100%;
-    float: right;
+#dispatch-dropDownList-form{
+    width:99%;
+    margin-left:1%;
 }
-#dispatchAssetsBackButton {
-    margin-bottom: 5px;
+#dispatchUnassignedTableDropdown{
+    width:99%;
+    margin-right:1%;
 }
 #dispatchDatePickerContainer{
 	float:left;
 	margin-right:1%;
+}
+/*check other clear filter usage for similarities*/
+#dispatchClearDateRange{
+	width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -10px;
+	float: left;
+}
+#dispatchPageSizeLabel{
+    margin: -39px auto;
+    width: 10%;
+	float: right;
+}
+#dispatchSearchContainer{
+    margin-left: 50%;
+}
+#dispatchSearchField{
+	float:left;
+	width:90%;
+}
+/*check other clear filter usage for similarities*/
+#dispatchSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -10px;
+	float: right;
+}
+#addSurveyorButtonDispatch{
+    float: right;
+    margin: 38px auto;
+    width: 11%;
+}
+#dispatchButton{
+    width: 110%;
 }
 #dispatchGridViewContainer{
     position:relative;
@@ -56,239 +71,17 @@
     margin-top: 0.7%;
     z-index: 1;
 }
-#dispatchSearchContainer{
-    float:left;
-    margin-left: 50%;
-}
-#dispatch-dropDownList-form{
-    width:99%;
-    margin-left:1%;
-    position:relative;
-    float:left;
-}
-#dispatchSearchField{
-	float:left;
-    margin-right:1%;
-	width:90%;
-    position:relative;
-}
-#dispatchSearchCleanFilterButton{
-    width: 32px;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-left: -10px;
-	float: right;
-}
-#dispatchSurveyorsGridview .table-responsive{
-    max-height:500px;
-    overflow:auto;
-}
-#dispatchUnassignedTableDropdown{
-    position:relative;
-    float:left;
-    width:99%;
-    margin-right:1%;
-}
-#unAssignedPageSizeLabel,#dispatchSurveyorPageSizeLabel{
-    float:right;
-    margin-right:2%;
-}
-#unAssignedPageSizeLabel span,#dispatchSurveyorPageSizeLabel span,#dispatchUnassignedTableDropdown #filtertitle span{
-    color:#0067a6;
-    float:left;
-    margin-top:27px;
-    margin-right:10px;
-}
-#unAssignedPageSizeLabel .form-group ,#dispatchSurveyorPageSizeLabel .form-group,#dispatchUnassignedTableDropdown #filtertitle .form-group {
-    float:right;
-}
-#dispatchSurveyorTableDropdown{
-    position:relative;
-    float:left;
-    width:25.5%;
-}
-#dispatchUnassignedTableClearFilterButton,#dispatchSurveyorTableClearFilterButton{
-    margin-top:25px;
-    width:32px;
-    cursor:pointer;
-}
-#dispatchSurveyorsContainer{
-    position:relative;
-    float:left;
-    width:27%;
-}
-#dispatchSurveyorsContainer tr{
-    background-color:white !important;
-}
-#dispatchSurveyorsContainer td{
-    border:0px;
-}
-#dispatchSurveyorTableDropdown #surveyorsfiltertitle{
-    width:46%;
-}
-#dispatchAssignedButton{
-    position:relative;
-    float:left;
-    width:8%;
-    padding-left:1%;
-    margin-top:20%;
-}
-#dispatchButton{
-    width: 110%;
-}
-#SurveyorGridviewTotalNumber{
-    position: fixed;
-    bottom: 45px;
-    left: 74%;
-    z-index: 42;
-}
-/*Pending changes pop-up missing modal*/
-#dispatch-message .modal-content {
-    position: relative;
-    background-color: #fefefe;
-    margin: auto;
-    padding: 0;
-    width: 400px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s
-}
-
-#dispatch-message .modal-body {
-    position:relative;
-    float:left;
-    width:100%;
-    padding: 5px 16px;
-    margin:15px 0;
-    background-color:white;
-}
-.dispatchModalbtn{
-    padding:10px 0;
-}
-#dispatch-message .dispatchModalbtn{
-    position:relative;
-    float:right;
-    width:30%;
-    color:#0067a6;
-}
-.dispatchModalbtn .btn{
-    background-color:white;
-}
-
-
-/*TODO used in multiple asset modals consider extracting out*/
-.viewAssetsSearchcontainer{
-    position: relative;
-    float: left;
-    width: 65%;
-}
-#addSurveyorsDispatchBtn {
-    text-align: center;
-    margin-top: 20px;
-}
-#addSurveyorDispatchButton{
-    margin-top: 4%;
-}
-#viewAssetModalContainer{
-    margin-bottom: 3%;
-}
-#assetTablePjax{
-    margin-bottom:6%;
-}
-#assetsTable #assetGV-container{
-    overflow-y: scroll !important;
-    max-height: 400px !important;
-}
-.kv-grid-wrapper {
-    height: auto !important;
-    max-height: 51vh !important;
-}
-/*TODO extract to add surveyor modal css*/
-#addsurveyorSearchcontainer{
-    position: relative;
-    float: left;
-    width: 40%;
-    padding-right: 1%;
-}
-.summary{
-    padding-left: 1%;
-	margin-top: 10px;
-}
-/*TODO consider extracting out*/
-#SurveyorModalCleanFilterButton{
-    margin-top: 25px;
-    width: 32px;
-    cursor: pointer;
-}
-/*TODO consider extracting out*/
-#surveyorGV-container{
-    max-height: 200px;
-}
-#dispatchSurveyorsTable{
-    position: relative;
-    float: left;
+#dispatchGV {
     width: 100%;
 }
-
-
-#dipatchSearchCleanFilterButton{
-    margin-top: 20px;
-    width: 32px;
-    cursor: pointer;
-    float: right;
-}
-#dispatchPageSizeLabel{
-    margin: -39px auto;
-    width: 10%;
-	float: right;
+#dispatchUnassignedTable .table-responsive {
+	max-height: 51vh;
 }
 #unassignedTablePagination .pagination {
     margin: 5px 0 0 0;
-    /*margin-top: 5.5%;
-    margin-right: 14%;*/
-}
-.field-dispatchFilter{
-    width: 100%;
-}
-/*Pending changes pop-up missing modal ends*/
-
-.dispatch-assigned #unAssignButton{
-    position:fixed;
-    bottom: 32px;
-    right: 180px;
-    z-index:42;
 }
 .ViewAssetBtn_DispatchMapGrid{
     cursor: pointer;
-}
-#modalViewAssetDispatch{
-    overflow-y: hidden;
-}
-#modalViewAssetDispatch.modal-open.modal{
-    padding: 0px 15px 15px 15px !important;
-}
-#assetsModalCleanFilterButtonDispatch{
-    margin-top: 21px;
-    width: 35px;
-    cursor: pointer;
-}
-#addSurveyorButtonDispatch{
-    float: right;
-    margin: 38px auto;
-    width: 11%;
-}
-#dispatchAssetsButton{
-    padding-left: 25%;
-    padding-right: 25%;
-}
-#dispatchClearDateRange{
-	width: 32px;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-left: -10px;
-	float: left;
 }
 
 /*css for the 1600*900 resolution*/
@@ -318,21 +111,18 @@
     #dispatchSearchContainer{
         margin-left: 40%;
     }
-	
 	#dispatchSearchField {
 		width: 88%;
 	}
     .kv-grid-wrapper {
         overflow-x: hidden;
     }
-	
 	#dispatchUnassignedTable .table-responsive {
 		max-height: 37vh;
 	}
 }
 
 /* Safari 7.1+ */
-
 /*_::-webkit-full-page-media, _:future, :root #dispatchGV{
     width: 100%;
     float: left;
@@ -343,7 +133,6 @@
 }*/
 
 @media screen and (min-resolution:.001dpcm) {
-
     /* Safari only override */
     ::i-block-chrome,#dispatchGV{
         width: 100%;
@@ -352,22 +141,6 @@
         overflow-y: auto;
         margin: 0 auto;
         overflow-x: hidden;
-    }
-    #dispatchUnassignedTable {
-        height: 620px;
-        overflow-y: hidden;
-        overflow-x: hidden;
-    }
-    .chrome_only {
-        width: 100%;
-        float: left;
-        max-height: 360px;
-        overflow-y: auto;
-        margin: 0 auto;
-        overflow-x: hidden;
-    }
-    .floatThead-col{
-        height: 0 !important;
     }
     ::i-block-chrome,.kv-grid-wrapper {
         height: 530px !important;
@@ -384,15 +157,8 @@
         }
     }
 }
-/* Chrome 29+ */
-@media screen and (min-resolution:.001dpcm) {
-    #inspectionTablePagination .pagination {
-        margin: 3px 15% 0 0;
-    }
-}
 
 /* Safari 10.1+ (which is the latest version of Safari at this time) */
-
 @media not all and (min-resolution:.001dpcm) {
     @media {
         ::i-block-chrome,#dispatchGV{

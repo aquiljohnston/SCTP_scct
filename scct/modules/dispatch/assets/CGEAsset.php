@@ -8,6 +8,7 @@ class CGEAsset extends AppAsset
 {
     public $css = [
         'css/cge.css',
+        'css/addSurveyor.css',
     ];
 	public $js = [
         'js/cge.js',

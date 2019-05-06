@@ -205,25 +205,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         </div>
     </div>
 
-	<!-- unused? -->
-    <!-- The Modal -->
-    <div id="dispatch-message" class="modal" style="display:none">
-        <!-- Modal content -->
-        <div class="modal-content">
-            <div class="modal-body">
-                <h4>Do you want to abandon your changes?</h4>
-                <div id="dispatchNoButton" class="dispatchModalbtn">
-                    <?php echo Html::button('No', ['class' => 'btn', 'id' => 'dispatchNoBtn']); ?>
-                </div>
-                <div id="dispatchYesButton" class="dispatchModalbtn">
-                    <?php echo Html::button('Yes', ['class' => 'btn', 'id' => 'dispatchYesBtn']); ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <?php
-
     Modal::begin([
         'header' => '<h4>ADD SURVEYORS TO SELECTED MAPS</h4>',
         'id' => 'addSurveyorModal',
