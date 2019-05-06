@@ -8,6 +8,7 @@ class AssignedAsset extends AppAsset
 {
     public $css = [
         'css/assigned.css',
+        'css/viewAssets.css',
     ];
 	public $js = [
         'js/assigned.js',

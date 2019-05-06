@@ -31,7 +31,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
         <div class="viewAssetsSearchcontainer">
             <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchDispatch', 'placeholder'=>'Search'])->label(''); ?>
         </div>
-        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButtonDispatch']) ?>
+        <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButton']) ?>
         <input id="searchFilterVal" type="hidden" name="searchFilterVal" value=<?php echo $searchFilterVal; ?> />
         <input id="mapGridSelected" type="hidden" name="mapGridSelected" value=<?php echo $mapGridSelected; ?> />
         <input id="sectionNumberSelected" type="hidden" name="sectionNumberSelected" value=<?php echo $sectionNumberSelected; ?> />
@@ -159,7 +159,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             }
         });
 
-        $('#assetsModalCleanFilterButtonDispatch').on('click', function () {
+        $('#assetsModalCleanFilterButton').on('click', function () {
             $('#viewAssetsSearchDispatch').val("");
             reloadViewAssetsModalDispatch();
         });

@@ -24,12 +24,12 @@ use kartik\grid\GridView;
             <div class="viewAssetsSearchcontainer dropdowntitle">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'viewAssetsSearchAssigned', 'placeholder'=>'Search'])->label(''); ?>
             </div>
-            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButtonAssigned']) ?>
+            <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'assetsModalCleanFilterButton']) ?>
             <div id="assignedAssetsButtonContainer" style="float: right;margin: 0% auto;width: 16%;">
                 <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
                     <div id="assiunassignedButton">
                         <?php echo Html::button('REMOVE SURVEYOR', ['class' => 'btn btn-primary',
-                            'id' => 'UnassignedAssetsButton', 'disabled' => 'disabled']); ?>
+                            'id' => 'assignedAssetRemoveSurveyorButton', 'disabled' => 'disabled']); ?>
                     </div>
                 <?php Pjax::end() ?>
             </div>
@@ -45,7 +45,7 @@ use kartik\grid\GridView;
         <?php yii\widgets\Pjax::end() ?>
         <?php Pjax::begin(['id' => 'dispatchBtnPjax', 'timeout' => false]) ?>
         <div id="addSurveyorButtonDispatchAssets" style="float: right; width: 16%; margin-top: -0.5%;">
-            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'assignedDispatchAssetsButton', 'disabled' => 'disabled', 'style' => 'width: 100%']); ?>
+            <?php echo Html::button('DISPATCH', ['class' => 'btn btn-primary', 'id' => 'dispatchAssetsButton', 'disabled' => 'disabled', 'style' => 'width: 100%']); ?>
         </div>
         <?php Pjax::end() ?>
     </div>
@@ -185,7 +185,7 @@ use kartik\grid\GridView;
             }
         });
 
-        $('#assetsModalCleanFilterButtonAssigned').on('click', function () {
+        $('#assetsModalCleanFilterButton').on('click', function () {
             $('#viewAssetsSearchAssigned').val("");
             reloadViewAssetsModal();
         });
@@ -198,7 +198,7 @@ use kartik\grid\GridView;
             reloadViewAssetsModal(page);
         });
 
-        $(document).off('click', '#assignedDispatchAssetsButton').on('click', '#assignedDispatchAssetsButton', function (event){
+        $(document).off('click', '#dispatchAssetsButton').on('click', '#dispatchAssetsButton', function (event){
             var assignedDispatchAsset = [];
             assignedDispatchAsset = getAssignedDispatchAssetsData();
             // Ajax post request to dispatch assets
@@ -237,7 +237,7 @@ use kartik\grid\GridView;
 					push: false,
 					replace: false,
 				}).done(function () {
-					$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
+					$('#dispatchAssetsButton').prop('disabled', 'disabled');
 					$("body").css("cursor", "default");
 					reloadAssignedGridView();
 				});
@@ -246,11 +246,11 @@ use kartik\grid\GridView;
 
         // Assets Surveyor Drop Down List listener
         $(document).off('change','.assetSurveyorDropDown').on('change', '.assetSurveyorDropDown', function (event) {
-            $('#assignedDispatchAssetsButton').prop('disabled', true);
+            $('#dispatchAssetsButton').prop('disabled', true);
             $('#assetGV-container tr').each(function () {
                 AssignedUserID = $(this).find('.assetSurveyorDropDown').val();
                 if (AssignedUserID != "null" && typeof AssignedUserID != 'undefined') {
-                    $('#assignedDispatchAssetsButton').prop('disabled', false);
+                    $('#dispatchAssetsButton').prop('disabled', false);
                     return false
                 }
             });
@@ -283,7 +283,7 @@ use kartik\grid\GridView;
             push: false,
             replace: false,
         }).done(function () {
-			$('#assignedDispatchAssetsButton').prop('disabled', 'disabled');
+			$('#dispatchAssetsButton').prop('disabled', 'disabled');
             $("body").css("cursor", "default");
 			$('#loading').hide();
         });
