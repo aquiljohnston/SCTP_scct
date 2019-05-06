@@ -12,6 +12,8 @@ use Yii;
  * @property string $EndTime
  * @property double $StartingMileage
  * @property double $EndingMileage
+ * @property number $StartingMileageEntryComment
+ * @property number $EndingMileageEntryComment
  * @property double $PersonalMiles
  * @property double $AdminMiles
  */
@@ -25,6 +27,8 @@ class MileageEntryTask extends \yii\base\model
 	public $EndTime;
 	public $StartingMileage;
 	public $EndingMileage;
+	public $StartingMileageEntryComment;
+	public $EndingMileageEntryComment;
 	public $PersonalMiles;
 	public $AdminMiles;
 
@@ -37,6 +41,7 @@ class MileageEntryTask extends \yii\base\model
 			[['EntryID', 'StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles','StartTime', 'EndTime', 'CardID', 'Date'], 'required'],
 			[['EntryID', 'CardID'], 'integer'],
             [['StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles'], 'number'],
+			[['StartingMileageEntryComment', 'EndingMileageEntryComment'], 'string', 'max'=>500],
             [['StartTime', 'EndTime', 'Date'], 'string', 'max'=>32],
         ];
     }
@@ -54,6 +59,8 @@ class MileageEntryTask extends \yii\base\model
             'EndTime' => 'End Time',
             'StartingMileage' => 'Starting Mileage',
 			'EndingMileage' => 'Ending Mileage',
+			'StartingMileageEntryComment' => 'Starting Mileage Entry Comment',
+			'EndingMileageEntryComment' => 'Ending Mileage Entry Comment',
 			'PersonalMiles' => 'Personal Miles',
 			'AdminMiles' => 'Admin Miles',
         ];
