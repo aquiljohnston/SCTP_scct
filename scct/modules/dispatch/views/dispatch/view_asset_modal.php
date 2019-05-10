@@ -56,10 +56,12 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
     <?= GridView::widget([
         'id' => 'assetGV',
+		'options' => ['style' => 'min-width: 1168px'], //to avoid error when applying floatHeader
         'dataProvider' => $assetDataProvider,
         'export' => false,
         'pjax' => true,
         'summary' => '',
+		'resizableColumns' => false,
         'floatHeader' => true,
         'floatOverflowContainer' => true,
         'columns' => [
@@ -150,8 +152,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
             var key = event.which;
             if (key == 13) {
                 var searchFilterVal = $('#viewAssetsSearchDispatch').val();
-                //console.log("about to call");
-                //console.log("searchFilterVal: " + searchFilterVal);
                 if (event.keyCode == 13) {
                     event.preventDefault();
                     reloadViewAssetsModalDispatch();

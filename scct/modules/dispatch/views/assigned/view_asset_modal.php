@@ -58,10 +58,12 @@ use kartik\grid\GridView;
 
     <?= GridView::widget([
         'id' => 'assetGV',
+		'options' => ['style' => 'min-width: 1168px'], //to avoid error when applying floatHeader
         'dataProvider' => $assetDataProvider,
         'export' => false,
         'pjax' => true,
         'summary' => '',
+		'resizableColumns' => false,
         'floatHeader' => true,
         'floatOverflowContainer' => true,
         'columns' => [
@@ -176,8 +178,6 @@ use kartik\grid\GridView;
             var key = event.which;
             if (key == 13) {
                 var searchFilterVal = $('#viewAssetsSearchAssigned').val();
-                console.log("about to call");
-                console.log("searchFilterVal: " + searchFilterVal);
                 if (event.keyCode == 13) {
                     event.preventDefault();
                     reloadViewAssetsModal();
