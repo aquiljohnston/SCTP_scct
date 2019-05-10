@@ -51,6 +51,7 @@ $(function () {
             reloadAssignedGridView();
         }
     });
+	
     $(document).off('change', '#assignPageSize').on('change', '#assignPageSize', function () {
         $('#assignedPageNumber').val(1);
         reloadAssignedGridView();
@@ -134,7 +135,6 @@ $(function () {
     $(document).off('click', '.unassignAssetsCheckbox input[type=checkbox]').on('click', '.unassignAssetsCheckbox input[type=checkbox]', function () {
         assignedAssets_WorkOrderID = $("#assetGV").yiiGridView('getSelectedRows');
         if($(this).prop('checked') == true){
-            //do something
             assignedAssets_AssignedUserId.push($(this).attr('assigneduserid'));
         }
         if (assignedAssets_WorkOrderID.length > 0) {
@@ -178,6 +178,7 @@ $(function () {
 	//reset checked assets on modal close
 	$('#modalViewAssetAssigned').on('hidden.bs.modal', function () {
 		assignedAssets_WorkOrderID = [];
+		assignedAssets_AssignedUserId = [];
 	});
 
     $(document).off('click', '#assignedSearchCleanFilterButton').on('click', '#assignedSearchCleanFilterButton', function (){
