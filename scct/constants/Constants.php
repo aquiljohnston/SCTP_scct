@@ -33,6 +33,9 @@ final class Constants
 	const QUICKBOOKS = "QB";
 	const ADP = "ADP";
  
+	//const values to determine active week when redirecting from home screen
+	const CURRENT_WEEK = 'Current Week';
+	const PRIOR_WEEK = 'Prior Week';
 	
 	private function __construct()
 	{

@@ -61,7 +61,7 @@ class HomeController extends BaseController
                     $this->mileageCardInfo = $dataProvider["mileageCards"];
                 }
             } catch (ErrorException $error) {
-                //Continue - Unable to retrieve equipment item
+                //Continue - Unable to retrieve notifications
             }
 
             $notificationProvider = new ArrayDataProvider([
@@ -130,6 +130,6 @@ class HomeController extends BaseController
             }
         }
 
-        return urlencode($allProjectsString);
+        return $allProjectsString;
     }
 }
