@@ -35,7 +35,7 @@ class MileageCardController extends BaseCardController
      * @throws ForbiddenHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($projectID = null, $projectFilterString = null)//variables for redirect defaults?
+    public function actionIndex($projectID = null, $projectFilterString = null, $activeWeek = null)//variables for redirect defaults from home notifications
     {
         try {
 			//guest redirect
@@ -127,11 +127,17 @@ class MileageCardController extends BaseCardController
 					//set default values
 					$model->pageSize = 50;
 					$model->employeeID = '';
-					$model->dateRangeValue = $currentWeek;
 					$model->dateRangePicker	= null;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
 					$model->projectID = $projectID != null ? $projectID : '';
+					if($activeWeek == Constants::PRIOR_WEEK){
+						$model->dateRangeValue = $priorWeek;
+					}elseif($activeWeek == Constants::CURRENT_WEEK){ //not necessary since default is current, but in place for clarity
+						$model->dateRangeValue = $currentWeek;
+					} else {
+						$model->dateRangeValue = $currentWeek;
+					}
 				}
             }
 
