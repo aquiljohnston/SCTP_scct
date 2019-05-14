@@ -21,38 +21,43 @@ use kartik\datetime\DateTimePicker;
         'export' => false,
         'id' => 'cgeAssetsGV',
         'summary' => '',
-        //'headerRowOptions' => ['style' => 'display: none'],
         'columns' => [
             [
                 'label' => 'Inspector',
                 'attribute' => 'Inspector',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
             ],
              [
                 'label' => 'Customer Info',
                 'attribute' => 'CustomerInfo',
                 'format' => 'raw',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 15%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
             ],
             [
                 'label' => 'Address',
                 'attribute' => 'Address',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
             ],
             [
                 'label' => 'Last Inspection Date',
                 'attribute' => 'InspectionDateTime',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 13.5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 12.5%;'],
+            ],
+			[
+                'label' => 'CGE Reason',
+                'attribute' => 'CGEReason',
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 8.5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 8.5%;'],
             ],
             [
                 'label' => 'Scheduled Date',
                 'attribute' => 'ScheduledDate',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 20%;'],
-                'contentOptions' => ['class' => 'text-center ScheduledDate','style' => 'width: 20%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 15.5%;'],
+                'contentOptions' => ['class' => 'text-center ScheduledDate','style' => 'width: 15.5%;'],
                 'value' => function($model){
                         $uniqueID = uniqid();
                         return DateTimePicker::widget([
@@ -73,20 +78,20 @@ use kartik\datetime\DateTimePicker;
             [
                 'label' => 'Inspection Type',
                 'attribute' => 'InspectionType',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
             ],
             [
                 'label' => 'Billing Code',
                 'attribute' => 'BillingCode',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
             ],
             [
                 'label' => 'Office Name',
                 'attribute' => 'OfficeName',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
-                'contentOptions' => ['class' => 'text-center','style' => 'width: 7%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'contentOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
             ],
             [
                 'attribute' => 'Image',
@@ -120,7 +125,7 @@ use kartik\datetime\DateTimePicker;
             [
                 'header' => '',
                 'class' => 'kartik\grid\CheckboxColumn',
-                'headerOptions' => ['class' => 'text-center','style' => 'width: 5%;'],
+                'headerOptions' => ['class' => 'text-center','style' => 'width: 2.5%;'],
                 'contentOptions' => ['class' => 'text-center cgeDispatchAssetsCheckbox','style' => 'width: 5%;'],
                 'checkboxOptions' => function ($model, $key, $index, $column) {
                     return [
