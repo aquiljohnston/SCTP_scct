@@ -39,10 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
 		<div id="selectDate" class="reportsDropdown" style="width: 300px;height: 20px;display: block;padding-top: 5px; display: none;">Select a
 			Date: <input type="text" id="datePickerSelectDate" style="float: right;"></div>
 		<div id="beginDate" class="reportsDropdown" style="width: 300px;height: 20px;display: block;display: none;">Start Date: 
-			<input type="text" id="datePickerBeginDate"></div>
+			<input type="text" id="datePickerBeginDate" autocomplete="off"></div>
 			<br /><br />
 		<div id="endDate" style="width: 300px;height:20px;display: block;padding-top: 5px; display: none;">End Date:
-			<input type="text" class="reportsDropdown"  id="datePickerEndDate"></div>
+			<input type="text" class="reportsDropdown"  id="datePickerEndDate" autocomplete="off"></div>
 		<div id="dropDownListView" style="width: 382px; padding-top: 10px;display: block; margin-bottom:.5%;">
 			<label id="mapGridListHeader" style="display: none;">MapGrid List: </label>
 			<select id="parmDropdown" class="reportsDropdown" style="float: right; display: none; margin-right: 41%; width: 20%;"></select>
