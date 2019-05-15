@@ -18,6 +18,11 @@
     margin-top: -3%;
 }
 
+.off-btn{
+	opacity: 0.65;
+	cursor: no-drop;
+}
+
 #mileageCardGridViewContainer,#mileage_card_filter{
 	position:relative;
 	width:100%;
