@@ -76,36 +76,29 @@ use kartik\form\ActiveForm;
 </div>
 <script type="text/javascript">
 
-    function enableDisableControls(enabled, searchFilterVal)
-    {
-        console.log("enableDisableControls Called");
-        $(".kv-row-select input[type=checkbox]").prop('disabled', !enabled);
-        $("#SurveyorModalCleanFilterButton").prop('disabled', !enabled);
-        $('.modalDispatchCgeBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-        $('#addSurveyorButton').prop('disabled', !enabled);
-        $('#assigned-surveyorWorkcenter-id').prop('disabled', !enabled);
-        $('#addSurveyorSearchCge').prop('disabled', !enabled);
-        resetCgeDispatchButtonState(); // make check enable / disable dispatch button
-    }
-	
-    function resetCgeDispatchButtonState()
-    {
-        $('.modalDispatchCgeBtn').prop('disabled', true); //TO DISABLED
-        $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
-
-        $(".cgeAddSurveyor input[type=checkbox]").click(function () {
-            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapGridData = getCgeDispatchMapGridData(assignedUserIDs);
-            dispatchAssetsData = getCgeDispatchAssetsData(assignedUserIDs);
-            console.log(assignedUserIDs.length);
-            if (assignedUserIDs.length == 1) {
-                $('.modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED
-                $('#modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED
-
-            } else {
-                $('.modalDispatchCgeBtn').prop('disabled', true); //TO DISABLED
+    // set trigger for search box in the add surveyor modal
+    $(document).ready(function () {
+		$('.modalDispatchCgeBtn').prop('disabled', true);
+		applyCgeDispatchTableListeners();
+		
+		//search filter listener
+        $('#addSurveyorSearchCge').keypress(function (event) {
+            var key = event.which;
+            if (key == 13) {
+                var searchFilterVal = $('#addSurveyorSearchCge').val();
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    reloadCgeAssetsModal(searchFilterVal);
+                }
             }
         });
+		
+		//SurveyorModal CleanFilterButton listener
+		$('#SurveyorModalCleanFilterButton').click(function () {
+			$("#addSurveyorSearchCge").val("");
+			var searchFilterVal = $('#addSurveyorSearchCge').val();
+			reloadCgeAssetsModal(searchFilterVal);
+		});
 
         $('.modalDispatchCgeBtn').click(function () {
             var form = $("#cgeActiveForm");
@@ -121,8 +114,6 @@ use kartik\form\ActiveForm;
                         $('#loading').show();
                     }
                 }).done(function () {
-                    $('#cgeDispatchButton').prop('disabled', true); //TO DISABLED
-                    resetCge_Global_Variable();
                     $.pjax.reload({
                         container:'#cgeGridview',
                         timeout: 99999,
@@ -131,8 +122,8 @@ use kartik\form\ActiveForm;
                         data: form.serialize()
                     });
                     $('#cgeGridview').on('pjax:success', function() {
-                        console.log("Pjax success");
-                        $("#dispatchButton").prop('disabled', true);
+						resetCge_Global_Variable();
+                        $("#cgeDispatchButton").prop('disabled', true);
                         $('#loading').hide();
                     });
                     $('#cgeGridview').on('pjax:error', function(e) {
@@ -141,27 +132,24 @@ use kartik\form\ActiveForm;
                 });
             }
         });
-    };
-
-    // set trigger for search box in the add surveyor modal
-    $(document).ready(function () {
-        $('.modalDispatchCgeBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-        $('#addSurveyorSearchCge').keypress(function (event) {
-            var key = event.which;
-            if (key == 13) {
-                var searchFilterVal = $('#addSurveyorSearchCge').val();
-                console.log("about to call");
-                console.log("searchFilterVal: " + searchFilterVal);
-                if (event.keyCode == 13) {
-                    event.preventDefault();
-                    reloadCgeAssetsModal(searchFilterVal);
-                }
+    });
+	
+	function applyCgeDispatchTableListeners()
+    {
+        $(".cgeAddSurveyor input[type=checkbox]").click(function () {
+            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            dispatchMapGridData = getCgeDispatchMapGridData(assignedUserIDs);
+            dispatchAssetsData = getCgeDispatchAssetsData(assignedUserIDs);
+            if (assignedUserIDs.length == 1) {
+                $('.modalDispatchCgeBtn').prop('disabled', false); //TO DISABLED
+            } else {
+                $('.modalDispatchCgeBtn').prop('disabled', true); //TO DISABLED
             }
         });
-        resetCgeDispatchButtonState();
-    });
+    };
 
     function reloadCgeAssetsModal(searchFilterVal) {
+		$('#loading').show();
         $.pjax.reload({
             type: 'POST',
             url: '/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge',
@@ -171,15 +159,12 @@ use kartik\form\ActiveForm;
             push: false,
             replace: false
         }).done(function () {
+			applyCgeDispatchTableListeners();
             $("body").css("cursor", "default");
-            enableDisableControls(true, searchFilterVal);
+            $('.modalDispatchCgeBtn').prop('disabled', true);
+			$('#loading').hide();
         });
     }
 
-    //SurveyorModal CleanFilterButton listener
-    $('#SurveyorModalCleanFilterButton').click(function () {
-        $("#addSurveyorSearchCge").val("");
-        var searchFilterVal = $('#addSurveyorSearchCge').val();
-        reloadCgeAssetsModal(searchFilterVal);
-    });
+    
 </script>
