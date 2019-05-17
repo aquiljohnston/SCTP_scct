@@ -26,7 +26,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 }
 </style>
 <div class="dispatch-assigned">
-    <div id="assignedDropdownContainer" style="height: 140px;">
+    <div id="assignedDropdownContainer">
 
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
 
@@ -73,9 +73,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                     <label style="color: #0067a6;"></label>
                     <?php Pjax::begin(['id' => 'assignButtons', 'timeout' => false]) ?>
                     <?php if ($canUnassign != 0) { ?>
-                        <div id="assiunassignedButton">
+                        <div id="removeSurveyorButtonContainer">
                             <?php echo Html::button('REMOVE SURVEYOR', ['class' => 'btn btn-primary',
-                                'id' => 'UnassignedButton']); ?>
+                                'id' => 'removeSurveyorButton']); ?>
                         </div>
                     <?php } else {
                         echo "";
@@ -268,7 +268,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 			<!-- Modal content -->
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3>PLEASE CONFIRM THE SURVEYORS YOU WISH TO REMOVE</h3>
+					<h4>PLEASE CONFIRM THE SURVEYORS YOU WISH TO REMOVE</h4>
 				</div>
 				<div class="modal-body">
 					<p><span class="unassignedUserName"></span></p>

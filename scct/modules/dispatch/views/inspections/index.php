@@ -54,7 +54,6 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                 'dataProvider' => $inspectionDataProvider, // Sent from inspectionController.php
                 'export' => false,
                 'pjax' => true,
-                'floatHeader' => true,
                 'summary' => '',
                 'columns' => [
                     [
