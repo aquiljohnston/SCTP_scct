@@ -22,8 +22,8 @@ $this->title = 'CGE';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 ?>
-<div class="dispatch-cge" style="margin-top: 2%;">
-    <div id="cgeDropdownContainer" style="height: 140px;float: left;width: 100%;background-color: #E6F0F6;z-index: 3;border-bottom: 1px solid black;padding: 10px;">
+<div class="dispatch-cge">
+    <div id="cgeDropdownContainer">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="cge-dropDownList-form">
             <?php $form = ActiveForm::begin([
@@ -38,18 +38,18 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
                                 'class' => 'recordsPerPage'
                             ]); ?>
                 </span>
-            <div class="col-xs-1 col-md-1 col-lg-1" id="cgeButtonContainer">
-                <label style="color: #0067a6; margin-bottom: 7px;"></label>
-                <?php Pjax::begin(['id' => 'cgeButtons', 'timeout' => false]) ?>
-                <?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary cge_dispatch_btn', 'id' => 'cgeDispatchButton', 'disabled' => 'disabled']); ?>
-                <?php Pjax::end() ?>
-            </div>
-            <div id="cgeSearchContainer">
-                <div id="cgefiltertitle" class="dropdowntitle">
+			<div id="cgeSearchContainer" class="col-xs-3 col-md-3 col-lg-3">
+                <div id="cgeSearchField">
                     <?= $form->field($model, 'cgefilter')->textInput(['value' => $cgeFilterParams, 'id' => 'cgeFilter', 'placeholder' => 'Search'])->label(''); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'cgeSearchCleanFilterButton']) ?>
             </div>
+			<div class="col-xs-1 col-md-1 col-lg-1" id="cgeButtonContainer">
+				<label style="color: #0067a6; margin-bottom: 7px;"></label>
+				<?php Pjax::begin(['id' => 'cgeButtons', 'timeout' => false]) ?>
+				<?php echo Html::button('ADD SURVEYOR', ['class' => 'btn btn-primary cge_dispatch_btn', 'id' => 'cgeDispatchButton', 'disabled' => 'disabled']); ?>
+				<?php Pjax::end() ?>
+			</div>
             <input id="cgeTableRecordsUpdate" type="hidden" name="cgeTableRecordsUpdate" value="no" />
             <input id="cgePageNumber" type="hidden" name="cgePageNumber" value="1" />
             <?php ActiveForm::end(); ?>

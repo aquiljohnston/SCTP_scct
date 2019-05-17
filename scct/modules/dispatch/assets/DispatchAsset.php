@@ -8,6 +8,8 @@ class DispatchAsset extends AppAsset
 {
     public $css = [
         'css/dispatch.css',
+        'css/addSurveyor.css',
+        'css/viewAssets.css',
     ];
 	public $js = [
         'js/dispatch.js',

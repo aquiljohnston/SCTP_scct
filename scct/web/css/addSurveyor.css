@@ -1,0 +1,27 @@
+#addsurveyorSearchcontainer{
+    float: left;
+    width: 40%;
+    padding-right: 1%;
+}
+#SurveyorModalCleanFilterButton{
+    margin-top: 20px;
+    width: 32px;
+    cursor: pointer;
+}
+#dispatchSurveyorsTable{
+    float: left;
+    width: 100%;
+}
+#surveyorGV-container{
+    max-height: 200px;
+}
+#addSurveyorsDispatchBtn {
+    text-align: center;
+}
+#addSurveyorDispatchButton{
+    margin-top: 15px;
+}
+
+
+
+

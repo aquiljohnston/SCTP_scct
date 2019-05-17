@@ -125,6 +125,6 @@ function getCgeDispatchMapGridData(assignedUserIDs) {
 }
 
 function resetCge_Global_Variable() {
-    cgeSelectedMapGrid = "";
-    cgeSelectedAssets = "";
+    cgeSelectedMapGrid = [];
+    cgeSelectedAssets = [];
 }

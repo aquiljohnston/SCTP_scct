@@ -16,63 +16,35 @@
     margin-top: -5px;
     font-size: 20px;
 }
-#inspectionGridViewContainer{
-    position:relative;
-    float:left;
-    width:100%;
-    margin-top: 0.7%;
-    z-index: 1;
-}
-#inspectionTable{
-    position:relative;
-    float:left;
-    width:100%;
-    margin-right:0.5%;
-    overflow-y: hidden;
-    overflow-x: hidden;
-}
-#inspectionGV {
-    width: 100%;
-    float: left;
-    height: 50vh;
-    overflow-y: auto;
-    margin: 0 auto;
-    overflow-x: hidden;
-}
-/*this is applying to both the main table and expanded section*/
-#inspectionTable .table-responsive {
-    margin-top:0px;
-    width:100%;
-    overflow-x: hidden !important;
-}
-#inspection-dropDownList-form{
-    width:99%;
-    margin-left:1%;
-    position:relative;
-    float:left;
-}
-#inspectionTableDropdown{
-    position:relative;
-    float:left;
-    width:99%;
-    margin-right:1%;
-}
 #inspectionPageSizeLabel{
     margin: -5px auto;
     width: 10%;
 }
-#InspectionTablePagination .pagination {
-    margin: 5px 0 0 0;
+#inspectionSearchContainer{
+    margin-left: 60%;
+}
+#inspectionSearchCleanFilterButton{
+    width: 32px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: -5px;
+}
+#inspectionGridViewContainer{
+    float:left;
+    width:100%;
+    margin-top: 0.7%;
+}
+#inspectionGV {
+    width: 100%;
+    height: 50vh;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 #sectionDetailTable{
     overflow-y: scroll;
     max-height: 25vh;
-	margin-right: 0.5vw;
 }
-#inspectionSearchContainer{
-    float:left;
-    margin-left: 60%;
-}
+
 /*css for new image tab*/
 .showImage:active {
     -webkit-transform: scale(2);
@@ -89,12 +61,6 @@
 .imageContainer{
     overflow-y: scroll;
 }
-#inspectionSearchCleanFilterButton{
-    width: 32px;
-    cursor: pointer;
-    margin-top: 20px;
-    margin-left: -5px;
-}
 
 @media (max-width: 760px) {
     #inspectionPageSizeLabel {
@@ -110,8 +76,6 @@
         overflow-x: hidden;
     }
 }
-/*Pending changes pop-up missing modal ends*/
-
 @media screen and (min-resolution:.001dpcm) {
 
     /* Safari only override */
