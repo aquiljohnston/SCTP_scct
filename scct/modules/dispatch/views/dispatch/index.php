@@ -207,7 +207,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
     <?php
     Modal::begin([
-        'header' => '<h4>ADD SURVEYORS TO SELECTED MAPS</h4>',
+        'header' => '<h4>ADD SURVEYORS</h4>',
         'id' => 'addSurveyorModal',
     ]);
     echo "<div id='modalAddSurveyor'>Loading...</div>";
