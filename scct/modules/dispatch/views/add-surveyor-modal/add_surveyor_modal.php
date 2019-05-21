@@ -145,11 +145,11 @@ use kartik\form\ActiveForm;
                         url: form.attr("action"),
                         data: pjaxFormData
                     });
-                    $('#dispatchUnassignedGridview').on('pjax:success', function() {
+                    $(gridViewID).on('pjax:success', function() {
                         $(dispatchButtonID).prop('disabled', true);
                         $('#loading').hide();
                     });
-                    $('#dispatchUnassignedGridview').on('pjax:error', function(e) {
+                    $(gridViewID).on('pjax:error', function(e) {
                         e.preventDefault();
                     });
                 });
