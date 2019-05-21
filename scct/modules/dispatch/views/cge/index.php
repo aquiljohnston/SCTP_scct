@@ -180,9 +180,9 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 
     Modal::begin([
         'header' => '<h4>ADD SURVEYORS</h4>',
-        'id' => 'addSurveyorCgeModal',
+        'id' => 'addSurveyorModal',
     ]);
-    echo "<div id='modalAddSurveyorCge'>Loading...</div>";
+    echo "<div id='modalAddSurveyor'>Loading...</div>";
     Modal::end();
     ?>
 </div>

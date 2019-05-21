@@ -6,16 +6,14 @@ use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
 
 ?>
-<div id="assignedaddsurveyordialogtitle">
-    <div id="addSurveyorModalHeader" class="addsurveryContainer">
-    </div>
+<div id="addSurveyorModalContainer">
     <div id="add-surveyor-dropDownList-form">
         <?php yii\widgets\Pjax::begin(['id' => 'addSurveyorForm']) ?>
         <?php $form = ActiveForm::begin([
             'type' => ActiveForm::TYPE_VERTICAL,
         ]); ?>
         <div class="addsurveryContainer">
-            <div id="addsurveyorSearchcontainer" class="dropdowntitle">
+            <div id="addsurveyorSearchcontainer">
                 <?= $form->field($model, 'modalSearch')->textInput(['value' => $searchFilterVal, 'id' => 'addSurveyorSearch', 'placeholder'=>'Search'])->label('Surveyor / Inspector'); ?>
             </div>
 			<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'SurveyorModalCleanFilterButton']) ?>
@@ -73,64 +71,82 @@ use kartik\form\ActiveForm;
 </div>
 <script type="text/javascript">
 
-    function enableDisableControls(enabled, searchFilterVal)
-    {
-        console.log("enableDisableControls Called");
-        $(".kv-row-select input[type=checkbox]").prop('disabled', !enabled);
-        $("#SurveyorModalCleanFilterButton").prop('disabled', !enabled);
-        $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it 
-        $('#addSurveyorButton').prop('disabled', !enabled); 
-        $('#assigned-surveyorWorkcenter-id').prop('disabled', !enabled);
-        $('#addSurveyorSearch').prop('disabled', !enabled);
-        resetButtonState(); // make check enable / disable dispatch button
-    }
-
-    function resetButtonState()
-    {
-        $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
-        $('#addSurveyorButton').prop('disabled', true); //TO DISABLED
-
-        $(".AddSurveyor input[type=checkbox]").click(function () {
-            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            dispatchMapData = getDispatchMapArray(assignedUserIDs);
-            dispatchSectionData = getDispatchSectionArray(assignedUserIDs);
-            console.log(assignedUserIDs.length);
-            if (assignedUserIDs.length > 0) {
-                $('.modalDispatchBtn').prop('disabled', false); //TO DISABLED
-                $('#addSurveyorModal').prop('disabled', false); //TO DISABLED
-            } else {
-                $('.modalDispatchBtn').prop('disabled', true); //TO DISABLED
+    // set trigger for search box in the add surveyor modal
+    $(document).ready(function () {
+		$('.modalDispatchBtn').prop('disabled', true);
+		applySurveyorTableListeners();
+		
+		//search filter listener
+        $('#addSurveyorSearch').keypress(function (event) {
+            var key = event.which;
+            if (key == 13) {
+                var searchFilterVal = $('#addSurveyorSearch').val();
+                if (event.keyCode == 13) {
+                    event.preventDefault();
+                    reloadAddSurveyorModal(searchFilterVal);
+                }
             }
         });
+		
+		//SurveyorModal CleanFilterButton listener
+		$('#SurveyorModalCleanFilterButton').click(function () {
+			$("#addSurveyorSearch").val("");
+			var searchFilterVal = $('#addSurveyorSearch').val();
+			reloadAddSurveyorModal(searchFilterVal);
+		});
 
         $('.modalDispatchBtn').click(function () {
-            var form = $("#dispatchActiveForm");
-			//get sort value
-			var sort = getDispatchIndexSortParams();
-			//append sort to form values
-			var dataParams = form.serialize() + "&sort=" + sort;
-            if (!assignedUserIDs || assignedUserIDs.length > 0) {
+            var form = $("#addSurveyorForm");
+			//get current screen from 3rd element in path '/dispatch/currentScreen'
+			currentScreen = window.location.pathname.split('/')[2];
+			//Dynamically build request params depending on screen
+			if(currentScreen == 'dispatch'){
+				//grab map data
+				dispatchMapData = getDispatchMapArray(assignedUserIDs);
+				dispatchSectionData = getDispatchSectionArray(assignedUserIDs);
+				//build post data
+				postData = {dispatchMap: dispatchMapData, dispatchSection: dispatchSectionData};
+				//get sort value and append to form values
+				var sort = getDispatchIndexSortParams();
+				var pjaxFormData = form.serialize() + "&sort=" + sort;
+				//set base screen ids for refresh
+				gridViewID = '#dispatchUnassignedGridview';
+				dispatchButtonID = '#dispatchButton';
+			}else if(currentScreen == 'cge'){
+				//grab map data
+				dispatchMapData = getCgeDispatchMapGridData(assignedUserIDs);
+				dispatchAssetsData = getCgeDispatchAssetsData(assignedUserIDs);
+				//build post data
+				postData = {dispatchMap: dispatchMapData, dispatchAsset: dispatchAssetsData};
+				//get form values
+				var pjaxFormData = form.serialize();
+				//set base screen ids for refresh
+				gridViewID = '#cgeGridview';
+				dispatchButtonID = '#cgeDispatchButton';
+			}
+			
+            if (!assignedUserIDs || assignedUserIDs.length == 1) {
                 // Ajax post request to dispatch action
                 $.ajax({
                     timeout: 99999,
                     url: '/dispatch/dispatch/dispatch',
-                    data: {dispatchMap: dispatchMapData, dispatchSection: dispatchSectionData},
+                    data: postData,
                     type: 'POST',
                     beforeSend: function () {
                         $('#addSurveyorModal').modal("hide");
                         $('#loading').show();
                     }
                 }).done(function () {
+					//need to dynamically load the correct gridview
                     $.pjax.reload({
-                        container:'#dispatchUnassignedGridview',
+                        container: gridViewID,
                         timeout: 99999,
                         type: 'GET',
                         url: form.attr("action"),
-                        data: dataParams
+                        data: pjaxFormData
                     });
                     $('#dispatchUnassignedGridview').on('pjax:success', function() {
-                        console.log("Pjax success");
-                        $("#dispatchButton").prop('disabled', true);
+                        $(dispatchButtonID).prop('disabled', true);
                         $('#loading').hide();
                     });
                     $('#dispatchUnassignedGridview').on('pjax:error', function(e) {
@@ -139,45 +155,34 @@ use kartik\form\ActiveForm;
                 });
             }
         });
-    }
-
-    // set trigger for search box in the add surveyor modal
-    $(document).ready(function () {
-        $('.modalDispatchBtn').prop('disabled', true); // always disable this one.  Checking an item will enable it
-        $('#addSurveyorSearch').keypress(function (event) {
-            var key = event.which;
-            if (key == 13) {
-                var searchFilterVal = $('#addSurveyorSearch').val();
-                console.log("about to call");
-                console.log("searchFilterVal: " + searchFilterVal);
-                if (event.keyCode == 13) {
-                    event.preventDefault();
-                    reloadAssetsModal(searchFilterVal);
-                }
+    });
+	
+	function applySurveyorTableListeners(){
+        $(".AddSurveyor input[type=checkbox]").click(function () {
+            assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
+            if (assignedUserIDs.length == 1) {
+                $('.modalDispatchBtn').prop('disabled', false);
+            } else {
+                $('.modalDispatchBtn').prop('disabled', true);
             }
         });
-        resetButtonState();
-    });
+    };
 
-    function reloadAssetsModal(searchFilterVal) {
+    function reloadAddSurveyorModal(searchFilterVal){
+		$('#loading').show();
         $.pjax.reload({
             type: 'POST',
             url: '/dispatch/add-surveyor-modal/add-surveyor-modal',
-            container: '#addSurveyorsGridviewPJAX', // id to update content
+            container: '#addSurveyorsGridviewPJAX',
             data: {searchFilterVal: searchFilterVal},
             timeout: 99999,
             push: false,
             replace: false
         }).done(function () {
+			applySurveyorTableListeners();
             $("body").css("cursor", "default");
-            enableDisableControls(true, searchFilterVal);
+            $('.modalDispatchBtn').prop('disabled', true);
+			$('#loading').hide();
         });
     }
-	
-    //SurveyorModal CleanFilterButton listener
-    $('#SurveyorModalCleanFilterButton').click(function () {
-        $("#addSurveyorSearch").val("");
-        var searchFilterVal = $('#addSurveyorSearch').val();
-        reloadAssetsModal(searchFilterVal);
-    });
 </script>
