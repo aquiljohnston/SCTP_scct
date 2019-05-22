@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use app\assets\HomeAsset;
 
+use app\constants\Constants;
+
 //register assets
 HomeAsset::register($this);
 /* @var $this yii\web\View */
@@ -33,17 +35,53 @@ $notificationCol = [
 
 $timeCardCol = [
     'Project',
-    'Number of Items',
+    [
+		'label' => 'Prior Week',
+		'attribute' => 'PriorWeekCount',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
     ['class' => 'kartik\grid\ActionColumn',
-        'header' => 'View',
+        'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view' && $model['Project'] === 'Total') {
-                $url = '/time-card/index?projectFilterString='
-				. $this->context->getAllProjects();
+				$url = '/time-card/index?' . http_build_query([
+					'projectFilterString' => $this->context->getAllProjects(),
+					'activeWeek' => Constants::PRIOR_WEEK,
+				]);
                 return $url;
             } else {
-                $url = '/time-card/index?projectID=' . $model['ProjectID'];
+				$url = '/time-card/index?' . http_build_query([
+					'projectID' => $model['ProjectID'],
+					'activeWeek' => Constants::PRIOR_WEEK,
+				]);
+                return $url;
+            }
+        }
+    ],
+	[
+		'label' => 'Current Week',
+		'attribute' => 'CurrentWeekCount',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'class' => 'kartik\grid\ActionColumn',
+		'header' => '',
+        'template' => '{view}',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view' && $model['Project'] === 'Total') {
+				$url = '/time-card/index?' . http_build_query([
+					'projectFilterString' => $this->context->getAllProjects(),
+					'activeWeek' => Constants::CURRENT_WEEK,
+				]);
+                return $url;
+            } else {
+				$url = '/time-card/index?' . http_build_query([
+					'projectID' => $model['ProjectID'],
+					'activeWeek' => Constants::CURRENT_WEEK,
+				]);
                 return $url;
             }
         }
@@ -52,17 +90,55 @@ $timeCardCol = [
 
 $mileageCardCol = [
     'Project',
-    'Number of Items',
-    ['class' => 'kartik\grid\ActionColumn',
-        'header' => 'View',
+    [
+		'label' => 'Prior Week',
+		'attribute' => 'PriorWeekCount',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'class' => 'kartik\grid\ActionColumn',
+		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view' && $model['Project'] === 'Total') {
-                $url = '/mileage-card/index?projectFilterString='
-				. $this->context->getAllProjects();
+				yii::trace('Project String: ' . $this->context->getAllProjects());
+				$url = '/mileage-card/index?' . http_build_query([
+					'projectFilterString' => $this->context->getAllProjects(),
+					'activeWeek' => Constants::PRIOR_WEEK,
+				]);
                 return $url;
             } else {
-                $url = '/mileage-card/index?projectID=' . $model['ProjectID'];
+				$url = '/mileage-card/index?' . http_build_query([
+					'projectID' => $model['ProjectID'],
+					'activeWeek' => Constants::PRIOR_WEEK,
+				]);
+                return $url;
+            }
+        }
+    ],
+	[
+		'label' => 'Current Week',
+		'attribute' => 'CurrentWeekCount',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+    [
+		'class' => 'kartik\grid\ActionColumn',
+		'header' => '',
+        'template' => '{view}',
+        'urlCreator' => function ($action, $model, $key, $index) {
+            if ($action === 'view' && $model['Project'] === 'Total') {
+				$url = '/mileage-card/index?' . http_build_query([
+					'projectFilterString' => $this->context->getAllProjects(),
+					'activeWeek' => Constants::CURRENT_WEEK,
+				]);
+                return $url;
+            } else {
+				$url = '/mileage-card/index?' . http_build_query([
+					'projectID' => $model['ProjectID'],
+					'activeWeek' => Constants::CURRENT_WEEK,
+				]);
                 return $url;
             }
         }

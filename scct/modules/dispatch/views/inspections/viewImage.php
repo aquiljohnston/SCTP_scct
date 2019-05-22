@@ -6,6 +6,11 @@
  * Time: 5:11 PM
  */
 use yii\helpers\Url;
+use app\modules\dispatch\assets\InspectionAsset;
+
+//register assets
+InspectionAsset::register($this);
+
 $this->registerCss("#top-wrapper { display:none } .copyright-section{display:none} .footerabove {display:none} .wrap > .container{padding: 60px 15px 20px;}");
 ?>
 <div class="imageContainer">

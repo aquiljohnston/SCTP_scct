@@ -52,6 +52,7 @@ class AddSurveyorModalController extends \app\controllers\BaseController {
 
             $dataProvider->key = 'UserID';
 
+			//this block could be cleaned up
             if ($modalName == null) {
                 if (Yii::$app->request->isAjax) {
                     return $this->renderAjax('add_surveyor_modal', [
