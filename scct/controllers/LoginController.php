@@ -181,7 +181,7 @@ class LoginController extends BaseController
 			//Leaving code in place if this changes in the future.
 			//if time card is not avaliable set to null
 			// if(Yii::$app->session['userTimeCard'] != null)
-			// {
+			// { test
 				// //populate timeEntry data
 				// $timeEntry->TimeEntryUserID = Yii::$app->session['userID'];
 				// $timeEntry->TimeEntryStartTime = BaseController::getDate();
