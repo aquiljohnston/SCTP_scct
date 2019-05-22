@@ -1,0 +1,28 @@
+#viewAssetModalContainer{
+    margin-bottom: 3%;
+}
+.viewAssetsSearchcontainer{
+    float: left;
+    width: 65%;
+}
+#assetsModalCleanFilterButton{
+    margin-top: 20px;
+    width: 35px;
+    cursor: pointer;
+}
+#dispatchAssetsButton{
+    padding-left: 25%;
+    padding-right: 25%;
+}
+#assetTablePjax{
+    margin-bottom:6%;
+}
+#assetsTable #assetGV-container{
+	max-height: 400px;
+    height: auto;
+}
+
+/*unique to the assigned asset modal*/
+#assignedAssetRemoveSurveyorButton{
+    width: 100%;
+}
