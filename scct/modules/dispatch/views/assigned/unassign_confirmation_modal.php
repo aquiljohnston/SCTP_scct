@@ -101,7 +101,7 @@
 		});
 
 		// disable remove surveyor button again
-		$('#UnassignedButton').prop('disabled', true); //TO DISABLED
+		$("#removeSurveyorButton").prop('disabled', true);
 	}
 	
 	//get confirmed unassign user data
