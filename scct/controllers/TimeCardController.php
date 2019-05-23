@@ -440,7 +440,7 @@ class TimeCardController extends BaseCardController
 				'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
 				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isSubmitted' => $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardQBSubmitted']=='Yes',
+				'isSubmitted' => $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes',
 				'inOvertime' => $inOvertime,
 
 			]);
@@ -483,6 +483,28 @@ class TimeCardController extends BaseCardController
         }
 	}
 	
+	public function actionAccountantReset(){
+		try{
+			$data = Yii::$app->request->post();	
+			$jsonData = json_encode($data);
+			
+			// post url
+			$putUrl = 'time-card%2Faccountant-reset';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$response = json_decode($putResponse, true);
+			
+			return $response['success'];
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }		
+	}
+	
     /**
      * Process Date Range Data
      * @param $dateRange
@@ -500,8 +522,7 @@ class TimeCardController extends BaseCardController
     }
 
 	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
-	private function calcInOvertime($entriesArray)
-	{
+	private function calcInOvertime($entriesArray){
 		define('FIRST_ENTRY_ROW',1);
 		define('FIRST_ENTRY_COLUMN',1);
 		
