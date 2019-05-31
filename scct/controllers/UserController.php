@@ -105,9 +105,6 @@ class UserController extends BaseController
                     ]
                 ]
             ];
-
-            // Generate User Permission Table
-            $userPermissionTable = SELF::getUserPermissionTable();
 			
             //populate add/remove modal options
             $addRemoveProjects = array();
@@ -119,16 +116,24 @@ class UserController extends BaseController
                 $tmpProjectObj = array('ProjectID'=> $projectID, 'ProjectName'=> $projectName);
                 array_push($addRemoveProjects, $tmpProjectObj);
             }
+			
+			//check user create permission to hide button
+			try{
+				self::requirePermission('userCreate');
+				$canCreate = true;
+			} catch(ForbiddenHttpException $e) {
+				$canCreate = false;
+			}
 
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
                 'model' => $model,
                 'pages' => $pages,
                 'page' => $page,
-                'userPermissionTable' => $userPermissionTable,
                 'addRemoveProjects' => $addRemoveProjects,
 				'projectDropdown' => $projectDropdown,
 				'showProjectDropdown' => $showProjectDropdown,
+				'canCreate' => $canCreate,
             ]);
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
