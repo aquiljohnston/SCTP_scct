@@ -84,6 +84,15 @@ $(function(){
 
 function mileageCardPmSubmit() {
 	$('#mileage_pm_submit_btn_id').on('click').click(function (event) {
+		//check css class that gives
+        //the appearance of being disabled via css
+        //add returns false to prevent submission in
+        //this state.
+		//mimics accountant submit may be be better to just disable since no tooltip exist
+        if($(this).hasClass('off-btn')){
+			return false;
+        }
+		
 		var projectID = new Array();
 		if($('#mileageProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#mileageProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
 			// get all project ids
