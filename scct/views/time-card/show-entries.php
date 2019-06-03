@@ -51,7 +51,7 @@ TimeCardAsset::register($this);
 			]) ?>
 			<?= Html::button('Add Task', [
 				'class' => 'btn btn-primary add_task_btn',
-				'disabled' => $approve_status && ($isSubmitted || !$isAccountant),
+				'disabled' => $approve_status && !$isAccountant,
 				'id' => 'add_task_btn_id',
 			]) ?>
 		</p>

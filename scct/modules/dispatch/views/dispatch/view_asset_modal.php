@@ -245,6 +245,7 @@ $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 					push: false,
 					replace: false,
 				}).done(function () {
+					$('#dispatchAssetsButton').prop('disabled', true);
 					$("body").css("cursor", "default");
 					reloadDispatchGridView();
 				});

@@ -251,28 +251,4 @@ class CgeController extends \app\controllers\BaseController
             throw new ServerErrorHttpException();
         }
     }
-
-    /**
-     * CGE Dispatch function
-     * @throws ForbiddenHttpException
-     */
-    public function actionDispatch(){
-        try {
-            if (Yii::$app->request->isAjax) {
-                $data = Yii::$app->request->post();
-                $json_data = json_encode($data);
-                // post url
-                $postUrl = 'dispatch%2Fdispatch';
-                $postResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
-            }
-        } catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch(ErrorException $e) {
-            throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
-            throw new ServerErrorHttpException();
-        }
-    }
 }
