@@ -205,3 +205,14 @@ div[id^=modalContent] .wrap #top-wrapper {
 	margin-top: -4.5%; 
 	margin-right: 1.5%;
 }
+
+/*css for mileage view image screen*/
+.img-responsive{
+	max-height: 90vh;
+	position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto auto
+}

@@ -349,16 +349,14 @@ class DispatchController extends \app\controllers\BaseController
      * Dispatch function
      * @throws ForbiddenHttpException
      */
-    public function actionDispatch()
-    {
+    public function actionDispatch(){
         try {
             if (Yii::$app->request->isAjax) {
                 $data = Yii::$app->request->post();
                 $json_data = json_encode($data);
-
                 // post url
-                $putUrl = 'dispatch%2Fdispatch';
-                $putResponse = Parent::executePostRequest($putUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
+                $postUrl = 'dispatch%2Fdispatch';
+                $postResponse = Parent::executePostRequest($postUrl, $json_data, Constants::API_VERSION_2); // indirect rbac
             }
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
