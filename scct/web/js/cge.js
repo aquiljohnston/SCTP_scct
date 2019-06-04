@@ -62,12 +62,11 @@ $(function () {
 
     // Refer the modal in dispatch page
     $('#cgeDispatchButton').click(function () {
-        console.log("cgeDispatchButton clicked!");
-        $('#addSurveyorCgeModal').modal('show')
-            .find('#modalAddSurveyorCge').html("Loading...");
-        $('#addSurveyorCgeModal').modal('show')
-            .find('#modalAddSurveyorCge')
-            .load('/dispatch/add-surveyor-modal/add-surveyor-modal?modalName=cge');
+        $('#addSurveyorModal').modal('show')
+            .find('#modalAddSurveyor').html("Loading...");
+        $('#addSurveyorModal').modal('show')
+            .find('#modalAddSurveyor')
+            .load('/dispatch/add-surveyor-modal/add-surveyor-modal');
     });
 
     $(document).off('click', '#cgeSearchCleanFilterButton').on('click', '#cgeSearchCleanFilterButton', function (){
