@@ -44,11 +44,6 @@ MileageCardAsset::register($this);
 				'disabled' => $approve_status || $isAccountant,
 				'id' => 'approve_mileageCard_btn_id',
 			]) ?>
-			<!--<?= Html::button('Deactivate', [
-				'class' => 'btn btn-primary',
-				'disabled' => true,
-				'id' => 'deactive_mileageEntry_btn_id',
-			]) ?>-->
 		</p>
 		<br>
     </div>
