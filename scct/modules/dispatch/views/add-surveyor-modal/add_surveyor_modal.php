@@ -125,7 +125,7 @@ use kartik\form\ActiveForm;
 				dispatchButtonID = '#cgeDispatchButton';
 			}
 			
-            if (!assignedUserIDs || assignedUserIDs.length == 1) {
+            if (!assignedUserIDs || assignedUserIDs.length > 0) {
                 // Ajax post request to dispatch action
                 $.ajax({
                     timeout: 99999,
