@@ -125,7 +125,7 @@ use kartik\form\ActiveForm;
 				dispatchButtonID = '#cgeDispatchButton';
 			}
 			
-            if (!assignedUserIDs || assignedUserIDs.length == 1) {
+            if (!assignedUserIDs || assignedUserIDs.length > 0) {
                 // Ajax post request to dispatch action
                 $.ajax({
                     timeout: 99999,
@@ -160,7 +160,7 @@ use kartik\form\ActiveForm;
 	function applySurveyorTableListeners(){
         $(".AddSurveyor input[type=checkbox]").click(function () {
             assignedUserIDs = $("#addSurveyorsGridview #surveyorGV").yiiGridView('getSelectedRows');
-            if (assignedUserIDs.length == 1) {
+            if (assignedUserIDs.length > 0) {
                 $('.modalDispatchBtn').prop('disabled', false);
             } else {
                 $('.modalDispatchBtn').prop('disabled', true);
