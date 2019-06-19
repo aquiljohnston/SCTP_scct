@@ -204,7 +204,7 @@ class BaseCardController extends BaseController
 		if($projectID != NULL){
 			$projArray[0] = $projectID;
 		}elseif($keysCount == 1) {
-			$projectID = $keys[0];
+			$projArray[0] = $keys[0];
 		}else{
 			for($i=0;$i<$keysCount; $i++) {
 				if($keys[$i] !== "") {

@@ -33,63 +33,6 @@ function applyMilageEntryListeners() {
 		})
 	});
 	
-	//apply on click listener on deactivate button to deactivate all checked rows
-	$(document).on('click','#deactive_mileageEntry_btn_id',function(e){
-		var name = "";
-		var tasks = [];
-		var entries = [];
-		var mileageCardID = $('#mileageCardId').val();
-
-	   $(".entryData").each(function(k,value){
-			if($(this).is(":checked")){
-				//get task name for payload and confirm message
-				name = $(this).attr('taskName');
-				tasks.push(name);
-			}
-		});
-		entries.push({taskName : tasks, mileageCardID : mileageCardID});
-		tasks.join(', ');
-		data = {entries};
-
-		krajeeDialog.defaults.confirm.title = 'Deactivate Mileage';
-		krajeeDialog.confirm('Are you sure you want to deactivate all ' +tasks+ '? Please confirm...', function (resp) {
-			if (resp) {
-				$('#loading').show();
-				$.ajax({
-					type: 'POST',
-					url: '/mileage-card/deactivate/',
-					data: data,
-					success: function(data) {
-						$.pjax.reload({container:"#ShowMileageEntriesView", timeout: 99999}).done(function(){
-							$('#loading').hide();
-							$('#deactive_MileageEntry_btn_id').prop('disabled',true);
-						});
-					}
-				});
-			} else {
-				$('#w0').modal('toggle');
-				return false;
-			}
-		});
-	});
-	
-	//apply listeners for deactivate check boxes to enable deactivate button
-	$(document).on('change','.entryData', function (e) {
-		input = $(this);
-		tr = $(this).closest('tr');
-
-		if($(this).is(":checked")){
-			tr.find('td').each(function(index,value){
-				if(index != 0 && $(this).text()!=""){
-					th_class = $(this).closest('table').find('th').eq(index).attr('class');
-				}
-			});
-			input.attr('entry',th_class);
-		}
-		$('#deactive_mileageEntry_btn_id').prop('disabled',
-			!($("#allMileageEntries-container input:checkbox:checked").length > 0));
-	});
-	
 	//apply listeners on cells with data for view entry by day modal
 	$(document).off('click', '#allMileageEntries tbody tr td').on('click', '#allMileageEntries tbody tr td',function (){
 		//get row and column of this item
@@ -108,7 +51,7 @@ function applyMilageEntryListeners() {
 		//with values in the .text()
 		if($(this).attr('data-col-seq') >=1){
 			//set readOnly status based on role and approved/submitted state
-			readOnly = (($("#approve_mileageCard_btn_id").prop("disabled") && !$('#isAccountant').val()) || $('#isSubmitted').val()) ? 1 : 0;
+			readOnly = ($("#approve_mileageCard_btn_id").prop("disabled") && !$('#isAccountant').val()) ? 1 : 0;
 			$('#viewMileageModal').modal('show').find('#viewEntriesModalContentSpan').html("Loading...");
 			//set header values
 			$('#viewMileageModal').find('#viewMileageModalTitle').html(task);
