@@ -4,9 +4,13 @@ $(function(){
     var jqWeekSelection = jqMileageCardFilter.find('#mileageCardDateRange');
     var jqMCPageSize = jqMCDropDowns.find('#mileageCardPageSize');
 	var mileageProjectFilterDD = $('#mileageProjectFilterDD');
-    mileageEntries = [];           
+    mileageEntries = []; 
+	mileageCardApproveMultiple();
     mileageCardPmSubmit();
 	mileageCardAccountantSubmit();
+	mileageCardPMReset();
+    //may need to add to index in pluginEvent
+	$.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
 	
 	$(document).ready(function () {
 		if(jqWeekSelection.length > 0)
@@ -80,7 +84,48 @@ $(function(){
 		$('#mileageCardPageNumber').val(1);
         reloadMileageCardGridView();
     }); 
+	
+	$(document).off('change', "#mileageCardGV input[type=checkbox]").on('change', "#mileageCardGV input[type=checkbox]", function (e) {
+        if ($("#GridViewForMileageCard").yiiGridView('getSelectedRows') != 0) {
+            $('#mc_multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
+			$('#pm_mileage_card_reset').prop('disabled', false);
+        } else {
+            $('#mc_multiple_approve_btn_id').prop('disabled', true);
+            $('#pm_mileage_card_reset').prop('disabled', true);
+        }
+    });
 });
+
+function mileageCardApproveMultiple() {	
+    $('#mc_multiple_approve_btn_id').off('click').click(function (event) {
+        var primaryKeys = $('#GridViewForMileageCard').yiiGridView('getSelectedRows');
+        var quantifier = "";
+
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
+        
+        if (resp) {
+			$('#loading').show();
+            $.ajax({
+                type: 'POST',
+                url: '/mileage-card/approve-multiple',
+                data: {
+                    mileagecardid: primaryKeys
+                }
+            });
+        } else {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+      })
+    });
+}
 
 function mileageCardPmSubmit() {
 	$('#mileage_pm_submit_btn_id').on('click').click(function (event) {
@@ -218,6 +263,42 @@ function mileageCardAccountantSubmit() {
     });
 }
 
+function mileageCardPMReset(){
+    $('#pm_mileage_card_reset').off('click').click(function (event) {
+        var primaryKeys = $('#GridViewForMileageCard').yiiGridView('getSelectedRows');
+        //removes EndDate attribute from keys
+        var quantifier = "";
+
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'PM Reset';
+        krajeeDialog.confirm('Are you sure you want to reset ' + quantifier, function (resp) {
+            if (resp) {
+                $('#loading').show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/mileage-card/p-m-reset',
+                    data: {
+                        data: primaryKeys
+                    },
+                    success: function(resp) {
+                        if(resp){
+                            reloadMileageCardGridView();
+                        }
+                    }
+                });
+            } else {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
+        })
+    });
+}
+
 function reloadMileageCardGridView() {
 	var form = $('#mileageCardDropdownContainer').find("#MileageCardForm");
 	//get sort value
@@ -246,9 +327,10 @@ function reloadMileageCardGridView() {
 				$.pjax.reload({container: '#mileageCardDropDownPjax', async:false});
 			});
 		$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
-			applyMileageCardOnClickListeners();
+			mileageCardApproveMultiple();
 			mileageCardAccountantSubmit();
 			mileageCardPmSubmit();
+			mileageCardPMReset();
 			$('#loading').hide();
 		});
 		$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
