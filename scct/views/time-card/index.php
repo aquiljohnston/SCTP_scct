@@ -85,6 +85,20 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
+		[
+			'class' => 'kartik\grid\CheckboxColumn',
+			'header' => 'PM Reset',
+			'headerOptions' => ['class' => 'text-center'],
+			'checkboxOptions' => function ($model, $key, $index, $column){
+				// Disable if already approved or SumHours is 0
+				$disabledBoolean = ($model['Approved Time Cards'] == 0 || $model['OasisSubmitted'] != 'No' || $model['MSDynamicsSubmitted'] != 'No' || $model['ADPSubmitted'] != 'No');
+				$result = [];
+				if ($disabledBoolean) {
+					$result['disabled'] = true;
+				}
+				return $result;
+			}
+		],
 		//may not need this field as it is the table key
 		[
 			'label' => 'Project ID',
@@ -214,6 +228,12 @@ else
 										'id' => 'time_card_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
+									echo Html::button('PM Reset',
+									[
+										'class' => 'btn btn-primary pm_reset_btn',
+										'id' => 'pm_time_card_reset',
+										'disabled' => true
+									]);
 								} elseif($isProjectManager){
 									echo Html::button('Submit',
 									[
@@ -295,9 +315,10 @@ else
 											timeout:false
 										});
 										$('#timeCardSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
-											applyTimeCardOnClickListeners();
-											timeCardAccountantSubmit();
+											timeCardApproveMultiple();
 											timeCardPmSubmit();
+											timeCardAccountantSubmit();
+											timeCardPMReset();
 											$('#loading').hide();
 										});
 										$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {

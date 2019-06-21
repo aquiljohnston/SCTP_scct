@@ -9,7 +9,6 @@ class MileageCardAsset extends AppAsset
         'css/notify.css',
     ];
 	public $js = [
-        'js/approve_multiple_mileagecard.js',
         'js/mileage_card.js',
         'js/mileage_entries.js',
         'js/datePicker.js',

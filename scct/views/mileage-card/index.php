@@ -79,6 +79,20 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
+		[
+			'class' => 'kartik\grid\CheckboxColumn',
+			'header' => 'PM Reset',
+			'headerOptions' => ['class' => 'text-center'],
+			'checkboxOptions' => function ($model, $key, $index, $column){
+				// Disable if already approved or SumHours is 0
+				$disabledBoolean = ($model['Approved Mileage Cards'] == 0 || $model['OasisSubmitted'] != 'No' || $model['MSDynamicsSubmitted'] != 'No');
+				$result = [];
+				if ($disabledBoolean) {
+					$result['disabled'] = true;
+				}
+				return $result;
+			}
+		],
 		//may not need this field as it is the table key
 		[
 			'label' => 'Project ID',
@@ -206,6 +220,13 @@ if($isAccountant)
 										'id' => 'mileage_acc_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
+									echo Html::button('PM Reset',
+                                    [
+                                        'class' => 'btn btn-primary pm_reset_btn',
+                                        'id' => 'pm_mileage_card_reset',
+                                        'disabled' => true
+                                    ]);
+
 								} elseif($isProjectManager){
 									echo Html::button('Submit',
 									[
@@ -287,9 +308,10 @@ if($isAccountant)
 									timeout:false
 								});
 								$('#mileageSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
-									applyMileageCardOnClickListeners();
-									mileageCardAccountantSubmit();
+									mileageCardApproveMultiple();
 									mileageCardPmSubmit();
+									mileageCardAccountantSubmit();
+									mileageCardPMReset();
 									$('#loading').hide();
 								});
 								$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
