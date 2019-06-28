@@ -463,13 +463,13 @@ class TimeCardController extends BaseCardController
      * @internal param string $id
      *
      */
-	public function actionDeactivate(){
+	public function actionDeactivateByTask(){
 		try{
 			$data = Yii::$app->request->post();	
 			$jsonData = json_encode($data);
 			
 			// post url
-			$putUrl = 'time-entry%2Fdeactivate';
+			$putUrl = 'time-entry%2Fdeactivate-by-task';
 			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
 		} catch (UnauthorizedHttpException $e){
