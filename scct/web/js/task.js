@@ -126,7 +126,7 @@ function deactivateCellSelection(cell){
 			data = {entries};
 			$.ajax({
 				type: 'POST',
-				url: '/time-card/deactivate/',
+				url: '/time-card/deactivate-by-task/',
 				data: data,
 				beforeSend: function() {
 				},
@@ -164,7 +164,7 @@ function deactivateRowSelection(){
 			$('#loading').show();
 			$.ajax({
 				type: 'POST',
-				url: '/time-card/deactivate/',
+				url: '/time-card/deactivate-by-task/',
 				data: data,
 				success: function(data) {
 					$.pjax.reload({container:"#ShowTimeEntriesView", timeout: 99999}).done(function(){

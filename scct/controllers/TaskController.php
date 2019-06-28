@@ -116,10 +116,9 @@ class TaskController extends BaseController
 				$hoursOverviewDataProvider = new ArrayDataProvider
 				([
 					'allModels' => $hoursOverview['hoursOverview'],
+					'key' => 'TimeEntryID',
 					'pagination' => false
 				]);
-
-				$hoursOverviewDataProvider->key = 'Task';
 				
 				$getAllTaskUrl = 'task%2Fget-by-project&' . http_build_query([
 					'projectID' => $timeCardProjectID,
@@ -151,6 +150,30 @@ class TaskController extends BaseController
 				}
 			}
 		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
+
+	/**
+	* deactivate time entry by id
+	* Pjax reload show entries table and modal table.
+	*/
+    public function actionDeactivate($entryID)
+    {
+        try {
+			//put url
+			$putUrl = 'time-entry%2Fdeactivate&' . http_build_query([
+				'entryID' => $entryID,
+			]);
+			$putResponse = Parent::executePutRequest($putUrl, '',Constants::API_VERSION_3); // indirect rbac
+			$obj = json_decode($putResponse, true);	
+        } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {
             throw $e;
