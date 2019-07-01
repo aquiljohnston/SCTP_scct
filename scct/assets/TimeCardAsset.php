@@ -9,7 +9,6 @@ class TimeCardAsset extends AppAsset
         'css/notify.css',
     ];
 	public $js = [
-        'js/approve_multiple_timecard.js',
         'js/time_card.js',
         'js/task.js',
         'js/datePicker.js',

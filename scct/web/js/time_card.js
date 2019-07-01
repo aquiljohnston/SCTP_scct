@@ -4,9 +4,14 @@ $(function(){
     var jqWeekSelection = jqTimeCardFilter.find('#timeCardDateRange');
     var jqTCPageSize = jqTCDropDowns.find('#timeCardPageSize');
     var timeCardProjectFilterDD = $('#timeCardProjectFilterDD');
-    entries = [];           
+    entries = [];   
+	timeCardApproveMultiple();
     timeCardPmSubmit();
     timeCardAccountantSubmit();
+	timeCardPMReset();
+	//may need to add to index in pluginEvent
+	$.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
+	
 	$(document).ready(function () {
 		if(jqWeekSelection.length > 0)
 		{
@@ -79,7 +84,49 @@ $(function(){
 		$('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
     });
+
+    $(document).off('change', "#timeCardGV input[type=checkbox]").on('change', "#timeCardGV input[type=checkbox]", function (e) {
+		//enable button when items are selected depending on what is available
+        if ($("#GridViewForTimeCard").yiiGridView('getSelectedRows') != 0) {
+            $('#tc_multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
+            $('#pm_time_card_reset').prop('disabled', false);
+        } else {
+            $('#tc_multiple_approve_btn_id').prop('disabled', true);
+            $('#pm_time_card_reset').prop('disabled', true);
+        }
+    });  
 });
+
+function timeCardApproveMultiple() {	
+    $('#tc_multiple_approve_btn_id').off('click').click(function (event) {
+        var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+        var quantifier = "";
+
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
+        
+        if (resp) {
+			$('#loading').show();
+            $.ajax({
+                type: 'POST',
+                url: '/time-card/approve-multiple',
+                data: {
+                    timecardid: primaryKeys
+                }
+            });
+        } else {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+      })
+    });
+}
 
 function timeCardPmSubmit() {
 	$('#time_card_pm_submit_btn_id').on('click').click(function (event) {
@@ -220,6 +267,42 @@ function timeCardAccountantSubmit() {
     });
 }
 
+function timeCardPMReset(){
+	$('#pm_time_card_reset').off('click').click(function (event) {
+        var primaryKeys = $('#GridViewForTimeCard').yiiGridView('getSelectedRows');
+		//removes EndDate attribute from keys
+        var quantifier = "";
+
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'PM Reset';
+        krajeeDialog.confirm('Are you sure you want to reset ' + quantifier, function (resp) {
+			if (resp) {
+				$('#loading').show();
+				$.ajax({
+					type: 'POST',
+					url: '/time-card/p-m-reset',
+					data: {
+						data: primaryKeys
+					},
+					success: function(resp) {
+						if(resp){
+							reloadTimeCardGridView();
+						}
+					}
+				});
+			} else {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+			}
+		})
+    });
+}
+
 //reload table
 function reloadTimeCardGridView() {
 	var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
@@ -249,9 +332,10 @@ function reloadTimeCardGridView() {
 				$.pjax.reload({container: '#timeCardDropDownPjax', async:false});
 			});
 		$('#timeCardSubmitApproveButtons').off('pjax:success').on('pjax:success', function () {
-			applyTimeCardOnClickListeners();
+			timeCardApproveMultiple();
 			timeCardAccountantSubmit();
 			timeCardPmSubmit();
+			timeCardPMReset();
 			$('#loading').hide();
 		});
 		$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
