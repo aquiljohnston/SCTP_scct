@@ -470,6 +470,28 @@ class MileageCardController extends BaseCardController
         }
     }
 
+	public function actionPMReset(){
+		try{
+			$data = Yii::$app->request->post();	
+			$jsonData = json_encode($data);
+			
+			// post url
+			$putUrl = 'mileage-card%2Fp-m-reset';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$response = json_decode($putResponse, true);
+			
+			return $response['success'];
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }		
+	}
+	
 	public function actionAccountantReset(){
         try{
             $data = Yii::$app->request->post();    
