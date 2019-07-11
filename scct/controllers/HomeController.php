@@ -38,11 +38,11 @@ class HomeController extends BaseController
             }
 			
 			//Check if user has permissions
-			self::requirePermission("notificationsGet");
-			
+			self::requirePermission('notificationsGet');
+		
             // Reading the response from the the api and filling the GridView
             $url = 'notification%2Fget-notifications';
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_2);
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = json_decode($response, true);
 
@@ -51,14 +51,14 @@ class HomeController extends BaseController
             $this->mileageCardInfo = [];
 
             try {
-                if ($dataProvider["notifications"] != null) {
-                    $this->notificationInfo = $dataProvider["notifications"];
+                if ($dataProvider['notifications'] != null) {
+                    $this->notificationInfo = $dataProvider['notifications'];
                 }
-                if ($dataProvider["timeCards"] != null) {
-                    $this->timeCardInfo = $dataProvider["timeCards"];
+                if ($dataProvider['timeCards'] != null) {
+                    $this->timeCardInfo = $dataProvider['timeCards'];
                 }
-				if ($dataProvider["mileageCards"] != null) {
-                    $this->mileageCardInfo = $dataProvider["mileageCards"];
+				if ($dataProvider['mileageCards'] != null) {
+                    $this->mileageCardInfo = $dataProvider['mileageCards'];
                 }
             } catch (ErrorException $error) {
                 //Continue - Unable to retrieve notifications
