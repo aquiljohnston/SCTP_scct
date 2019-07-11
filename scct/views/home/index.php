@@ -14,21 +14,61 @@ HomeAsset::register($this);
 $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
 $notificationCol = [
-    'Project',
-    'Number of Items',
+    [
+		'label' => 'Project',
+		'attribute' => 'ProjectName',
+	],
+	[
+		'label' => 'Start Date - End Date',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+		'value' => function($model, $key, $index, $column) {
+			if(array_key_exists('StartDate', $model) && array_key_exists('EndDate', $model)){
+				$value = explode(' ', $model['StartDate'])[0] . ' - ' . explode(' ', $model['EndDate'])[0];
+			}else{
+				$value = '';
+			}
+			return $value;
+		},
+	],
+	[
+		'label' => 'Type',
+		'attribute' => 'NotificationType',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+    [
+		'label' => 'Count',
+		'attribute' => 'Count',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
     ['class' => 'kartik\grid\ActionColumn',
-		//hiding for now until notification screen is fully implemented and we can redirect
-		'hidden' => true,
         'header' => 'View',
         'template' => '{view}',
+		//hide action column button for total row
+        'visibleButtons' => [
+			'view' => function ($model, $key, $index) {
+				if ($model['ProjectName'] === 'Total') {
+					return false;
+				} else {
+					return true;
+				}
+			}
+        ],
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Number of Items'] > 0) {
-                $url = '/notification/index';
-                return $url;
-            } else {
-                $url =  '';
-                return $url;
+            if ($model['NotificationType'] === 'Time Card') {
+                $url = '/time-card/index?';
+            } elseif($model['NotificationType'] === 'Mileage Card') {
+				$url = '/mileage-card/index?';
+			} else {
+                return '';
             }
+			$url .= http_build_query([
+				'projectID' => $model['ProjectID'],
+				'dateRange' => explode(' ', $model['StartDate'])[0] . ' - ' . explode(' ', $model['EndDate'])[0],
+			]);
+			return $url;
         }
     ],
 ];
@@ -146,10 +186,11 @@ $mileageCardCol = [
 ]; ?>
 
 <div class="home-index">
-    <!-- Table for Unaccepted Equipment -->
+    <!-- Table for Notifications -->
     <?= GridView::widget([
-        'id' => 'homeEquipmentWidget',
+        'id' => 'homeNotificationWidget',
         'dataProvider' => $notificationProvider,
+		'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
         'layout' => "{items}\n{pager}",
         'bootstrap' => false,
         'export' => false,

@@ -35,7 +35,7 @@ class MileageCardController extends BaseCardController
      * @throws ForbiddenHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($projectID = null, $projectFilterString = null, $activeWeek = null)//variables for redirect defaults from home notifications
+    public function actionIndex($projectID = null, $projectFilterString = null, $activeWeek = null, $dateRange = null)//variables for redirect defaults from home notifications
     {
         try {
 			//guest redirect
@@ -121,13 +121,12 @@ class MileageCardController extends BaseCardController
 				if(Yii::$app->session['mileageCardFormData'])
 				{
 					$model = Yii::$app->session['mileageCardFormData'];
-				}
-				else
-				{
+				}else{
 					//set default values
 					$model->pageSize = 50;
 					$model->employeeID = '';
 					$model->dateRangePicker	= null;
+					$model->dateRangeValue = $currentWeek;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
 					$model->projectID = $projectID != null ? $projectID : '';
@@ -135,13 +134,14 @@ class MileageCardController extends BaseCardController
 						$model->dateRangeValue = $priorWeek;
 					}elseif($activeWeek == Constants::CURRENT_WEEK){ //not necessary since default is current, but in place for clarity
 						$model->dateRangeValue = $currentWeek;
-					} else {
-						$model->dateRangeValue = $currentWeek;
+					}elseif($dateRange != null){
+						$model->dateRangePicker = $dateRange;
+						$model->dateRangeValue = 'other';
 					}
 				}
             }
 
-            if ($model->dateRangeValue == "other") {
+            if ($model->dateRangeValue == 'other') {
                 if ($model->dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
