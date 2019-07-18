@@ -9,6 +9,7 @@ $(function(){
     mileageCardPmSubmit();
 	mileageCardAccountantSubmit();
 	mileageCardPMReset();
+	mileageCardRequestPMReset();
     //may need to add to index in pluginEvent
 	$.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
 	
@@ -138,17 +139,7 @@ function mileageCardPmSubmit() {
 			return false;
         }
 		
-		var projectID = new Array();
-		if($('#mileageProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#mileageProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
-			// get all project ids
-			projectID = new Array();
-			for ( var i = 0, len = mileageProjectFilterDD.options.length; i < len; i++ ) {
-				opt = mileageProjectFilterDD.options[i];
-				if(opt.value.length > 0)
-					projectID.push(opt.value);
-			}
-		} else
-			projectID.push($('#mileageProjectFilterDD').val());
+		var projectID = mileageCardGetSelectedProjectID();
 		var dateRangeArray = $('#mileageCardDateRange').val().split(',');
 		if(dateRangeArray.length == 1) {
 			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
@@ -263,6 +254,44 @@ function mileageCardAccountantSubmit() {
     });
 }
 
+function mileageCardRequestPMReset() {
+    $('#mc_pm_reset_request_btn_id').on('click').click(function (event) {
+        var projectID = mileageCardGetSelectedProjectID();        
+        var dateRangeArray = $('#mileageCardDateRange').val().split(',');
+        //TODO see when this is triggered. 
+        if(dateRangeArray.length == 1) {
+            dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
+            var selectedDate = new Date(dateRangeArray[0]);
+            var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
+            dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
+        }
+        krajeeDialog.defaults.confirm.title = 'Request Submission Reset';
+        krajeeDialog.confirm('Are you sure you want to request a reset of submitted cards?', function (resp) {
+            if (resp) {
+                $('#loading').show();
+                $.ajax({
+                    type: 'POST',
+                    url: '/mileage-card/p-m-reset-request',
+                    data: {
+                        projectIDArray: projectID,
+                        dateRangeArray: dateRangeArray
+                    },
+                    success: function(data){
+                        $('#loading').hide();
+                        krajeeDialog.defaults.alert.title = 'Request';
+                        krajeeDialog.alert('Sent Successfully.', function (resp) {
+                            
+                        });
+                    }
+                });
+            } else {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
+        });
+    });
+}
+
 function mileageCardPMReset(){
     $('#pm_mileage_card_reset').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForMileageCard').yiiGridView('getSelectedRows');
@@ -299,6 +328,22 @@ function mileageCardPMReset(){
     });
 }
 
+function mileageCardGetSelectedProjectID(){
+	var projectID = new Array();
+	if($('#mileageProjectFilterDD option:selected').text().toLowerCase() == 'All'.toLowerCase() || $('#mileageProjectFilterDD').val().toLowerCase() == '< All >'.toLowerCase()) {
+			// get all project ids
+			projectID = new Array();
+			for ( var i = 0, len = mileageProjectFilterDD.options.length; i < len; i++ ) {
+				opt = mileageProjectFilterDD.options[i];
+				if(opt.value.length > 0)
+					projectID.push(opt.value);
+			}
+		} else
+			projectID.push($('#mileageProjectFilterDD').val());
+    
+    return projectID;
+}
+
 function reloadMileageCardGridView() {
 	var form = $('#mileageCardDropdownContainer').find("#MileageCardForm");
 	//get sort value
@@ -331,6 +376,7 @@ function reloadMileageCardGridView() {
 			mileageCardAccountantSubmit();
 			mileageCardPmSubmit();
 			mileageCardPMReset();
+			mileageCardRequestPMReset();
 			$('#loading').hide();
 		});
 		$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {

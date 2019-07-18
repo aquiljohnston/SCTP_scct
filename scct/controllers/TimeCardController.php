@@ -190,7 +190,8 @@ class TimeCardController extends BaseCardController
             $assets = $response['assets'];
 			
 			//extract format indicators from response data
-            $unapprovedTimeCardExist = array_key_exists('unapprovedTimeCardExist', $response) ? $response['unapprovedTimeCardExist'] : false;
+            $unapprovedTimeCardInProject = array_key_exists('unapprovedTimeCardInProject', $response) ? $response['unapprovedTimeCardInProject'] : false;
+            $unapprovedTimeCardVisible = array_key_exists('unapprovedTimeCardVisible', $response) ? $response['unapprovedTimeCardVisible'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
@@ -265,7 +266,8 @@ class TimeCardController extends BaseCardController
 				'projectDropDown' => $projectDropDown,
 				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,
-				'unapprovedTimeCardExist' => $unapprovedTimeCardExist,
+				'unapprovedTimeCardInProject' => $unapprovedTimeCardInProject,
+				'unapprovedTimeCardVisible' => $unapprovedTimeCardVisible,
 				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
