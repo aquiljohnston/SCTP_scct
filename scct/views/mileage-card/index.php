@@ -162,7 +162,7 @@ if($isAccountant)
 			'class' => 'kartik\grid\CheckboxColumn',
 			'header' => Html::checkBox('selection_all', false, [
 				'class' => 'select-on-check-all',
-				'disabled' => ($unapprovedMileageCardExist)  ? false : true,
+				'disabled' => ($unapprovedMileageCardVisible)  ? false : true,
 			]),
 			'checkboxOptions' => function ($model, $key, $index, $column) {
 				// Disable if already approved or SumHours is 0
@@ -228,13 +228,21 @@ if($isAccountant)
                                     ]);
 
 								} elseif($isProjectManager){
-									echo Html::button('Submit',
-									[
-										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
-										'id' => 'mileage_pm_submit_btn_id',
-										'submitted' => $projectSubmitted ? 'true' : 'false'
-									]);
-									echo Html::button('Approve', $approveButton);
+									if($pmSubmitReady || $unapprovedMileageCardInProject){
+                                        echo Html::button('Submit',
+                                        [
+                                            'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+                                            'id' => 'mileage_pm_submit_btn_id'
+                                        ]);
+                                        echo Html::button('Approve', $approveButton);
+                                    }else{                                    
+                                        echo Html::button('Request Reset',
+                                        [
+                                            'class' => 'btn btn-primary mc_pm_reset_request_btn',
+                                            'id' => 'mc_pm_reset_request_btn_id',
+                                            'disabled' => false
+                                        ]);
+                                    }
 								} else
 									echo Html::button('Approve',$approveButton);
 							?>

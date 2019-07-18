@@ -170,7 +170,7 @@ else
 			'class' => 'kartik\grid\CheckboxColumn',
 			'header' => Html::checkBox('selection_all', false, [
 				'class' => 'select-on-check-all',
-				'disabled' => ($unapprovedTimeCardExist)  ? false : true,
+				'disabled' => ($unapprovedTimeCardVisible)  ? false : true,
 			]),
 			'checkboxOptions' => function ($model, $key, $index, $column){
 				// Disable if already approved or SumHours is 0
@@ -235,13 +235,21 @@ else
 										'disabled' => true
 									]);
 								} elseif($isProjectManager){
-									echo Html::button('Submit',
-									[
-										'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
-										'id' => 'time_card_pm_submit_btn_id',
-										'submitted' => $projectSubmitted ? 'true' : 'false'
-									]);
-									echo Html::button('Approve', $approveButton);
+									if($pmSubmitReady || $unapprovedTimeCardInProject){
+										echo Html::button('Submit',
+										[
+											'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+											'id' => 'time_card_pm_submit_btn_id'
+										]);
+										echo Html::button('Approve', $approveButton);
+									}else{									
+										echo Html::button('Request Reset',
+										[
+											'class' => 'btn btn-primary tc_pm_reset_request_btn',
+											'id' => 'tc_pm_reset_request_btn_id',
+											'disabled' => false
+										]);
+									}
 								} else
 									echo Html::button('Approve',$approveButton);
 							?>

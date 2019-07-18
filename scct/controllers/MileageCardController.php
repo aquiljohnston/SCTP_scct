@@ -189,7 +189,8 @@ class MileageCardController extends BaseCardController
             $assets = $response['assets'];
 			
 			//extract format indicators from response data
-			$unapprovedMileageCardExist = array_key_exists('unapprovedMileageCardExist', $response) ? $response['unapprovedMileageCardExist'] : false;
+			$unapprovedMileageCardInProject = array_key_exists('unapprovedMileageCardInProject', $response) ? $response['unapprovedMileageCardInProject'] : false;
+            $unapprovedMileageCardVisible = array_key_exists('unapprovedMileageCardVisible', $response) ? $response['unapprovedMileageCardVisible'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
@@ -264,7 +265,8 @@ class MileageCardController extends BaseCardController
 				'projectDropDown' => $projectDropDown,
 				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,
-				'unapprovedMileageCardExist' => $unapprovedMileageCardExist,
+				'unapprovedMileageCardInProject' => $unapprovedMileageCardInProject,
+				'unapprovedMileageCardVisible' => $unapprovedMileageCardVisible,
 				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
