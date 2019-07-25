@@ -4,16 +4,22 @@
 #homeNotificationWidget{
 	float: left;
 	width: 32%;
+	max-height: 50vh;
+	overflow-y: auto;
 }
 #homeTimeCardWidget{
 	float: left;
 	width: 32%;
 	margin-left: 2%;
+	max-height: 50vh;
+	overflow-y: auto;
 }
 #homeMileageCardWidget{
 	float: left;
 	width: 32%;
 	margin-left: 2%;
+	max-height: 50vh;
+	overflow-y: auto;
 }
 .home-index tbody tr:last-child {
 	background: #f0f0f2;
