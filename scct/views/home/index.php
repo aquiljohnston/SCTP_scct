@@ -43,7 +43,8 @@ $notificationCol = [
 		'headerOptions' => ['class' => 'text-center'],
 		'contentOptions' => ['class' => 'text-center'],
 	],
-    ['class' => 'kartik\grid\ActionColumn',
+    [
+		'class' => 'kartik\grid\ActionColumn',
         'header' => 'View',
         'template' => '{view}',
 		//hide action column button for total row
@@ -74,18 +75,22 @@ $notificationCol = [
 ];
 
 $timeCardCol = [
-    'Project',
+    [
+		'label' => 'Project',
+		'attribute' => 'ProjectName',
+	],
     [
 		'label' => 'Prior Week',
 		'attribute' => 'PriorWeekCount',
 		'headerOptions' => ['class' => 'text-center'],
 		'contentOptions' => ['class' => 'text-center'],
 	],
-    ['class' => 'kartik\grid\ActionColumn',
+    [
+		'class' => 'kartik\grid\ActionColumn',
         'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/time-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::PRIOR_WEEK,
@@ -111,7 +116,7 @@ $timeCardCol = [
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/time-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::CURRENT_WEEK,
@@ -129,7 +134,10 @@ $timeCardCol = [
 ];
 
 $mileageCardCol = [
-    'Project',
+    [
+		'label' => 'Project',
+		'attribute' => 'ProjectName',
+	],
     [
 		'label' => 'Prior Week',
 		'attribute' => 'PriorWeekCount',
@@ -141,7 +149,7 @@ $mileageCardCol = [
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				yii::trace('Project String: ' . $this->context->getAllProjects());
 				$url = '/mileage-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
@@ -168,7 +176,7 @@ $mileageCardCol = [
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/mileage-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::CURRENT_WEEK,
