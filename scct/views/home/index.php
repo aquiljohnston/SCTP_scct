@@ -15,13 +15,15 @@ $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
 $notificationCol = [
     [
-		'label' => 'Project',
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
 		'attribute' => 'ProjectName',
 	],
 	[
-		'label' => 'Start Date - End Date',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'header' => 'Start Date -<br> End Date',
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 		'value' => function($model, $key, $index, $column) {
 			if(array_key_exists('StartDate', $model) && array_key_exists('EndDate', $model)){
 				$value = explode(' ', $model['StartDate'])[0] . ' - ' . explode(' ', $model['EndDate'])[0];
@@ -32,16 +34,16 @@ $notificationCol = [
 		},
 	],
 	[
-		'label' => 'Type',
+		'header' => 'Type',
 		'attribute' => 'NotificationType',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
     [
-		'label' => 'Count',
+		'header' => 'Count',
 		'attribute' => 'Count',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
     [
 		'class' => 'kartik\grid\ActionColumn',
@@ -76,14 +78,16 @@ $notificationCol = [
 
 $timeCardCol = [
     [
-		'label' => 'Project',
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
 		'attribute' => 'ProjectName',
 	],
     [
-		'label' => 'Prior Week',
+		'header' => 'Prior Week',
 		'attribute' => 'PriorWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
     [
 		'class' => 'kartik\grid\ActionColumn',
@@ -106,10 +110,10 @@ $timeCardCol = [
         }
     ],
 	[
-		'label' => 'Current Week',
+		'header' => 'Current Week',
 		'attribute' => 'CurrentWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
 	[
 		'class' => 'kartik\grid\ActionColumn',
@@ -135,14 +139,16 @@ $timeCardCol = [
 
 $mileageCardCol = [
     [
-		'label' => 'Project',
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
 		'attribute' => 'ProjectName',
 	],
     [
-		'label' => 'Prior Week',
+		'header' => 'Prior Week',
 		'attribute' => 'PriorWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
 	[
 		'class' => 'kartik\grid\ActionColumn',
@@ -166,10 +172,10 @@ $mileageCardCol = [
         }
     ],
 	[
-		'label' => 'Current Week',
+		'header' => 'Current Week',
 		'attribute' => 'CurrentWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
     [
 		'class' => 'kartik\grid\ActionColumn',
