@@ -66,23 +66,17 @@ class HomeController extends BaseController
 
             $notificationProvider = new ArrayDataProvider([
                 'allModels' => $this->notificationInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
+                'pagination' => false,
             ]);
 
             $timeCardProvider = new ArrayDataProvider([
                 'allModels' => $this->timeCardInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
+                'pagination' => false
             ]);
 			
 			$mileageCardProvider = new ArrayDataProvider([
                 'allModels' => $this->mileageCardInfo,
-                'pagination' => [
-                    'pageSize' => 10,
-                ]
+                'pagination' => false
             ]);
 			
             return $this->render('index', [
@@ -121,11 +115,11 @@ class HomeController extends BaseController
         $allProjectsString = '';
 
         foreach ($this->timeCardInfo as $value) {
-            if (!($value['Project'] === 'Total')) { // Make sure we do not enter 'Total' into our search for all unapproved item(s)
+            if (!($value['ProjectName'] === 'Total')) { // Make sure we do not enter 'Total' into our search for all unapproved item(s)
                 if ($allProjectsString === '') { // The first string does not need to have a '|' character before concatenating the string
-                    $allProjectsString = $this->trimString($value['Project']);
+                    $allProjectsString = $this->trimString($value['ProjectName']);
                 } else {
-                    $allProjectsString = $allProjectsString . ', ' . $this->trimString($value['Project']);
+                    $allProjectsString = $allProjectsString . ', ' . $this->trimString($value['ProjectName']);
                 }
             }
         }
