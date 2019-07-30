@@ -67,6 +67,16 @@ class HomeController extends BaseController
             $notificationProvider = new ArrayDataProvider([
                 'allModels' => $this->notificationInfo,
                 'pagination' => false,
+				//add data key for sending read update
+				'key' => function ($data) {
+					return array(
+						//check for nulls to avoid error on total row
+						'ProjectID' => array_key_exists('ProjectID', $data) ? $data['ProjectID'] : null,
+						'NotificationType' => array_key_exists('NotificationType', $data) ? $data['NotificationType'] : null,
+						'StartDate' => array_key_exists('StartDate', $data) ? $data['StartDate'] : null,
+						'EndDate' => array_key_exists('EndDate', $data) ? $data['EndDate'] : null,
+					);
+				}
             ]);
 
             $timeCardProvider = new ArrayDataProvider([
@@ -93,6 +103,26 @@ class HomeController extends BaseController
             throw new ServerErrorHttpException();
         }
     }
+	
+	public function actionSetNotificationRead(){
+		try{
+			$data = Yii::$app->request->post();
+			$jsonData = json_encode($data);
+			
+			//put url
+			$putUrl = 'notification%2Fread';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$obj = json_decode($putResponse, true);	
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
 
     /**
      * Base method for trimming a project when it has spaces to '+' characters in order to search accordingly
