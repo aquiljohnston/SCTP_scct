@@ -97,6 +97,12 @@
     padding-right: 7%;
 }
 
+#mc_pm_reset_request_btn_id {
+	float: right;
+	padding-left: 7%;
+	padding-right: 7%;
+}
+
 #mc_multiple_approve_btn_id {
 	float: right;
 	padding-left: 7%;

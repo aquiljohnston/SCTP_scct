@@ -14,38 +14,87 @@ HomeAsset::register($this);
 $this->title = 'Home';
 $this->params['breadcrumbs'][] = $this->title;
 $notificationCol = [
-    'Project',
-    'Number of Items',
-    ['class' => 'kartik\grid\ActionColumn',
-		//hiding for now until notification screen is fully implemented and we can redirect
-		'hidden' => true,
+    [
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
+		'attribute' => 'ProjectName',
+	],
+	[
+		'header' => 'Start Date -<br> End Date',
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'value' => function($model, $key, $index, $column) {
+			if(array_key_exists('StartDate', $model) && array_key_exists('EndDate', $model)){
+				$value = explode(' ', $model['StartDate'])[0] . ' - ' . explode(' ', $model['EndDate'])[0];
+			}else{
+				$value = '';
+			}
+			return $value;
+		},
+	],
+	[
+		'header' => 'Type',
+		'attribute' => 'NotificationType',
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
+	],
+    [
+		'header' => 'Count',
+		'attribute' => 'Count',
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
+	],
+    [
+		'class' => 'kartik\grid\ActionColumn',
         'header' => 'View',
         'template' => '{view}',
+		//hide action column button for total row
+        'visibleButtons' => [
+			'view' => function ($model, $key, $index) {
+				if ($model['ProjectName'] === 'Total') {
+					return false;
+				} else {
+					return true;
+				}
+			}
+        ],
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Number of Items'] > 0) {
-                $url = '/notification/index';
-                return $url;
-            } else {
-                $url =  '';
-                return $url;
+            if ($model['NotificationType'] === 'Time Card') {
+                $url = '/time-card/index?';
+            } elseif($model['NotificationType'] === 'Mileage Card') {
+				$url = '/mileage-card/index?';
+			} else {
+                return '';
             }
+			$url .= http_build_query([
+				'projectID' => $model['ProjectID'],
+				'dateRange' => explode(' ', $model['StartDate'])[0] . ' - ' . explode(' ', $model['EndDate'])[0],
+			]);
+			return $url;
         }
     ],
 ];
 
 $timeCardCol = [
-    'Project',
     [
-		'label' => 'Prior Week',
-		'attribute' => 'PriorWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
+		'attribute' => 'ProjectName',
 	],
-    ['class' => 'kartik\grid\ActionColumn',
+    [
+		'header' => 'Prior Week',
+		'attribute' => 'PriorWeekCount',
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
+	],
+    [
+		'class' => 'kartik\grid\ActionColumn',
         'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/time-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::PRIOR_WEEK,
@@ -61,17 +110,17 @@ $timeCardCol = [
         }
     ],
 	[
-		'label' => 'Current Week',
+		'header' => 'Current Week',
 		'attribute' => 'CurrentWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
 	[
 		'class' => 'kartik\grid\ActionColumn',
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/time-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::CURRENT_WEEK,
@@ -89,19 +138,24 @@ $timeCardCol = [
 ];
 
 $mileageCardCol = [
-    'Project',
     [
-		'label' => 'Prior Week',
+		'header' => 'Project',
+		'headerOptions' => ['class' => 'kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-middle'],
+		'attribute' => 'ProjectName',
+	],
+    [
+		'header' => 'Prior Week',
 		'attribute' => 'PriorWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
 	[
 		'class' => 'kartik\grid\ActionColumn',
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				yii::trace('Project String: ' . $this->context->getAllProjects());
 				$url = '/mileage-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
@@ -118,17 +172,17 @@ $mileageCardCol = [
         }
     ],
 	[
-		'label' => 'Current Week',
+		'header' => 'Current Week',
 		'attribute' => 'CurrentWeekCount',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'kv-align-center kv-align-middle'],
+		'contentOptions' => ['class' => 'kv-align-center kv-align-middle'],
 	],
     [
 		'class' => 'kartik\grid\ActionColumn',
 		'header' => '',
         'template' => '{view}',
         'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'view' && $model['Project'] === 'Total') {
+            if ($action === 'view' && $model['ProjectName'] === 'Total') {
 				$url = '/mileage-card/index?' . http_build_query([
 					'projectFilterString' => $this->context->getAllProjects(),
 					'activeWeek' => Constants::CURRENT_WEEK,
@@ -146,10 +200,11 @@ $mileageCardCol = [
 ]; ?>
 
 <div class="home-index">
-    <!-- Table for Unaccepted Equipment -->
+    <!-- Table for Notifications -->
     <?= GridView::widget([
-        'id' => 'homeEquipmentWidget',
+        'id' => 'homeNotificationWidget',
         'dataProvider' => $notificationProvider,
+		'formatter' => ['class' => 'yii\i18n\Formatter', 'nullDisplay' => ''],
         'layout' => "{items}\n{pager}",
         'bootstrap' => false,
         'export' => false,

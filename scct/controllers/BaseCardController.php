@@ -145,6 +145,34 @@ class BaseCardController extends BaseController
 			throw new ServerErrorHttpException();
 		}
 	}
+	
+	public function actionPMResetRequest(){
+		try{
+			$requestType = self::getRequestType();
+			$data = Yii::$app->request->post();	
+			$body = array(
+				'projectIDArray' => $data['projectIDArray'],
+				'dateRangeArray' => $data['dateRangeArray'],
+				'requestType' => $requestType,
+			);		
+			$jsonData = json_encode($body);
+			
+			//post url
+			$postUrl = $requestType.'%2Fp-m-reset-request';
+			$postResponse = Parent::executePostRequest($postUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$response = json_decode($postResponse, true);
+			
+			return $response['success'];
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }		
+	}
 
     public function actionAccountantSubmit(){
         try{

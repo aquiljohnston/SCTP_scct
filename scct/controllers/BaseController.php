@@ -70,6 +70,7 @@ class BaseController extends Controller
 		) 
 		{
             return "scctdev";
+            // return "scanadev";
         }
         else {
             return self::urlPrefix();

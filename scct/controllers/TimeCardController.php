@@ -35,7 +35,7 @@ class TimeCardController extends BaseCardController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($projectID = null, $projectFilterString = null,  $activeWeek = null)
+    public function actionIndex($projectID = null, $projectFilterString = null,  $activeWeek = null, $dateRange = null)
     {
 		try {
 			//guest redirect
@@ -122,13 +122,12 @@ class TimeCardController extends BaseCardController
 				if(Yii::$app->session['timeCardFormData'])
 				{
 					$model = Yii::$app->session['timeCardFormData'];
-				}
-				else
-				{
+				}else{
 					//set default values
 					$model->pageSize = 50;
 					$model->employeeID = '';
 					$model->dateRangePicker	= null;
+					$model->dateRangeValue = $currentWeek;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
 					$model->projectID = $projectID != null ? $projectID : '';
@@ -136,14 +135,15 @@ class TimeCardController extends BaseCardController
 						$model->dateRangeValue = $priorWeek;
 					}elseif($activeWeek == Constants::CURRENT_WEEK){ //not necessary since default is current, but in place for clarity
 						$model->dateRangeValue = $currentWeek;
-					} else {
-						$model->dateRangeValue = $currentWeek;
+					}elseif($dateRange != null){
+						$model->dateRangePicker	= $dateRange;
+						$model->dateRangeValue = 'other';
 					}
 				}
             }
 			
 			//get start/end date based on dateRangeValue
-            if ($model->dateRangeValue == "other") {
+            if ($model->dateRangeValue == 'other') {
                 if ($model->dateRangePicker == null){
                     $endDate = $startDate = date('Y-m-d');
                 }else {
@@ -190,7 +190,8 @@ class TimeCardController extends BaseCardController
             $assets = $response['assets'];
 			
 			//extract format indicators from response data
-            $unapprovedTimeCardExist = array_key_exists('unapprovedTimeCardExist', $response) ? $response['unapprovedTimeCardExist'] : false;
+            $unapprovedTimeCardInProject = array_key_exists('unapprovedTimeCardInProject', $response) ? $response['unapprovedTimeCardInProject'] : false;
+            $unapprovedTimeCardVisible = array_key_exists('unapprovedTimeCardVisible', $response) ? $response['unapprovedTimeCardVisible'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
@@ -265,7 +266,8 @@ class TimeCardController extends BaseCardController
 				'projectDropDown' => $projectDropDown,
 				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,
-				'unapprovedTimeCardExist' => $unapprovedTimeCardExist,
+				'unapprovedTimeCardInProject' => $unapprovedTimeCardInProject,
+				'unapprovedTimeCardVisible' => $unapprovedTimeCardVisible,
 				'accountingSubmitReady' => $accountingSubmitReady,
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
@@ -463,13 +465,13 @@ class TimeCardController extends BaseCardController
      * @internal param string $id
      *
      */
-	public function actionDeactivate(){
+	public function actionDeactivateByTask(){
 		try{
 			$data = Yii::$app->request->post();	
 			$jsonData = json_encode($data);
 			
 			// post url
-			$putUrl = 'time-entry%2Fdeactivate';
+			$putUrl = 'time-entry%2Fdeactivate-by-task';
 			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
 		} catch (UnauthorizedHttpException $e){
