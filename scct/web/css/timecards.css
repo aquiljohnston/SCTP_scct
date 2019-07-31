@@ -113,6 +113,12 @@
 	padding-right: 7%;
 }
 
+#tc_pm_reset_request_btn_id{
+	float: right;
+	padding-left: 7%;
+	padding-right: 7%;
+}
+
 #timeCardDatePickerContainer{
 	margin-top: -5.2%;
 	margin-left: -15%;

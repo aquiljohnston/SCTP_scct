@@ -32,6 +32,16 @@ $columns = [
 			'attribute' => 'End Time',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'class' => 'kartik\grid\ActionColumn',
+			'template' => '{delete}',
+			'header' => '',
+			'buttons' => [
+				'delete' => function ($url, $model, $key) {
+					return Html::a('<span id="taskModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
+				}
+			]
 		]
 	];
 
@@ -176,6 +186,7 @@ $columns = [
 				$('#create_task_entry_submit_btn').prop('disabled', true); 
             }
         });
+		
 		$(document).off('change', '#TaskEntryForm :input').on('change', '#TaskEntryForm :input', function (){
 			if (InputFieldValidator()){
 				$('#create_task_entry_submit_btn').prop('disabled', false); 
@@ -197,6 +208,13 @@ $columns = [
 		$(document).off('change', '#TaskEntryForm #dynamicmodel-date').on('change', '#TaskEntryForm #dynamicmodel-date', function (){
 			reloadHoursOverview();
         });
+		
+		//deactivate entry
+		$(document).off('click', '#taskModalDeactivateAction').on('click', '#taskModalDeactivateAction',function (){
+			//get entry id
+			var entryID = $(this).closest('tr').attr('data-key');
+			deactivateEntry(entryID);
+		});
 
         function InputFieldValidator() {
 			var date = $('#dynamicmodel-date').val();
@@ -294,6 +312,33 @@ $columns = [
 				error : function (){
 					console.log("internal server error");
 				}
+			});
+		}
+		
+		function deactivateEntry(entryID){
+			krajeeDialog.defaults.confirm.title = 'Deactivate';
+			krajeeDialog.confirm('Are you sure you want to deactivate this entry?', function (resp) {
+				if(resp){
+					$('#loading').show();
+					//post form data
+					$.ajax({
+						type: 'POST',
+						url: '/task/deactivate?entryID='+entryID,
+						success: function (response) {
+							reloadTimeTaskGridViews();
+						}
+					});		
+				}
+			})
+		}
+		
+		function reloadTimeTaskGridViews(){
+			//reload show entries gridview
+			$.pjax.reload({
+				container:"#ShowTimeEntriesView",
+				timeout: 99999
+			}).done(function(){
+				reloadHoursOverview();
 			});
 		}
 
