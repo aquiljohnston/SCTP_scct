@@ -141,9 +141,11 @@ function mileageCardPmSubmit() {
 		
 		var projectID = mileageCardGetSelectedProjectID();
 		var dateRangeArray = $('#mileageCardDateRange').val().split(',');
+		//if the range value is 'other'
 		if(dateRangeArray.length == 1) {
 			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
 			var selectedDate = new Date(dateRangeArray[0]);
+			selectedDate.setHours(selectedDate.getHours()+(selectedDate.getTimezoneOffset()/60));//to handle timezone offset on sat/sun
 			var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
 			dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
 		}
