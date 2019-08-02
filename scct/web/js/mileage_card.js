@@ -121,7 +121,10 @@ function mileageCardApproveMultiple() {
                 url: '/mileage-card/approve-multiple',
                 data: {
                     mileagecardid: primaryKeys
-                }
+                },
+				success: function(data){
+					reloadMileageCardGridView();
+				}
             });
         } else {
             event.stopImmediatePropagation();
@@ -164,7 +167,7 @@ function mileageCardPmSubmit() {
 						dateRangeArray: dateRangeArray
 					},
 					success: function(data){
-						$('#loading').hide();
+						reloadMileageCardGridView();
 					}
 				});
 			} else {

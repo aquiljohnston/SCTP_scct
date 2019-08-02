@@ -102,7 +102,7 @@ class BaseCardController extends BaseController
 				// post url
 				$putUrl = $requestType.'%2Fapprove-cards';
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
-				return $this->redirect(['index']);
+				//Handle API response if we want to do more robust error handling
 			} else {
 			  throw new \yii\web\BadRequestHttpException;
 			}
@@ -131,7 +131,7 @@ class BaseCardController extends BaseController
 				$json_data = json_encode($body);
 				$url = $requestType.'%2Fp-m-submit';
 				$putResponse = Parent::executePutRequest($url, $json_data, Constants::API_VERSION_3); // indirect rbac
-				return $this->redirect(['index']);
+				//Handle API response if we want to do more robust error handling
 			} else {
 				throw new \yii\web\BadRequestHttpException;
 			}

@@ -122,7 +122,10 @@ function timeCardApproveMultiple() {
                 url: '/time-card/approve-multiple',
                 data: {
                     timecardid: primaryKeys
-                }
+                },
+				success: function(data){
+					reloadTimeCardGridView();
+				}
             });
         } else {
             event.stopImmediatePropagation();
@@ -165,7 +168,7 @@ function timeCardPmSubmit() {
 						dateRangeArray: dateRangeArray
 					},
 					success: function(data){
-						$('#loading').hide();
+						reloadTimeCardGridView();
 					}
 				});
 			} else {
