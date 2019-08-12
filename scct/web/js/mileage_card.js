@@ -23,6 +23,7 @@ $(function(){
 	
 	$(document).off('change', "#mileageCardDateRange").on('change', "#mileageCardDateRange", function (event) {
         event.preventDefault();
+		$('#mileageCardPageNumber').val(1);
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
 			//reset date picker
@@ -45,13 +46,15 @@ $(function(){
 
     $(document).off('change', '#mileageProjectFilterDD').on('change', '#mileageProjectFilterDD', function (event) {
 		$('#mileageEmployeeFilterDD').val("All");
+		$('#mileageCardPageNumber').val(1);
         reloadMileageCardGridView();
         event.preventDefault();
         return false;
     });
 	
 	$(document).off('change', '#mileageEmployeeFilterDD').on('change', '#mileageEmployeeFilterDD', function (event) {
-        reloadMileageCardGridView();
+		$('#mileageCardPageNumber').val(1);
+		reloadMileageCardGridView();
         event.preventDefault();
         return false;
     });
@@ -118,7 +121,10 @@ function mileageCardApproveMultiple() {
                 url: '/mileage-card/approve-multiple',
                 data: {
                     mileagecardid: primaryKeys
-                }
+                },
+				success: function(data){
+					reloadMileageCardGridView();
+				}
             });
         } else {
             event.stopImmediatePropagation();
@@ -161,7 +167,7 @@ function mileageCardPmSubmit() {
 						dateRangeArray: dateRangeArray
 					},
 					success: function(data){
-						$('#loading').hide();
+						reloadMileageCardGridView();
 					}
 				});
 			} else {

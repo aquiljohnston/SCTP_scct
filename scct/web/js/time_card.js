@@ -23,6 +23,7 @@ $(function(){
 	
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
+		$('#timeCardPageNumber').val(1);
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
 			//reset date picker
@@ -45,12 +46,14 @@ $(function(){
 
     $(document).off('change', '#timeCardProjectFilterDD').on('change', '#timeCardProjectFilterDD', function (event) {
 		$('#timeCardEmployeeFilterDD').val("All");
+		$('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
     });
 	
 	$(document).off('change', '#timeCardEmployeeFilterDD').on('change', '#timeCardEmployeeFilterDD', function (event) {
+		$('#timeCardPageNumber').val(1);
         reloadTimeCardGridView();
         event.preventDefault();
         return false;
@@ -119,7 +122,10 @@ function timeCardApproveMultiple() {
                 url: '/time-card/approve-multiple',
                 data: {
                     timecardid: primaryKeys
-                }
+                },
+				success: function(data){
+					reloadTimeCardGridView();
+				}
             });
         } else {
             event.stopImmediatePropagation();
@@ -162,7 +168,7 @@ function timeCardPmSubmit() {
 						dateRangeArray: dateRangeArray
 					},
 					success: function(data){
-						$('#loading').hide();
+						reloadTimeCardGridView();
 					}
 				});
 			} else {
@@ -350,6 +356,7 @@ function timeCardGetSelectedProjectID(){
 }
 
 //reload table
+//consider adding page as a param so reseting of current page may be moved into this function
 function reloadTimeCardGridView() {
 	var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
 	//get sort value
