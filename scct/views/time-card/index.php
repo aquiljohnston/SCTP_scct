@@ -209,7 +209,6 @@ else
                         <?= $form->field($model, 'pageSize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'timeCardPageSize'])->label("Records Per Page", [
                             'class' => 'TimeCardRecordsPerPage'
                         ]); ?>
-                        <input id="timeCardPageNumber" type="hidden" name="timeCardPageNumber" value="1"/>
                     </div>
                 </div>
 				<?php Pjax::begin(['id' => 'timeCardSubmitApproveButtons', 'timeout' => false]) ?>

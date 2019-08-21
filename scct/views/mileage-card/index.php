@@ -201,7 +201,6 @@ if($isAccountant)
                         <?= $form->field($model, 'pageSize', ['labelSpan' => 6])->dropDownList($pageSize, ['value' => $model->pageSize, 'id' => 'mileageCardPageSize'])->label("Records Per Page", [
                             'class' => 'MileageCardRecordsPerPage'
                         ]); ?>
-                        <input id="mileageCardPageNumber" type="hidden" name="mileageCardPageNumber" value="1"/>
                     </div>
                 </div>
 				<?php Pjax::begin(['id' => 'mileageSubmitApproveButtons', 'timeout' => false]) ?>

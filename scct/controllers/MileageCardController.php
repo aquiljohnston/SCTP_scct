@@ -46,7 +46,7 @@ class MileageCardController extends BaseCardController
 			//Check if user has permission to view mileage card page
 			self::requirePermission("viewMileageCardMgmt");
 			
-			//if request is not coming from time-card reset session variables. 
+			//if request is not coming from mileage-card reset session variables. 
 			$referrer = Yii::$app->request->referrer;
 			if(!strpos($referrer,'mileage-card')){
 				unset(Yii::$app->session['mileageCardFormData']);
@@ -65,6 +65,7 @@ class MileageCardController extends BaseCardController
 			
             $model = new \yii\base\DynamicModel([
                 'dateRangePicker',
+				'page',
 				'pageSize',
                 'filter',
                 'dateRangeValue',
@@ -72,11 +73,12 @@ class MileageCardController extends BaseCardController
 				'employeeID'
             ]);
 			$model->addRule('dateRangePicker', 'string', ['max' => 32]);
+			$model->addRule('page', 'integer');
             $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]);
-			$model->addRule('projectID', 'integer'); //
-            $model->addRule('employeeID', 'integer'); //
+			$model->addRule('projectID', 'integer');
+            $model->addRule('employeeID', 'integer');
 			
 			//get current and prior weeks date range
 			$today = BaseController::getDate();
@@ -123,6 +125,7 @@ class MileageCardController extends BaseCardController
 					$model = Yii::$app->session['mileageCardFormData'];
 				}else{
 					//set default values
+					$model->page = 1;
 					$model->pageSize = 50;
 					$model->employeeID = '';
 					$model->dateRangePicker	= null;
@@ -155,13 +158,6 @@ class MileageCardController extends BaseCardController
                 $startDate = $dateRangeArray['startDate'];
                 $endDate =  $dateRangeArray['endDate'];
             }
-
-            //check current page at
-			if (isset($_GET['mileageCardPageNumber'])){
-                $page = $_GET['mileageCardPageNumber'];
-            } else {
-                $page = 1;
-            }
 			
 			//url encode filter
 			$encodedFilter = urlencode($model->filter);
@@ -170,7 +166,7 @@ class MileageCardController extends BaseCardController
 				'startDate' => $startDate,
 				'endDate' => $endDate,
 				'listPerPage' => $model->pageSize,
-				'page' => $page,
+				'page' => $model->page,
 				'filter' => $encodedFilter,
 				'projectID' => $model->projectID,
 				'employeeID' => $model->employeeID,
