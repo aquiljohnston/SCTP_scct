@@ -66,18 +66,20 @@ class TimeCardController extends BaseCardController
 
             $model = new \yii\base\DynamicModel([
                 'pageSize',
+				'page',
                 'filter',
                 'dateRangeValue',
                 'dateRangePicker',
                 'projectID',
 				'employeeID'
             ]);
-            $model ->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
-            $model ->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
-            $model ->addRule('dateRangePicker', 'string', ['max' => 32]);//get page number and records per page
-            $model ->addRule('dateRangeValue', 'string', ['max' => 100]); //
-            $model ->addRule('projectID', 'integer'); //
-            $model ->addRule('employeeID', 'integer'); //
+            $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
+			$model->addRule('page', 'integer');
+            $model->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
+            $model->addRule('dateRangePicker', 'string', ['max' => 32]);
+            $model->addRule('dateRangeValue', 'string', ['max' => 100]); 
+            $model->addRule('projectID', 'integer');
+            $model->addRule('employeeID', 'integer');
 
             //get current and prior weeks date range
             $today = BaseController::getDate();
@@ -125,6 +127,7 @@ class TimeCardController extends BaseCardController
 				}else{
 					//set default values
 					$model->pageSize = 50;
+					$model->page = 1;
 					$model->employeeID = '';
 					$model->dateRangePicker	= null;
 					$model->dateRangeValue = $currentWeek;
@@ -157,13 +160,6 @@ class TimeCardController extends BaseCardController
                 $endDate =  $dateRangeArray['endDate'];
             }
 
-            //check current page at
-            if (isset($_GET['timeCardPageNumber'])){
-                $page = $_GET['timeCardPageNumber'];
-            } else {
-                $page = 1;
-            }
-
 			//url encode filter
 			$encodedFilter = urlencode($model->filter);
 			//build params
@@ -171,7 +167,7 @@ class TimeCardController extends BaseCardController
 				'startDate' => $startDate,
 				'endDate' => $endDate,
 				'listPerPage' => $model->pageSize,
-				'page' => $page,
+				'page' => $model->page,
 				'filter' => $encodedFilter,
 				'projectID' => $model->projectID,
 				'employeeID' => $model->employeeID,
