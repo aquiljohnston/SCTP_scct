@@ -23,6 +23,10 @@ use app\constants\Constants;
  */
 class UserController extends BaseController
 {
+	//user request types for drodpowns
+	const USER_CREATE_REQUEST = 'Create';
+    const USER_UPDATE_REQUEST = 'Update';
+	
     /**
      * Lists all user models.
      * @return mixed
@@ -202,8 +206,10 @@ class UserController extends BaseController
 			$model = new User();
 
 			//get App Roles for form dropdown
-			$rolesUrl = 'dropdown%2Fget-roles-dropdowns';
-			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$rolesUrl = 'dropdown%2Fget-roles-dropdowns&' . http_build_query([
+					'type' => self::USER_CREATE_REQUEST,
+				]);
+			$rolesResponse = Parent::executeGetRequest($rolesUrl, Constants::API_VERSION_3);
 			$roles = json_decode($rolesResponse, true);
 
 			//get types for form dropdown
@@ -295,8 +301,10 @@ class UserController extends BaseController
 			$model->attributes = $getResponse;
 
 			//get App Roles for form dropdown
-			$rolesUrl = 'dropdown%2Fget-roles-dropdowns';
-			$rolesResponse = Parent::executeGetRequest($rolesUrl);
+			$rolesUrl = 'dropdown%2Fget-roles-dropdowns&' . http_build_query([
+					'type' => self::USER_UPDATE_REQUEST,
+				]);
+			$rolesResponse = Parent::executeGetRequest($rolesUrl, Constants::API_VERSION_3);
 			$roles = json_decode($rolesResponse, true);
 
 			//get types for form dropdown

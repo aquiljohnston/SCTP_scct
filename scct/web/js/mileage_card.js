@@ -23,7 +23,6 @@ $(function(){
 	
 	$(document).off('change', "#mileageCardDateRange").on('change', "#mileageCardDateRange", function (event) {
         event.preventDefault();
-		$('#mileageCardPageNumber').val(1);
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
 			//reset date picker
@@ -33,60 +32,52 @@ $(function(){
         }else {
 			//hide date picker
             $('#mileageDatePickerContainer').css("display", "none");
-            reloadMileageCardGridView();
+            reloadMileageCardGridView(1);
         }
     });
 
     $(document).off('change', "#mileageCardPageSize").on('change', "#mileageCardPageSize", function (event) {
-        $('#mileageCardPageNumber').val(1);
-        reloadMileageCardGridView();
+        reloadMileageCardGridView(1);
         event.preventDefault();
         return false;
     });
 
     $(document).off('change', '#mileageProjectFilterDD').on('change', '#mileageProjectFilterDD', function (event) {
 		$('#mileageEmployeeFilterDD').val("All");
-		$('#mileageCardPageNumber').val(1);
-        reloadMileageCardGridView();
+        reloadMileageCardGridView(1);
         event.preventDefault();
         return false;
     });
 	
 	$(document).off('change', '#mileageEmployeeFilterDD').on('change', '#mileageEmployeeFilterDD', function (event) {
-		$('#mileageCardPageNumber').val(1);
-		reloadMileageCardGridView();
+		reloadMileageCardGridView(1);
         event.preventDefault();
         return false;
     });
 
     $(document).off('click', "#MCPagination ul li a").on('click', "#MCPagination ul li a", function (event) {
+		event.preventDefault();
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
-        $('#mileageCardPageNumber').val(page);
-        reloadMileageCardGridView();
-        event.preventDefault();
-        return false;
+        reloadMileageCardGridView(page);
     });
 	
 	// mileagecard filter listener
     $(document).off('keypress', '#mileageCardFilter').on('keypress', '#mileageCardFilter', function (event) {
         if (event.keyCode === 13 || event.keyCode === 10) {
             event.preventDefault();
-			$('#mileageCardPageNumber').val(1);
-            reloadMileageCardGridView();
+            reloadMileageCardGridView(1);
         }
     });
 	
 	$(document).off('click', '#mileageCardClearDropdownFilterButton').on('click', '#mileageCardClearDropdownFilterButton', function (){
         $('#mileageProjectFilterDD').val("All");
         $('#mileageEmployeeFilterDD').val("All");
-		$('#mileageCardPageNumber').val(1);
-        reloadMileageCardGridView();
+        reloadMileageCardGridView(1);
     });
 
     $(document).off('click', '#mileageCardSearchCleanFilterButton').on('click', '#mileageCardSearchCleanFilterButton', function (){
         $('#mileageCardFilter').val("");
-		$('#mileageCardPageNumber').val(1);
-        reloadMileageCardGridView();
+        reloadMileageCardGridView(1);
     }); 
 	
 	$(document).off('change', "#mileageCardGV input[type=checkbox]").on('change', "#mileageCardGV input[type=checkbox]", function (e) {
@@ -352,14 +343,22 @@ function mileageCardGetSelectedProjectID(){
     return projectID;
 }
 
-function reloadMileageCardGridView() {
+//page is page to be reloaded to, if no value is sent will fetch current page
+function reloadMileageCardGridView(page = null) {
+	//if no page is passed get the current active page
+	if(page == null){
+		// Get Current page and shift by one to 1-index instead of 0-index. Shifting will cause undefined value to become NaN
+		currentPage = $("#MCPagination ul li.active a").data('page') + 1;
+		//if page is Not a Number becuase no pagination is present set to page 1
+		page = isNaN(currentPage) ? 1 : currentPage;
+	}
 	var form = $('#mileageCardDropdownContainer').find("#MileageCardForm");
 	//get sort value
 	var ascSort = $("#GridViewForMileageCard-container").find(".asc").attr('data-sort');
 	var descSort = $("#GridViewForMileageCard-container").find(".desc").attr('data-sort');
 	var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
 	//append sort to form values
-	var dataParams = form.serialize() + "&sort=" + sort;
+	var dataParams = form.serialize()+ "&DynamicModel%5Bpage%5D=" + page + "&sort=" + sort;
 	if (form.find(".has-error").length){
 		return false;
 	}
@@ -386,12 +385,10 @@ function reloadMileageCardGridView() {
 			mileageCardPMReset();
 			mileageCardRequestPMReset();
 			$('#loading').hide();
-		});
-		$('#mileageSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
+		}).off('pjax:error').on('pjax:error', function () {
 			location.reload();
 		});
-	});
-	$('#mileageCardGridview').off('pjax:error').on('pjax:error', function () {
+	}).off('pjax:error').on('pjax:error', function () {
 		location.reload();
 	});
 }
