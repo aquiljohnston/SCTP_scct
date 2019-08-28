@@ -23,7 +23,6 @@ $(function(){
 	
     $(document).off('change', "#timeCardDateRange").on('change', "#timeCardDateRange", function (event) {
         event.preventDefault();
-		$('#timeCardPageNumber').val(1);
         var selected = $(this).find(":selected").val();
         if(selected == "other") {
 			//reset date picker
@@ -33,60 +32,52 @@ $(function(){
         }else {
 			//hide date picker
             $('#timeCardDatePickerContainer').css("display", "none");
-            reloadTimeCardGridView();
+            reloadTimeCardGridView(1);
         }
     });
 
     $(document).off('change', "#timeCardPageSize").on('change', "#timeCardPageSize", function (event) {
-        $('#timeCardPageNumber').val(1);
-        reloadTimeCardGridView();
+        reloadTimeCardGridView(1);
         event.preventDefault();
         return false;
     });
 
     $(document).off('change', '#timeCardProjectFilterDD').on('change', '#timeCardProjectFilterDD', function (event) {
 		$('#timeCardEmployeeFilterDD').val("All");
-		$('#timeCardPageNumber').val(1);
-        reloadTimeCardGridView();
+        reloadTimeCardGridView(1);
         event.preventDefault();
         return false;
     });
 	
 	$(document).off('change', '#timeCardEmployeeFilterDD').on('change', '#timeCardEmployeeFilterDD', function (event) {
-		$('#timeCardPageNumber').val(1);
-        reloadTimeCardGridView();
+        reloadTimeCardGridView(1);
         event.preventDefault();
         return false;
     });
 
     $(document).off('click', "#TCPagination ul li a").on('click', "#TCPagination ul li a", function (event) {
+		event.preventDefault();
         var page = $(this).data('page') + 1; // Shift by one to 1-index instead of 0-index.
-        $('#timeCardPageNumber').val(page);
-        reloadTimeCardGridView();
-        event.preventDefault();
-        return false;
+        reloadTimeCardGridView(page);
     });
 	
 	// timecard filter listener
     $(document).off('keypress', '#timeCardFilter').on('keypress', '#timeCardFilter', function (event) {
         if (event.keyCode === 13 || event.keyCode === 10) {
             event.preventDefault();
-			$('#timeCardPageNumber').val(1);
-            reloadTimeCardGridView();
+            reloadTimeCardGridView(1);
         }
     });
 	
 	$(document).off('click', '#timeCardClearDropdownFilterButton').on('click', '#timeCardClearDropdownFilterButton', function (){
         $('#timeCardProjectFilterDD').val("All");
         $('#timeCardEmployeeFilterDD').val("All");
-		$('#timeCardPageNumber').val(1);
-        reloadTimeCardGridView();
+        reloadTimeCardGridView(1);
     });
 
     $(document).off('click', '#timeCardSearchCleanFilterButton').on('click', '#timeCardSearchCleanFilterButton', function (){
         $('#timeCardFilter').val("");
-		$('#timeCardPageNumber').val(1);
-        reloadTimeCardGridView();
+        reloadTimeCardGridView(1);
     });
 
     $(document).off('change', "#timeCardGV input[type=checkbox]").on('change', "#timeCardGV input[type=checkbox]", function (e) {
@@ -356,15 +347,22 @@ function timeCardGetSelectedProjectID(){
 }
 
 //reload table
-//consider adding page as a param so reseting of current page may be moved into this function
-function reloadTimeCardGridView() {
+//page is page to be reloaded to, if no value is sent will fetch current page
+function reloadTimeCardGridView(page = null) {
+	//if no page is passed get the current active page
+    if(page == null){
+        // Get Current page and shift by one to 1-index instead of 0-index. Shifting will cause undefined value to become NaN
+        currentPage = $("#TCPagination ul li.active a").data('page') + 1;
+        //if page is Not a Number becuase no pagination is present set to page 1
+        page = isNaN(currentPage) ? 1 : currentPage;
+    }
 	var form = $('#timeCardDropdownContainer').find("#TimeCardForm");
 	//get sort value
 	var ascSort = $("#GridViewForTimeCard-container").find(".asc").attr('data-sort');
 	var descSort = $("#GridViewForTimeCard-container").find(".desc").attr('data-sort');
 	var sort = (ascSort !== undefined) ? ascSort.replace('-', ''): '-' + descSort;
 	//append sort to form values
-	var dataParams = form.serialize() + "&sort=" + sort;
+	var dataParams = form.serialize()+ "&DynamicModel%5Bpage%5D=" + page + "&sort=" + sort;
 	if (form.find(".has-error").length){
 		return false;
 	}
@@ -391,12 +389,10 @@ function reloadTimeCardGridView() {
 			timeCardPMReset();
 			timeCardRequestPMReset();
 			$('#loading').hide();
-		});
-		$('#timeCardSubmitApproveButtons').off('pjax:error').on('pjax:error', function () {
+		}).off('pjax:error').on('pjax:error', function () {
 			location.reload();
 		});
-	});
-	$('#timeCardGridview').off('pjax:error').on('pjax:error', function () {
+	}).off('pjax:error').on('pjax:error', function () {
 		location.reload();
 	});
 }
