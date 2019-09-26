@@ -202,6 +202,9 @@ class TimeCardController extends BaseCardController
 			else
 				$pmSubmitReady = $isSubmitReady;
 			
+			//check if user can approve cards
+			$canApprove = self::can('timeCardApproveCards');
+			
             // passing decode data into dataProvider
             $dataProvider = new ArrayDataProvider
 			([
@@ -268,7 +271,8 @@ class TimeCardController extends BaseCardController
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
 				'isProjectManager' => $isProjectManager,
-				'isAccountant' => $isAccountant
+				'isAccountant' => $isAccountant,
+				'canApprove' => $canApprove
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -410,6 +414,9 @@ class TimeCardController extends BaseCardController
 			$FridayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']);
 			$SaturdayDate =  explode('-', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']);
 
+			//check if user can approve cards
+			$canApprove = self::can('timeCardApproveCards');
+
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
 				'pagination'=> false,
@@ -440,6 +447,7 @@ class TimeCardController extends BaseCardController
 				'timeCardProjectID' => $timeCardProjectID,
 				'isSubmitted' => $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes',
 				'inOvertime' => $inOvertime,
+				'canApprove' => $canApprove
 
 			]);
 		} catch (UnauthorizedHttpException $e){

@@ -226,7 +226,7 @@ if($isAccountant)
                                         'disabled' => true
                                     ]);
 
-								} elseif($isProjectManager){
+								}elseif($isProjectManager){
 									if($pmSubmitReady || $unapprovedMileageCardInProject){
                                         echo Html::button('Submit',
                                         [
@@ -242,7 +242,7 @@ if($isAccountant)
                                             'disabled' => false
                                         ]);
                                     }
-								} else
+								}elseif($canApprove)
 									echo Html::button('Approve',$approveButton);
 							?>
 						</div>
