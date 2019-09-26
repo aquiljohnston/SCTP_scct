@@ -233,7 +233,7 @@ else
 										'id' => 'pm_time_card_reset',
 										'disabled' => true
 									]);
-								} elseif($isProjectManager){
+								}elseif($isProjectManager){
 									if($pmSubmitReady || $unapprovedTimeCardInProject){
 										echo Html::button('Submit',
 										[
@@ -249,8 +249,9 @@ else
 											'disabled' => false
 										]);
 									}
-								} else
+								}elseif($canApprove){
 									echo Html::button('Approve',$approveButton);
+								}
 							?>
 						</div>
 					</div>
