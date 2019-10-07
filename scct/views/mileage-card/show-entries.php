@@ -39,11 +39,15 @@ MileageCardAsset::register($this);
 		?>
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
-			<?= Html::button('Approve', [
-				'class' => 'btn btn-primary',
-				'disabled' => $approve_status || $isAccountant,
-				'id' => 'approve_mileageCard_btn_id',
-			]) ?>
+			<?php
+            if($canApprove){
+                echo Html::button('Approve', [
+                    'class' => 'btn btn-primary',
+                    'disabled' => $approve_status || $isAccountant,
+                    'id' => 'approve_mileageCard_btn_id',
+                ]);
+            }
+            ?>
 		</p>
 		<br>
     </div>
