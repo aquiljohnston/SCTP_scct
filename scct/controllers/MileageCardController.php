@@ -200,6 +200,9 @@ class MileageCardController extends BaseCardController
 				$accountingSubmitReady = $isSubmitReady;
 			else
 				$pmSubmitReady = $isSubmitReady;
+			
+			//check if user can approve cards
+            $canApprove = self::can('mileageCardApprove');
 
             // passing decode data into dataProvider
 			$dataProvider = new ArrayDataProvider
@@ -267,7 +270,8 @@ class MileageCardController extends BaseCardController
 				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
 				'isProjectManager' => $isProjectManager,
-				'isAccountant' => $isAccountant
+				'isAccountant' => $isAccountant,
+				'canApprove' => $canApprove
 			];
             //calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -419,6 +423,9 @@ class MileageCardController extends BaseCardController
 					'Date7' => '',
 				];
 			}
+			
+			//check if user can approve cards
+            $canApprove = self::can('mileageCardApprove');
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -450,6 +457,7 @@ class MileageCardController extends BaseCardController
 				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'mileageCardProjectID' => $mileageCardProjectID,
 				'isSubmitted' => $cardData['card']['MileageCardOasisSubmitted']=='Yes',
+				'canApprove' => $canApprove
 			];
 			
 			if (Yii::$app->request->isAjax) {

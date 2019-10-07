@@ -89,6 +89,7 @@ class PermissionDictionary {
         'viewEquipmentMgmt', // View equipment management
         'viewTimeCardMgmt', // View time card management
         'viewMileageCardMgmt', // View mileage card management
+        'viewExpenseMgmt', // View expense management
         'viewTracker', // View tracker
         'viewLeakLogMgmt', // View leak log management
         'viewLeakLogDetail', // View leak log detail
