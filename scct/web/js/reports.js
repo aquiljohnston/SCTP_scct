@@ -340,9 +340,9 @@ function convertToCSV() {
         for (var index in array[i]) {
             if (line != '') line += ';';
 
-            line += (array[i][index] !== null) ? array[i][index] : ''; // Append the cell data
-			line = line.replace(/(\r\n|\n|\r)/gm," ");
-            // The ternary operator changes nulls to ''
+			// The ternary operator changes nulls to ''
+            line += (array[i][index] !== null) ? array[i][index].replace(/(;)/gm, ",") : ''; // Append the cell data, clenses any semicolons
+			line = line.replace(/(\r\n|\n|\r)/gm," "); //remove extra returns
         }
         str += line + '\r\n';
     }
