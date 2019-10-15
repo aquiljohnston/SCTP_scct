@@ -18,6 +18,64 @@ $this->title = 'Expense';
 $pageSize = ["50" => "50", "100" => "100", "200" => "200", "500" => "500", "750" => "750"];
 if($isAccountant)
 {
+	$column = [
+		[
+			'class' => 'kartik\grid\ExpandRowColumn',
+			'expandAllTitle' => 'Expand all',
+			'collapseTitle' => 'Collapse all',
+			'expandIcon' => '<span class="glyphicon glyphicon-expand"></span>',
+			'value' => function ($model, $key, $index, $column) {
+				return GridView::ROW_COLLAPSED;
+			},
+			'detailUrl' => Url::to(['expense/view-accountant-detail']),
+			'detailAnimationDuration' => 'fast',
+		],
+		[
+			'label' => 'Project Name',
+			'attribute' => 'ProjectName',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'label' => 'Start Date - End Date',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+			'value' => function($model, $key, $index, $column) {
+				return $model['StartDate'] . ' - ' . $model['EndDate'];
+			},
+		],
+		[
+			'label' => 'Submitted',
+			'attribute' => 'IsSubmitted',
+			'value' => function($model, $key, $index, $column) {
+				return $model['IsSubmitted'] == 0 ? 'No' : 'Yes';
+			},
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
+			'class' => 'kartik\grid\CheckboxColumn',
+			'header' => 'PM Reset',
+			'headerOptions' => ['class' => 'text-center'],
+			'checkboxOptions' => function ($model, $key, $index, $column){
+				// Disable if already submitted
+				$disabledBoolean = ($model['IsSubmitted'] != 0);
+				$result = [];
+				if ($disabledBoolean) {
+					$result['disabled'] = true;
+				}
+				return $result;
+			}
+		],
+		//may not need this field as it is the table key
+		[
+			'label' => 'Project ID',
+			'attribute' => 'ProjectID',
+			'visible' => false,
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+	];
 }
 else
 {

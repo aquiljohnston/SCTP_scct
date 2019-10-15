@@ -105,7 +105,6 @@ class ExpenseController extends BaseCardController {
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)){
-				yii::trace('MODEL DATA: ' . json_encode($model));
 				Yii::$app->session['expenseFormData'] = $model;
 			}else{
 				//set defaults to session data if avaliable
@@ -143,7 +142,6 @@ class ExpenseController extends BaseCardController {
                     $endDate 	= $dateData[1];
                 }
             }else{
-				yii::trace('DateRange ' . $model->dateRangeValue);
                 $dateRangeArray = BaseController::splitDateRange($model->dateRangeValue);
                 $startDate = $dateRangeArray['startDate'];
                 $endDate =  $dateRangeArray['endDate'];
@@ -193,32 +191,43 @@ class ExpenseController extends BaseCardController {
 			
 			//check if user can approve cards
 			$canApprove = true;//self::can('expenseApprove');
-			
-            // passing decode data into dataProvider
-            $dataProvider = new ArrayDataProvider
-			([
-				'allModels' => $assets,
-				'pagination' => false,
-				'key' => function ($assets) {
-					return array(
-						'ProjectID' => $assets['ProjectID'],
-						'CreatedDate' => $assets['CreatedDate'],
-					);
-				}
-			]);
-			
+
 			if($isAccountant) {
+				// passing decode data into dataProvider
+				$dataProvider = new ArrayDataProvider
+				([
+					'allModels' => $assets,
+					'pagination' => false,
+					'key' => function ($assets) {
+						return array(
+							'ProjectID' => $assets['ProjectID'],
+							'StartDate' => $assets['StartDate'],
+							'EndDate' => $assets['EndDate'],
+						);
+					}
+				]);
+				
 				// Sorting TimeCard table
 				$dataProvider->sort = [
 					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
 					'attributes' => [
 						'ProjectName',
-						'CreatedDate',
-						'IsApproved',
 						'IsSubmitted',
 					]
 				];
 			} else {
+				// passing decode data into dataProvider
+				$dataProvider = new ArrayDataProvider
+				([
+					'allModels' => $assets,
+					'pagination' => false,
+					'key' => function ($assets) {
+						return array(
+							'ProjectID' => $assets['ProjectID'],
+							'CreatedDate' => $assets['CreatedDate'],
+						);
+					}
+				]);
 				// Sorting TimeCard table
 				$dataProvider->sort = [
 					'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
@@ -273,6 +282,68 @@ class ExpenseController extends BaseCardController {
             throw new ServerErrorHttpException();
         }
     }
+	
+	public function actionViewAccountantDetail()
+	{
+		try{
+			// Verify logged in
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+
+			// get the key to generate section table
+			if (isset($_POST['expandRowKey']))
+			{
+				$projectID = $_POST['expandRowKey']['ProjectID'];
+				$startDate = $_POST['expandRowKey']['StartDate'];
+				$endDate = $_POST['expandRowKey']['EndDate'];
+			}else{
+				$projectID = '';
+				$startDate = '';
+				$endDate = '';
+			}
+			
+			$queryParams = [
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			];
+
+			$getUrl = 'expense%2Fget-accountant-details&' . http_build_query([
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			]);
+			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
+			$detailsData = $getResponseData['details'];
+
+			// Put data in data provider
+			$accountantDetialsDataProvider = new ArrayDataProvider
+			([
+				'allModels' => $detailsData,
+				'pagination' => false,
+				'key' => 'ProjectID',
+			]);
+
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			} else {
+				return $this->render('_accountant-detail-expand', [
+					'accountantDetialsDataProvider' => $accountantDetialsDataProvider,
+				]);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
 	
 	//TODO potentially put into base
 	/**
