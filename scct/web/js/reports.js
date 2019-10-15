@@ -341,6 +341,7 @@ function convertToCSV() {
             if (line != '') line += ';';
 
             line += (array[i][index] !== null) ? array[i][index] : ''; // Append the cell data
+			line = line.replace(/(\r\n|\n|\r)/gm," ");
             // The ternary operator changes nulls to ''
         }
         str += line + '\r\n';
@@ -364,5 +365,6 @@ function convertToCSV() {
     str = 'sep=;\r\n' + str;
     //using FileSaver.min.js
     var blob = new Blob([str], {type: "text/csv;charset=utf-8"});
+	//consider adding report type to file name?
     saveAs(blob, "Report_" + today + ".csv");
 }
