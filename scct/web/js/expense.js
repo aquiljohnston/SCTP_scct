@@ -92,6 +92,37 @@ $(function(){
 });
 
 function expenseApproveMultiple() {	
+	$('#exp_multiple_approve_btn_id').off('click').click(function (event) {
+        var primaryKeys = $('#GridViewForExpense').yiiGridView('getSelectedRows');
+        var quantifier = "";
+
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Approve';
+        krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
+        
+        if (resp) {
+			$('#loading').show();
+            $.ajax({
+                type: 'POST',
+                url: '/expense/approve-multiple',
+                data: {
+                    id: primaryKeys
+                },
+				success: function(data){
+					reloadExpenseGridView();
+				}
+            });
+        } else {
+            event.stopImmediatePropagation();
+            event.preventDefault();
+        }
+      })
+    });
 }
 
 function expenseAccountantSubmit() {
