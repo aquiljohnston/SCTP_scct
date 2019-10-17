@@ -22,8 +22,7 @@ class ExpenseController extends BaseCardController {
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex($projectID = null, $projectFilterString = null,  $activeWeek = null, $dateRange = null)
-    {
+    public function actionIndex($projectID = null, $projectFilterString = null,  $activeWeek = null, $dateRange = null){
 		try {
 			//guest redirect
 			if (Yii::$app->user->isGuest)
@@ -283,8 +282,7 @@ class ExpenseController extends BaseCardController {
         }
     }
 	
-	public function actionViewAccountantDetail()
-	{
+	public function actionViewAccountantDetail(){
 		try{
 			// Verify logged in
 			if (Yii::$app->user->isGuest) {
@@ -343,6 +341,48 @@ class ExpenseController extends BaseCardController {
         } catch(Exception $e) {
             throw new ServerErrorHttpException();
         }
+	}
+	
+	/**
+     * Approve Multiple existing Expense Records.
+     * @return mixed
+     * @throws \yii\web\BadRequestHttpException
+     * @throws \yii\web\HttpException
+     * @internal param string $id
+     *
+     */
+	public function actionApproveMultiple(){
+		try{
+			if (Yii::$app->request->isAjax) {
+				$data = Yii::$app->request->post();					
+				// loop the data array to get all id's.	
+				foreach ($data as $key) {
+					foreach($key as $keyitem){
+					   $expenseArray[] = $keyitem;
+					}
+				}
+				
+				$data = array(
+						'expenseArray' => $expenseArray,
+					);		
+				$json_data = json_encode($data);
+				
+				//post url
+				$putUrl = 'expense%2Fapprove';
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
+				//Handle API response if we want to do more robust error handling
+			} else {
+			  throw new \yii\web\BadRequestHttpException;
+			}
+		} catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
+		}
 	}
 	
 	//TODO potentially put into base
