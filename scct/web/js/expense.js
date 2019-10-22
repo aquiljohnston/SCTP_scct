@@ -126,15 +126,95 @@ function expenseApproveMultiple() {
 }
 
 function expenseAccountantSubmit() {
+	//apply tooltip for button status
+	$( document ).tooltip();
+    
+    if($('#expense_submit_btn_id').hasClass('off-btn')){
+		$('#expense_submit_btn_id').attr("title", "Not all expenses have been approved.");
+    } 
+    if($('#expense_submit_btn_id').attr('submitted') == 'true'){
+		$('#expense_submit_btn_id').attr("title", "All expenses have been submitted.");
+    }
+	
+    $('#expense_submit_btn_id').off('click').click(function (event) {
+        //apply css class that gives the tooltip gives
+        //the appearance of being disabled via css
+        //add returns false to prevent submission in
+        //this state.
+        if($(this).hasClass('off-btn')){
+            return false;
+        }
+
+        var quantifier = "";
+        var projectIDs = [];
+        
+        $('#expenseProjectFilterDD option').each(function(){
+            if($(this).val()!=""){
+                projectIDs.push($(this).val());
+            }
+        })
+
+        dateRangeDD = $('[name="DynamicModel[dateRangeValue]"]').val();
+		//check if date picker is active
+		if(dateRangeDD == 'other'){
+			dateRange = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html();
+			dateRange = dateRange.split(" - ");
+		}else{
+			dateRange = dateRangeDD.split(",");
+		}
+        weekStart = dateRange[0];
+        weekEnd = $.trim(dateRange[1]);
+
+        var primaryKeys = $('#GridViewForExpense').yiiGridView('getSelectedRows');
+        if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
+            quantifier = "this item?";
+        } else {
+            quantifier = "these items?"
+        }
+
+        krajeeDialog.defaults.confirm.title = 'Submit';
+        krajeeDialog.confirm('Are you sure you want to submit ' + quantifier, function (resp) {
+			if (resp) {
+				$('#loading').show();
+				
+				var primaryKeys = $('#GridViewForExpense').yiiGridView('getSelectedRows');
+
+				//usage $.ctGrow(msg,title,boostrap text class)
+				$.ctGrowl.msg('Initiating the Submission.','Success','bg-success');
+
+				payload = {
+					projectIDs : projectIDs,
+					weekStart : weekStart,
+					weekEnd : weekEnd
+				}
+					   
+				$.ajax({
+					type: 'POST',
+					url: '/expense/accountant-submit',
+					data:payload,
+					success: function(data) {
+						data = JSON.parse(data);
+						if(data.success){
+							$.ctGrowl.msg(data.message,'Success','bg-success');
+							reloadExpenseGridView();
+						} else {
+							$.ctGrowl.msg(data.message,'Error','bg-danger');
+							$('#loading').hide();
+						}
+					}
+				});
+			} else {
+				event.stopImmediatePropagation();
+				event.preventDefault();
+			}
+		}) 
+    });
 }
 
 function expenseRequestPMReset() {
 }
 
 function expensePMReset(){
-}
-
-function expenseGetSelectedProjectID(){
 }
 
 //reload table
