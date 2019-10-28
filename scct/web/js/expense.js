@@ -13,8 +13,7 @@ $(function(){
 	$.ctGrowl.init( { position: 'absolute', bottom: '70px', left: '8px' });
 	
 	$(document).ready(function () {
-		if(jqWeekSelection.length > 0)
-		{
+		if(jqWeekSelection.length > 0){
 			//set to and from values for date picker based on current date range
 			refreshDatePicker();	
 		}
@@ -93,7 +92,12 @@ $(function(){
 
 function expenseApproveMultiple() {	
 	$('#exp_multiple_approve_btn_id').off('click').click(function (event) {
-        var primaryKeys = $('#GridViewForExpense').yiiGridView('getSelectedRows');
+        var preProcessPrimaryKeys = $('#GridViewForExpense').yiiGridView('getSelectedRows');
+		var primaryKeys = [];
+		//handle rows with multiple expenses
+		preProcessPrimaryKeys.forEach(function(key) {
+		  primaryKeys = primaryKeys.concat(key.split(','));
+		});
         var quantifier = "";
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it

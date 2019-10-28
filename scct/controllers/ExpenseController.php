@@ -220,12 +220,6 @@ class ExpenseController extends BaseCardController {
 				([
 					'allModels' => $assets,
 					'pagination' => false,
-					'key' => function ($assets) {
-						return array(
-							'ProjectID' => $assets['ProjectID'],
-							'CreatedDate' => $assets['CreatedDate'],
-						);
-					}
 				]);
 				// Sorting TimeCard table
 				$dataProvider->sort = [
@@ -234,15 +228,16 @@ class ExpenseController extends BaseCardController {
 						'UserName',
 						'ProjectName',
 						'ChargeAccount',
-						'CreatedDate',
+						'StartDate',
+						'EndDate',
 						'IsSubmitted',
 						'Quantity',
 						'IsApproved',
 					]
 				];
-
+				
 				//set expense ID as id
-				$dataProvider->key = 'ID';
+                $dataProvider->key = 'ExpenseID';
 			}
 
             // set pages to dispatch table
@@ -342,6 +337,84 @@ class ExpenseController extends BaseCardController {
             throw new ServerErrorHttpException();
         }
 	}
+	
+	/**
+     * Displays all expense entries for a given user, project, and date range.
+     * @param int @userID
+     * @param int @projectID
+     * @param string @startDate
+     * @param string @endDate
+     * @throws \yii\web\HttpException
+     * @return mixed
+     */
+    public function actionShowEntries($userID, $projectID, $startDate, $endDate){		
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest){
+				return $this->redirect(['/login']);
+			}
+			
+			//Check if user has permissions
+			self::requirePermission('expenseGetEntries');
+			
+			//build api url path
+			$entries_url = 'expense%2Fshow-entries&' . http_build_query([
+				'userID' => $userID,
+				'projectID' => $projectID,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+			]);
+			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
+			$expenseData = json_decode($resp, true);
+			
+			//check if user can approve cards
+            $canApprove = self::can('expenseApprove');
+
+			$entries = new ArrayDataProvider([
+				'allModels' => $expenseData['entries'],
+				'pagination'=> false,
+				'key' => function ($entries) {
+					return array(
+						'ID' => $entries['ID'],
+					);
+				}
+			]);
+			$projectName = $expenseData['groupData']['ProjectName'];
+			$userName = $expenseData['groupData']['UserName'];
+			$isApproved = $expenseData['groupData']['IsApproved'];
+			$isSubmitted = $expenseData['groupData']['IsSubmitted'];
+			$total = $expenseData['groupData']['Quantity'];
+			
+			//data to pass to view
+			$dataArray = [
+				'entries' => $entries,
+				'startDate' => $startDate,
+				'endDate' => $endDate,
+				'projectID' => $projectID,
+				'projectName' => $projectName,
+				'userID' => $userID,
+				'userName' => $userName,
+				'canApprove' => $canApprove,
+				'isApproved' => $isApproved,
+				'isSubmitted' => $isSubmitted,
+				'total' => $total,
+			];
+			
+			if (Yii::$app->request->isAjax) {
+				return $this->renderAjax('show-entries', $dataArray);
+			} else {
+				return $this->render('show-entries', $dataArray);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
 	
 	/**
      * Approve Multiple existing Expense Records.

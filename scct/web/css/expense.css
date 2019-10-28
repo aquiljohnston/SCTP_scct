@@ -157,3 +157,11 @@
 div[id^=modalContent] #loading {
     display: none;
 }
+
+/*expense show entries*/
+
+#entries_sum_expenses {
+	font-size: medium;
+	float: right;
+	margin-right: 1%;
+}

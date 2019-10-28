@@ -93,10 +93,12 @@ else
 			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
-			'label' => 'Date',
-			'attribute' => 'CreatedDate',
+			'label' => 'Start Date - End Date',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
+			'value' => function($model, $key, $index, $column) {
+				return $model['StartDate'] . ' - ' . $model['EndDate'];
+			},
 		],
 		[
 			'label' => 'Quantity',
@@ -114,6 +116,19 @@ else
 			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
+			'class' => 'kartik\grid\ActionColumn',
+			'template' => '{view}', // does not include delete
+			'urlCreator' => function ($action, $model, $key, $index) {
+				if ($action === 'view') {
+					$url = '/expense/show-entries?userID=' . $model['UserID']
+					.'&projectID='.$model['ProjectID']
+					.'&startDate='.$model['StartDate']
+					.'&endDate='.$model['EndDate'];
+					return $url;
+				}
+			},
+		],
+		[
 			'class' => 'kartik\grid\CheckboxColumn',
 			'header' => Html::checkBox('selection_all', false, [
 				'class' => 'select-on-check-all',
@@ -123,7 +138,7 @@ else
 				// Disable if already approved or SumHours is 0
 				$disabledBoolean = $model['IsApproved'] == 1;
 				$result = [
-					'expenseid' => $model['ID'],
+					'expenseid' => $model['ExpenseID'],
 					'approved' => $model['IsApproved'],
 					'quantity' => $model['Quantity']
 				];
