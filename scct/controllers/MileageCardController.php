@@ -358,7 +358,7 @@ class MileageCardController extends BaseCardController
 	}
 	
 	/**
-     * Displays all time entries for a given time card.
+     * Displays all mileage entries for a given mileage card.
      * @param string $id
      * @throws \yii\web\HttpException
      * @return mixed

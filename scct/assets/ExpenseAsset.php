@@ -10,6 +10,7 @@ class ExpenseAsset extends AppAsset
     ];
 	public $js = [
         'js/expense.js',
+        'js/expense_entries.js',
         'js/datePicker.js',
         'js/notify.js',
 	];

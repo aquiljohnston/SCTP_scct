@@ -69,6 +69,8 @@ class PermissionDictionary {
         'timeEntryCreate', // Create a time entry
         'timeEntryDeactivate', // Deactivate a time entry
 		'timeCardPmSubmit', // pm submit time cards
+		'expenseGetEntries', //get exepense entries for a user, project, and date range
+		'expenseApprove', //approve expenses
 		'getAllTask', //Get an array of all task
 		'createTaskEntry', //Create a task entry
         'userGetActive', // Get all active users
