@@ -178,18 +178,13 @@ class ExpenseController extends BaseCardController {
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
 			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
-			
-			//get submit button status
-			$isSubmitReady = true;//self::getSubmitButtonStatus($model->projectID, $projectDropDown, $startDate, $endDate, $isAccountant);
 
 			//set submit button status
 			if($isAccountant)
-				$accountingSubmitReady = $isSubmitReady;
-			else
-				$pmSubmitReady = $isSubmitReady;
+				$accountingSubmitReady = self::getSubmitButtonStatus($model->projectID, $projectDropDown, $startDate, $endDate, $isAccountant);
 			
 			//check if user can approve cards
-			$canApprove = true;//self::can('expenseApprove');
+			$canApprove = self::can('expenseApprove');
 
 			if($isAccountant) {
 				// passing decode data into dataProvider
@@ -254,7 +249,6 @@ class ExpenseController extends BaseCardController {
 				'unapprovedExpenseInProject' => $unapprovedExpenseInProject,
 				'unapprovedExpenseVisible' => $unapprovedExpenseVisible,
 				'accountingSubmitReady' => $accountingSubmitReady,
-				'pmSubmitReady' => $pmSubmitReady,
 				'projectSubmitted' => $projectWasSubmitted,
 				'isProjectManager' => $isProjectManager,
 				'isAccountant' => $isAccountant,

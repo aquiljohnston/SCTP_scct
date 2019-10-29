@@ -8,11 +8,75 @@ use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 use app\assets\ExpenseAsset;
 
+/* @var $this yii\web\View */
+/* @var $model app\models\expenses */
+
 //register assets
 ExpenseAsset::register($this);
 
-/* @var $this yii\web\View */
-/* @var $model app\models\expenses */
+$this->title = $projectName.' Week '.$startDate.' - '.$endDate.': '.$userName;;
+$column = [
+	[
+		'label' => 'User',
+		'attribute' => 'UserName',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'label' => 'Project',
+		'attribute' => 'ProjectName',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'label' => 'Date',
+		'attribute' => 'CreatedDate',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'label' => 'COA',
+		'attribute' => 'ChargeAccount',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'label' => 'Quantity',
+		'attribute' => 'Quantity',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+	[
+		'label' => 'Approved',
+		'attribute' => 'IsApproved',
+		'value' => function($model, $key, $index, $column) {
+			return $model['IsApproved'] == 0 ? 'No' : 'Yes';
+		},
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],
+];
+if($canApprove){
+	$column[] = [
+		'class' => 'kartik\grid\CheckboxColumn',
+		'header' => Html::checkBox('selection_all', false, [
+			'class' => 'select-on-check-all',
+			'disabled' => ($isApproved)  ? true : false,
+		]),
+		'checkboxOptions' => function ($model, $key, $index, $column){
+			// Disable if already approved
+			$disabledBoolean = $model['IsApproved'] == 1;
+			$result = [
+				'expenseid' => $model['ID'],
+				'approved' => $model['IsApproved']
+			];
+			if ($disabledBoolean) {
+				$result['disabled'] = true;
+			}
+			return $result;
+		}
+	];
+}
 ?>
 
 <div class="expense-card-entries">
@@ -25,7 +89,7 @@ ExpenseAsset::register($this);
 	</div>
   
     <div class="lightBlueBar">
-		<h3> <?= $projectName.' Week '.$startDate.' - '.$endDate.': '.$userName; ?></h3>
+		<h3> <?= Html::encode($this->title) ?></h3>
 
 		<?php
 			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
@@ -55,63 +119,7 @@ ExpenseAsset::register($this);
 			'summary' => '',
 			'showOnEmpty' => true,
             'emptyText' => 'No results found!',
-			'columns' => [
-				[
-					'label' => 'User',
-					'attribute' => 'UserName',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'label' => 'Project',
-					'attribute' => 'ProjectName',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'label' => 'Date',
-					'attribute' => 'CreatedDate',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'label' => 'COA',
-					'attribute' => 'ChargeAccount',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'label' => 'Quantity',
-					'attribute' => 'Quantity',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'label' => 'Approved',
-					'attribute' => 'IsApproved',
-					'headerOptions' => ['class' => 'text-center'],
-					'contentOptions' => ['class' => 'text-center'],
-				],
-				[
-					'class' => 'kartik\grid\CheckboxColumn',
-					'header' => Html::checkBox('selection_all', false, [
-						'class' => 'select-on-check-all',
-						'disabled' => ($isApproved)  ? true : false,
-					]),
-					'checkboxOptions' => function ($model, $key, $index, $column){
-						// Disable if already approved
-						$disabledBoolean = $model['IsApproved'] == 1;
-						$result = [
-							'expenseid' => $model['ID'],
-							'approved' => $model['IsApproved']
-						];
-						if ($disabledBoolean) {
-							$result['disabled'] = true;
-						}
-						return $result;
-					}
-				],
-			]
+			'columns' => $column,
 		]);
 		?>
 		<?= Html::label('Total: '. $total,

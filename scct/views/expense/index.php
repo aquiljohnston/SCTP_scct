@@ -37,11 +37,24 @@ if($isAccountant)
 			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
+			'label' => 'Project Manager',
+			'attribute' => 'ProjectManager',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+		],
+		[
 			'label' => 'Start Date - End Date',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 			'value' => function($model, $key, $index, $column) {
-				return $model['StartDate'] . ' - ' . $model['EndDate'];
+			},
+		],
+		[
+			'label' => 'Approved/Total',
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
+			'value' => function($model, $key, $index, $column) {
+				return $model['ApprovedCount'] . '/' . $model['TotalCount'];
 			},
 		],
 		[
@@ -53,28 +66,20 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
-		[
-			'class' => 'kartik\grid\CheckboxColumn',
-			'header' => 'PM Reset',
-			'headerOptions' => ['class' => 'text-center'],
-			'checkboxOptions' => function ($model, $key, $index, $column){
-				// Disable if already submitted
-				$disabledBoolean = ($model['IsSubmitted'] != 0);
-				$result = [];
-				if ($disabledBoolean) {
-					$result['disabled'] = true;
-				}
-				return $result;
-			}
-		],
-		//may not need this field as it is the table key
-		[
-			'label' => 'Project ID',
-			'attribute' => 'ProjectID',
-			'visible' => false,
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
-		],
+		// [
+			// 'class' => 'kartik\grid\CheckboxColumn',
+			// 'header' => 'PM Reset',
+			// 'headerOptions' => ['class' => 'text-center'],
+			// 'checkboxOptions' => function ($model, $key, $index, $column){
+				// // Disable if already submitted
+				// $disabledBoolean = ($model['IsSubmitted'] != 0);
+				// $result = [];
+				// if ($disabledBoolean) {
+					// $result['disabled'] = true;
+				// }
+				// return $result;
+			// }
+		// ],
 	];
 }
 else
@@ -189,22 +194,22 @@ else
 										'id' => 'expense_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
-									echo Html::button('PM Reset',
-									[
-										'class' => 'btn btn-primary pm_reset_btn',
-										'id' => 'pm_expense_reset',
-										'disabled' => true
-									]);
+									// echo Html::button('PM Reset',
+									// [
+										// 'class' => 'btn btn-primary pm_reset_btn',
+										// 'id' => 'pm_expense_reset',
+										// 'disabled' => true
+									// ]);
 								}elseif($isProjectManager && $canApprove){
-									if($pmSubmitReady || $unapprovedExpenseInProject){
+									if($unapprovedExpenseInProject){
 										echo Html::button('Approve', $approveButton);
 									}else{									
-										echo Html::button('Request Reset',
-										[
-											'class' => 'btn btn-primary exp_pm_reset_request_btn',
-											'id' => 'exp_pm_reset_request_btn_id',
-											'disabled' => false
-										]);
+										// echo Html::button('Request Reset',
+										// [
+											// 'class' => 'btn btn-primary exp_pm_reset_request_btn',
+											// 'id' => 'exp_pm_reset_request_btn_id',
+											// 'disabled' => false
+										// ]);
 									}
 								}
 							?>
