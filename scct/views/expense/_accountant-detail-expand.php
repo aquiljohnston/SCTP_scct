@@ -21,11 +21,13 @@ use kartik\grid\GridView;
                 'contentOptions' => ['class' => 'text-center'],
             ],
             [
-                'label' => 'Date',
-                'attribute' => 'CreatedDate',
-                'headerOptions' => ['class' => 'text-center'],
-                'contentOptions' => ['class' => 'text-center'],
-            ],
+				'label' => 'Start Date - End Date',
+				'headerOptions' => ['class' => 'text-center'],
+				'contentOptions' => ['class' => 'text-center'],
+				'value' => function($model, $key, $index, $column) {
+					return $model['StartDate'] . ' - ' . $model['EndDate'];
+				},
+			],
             [
                 'label' => 'Quantity',
                 'attribute' => 'Quantity',
@@ -40,7 +42,20 @@ use kartik\grid\GridView;
 				'value' => function($model, $key, $index, $column) {
 					return $model['IsApproved'] == 0 ? 'No' : 'Yes';
 				},
-            ]
+            ],
+			[
+				'class' => 'kartik\grid\ActionColumn',
+				'template' => '{view}', // does not include delete
+				'urlCreator' => function ($action, $model, $key, $index) {
+					if ($action === 'view') {
+						$url = '/expense/show-entries?userID=' . $model['UserID']
+						.'&projectID='.$model['ProjectID']
+						.'&startDate='.$model['StartDate']
+						.'&endDate='.$model['EndDate'];
+						return $url;
+					}
+				},
+			],
         ],
     ]); ?>
 	
