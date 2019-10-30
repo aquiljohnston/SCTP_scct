@@ -26,7 +26,6 @@ function expenseShowEntriesApproveMultiple() {
         
         if (resp) {
 			$('#loading').show();
-			reloadExpenseEntriesGridView();
             $.ajax({
                 type: 'POST',
                 url: '/expense/approve-multiple',
@@ -66,16 +65,9 @@ function reloadExpenseEntriesGridView() {
 		timeout: 99999
 	});
 	$('#ShowExpenseEntriesView').off('pjax:success').on('pjax:success', function () {
-		$.pjax.reload({
-			container: '#expenseShowEntriesButtons',
-			timeout:false,
-		});
-		$('#expenseShowEntriesButtons').off('pjax:success').on('pjax:success', function () {
-			expenseShowEntriesApproveMultiple();
-			$('#loading').hide();
-		}).off('pjax:error').on('pjax:error', function () {
-			location.reload();
-		});
+		$('#approve_expense_btn_id').prop('disabled', true);
+		expenseShowEntriesApproveMultiple();
+		$('#loading').hide();
 	}).off('pjax:error').on('pjax:error', function () {
 		location.reload();
 	});

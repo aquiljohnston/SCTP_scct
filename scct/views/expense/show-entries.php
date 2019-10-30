@@ -94,7 +94,6 @@ if($canApprove){
 		<?php
 			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 		?>
-		<?php Pjax::begin(['id' => 'expenseShowEntriesButtons', 'timeout' => false]) ?>
 			<p>
 				<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 				<?php
@@ -107,7 +106,6 @@ if($canApprove){
 				}
 				?>
 			</p>
-		<?php Pjax::end() ?>
 		<br>
     </div>
     <?php Pjax::begin(['id' => 'ShowExpenseEntriesView', 'timeout' => false]) ?>
