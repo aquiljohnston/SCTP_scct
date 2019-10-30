@@ -47,6 +47,7 @@ if($isAccountant)
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 			'value' => function($model, $key, $index, $column) {
+				return $model['StartDate'] . ' - ' . $model['EndDate'];
 			},
 		],
 		[
