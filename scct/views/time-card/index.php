@@ -154,7 +154,8 @@ else
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
 		],
-		['class' => 'kartik\grid\ActionColumn',
+		[
+			'class' => 'kartik\grid\ActionColumn',
 			'template' => '{view}', // does not include delete
 			'urlCreator' => function ($action, $model, $key, $index) {
 				if ($action === 'view') {

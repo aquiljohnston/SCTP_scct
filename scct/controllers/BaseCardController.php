@@ -195,7 +195,7 @@ class BaseCardController extends BaseController
 			if($submitResponse['success'] == 1)
 			{
 				$response['success'] = TRUE; 
-				$response['message'] = 'Successfully Completed Card Submission Process.'; 
+				$response['message'] = 'Successfully Completed Submission Process.'; 
 				return json_encode($response);
 			} else {
 				$response['success'] = FALSE; 
