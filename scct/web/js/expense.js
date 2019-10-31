@@ -96,7 +96,7 @@ function expenseApproveMultiple() {
 		var primaryKeys = [];
 		//handle rows with multiple expenses
 		preProcessPrimaryKeys.forEach(function(key) {
-		  primaryKeys = primaryKeys.concat(key.split(','));
+		  primaryKeys = primaryKeys.concat(key.toString().split(','));
 		});
         var quantifier = "";
 
