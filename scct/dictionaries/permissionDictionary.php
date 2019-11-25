@@ -28,6 +28,10 @@ class PermissionDictionary {
         'employeeTypeGetDropdown', // Get an associative array of employee types
         'equipmentCalibrationCreate', // Creates a new equipment calibration record
         'equipmentConditionGetDropdown', // Get an associative array of equipment conditions
+		'expenseGetEntries', //get exepense entries for a user, project, and date range
+		'expenseApprove', //approve expenses
+		'expenseCreate', //create expenses
+		'expenseDeactivate', //deactivate expenses
         'getOwnEquipment', // Get equipment for associated projects
         'getAllEquipment', // Get all equipment
         'equipmentView', // View equipment
@@ -69,8 +73,6 @@ class PermissionDictionary {
         'timeEntryCreate', // Create a time entry
         'timeEntryDeactivate', // Deactivate a time entry
 		'timeCardPmSubmit', // pm submit time cards
-		'expenseGetEntries', //get exepense entries for a user, project, and date range
-		'expenseApprove', //approve expenses
 		'getAllTask', //Get an array of all task
 		'createTaskEntry', //Create a task entry
         'userGetActive', // Get all active users
