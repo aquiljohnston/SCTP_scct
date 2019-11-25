@@ -123,6 +123,14 @@
 	padding-right: 7%;
 }
 
+#approve_expense_btn_id{
+	margin-right: 0.2%
+}
+
+#exp_entries_add_btn_id{
+	margin-right: 0.2%
+}
+
 #expenseDatePickerContainer{
 	margin-top: -5.2%;
 	margin-left: -15%;

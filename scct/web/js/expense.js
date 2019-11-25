@@ -93,6 +93,11 @@ $(function(){
 	$(document).off('click', '#exp_add_btn_id').on('click', '#exp_add_btn_id', function (){
 		addExpense();
     });
+	
+	//listener on show entries add expense button to launch modal and pass data to it
+	$(document).off('click', '#exp_entries_add_btn_id').on('click', '#exp_entries_add_btn_id', function (){
+		entriesAddExpense();
+    });
 });
 
 function expenseApproveMultiple() {	
@@ -235,6 +240,20 @@ function addExpense(){
 		type: 'GET',
 		replace:false,
 		url: '/expense/add?projectID='+projectID+'&userID='+userID,
+		container: '#modalContentSpan', // id to update content
+		timeout: 99999
+	})
+}
+
+function entriesAddExpense(){
+	var projectID = $('#projectID').val();
+	var userID = $('#userID').val();
+	$('#addExpenseModal').modal('show').find('#modalContentSpan').html("Loading...");
+	//Fetch modal content via pjax
+	$.pjax.reload({
+		type: 'GET',
+		replace:false,
+		url: '/expense/add?projectID='+projectID+'&userID='+userID+'&isEntries=true',
 		container: '#modalContentSpan', // id to update content
 		timeout: 99999
 	})
