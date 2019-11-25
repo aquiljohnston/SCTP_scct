@@ -463,7 +463,7 @@ class ExpenseController extends BaseCardController {
      * @throws \yii\web\HttpException
      */
 
-    public function actionAdd($projectID = null, $userID = null, $startDate = null, $endDate = null){
+    public function actionAdd($projectID = null, $userID = null, $startDate = null, $endDate = null, $isEntries = null){
 		try{
 			//guest redirect
 			if (Yii::$app->user->isGuest) {
@@ -496,8 +496,14 @@ class ExpenseController extends BaseCardController {
 				$modalDropdownResponse = Parent::executeGetRequest($modalDropdownUrl, Constants::API_VERSION_3);
 				$modalDropdown = json_decode($modalDropdownResponse, true);
 
-				$projectDropdown = $modalDropdown['projectDropdown'];
-				$employeeDropdown = $modalDropdown['employeeDropdown'];
+				if($isEntries == true){
+					//if on entries screen limit dropdown options to screen values
+					$projectDropdown = [$projectID => $modalDropdown['projectDropdown'][$projectID]];
+					$employeeDropdown = [$userID => $modalDropdown['employeeDropdown'][$userID]];
+				}else{
+					$projectDropdown = $modalDropdown['projectDropdown'];
+					$employeeDropdown = $modalDropdown['employeeDropdown'];
+				}
 				$coaDropdown = $modalDropdown['coaDropdown'];
 				
 				$dataArray = [

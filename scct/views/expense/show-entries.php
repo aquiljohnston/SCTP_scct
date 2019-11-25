@@ -104,6 +104,11 @@ if($canApprove){
 						'id' => 'approve_expense_btn_id',
 					]);
 				}
+				echo Html::button('Add Expense', [
+					'class' => 'btn btn-primary add_btn',
+					'id' => 'exp_entries_add_btn_id',
+					'disabled' => false
+				]);
 				?>
 			</p>
 		<br>
@@ -127,3 +132,15 @@ if($canApprove){
 		<input type="hidden" value=<?php echo $isApproved ?> id="isApproved">
     <?php Pjax::end() ?>
 </div>
+
+<?php
+Pjax::begin(['id' => 'addExpense', 'timeout' => false]);
+	Modal::begin([
+		'header' => '<h4>ADD EXPENSE</h4>',
+		'id' => 'addExpenseModal',
+		'size' => 'modal-lg',
+	]);
+	echo "<div id='modalAddExpense'><span id='modalContentSpan'></span></div>";
+	Modal::end();
+Pjax::end();
+?>

@@ -46,7 +46,6 @@ use kartik\date\DatePicker;
 					'showLabels'=>false
 					])->widget(DatePicker::classname(),[
 						'options' => ['placeholder' => 'Enter date...'],
-						'readonly' => true,
 						'pluginOptions' => [
 							'autoclose' => true,
 							'format' => 'yyyy-mm-dd'
