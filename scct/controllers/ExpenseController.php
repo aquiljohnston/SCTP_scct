@@ -3,6 +3,7 @@ namespace app\controllers;
 
 use Yii;
 use app\controllers\BaseController;
+use app\models\Expense;
 use yii\base\Exception;
 use yii\data\Pagination;
 use yii\data\ArrayDataProvider;
@@ -451,6 +452,81 @@ class ExpenseController extends BaseCardController {
 			throw new ServerErrorHttpException();
 		}
 	}
+	
+	/**
+     * Add New Expense Entry.
+     * @param $projectID
+     * @param $userID
+     * @param $startDate
+     * @param $endDate
+     * @return string
+     * @throws \yii\web\HttpException
+     */
+
+    public function actionAdd($projectID = null, $userID = null, $startDate = null, $endDate = null){
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+			
+			self::requirePermission('expenseCreate');
+
+			//create model object
+			$model = new Expense;
+			
+			//set default it available
+			$model->ProjectID = $projectID != null ? $projectID : '';
+			$model->UserID = $userID != null ? $userID : '';
+				
+			if ($model->load(Yii::$app->request->post()) && $model->validate()){
+				//if posting fields send create request
+				$json_data = json_encode($model->attributes);
+				//post url
+				$url = 'expense%2Fcreate';
+				$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
+				//reload underlying page
+				$referrer = Yii::$app->request->referrer;
+				return $this->redirect($referrer);
+			}else{
+				//make route call with time card id and date params to get filtered overview data
+				$modalDropdownUrl = 'expense%2Fget-modal-dropdown&' . http_build_query([
+					'projectID' => $projectID,
+				]);
+				$modalDropdownResponse = Parent::executeGetRequest($modalDropdownUrl, Constants::API_VERSION_3);
+				$modalDropdown = json_decode($modalDropdownResponse, true);
+
+				$projectDropdown = $modalDropdown['projectDropdown'];
+				$employeeDropdown = $modalDropdown['employeeDropdown'];
+				$coaDropdown = $modalDropdown['coaDropdown'];
+				
+				$dataArray = [
+					'model' => $model,
+					'ProjectDropdown' => $projectDropdown,
+					'EmployeeDropdown' => $employeeDropdown,
+					'CoaDropdown' => $coaDropdown,
+					'ProjectID' => $projectID,
+					'UserID' => $userID,
+					'StartDate' => $startDate,
+					'EndDate' => $endDate,
+				];
+				
+				if (Yii::$app->request->isAjax) {
+					return $this->renderAjax('expense_add_modal', $dataArray);
+				} else {
+					return $this->render('expense_add_modal', $dataArray);
+				}
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
 	
 	//TODO potentially put into base
 	/**

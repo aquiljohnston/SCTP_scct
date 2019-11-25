@@ -88,6 +88,11 @@ $(function(){
             $('#pm_expense_reset').prop('disabled', true);
         }
     });  
+	
+	//listener on add expense button to launch modal and pass data to it
+	$(document).off('click', '#exp_add_btn_id').on('click', '#exp_add_btn_id', function (){
+		addExpense();
+    });
 });
 
 function expenseApproveMultiple() {	
@@ -219,6 +224,20 @@ function expenseRequestPMReset() {
 }
 
 function expensePMReset(){
+}
+
+function addExpense(){
+	var projectID = $('#expenseProjectFilterDD').val();
+	var userID = $('#expenseEmployeeFilterDD').val();
+	$('#addExpenseModal').modal('show').find('#modalContentSpan').html("Loading...");
+	//Fetch modal content via pjax
+	$.pjax.reload({
+		type: 'GET',
+		replace:false,
+		url: '/expense/add?projectID='+projectID+'&userID='+userID,
+		container: '#modalContentSpan', // id to update content
+		timeout: 99999
+	})
 }
 
 //reload table

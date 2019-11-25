@@ -1,6 +1,7 @@
 <?php
 
 use app\controllers\Expense;
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\LinkPager;
@@ -188,7 +189,13 @@ else
 									'id' => 'exp_multiple_approve_btn_id',
 									'disabled' => true
 								];
+								$addExpenseButton = [
+									'class' => 'btn btn-primary add_btn',
+									'id' => 'exp_add_btn_id',
+									'disabled' => false
+								];
 								if($isAccountant) {
+									echo Html::button('Add Expense', $addExpenseButton);
 									echo Html::button('Submit',
 									[
 										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
@@ -202,6 +209,7 @@ else
 										// 'disabled' => true
 									// ]);
 								}elseif($isProjectManager && $canApprove){
+									echo Html::button('Add Expense', $addExpenseButton);
 									if($unapprovedExpenseInProject){
 										echo Html::button('Approve', $approveButton);
 									}else{									
@@ -334,6 +342,18 @@ else
         </div>
     </div>
 </div>
+<?php
+Pjax::begin(['id' => 'addExpense', 'timeout' => false]);
+	Modal::begin([
+		'header' => '<h4>ADD EXPENSE</h4>',
+		'id' => 'addExpenseModal',
+		'size' => 'modal-lg',
+	]);
+	echo "<div id='modalAddExpense'><span id='modalContentSpan'></span></div>";
+	Modal::end();
+Pjax::end();
+?>
+
 <!--ctGrowl-->
  <div id = "ctGrowlContainer"></div>
  <ul id = "ct-growl-clone">
