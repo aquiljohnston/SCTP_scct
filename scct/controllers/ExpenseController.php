@@ -523,15 +523,24 @@ class ExpenseController extends BaseCardController {
 			$model->ProjectID = $projectID != null ? $projectID : '';
 			$model->UserID = $userID != null ? $userID : '';
 				
-			if ($model->load(Yii::$app->request->post()) && $model->validate()){
-				//if posting fields send create request
-				$json_data = json_encode($model->attributes);
-				//post url
-				$url = 'expense%2Fcreate';
-				$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
-				//reload underlying page
-				$referrer = Yii::$app->request->referrer;
-				return $this->redirect($referrer);
+			if ($model->load(Yii::$app->request->post())){
+				if($model->validate()){
+					try{
+						//if posting fields send create request
+						$json_data = json_encode($model->attributes);
+						//post url
+						$url = 'expense%2Fcreate';
+						$response = Parent::executePostRequest($url, $json_data, Constants::API_VERSION_3);
+						//reload underlying page
+						$referrer = Yii::$app->request->referrer;
+						return $this->redirect($referrer);
+					}catch(Exception $e){
+						//could implement more robust error message here for user
+						return 'false';
+					}
+				}else{
+					return 'false';
+				}
 			}else{
 				//make route call with time card id and date params to get filtered overview data
 				$modalDropdownUrl = 'expense%2Fget-modal-dropdown&' . http_build_query([
