@@ -121,13 +121,9 @@ class UserController extends BaseController
                 array_push($addRemoveProjects, $tmpProjectObj);
             }
 			
-			//check user create permission to hide button
-			try{
-				self::requirePermission('userCreate');
-				$canCreate = true;
-			} catch(ForbiddenHttpException $e) {
-				$canCreate = false;
-			}
+			//check user create/deactivate permission to hide buttons
+			$canDeactivate = self::can('userDeactivate');
+			$canCreate = self::can('userCreate');
 
             return $this->render('index', [
                 'dataProvider' => $dataProvider,
@@ -137,6 +133,7 @@ class UserController extends BaseController
                 'addRemoveProjects' => $addRemoveProjects,
 				'projectDropdown' => $projectDropdown,
 				'showProjectDropdown' => $showProjectDropdown,
+				'canDeactivate' => $canDeactivate,
 				'canCreate' => $canCreate,
             ]);
         } catch (UnauthorizedHttpException $e){

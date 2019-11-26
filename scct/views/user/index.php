@@ -20,8 +20,6 @@ $this->title = 'User Management';
 $this->params['breadcrumbs'][] = $this->title;
 $pageSize = ["50" => "50", "100" => "100", "200" => "200"];
 $column = [
-
-    //'UserID',
     [
         'label' => 'Username',
         'attribute' => 'UserName',
@@ -46,33 +44,50 @@ $column = [
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
-    ['class' => 'kartik\grid\ActionColumn',
-        'template' => '{update} {delete}',
-        'urlCreator' => function ($action, $model, $key, $index) {
-            if ($action === 'update') {
-                $url = '/user/update?username=' . $model["UserName"];
-                return $url;
-            }
-            if ($action === 'delete') {
-                $url = '/user/Deactivate?username=' . $model["UserName"];
-                return $url;
-            }
-        },
-        'buttons' => [
-            'delete' => function ($url, $model, $key) {
-                $url = '/user/deactivate?username=' . $model["UserName"];
-                $options = [
-                    'title' => Yii::t('yii', 'Deactivate'),
-                    'aria-label' => Yii::t('yii', 'Deactivate'),
-                    'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
-                    'data-method' => 'Put',
-                    'data-pjax' => '0',
-                ];
-                return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
-            },
-        ]
-    ],
 ];
+//build action column based on permissions
+if($canDeactivate){
+	$actionColumn  = [
+		'class' => 'kartik\grid\ActionColumn',
+		'template' => '{update} {delete}',
+		'urlCreator' => function ($action, $model, $key, $index) {
+			if ($action === 'update') {
+				$url = '/user/update?username=' . $model["UserName"];
+				return $url;
+			}
+			if ($action === 'delete') {
+				$url = '/user/Deactivate?username=' . $model["UserName"];
+				return $url;
+			}
+		},
+		'buttons' => [
+			'delete' => function ($url, $model, $key) {
+				$url = '/user/deactivate?username=' . $model["UserName"];
+				$options = [
+					'title' => Yii::t('yii', 'Deactivate'),
+					'aria-label' => Yii::t('yii', 'Deactivate'),
+					'data-confirm' => Yii::t('yii', 'Are you sure you want to deactivate this user?'),
+					'data-method' => 'Put',
+					'data-pjax' => '0',
+				];
+				return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url, $options);
+			},
+		]
+	];
+}else{
+	$actionColumn  = [
+		'class' => 'kartik\grid\ActionColumn',
+		'template' => '{update}',
+		'urlCreator' => function ($action, $model, $key, $index) {
+			if ($action === 'update') {
+				$url = '/user/update?username=' . $model["UserName"];
+				return $url;
+			}
+		}
+	];
+}
+//append action column
+$column[] = $actionColumn;
 ?>
 <div class="user-index">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
