@@ -74,7 +74,7 @@ $(function(){
     });
 
     $(document).off('click', '#expenseSearchCleanFilterButton').on('click', '#expenseSearchCleanFilterButton', function (){
-        $('#expenseCardFilter').val("");
+        $('#expenseFilter').val("");
         reloadExpenseGridView(1);
     });
 
