@@ -14,7 +14,7 @@ use app\assets\ExpenseAsset;
 //register assets
 ExpenseAsset::register($this);
 
-$this->title = $projectName.' Week '.$startDate.' - '.$endDate.': '.$userName;;
+$this->title = $projectName.' Week '.$startDate.' - '.$endDate.': '.$userName;
 $column = [
 	[
 		'label' => 'User',
@@ -56,7 +56,7 @@ $column = [
 		'contentOptions' => ['class' => 'text-center'],
 	],
 ];
-if($canApprove){
+if($canApprove || $canDeactivate){
 	$column[] = [
 		'class' => 'kartik\grid\CheckboxColumn',
 		'header' => Html::checkBox('selection_all', false, [
@@ -90,13 +90,17 @@ if($canApprove){
   
     <div class="lightBlueBar">
 		<h3> <?= Html::encode($this->title) ?></h3>
-
 		<?php
 			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 		?>
 			<p>
 				<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 				<?php
+				echo Html::button('Add Expense', [
+					'class' => 'btn btn-primary add_btn',
+					'id' => 'exp_entries_add_btn_id',
+					'disabled' => false
+				]);
 				if($canApprove){
 					echo Html::button('Approve', [
 						'class' => 'btn btn-primary',
@@ -104,10 +108,10 @@ if($canApprove){
 						'id' => 'approve_expense_btn_id',
 					]);
 				}
-				echo Html::button('Add Expense', [
+				echo Html::button('Deactivate', [
 					'class' => 'btn btn-primary add_btn',
-					'id' => 'exp_entries_add_btn_id',
-					'disabled' => false
+					'id' => 'exp_entries_deactivate_btn_id',
+					'disabled' => true
 				]);
 				?>
 			</p>
