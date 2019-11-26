@@ -79,7 +79,6 @@ use kartik\date\DatePicker;
     <?php ActiveForm::end(); ?>
 	
 	<script>
-	
 		$(document).off('change', '#expense-projectid').on('change', '#expense-projectid', function (event) {
 			reloadModalDropdowns();
 			event.preventDefault();
@@ -117,9 +116,11 @@ use kartik\date\DatePicker;
 				type: 'POST',
 				url: form.attr("action"),
 				data: form.serialize(),
-				error : function (){
-					console.log("internal server error");
-				}
+				success: function(response){
+					if(response == 'false'){
+						$('#loading').hide();
+					}
+				},
 			});
 		}
 		
