@@ -3,7 +3,7 @@ $(function(){
 	expenseShowEntriesDeactivate();
 	
 	$(document).off('change', "#ShowExpenseEntriesView input[type=checkbox]").on('change', "#ShowExpenseEntriesView input[type=checkbox]", function (e) {
-        if ($("#allExpenseEntries").yiiGridView('getSelectedRows') != 0 && $('#isAccountant').val() != true) {
+        if ($("#allExpenseEntries").yiiGridView('getSelectedRows') != 0) {
             $('#approve_expense_btn_id').prop('disabled', false);
             $('#exp_entries_deactivate_btn_id').prop('disabled', false);
         } else {
