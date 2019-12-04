@@ -50,6 +50,7 @@ class MileageTaskController extends BaseController
 					'CreatedByUserName' => Yii::$app->session['UserName'],
 					'TotalMiles' => $model->AdminMiles,
 					'MileageType' => 'AdminDriveMeter',
+					'MileageRate' => $model->MileageRate,
 				);
 				
 				$json_data = json_encode($mileage_task_data);
@@ -91,6 +92,7 @@ class MileageTaskController extends BaseController
 			]);
 			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
 			$entries = $getResponseData['entries'];
+			$rates = $getResponseData['rates'];
 			
 			$mileageEntryDataProvider = new ArrayDataProvider([
 				'allModels' => $entries,
@@ -101,6 +103,7 @@ class MileageTaskController extends BaseController
 			$dataArray = [
 				'mileageEntryDataProvider' => $mileageEntryDataProvider,
 				'model' => $model,
+				'rates' => $rates,
 				'readOnly' => $readOnly,
 			];	
 			
@@ -151,6 +154,7 @@ class MileageTaskController extends BaseController
 					'MileageEntryEndDate' => $endDate,
 					'MileageEntryPersonalMiles' => $model->PersonalMiles,
 					'MileageEntryTotalMiles' => $model->AdminMiles,
+					'MileageRate' => $model->MileageRate,
 				];
 				
 				$jsonData = json_encode($mileageEntryUpdateData);

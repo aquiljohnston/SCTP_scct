@@ -8,7 +8,7 @@ use kartik\form\ActiveForm;
 
 $columns = [
 	[
-		'label' => 'Mileage Type',
+		'label' => 'Type',
 		'attribute' => 'MileageType',
 		'headerOptions' => ['class' => 'text-center'],
 		'contentOptions' => ['class' => 'text-center'],
@@ -37,6 +37,11 @@ $columns = [
 	],[
 		'label' => 'Admin Miles',
 		'attribute' => 'AdminMiles',
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
+	],[
+		'label' => 'Rate',
+		'attribute' => 'MileageRate',
 		'headerOptions' => ['class' => 'text-center'],
 		'contentOptions' => ['class' => 'text-center'],
 	],[
@@ -202,6 +207,15 @@ $gridViewSettingsArray['columns'] = $columns;
 						'showLabels' => false
 					])->textInput(['placeholder' => 'Admin Miles', 'type' => 'number', 'readonly' => true]); ?>
 				</div>
+				<?= Html::activeLabel($model, 'MileageRate', [
+					'label'=>'Rate', 
+					'class'=>'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($model, 'MileageRate',[
+						'showLabels'=>false
+					])->dropDownList($rates); ?>
+				</div>
 				<?= Html::activeHiddenInput($model, 'EntryID', ['value' => $model->EntryID]); ?>
 				<?= Html::activeHiddenInput($model, 'CardID', ['value' => $model->CardID]); ?>
 				<?= Html::activeHiddenInput($model, 'Date', ['value' => $model->Date]); ?>
@@ -259,8 +273,8 @@ $gridViewSettingsArray['columns'] = $columns;
 				if(type == 'Odometer'){
 					$("#odometerImgs").css("display", "block");
 					//set img src values
-					photo1 = $(this).find("td[data-col-seq='9']").text();
-					photo2 = $(this).find("td[data-col-seq='10']").text();
+					photo1 = $(this).find("td[data-col-seq='10']").text();
+					photo2 = $(this).find("td[data-col-seq='11']").text();
 					if(photo1 != '') $("#mileageViewModalPhoto1").attr('src', "../images/" + photo1);
 					if(photo2 != '') $("#mileageViewModalPhoto2").attr('src', "../images/" + photo2);
 				} else {
@@ -268,13 +282,13 @@ $gridViewSettingsArray['columns'] = $columns;
 				}
 				
 				//get values
-				entryID = $(this).find("td[data-col-seq='6']").text();
-				startTime = $(this).find("td[data-col-seq='7']").text();
-				endTime = $(this).find("td[data-col-seq='8']").text();
+				entryID = $(this).find("td[data-col-seq='7']").text();
+				startTime = $(this).find("td[data-col-seq='8']").text();
+				endTime = $(this).find("td[data-col-seq='9']").text();
 				startMileage = $(this).find("td[data-col-seq='2']").text();
 				endMileage = $(this).find("td[data-col-seq='3']").text();
-				startComment = $(this).find("td[data-col-seq='11']").text();
-				endComment = $(this).find("td[data-col-seq='12']").text();
+				startComment = $(this).find("td[data-col-seq='12']").text();
+				endComment = $(this).find("td[data-col-seq='13']").text();
 				personalMiles = $(this).find("td[data-col-seq='4']").text();
 				adminMiles = $(this).find("td[data-col-seq='5']").text();
 				//set values
@@ -287,8 +301,10 @@ $gridViewSettingsArray['columns'] = $columns;
 				$('#mileageentrytask-endingmileageentrycomment').val(endComment);
 				$('#mileageentrytask-personalmiles').val(personalMiles);
 				$('#mileageentrytask-adminmiles').val(adminMiles);
+				$('#mileageentrytask-mileagerate').val('');
 				
 				if(!isEdit){
+					//disable fields
 					$('#mileageentrytask-starttime').attr("disabled", true);
 					$('#mileageentrytask-endtime').attr("disabled", true);
 					$('#mileageentrytask-startingmileage').attr("readonly", true);
@@ -297,7 +313,8 @@ $gridViewSettingsArray['columns'] = $columns;
 					$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 					$('#mileageentrytask-personalmiles').attr("readonly", true);
 					$('#mileageentrytask-adminmiles').attr("readonly", true);
-					
+					$('#mileageentrytask-mileagerate').attr("readonly", true);
+					//hide buttons
 					$("#mileageEntryModalFormButtons").css("display", "none");
 				} else {
 					isEdit = false;
@@ -348,13 +365,13 @@ $gridViewSettingsArray['columns'] = $columns;
 			//get selected row
 			row = $("#mileageEntryGridView tbody tr.mileageEntrySelectedRow");
 			//get values
-			entryID = row.find("td[data-col-seq='6']").text();
-			startTime = row.find("td[data-col-seq='7']").text();
-			endTime = row.find("td[data-col-seq='8']").text();
+			entryID = row.find("td[data-col-seq='7']").text();
+			startTime = row.find("td[data-col-seq='8']").text();
+			endTime = row.find("td[data-col-seq='9']").text();
 			startMileage = row.find("td[data-col-seq='2']").text();
 			endMileage = row.find("td[data-col-seq='3']").text();
-			startComment = row.find("td[data-col-seq='11']").text();
-			endComment = row.find("td[data-col-seq='12']").text();
+			startComment = row.find("td[data-col-seq='12']").text();
+			endComment = row.find("td[data-col-seq='13']").text();
 			personalMiles = row.find("td[data-col-seq='4']").text();
 			adminMiles = row.find("td[data-col-seq='5']").text();
 			//set values
@@ -367,6 +384,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').val(endComment);
 			$('#mileageentrytask-personalmiles').val(personalMiles);
 			$('#mileageentrytask-adminmiles').val(adminMiles);
+			$('#mileageentrytask-mileagerate').val('');
 			//disable fields
 			$('#mileageentrytask-starttime').attr("disabled", true);
 			$('#mileageentrytask-endtime').attr("disabled", true);
@@ -376,6 +394,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
 			$('#mileageentrytask-adminmiles').attr("readonly", true);
+			$('#mileageentrytask-mileagerate').attr("readonly", true);
 			//hide buttons
 			$("#mileageEntryModalFormButtons").css("display", "none");
 			//hide form if was create//display form
@@ -392,34 +411,22 @@ $gridViewSettingsArray['columns'] = $columns;
 				//enable potentially disabled fields
 				$('#mileageentrytask-starttime').attr("disabled", false);
 				$('#mileageentrytask-endtime').attr("disabled", false);
+				//get form data
+				var form = $('#MileageEntryModalForm');
+				$('#loading').show();
+				var urlString = '/mileage-task/update';
 				//check isCreate to determine route
-				if(isCreate){
-					//get form data
-					var form = $('#MileageEntryModalForm');
-					$('#loading').show();
-					//post form data
-					$.ajax({
-						type: 'POST',
-						url: '/mileage-task/add-mileage-entry-task',
-						data: form.serialize(),
-						success: function (response) {
-							reloadMileageGridViews();
-						}
-					});	
-				}else{
-					//get form data
-					var form = $('#MileageEntryModalForm');
-					$('#loading').show();
-					//post form data
-					$.ajax({
-						type: 'POST',
-						url: '/mileage-task/update',
-						data: form.serialize(),
-						success: function (response) {
-							reloadMileageGridViews();
-						}
-					});	
-				}
+				if(isCreate) 
+					urlString = '/mileage-task/add-mileage-entry-task';
+				//post form data
+				$.ajax({
+					type: 'POST',
+					url: urlString,
+					data: form.serialize(),
+					success: function (response) {
+						reloadMileageGridViews();
+					}
+				});	
 			}else{
 				$('#update_mileage_entry_submit_btn').prop('disabled', true);
 			}			
@@ -558,6 +565,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').val('');
 			$('#mileageentrytask-personalmiles').val('0.0');
 			$('#mileageentrytask-adminmiles').val('');
+			$('#mileageentrytask-mileagerate').val('');
 			//enable/disable fields
 			$('#mileageentrytask-starttime').attr("disabled", true);
 			$('#mileageentrytask-endtime').attr("disabled", true);
@@ -567,6 +575,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
 			$('#mileageentrytask-adminmiles').attr("readonly", false);
+			$('#mileageentrytask-mileagerate').attr("readonly", false);
 			//display form buttons
 			$("#mileageEntryModalFormButtons").css("display", "block");
 		}
@@ -584,6 +593,7 @@ $gridViewSettingsArray['columns'] = $columns;
 				$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", false);
 				$('#mileageentrytask-adminmiles').attr("readonly", true);
+				$('#mileageentrytask-mileagerate').attr("readonly", false);
 			}else{
 				$('#mileageentrytask-starttime').attr("disabled", true);
 				$('#mileageentrytask-endtime').attr("disabled", true);
@@ -593,6 +603,7 @@ $gridViewSettingsArray['columns'] = $columns;
 				$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
 				$('#mileageentrytask-adminmiles').attr("readonly", false);
+				$('#mileageentrytask-mileagerate').attr("readonly", false);
 			}
 			$("#mileageEntryModalFormButtons").css("display", "block");
 			

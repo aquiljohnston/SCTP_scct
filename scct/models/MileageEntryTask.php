@@ -31,6 +31,7 @@ class MileageEntryTask extends \yii\base\model
 	public $EndingMileageEntryComment;
 	public $PersonalMiles;
 	public $AdminMiles;
+	public $MileageRate;
 
     /**
      * @inheritdoc
@@ -40,7 +41,7 @@ class MileageEntryTask extends \yii\base\model
         return [
 			[['EntryID', 'StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles','StartTime', 'EndTime', 'CardID', 'Date'], 'required'],
 			[['EntryID', 'CardID'], 'integer'],
-            [['StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles'], 'number'],
+            [['StartingMileage', 'EndingMileage', 'PersonalMiles', 'AdminMiles', 'MileageRate'], 'number'],
 			[['StartingMileageEntryComment', 'EndingMileageEntryComment'], 'string', 'max'=>500],
             [['StartTime', 'EndTime', 'Date'], 'string', 'max'=>32],
         ];
@@ -63,6 +64,7 @@ class MileageEntryTask extends \yii\base\model
 			'EndingMileageEntryComment' => 'Ending Mileage Entry Comment',
 			'PersonalMiles' => 'Personal Miles',
 			'AdminMiles' => 'Admin Miles',
+			'MileageRate' => 'Mileage Rate',
         ];
     }
 }
