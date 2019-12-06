@@ -17,7 +17,7 @@ $(function(){
 		if(jqWeekSelection.length > 0)
 		{
 			//set to and from values for date picker based on current date range
-			refreshDatePicker();	
+			refreshDatePicker();
 		}
 	});
 	
@@ -90,6 +90,12 @@ $(function(){
             $('#pm_time_card_reset').prop('disabled', true);
         }
     });  
+	
+	//add filter to extra data of expand row ajax request
+	$(document).off('kvexprow:beforeLoad', '#timeCardGV').on('kvexprow:beforeLoad', '#timeCardGV', function (event, ind, key, extra) {
+		//add filter data to keys
+		key.Filter = $('#timeCardFilter').val();
+	});
 });
 
 function timeCardApproveMultiple() {	
