@@ -296,8 +296,7 @@ class TimeCardController extends BaseCardController
 	 *@throws \yii\web\HttpException
 	 *@returns mixed
 	 */
-	public function actionViewAccountantDetail()
-	{
+	public function actionViewAccountantDetail(){
 		try{
 			// Verify logged in
 			if (Yii::$app->user->isGuest) {
@@ -305,28 +304,27 @@ class TimeCardController extends BaseCardController
 			}
 
 			// get the key to generate section table
-			if (isset($_POST['expandRowKey']))
-			{
+			if (isset($_POST['expandRowKey'])){
 				$projectID = $_POST['expandRowKey']['ProjectID'];
 				$startDate = $_POST['expandRowKey']['StartDate'];
 				$endDate = $_POST['expandRowKey']['EndDate'];
+				if(array_key_exists('Filter', $_POST['expandRowKey']))
+					$filter = $_POST['expandRowKey']['Filter'];
 			}else{
 				$projectID = '';
 				$startDate = '';
 				$endDate = '';
+				$filter = '';
 			}
 			
 			$queryParams = [
 				'projectID' => $projectID,
 				'startDate' => $startDate,
 				'endDate' => $endDate,
+				'filter' => $filter,
 			];
 
-			$getUrl = 'time-card%2Fget-accountant-details&' . http_build_query([
-				'projectID' => $projectID,
-				'startDate' => $startDate,
-				'endDate' => $endDate,
-			]);
+			$getUrl = 'time-card%2Fget-accountant-details&' . http_build_query($queryParams);
 			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
 			$detailsData = $getResponseData['details'];
 
