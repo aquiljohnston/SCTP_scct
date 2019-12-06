@@ -89,6 +89,12 @@ $(function(){
             $('#pm_mileage_card_reset').prop('disabled', true);
         }
     });
+	    
+    //add filter to extra data of expand row ajax request
+    $(document).off('kvexprow:beforeLoad', '#mileageCardGV').on('kvexprow:beforeLoad', '#mileageCardGV', function (event, ind, key, extra) {
+        //add filter data to keys
+        key.Filter = $('#mileageCardFilter').val();
+    });
 });
 
 function mileageCardApproveMultiple() {	
