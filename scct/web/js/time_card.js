@@ -95,6 +95,7 @@ $(function(){
 	$(document).off('kvexprow:beforeLoad', '#timeCardGV').on('kvexprow:beforeLoad', '#timeCardGV', function (event, ind, key, extra) {
 		//add filter data to keys
 		key.Filter = $('#timeCardFilter').val();
+		key.EmployeeID = $('#timeCardEmployeeFilterDD').val();
 	});
 });
 

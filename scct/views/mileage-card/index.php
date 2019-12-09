@@ -266,14 +266,12 @@ if($isAccountant)
 					<?php }else{
 						echo "<input type='hidden' value=$model->projectID id='mileageProjectFilterDD'>";
 					} ?>
-					<?php if(!$isAccountant){ ?>
-						<div class="col-md-2 mileageEmployeeFilterDD">
-							<?=
-								$form->field($model, 'employeeID', ['labelSpan' => 3])->dropDownList($employeeDropDown,
-								['value' => $model->employeeID, 'id'=>'mileageEmployeeFilterDD'])->label('Employee'); 
-							?>
-						</div>
-					<?php } ?>
+					<div class="col-md-2 mileageEmployeeFilterDD">
+						<?=
+							$form->field($model, 'employeeID', ['labelSpan' => 3])->dropDownList($employeeDropDown,
+							['value' => $model->employeeID, 'id'=>'mileageEmployeeFilterDD'])->label('Employee'); 
+						?>
+					</div>
 					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardClearDropdownFilterButton']) ?>
 				<?php Pjax::end() ?>
 				<?php if($model->dateRangeValue == 'other'){ ?>
