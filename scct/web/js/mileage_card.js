@@ -94,6 +94,7 @@ $(function(){
     $(document).off('kvexprow:beforeLoad', '#mileageCardGV').on('kvexprow:beforeLoad', '#mileageCardGV', function (event, ind, key, extra) {
         //add filter data to keys
         key.Filter = $('#mileageCardFilter').val();
+		key.EmployeeID = $('#mileageEmployeeFilterDD').val();
     });
 });
 

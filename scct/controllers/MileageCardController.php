@@ -190,7 +190,7 @@ class MileageCardController extends BaseCardController
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
-			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
+			$employeeDropDown = $response['employeeDropDown'];
 
 			//get submit button status
 			$isSubmitReady = self::getSubmitButtonStatus($model->projectID, $projectDropDown, $startDate, $endDate, $isAccountant);
@@ -305,12 +305,15 @@ class MileageCardController extends BaseCardController
 			// get the key to generate section table
 			if (isset($_POST['expandRowKey'])){
 				$projectID = $_POST['expandRowKey']['ProjectID'];
+				if(array_key_exists('EmployeeID', $_POST['expandRowKey']))
+					$employeeID = $_POST['expandRowKey']['EmployeeID'];
 				$startDate = $_POST['expandRowKey']['StartDate'];
 				$endDate = $_POST['expandRowKey']['EndDate'];
 				if(array_key_exists('Filter', $_POST['expandRowKey']))
                     $filter = $_POST['expandRowKey']['Filter'];
 			}else{
 				$projectID = '';
+				$employeeID = '';
 				$startDate = '';
 				$endDate = '';
 				$filter = '';
@@ -318,6 +321,7 @@ class MileageCardController extends BaseCardController
 			
 			$queryParams = [
 				'projectID' => $projectID,
+				'employeeID' => $employeeID,
 				'startDate' => $startDate,
 				'endDate' => $endDate,
 				'filter' => $filter,
