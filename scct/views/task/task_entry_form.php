@@ -253,6 +253,14 @@ $columns = [
 			//convert times to 24
 			var StartTime = $('#dynamicmodel-starttime').val();
 			var EndTime = $('#dynamicmodel-endtime').val();
+			var timeReason = $('#dynamicmodel-timereason').val();
+			var comments = $('#dynamicmodel-comments').val();
+			
+			if(timeReason == '')
+				return false;
+			if(comments.length > 225)
+				return false;
+			return true;
 
             if (date !="" && StartTime != "" &&
                 EndTime != "" && TaskName != "" && 
@@ -267,8 +275,7 @@ $columns = [
                 return true;
             } else {
                 return false; 
-            }
-                
+            }    
         }
         
 		
