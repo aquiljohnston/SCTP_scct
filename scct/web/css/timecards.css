@@ -189,3 +189,13 @@ div[id^=modalContent] #loading {
 	max-height: 20vh;
 	overflow-y: auto;
 }
+
+/*time card time reason form*/
+#TimeReasonModalForm{
+	margin-left:2%;
+}
+#timeReasonModalFormButtons{
+	float: right; 
+	margin-top: -4.5%; 
+	margin-right: 1.5%;
+}

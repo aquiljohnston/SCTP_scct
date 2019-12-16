@@ -139,5 +139,15 @@ TimeCardAsset::register($this);
 		Modal::end();
     Pjax::end();
     ?>
-
+	<?php
+    Pjax::begin(['id' => 'timeReason', 'timeout' => false]);
+		Modal::begin([
+			'header' => '<h4>DEACTIVATE REASON</h4>',
+			'id' => 'timeReasonModal',
+			//no size defaults to medium
+		]);
+		echo "<div id='modalTimeReason'><span id='timeReasonModalContentSpan'></span></div>";
+		Modal::end();
+	Pjax::end();
+    ?>
 </div>
