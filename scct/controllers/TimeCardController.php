@@ -478,7 +478,7 @@ class TimeCardController extends BaseCardController
 			
 			// post url
 			$putUrl = 'time-entry%2Fdeactivate-by-task';
-			$putResponse = Parent::executePutRequest($putUrl, $jsonData,Constants::API_VERSION_3); // indirect rbac
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData, Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);

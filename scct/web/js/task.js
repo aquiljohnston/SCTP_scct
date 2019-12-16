@@ -53,7 +53,7 @@ function applyTimeEntryListeners() {
 		if($('#isSubmitted').val()){
 			resetSubmissionStatusDialog('deactivateRowSelection');
 		}else{
-			deactivateRowSelection();
+			deactivateTimeReason('deactivateRowSelection');
 		}
 	});
 	
@@ -64,10 +64,15 @@ function applyTimeEntryListeners() {
 		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")
 			&& (!$("#approve_timeCard_btn_id").prop("disabled") || $('#isAccountant').val()))
 		{
+			//get data for deactivate
+			var seq_num = $(this).attr('data-col-seq');
+			var taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
+			var dataObj = {seq_num: seq_num, taskName: taskName};
+			var dataString = JSON.stringify(dataObj);
 			if($('#isSubmitted').val()){
-				resetSubmissionStatusDialog('deactivateCellSelection', this);
+				resetSubmissionStatusDialog('deactivateCellSelection', dataString);
 			}else{
-				deactivateCellSelection(this);
+				deactivateTimeReason('deactivateCellSelection', dataString);
 			}
 		}
 	});
@@ -108,10 +113,11 @@ function validateTaskCheckEnabled() {
     });
 }
 
-function deactivateCellSelection(cell){
+function deactivateCellSelection(timeReason, dataString){
 	id = $('#timeCardId').val();
-	seq_num = $(cell).attr('data-col-seq');
-	taskName = $(cell).closest('tr').find("td[data-col-seq='0']").text();
+	cellData = JSON.parse(dataString);
+	seq_num = cellData.seq_num;
+	taskName = cellData.taskName;
 	date = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
 	var entries = [];
 	//clean up date format for sending
@@ -120,9 +126,10 @@ function deactivateCellSelection(cell){
 	krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
 	krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
 		if (resp) {
+			$('#timeReasonModal').modal('hide');
 			$('#loading').show();
 			//build and send payload to deactivate single entry
-			entries.push({taskName : [taskName], day : date, timeCardID : id});
+			entries.push({taskName : [taskName], day : date, timeCardID : id, timeReason : timeReason});
 			data = {entries};
 			$.ajax({
 				type: 'POST',
@@ -141,7 +148,7 @@ function deactivateCellSelection(cell){
 	$('#loading').hide();
 }
 
-function deactivateRowSelection(){
+function deactivateRowSelection(timeReason){
 	var name = "";
 	var tasks = [];
 	var entries = [];
@@ -154,13 +161,14 @@ function deactivateRowSelection(){
 			tasks.push(name);
 		}
 	});
-	entries.push({taskName : tasks, timeCardID : timeCardID});
+	entries.push({taskName : tasks, timeCardID : timeCardID, timeReason : timeReason});
 	tasks.join(', ');
 	data = {entries};
 
 	krajeeDialog.defaults.confirm.title = 'Deactivate All Task';
 	krajeeDialog.confirm('Are you sure you want to deactivate all ' +tasks+ '? Please confirm...', function (resp) {
 		if (resp) {
+			$('#timeReasonModal').modal('hide');
 			$('#loading').show();
 			$.ajax({
 				type: 'POST',
@@ -199,7 +207,7 @@ function addTaskEntry(){
 	})
 }
 
-function resetSubmissionStatusDialog(action, cell){
+function resetSubmissionStatusDialog(action, dataString){
 	krajeeDialog.defaults.confirm.title = 'RESET SUBMISSION STATUS!';
 	krajeeDialog.confirm("The card you're attempting to edit has already been submitted. " +
 		"Continuing with this action will reset all cards for the week and require you to resubmit. " + 
@@ -220,10 +228,10 @@ function resetSubmissionStatusDialog(action, cell){
 						$('#loading').hide();
 						//execute next action based on trigger
 						//handle potentially passing selected cell from grid view click
-						if(cell){
-							window[action](cell);
+						if(dataString){
+							deactivateTimeReason(action, dataString);
 						}else{
-							window[action]();
+							deactivateTimeReason(action);
 						}
 					}
 				}
@@ -231,4 +239,21 @@ function resetSubmissionStatusDialog(action, cell){
 			
 		}
 	});
+}
+
+//pass deactivate action and data to universial time reason modal
+function deactivateTimeReason(action, data = null){
+	$('#timeReasonModal').modal('show').find('#timeReasonModalContentSpan').html("Loading...");
+	//build data object
+	data = {Action: action, Data: data};
+	//Fetch modal content via pjax
+	$.pjax.reload({
+		type: 'POST',
+		replace:false,
+		push:false,
+		url: '/task/deactivate-time-reason',
+		data: data,
+		container: '#timeReasonModalContentSpan', // id to update content
+		timeout: 99999
+	})
 }

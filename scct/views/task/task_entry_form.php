@@ -121,7 +121,7 @@ $columns = [
                     'TaskName', [
                     'showLabels' => false
                 ])->dropDownList($allTask,
-                      array('prompt'=>'--Select A Task--')
+                      array('prompt'=>'--Select a Task--')
     ); ?>
             </div>
         </div>
@@ -150,8 +150,16 @@ $columns = [
                 ]); ?>
             </div>
         </div>
-
         <div class="row">
+			<?= Html::activeLabel($model, 'TimeReason', [
+                'label' => 'Reason',
+                'class' => 'col-sm-2 control-label'
+            ]) ?>
+            <div class="col-sm-4">
+                <?= $form->field($model, 'TimeReason', [
+                    'showLabels' => false
+                ])->dropDownList($timeReasonDropdown); ?>
+            </div>
             <?= Html::activeLabel($model, 'ChargeOfAccountType', [
                 'label' => 'Account Type',
                 'class' => 'col-sm-2 control-label'
@@ -160,8 +168,19 @@ $columns = [
                 <?= $form->field($model, 'ChargeOfAccountType', [
                     'showLabels' => false
                 ])->dropDownList($chartOfAccountType,
-                     array('prompt'=>'--Select an Account Type--')); ?>
+                    array('prompt'=>'--Select an Account Type--')); ?>
             </div>
+        </div>
+		<div class="row" id='timeReasonCommentRow' style='display: none'>
+            <?= Html::activeLabel($model, 'Comments', [
+				'label' => 'Comments',
+				'class' => 'col-sm-2 control-label',
+			]) ?>
+			<div class="col-sm-6">
+				<?= $form->field($model, 'Comments', [
+					'showLabels' => false
+				])->textarea(['placeholder' => 'Comments']); ?>
+			</div>
         </div>
         <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $model->TimeCardID]); ?>
 		<?= Html::activeHiddenInput($model, 'WeekStart', ['value' => $model->WeekStart]); ?>
@@ -209,11 +228,22 @@ $columns = [
 			reloadHoursOverview();
         });
 		
+		$(document).off('change', '#TaskEntryForm #dynamicmodel-timereason').on('change', '#TaskEntryForm #dynamicmodel-timereason', function (){
+			var timeReason = $('#dynamicmodel-timereason').val();
+			//hide/show dynamicmodel-comments based on time reason selection
+			if(timeReason == 'Other'){
+				$('#timeReasonCommentRow').css("display", "block");
+			}else{
+				$('#timeReasonCommentRow').css("display", "none");
+				$('#dynamicmodel-comments').val('');
+			}
+        });
+		
 		//deactivate entry
 		$(document).off('click', '#taskModalDeactivateAction').on('click', '#taskModalDeactivateAction',function (){
 			//get entry id
 			var entryID = $(this).closest('tr').attr('data-key');
-			deactivateEntry(entryID);
+			deactivateTimeReason('deactivateEntry', entryID);
 		});
 
         function InputFieldValidator() {
@@ -315,15 +345,19 @@ $columns = [
 			});
 		}
 		
-		function deactivateEntry(entryID){
+		function deactivateEntry(timeReason, entryID){
 			krajeeDialog.defaults.confirm.title = 'Deactivate';
 			krajeeDialog.confirm('Are you sure you want to deactivate this entry?', function (resp) {
-				if(resp){
+				if(resp){	
+					$('#timeReasonModal').modal('hide');
 					$('#loading').show();
+					data = {entryID: entryID, timeReason : timeReason};
+					entry = {data: data};
 					//post form data
 					$.ajax({
 						type: 'POST',
-						url: '/task/deactivate?entryID='+entryID,
+						data: entry,
+						url: '/task/deactivate',
 						success: function (response) {
 							reloadTimeTaskGridViews();
 						}

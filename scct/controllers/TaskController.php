@@ -52,6 +52,8 @@ class TaskController extends BaseController
 				'StartTime',
 				'EndTime',
 				'ChargeOfAccountType',
+				'TimeReason',
+				'Comments',
 				'WeekStart',
 				'WeekEnd'
 			]);
@@ -61,6 +63,8 @@ class TaskController extends BaseController
 			$model-> addRule('StartTime', 'string', ['max' => 100], 'required');
 			$model-> addRule('EndTime', 'string', ['max' => 100], 'required');
 			$model-> addRule('ChargeOfAccountType', 'string', ['max' => 100], 'required');
+			$model-> addRule('TimeReason', 'string', ['max' => 100], 'required');
+			$model-> addRule('Comments', 'string', ['max' => 225], 'required');
 			$model-> addRule('WeekStart', 'string', ['max' => 32], 'required');
 			$model-> addRule('WeekEnd', 'string', ['max' => 32], 'required');
 			
@@ -82,6 +86,7 @@ class TaskController extends BaseController
 					'EndTime' => $endTime24,
 					'CreatedByUserName' => Yii::$app->session['UserName'],
 					'ChargeOfAccountType' => $model->ChargeOfAccountType,
+					'TimeReason' => ($model->Comments == null) ? $model->TimeReason : $model->TimeReason . ' - ' . $model->Comments,
 				);
 				
 				$testDate = date( "Y-m-d", strtotime(str_replace('-', '/',$model->Date)));
@@ -134,10 +139,19 @@ class TaskController extends BaseController
 				$getAllChartOfAccountTypeResponse = Parent::executeGetRequest($getAllChartOfAccountTypeUrl, Constants::API_VERSION_3);
 				$chartOfAccountType = json_decode($getAllChartOfAccountTypeResponse, true);
 				
+				//get edit reasons
+				$timeReasonData = Yii::$app->session['webDropDowns']['TimeReason'];
+				//format reasons for dropdown
+				$timeReasonDropdown = [];
+				foreach($timeReasonData as $r){
+					$timeReasonDropdown[$r['FieldValue']] = $r['FieldDisplay'];
+				}
+				
 				$dataArray = [
 					'model' => $model,
 					'allTask' => $allTask,
 					'chartOfAccountType' => $chartOfAccountType,
+					'timeReasonDropdown' => $timeReasonDropdown,
 					'SundayDate' => $SundayDate,
 					'SaturdayDate' => $SaturdayDate,
 					'hoursOverviewDataProvider' => $hoursOverviewDataProvider,
@@ -161,17 +175,82 @@ class TaskController extends BaseController
     }
 
 	/**
+     * Open modal to set reason for deactivate
+     * Form submission will pass data to deactivate function
+     * @param $action
+     * @param null $data
+     * @return string
+     * @throws \yii\web\HttpException
+     */
+    public function actionDeactivateTimeReason()
+    {
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest) {
+				return $this->redirect(['/login']);
+			}
+
+			$model = new \yii\base\DynamicModel([
+				'DeactivateAction',
+				'DeactivateData',
+				'DeactivateTimeReason',
+				'DeactivateComments',
+			]);
+			$model->addRule('DeactivateAction', 'string', ['max' => 50], 'required');
+			$model->addRule('DeactivateData', 'string', ['max' => 200]);
+			$model->addRule('DeactivateTimeReason', 'string', ['max' => 100], 'required');
+			$model->addRule('DeactivateComments', 'string', ['max' => 225]);
+			if ($data = Yii::$app->request->post()){
+				//set default hidden form values
+				$model->DeactivateAction = $data['Action'];
+				$model->DeactivateData = $data['Data'];
+				
+				//get edit reasons
+				$timeReasonData = Yii::$app->session['webDropDowns']['TimeReason'];
+				//format reasons for dropdown
+				$timeReasonDropdown = [];
+				foreach($timeReasonData as $r){
+					$timeReasonDropdown[$r['FieldValue']] = $r['FieldDisplay'];
+				}
+				
+				$dataArray = [
+					'model' => $model,
+					'timeReasonDropdown' => $timeReasonDropdown,
+				];
+				
+				if (Yii::$app->request->isAjax) {
+					return $this->renderAjax('deactivate_time_reason', $dataArray);
+				} else {
+					return $this->render('deactivate_time_reason', $dataArray);
+				}
+			}else{
+				yii::trace($model->errors);
+				throw new \yii\web\HttpException(400);
+			}
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
+
+	/**
 	* deactivate time entry by id
 	* Pjax reload show entries table and modal table.
 	*/
-    public function actionDeactivate($entryID)
+    public function actionDeactivate()
     {
         try {
+			$data = Yii::$app->request->post();	
+			$jsonData = json_encode($data);
+			
 			//put url
-			$putUrl = 'time-entry%2Fdeactivate&' . http_build_query([
-				'entryID' => $entryID,
-			]);
-			$putResponse = Parent::executePutRequest($putUrl, '',Constants::API_VERSION_3); // indirect rbac
+			$putUrl = 'time-entry%2Fdeactivate';
+			$putResponse = Parent::executePutRequest($putUrl, $jsonData, Constants::API_VERSION_3); // indirect rbac
 			$obj = json_decode($putResponse, true);	
         } catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
