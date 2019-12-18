@@ -372,6 +372,7 @@ class ExpenseController extends BaseCardController {
 				'key' => function ($entries) {
 					return array(
 						'ID' => $entries['ID'],
+						'IsApproved' => $entries['IsApproved'],
 					);
 				}
 			]);
@@ -424,17 +425,15 @@ class ExpenseController extends BaseCardController {
 	public function actionApproveMultiple(){
 		try{
 			if (Yii::$app->request->isAjax) {
-				$data = Yii::$app->request->post();					
-				// loop the data array to get all id's.	
-				foreach ($data as $key) {
-					foreach($key as $keyitem){
-					   $expenseArray[] = $keyitem;
-					}
+				$data = Yii::$app->request->post();	
+
+				//loop the data array to get all id's.	
+				foreach($data['entries'] as $entry){
+					if($entry['IsApproved'] == 0)
+						$expenseArray[] = $entry['ID'];
 				}
 				
-				$data = array(
-						'expenseArray' => $expenseArray,
-					);		
+				$data = array('expenseArray' => $expenseArray);
 				$json_data = json_encode($data);
 				
 				//post url
@@ -466,17 +465,13 @@ class ExpenseController extends BaseCardController {
 	public function actionDeactivate(){
 		try{
 			if (Yii::$app->request->isAjax) {
-				$data = Yii::$app->request->post();					
-				// loop the data array to get all id's.	
-				foreach ($data as $key) {
-					foreach($key as $keyitem){
-					   $expenseArray[] = $keyitem;
-					}
+				$data = Yii::$app->request->post();
+				//loop the data array to get all id's.	
+				foreach($data['entries'] as $entry){
+					$expenseArray[] = $entry['ID'];
 				}
 				
-				$data = array(
-						'expenseArray' => $expenseArray,
-					);		
+				$data = array('expenseArray' => $expenseArray);		
 				$json_data = json_encode($data);
 				
 				//post url
@@ -484,7 +479,7 @@ class ExpenseController extends BaseCardController {
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
 				//Handle API response if we want to do more robust error handling
 			} else {
-			  throw new \yii\web\BadRequestHttpException;
+				throw new \yii\web\BadRequestHttpException;
 			}
 		} catch (UnauthorizedHttpException $e){
 			Yii::$app->response->redirect(['login/index']);

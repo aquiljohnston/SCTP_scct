@@ -3,8 +3,19 @@ $(function(){
 	expenseShowEntriesDeactivate();
 	
 	$(document).off('change', "#ShowExpenseEntriesView input[type=checkbox]").on('change', "#ShowExpenseEntriesView input[type=checkbox]", function (e) {
-        if ($("#allExpenseEntries").yiiGridView('getSelectedRows') != 0) {
-            $('#approve_expense_btn_id').prop('disabled', false);
+		var rows = $('#allExpenseEntries').yiiGridView('getSelectedRows');
+		//check if any rows can be approved
+		var canApprove = false;
+		rows.forEach(function(row){
+			if(row.IsApproved == 0)
+				canApprove = true;
+		});
+        if (rows != 0) {
+			if(canApprove){
+				$('#approve_expense_btn_id').prop('disabled', false);
+			}else{
+				$('#approve_expense_btn_id').prop('disabled', true);
+			}
             $('#exp_entries_deactivate_btn_id').prop('disabled', false);
         } else {
             $('#approve_expense_btn_id').prop('disabled', true);
@@ -18,7 +29,7 @@ $(function(){
     });
 });
 
-function expenseShowEntriesApproveMultiple() {	
+function expenseShowEntriesApproveMultiple() {
 	$('#approve_expense_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#allExpenseEntries').yiiGridView('getSelectedRows');
         var quantifier = "";
@@ -37,9 +48,7 @@ function expenseShowEntriesApproveMultiple() {
             $.ajax({
                 type: 'POST',
                 url: '/expense/approve-multiple',
-                data: {
-                    id: primaryKeys
-                },
+                data: {entries: primaryKeys},
 				success: function(data){
 					reloadExpenseEntriesGridView();
 				}
@@ -71,9 +80,7 @@ function expenseShowEntriesDeactivate() {
             $.ajax({
                 type: 'POST',
                 url: '/expense/deactivate',
-                data: {
-                    id: primaryKeys
-                },
+                data: {entries: primaryKeys},
 				success: function(data){
 					reloadExpenseEntriesGridView();
 				}
