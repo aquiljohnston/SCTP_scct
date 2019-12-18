@@ -15,6 +15,8 @@ use app\assets\ExpenseAsset;
 ExpenseAsset::register($this);
 
 $this->title = $projectName.' Week '.$startDate.' - '.$endDate.': '.$userName;
+$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
 $column = [
 	[
 		'label' => 'User',
@@ -57,15 +59,19 @@ $column = [
 	],
 ];
 if($canApprove || $canDeactivate){
+	$selectAllDisabled = ($isSubmitted || ($isApproved && !($isAccountant || $isProjectManager))) ? true : false;	
 	$column[] = [
 		'class' => 'kartik\grid\CheckboxColumn',
 		'header' => Html::checkBox('selection_all', false, [
 			'class' => 'select-on-check-all',
-			'disabled' => ($isApproved)  ? true : false,
+			'disabled' => $selectAllDisabled,
 		]),
 		'checkboxOptions' => function ($model, $key, $index, $column){
+			//refetch role variables in scope
+			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
 			// Disable if already approved
-			$disabledBoolean = $model['IsApproved'] == 1;
+			$disabledBoolean = ($model['IsSubmitted'] == 1 || ($model['IsApproved'] == 1 && !($isAccountant || $isProjectManager))) ? true : false;
 			$result = [
 				'expenseid' => $model['ID'],
 				'approved' => $model['IsApproved']
@@ -90,9 +96,6 @@ if($canApprove || $canDeactivate){
   
     <div class="lightBlueBar">
 		<h3> <?= Html::encode($this->title) ?></h3>
-		<?php
-			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
-		?>
 			<p>
 				<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 				<?php
