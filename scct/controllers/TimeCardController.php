@@ -378,8 +378,7 @@ class TimeCardController extends BaseCardController
 			define('TO_DATE_FIRST_INDEX',1);
 
 			//guest redirect
-			if (Yii::$app->user->isGuest)
-			{
+			if (Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
 			
@@ -393,9 +392,6 @@ class TimeCardController extends BaseCardController
 			$resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
 			$cardData = json_decode($resp, true);
 
-			//send entries to function to calculate if given card is in overtime
-			$inOvertime = self::calcInOvertime($cardData['show-entries']);
-			
 			//populate required values if not received from function call
 			$timeCardProjectID = $timeCardProjectID != null ? $timeCardProjectID : $cardData['card']['TimeCardProjectID'];
 			$projectName = $projectName != null ? $projectName : $cardData['card']['ProjectName'];
@@ -418,6 +414,20 @@ class TimeCardController extends BaseCardController
 
 			//check if user can approve cards
 			$canApprove = self::can('timeCardApproveCards');
+
+			$bools = [];
+
+			//send entries to function to calculate if given card is in overtime
+			$bools['inOvertime'] = self::calcInOvertime($cardData['show-entries']);
+			
+			//get card status
+			$bools['isApproved'] = $cardData['card']['TimeCardApprovedFlag'] == 1;
+			$bools['isPMApproved'] = $cardData['card']['TimeCardPMApprovedFlag'] == 1;
+			$bools['isSubmitted'] = $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes';
+			
+			//check role
+			$bools['isProjectManager'] = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+			$bools['isAccountant'] = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -447,10 +457,9 @@ class TimeCardController extends BaseCardController
 				'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
 				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'timeCardProjectID' => $timeCardProjectID,
-				'isSubmitted' => $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes',
-				'inOvertime' => $inOvertime,
-				'canApprove' => $canApprove
-
+				'timeCardID' => $id,
+				'canApprove' => $canApprove,
+				'bools' => $bools
 			]);
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
