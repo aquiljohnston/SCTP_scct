@@ -28,22 +28,13 @@ TimeCardAsset::register($this);
   
     <div class="lightBlueBar">
 		<h3> <?= $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName; ?></h3>
-
-		<?php
-		$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
-		if ($model['TimeCardApprovedFlag'] == 1) {
-			$approve_status = true;
-		} else {
-			$approve_status = false;
-		}
-		?>
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
 			if($canApprove){
 				echo Html::button('Approve', [
 					'class' => 'btn btn-primary',
-					'disabled' => $approve_status || $isAccountant,
+					'disabled' => $bools['isApproved'] || $bools['isAccountant'],
 					'id' => 'approve_timeCard_btn_id',
 				]);
 			}
@@ -55,7 +46,7 @@ TimeCardAsset::register($this);
 			]) ?>
 			<?= Html::button('Add Task', [
 				'class' => 'btn btn-primary add_task_btn',
-				'disabled' => $approve_status && !$isAccountant,
+				'disabled' => (($bools['isPMApproved'] || ($bools['isApproved'] && !$bools['isProjectManager'])) && !$bools['isAccountant']),
 				'id' => 'add_task_btn_id',
 			]) ?>
 		</p>
@@ -68,7 +59,7 @@ TimeCardAsset::register($this);
 			'export' => false,
 			'pjax' => true,
 			'summary' => '',
-			'caption' => "",
+			'caption' => '',
 			'columns' => [
 				[
 					'label' => 'Task',
@@ -110,12 +101,17 @@ TimeCardAsset::register($this);
 					'headerOptions' => ['class'=>$SaturdayDateFull],
 				],
 				[
-					'header'            => 'Deactivate All Task',
-					'class'             => 'kartik\grid\CheckboxColumn',
-					'contentOptions'    => [],
-					'checkboxOptions'   => function ($model) {
-						return ['timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),
-							'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
+					'header' => 'Deactivate All Task',
+					'class' => 'kartik\grid\CheckboxColumn',
+					'contentOptions' => [],
+					'checkboxOptions' => function ($model, $key, $index, $column) {
+						$result = [
+							'timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),
+							'taskName' => $model['Task'],
+							'entry' => '',
+							'class'=> 'entryData'
+						];
+						return $result;
 					}
 				]
 			]
@@ -123,10 +119,13 @@ TimeCardAsset::register($this);
 		?>
 		<?= Html::label('Total Time: '. $model['SumHours'],
 			null, ['id' => 'task_sum_hours']) ?>
-		<input type="hidden" value=<?php echo $model["TimeCardID"]?> name="timeCardId" id="timeCardId">
-		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
-		<input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">
-		<input type="hidden" value=<?php echo $inOvertime ?> id="inOvertime">
+		<input type="hidden" value=<?php echo $model['TimeCardID'] ?> name="timeCardId" id="timeCardId">
+		<input type="hidden" value=<?php echo $bools['isProjectManager'] ?> id="isProjectManager">
+		<input type="hidden" value=<?php echo $bools['isAccountant'] ?> id="isAccountant">
+		<input type="hidden" value=<?php echo $bools['isApproved'] ?> id="isApproved">
+		<input type="hidden" value=<?php echo $bools['isPMApproved'] ?> id="isPMApproved">
+		<input type="hidden" value=<?php echo $bools['isSubmitted'] ?> id="isSubmitted">
+		<input type="hidden" value=<?php echo $bools['inOvertime'] ?> id="inOvertime">
     <?php Pjax::end() ?>
     <?php
     Pjax::begin(['id' => 'showTime', 'timeout' => false]);

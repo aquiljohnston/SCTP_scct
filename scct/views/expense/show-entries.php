@@ -59,7 +59,7 @@ $column = [
 	],
 ];
 if($canApprove || $canDeactivate){
-	$selectAllDisabled = ($isSubmitted || ($isApproved && !($isAccountant || $isProjectManager))) ? true : false;	
+	$selectAllDisabled = ($isSubmitted || ($isApproved && !($isAccountant || $isProjectManager)));	
 	$column[] = [
 		'class' => 'kartik\grid\CheckboxColumn',
 		'header' => Html::checkBox('selection_all', false, [
@@ -70,15 +70,13 @@ if($canApprove || $canDeactivate){
 			//refetch role variables in scope
 			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
-			// Disable if already approved
-			$disabledBoolean = ($model['IsSubmitted'] == 1 || ($model['IsApproved'] == 1 && !($isAccountant || $isProjectManager))) ? true : false;
+			//Disable if already approved
+			$disabledBoolean = ($model['IsSubmitted'] == 1 || ($model['IsApproved'] == 1 && !($isAccountant || $isProjectManager)));
 			$result = [
 				'expenseid' => $model['ID'],
-				'approved' => $model['IsApproved']
+				'approved' => $model['IsApproved'],
+				'disabled' => $disabledBoolean
 			];
-			if ($disabledBoolean) {
-				$result['disabled'] = true;
-			}
 			return $result;
 		}
 	];
@@ -86,7 +84,6 @@ if($canApprove || $canDeactivate){
 ?>
 
 <div class="expense-card-entries">
-
 	<div id="ExpenseEntriesForm">
 		<input id="startDate" type="hidden" value=<?php echo $startDate; ?>>
 		<input id="endDate" type="hidden" value=<?php echo $endDate; ?>>

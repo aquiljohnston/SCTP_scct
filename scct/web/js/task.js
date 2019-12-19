@@ -59,11 +59,11 @@ function applyTimeEntryListeners() {
 	
 	//apply listeners on cells with data for deactivation
 	$(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEntries tbody tr td',function (){
+		//boolean representing if actions are available based on role and card status
+		disabledBoolean = (($('#isPMApproved').val() || ($('#isApproved').val() && !$('#isProjectManager').val())) && !$('#isAccountant').val());
 		//restrict click to only day of the week fields
 		//with values in the .text()
-		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="")
-			&& (!$("#approve_timeCard_btn_id").prop("disabled") || $('#isAccountant').val()))
-		{
+		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && (!disabledBoolean)){
 			//get data for deactivate
 			var seq_num = $(this).attr('data-col-seq');
 			var taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
@@ -105,9 +105,10 @@ function validateTaskToolTip() {
 }
 
 function validateTaskCheckEnabled() {
-    $(".entryData").each(function(){
-        if ($("#approve_timeCard_btn_id").prop("disabled")
-            && !$('#isAccountant').val()) {
+	$(".entryData").each(function(){
+		//boolean representing if actions are available based on role and card status
+		disabledBoolean = (($('#isPMApproved').val() || ($('#isApproved').val() && !$('#isProjectManager').val())) && !$('#isAccountant').val());
+        if (disabledBoolean) {
             $(this).prop('disabled',true);
         }
     });
