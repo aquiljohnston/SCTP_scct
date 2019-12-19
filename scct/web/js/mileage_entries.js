@@ -2,7 +2,6 @@ $(function () {
     $(document).ready(function () {
         if ($('#ShowMileageEntriesView').length > 0) {
 			applyMilageEntryListeners();
-            validateMileageCheckEnabled();
             validateMileageToolTip();
         }
     });
@@ -24,7 +23,6 @@ function applyMilageEntryListeners() {
 						$.pjax.reload({container:"#ShowMileageEntriesView", timeout: 99999}).done(function(){ //for pjax update
 							$('#approve_mileageCard_btn_id').prop('disabled', true);
 							$('#add_mileage_btn_id').prop('disabled', true);
-							validateMileageCheckEnabled();
 							$('#loading').hide();
 						});
 					}
@@ -50,8 +48,8 @@ function applyMilageEntryListeners() {
 		//restrict click to only day of the week fields
 		//with values in the .text()
 		if($(this).attr('data-col-seq') >=1){
-			//set readOnly status based on role and approved/submitted state
-			readOnly = ($("#approve_mileageCard_btn_id").prop("disabled") && !$('#isAccountant').val()) ? 1 : 0;
+			//set readOnly status  based on role and card status
+			readOnly = (($('#isPMApproved').val() || ($('#isApproved').val() && !$('#isProjectManager').val())) && !$('#isAccountant').val()) ?  1 : 0;
 			$('#viewMileageModal').modal('show').find('#viewEntriesModalContentSpan').html("Loading...");
 			//set header values
 			$('#viewMileageModal').find('#viewMileageModalTitle').html(task);
@@ -70,27 +68,8 @@ function applyMilageEntryListeners() {
 //determines if deactivate tooltip should be displayed on table cells
 function validateMileageToolTip() {
     $.each($('#allMileageEntries tbody tr td'),function(){
-        if($(this).attr('data-col-seq') >=1 && ($(this).parent().attr('data-key')>0)
-            && (!$("#approve_mileageCard_btn_id").prop("disabled"))) 
-		{
+		if ($(this).attr('data-col-seq') >=1 && ($(this).parent().attr('data-key')>0)){
             $(this).attr("title","Click to view details.")
-        } 
-		else if ($('#isAccountant').val() && !$('#isSubmitted').val() &&
-			$(this).attr('data-col-seq') >=1 &&
-			($(this).text()!="") &&
-			($(this).parent().attr('data-key')>0))
-		{
-            $(this).attr("title","Click to view details.")
-        }
-    });
-}
-
-//checks if approved button should be disabled
-function validateMileageCheckEnabled() {
-    $(".entryData").each(function(){
-        if ($("#approve_mileageCard_btn_id").prop("disabled")
-            && ($('#isSubmitted').val() || !$('#isAccountant').val())) {
-            $(this).prop('disabled',true);
         }
     });
 }

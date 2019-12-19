@@ -34,7 +34,7 @@ TimeCardAsset::register($this);
 			if($canApprove){
 				echo Html::button('Approve', [
 					'class' => 'btn btn-primary',
-					'disabled' => $bools['isApproved'] || $bools['isAccountant'],
+					'disabled' => $isApproved || $isAccountant,
 					'id' => 'approve_timeCard_btn_id',
 				]);
 			}
@@ -46,7 +46,7 @@ TimeCardAsset::register($this);
 			]) ?>
 			<?= Html::button('Add Task', [
 				'class' => 'btn btn-primary add_task_btn',
-				'disabled' => (($bools['isPMApproved'] || ($bools['isApproved'] && !$bools['isProjectManager'])) && !$bools['isAccountant']),
+				'disabled' => (($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
 				'id' => 'add_task_btn_id',
 			]) ?>
 		</p>
@@ -120,12 +120,12 @@ TimeCardAsset::register($this);
 		<?= Html::label('Total Time: '. $model['SumHours'],
 			null, ['id' => 'task_sum_hours']) ?>
 		<input type="hidden" value=<?php echo $model['TimeCardID'] ?> name="timeCardId" id="timeCardId">
-		<input type="hidden" value=<?php echo $bools['isProjectManager'] ?> id="isProjectManager">
-		<input type="hidden" value=<?php echo $bools['isAccountant'] ?> id="isAccountant">
-		<input type="hidden" value=<?php echo $bools['isApproved'] ?> id="isApproved">
-		<input type="hidden" value=<?php echo $bools['isPMApproved'] ?> id="isPMApproved">
-		<input type="hidden" value=<?php echo $bools['isSubmitted'] ?> id="isSubmitted">
-		<input type="hidden" value=<?php echo $bools['inOvertime'] ?> id="inOvertime">
+		<input type="hidden" value=<?php echo $isProjectManager ?> id="isProjectManager">
+		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
+		<input type="hidden" value=<?php echo $isApproved ?> id="isApproved">
+		<input type="hidden" value=<?php echo $isPMApproved ?> id="isPMApproved">
+		<input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">
+		<input type="hidden" value=<?php echo $inOvertime ?> id="inOvertime">
     <?php Pjax::end() ?>
     <?php
     Pjax::begin(['id' => 'showTime', 'timeout' => false]);

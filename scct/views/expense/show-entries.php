@@ -99,7 +99,7 @@ if($canApprove || $canDeactivate){
 				echo Html::button('Add Expense', [
 					'class' => 'btn btn-primary add_btn',
 					'id' => 'exp_entries_add_btn_id',
-					'disabled' => false
+					'disabled' => $isSubmitted ? true : false
 				]);
 				if($canApprove){
 					echo Html::button('Approve', [

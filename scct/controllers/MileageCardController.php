@@ -428,6 +428,15 @@ class MileageCardController extends BaseCardController
 			
 			//check if user can approve cards
             $canApprove = self::can('mileageCardApprove');
+			
+			//get card status
+			$isApproved = $cardData['card']['MileageCardApprovedFlag'] == 1;
+			$isPMApproved = $cardData['card']['MileageCardPMApprovedFlag'] == 1;
+			$isSubmitted = $cardData['card']['MileageCardOasisSubmitted']=='Yes';
+			
+			//check role
+			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -458,8 +467,12 @@ class MileageCardController extends BaseCardController
 				'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
 				'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
 				'mileageCardProjectID' => $mileageCardProjectID,
-				'isSubmitted' => $cardData['card']['MileageCardOasisSubmitted']=='Yes',
-				'canApprove' => $canApprove
+				'canApprove' => $canApprove,
+				'isApproved' => $isApproved,
+				'isPMApproved' => $isPMApproved,
+				'isSubmitted' => $isSubmitted,
+				'isProjectManager' => $isProjectManager,
+				'isAccountant' => $isAccountant
 			];
 			
 			if (Yii::$app->request->isAjax) {
