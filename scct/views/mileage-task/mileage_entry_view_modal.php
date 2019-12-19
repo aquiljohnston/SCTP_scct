@@ -44,6 +44,9 @@ $columns = [
 		'attribute' => 'MileageRate',
 		'headerOptions' => ['class' => 'text-center'],
 		'contentOptions' => ['class' => 'text-center'],
+		'value' => function($model, $key, $index, $column) {
+			return round($model['MileageRate'], 3);
+		},
 	],[
 		'attribute' => 'EntryID',
 		'hidden' => true,
@@ -313,7 +316,7 @@ $gridViewSettingsArray['columns'] = $columns;
 					$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 					$('#mileageentrytask-personalmiles').attr("readonly", true);
 					$('#mileageentrytask-adminmiles').attr("readonly", true);
-					$('#mileageentrytask-mileagerate').attr("readonly", true);
+					$('#mileageentrytask-mileagerate').attr("disabled", true);
 					//hide buttons
 					$("#mileageEntryModalFormButtons").css("display", "none");
 				} else {
@@ -394,7 +397,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
 			$('#mileageentrytask-adminmiles').attr("readonly", true);
-			$('#mileageentrytask-mileagerate').attr("readonly", true);
+			$('#mileageentrytask-mileagerate').attr("disabled", true);
 			//hide buttons
 			$("#mileageEntryModalFormButtons").css("display", "none");
 			//hide form if was create//display form
@@ -575,7 +578,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 			$('#mileageentrytask-personalmiles').attr("readonly", true);
 			$('#mileageentrytask-adminmiles').attr("readonly", false);
-			$('#mileageentrytask-mileagerate').attr("readonly", false);
+			$('#mileageentrytask-mileagerate').attr("disabled", false);
 			//display form buttons
 			$("#mileageEntryModalFormButtons").css("display", "block");
 		}
@@ -593,7 +596,7 @@ $gridViewSettingsArray['columns'] = $columns;
 				$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", false);
 				$('#mileageentrytask-adminmiles').attr("readonly", true);
-				$('#mileageentrytask-mileagerate').attr("readonly", false);
+				$('#mileageentrytask-mileagerate').attr("disabled", false);
 			}else{
 				$('#mileageentrytask-starttime').attr("disabled", true);
 				$('#mileageentrytask-endtime').attr("disabled", true);
@@ -603,7 +606,7 @@ $gridViewSettingsArray['columns'] = $columns;
 				$('#mileageentrytask-endingmileageentrycomment').attr("readonly", true);
 				$('#mileageentrytask-personalmiles').attr("readonly", true);
 				$('#mileageentrytask-adminmiles').attr("readonly", false);
-				$('#mileageentrytask-mileagerate').attr("readonly", false);
+				$('#mileageentrytask-mileagerate').attr("disabled", false);
 			}
 			$("#mileageEntryModalFormButtons").css("display", "block");
 			

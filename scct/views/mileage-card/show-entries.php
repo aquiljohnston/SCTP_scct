@@ -28,22 +28,13 @@ MileageCardAsset::register($this);
   
     <div class="lightBlueBar">
 		<h3> <?= $projectName.' Week '.$from.' - '.$to.': '.$lName.', '.$fName; ?></h3>
-
-		<?php
-		$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
-		if ($model['MileageCardApprovedFlag'] == 1) {
-			$approve_status = true;
-		} else {
-			$approve_status = false;
-		}
-		?>
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
             if($canApprove){
                 echo Html::button('Approve', [
                     'class' => 'btn btn-primary',
-                    'disabled' => $approve_status || $isAccountant,
+                    'disabled' => $isApproved || $isAccountant,
                     'id' => 'approve_mileageCard_btn_id',
                 ]);
             }
@@ -98,24 +89,17 @@ MileageCardAsset::register($this);
 					'label' => 'Saturday '. $SaturdayDate,
 					'attribute' => 'Date7',
 					'headerOptions' => ['class'=>$SaturdayDateFull],
-				],
-				// [
-					// 'header' => 'Deactivate Mileage',
-					// 'class' => 'kartik\grid\CheckboxColumn',
-					// 'hidden' => 'true',
-					// 'contentOptions' => [],
-					// 'checkboxOptions' => function ($model) {
-						// return ['mileageCardId' => Yii::$app->getRequest()->getQueryParam('id'),
-							// 'taskName' => $model['Task'],'entry' => '','class'=>'entryData'];
-					// }
-				// ]
+				]
 			]
 		]);
 		?>
 		<?= Html::label('Total Miles: '. $model['SumMiles'],
 			null, ['id' => 'entries_sum_miles']) ?>
 		<input type="hidden" value=<?php echo $model["MileageCardID"]?> name="mileageCardId" id="mileageCardId">
+		<input type="hidden" value=<?php echo $isProjectManager ?> id="isProjectManager">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
+		<input type="hidden" value=<?php echo $isApproved ?> id="isApproved">
+		<input type="hidden" value=<?php echo $isPMApproved ?> id="isPMApproved">
 		<input type="hidden" value=<?php echo $isSubmitted ?> id="isSubmitted">
     <?php Pjax::end() ?>
     <?php

@@ -150,10 +150,13 @@ if($isAccountant)
 			'template' => '{view}', // does not include delete
 			'urlCreator' => function ($action, $model, $key, $index) {
 				if ($action === 'view') {
-					$url = '/mileage-card/show-entries?id=' . $model["MileageCardID"].'&projectName='.$model['ProjectName']
-					.'&fName='.$model['UserFirstName']
-					.'&lName='.$model['UserLastName']
-					.'&mileageCardProjectID='.$model['MileageCardProjectID'];
+					$url = '/mileage-card/show-entries?' . http_build_query([
+						'id' => $model['MileageCardID'],
+						'projectName' => $model['ProjectName'],
+						'fName' => $model['UserFirstName'],
+						'lName' => $model['UserLastName'],
+						'mileageCardProjectID' => $model['MileageCardProjectID'],
+					]);
 					return $url;
 				}
 			},

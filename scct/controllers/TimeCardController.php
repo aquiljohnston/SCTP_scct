@@ -414,20 +414,18 @@ class TimeCardController extends BaseCardController
 
 			//check if user can approve cards
 			$canApprove = self::can('timeCardApproveCards');
-
-			$bools = [];
-
+			
 			//send entries to function to calculate if given card is in overtime
-			$bools['inOvertime'] = self::calcInOvertime($cardData['show-entries']);
+			$inOvertime = self::calcInOvertime($cardData['show-entries']);
 			
 			//get card status
-			$bools['isApproved'] = $cardData['card']['TimeCardApprovedFlag'] == 1;
-			$bools['isPMApproved'] = $cardData['card']['TimeCardPMApprovedFlag'] == 1;
-			$bools['isSubmitted'] = $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes';
+			$isApproved = $cardData['card']['TimeCardApprovedFlag'] == 1;
+			$isPMApproved = $cardData['card']['TimeCardPMApprovedFlag'] == 1;
+			$isSubmitted = $cardData['card']['TimeCardOasisSubmitted']=='Yes' && $cardData['card']['TimeCardMSDynamicsSubmitted']=='Yes';
 			
 			//check role
-			$bools['isProjectManager'] = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
-			$bools['isAccountant'] = Yii::$app->session['UserAppRoleType'] == 'Accountant';
+			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+			$isAccountant = Yii::$app->session['UserAppRoleType'] == 'Accountant';
 
 			$allTask = new ArrayDataProvider([
 				'allModels' => $cardData['show-entries'],
@@ -459,7 +457,12 @@ class TimeCardController extends BaseCardController
 				'timeCardProjectID' => $timeCardProjectID,
 				'timeCardID' => $id,
 				'canApprove' => $canApprove,
-				'bools' => $bools
+				'inOvertime' => $inOvertime,
+				'isApproved' => $isApproved,
+				'isPMApproved' => $isPMApproved,
+				'isSubmitted' => $isSubmitted,
+				'isProjectManager' => $isProjectManager,
+				'isAccountant' => $isAccountant
 			]);
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
