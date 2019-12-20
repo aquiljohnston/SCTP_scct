@@ -5,11 +5,11 @@
 }
 
 .timeCardProjectFilterDD {
-    margin-top: -1.8%;
+    margin-top: -2%;
 }
 
 .timeCardEmployeeFilterDD {
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #timeCardClearDropdownFilterButton  {
@@ -72,7 +72,7 @@
 	cursor: pointer;
 	float: right;
 	margin-right: -26.5%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #timeCardDatePickerContainer .field-dynamicmodel-daterangepicker{
@@ -83,12 +83,11 @@
 .TimeCardSearch {
 	float: right;
 	margin-right: 22%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 .TimeCardDateRangeDropDown {
-	margin-left: 1%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #time_card_pm_submit_btn_id{
@@ -120,20 +119,58 @@
 }
 
 #timeCardDatePickerContainer{
-	margin-top: -5.2%;
+	margin-top: -6.2%;
 	margin-left: -15%;
 }
 
 /*responsive css* for table*/
 @media only screen and (min-width : 1360px) {
-	#GridViewForTimeCard{
-		max-height:57vh;
+	.TimeCardSearch {
+		margin-right: 20%;
+	}
+	
+	#timeCardEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#timeCardGridview .kv-grid-container{
+		max-height:38vh;
+	}
+	
+	.form-group{
+		margin-bottom: 5px;
+	}
+}
+
+@media only screen and (min-width : 1600px) {
+	.TimeCardSearch {
+		margin-right: 20%;
+	}
+	
+	#timeCardEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#timeCardGridview .kv-grid-container{
+		max-height:48vh;
+	}
+	
+	.form-group{
+		margin-bottom: 10px;
 	}
 }
 
 @media only screen and (min-width : 1900px) {
-	#GridViewForTimeCard{
-		max-height:62vh;
+	#timeCardEmployeeFilterDD{
+		margin-left: 0px;
+	}
+	
+	#timeCardGridview .kv-grid-container{
+		max-height:58vh;
+	}
+	
+	.form-group{
+		margin-bottom: 15px;
 	}
 }
 

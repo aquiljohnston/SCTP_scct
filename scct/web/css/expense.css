@@ -8,11 +8,11 @@
 }
 
 .expenseProjectFilterDD {
-    margin-top: -1.8%;
+    margin-top: -2%;
 }
 
 .expenseEmployeeFilterDD {
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #expenseClearDropdownFilterButton  {
@@ -75,7 +75,7 @@
 	cursor: pointer;
 	float: right;
 	margin-right: -26.5%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #expenseDatePickerContainer .field-dynamicmodel-daterangepicker{
@@ -86,12 +86,11 @@
 .ExpenseSearch {
 	float: right;
 	margin-right: 22%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 .ExpenseDateRangeDropDown {
-	margin-left: 1%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #exp_multiple_approve_btn_id {
@@ -132,7 +131,7 @@
 }
 
 #expenseDatePickerContainer{
-	margin-top: -5.2%;
+	margin-top: -6.2%;
 	margin-left: -15%;
 }
 
@@ -144,14 +143,52 @@
 
 /*responsive css* for table*/
 @media only screen and (min-width : 1360px) {
-	#GridViewForExpense{
-		max-height:57vh;
+	.ExpenseSearch {
+		margin-right: 20%;
+	}
+	
+	#expenseEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#expenseGridview .kv-grid-container{
+		max-height:38vh;
+	}
+	
+	.form-group{
+		margin-bottom: 5px;
+	}
+}
+
+@media only screen and (min-width : 1600px) {
+	.ExpenseSearch {
+		margin-right: 20%;
+	}
+	
+	#expenseEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#expenseGridview .kv-grid-container{
+		max-height:48vh;
+	}
+	
+	.form-group{
+		margin-bottom: 10px;
 	}
 }
 
 @media only screen and (min-width : 1900px) {
-	#GridViewForExpense{
-		max-height:62vh;
+	#expenseEmployeeFilterDD{
+		margin-left: 0px;
+	}
+	
+	#expenseGridview .kv-grid-container{
+		max-height:58vh;
+	}
+	
+	.form-group{
+		margin-bottom: 15px;
 	}
 }
 
