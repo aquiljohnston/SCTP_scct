@@ -5,11 +5,11 @@
 }
 
 .mileageProjectFilterDD {
-    margin-top: -1.8%;
+    margin-top: -2%;
 }
 
 .mileageEmployeeFilterDD {
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #mileageCardClearDropdownFilterButton  {
@@ -73,7 +73,7 @@
 	cursor: pointer;
 	float: right;
 	margin-right: -26.5%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #mileageDatePickerContainer .field-dynamicmodel-daterangepicker{
@@ -84,12 +84,11 @@
 .MileageCardSearch {
 	float: right;
 	margin-right: 22%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 .MileageCardDateRangeDropDown {
-	margin-left: 1%;
-	margin-top: -1.8%;
+	margin-top: -2%;
 }
 
 #mileage_pm_submit_btn_id{
@@ -121,20 +120,58 @@
 }
 
 #mileageDatePickerContainer{
-	margin-top: -5.2%;
+	margin-top: -6.2%;
 	margin-left: -15%;
 }
 
 /*responsive css for table*/
 @media only screen and (min-width : 1360px) {
-	#GridViewForMileageCard{
-		max-height:57vh;
+	.MileageCardSearch {
+		margin-right: 20%;
+	}
+	
+	#mileageEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#mileageCardGridview .kv-grid-container{
+		max-height:38vh;
+	}
+	
+	.form-group{
+		margin-bottom: 5px;
+	}
+}
+
+@media only screen and (min-width : 1600px) {
+	.MileageCardSearch {
+		margin-right: 20%;
+	}
+	
+	#mileageEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#mileageCardGridview .kv-grid-container{
+		max-height:48vh;
+	}
+	
+	.form-group{
+		margin-bottom: 10px;
 	}
 }
 
 @media only screen and (min-width : 1900px) {
-	#GridViewForMileageCard{
-		max-height:62vh;
+	#mileageEmployeeFilterDD{
+		margin-left: 0px;
+	}
+	
+	#mileageCardGridview .kv-grid-container{
+		max-height:58vh;
+	}
+	
+	.form-group{
+		margin-bottom: 15px;
 	}
 }
 
