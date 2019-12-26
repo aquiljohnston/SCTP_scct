@@ -427,11 +427,18 @@ class ExpenseController extends BaseCardController {
 			if (Yii::$app->request->isAjax) {
 				$data = Yii::$app->request->post();	
 
-				//loop the data array to get all id's.	
+				/* bug fix: invalid object reference
+				//loop the data array to get all id's.
 				foreach($data['entries'] as $entry){
 					if($entry['IsApproved'] == 0)
 						$expenseArray[] = $entry['ID'];
-				}
+				} 
+				*/
+				foreach ($data as $key) {
+					foreach($key as $keyitem){
+                        $expenseArray[] = $keyitem;
+                    }
+                }
 				
 				$data = array('expenseArray' => $expenseArray);
 				$json_data = json_encode($data);
