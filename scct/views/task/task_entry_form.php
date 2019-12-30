@@ -255,18 +255,8 @@ $columns = [
 			var EndTime = $('#dynamicmodel-endtime').val();
 			var timeReason = $('#dynamicmodel-timereason').val();
 			var comments = $('#dynamicmodel-comments').val();
-			
-			if(timeReason == '')
-				return false;
-			if(comments.length > 225)
-				return false;
-			return true;
 
-            if (date !="" && StartTime != "" &&
-                EndTime != "" && TaskName != "" && 
-                ChangeOfAccountType != "")
-				//>= allows same start and end remove the = if this is not allowed.
-				{
+            if (date != '' && StartTime != '' && EndTime != '' && TaskName != '' && ChangeOfAccountType != '' && timeReason != '' && comments.length <= 225){
                //only convert when not empty
                 StartTime = ConvertToTwentyFourHourTime(StartTime);
                 EndTime = ConvertToTwentyFourHourTime(EndTime);
