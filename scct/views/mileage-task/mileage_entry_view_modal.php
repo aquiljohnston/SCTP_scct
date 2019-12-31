@@ -496,6 +496,7 @@ $gridViewSettingsArray['columns'] = $columns;
 			endMiles = parseFloat($('#mileageentrytask-endingmileage').val());
 			personalMiles = parseFloat($('#mileageentrytask-personalmiles').val());
 			adminMiles = parseFloat($('#mileageentrytask-adminmiles').val());
+			mileageRate = $('#mileageentrytask-mileagerate').val();
 			//not null
 			if(startTime == "" ||
 			endTime == "" ||
@@ -523,7 +524,10 @@ $gridViewSettingsArray['columns'] = $columns;
 			if(startMiles > endMiles){
 				return false;
 			}
-			
+			//mileage rate required
+			if(mileageRate == ''){
+				return false;
+			}
 			//return true if no rules are broken
 			return true;
 		}
