@@ -239,6 +239,15 @@ $columns = [
 			}
         });
 		
+		$(document).off('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype').on('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype', function (){
+			var accountType = $('#dynamicmodel-chargeofaccounttype').val();
+			//default time to 8 hours if 5015(OH Holiday Pay/Bereavement) is selected
+			if(accountType == '5015'){
+				$('#dynamicmodel-starttime').val('08:00 AM');
+				$('#dynamicmodel-endtime').val('04:00 PM');
+			}
+        });
+		
 		//deactivate entry
 		$(document).off('click', '#taskModalDeactivateAction').on('click', '#taskModalDeactivateAction',function (){
 			//get entry id
