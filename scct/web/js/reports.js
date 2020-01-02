@@ -18,11 +18,13 @@
     noSelectionError = $("#noSelectionError"),
     noDateError = $("#noDateError"),
     selectDateFirstError = $("#selectDateFirstError"),
-    startDatePicker = $("#datePickerBeginDate").datepicker({minDate: "1/1/"+(new Date()).getFullYear(), maxDate : 'now'}),
-    endDatePicker = $('#datePickerEndDate').datepicker({minDate: "1/31/"+(new Date()).getFullYear(), maxDate : 'now', maxDate : 'now'});
+    startDatePicker = $("#datePickerBeginDate").datepicker({minDate: "1/1/"+((new Date()).getFullYear()-1), maxDate : 'now'}),
+    endDatePicker = $('#datePickerEndDate').datepicker({minDate: "1/31/"+((new Date()).getFullYear()-1), maxDate : 'now'});
     oTable = null;
     selectedReport = new Object();
     queryResultsAray = null;
+	daySeconds = 86400; //seconds in a day
+	maxDateRange = 30; //maximum number of days passed startdate
  }
 
 $(function () {
@@ -90,9 +92,16 @@ function initListeners() {
     // datepickers
     startDatePicker.change(function(){
         endDatePicker.datepicker('setDate', null);
-        if(startDatePicker.datepicker("getDate") != null)
+        if(startDatePicker.datepicker("getDate") != null){
+			//set min and max for enddate based on selected startdate
             endDatePicker.datepicker("option", "minDate", startDatePicker.datepicker("getDate"));
-        else 
+			//get date range in miliseconds for js
+			maxDateMS = maxDateRange * daySeconds * 1000; 
+			maxTimestamp = Date.parse(startDatePicker.datepicker("getDate"))+maxDateMS;
+			todayTimestamp = new Date().getTime();
+			maxEndDate = new Date(maxTimestamp);
+            endDatePicker.datepicker("option", "maxDate", maxTimestamp < todayTimestamp ? maxEndDate : 'now');
+        } else 
             submitButton.css('display', 'none');
         if(selectedReport.ParmDropDownFlag == 1) {
             toggleVisible([mapGridListHeader[0], mapGridDropdown[0], submitButton[0]], "none");
