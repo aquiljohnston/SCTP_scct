@@ -242,7 +242,7 @@ $columns = [
 		$(document).off('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype').on('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype', function (){
 			var accountType = $('#dynamicmodel-chargeofaccounttype').val();
 			//default time to 8 hours if 5015(OH Holiday Pay/Bereavement) is selected
-			if(accountType == '5015'){
+			if(accountType == '5015' || accountType == '5020'){
 				$('#dynamicmodel-starttime').val('08:00 AM');
 				$('#dynamicmodel-endtime').val('04:00 PM');
 			}
