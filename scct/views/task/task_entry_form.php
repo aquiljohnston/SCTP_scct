@@ -216,6 +216,8 @@ $columns = [
 
         $('#create_task_entry_submit_btn').click(function (event) {
              if (InputFieldValidator()) {
+				//enable potentially disable field so data may be passed
+				$('#dynamicmodel-taskname').attr("disabled", false);
                 TaskEntryCreation();
                 event.preventDefault();
                 return false;
@@ -241,10 +243,22 @@ $columns = [
 		
 		$(document).off('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype').on('change', '#TaskEntryForm #dynamicmodel-chargeofaccounttype', function (){
 			var accountType = $('#dynamicmodel-chargeofaccounttype').val();
-			//default time to 8 hours if 5015(OH Holiday Pay/Bereavement) is selected
 			if(accountType == '5015' || accountType == '5020'){
+				//default time to 8 hours if 5015(OH Holiday Pay/Bereavement) or 5020(PTO) is selected
 				$('#dynamicmodel-starttime').val('08:00 AM');
 				$('#dynamicmodel-endtime').val('04:00 PM');
+				//default task name to 'OTHER' and lock selection if 5015(OH Holiday Pay/Bereavement) or 5020(PTO) is selected
+				$('#dynamicmodel-taskname').val('OTHER');
+				$('#dynamicmodel-taskname').attr("disabled", true);
+				//validate new form values
+				if (InputFieldValidator()){
+					$('#create_task_entry_submit_btn').prop('disabled', false); 
+				}else{
+					$('#create_task_entry_submit_btn').prop('disabled', true); 
+				}
+			} else {
+				//unlock selection of task name if 5015(OH Holiday Pay/Bereavement) or 5020(PTO) is not selected
+				$('#dynamicmodel-taskname').attr("disabled", false);
 			}
         });
 		
@@ -271,7 +285,7 @@ $columns = [
                 EndTime = ConvertToTwentyFourHourTime(EndTime);
                 //now compare 
                 if(EndTime > StartTime)
-                return true;
+					return true;
             } else {
                 return false; 
             }    
