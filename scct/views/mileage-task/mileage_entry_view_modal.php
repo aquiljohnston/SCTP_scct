@@ -414,6 +414,7 @@ $gridViewSettingsArray['columns'] = $columns;
 				//enable potentially disabled fields
 				$('#mileageentrytask-starttime').attr("disabled", false);
 				$('#mileageentrytask-endtime').attr("disabled", false);
+				$('#mileageentrytask-mileagerate').attr("disabled", false);
 				//get form data
 				var form = $('#MileageEntryModalForm');
 				$('#loading').show();
