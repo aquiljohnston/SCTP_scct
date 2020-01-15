@@ -93,6 +93,13 @@ $(function(){
 	$(document).off('click', '#exp_add_btn_id').on('click', '#exp_add_btn_id', function (){
 		addExpense();
     });
+	
+	//add filter to extra data of expand row ajax request
+	$(document).off('kvexprow:beforeLoad', '#expenseGV').on('kvexprow:beforeLoad', '#expenseGV', function (event, ind, key, extra) {
+		//add filter data to keys
+		key.Filter = $('#expenseFilter').val();
+		key.EmployeeID = $('#expenseEmployeeFilterDD').val();
+	});
 });
 
 function expenseApproveMultiple() {	

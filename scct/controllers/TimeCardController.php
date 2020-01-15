@@ -306,25 +306,25 @@ class TimeCardController extends BaseCardController
 			// get the key to generate section table
 			if (isset($_POST['expandRowKey'])){
 				$projectID = $_POST['expandRowKey']['ProjectID'];
-				if(array_key_exists('EmployeeID', $_POST['expandRowKey']))
-					$employeeID = $_POST['expandRowKey']['EmployeeID'];
 				$startDate = $_POST['expandRowKey']['StartDate'];
 				$endDate = $_POST['expandRowKey']['EndDate'];
+				if(array_key_exists('EmployeeID', $_POST['expandRowKey']))
+					$employeeID = $_POST['expandRowKey']['EmployeeID'];
 				if(array_key_exists('Filter', $_POST['expandRowKey']))
 					$filter = $_POST['expandRowKey']['Filter'];
 			}else{
 				$projectID = '';
-				$employeeID = '';
 				$startDate = '';
 				$endDate = '';
+				$employeeID = '';
 				$filter = '';
 			}
 			
 			$queryParams = [
 				'projectID' => $projectID,
-				'employeeID' => $employeeID,
 				'startDate' => $startDate,
 				'endDate' => $endDate,
+				'employeeID' => $employeeID,
 				'filter' => $filter,
 			];
 
