@@ -178,7 +178,7 @@ class ExpenseController extends BaseCardController {
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
 			$projectDropDown = $response['projectDropDown'];
-			$isAccountant ? $employeeDropDown = [] : $employeeDropDown = $response['employeeDropDown'];
+			$employeeDropDown = $response['employeeDropDown'];
 
 			//set submit button status
 			if($isAccountant)
@@ -283,25 +283,29 @@ class ExpenseController extends BaseCardController {
 			if (isset($_POST['expandRowKey']))
 			{
 				$projectID = $_POST['expandRowKey']['ProjectID'];
+				if(array_key_exists('EmployeeID', $_POST['expandRowKey']))
+					$employeeID = $_POST['expandRowKey']['EmployeeID'];
 				$startDate = $_POST['expandRowKey']['StartDate'];
 				$endDate = $_POST['expandRowKey']['EndDate'];
+				if(array_key_exists('Filter', $_POST['expandRowKey']))
+					$filter = $_POST['expandRowKey']['Filter'];
 			}else{
 				$projectID = '';
 				$startDate = '';
 				$endDate = '';
+				$employeeID = '';
+				$filter = '';
 			}
 			
 			$queryParams = [
 				'projectID' => $projectID,
 				'startDate' => $startDate,
 				'endDate' => $endDate,
+				'employeeID' => $employeeID,
+				'filter' => $filter,
 			];
 
-			$getUrl = 'expense%2Fget-accountant-details&' . http_build_query([
-				'projectID' => $projectID,
-				'startDate' => $startDate,
-				'endDate' => $endDate,
-			]);
+			$getUrl = 'expense%2Fget-accountant-details&' . http_build_query($queryParams);
 			$getResponseData = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true); //indirect RBAC
 			$detailsData = $getResponseData['details'];
 
