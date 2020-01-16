@@ -105,11 +105,14 @@ TimeCardAsset::register($this);
 					'class' => 'kartik\grid\CheckboxColumn',
 					'contentOptions' => [],
 					'checkboxOptions' => function ($model, $key, $index, $column) {
+						//hide checkbox on total row
+						$hiddenBool = $model['Task'] == 'Total';
 						$result = [
 							'timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),
 							'taskName' => $model['Task'],
 							'entry' => '',
-							'class'=> 'entryData'
+							'class'=> 'entryData',
+							'hidden' => $hiddenBool
 						];
 						return $result;
 					}

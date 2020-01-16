@@ -59,14 +59,15 @@ function applyTimeEntryListeners() {
 	
 	//apply listeners on cells with data for deactivation
 	$(document).off('click', '#allTaskEntries tbody tr td').on('click', '#allTaskEntries tbody tr td',function (){
+		//get task for disable check and deactivate call
+		var taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
 		//boolean representing if actions are available based on role and card status
-		disabledBoolean = (($('#isPMApproved').val() || ($('#isApproved').val() && !$('#isProjectManager').val())) && !$('#isAccountant').val());
+		disabledBoolean = ((($('#isPMApproved').val() || ($('#isApproved').val() && !$('#isProjectManager').val())) && !$('#isAccountant').val()) || taskName == 'Total');
 		//restrict click to only day of the week fields
 		//with values in the .text()
 		if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && (!disabledBoolean)){
 			//get data for deactivate
 			var seq_num = $(this).attr('data-col-seq');
-			var taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
 			var dataObj = {seq_num: seq_num, taskName: taskName};
 			var dataString = JSON.stringify(dataObj);
 			if($('#isSubmitted').val()){
@@ -89,15 +90,18 @@ function applyTimeEntryListeners() {
 
 function validateTaskToolTip() {
     $.each($('#allTaskEntries tbody tr td'),function(){
-        if($(this).attr('data-col-seq') >=1 && ($(this).text()!="") && ($(this).parent().attr('data-key')>0)
-            && (!$("#approve_timeCard_btn_id").prop("disabled"))) 
+		//get task name for current row
+		var taskName = $(this).closest('tr').find("td[data-col-seq='0']").text();
+        if($(this).attr('data-col-seq') > 0 && ($(this).text()!="") && ($(this).parent().attr('data-key') > 0)
+            && (!$("#approve_timeCard_btn_id").prop("disabled")) && (taskName != 'Total')) 
 		{
             $(this).attr("title","Click to deactivate this time entry!")
         } 
 		else if ($('#isAccountant').val() &&
 			$(this).attr('data-col-seq') >=1 &&
 			($(this).text()!="") &&
-			($(this).parent().attr('data-key')>0))
+			($(this).parent().attr('data-key')>0) &&
+			(taskName != 'Total'))
 		{
             $(this).attr("title","Click to deactivate this time entry!")
         }
