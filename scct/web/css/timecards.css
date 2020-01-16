@@ -205,6 +205,15 @@ div[id^=modalContent] #loading {
 	margin-right: 1%;
 }
 
+.time-card-entries tbody tr:last-child {
+    background: #f0f0f2;
+    color: #333;
+    font-weight: bold;
+    border-top: solid #333;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
 /*custom style for show entries grid view hover*/
 #allTaskEntries table tbody tr:hover{
 	/*cancel out base style*/
