@@ -415,8 +415,8 @@ class TimeCardController extends BaseCardController
 			//check if user can approve cards
 			$canApprove = self::can('timeCardApproveCards');
 			
-			//send entries to function to calculate if given card is in overtime
-			$inOvertime = self::calcInOvertime($cardData['show-entries']);
+			//checks sumHours value and returns 'true' if in overtime(over 40 hours) and 'false' if not
+			$inOvertime = $cardData['card']['SumHours'] >= 40 ? 'true' : 'false';
 			
 			//get card status
 			$isApproved = $cardData['card']['TimeCardApprovedFlag'] == 1;
@@ -562,31 +562,6 @@ class TimeCardController extends BaseCardController
         }
         return $dateData;
     }
-
-	//count time in provided entries($entriesArray) and returns 'true' if in overtime(over 40 hours) and 'false' if not
-	private function calcInOvertime($entriesArray){
-		define('FIRST_ENTRY_ROW',1);
-		define('FIRST_ENTRY_COLUMN',1);
-		
-		$totalSeconds = 0;
-		
-		foreach(array_slice($entriesArray, FIRST_ENTRY_ROW) as $rKey => $rVal)
-		{			
-			foreach(array_slice($rVal, FIRST_ENTRY_COLUMN) as $cKey => $cVal)
-			{
-				$time = $rVal[$cKey];
-				if($time != '')
-				{
-					$splitTime = explode(':', $time);
-					$totalSeconds += $splitTime[0] * 3600 + $splitTime[1] * 60;
-				}
-			}
-		}
-		
-		$totalHours = $totalSeconds/3600;
-		
-		return $totalHours >= 40 ? 'true' : 'false';
-	}
 
 	/**
      * Collect all time card ids
