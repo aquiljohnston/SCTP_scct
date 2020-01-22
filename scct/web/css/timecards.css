@@ -205,7 +205,8 @@ div[id^=modalContent] #loading {
 	margin-right: 1%;
 }
 
-.time-card-entries tbody tr:last-child {
+/*custom css for total row*/
+#allTaskEntries table tbody tr:last-child {
     background: #f0f0f2;
     color: #333;
     font-weight: bold;
