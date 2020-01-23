@@ -123,7 +123,7 @@ function deactivateCellSelection(timeReason, dataString){
 	cellData = JSON.parse(dataString);
 	seq_num = cellData.seq_num;
 	taskName = cellData.taskName;
-	date = $("tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
+	date = $("#allTaskEntries tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
 	var entries = [];
 	//clean up date format for sending
 	date = date.replace(/\-/g, '/');
@@ -194,8 +194,8 @@ function deactivateRowSelection(timeReason){
 }
 
 function addTaskEntry(){
-	var weekStart = $("table th").eq(1).attr('class');
-	var weekEnd = $("table th").eq(7).attr('class');
+	var weekStart = $("#allTaskEntries table th").eq(1).attr('class');
+	var weekEnd = $("#allTaskEntries table th").eq(7).attr('class');
 	var timeCardID = $('#timeCardId').val();
 	var SundayDate = $('#SundayDate').val();
 	var SaturdayDate = $('#SaturdayDate').val();

@@ -197,7 +197,36 @@ div[id^=modalContent] #loading {
     display: none;
 }
 
+
+
 /*time card show entries*/
+
+#ShowTimeEntriesView{
+	overflow-y: auto;
+    max-height: 55vh;
+}
+
+/*responsive css* for table container height*/
+@media only screen and (max-height : 1200px) {	
+	#ShowTimeEntriesView{
+		max-height: 70vh;
+	}
+}
+@media only screen and (max-height : 1024px) {	
+	#ShowTimeEntriesView{
+		max-height: 66vh;
+	}
+}
+@media only screen and (max-height : 900px) {	
+	#ShowTimeEntriesView{
+		max-height: 60vh;
+	}
+}
+@media only screen and (max-height : 768px) {	
+	#ShowTimeEntriesView{
+		max-height: 55vh;
+	}
+}
 
 #task_sum_hours {
 	font-size: medium;
@@ -224,6 +253,8 @@ div[id^=modalContent] #loading {
 #allTaskEntries table tbody tr td:hover{
     background-color: rgba(57, 12, 255, 0.25);
 }
+
+
 
 /*time card task entry form*/
 

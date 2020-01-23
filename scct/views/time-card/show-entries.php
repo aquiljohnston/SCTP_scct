@@ -53,6 +53,7 @@ TimeCardAsset::register($this);
 		<br>
     </div>
     <?php Pjax::begin(['id' => 'ShowTimeEntriesView', 'timeout' => false]) ?>
+		<h3>Task</h3>
 		<?= \kartik\grid\GridView::widget([
 			'id' => 'allTaskEntries',
 			'dataProvider' => $task,
@@ -64,43 +65,35 @@ TimeCardAsset::register($this);
 				[
 					'label' => 'Task',
 					'attribute' => 'Task',
-				],
-				[
+				],[
 					'label' => 'Sunday ' . $SundayDate,
 					'attribute' => 'Date1',
 					'headerOptions' => ['class'=>$SundayDateFull]
-				],
-				[
+				],[
 					'label' => 'Monday '. $MondayDate,
 					'attribute' => 'Date2',
 					'headerOptions' => ['class'=>$MondayDateFull],
-				],
-				[
+				],[
 					'label' => 'Tuesday '. $TuesdayDate,
 					'attribute' => 'Date3',
 					'headerOptions' => ['class'=>$TuesdayDateFull],
-				],
-				[
+				],[
 					'label' => 'Wednesday '. $WednesdayDate,
 					'attribute' => 'Date4',
 					'headerOptions' => ['class'=>$WednesdayDateFull],
-				],
-				[
+				],[
 					'label' => 'Thursday '. $ThursdayDate,
 					'attribute' => 'Date5',
 					'headerOptions' => ['class'=>$ThursdayDateFull],
-				],
-				[
+				],[
 					'label' => 'Friday '. $FridayDate,
 					'attribute' => 'Date6',
 					'headerOptions' => ['class'=>$FridayDateFull],
-				],
-				[
+				],[
 					'label' => 'Saturday '. $SaturdayDate,
 					'attribute' => 'Date7',
 					'headerOptions' => ['class'=>$SaturdayDateFull],
-				],
-				[
+				],[
 					'header' => 'Deactivate All Task',
 					'class' => 'kartik\grid\CheckboxColumn',
 					'contentOptions' => [],
@@ -122,6 +115,58 @@ TimeCardAsset::register($this);
 		?>
 		<?= Html::label('Total Time: '. $model['SumHours'],
 			null, ['id' => 'task_sum_hours']) ?>
+		<br>
+		<!--<h3>Miscellaneous</h3>-->
+		<h3>Lunch</h3>
+		<?= \kartik\grid\GridView::widget([
+			'id' => 'allLunchEntries',
+			'dataProvider' => $lunch,
+			'export' => false,
+			'pjax' => true,
+			'summary' => '',
+			'caption' => '',
+			'columns' => [
+			//for future use if other types of activities are added
+				// [
+					// 'label' => 'Type',
+					// 'attribute' => 'ActivityTitle',
+				// ],
+				[
+					'label' => 'Sunday ' . $SundayDate,
+					'attribute' => 'Date1',
+					'headerOptions' => ['class'=>$SundayDateFull]
+				],[
+					'label' => 'Monday '. $MondayDate,
+					'attribute' => 'Date2',
+					'headerOptions' => ['class'=>$MondayDateFull],
+				],[
+					'label' => 'Tuesday '. $TuesdayDate,
+					'attribute' => 'Date3',
+					'headerOptions' => ['class'=>$TuesdayDateFull],
+				],[
+					'label' => 'Wednesday '. $WednesdayDate,
+					'attribute' => 'Date4',
+					'headerOptions' => ['class'=>$WednesdayDateFull],
+				],[
+					'label' => 'Thursday '. $ThursdayDate,
+					'attribute' => 'Date5',
+					'headerOptions' => ['class'=>$ThursdayDateFull],
+				],[
+					'label' => 'Friday '. $FridayDate,
+					'attribute' => 'Date6',
+					'headerOptions' => ['class'=>$FridayDateFull],
+				],[
+					'label' => 'Saturday '. $SaturdayDate,
+					'attribute' => 'Date7',
+					'headerOptions' => ['class'=>$SaturdayDateFull],
+				],[
+					'label' => 'Total',
+					'attribute' => 'Total'
+				]
+			]
+		]);
+		?>
+		
 		<input type="hidden" value=<?php echo $model['TimeCardID'] ?> name="timeCardId" id="timeCardId">
 		<input type="hidden" value=<?php echo $isProjectManager ?> id="isProjectManager">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
