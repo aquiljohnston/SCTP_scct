@@ -431,10 +431,16 @@ class TimeCardController extends BaseCardController
 				'allModels' => $cardData['show-entries'],
 				'pagination'=> false,
 			]);
+			
+			$lunchActivity = new ArrayDataProvider([
+				'allModels' => $cardData['lunch-entries'],
+				'pagination'=> false,
+			]);
 
 			return $this -> render('show-entries', [
 				'model' => $cardData['card'],
 				'task' => $allTask,
+				'lunch' => $lunchActivity,
 				'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
 				'to' => $to,
 				'SundayDate' => $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
