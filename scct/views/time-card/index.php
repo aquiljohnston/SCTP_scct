@@ -132,7 +132,21 @@ else
 		],
 		[
 			'label' => 'Sum Hours',
-			'attribute' => 'SumHours',
+			//custom logic for time cards with single days over 12 hours
+			'value' => function($model, $key, $index, $column) {
+				$sumString = strval($model['SumHours']);
+				$overTwelve = $model['Flag'] == 0 ? '' : ' !';
+				return $sumString . $overTwelve;
+			},
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => function($model, $key, $index, $column) {
+				return $model['Flag'] == 0 ? ['class' => 'text-center'] : ['class' => 'text-center over-twelve', 'title' => 'At least one day has over 12 hours recorded.'];
+			},
+		],
+		[
+			'label' => '',
+			'attribute' => 'Flag',
+			'hidden' => true,
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center']
 		],
