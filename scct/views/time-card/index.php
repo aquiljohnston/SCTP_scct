@@ -144,13 +144,6 @@ else
 			},
 		],
 		[
-			'label' => '',
-			'attribute' => 'Flag',
-			'hidden' => true,
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center']
-		],
-		[
 			'label' => 'Supervisor Approved',
 			'attribute' => 'TimeCardApprovedFlag',
 			'value' => function($model, $key, $index, $column) {
