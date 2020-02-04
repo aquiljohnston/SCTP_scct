@@ -136,6 +136,13 @@ function initListeners() {
                     inspectorsListHeader.text("Project List: ");
                     toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
                 }
+				// reuse and rename the inspector dropdown for client
+                if(selectedReport.ParmClientFlag == 1) {
+                    dataSync("timeCard", reportStartDate, reportEndDate, null, null);
+                    // show project dropdown
+                    inspectorsListHeader.text("Client List: ");
+                    toggleVisible([inspectorsListHeader[0], inspectorsDropdown[0]], "inline");
+                }
 				// custom logic for taskout report
                 if(selectedReport.ReportSPName == 'spRptEmployeeTaskOutDetails') {
                     dataSync("taskOut", reportStartDate, reportEndDate, null, null);
@@ -173,7 +180,7 @@ function initListeners() {
             } 
         }
         // set inspectors
-        if(selectedReport.ParmInspectorFlag == 1)
+        if(selectedReport.ParmInspectorFlag == 1 || selectedReport.ParmClientFlag == 1)
             dropdownParam = inspectorsDropdown.val(); 
         // use inspector dropdown as project 
         if(selectedReport.ParmProjectFlag == 1) {
