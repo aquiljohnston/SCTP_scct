@@ -61,6 +61,19 @@ class UserController extends BaseController
             } else {
                 $page = 1;
             }
+			
+			//"sort":"-UserLastName"
+            //get sort data
+            if (isset($_GET['sort'])){
+                $sort = $_GET['sort'];
+                //parse sort data
+                $sortField = str_replace('-', '', $sort, $sortCount);
+                $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
+            } else {
+					//default sort values
+					$sortField = 'UserLastName';
+					$sortOrder = 'ASC';
+            }
 
             //build url with params
 			$userQueryParams = http_build_query([
@@ -68,6 +81,8 @@ class UserController extends BaseController
 				'listPerPage' => $model->pageSize,
 				'page' => $page,
 				'projectID' => $model->projectID,
+				'sortField' => $sortField,
+				'sortOrder' => $sortOrder,
 			]);
             $userGetUrl = 'user%2Fget-active&' . $userQueryParams;
             $userGetResponse = Parent::executeGetRequest($userGetUrl, Constants::API_VERSION_2);
@@ -87,28 +102,16 @@ class UserController extends BaseController
 
             // set pages to dispatch table
             $pages = new Pagination($userGetResponse['pages']);
-
-            // Sorting User table
-            $dataProvider->sort = [
-                'attributes' => [
-                    'UserName' => [
-                        'asc' => ['UserName' => SORT_ASC],
-                        'desc' => ['UserName' => SORT_DESC]
-                    ],
-                    'UserFirstName' => [
-                        'asc' => ['UserFirstName' => SORT_ASC],
-                        'desc' => ['UserFirstName' => SORT_DESC]
-                    ],
-                    'UserLastName' => [
-                        'asc' => ['UserLastName' => SORT_ASC],
-                        'desc' => ['UserLastName' => SORT_DESC]
-                    ],
-                    'UserAppRoleType' => [
-                        'asc' => ['UserAppRoleType' => SORT_ASC],
-                        'desc' => ['UserAppRoleType' => SORT_DESC]
-                    ]
-                ]
-            ];
+			
+			$dataProvider->sort = [
+				'defaultOrder' => [$sortField => ($sortOrder == 'ASC') ? SORT_ASC : SORT_DESC],
+				'attributes' => [
+					'UserName',
+					'UserFirstName',
+					'UserLastName',
+					'UserAppRoleType',
+				]
+			];
 			
             //populate add/remove modal options
             $addRemoveProjects = array();
