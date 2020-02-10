@@ -1,3 +1,14 @@
+.reportsDropdown select {
+    padding:5px;
+    list-style:none;
+    margin:5px;
+}
+
+.reportsDropdown option {
+    font-size: medium;
+	list-style-position: inside;
+}
+
 #reportsContainer .containerByDropdown {
     /*position: fixed;*/
     padding: 0 1%;
