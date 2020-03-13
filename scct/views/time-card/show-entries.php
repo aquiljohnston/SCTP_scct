@@ -167,7 +167,7 @@ TimeCardAsset::register($this);
 		]);
 		?>
 		
-		<input type="hidden" value=<?php echo $model['TimeCardID'] ?> name="timeCardId" id="timeCardId">
+		<input type="hidden" value=<?php echo Yii::$app->getRequest()->getQueryParam('id') ?> name="timeCardId" id="timeCardId">
 		<input type="hidden" value=<?php echo $isProjectManager ?> id="isProjectManager">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
 		<input type="hidden" value=<?php echo $isApproved ?> id="isApproved">
