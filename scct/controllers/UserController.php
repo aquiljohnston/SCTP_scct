@@ -89,7 +89,8 @@ class UserController extends BaseController
             $userGetResponse = json_decode($userGetResponse, true);
             $assets = $userGetResponse['assets'];
 			$showProjectDropdown = $userGetResponse['showProjectDropdown'];
-			$projectDropdown = $userGetResponse['projects'];			
+			$projectDropdown = $userGetResponse['projectDropdown'];			
+			$addUserProjects = $userGetResponse['addUserProjects'];			
 			
             //Passing data to the dataProvider and formatting it in an associative array
             $dataProvider = new ArrayDataProvider
@@ -113,17 +114,6 @@ class UserController extends BaseController
 				]
 			];
 			
-            //populate add/remove modal options
-            $addRemoveProjects = array();
-			$tmpProjectArray = $projectDropdown;
-			//remove generic options from data set
-			if(array_key_exists('all', $tmpProjectArray)) unset($tmpProjectArray['all']);
-			if(array_key_exists('unassigned', $tmpProjectArray)) unset($tmpProjectArray['unassigned']);
-            foreach($tmpProjectArray as $projectID => $projectName){
-                $tmpProjectObj = array('ProjectID'=> $projectID, 'ProjectName'=> $projectName);
-                array_push($addRemoveProjects, $tmpProjectObj);
-            }
-			
 			//check user create/deactivate permission to hide buttons
 			$canDeactivate = self::can('userDeactivate');
 			$canCreate = self::can('userCreate');
@@ -133,7 +123,7 @@ class UserController extends BaseController
                 'model' => $model,
                 'pages' => $pages,
                 'page' => $page,
-                'addRemoveProjects' => $addRemoveProjects,
+                'addUserProjects' => $addUserProjects,
 				'projectDropdown' => $projectDropdown,
 				'showProjectDropdown' => $showProjectDropdown,
 				'canDeactivate' => $canDeactivate,
