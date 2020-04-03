@@ -95,7 +95,7 @@ MileageCardAsset::register($this);
 		?>
 		<?= Html::label('Total Miles: '. $model['SumMiles'],
 			null, ['id' => 'entries_sum_miles']) ?>
-		<input type="hidden" value=<?php echo Yii::$app->getRequest()->getQueryParam('id') ?> name="mileageCardId" id="mileageCardId">
+		<input type="hidden" value=<?php echo $model["MileageCardID"]?> name="mileageCardId" id="mileageCardId">
 		<input type="hidden" value=<?php echo $isProjectManager ?> id="isProjectManager">
 		<input type="hidden" value=<?php echo $isAccountant ?> id="isAccountant">
 		<input type="hidden" value=<?php echo $isApproved ?> id="isApproved">
