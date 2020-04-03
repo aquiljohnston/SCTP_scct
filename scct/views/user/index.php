@@ -190,9 +190,9 @@ $column[] = $actionColumn;
     <!-- Modal content-->
     <div id='modalAddRemoveUserFromProjectBody' class="modal-body">
         <?php 
-            foreach($addUserProjects as $row) {
+            foreach($addRemoveProjects as $row) {
                 echo '<p style="text-align: center; margin-right: 2%;">' 
-                    . Html::a($row['ProjectName'] . '(' .$row['ProjectReferenceID'] . ')', ['project/add-user?id='.$row['ProjectID']], ['class' => 'btn btn-success', 'id' => 'createUserButton']) 
+                    . Html::a($row['ProjectName'], ['project/add-user?id='.$row['ProjectID']], ['class' => 'btn btn-success', 'id' => 'createUserButton']) 
                     . '</p>';
             }
         ?>
