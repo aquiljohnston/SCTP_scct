@@ -385,6 +385,7 @@ class ExpenseController extends BaseCardController {
 			$isApproved = $expenseData['groupData']['IsApproved'];
 			$isSubmitted = $expenseData['groupData']['IsSubmitted'];
 			$total = $expenseData['groupData']['Quantity'];
+			$isActive = $expenseData['isActive'];
 			
 			//data to pass to view
 			$dataArray = [
@@ -399,6 +400,7 @@ class ExpenseController extends BaseCardController {
 				'canDeactivate' => $canDeactivate,
 				'isApproved' => $isApproved,
 				'isSubmitted' => $isSubmitted,
+				'isActive' => $isActive,
 				'total' => $total,
 			];
 			
