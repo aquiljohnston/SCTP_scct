@@ -99,7 +99,8 @@ if($canApprove || $canDeactivate){
 				echo Html::button('Add Expense', [
 					'class' => 'btn btn-primary add_btn',
 					'id' => 'exp_entries_add_btn_id',
-					'disabled' => ($isSubmitted || !$isActive) ? true : false
+					'disabled' => ($isSubmitted || !$isActive) ? true : false,
+					'title' => $isActive ? '' : 'User not associated to project'
 				]);
 				if($canApprove){
 					echo Html::button('Approve', [
