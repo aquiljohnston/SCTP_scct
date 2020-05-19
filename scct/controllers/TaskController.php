@@ -55,7 +55,11 @@ class TaskController extends BaseController
 				'TimeReason',
 				'Comments',
 				'WeekStart',
-				'WeekEnd'
+				'WeekEnd',
+				//fields for PTO
+				'SCCEmployeeID',
+				'RefProjectID',
+				'PrevBalance'
 			]);
 			$model-> addRule('TimeCardID', 'string', ['max' => 100], 'required');
 			$model-> addRule('TaskName', 'string', ['max' => 100], 'required');
@@ -67,6 +71,10 @@ class TaskController extends BaseController
 			$model-> addRule('Comments', 'string', ['max' => 225], 'required');
 			$model-> addRule('WeekStart', 'string', ['max' => 32], 'required');
 			$model-> addRule('WeekEnd', 'string', ['max' => 32], 'required');
+			//fields for PTO
+			$model-> addRule('SCCEmployeeID', 'string', ['max' => 32]);
+			$model-> addRule('RefProjectID', 'string', ['max' => 32]);
+			$model-> addRule('PrevBalance', 'string', ['max' => 32]);
 			
 			//set default hidden form values
 			$model->TimeCardID = $TimeCardID;
@@ -77,6 +85,30 @@ class TaskController extends BaseController
 				// convert to 24 hour format
 				$startTime24 = date("H:i", strtotime($model->StartTime));
 				$endTime24 = date("H:i", strtotime($model->EndTime));
+				
+				//if new task is pto create pto object.
+				$pto_data = [];
+				if($model->ChargeOfAccountType == "5020"){
+					//convert time to float values to do qunatity calculations
+					$startTimeParts = explode(':', $startTime24);
+					$startTimeFloat = (float)($startTimeParts[0] + floor(($startTimeParts[1]/60)*100)/100);
+					$endTimeParts = explode(':', $endTime24);
+					$endTimeFloat = (float)($endTimeParts[0] + floor(($endTimeParts[1]/60)*100)/100);
+					$quantity = $endTimeFloat - $startTimeFloat;
+					$pto_data = array(
+						'Quantity' => $quantity,
+						'Memo' => '',
+						'StartDate' => $model->Date,
+						'EndDate' => $model->Date,
+						'SCCEmployeeID' => $model->SCCEmployeeID, 
+						'RefProjectID' => $model->RefProjectID,
+						'SrcCreatedDateTime' => BaseController::getDate(),
+						'PTOUID' => BaseController::generateUID('PTO'),
+						'TimeCardID' => $model->TimeCardID,
+						'PreviousBalance' => $model->PrevBalance,
+						'NewBalance' => $model->PrevBalance - $quantity,
+					);
+				}				
 
 				$task_entry_data = array(
 					'TimeCardID' => $model->TimeCardID,
@@ -87,6 +119,7 @@ class TaskController extends BaseController
 					'CreatedByUserName' => Yii::$app->session['UserName'],
 					'ChargeOfAccountType' => $model->ChargeOfAccountType,
 					'TimeReason' => ($model->Comments == null) ? $model->TimeReason : $model->TimeReason . ' - ' . $model->Comments,
+					'PTOData' => $pto_data
 				);
 				
 				$testDate = date( "Y-m-d", strtotime(str_replace('-', '/',$model->Date)));
@@ -103,12 +136,13 @@ class TaskController extends BaseController
 				return $response;
 			} else {
 				$hoursOverview['hoursOverview'] = [];
-				if($model->load(Yii::$app->request->queryParams) && $model->Date != null){	
+				if($model->load(Yii::$app->request->queryParams) && $model->Date != null){
+					$TimeCardID = $model->TimeCardID;
 					//format date for query
 					$hoursOverviewDate = date("Y-m-d", strtotime($model->Date));
 					//make route call with time card id and date params to get filtered overview data
 					$getHoursOverviewUrl = 'task%2Fget-hours-overview&' . http_build_query([
-						'timeCardID' => $model->TimeCardID,
+						'timeCardID' => $TimeCardID,
 						'date' => $hoursOverviewDate,
 					]);
 					$getHoursOverviewResponse = Parent::executeGetRequest($getHoursOverviewUrl, Constants::API_VERSION_3);
@@ -147,11 +181,19 @@ class TaskController extends BaseController
 					$timeReasonDropdown[$r['FieldValue']] = $r['FieldDisplay'];
 				}
 				
+				//get pto balance TODO look into combining call with time reason, task, and COA to cut down on api calls.
+				$ptoGetBalanceUrl = 'pto%2Fget-balance&' . http_build_query([
+					'timeCardID' => $TimeCardID,
+				]);
+				$ptoGetBalanceResponse = Parent::executeGetRequest($ptoGetBalanceUrl, Constants::API_VERSION_3);
+				$ptoData = json_decode($ptoGetBalanceResponse, true)['ptoData'];
+				
 				$dataArray = [
 					'model' => $model,
 					'allTask' => $allTask,
 					'chartOfAccountType' => $chartOfAccountType,
 					'timeReasonDropdown' => $timeReasonDropdown,
+					'ptoData' => $ptoData,
 					'SundayDate' => $SundayDate,
 					'SaturdayDate' => $SaturdayDate,
 					'hoursOverviewDataProvider' => $hoursOverviewDataProvider,

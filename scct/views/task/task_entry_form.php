@@ -185,12 +185,16 @@ $columns = [
         <?= Html::activeHiddenInput($model, 'TimeCardID', ['value' => $model->TimeCardID]); ?>
 		<?= Html::activeHiddenInput($model, 'WeekStart', ['value' => $model->WeekStart]); ?>
 		<?= Html::activeHiddenInput($model, 'WeekEnd', ['value' => $model->WeekEnd]); ?>
+		<?= Html::activeHiddenInput($model, 'PrevBalance', ['value' => $ptoData['PTOBalance']]); ?>
+		<?= Html::activeHiddenInput($model, 'SCCEmployeeID', ['value' => $ptoData['SCCEmployeeID']]); ?>
+		<?= Html::activeHiddenInput($model, 'RefProjectID', ['value' => $ptoData['ProjectReferenceID']]); ?>
     </div>
 		<input type="hidden" name="timeCardProjectID" value=<?=Yii::$app->getRequest()->getQueryParam('timeCardProjectID') ?> />
 		<input type="hidden" name="inOvertime" value=<?=Yii::$app->getRequest()->getQueryParam('inOvertime') ?> />
-    <br>
+    <br>	
     <br>
     <div class="form-group">
+		<?= Html::label('PTO Balance: '. $ptoData['PTOBalance'], null, ['id' => 'pto_balance', 'style' => 'padding-left: 50px; padding-top: 15px;']) ?>
         <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'create_task_entry_submit_btn', 'disabled' => 'disabled']) ?>
     </div>
     <?php ActiveForm::end(); ?>
@@ -278,6 +282,7 @@ $columns = [
 			var EndTime = $('#dynamicmodel-endtime').val();
 			var timeReason = $('#dynamicmodel-timereason').val();
 			var comments = $('#dynamicmodel-comments').val();
+			var ptoBalance = $('#dynamicmodel-prevbalance').val();
 
             if (date != '' && StartTime != '' && EndTime != '' && TaskName != '' && ChangeOfAccountType != '' && timeReason != '' && comments.length <= 225){
                //only convert when not empty
@@ -285,7 +290,11 @@ $columns = [
                 EndTime = ConvertToTwentyFourHourTime(EndTime);
                 //now compare 
                 if(EndTime > StartTime)
-					return true;
+					floatStartTime = timeStringToFloat(StartTime);
+					floatEndTime = timeStringToFloat(EndTime);
+					//check pto balance
+					if(!(ChangeOfAccountType == '5020') || ptoBalance > floatEndTime - floatStartTime)
+						return true;
             } else {
                 return false; 
             }    
@@ -305,6 +314,14 @@ $columns = [
 			if(hours<10) sHours = "0" + sHours;
 			if(minutes<10) sMinutes = "0" + sMinutes;
 			return sHours + ":" + sMinutes;
+		}
+		
+		//convery 24 hour format to float values
+		function timeStringToFloat(time) {
+			var hoursMinutes = time.split(/[.:]/);
+			var hours = parseInt(hoursMinutes[0], 10);
+			var minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+			return hours + minutes / 60;
 		}
 		
 		//reloads hours overview table in the task entry modal

@@ -12,6 +12,7 @@ if($allTask != null)
 				'allTask' => $allTask,
 				'chartOfAccountType' => $chartOfAccountType,
 				'timeReasonDropdown' => $timeReasonDropdown,
+				'ptoData' => $ptoData,
 				'SundayDate' => $SundayDate,
 				'SaturdayDate' => $SaturdayDate,
 				'hoursOverviewDataProvider' => $hoursOverviewDataProvider,
