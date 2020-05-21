@@ -293,7 +293,7 @@ $columns = [
 					floatStartTime = timeStringToFloat(StartTime);
 					floatEndTime = timeStringToFloat(EndTime);
 					//check pto balance
-					if(!(ChangeOfAccountType == '5020') || ptoBalance > floatEndTime - floatStartTime)
+					if(!(ChangeOfAccountType == '5020') || ptoBalance >= floatEndTime - floatStartTime)
 						return true;
             } else {
                 return false; 
