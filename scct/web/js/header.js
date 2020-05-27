@@ -156,7 +156,11 @@ $(document).ready(function () {
 									for (var j = 0; j < subNavigationLength; j++) {
 										if (subNavigationArray[j].enabled.toString() != 0) {
 											dropdownFlag = 1;
-											SubNavigationStr += "<li><a data-description='Dropdown" + j + "Option' href='" + baseUrl + subNavigationArray[j].Url.toString() + "'>" + subNavigationArray[j].SubNavigationName.toString() + "</a></li>";
+											subNavBaseUrl = baseUrl;
+											//if sub nav is a full url remove leading "/" to redirect away from main site
+											if(subNavigationArray[j].Url.toString().includes(".com"))
+												subNavBaseUrl = "";
+											SubNavigationStr += "<li><a data-description='Dropdown" + j + "Option' href='" + subNavBaseUrl + subNavigationArray[j].Url.toString() + "'>" + subNavigationArray[j].SubNavigationName.toString() + "</a></li>";
 										} else {
 											continue;
 										}
