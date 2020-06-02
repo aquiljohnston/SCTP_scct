@@ -135,10 +135,9 @@ class ProjectController extends BaseController
 			self::requirePermission("projectView");
 			
 			$url = 'project%2Fview&' . http_build_query([
-				'joinNames' => true,
 				'id' => $id,
 			]);
-			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3); // indirect rbac
 
 			return $this -> render('view', ['model' => json_decode($response), true]);
 		} catch (UnauthorizedHttpException $e){
