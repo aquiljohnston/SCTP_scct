@@ -46,25 +46,6 @@ $column = [
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
-    [
-        'label' => 'Start Date',
-        'attribute' => 'ProjectStartDate',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['ProjectStartDate']));
-        }
-    ],
-    [
-        'label' => 'End Date',
-        'attribute' => 'ProjectEndDate',
-        'headerOptions' => ['class' => 'text-center'],
-        'contentOptions' => ['class' => 'text-center'],
-        'value' => function ($model) {
-            return date("m/d/Y", strtotime($model['ProjectEndDate']));
-        }
-    ],
-
     ['class' => 'kartik\grid\ActionColumn',
 		'template' => '{view} {update}',
         'urlCreator' => function ($action, $model, $key, $index) {
