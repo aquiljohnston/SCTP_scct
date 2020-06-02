@@ -23,6 +23,7 @@ use Yii;
  * @property string $ProjectCreatedBy
  * @property string $ProjectModifiedDate
  * @property string $ProjectModifiedBy
+ * @property string $ProjectReferenceID
  *
  * @property ProjectUserTb[] $projectUserTbs
  * @property ProjectOQRequirementstb[] $projectOQRequirementstbs
@@ -47,6 +48,7 @@ class Project extends \yii\base\model
 	public $ProjectCreatedBy;
 	public $ProjectModifiedDate;
 	public $ProjectModifiedBy;
+	public $ProjectReferenceID;
 
 	// Constants defined to avoid "magic numbers"
     // Constant values taken from the database definition
@@ -66,7 +68,7 @@ class Project extends \yii\base\model
     {
         return [
             [['ProjectName', 'ProjectUrlPrefix'], 'required'],
-            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix', 'ProjectLandingPage'], 'string'],
+            [['ProjectName', 'ProjectDescription', 'ProjectNotes', 'ProjectType', 'ProjectState', 'ProjectUrlPrefix', 'ProjectLandingPage', 'ProjectReferenceID'], 'string'],
             [['ProjectID', 'ProjectStatus', 'ProjectClientID', 'ProjectCreatedBy', 'ProjectModifiedBy'], 'integer'],
             [['ProjectStartDate', 'ProjectEndDate', 'ProjectCreateDate', 'ProjectModifiedDate'], 'safe'],
             ['ProjectUrlPrefix', 'string', 'max' => self::MAX_PREFIX_LENGTH],
@@ -104,6 +106,7 @@ class Project extends \yii\base\model
             'ProjectCreatedBy' => 'Project Created By',
             'ProjectModifiedDate' => 'Project Modified Date',
             'ProjectModifiedBy' => 'Project Modified By',
+            'ProjectReferenceID' => 'Project Reference ID',
         ];
     }
 }

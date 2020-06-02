@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\project;
 use app\models\ProjectSearch;
+use app\models\ProjectConfiguration;
 use app\controllers\BaseController;
 use yii\data\Pagination;
 use yii\web\NotFoundHttpException;
@@ -58,7 +59,7 @@ class ProjectController extends BaseController
 				'listPerPage' => $model->pagesize,
 				'page' => $model->page
 			]);
-			$response = Parent::executeGetRequest($url, Constants::API_VERSION_2); // indirect rbac
+			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3); // indirect rbac
 
 			Yii::trace("Response from ProjectController: $response");
 			$resultData = json_decode($response, true);
@@ -77,6 +78,10 @@ class ProjectController extends BaseController
 					'ProjectName' => [
 						'asc' => ['ProjectName' => SORT_ASC],
 						'desc' => ['ProjectName' => SORT_DESC]
+					],
+					'ProjectReferenceID' => [
+						'asc' => ['ProjectReferenceID' => SORT_ASC],
+						'desc' => ['ProjectReferenceID' => SORT_DESC]
 					],
 					'ProjectType' => [
 						'asc' => ['ProjectType' => SORT_ASC],
@@ -248,113 +253,79 @@ class ProjectController extends BaseController
     }
 
     /**
-     * Updates an existing project model.
-     * If update is successful, the browser will be redirected to the 'view' page.
+     * Updates an existing project config model or create a new config based on defaults.
      * @param string $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id, $refid, $projectName){
 		try{
 			//guest redirect
 			if (Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
-			self::requirePermission("projectUpdate");
-			$getUrl = 'project%2Fview&' . http_build_query([
-				'id' => $id,
+			self::requirePermission("projectUpdateConfig");
+			$getUrl = 'project%2Fget-config&' . http_build_query([
+				'projectID' => $id,
 			]);
-			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_2), true);
+			$getResponse = json_decode(Parent::executeGetRequest($getUrl, Constants::API_VERSION_3), true);
+			$configData = $getResponse['ProjectConfig'];
 
-			$model  = new Project();
-			$model->attributes = $getResponse;
-				  
-			//get clients for form dropdown
-			$clientUrl = "client%2Fget-client-dropdowns";
-			$clientResponse = Parent::executeGetRequest($clientUrl, Constants::API_VERSION_2);
-			$clients = json_decode($clientResponse, true);
-			
-			//get states for form dropdown
-			$stateUrl = "dropdown%2Fget-state-codes-dropdown";
-			$stateResponse = Parent::executeGetRequest($stateUrl, Constants::API_VERSION_2);
-			$states = json_decode($stateResponse, true);
-			
-			//generate array for Active Flag dropdown
-			$flag = 
-			[
-				1 => "Active",
-				0 => "Inactive",
-			];
-			
-			if(Yii::$app->session->has('webDropDowns') && array_key_exists('ProjectLanding', Yii::$app->session['webDropDowns']))
-			{
-				$landingPageArray = Yii::$app->session['webDropDowns']['ProjectLanding'];
-				foreach($landingPageArray as $page)
-				{
-					$landingPages[$page['FieldValue']]= $page['FieldDisplay'];
-				}
+			//populate form model with current data if exist else populate with default values
+			$model = new ProjectConfiguration();
+			if($configData != null){
+				$model->attributes = $configData;
+			}else{
+				$model->ProjectID = $id;
+				$model->ProjectReferenceID = $refid;
+				$model->IsEndOfDayTaskOut = 1;
 			}
-				  
-			if ($model->load(Yii::$app->request->post()))
-			{
-				$data =array(
-					'ProjectName' => $model->ProjectName,
-					'ProjectDescription' => $model->ProjectDescription,
-					'ProjectNotes' => $model->ProjectNotes,
-					'ProjectType' => $model->ProjectType,
-					'ProjectStatus' => $model->ProjectStatus,
-					'ProjectUrlPrefix' => $model->ProjectUrlPrefix,
-					'ProjectLandingPage' => $model->ProjectLandingPage,
-					'ProjectClientID' => $model->ProjectClientID,
-					'ProjectState' => $model->ProjectState,
-					'ProjectStartDate' => $model->ProjectStartDate,
-					'ProjectEndDate' => $model->ProjectEndDate,
-					'ProjectCreateDate' => $model->ProjectCreateDate,
-					'ProjectCreatedBy' => $model->ProjectCreatedBy,
-					'ProjectModifiedDate' => $model->ProjectModifiedDate,
-					'ProjectModifiedBy' => Yii::$app->session['userID'],
-					);
 
-				$json_data = json_encode($data);
+			//generate array for Active Flag dropdown
+			$flag = [
+				1 => "Yes",
+				0 => "No",
+			];
+				  
+			if ($model->load(Yii::$app->request->post())){
+				$data = [
+					'ProjectID' => $id,
+					'ProjectReferenceID' => $refid,
+					'IsEndOfDayTaskOut' => $model->IsEndOfDayTaskOut,
+				];
+				$putData['ProjectConfig'] = $data; 
 				try {
-					$putUrl = 'project%2Fupdate&' . http_build_query([
-						'id' => $id,
-					]);
-					$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_2);
+					$putUrl = 'project%2Fupdate-config';
+					$putResponse = Parent::executePutRequest($putUrl, json_encode($putData), Constants::API_VERSION_3);
 					
-					$obj = json_decode($putResponse, true);
-					if(isset($obj["status"]) && $obj["status"] == 400) {
-						return $this->render('update', [
+					$response = json_decode($putResponse, true);
+					if($response['ProjectConfig']['SuccessFlag'] == 0) {
+						$dataArray = [
 							'model' => $model,
-							'clients' => $clients,
+							'projectName' => $projectName,
 							'flag' => $flag,
-							'states' => $states,
 							'updateFailed' => true,
-							'landingPages' => $landingPages,
-						]);
+						];
 					} else {
+						//may want to change this functionality, doesn't translate aswell to config updates
 						return $this->redirect(['view', 'id' => $model["ProjectID"]]);
 					}
 				} catch (\Exception $e) {
-					return $this->render('update', [
+					$dataArray = [
 						'model' => $model,
-						'clients' => $clients,
+						'projectName' => $projectName,
 						'flag' => $flag,
-						'states' => $states,
 						'updateFailed' => true,
-						'landingPages' => $landingPages,
-					]);
+					];
 				}
 			} else {
-				return $this->render('update', [
+				$dataArray = [
 					'model' => $model,
-					'clients' => $clients,
+					'projectName' => $projectName,
 					'flag' => $flag,
-					'states' => $states,
 					'updateFailed' => false,
-					'landingPages' => $landingPages,
-				]);
+				];
 			}
+			return $this->render('update', $dataArray);
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {

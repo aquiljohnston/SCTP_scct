@@ -62,6 +62,7 @@ class PermissionDictionary {
         'projectGetUserRelationships', // Get two arrays one of users associated with a project and one of all other users
         'projectAddRemoveUsers', // Add or remove users from a project
         'projectAddRemoveModules', // Add or remove modules from a project
+        'projectUpdateConfig', // Update config data for a project
         'stateCodeGetDropdown', // Get an associative array of state codes
         'timeCardGetOwnCards', // Get an array of multiple time cards for associated projects
         'timeCardGetAllCards', // Get an array of all time cards

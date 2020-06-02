@@ -28,6 +28,12 @@ $column = [
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],
+	[
+        'label' => 'Project ID',
+        'attribute' => 'ProjectReferenceID',
+        'headerOptions' => ['class' => 'text-center'],
+        'contentOptions' => ['class' => 'text-center'],
+    ],
     [
         'label' => 'Project Type',
         'attribute' => 'ProjectType',
@@ -60,10 +66,16 @@ $column = [
     ],
 
     ['class' => 'kartik\grid\ActionColumn',
-        'template' => '{view}',
+		'template' => '{view} {update}',
         'urlCreator' => function ($action, $model, $key, $index) {
             if ($action === 'view') {
                 $url = '/project/view?id=' . $model["ProjectID"];
+                return $url;
+            }
+			if ($action === 'update') {
+                $url = '/project/update?id=' . $model["ProjectID"] . 
+					'&refid=' . $model["ProjectReferenceID"] . 
+					'&projectName=' . $model["ProjectName"];
                 return $url;
             }
         },
@@ -89,8 +101,6 @@ $column = [
     <div class = 'col-sm-1' style='padding-left: 0px'>
         <?php if ($canCreateProjects): ?>
             <?= Html::a('Create Project', ['create'], ['class' => 'btn btn-success']) ?>
-        <?php else: ?>
-            <?= Html::a('Create Project', null, ['class' => 'btn btn-success', 'disabled' => 'disabled']) ?>
         <?php endif; ?>
     </div>
     <div class = 'col-sm-11' id="projectSearchContainer">

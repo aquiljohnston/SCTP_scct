@@ -9,7 +9,7 @@ ProjectAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $model app\models\project */
 
-$this->title = 'Update Project: ' . ' ' . $model->ProjectName;
+$this->title = 'Update Project: ' . ' ' . $projectName;
 $this->params['breadcrumbs'][] = ['label' => 'Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->ProjectID, 'url' => ['view', 'id' => $model->ProjectID]];
 $this->params['breadcrumbs'][] = 'Update';
@@ -22,12 +22,10 @@ $this->params['breadcrumbs'][] = 'Update';
 		<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 	</p>
 	
-    <?= $this->render('_form', [
+    <?= $this->render('_config_form', [
         'model' => $model,
-		'clients' => $clients,
+		'projectName' => $projectName,
 		'flag' => $flag,
-		'states' => $states,
-		'landingPages' => $landingPages,
     ]) ?>
 
 </div>
