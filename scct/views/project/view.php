@@ -28,32 +28,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            //'ProjectID',
-            'ProjectName',
-            'ProjectDescription',
-            'ProjectNotes',
-            'ProjectType',
-            'ProjectStatus',
-            'ProjectUrlPrefix',
             [
-                'label' => 'Project Client',
-                'value' => function($model, $widget) {
-                    return Html::a($model->ClientName, ['client/view', 'id' => $model->ProjectClientID]);;
-                },
-                'format' => 'html'
-            ],
-			'ProjectState',
-            'ProjectStartDate',
-            'ProjectEndDate',	
-			'ProjectCreateDate',
-			[
-                'label' => 'Project Created By',
-                'value' => function($model, $widget) {
-                    return Html::a($model->CreatedUserName, ['user/view', 'username' => $model->CreatedUserName]);;
-                },
-                'format' => 'html'
-            ],
-			'ProjectModifiedDate',
+				'label' => 'Name',
+				'value' => $model->ProjectName,
+			],[
+				'label' => 'ReferenceID',
+				'value' => $model->ProjectReferenceID,
+			],[
+				'label' => 'Type',
+				'value' => $model->ProjectType,
+			],[
+				'label' => 'State',
+				'value' => $model->ProjectState,
+			],[
+				'label' => 'End of Day Task Out',
+				'value' => $model->IsEndOfDayTaskOut == 1 ? 'Yes' : 'No',
+			],
         ],
     ]) ?>
 
