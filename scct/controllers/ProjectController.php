@@ -277,7 +277,7 @@ class ProjectController extends BaseController
 			}else{
 				$model->ProjectID = $id;
 				$model->ProjectReferenceID = $refid;
-				$model->IsEndOfDayTaskOut = 1;
+				$model->IsEndOfDayTaskOut = 0;
 			}
 
 			//generate array for Active Flag dropdown
