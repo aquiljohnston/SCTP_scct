@@ -39,8 +39,8 @@ $column = [
         'contentOptions' => ['class' => 'text-center'],
     ],
     [
-        'label' => 'Role Type',
-        'attribute' => 'UserAppRoleType',
+        'label' => 'Job Title',
+        'attribute' => 'UserEmployeeType',
         'headerOptions' => ['class' => 'text-center'],
         'contentOptions' => ['class' => 'text-center'],
     ],

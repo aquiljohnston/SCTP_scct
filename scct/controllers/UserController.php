@@ -33,11 +33,10 @@ class UserController extends BaseController
      * @throws ForbiddenHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionIndex()
-    {
-        try {
-			 //guest redirect
-			if (Yii::$app->user->isGuest) {
+    public function actionIndex(){
+        try{
+			//guest redirect
+			if(Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
             //Check if user has permission to view user page
@@ -50,16 +49,16 @@ class UserController extends BaseController
                 ->addRule('pageSize', 'string', ['max' => 32])//get page number and records per page
 				->addRule('projectID', 'string', ['max' => 32]);//set to string to accommodate all options
 
-            if (!$model->load(Yii::$app->request->get())) {
+            if(!$model->load(Yii::$app->request->get())){
                 $model->pageSize = 50;
                 $model->filter = "";
 				$model->projectID = null;
             }
 
-            if (isset(Yii::$app->request->queryParams['UserManagementPageNumber'])) {
+            if(isset(Yii::$app->request->queryParams['UserManagementPageNumber'])){
                 $page = intval(Yii::$app->request->queryParams['UserManagementPageNumber']);
-            } else {
-                $page = 1;
+            }else{
+				$page = 1;
             }
 			
 			//"sort":"-UserLastName"
@@ -69,10 +68,10 @@ class UserController extends BaseController
                 //parse sort data
                 $sortField = str_replace('-', '', $sort, $sortCount);
                 $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
-            } else {
-					//default sort values
-					$sortField = 'UserLastName';
-					$sortOrder = 'ASC';
+            }else{
+				//default sort values
+				$sortField = 'UserLastName';
+				$sortOrder = 'ASC';
             }
 
             //build url with params
@@ -85,7 +84,7 @@ class UserController extends BaseController
 				'sortOrder' => $sortOrder,
 			]);
             $userGetUrl = 'user%2Fget-active&' . $userQueryParams;
-            $userGetResponse = Parent::executeGetRequest($userGetUrl, Constants::API_VERSION_2);
+            $userGetResponse = Parent::executeGetRequest($userGetUrl, Constants::API_VERSION_3);
             $userGetResponse = json_decode($userGetResponse, true);
             $assets = $userGetResponse['assets'];
 			$showProjectDropdown = $userGetResponse['showProjectDropdown'];
@@ -93,8 +92,7 @@ class UserController extends BaseController
 			$addUserProjects = $userGetResponse['addUserProjects'];			
 			
             //Passing data to the dataProvider and formatting it in an associative array
-            $dataProvider = new ArrayDataProvider
-            ([
+            $dataProvider = new ArrayDataProvider([
                 'allModels' => $assets,
                 'pagination' => [
                     'pageSize' => $model->pageSize,
@@ -110,7 +108,7 @@ class UserController extends BaseController
 					'UserName',
 					'UserFirstName',
 					'UserLastName',
-					'UserAppRoleType',
+					'UserEmployeeType',
 				]
 			];
 			
@@ -129,13 +127,13 @@ class UserController extends BaseController
 				'canDeactivate' => $canDeactivate,
 				'canCreate' => $canCreate,
             ]);
-        } catch (UnauthorizedHttpException $e){
+        }catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
+        }catch(ForbiddenHttpException $e){
             throw $e;
-        } catch(ErrorException $e) {
+        }catch(ErrorException $e){
             throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
+        }catch(Exception $e){
             throw new ServerErrorHttpException();
         }
     }
