@@ -4,6 +4,10 @@
     font-size: 20px;
 }
 
+.mileageCardClientFilterDD {
+    margin-top: -3%;
+}
+
 .mileageProjectFilterDD {
     margin-top: -2%;
 }
@@ -12,10 +16,16 @@
 	margin-top: -2%;
 }
 
-#mileageCardClearDropdownFilterButton  {
+.mileageCardClearDropdownFilterButton  {
     width: 32px;
     cursor: pointer;
-    margin-top: -3%;
+    margin-top: -5%;
+}
+
+.mileageCardClearDropdownFilterButtonNoFilter  {
+    width: 32px;
+    cursor: pointer;
+    margin-top: -3.5%;
 }
 
 .off-btn{
@@ -31,7 +41,7 @@
 
 #multiple_mileage_card_approve_btn{
 	float: right;
-	margin-top: -1%;
+	margin-top: -0.5%;
 	margin-right: 0.5%;
 	width: 12%;
 }
@@ -87,6 +97,10 @@
 }
 
 .MileageCardDateRangeDropDown {
+	margin-top: -3%;
+}
+
+.MileageCardDateRangeDropDownNoFilter {
 	margin-top: -2%;
 }
 
@@ -119,13 +133,17 @@
 }
 
 #mileageDatePickerContainer{
-	margin-top: -6.2%;
-	margin-left: -15%;
+	margin-top: -7.5%;
+	margin-left: -13%;
 }
 
 /*responsive css for table*/
 @media only screen and (max-width : 1900px) {
 	#mileageEmployeeFilterDD{
+		margin-left: 0px;
+	}
+	
+	#mileageCardClientFilterDD{
 		margin-left: 0px;
 	}
 	
@@ -147,6 +165,10 @@
 		margin-left: 12px;
 	}
 	
+	#mileageCardClientFilterDD{
+		margin-left: 12px;
+	}
+	
 	#mileageCardGridview .kv-grid-container{
 		max-height:48vh;
 	}
@@ -156,10 +178,15 @@
 	}
 	
 	#multiple_mileage_card_approve_btn{
-        margin-top: -1%;
+        margin-top: -0.5%;
         margin-right: 0.5%;
         width: 14%;
     }
+	
+	#mileageDatePickerContainer{
+		margin-top: -8%;
+		margin-left: -14%;
+	}
 }
 
 @media only screen and (max-width : 1366px) {
@@ -168,6 +195,10 @@
 	}
 	
 	#mileageEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#mileageCardClientFilterDD{
 		margin-left: 12px;
 	}
 	
@@ -180,10 +211,15 @@
 	}
 	
 	#multiple_mileage_card_approve_btn{
-        margin-top: -1%;
+        margin-top: -0.5%;
         margin-right: 0.5%;
         width: 15%;
     }
+	
+	#mileageDatePickerContainer{
+		margin-top: -9%;
+		margin-left: -17%;
+	}
 }
 
 @media only screen and (max-width : 1280px) {	
@@ -191,11 +227,19 @@
 		margin-right: 22%;
 	}
 	
-	#mileageCardClearDropdownFilterButton{
+	.mileageCardClearDropdownFilterButton{
+		margin-left: 4px;
+	}
+	
+	.mileageCardClearDropdownFilterButtonNoFilter{
 		margin-left: 4px;
 	}
 	
 	#mileageEmployeeFilterDD{
+		margin-left: 18px;
+	}
+	
+	#mileageCardClientFilterDD{
 		margin-left: 18px;
 	}
 	
@@ -208,8 +252,8 @@
 	}
 	
 	#mileageDatePickerContainer {
-		margin-top: -7.5%;
-		margin-left: -16%;
+		margin-top: -9.5%;
+		margin-left: -18%;
 	}
 	
 	#mileageCardDateRange{
@@ -218,7 +262,7 @@
 	}
 	
 	#multiple_mileage_card_approve_btn{
-		margin-top: -0.75%;
+		margin-top: -0.25%;
 		margin-right: 0;
 		width: 15%;
 	}

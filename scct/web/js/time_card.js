@@ -42,6 +42,14 @@ $(function(){
         return false;
     });
 
+	$(document).off('change', '#timeCardClientFilterDD').on('change', '#timeCardClientFilterDD', function (event) {
+		$('#timeCardProjectFilterDD').val("All");
+		$('#timeCardEmployeeFilterDD').val("All");
+        reloadTimeCardGridView(1);
+        event.preventDefault();
+        return false;
+    });
+
     $(document).off('change', '#timeCardProjectFilterDD').on('change', '#timeCardProjectFilterDD', function (event) {
 		$('#timeCardEmployeeFilterDD').val("All");
         reloadTimeCardGridView(1);
@@ -70,6 +78,7 @@ $(function(){
     });
 	
 	$(document).off('click', '#timeCardClearDropdownFilterButton').on('click', '#timeCardClearDropdownFilterButton', function (){
+        $('#timeCardClientFilterDD').val("All");
         $('#timeCardProjectFilterDD').val("All");
         $('#timeCardEmployeeFilterDD').val("All");
         reloadTimeCardGridView(1);

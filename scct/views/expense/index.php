@@ -160,7 +160,7 @@ else
 ?>
 
 <div class="expense-index">
-    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
+    <div class="lightBlueBar" style="height: 140px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="expense_filter">
             <div id="expenseDropdownContainer">
@@ -229,11 +229,22 @@ else
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'expenseFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'expenseSearchCleanFilterButton']) ?>
-                <div class="col-md-2 ExpenseDateRangeDropDown">
+                <?php if($showFilter){ ?>
+					<div class="col-md-2 ExpenseDateRangeDropDown">
+				<?php }else{ ?>
+					<div class="col-md-2 ExpenseDateRangeDropDownNoFilter">
+				<?php } ?>
                     <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'expenseDateRange'])->label("Week"); ?>
                 </div> <!--show filter-->
 				<?php Pjax::begin(['id' => 'expenseDropDownPjax', 'timeout' => false]) ?>
 					<?php if($showFilter){ ?>
+						<div class="col-md-2 expenseClientFilterDD">
+							<?=
+								$form->field($model, 'clientID', ['labelSpan' => 3])->dropDownList($clientDropDown,
+								['value' => $model->clientID, 'id'=>'expenseClientFilterDD'])->label('Client'); 
+							?>
+						</div>
+						<br style="clear: both;">
 						<div class="col-md-2 expenseProjectFilterDD">
 							<?=
 								$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
@@ -249,7 +260,13 @@ else
 							['value' => $model->employeeID, 'id'=>'expenseEmployeeFilterDD'])->label('Employee'); 
 						?>
 					</div>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'expenseClearDropdownFilterButton']) ?>
+					<?php 
+						if($showFilter){
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'expenseClearDropdownFilterButton' , 'class' => 'expenseClearDropdownFilterButton']);
+						}else{
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'expenseClearDropdownFilterButton' , 'class' => 'expenseClearDropdownFilterButtonNoFilter']);
+						}
+					?>
 				<?php Pjax::end() ?>
 					<?php if($model->dateRangeValue == 'other'){ ?>
 						<div id="expenseDatePickerContainer" style="float: left; width: auto; display: block;">

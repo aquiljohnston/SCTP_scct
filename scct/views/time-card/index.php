@@ -199,7 +199,7 @@ else
 ?>
 
 <div class="timecard-index">
-    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
+    <div class="lightBlueBar" style="height: 140px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="timecard_filter">
             <div id="timeCardDropdownContainer">
@@ -268,11 +268,22 @@ else
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'timeCardFilter'])->label("Search"); ?>
                 </div>
                 <?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardSearchCleanFilterButton']) ?>
-                <div class="col-md-2 TimeCardDateRangeDropDown">
-                    <?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
-                </div> <!--show filter-->
+				<?php if($showFilter){ ?>
+					<div class="col-md-2 TimeCardDateRangeDropDown">
+				<?php }else{ ?>
+					<div class="col-md-2 TimeCardDateRangeDropDownNoFilter">
+				<?php } ?>
+					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'timeCardDateRange'])->label("Week"); ?>
+				</div> <!--show filter-->
 				<?php Pjax::begin(['id' => 'timeCardDropDownPjax', 'timeout' => false]) ?>
 					<?php if($showFilter){ ?>
+						<div class="col-md-2 timeCardClientFilterDD">
+							<?=
+								$form->field($model, 'clientID', ['labelSpan' => 3])->dropDownList($clientDropDown,
+								['value' => $model->clientID, 'id'=>'timeCardClientFilterDD'])->label('Client'); 
+							?>
+						</div>
+						<br style="clear: both;"> 
 						<div class="col-md-2 timeCardProjectFilterDD">
 							<?=
 								$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
@@ -288,7 +299,13 @@ else
 							['value' => $model->employeeID, 'id'=>'timeCardEmployeeFilterDD'])->label('Employee'); 
 						?>
 					</div>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearDropdownFilterButton']) ?>
+					<?php 
+						if($showFilter){
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearDropdownFilterButton' , 'class' => 'timeCardClearDropdownFilterButton']);
+						}else{
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'timeCardClearDropdownFilterButton' , 'class' => 'timeCardClearDropdownFilterButtonNoFilter']);
+						}
+					?>
 				<?php Pjax::end() ?>
 					<?php if($model->dateRangeValue == 'other'){ ?>
 						<div id="timeCardDatePickerContainer" style="float: left; width: auto; display: block;">
