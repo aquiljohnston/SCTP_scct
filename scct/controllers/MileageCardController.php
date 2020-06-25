@@ -69,6 +69,7 @@ class MileageCardController extends BaseCardController
 				'pageSize',
                 'filter',
                 'dateRangeValue',
+				'clientID',
 				'projectID',
 				'employeeID'
             ]);
@@ -77,6 +78,7 @@ class MileageCardController extends BaseCardController
             $model->addRule('pageSize', 'string', ['max' => 32]);//get page number and records per page
             $model->addRule('filter', 'string', ['max' => 100]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]);
+			$model->addRule('clientID', 'integer');
 			$model->addRule('projectID', 'integer');
             $model->addRule('employeeID', 'integer');
 			
@@ -132,6 +134,7 @@ class MileageCardController extends BaseCardController
 					$model->dateRangeValue = $currentWeek;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->clientID = '';
 					$model->projectID = $projectID != null ? $projectID : '';
 					if($activeWeek == Constants::PRIOR_WEEK){
 						$model->dateRangeValue = $priorWeek;
@@ -168,6 +171,7 @@ class MileageCardController extends BaseCardController
 				'listPerPage' => $model->pageSize,
 				'page' => $model->page,
 				'filter' => $encodedFilter,
+				'clientID' => $model->clientID,
 				'projectID' => $model->projectID,
 				'employeeID' => $model->employeeID,
 				'sortField' => $sortField,
@@ -189,6 +193,7 @@ class MileageCardController extends BaseCardController
             $unapprovedMileageCardVisible = array_key_exists('unapprovedMileageCardVisible', $response) ? $response['unapprovedMileageCardVisible'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
+			$clientDropDown = $response['clientDropDown'];
 			$projectDropDown = $response['projectDropDown'];
 			$employeeDropDown = $response['employeeDropDown'];
 
@@ -261,6 +266,7 @@ class MileageCardController extends BaseCardController
 				'dateRangeDD' => $dateRangeDD,
 				'model' => $model,
 				'pages' => $pages,
+				'clientDropDown' => $clientDropDown,
 				'projectDropDown' => $projectDropDown,
 				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,

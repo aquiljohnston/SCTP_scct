@@ -186,7 +186,7 @@ if($isAccountant)
 ?>
 
 <div class="mileagecard-index">
-    <div class="lightBlueBar" style="height: 110px; padding: 10px;">
+    <div class="lightBlueBar" style="height: 140px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="mileage_card_filter">
             <div id="mileageCardDropdownContainer">
@@ -255,11 +255,22 @@ if($isAccountant)
                     <?= $form->field($model, 'filter', ['labelSpan' => 3])->textInput(['value' => $model->filter, 'placeholder' => 'Example: username, project', 'id' => 'mileageCardFilter'])->label("Search"); ?>
                 </div>
 				<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardSearchCleanFilterButton']) ?>
-				<div class="col-md-2 MileageCardDateRangeDropDown">
+				<?php if($showFilter){ ?>
+					<div class="col-md-2 MileageCardDateRangeDropDown">
+				<?php }else{ ?>
+					<div class="col-md-2 MileageCardDateRangeDropDownNoFilter">
+				<?php } ?>
 					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'mileageCardDateRange'])->label("Week"); ?>
 				</div>
 				<?php Pjax::begin(['id' => 'mileageCardDropDownPjax', 'timeout' => false]) ?>
 					<?php if($showFilter){ ?>
+						<div class="col-md-2 mileageCardClientFilterDD">
+							<?=
+								$form->field($model, 'clientID', ['labelSpan' => 3])->dropDownList($clientDropDown,
+								['value' => $model->clientID, 'id'=>'mileageCardClientFilterDD'])->label('Client'); 
+							?>
+						</div>
+						<br style="clear: both;"> 
 						<div class="col-md-2 mileageProjectFilterDD">
 							<?=
 								$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
@@ -275,7 +286,13 @@ if($isAccountant)
 							['value' => $model->employeeID, 'id'=>'mileageEmployeeFilterDD'])->label('Employee'); 
 						?>
 					</div>
-					<?php echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardClearDropdownFilterButton']) ?>
+					<?php 
+						if($showFilter){
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardClearDropdownFilterButton' , 'class' => 'mileageCardClearDropdownFilterButton']);
+						}else{
+							echo Html::img('@web/logo/filter_clear_black.png', ['id' => 'mileageCardClearDropdownFilterButton' , 'class' => 'mileageCardClearDropdownFilterButtonNoFilter']);
+						}
+					?>
 				<?php Pjax::end() ?>
 				<?php if($model->dateRangeValue == 'other'){ ?>
 					<div id="mileageDatePickerContainer" style="float: left; width: auto; display: block;">

@@ -4,6 +4,10 @@
     font-size: 20px;
 }
 
+.timeCardClientFilterDD {
+    margin-top: -3%;
+}
+
 .timeCardProjectFilterDD {
     margin-top: -2%;
 }
@@ -12,10 +16,16 @@
 	margin-top: -2%;
 }
 
-#timeCardClearDropdownFilterButton  {
+.timeCardClearDropdownFilterButton  {
     width: 32px;
     cursor: pointer;
-    margin-top: -3%;
+    margin-top: -5%;
+}
+
+.timeCardClearDropdownFilterButtonNoFilter  {
+    width: 32px;
+    cursor: pointer;
+    margin-top: -3.5%;
 }
 
 .off-btn{
@@ -31,7 +41,7 @@
 
 #multiple_time_card_approve_btn{
 	float: right;
-	margin-top: -1%;
+	margin-top: -0.5%;
 	margin-right: 0.5%;
 	width: 12%;
 }
@@ -92,6 +102,10 @@
 }
 
 .TimeCardDateRangeDropDown {
+	margin-top: -3%;
+}
+
+.TimeCardDateRangeDropDownNoFilter {
 	margin-top: -2%;
 }
 
@@ -124,13 +138,17 @@
 }
 
 #timeCardDatePickerContainer{
-	margin-top: -6.2%;
-	margin-left: -15%;
+	margin-top: -7.5%;
+	margin-left: -13%;
 }
 
 /*responsive css for table*/
 @media only screen and (max-width : 1900px) {
 	#timeCardEmployeeFilterDD{
+		margin-left: 0px;
+	}
+	
+	#timeCardClientFilterDD{
 		margin-left: 0px;
 	}
 	
@@ -152,6 +170,10 @@
 		margin-left: 12px;
 	}
 	
+	#timeCardClientFilterDD{
+		margin-left: 12px;
+	}
+	
 	#timeCardGridview .kv-grid-container{
 		max-height:48vh;
 	}
@@ -161,10 +183,15 @@
 	}
 	
 	#multiple_time_card_approve_btn{
-        margin-top: -1%;
+        margin-top: -0.5%;
         margin-right: 0.5%;
         width: 14%;
     }
+	
+	#timeCardDatePickerContainer{
+		margin-top: -8%;
+		margin-left: -14%;
+	}
 }
 
 @media only screen and (max-width : 1366px) {
@@ -173,6 +200,10 @@
 	}
 	
 	#timeCardEmployeeFilterDD{
+		margin-left: 12px;
+	}
+	
+	#timeCardClientFilterDD{
 		margin-left: 12px;
 	}
 	
@@ -185,10 +216,15 @@
 	}
 	
 	#multiple_time_card_approve_btn{
-        margin-top: -1%;
+        margin-top: -0.5%;
         margin-right: 0.5%;
         width: 15%;
     }
+	
+	#timeCardDatePickerContainer{
+		margin-top: -9%;
+		margin-left: -17%;
+	}
 }
 
 @media only screen and (max-width : 1280px) {	
@@ -196,11 +232,19 @@
 		margin-right: 22%;
 	}
 	
-	#timeCardClearDropdownFilterButton{
+	.timeCardClearDropdownFilterButton{
+		margin-left: 4px;
+	}
+	
+	.timeCardClearDropdownFilterButtonNoFilter{
 		margin-left: 4px;
 	}
 	
 	#timeCardEmployeeFilterDD{
+		margin-left: 18px;
+	}
+	
+	#timeCardClientFilterDD{
 		margin-left: 18px;
 	}
 	
@@ -213,8 +257,8 @@
 	}
 	
 	#timeCardDatePickerContainer {
-		margin-top: -7.5%;
-		margin-left: -16%;
+		margin-top: -9.5%;
+		margin-left: -18%;
 	}
 	
 	#timeCardDateRange{
@@ -223,7 +267,7 @@
 	}
 	
 	#multiple_time_card_approve_btn{
-		margin-top: -0.75%;
+		margin-top: -0.25%;
 		margin-right: 0;
 		width: 15%;
 	}
