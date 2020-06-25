@@ -70,6 +70,7 @@ class TimeCardController extends BaseCardController
                 'filter',
                 'dateRangeValue',
                 'dateRangePicker',
+                'clientID',
                 'projectID',
 				'employeeID'
             ]);
@@ -78,6 +79,7 @@ class TimeCardController extends BaseCardController
             $model->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model->addRule('dateRangePicker', 'string', ['max' => 32]);
             $model->addRule('dateRangeValue', 'string', ['max' => 100]); 
+            $model->addRule('clientID', 'integer');
             $model->addRule('projectID', 'integer');
             $model->addRule('employeeID', 'integer');
 
@@ -133,6 +135,7 @@ class TimeCardController extends BaseCardController
 					$model->dateRangeValue = $currentWeek;
 					//set filters if data passed from home screen
 					$model->filter = $projectFilterString != null ? urldecode($projectFilterString): '';
+					$model->clientID = '';
 					$model->projectID = $projectID != null ? $projectID : '';
 					if($activeWeek == Constants::PRIOR_WEEK){
 						$model->dateRangeValue = $priorWeek;
@@ -169,6 +172,7 @@ class TimeCardController extends BaseCardController
 				'listPerPage' => $model->pageSize,
 				'page' => $model->page,
 				'filter' => $encodedFilter,
+				'clientID' => $model->clientID,
 				'projectID' => $model->projectID,
 				'employeeID' => $model->employeeID,
 				'sortField' => $sortField,
@@ -190,6 +194,7 @@ class TimeCardController extends BaseCardController
             $unapprovedTimeCardVisible = array_key_exists('unapprovedTimeCardVisible', $response) ? $response['unapprovedTimeCardVisible'] : false;
             $showFilter = $response['showProjectDropDown'];
             $projectWasSubmitted = $response['projectSubmitted'];
+			$clientDropDown = $response['clientDropDown'];
 			$projectDropDown = $response['projectDropDown'];
 			$employeeDropDown = $response['employeeDropDown'];
 			
@@ -262,6 +267,7 @@ class TimeCardController extends BaseCardController
 				'dateRangeDD' => $dateRangeDD,
 				'model' => $model,
 				'pages' => $pages,
+				'clientDropDown' => $clientDropDown,
 				'projectDropDown' => $projectDropDown,
 				'employeeDropDown' => $employeeDropDown,
 				'showFilter' => $showFilter,

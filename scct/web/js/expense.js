@@ -40,6 +40,14 @@ $(function(){
         return false;
     });
 
+	$(document).off('change', '#expenseClientFilterDD').on('change', '#expenseClientFilterDD', function (event) {
+		$('#expenseProjectFilterDD').val("All");
+		$('#expenseEmployeeFilterDD').val("All");
+        reloadExpenseGridView(1);
+        event.preventDefault();
+        return false;
+    });
+
     $(document).off('change', '#expenseProjectFilterDD').on('change', '#expenseProjectFilterDD', function (event) {
 		$('#expenseEmployeeFilterDD').val("All");
         reloadExpenseGridView(1);
@@ -68,6 +76,7 @@ $(function(){
     });
 	
 	$(document).off('click', '#expenseClearDropdownFilterButton').on('click', '#expenseClearDropdownFilterButton', function (){
+        $('#expenseClientFilterDD').val("All");
         $('#expenseProjectFilterDD').val("All");
         $('#expenseEmployeeFilterDD').val("All");
         reloadExpenseGridView(1);

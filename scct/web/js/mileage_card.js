@@ -41,7 +41,15 @@ $(function(){
         event.preventDefault();
         return false;
     });
-
+	
+	$(document).off('change', '#mileageCardClientFilterDD').on('change', '#mileageCardClientFilterDD', function (event) {
+		$('#mileageProjectFilterDD').val("All");
+		$('#mileageEmployeeFilterDD').val("All");
+        reloadMileageCardGridView(1);
+        event.preventDefault();
+        return false;
+    });
+	
     $(document).off('change', '#mileageProjectFilterDD').on('change', '#mileageProjectFilterDD', function (event) {
 		$('#mileageEmployeeFilterDD').val("All");
         reloadMileageCardGridView(1);
@@ -70,6 +78,7 @@ $(function(){
     });
 	
 	$(document).off('click', '#mileageCardClearDropdownFilterButton').on('click', '#mileageCardClearDropdownFilterButton', function (){
+        $('#mileageCardClientFilterDD').val("All");
         $('#mileageProjectFilterDD').val("All");
         $('#mileageEmployeeFilterDD').val("All");
         reloadMileageCardGridView(1);
