@@ -32,17 +32,17 @@ $columns = [
 			'attribute' => 'End Time',
 			'headerOptions' => ['class' => 'text-center'],
 			'contentOptions' => ['class' => 'text-center'],
-		],
-		[
-			'class' => 'kartik\grid\ActionColumn',
-			'template' => '{delete}',
-			'header' => '',
-			'buttons' => [
-				'delete' => function ($url, $model, $key) {
-					return Html::a('<span id="taskModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
-				}
-			]
 		]
+		// ,[
+			// 'class' => 'kartik\grid\ActionColumn',
+			// 'template' => '{delete}',
+			// 'header' => '',
+			// 'buttons' => [
+				// 'delete' => function ($url, $model, $key) {
+					// return Html::a('<span id="taskModalDeactivateAction" class="glyphicon glyphicon-trash" title="Deactivate"></span>');
+				// }
+			// ]
+		// ]
 	];
 
 /* @var $this yii\web\View */
