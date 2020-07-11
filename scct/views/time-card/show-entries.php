@@ -39,11 +39,11 @@ TimeCardAsset::register($this);
 				]);
 			}
 			?>
-			<?= Html::button('Deactivate', [
+			<!--<?= Html::button('Deactivate', [
 				'class' => 'btn btn-primary',
 				'disabled' => true,
 				'id' => 'deactive_timeEntry_btn_id',
-			]) ?>
+			]) ?>-->
 			<?= Html::button('Add Task', [
 				'class' => 'btn btn-primary add_task_btn',
 				'disabled' => (($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
@@ -53,7 +53,7 @@ TimeCardAsset::register($this);
 		<br>
     </div>
     <?php Pjax::begin(['id' => 'ShowTimeEntriesView', 'timeout' => false]) ?>
-		<h3>Task</h3>
+		<h3>Time</h3>
 		<?= \kartik\grid\GridView::widget([
 			'id' => 'allTaskEntries',
 			'dataProvider' => $task,
@@ -63,9 +63,6 @@ TimeCardAsset::register($this);
 			'caption' => '',
 			'columns' => [
 				[
-					'label' => 'Task',
-					'attribute' => 'Task',
-				],[
 					'label' => 'Sunday ' . $SundayDate,
 					'attribute' => 'Date1',
 					'headerOptions' => ['class'=>$SundayDateFull]
@@ -94,27 +91,12 @@ TimeCardAsset::register($this);
 					'attribute' => 'Date7',
 					'headerOptions' => ['class'=>$SaturdayDateFull],
 				],[
-					'header' => 'Deactivate All Task',
-					'class' => 'kartik\grid\CheckboxColumn',
-					'contentOptions' => [],
-					'checkboxOptions' => function ($model, $key, $index, $column) {
-						//hide checkbox on total row
-						$hiddenBool = $model['Task'] == 'Total';
-						$result = [
-							'timeCardId' => Yii::$app->getRequest()->getQueryParam('id'),
-							'taskName' => $model['Task'],
-							'entry' => '',
-							'class'=> 'entryData',
-							'hidden' => $hiddenBool
-						];
-						return $result;
-					}
+					'label' => 'Total',
+					'attribute' => 'Total',
 				]
 			]
 		]);
 		?>
-		<?= Html::label('Total Time: '. $model['SumHours'],
-			null, ['id' => 'task_sum_hours']) ?>
 		<br>
 		<!--<h3>Miscellaneous</h3>-->
 		<h3>Lunch</h3>

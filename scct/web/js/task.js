@@ -95,7 +95,7 @@ function validateTaskToolTip() {
         if($(this).attr('data-col-seq') > 0 && ($(this).text()!="") && ($(this).parent().attr('data-key') > 0)
             && (!$("#approve_timeCard_btn_id").prop("disabled")) && (taskName != 'Total')) 
 		{
-            $(this).attr("title","Click to deactivate this time entry!")
+            $(this).attr("title","Click to deactivate this time!")
         } 
 		else if ($('#isAccountant').val() &&
 			$(this).attr('data-col-seq') >=1 &&
@@ -103,7 +103,7 @@ function validateTaskToolTip() {
 			($(this).parent().attr('data-key')>0) &&
 			(taskName != 'Total'))
 		{
-            $(this).attr("title","Click to deactivate this time entry!")
+            $(this).attr("title","Click to deactivate this time!")
         }
     });
 }
@@ -122,23 +122,22 @@ function deactivateCellSelection(timeReason, dataString){
 	id = $('#timeCardId').val();
 	cellData = JSON.parse(dataString);
 	seq_num = cellData.seq_num;
-	taskName = cellData.taskName;
 	date = $("#allTaskEntries tr[data-key='0']").find("td[data-col-seq='"+seq_num+"']").text();
 	var entries = [];
 	//clean up date format for sending
 	date = date.replace(/\-/g, '/');
 
-	krajeeDialog.defaults.confirm.title = 'Deactivate Time Entry';
-	krajeeDialog.confirm('Are you sure you want to deactivate this time entry for '+date+'?', function (resp) {
+	krajeeDialog.defaults.confirm.title = 'Deactivate Time';
+	krajeeDialog.confirm('Are you sure you want to deactivate this time for '+date+'?', function (resp) {
 		if (resp) {
 			$('#timeReasonModal').modal('hide');
 			$('#loading').show();
 			//build and send payload to deactivate single entry
-			entries.push({taskName : [taskName], day : date, timeCardID : id, timeReason : timeReason});
+			entries.push({day : date, timeCardID : id, timeReason : timeReason});
 			data = {entries};
 			$.ajax({
 				type: 'POST',
-				url: '/time-card/deactivate-by-task/',
+				url: '/time-card/deactivate-by-day/',
 				data: data,
 				beforeSend: function() {
 				},
@@ -194,8 +193,8 @@ function deactivateRowSelection(timeReason){
 }
 
 function addTaskEntry(){
-	var weekStart = $("#allTaskEntries table th").eq(1).attr('class');
-	var weekEnd = $("#allTaskEntries table th").eq(7).attr('class');
+	var weekStart = $("#allTaskEntries table th").eq(0).attr('class');
+	var weekEnd = $("#allTaskEntries table th").eq(6).attr('class');
 	var timeCardID = $('#timeCardId').val();
 	var SundayDate = $('#SundayDate').val();
 	var SaturdayDate = $('#SaturdayDate').val();
