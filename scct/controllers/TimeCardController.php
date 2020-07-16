@@ -422,7 +422,9 @@ class TimeCardController extends BaseCardController
 			$canApprove = self::can('timeCardApproveCards');
 			
 			//checks sumHours value and returns 'true' if in overtime(over 40 hours) and 'false' if not
-			$inOvertime = $cardData['card']['SumHours'] >= 40 ? 'true' : 'false';
+			$totalTimePartArray = array_key_exists(1, $cardData['show-entries']) ? explode(':', $cardData['show-entries'][1]['Total']) : null;
+			$totalTime = $totalTimePartArray != null ? ($totalTimePartArray[0]) + ($totalTimePartArray[1]/60) : 0;
+			$inOvertime = $totalTime >= 40 ? 'true' : 'false';
 			
 			//get card status
 			$isApproved = $cardData['card']['TimeCardApprovedFlag'] == 1;
