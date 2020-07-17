@@ -231,7 +231,7 @@ else
 								if($isAccountant) {
 									echo Html::button('Submit',
 									[
-										'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn',
+										'class' => /*$accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' :*/ 'btn btn-primary multiple_submit_btn off-btn disabled',
 										'id' => 'time_card_submit_btn_id',
 										'submitted' => $projectSubmitted ? 'true' : 'false'
 									]);
@@ -245,7 +245,7 @@ else
 									if($pmSubmitReady || $unapprovedTimeCardInProject){
 										echo Html::button('Submit',
 										[
-											'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+											'class' => /*$pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' :*/ 'btn btn-primary multiple_submit_btn off-btn disabled',
 											'id' => 'time_card_pm_submit_btn_id'
 										]);
 										echo Html::button('Approve', $approveButton);
