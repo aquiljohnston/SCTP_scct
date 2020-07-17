@@ -223,43 +223,43 @@ else
 					<div class="row">
 						<div id="multiple_time_card_approve_btn">
 							<?php 
-								$approveButton = [
-									'class' => 'btn btn-primary multiple_approve_btn',
-									'id' => 'tc_multiple_approve_btn_id',
-									'disabled' => true
-								];
-								if($isAccountant) {
-									echo Html::button('Submit',
-									[
-										'class' => /*$accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' :*/ 'btn btn-primary multiple_submit_btn off-btn disabled',
-										'id' => 'time_card_submit_btn_id',
-										'submitted' => $projectSubmitted ? 'true' : 'false'
-									]);
-									echo Html::button('PM Reset',
-									[
-										'class' => 'btn btn-primary pm_reset_btn',
-										'id' => 'pm_time_card_reset',
-										'disabled' => true
-									]);
-								}elseif($isProjectManager){
-									if($pmSubmitReady || $unapprovedTimeCardInProject){
-										echo Html::button('Submit',
-										[
-											'class' => /*$pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' :*/ 'btn btn-primary multiple_submit_btn off-btn disabled',
-											'id' => 'time_card_pm_submit_btn_id'
-										]);
-										echo Html::button('Approve', $approveButton);
-									}else{									
-										echo Html::button('Request Reset',
-										[
-											'class' => 'btn btn-primary tc_pm_reset_request_btn',
-											'id' => 'tc_pm_reset_request_btn_id',
-											'disabled' => false
-										]);
-									}
-								}elseif($canApprove){
-									echo Html::button('Approve',$approveButton);
-								}
+								// $approveButton = [
+									// 'class' => 'btn btn-primary multiple_approve_btn',
+									// 'id' => 'tc_multiple_approve_btn_id',
+									// 'disabled' => true
+								// ];
+								// if($isAccountant) {
+									// echo Html::button('Submit',
+									// [
+										// 'class' => $accountingSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+										// 'id' => 'time_card_submit_btn_id',
+										// 'submitted' => $projectSubmitted ? 'true' : 'false'
+									// ]);
+									// echo Html::button('PM Reset',
+									// [
+										// 'class' => 'btn btn-primary pm_reset_btn',
+										// 'id' => 'pm_time_card_reset',
+										// 'disabled' => true
+									// ]);
+								// }elseif($isProjectManager){
+									// if($pmSubmitReady || $unapprovedTimeCardInProject){
+										// echo Html::button('Submit',
+										// [
+											// 'class' => $pmSubmitReady ? 'btn btn-primary multiple_submit_btn enable-btn' : 'btn btn-primary multiple_submit_btn off-btn disabled',
+											// 'id' => 'time_card_pm_submit_btn_id'
+										// ]);
+										// echo Html::button('Approve', $approveButton);
+									// }else{									
+										// echo Html::button('Request Reset',
+										// [
+											// 'class' => 'btn btn-primary tc_pm_reset_request_btn',
+											// 'id' => 'tc_pm_reset_request_btn_id',
+											// 'disabled' => false
+										// ]);
+									// }
+								// }elseif($canApprove){
+									// echo Html::button('Approve',$approveButton);
+								// }
 							?>
 						</div>
 					</div>
