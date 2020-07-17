@@ -92,8 +92,8 @@ $(function(){
     $(document).off('change', "#timeCardGV input[type=checkbox]").on('change', "#timeCardGV input[type=checkbox]", function (e) {
 		//enable button when items are selected depending on what is available
         if ($("#GridViewForTimeCard").yiiGridView('getSelectedRows') != 0) {
-            $('#tc_multiple_approve_btn_id').prop('disabled', true); //TO ENABLE
-            $('#pm_time_card_reset').prop('disabled', true);
+            $('#tc_multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
+            $('#pm_time_card_reset').prop('disabled', false);
         } else {
             $('#tc_multiple_approve_btn_id').prop('disabled', true);
             $('#pm_time_card_reset').prop('disabled', true);

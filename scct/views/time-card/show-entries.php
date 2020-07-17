@@ -32,11 +32,11 @@ TimeCardAsset::register($this);
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
 			if($canApprove){
-				echo Html::button('Approve', [
-					'class' => 'btn btn-primary',
-					'disabled' => 1,//$isApproved || $isAccountant,
-					'id' => 'approve_timeCard_btn_id',
-				]);
+				// echo Html::button('Approve', [
+					// 'class' => 'btn btn-primary',
+					// 'disabled' => $isApproved || $isAccountant,
+					// 'id' => 'approve_timeCard_btn_id',
+				// ]);
 			}
 			?>
 			<!--<?= Html::button('Deactivate', [
