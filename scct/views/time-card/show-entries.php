@@ -34,7 +34,7 @@ TimeCardAsset::register($this);
 			if($canApprove){
 				echo Html::button('Approve', [
 					'class' => 'btn btn-primary',
-					'disabled' => $isApproved || $isAccountant,
+					'disabled' => 1,//$isApproved || $isAccountant,
 					'id' => 'approve_timeCard_btn_id',
 				]);
 			}
