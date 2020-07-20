@@ -44,7 +44,7 @@ use kartik\form\ActiveForm;
 		</div>
 		<br>
 		<div id="timeReasonModalFormButtons" class="form-group">
-			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'time_reason_submit_btn', 'disabled' => 'disabled']) ?>
+			<!--<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'time_reason_submit_btn', 'disabled' => 'disabled']) ?>-->
 		</div>
     <?php ActiveForm::end(); ?>
 	

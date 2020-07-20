@@ -44,11 +44,11 @@ TimeCardAsset::register($this);
 				'disabled' => true,
 				'id' => 'deactive_timeEntry_btn_id',
 			]) ?>-->
-			<?= Html::button('Add Task', [
+			<!--<?= Html::button('Add Task', [
 				'class' => 'btn btn-primary add_task_btn',
 				'disabled' => (($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
 				'id' => 'add_task_btn_id',
-			]) ?>
+			]) ?>-->
 		</p>
 		<br>
     </div>
