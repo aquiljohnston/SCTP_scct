@@ -86,9 +86,9 @@ class BaseController extends Controller
 			return Constants::DEV_TEST_PROJECTS;
 		} else if(strcmp($_SERVER['SERVER_PORT'], Constants::WEB_WITH_LOCAL_API_PORT) === 0) {
 			return Constants::DEV_TEST_PROJECTS;
-		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
+		} else if(strpos($environment, Constants::SERVER_DEV) !== false || strpos($environment, 'demo') !== false) {
             return Constants::DEV_TEST_PROJECTS;
-        } else if(strpos($prefix, Constants::SERVER_STAGE) !== false){
+        } else if(strpos($environment, Constants::SERVER_STAGE) !== false){
             return Constants::STAGE_TEST_PROJECTS;
         } else {
 			//if no distinguishing characters are present defaults to production
