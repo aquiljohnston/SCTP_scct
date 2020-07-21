@@ -32,7 +32,7 @@ TimeCardAsset::register($this);
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
-				if(in_array($timeCardProjectID, BaseController::getTestProjects())){
+				// if(in_array($timeCardProjectID, BaseController::getTestProjects())){
 					if($canApprove){
 						echo Html::button('Approve', [
 							'class' => 'btn btn-primary',
@@ -53,7 +53,7 @@ TimeCardAsset::register($this);
 						'id' => 'add_task_btn_id',
 						'style' => ['margin' => '.2%']
 					]);
-				}				
+				// }				
 			?>
 		</p>
 		<br>
