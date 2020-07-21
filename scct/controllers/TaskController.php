@@ -182,7 +182,7 @@ class TaskController extends BaseController
      * @return string
      * @throws \yii\web\HttpException
      */
-    public function actionDeactivateTimeReason()
+    public function actionDeactivateTimeReason($projectID = null)
     {
 		try{
 			//guest redirect
@@ -215,6 +215,7 @@ class TaskController extends BaseController
 				
 				$dataArray = [
 					'model' => $model,
+					'projectID' => $projectID,
 					'timeReasonDropdown' => $timeReasonDropdown,
 				];
 				

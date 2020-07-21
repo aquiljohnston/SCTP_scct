@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
 use app\assets\TimeCardAsset;
+use app\controllers\BaseController;
 
 //register assets
 TimeCardAsset::register($this);
@@ -31,24 +32,29 @@ TimeCardAsset::register($this);
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
-			if($canApprove){
-				// echo Html::button('Approve', [
-					// 'class' => 'btn btn-primary',
-					// 'disabled' => $isApproved || $isAccountant,
-					// 'id' => 'approve_timeCard_btn_id',
-				// ]);
-			}
+				if(in_array($timeCardProjectID, BaseController::getTestProjects())){
+					if($canApprove){
+						echo Html::button('Approve', [
+							'class' => 'btn btn-primary',
+							'disabled' => $isApproved || $isAccountant,
+							'id' => 'approve_timeCard_btn_id',
+							'style' => ['margin' => '.2%']
+						]);
+					}
+					echo Html::button('Deactivate', [
+						'class' => 'btn btn-primary',
+						'disabled' => true,
+						'id' => 'deactive_timeEntry_btn_id',
+						'style' => ['margin' => '.2%']
+					]);
+					echo Html::button('Add Task', [
+						'class' => 'btn btn-primary add_task_btn',
+						'disabled' => (($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
+						'id' => 'add_task_btn_id',
+						'style' => ['margin' => '.2%']
+					]);
+				}				
 			?>
-			<!--<?= Html::button('Deactivate', [
-				'class' => 'btn btn-primary',
-				'disabled' => true,
-				'id' => 'deactive_timeEntry_btn_id',
-			]) ?>-->
-			<!--<?= Html::button('Add Task', [
-				'class' => 'btn btn-primary add_task_btn',
-				'disabled' => (($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
-				'id' => 'add_task_btn_id',
-			]) ?>-->
 		</p>
 		<br>
     </div>

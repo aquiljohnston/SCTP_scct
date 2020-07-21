@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
+use app\controllers\BaseController;
 
 ?>
 
@@ -44,7 +45,11 @@ use kartik\form\ActiveForm;
 		</div>
 		<br>
 		<div id="timeReasonModalFormButtons" class="form-group">
-			<!--<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'time_reason_submit_btn', 'disabled' => 'disabled']) ?>-->
+			<?php
+				if(in_array($projectID, BaseController::getTestProjects())){
+					echo Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'time_reason_submit_btn', 'disabled' => 'disabled']);
+				}
+			?>
 		</div>
     <?php ActiveForm::end(); ?>
 	
