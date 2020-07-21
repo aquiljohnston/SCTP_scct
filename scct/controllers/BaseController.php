@@ -76,6 +76,25 @@ class BaseController extends Controller
             return self::urlPrefix();
         }
     }
+	
+	//get test projects array for current environment
+	public static function getTestProjects(){
+		$environment = self::getXClient();
+		
+		//could probably combine the first three into one long condition
+		if(strcmp($_SERVER['SERVER_PORT'],Constants::WEB_WITH_DEV_API_PORT) === 0) {
+			return Constants::DEV_TEST_PROJECTS;
+		} else if(strcmp($_SERVER['SERVER_PORT'], Constants::WEB_WITH_LOCAL_API_PORT) === 0) {
+			return Constants::DEV_TEST_PROJECTS;
+		} else if(strpos($prefix, Constants::SERVER_DEV) !== false || strpos($prefix, 'demo') !== false) {
+            return Constants::DEV_TEST_PROJECTS;
+        } else if(strpos($prefix, Constants::SERVER_STAGE) !== false){
+            return Constants::STAGE_TEST_PROJECTS;
+        } else {
+			//if no distinguishing characters are present defaults to production
+			return Constants::PROD_TEST_PROJECTS;
+        }
+	}
 
     //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url, $version = Constants::DEFAULT_VERSION)

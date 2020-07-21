@@ -243,6 +243,7 @@ function resetSubmissionStatusDialog(action, dataString){
 //pass deactivate action and data to universial time reason modal
 function deactivateTimeReason(action, data = null){
 	$('#timeReasonModal').modal('show').find('#timeReasonModalContentSpan').html("Loading...");
+	var projectID = $('#TimeCardProjectID').val();
 	//build data object
 	data = {Action: action, Data: data};
 	//Fetch modal content via pjax
@@ -250,7 +251,7 @@ function deactivateTimeReason(action, data = null){
 		type: 'POST',
 		replace:false,
 		push:false,
-		url: '/task/deactivate-time-reason',
+		url: '/task/deactivate-time-reason?projectID=' + projectID,
 		data: data,
 		container: '#timeReasonModalContentSpan', // id to update content
 		timeout: 99999

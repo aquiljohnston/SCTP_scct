@@ -37,6 +37,11 @@ final class Constants
 	const CURRENT_WEEK = 'Current Week';
 	const PRIOR_WEEK = 'Prior Week';
 	
+	//hardcoded list of test projects for Clint Joyner
+	const DEV_TEST_PROJECTS = [2000,2001,2002,2048,3142,3143,3144,3147,3148];
+	const STAGE_TEST_PROJECTS = [3799,3806,3807,3808,3960,3961,3962,3963,3964];
+	const PROD_TEST_PROJECTS = [593,594,595,636,714,715,716,717,718];
+	
 	private function __construct()
 	{
 		throw new Exception("Can't get an instance of Constants.");
