@@ -225,7 +225,7 @@ else
 						<div id="multiple_time_card_approve_btn">
 							<?php 
 								//check against const hardcoded list of test projects for Clint Joyner
-								if(in_array($model->projectID, BaseController::getTestProjects())){
+								// if(in_array($model->projectID, BaseController::getTestProjects())){
 									$approveButton = [
 										'class' => 'btn btn-primary multiple_approve_btn',
 										'id' => 'tc_multiple_approve_btn_id',
@@ -263,7 +263,7 @@ else
 									}elseif($canApprove){
 										echo Html::button('Approve',$approveButton);
 									}
-								}
+								// }
 							?>
 						</div>
 					</div>

@@ -46,9 +46,9 @@ use app\controllers\BaseController;
 		<br>
 		<div id="timeReasonModalFormButtons" class="form-group">
 			<?php
-				if(in_array($projectID, BaseController::getTestProjects())){
+				// if(in_array($projectID, BaseController::getTestProjects())){
 					echo Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'time_reason_submit_btn', 'disabled' => 'disabled']);
-				}
+				// }
 			?>
 		</div>
     <?php ActiveForm::end(); ?>
