@@ -289,15 +289,15 @@ $columns = [
                 StartTime = ConvertToTwentyFourHourTime(StartTime);
                 EndTime = ConvertToTwentyFourHourTime(EndTime);
                 //now compare 
-                if(EndTime > StartTime)
+                if(EndTime > StartTime){
 					floatStartTime = timeStringToFloat(StartTime);
 					floatEndTime = timeStringToFloat(EndTime);
 					//check pto balance
 					if(!(ChangeOfAccountType == '5020') || ptoBalance >= floatEndTime - floatStartTime)
 						return true;
-            } else {
-                return false; 
-            }    
+				}
+            }
+            return false;
         }
         
 		
