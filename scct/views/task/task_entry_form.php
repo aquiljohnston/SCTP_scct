@@ -286,9 +286,8 @@ $columns = [
                 //now compare 
                 if(EndTime > StartTime)
 					return true;
-            } else {
-                return false; 
-            }    
+            }
+            return false;
         }
         
 		
