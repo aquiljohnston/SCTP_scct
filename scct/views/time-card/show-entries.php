@@ -60,7 +60,7 @@ TimeCardAsset::register($this);
     </div>
     <?php Pjax::begin(['id' => 'ShowTimeEntriesView', 'timeout' => false]) ?>
 		<h3>Time</h3>
-		<?= \kartik\grid\GridView::widget([
+		<?= GridView::widget([
 			'id' => 'allTaskEntries',
 			'dataProvider' => $task,
 			'export' => false,
@@ -106,7 +106,7 @@ TimeCardAsset::register($this);
 		<br>
 		<!--<h3>Miscellaneous</h3>-->
 		<h3>Lunch</h3>
-		<?= \kartik\grid\GridView::widget([
+		<?= GridView::widget([
 			'id' => 'allLunchEntries',
 			'dataProvider' => $lunch,
 			'export' => false,
@@ -150,6 +150,51 @@ TimeCardAsset::register($this);
 				],[
 					'label' => 'Total',
 					'attribute' => 'Total'
+				]
+			]
+		]);
+		?>
+		<br>
+		<h3>Hours Overview</h3>
+		<?= GridView::widget([
+			'id' => 'hoursOverviewEntries',
+			'dataProvider' => $hoursOverview,
+			'export' => false,
+			'bootstrap' => false,
+			'pjax' => true,
+			'summary' => '',
+			'caption' => '',
+			'emptyText' => 'No entries exist for this week.',
+			'columns' => [
+				[
+					'label' => 'Task',
+					'attribute' => 'Task',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
+				],
+				[
+					'label' => 'Date',
+					'attribute' => 'Date',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
+				],
+				[
+					'label' => 'Start Time',
+					'attribute' => 'Start Time',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
+				],
+				[
+					'label' => 'End Time',
+					'attribute' => 'End Time',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
+				],
+				[
+					'label' => 'Total Time',
+					'attribute' => 'Total Time',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
 				]
 			]
 		]);
