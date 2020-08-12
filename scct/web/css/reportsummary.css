@@ -1,0 +1,10 @@
+/*report-summary index*/
+.title{
+    margin-top: -5px;
+    font-size: 20px;
+}
+
+/*custom style for report summary user data table grid view hover*/
+#GridViewForReportSummaryUser table tbody tr td:hover{
+    background-color: rgba(57, 12, 255, 0.25);
+}

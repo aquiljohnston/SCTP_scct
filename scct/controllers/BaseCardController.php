@@ -212,6 +212,22 @@ class BaseCardController extends BaseController
 			return json_encode($response);
         }
     }
+	
+	/**
+     * Process Date Range Data
+     * @param $dateRange
+     * @return array
+     */
+    public function dateRangeProcessor($dateRange){
+        $data = explode(" ", $dateRange);
+        $dateData = [];
+        foreach ($data as $item){
+            if($item != "-"){\
+                array_push($dateData, $item);
+            }
+        }
+        return $dateData;
+    }
 
 	/**
 	 * Execute API request to get status for submit button
