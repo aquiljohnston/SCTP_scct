@@ -20,9 +20,8 @@ ReportSummaryAsset::register($this);
  } */
 </style>
 
-<div class="report-summary-employee-detail">  
-    <div class="lightBlueBar">
-		<h3></h3>
+<div class="report-summary-employee-detail index-div">  
+    <div class="lightBlueBar" style="height: 60px; padding: 10px;">
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
@@ -44,27 +43,30 @@ ReportSummaryAsset::register($this);
     </div>
 	
     <?php Pjax::begin(['id' => 'EmployeeDetailView', 'timeout' => false]) ?>
-		<h4> <?= 'Technician Name: ' . $totalData['Tech'] .' Weekly Total Hours ' . $totalData['WeeklyTotal']; ?></h4>
-		<?= GridView::widget([
-			'id' => 'DailyProjectHours',
-			'dataProvider' => $projectDataProvider,
-			'showHeader'=> false,
-			'export' => false,
-			'pjax' => true,
-			'summary' => '',
-			'caption' => '',
-			'columns' => [
-				[
-					'label' => 'Label',
-					'attribute' => 'Label'
-				],[
-					'label' => 'Value',
-					'attribute' => 'Value'
+		<div class="project-hours-container">
+			<h4><span><?= 'Technician Name: ' . $totalData['Tech']?></span><span style="float:right"><?=' Weekly Total Hours: ' . $totalData['WeeklyTotal']; ?></span></h4>
+			<?= GridView::widget([
+				'id' => 'DailyProjectHours',
+				'dataProvider' => $projectDataProvider,
+				'showHeader'=> false,
+				'export' => false,
+				'pjax' => true,
+				'summary' => '',
+				'caption' => '',
+				'columns' => [
+					[
+						'label' => 'Label',
+						'attribute' => 'Label',
+						'contentOptions' => ['class' => 'text-left'],
+					],[
+						'label' => 'Value',
+						'attribute' => 'Value',
+						'contentOptions' => ['class' => 'text-center'],
+					]
 				]
-			]
-		]);
-		?>
-		<br>
+			]);
+			?>
+		</div>
 		<?= GridView::widget([
 			'id' => 'DailyBreakdownHours',
 			'dataProvider' => $breakdownDataProvider,
@@ -75,25 +77,43 @@ ReportSummaryAsset::register($this);
 			'columns' => [
 				[
 					'label' => 'Project',
-					'attribute' => 'Project'
+					'attribute' => 'Project',
+					'headerOptions' => ['class' => 'text-left'],
+					'contentOptions' => ['class' => 'text-left'],
 				],[
 					'label' => 'Task',
-					'attribute' => 'Task'
+					'attribute' => 'Task',
+					'headerOptions' => ['class' => 'text-left'],
+					'contentOptions' => ['class' => 'text-left'],
 				],[
 					'label' => 'Start Time',
 					'attribute' => 'Start Time',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
 				],[
 					'label' => 'End Time',
 					'attribute' => 'End Time',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
 				],[
 					'label' => 'Time On Task',
 					'attribute' => 'Time On Task',
+					'headerOptions' => ['class' => 'text-center'],
+					'contentOptions' => ['class' => 'text-center'],
 				]
 			]
 		]);
 		?>
-		<h4><?= 'Total: ' . $totalData['Total'];?></h4>
-		<h4><?= 'Total w/out lunch: ' . $totalData['TotalNoLunch']; ?></h4>
+		<p style="float:right; text-align:right;">
+			<?= $totalData['Total'];?>
+			<br>
+			<?= $totalData['TotalNoLunch']; ?>
+		</p>
+		<p style="float:right; text-align:right; font-weight:bold; margin-right:5px;">
+			Total:
+			<br>
+			Total w/out lunch:
+		</p>
     <?php Pjax::end() ?>
     <!--<?php
     Pjax::begin(['id' => 'showTime', 'timeout' => false]);

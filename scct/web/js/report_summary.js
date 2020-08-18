@@ -41,8 +41,10 @@ function applyReportSummaryListeners() {
 		//enable button when items are selected depending on what is available
         if ($("#GridViewForReportSummaryUser").yiiGridView('getSelectedRows') != 0) {
             $('#rs_multiple_approve_btn_id').prop('disabled', false); //TO ENABLE
+            $('#rs_multiple_submit_btn_id').prop('disabled', false); //TO ENABLE
         } else {
             $('#rs_multiple_approve_btn_id').prop('disabled', true);
+            $('#rs_multiple_submit_btn_id').prop('disabled', true);
         }
     });
 	
@@ -60,6 +62,12 @@ function applyReportSummaryListeners() {
             $('#reportSummaryDatePickerContainer').css("display", "none");
             reloadReportSummaryGridView();
         }
+    });
+	
+	$(document).off('change', '#reportSummaryProjectFilterDD').on('change', '#reportSummaryProjectFilterDD', function (event) {
+        reloadReportSummaryGridView();
+        event.preventDefault();
+        return false;
     });
 }
 
@@ -82,6 +90,16 @@ function reportSummaryApproveMultiple() {
         } else {
             quantifier = "these items?"
         }
+		
+		var dateRangeArray = $('#timeCardDateRange').val().split(',');
+		//if the range value is 'other'
+		if(dateRangeArray.length == 1) {
+			dateRangeArray = $('#dynamicmodel-daterangepicker-container').find('.kv-drp-dropdown').find('.range-value').html().split(" - ");
+			var selectedDate = new Date(dateRangeArray[0]);
+			selectedDate.setHours(selectedDate.getHours()+(selectedDate.getTimezoneOffset()/60));//to handle timezone offset on sat/sun
+			var prevSunday = new Date(selectedDate.setDate(selectedDate.getDate()-selectedDate.getDay()));
+			dateRangeArray[0] = prevSunday.getFullYear() + "-"+(prevSunday.getMonth()+1)+"-"+prevSunday.getDate(); // getMonth is 0 indexed
+		}
 
         krajeeDialog.defaults.confirm.title = 'Approve';
         krajeeDialog.confirm('Are you sure you want to approve ' + quantifier, function (resp) {
@@ -95,7 +113,7 @@ function reportSummaryApproveMultiple() {
                     userid: primaryKeys
                 },
 				success: function(data){
-					//TODO reloadGridView();
+					reloadReportSummaryGridView();
 				}
             });
         } else {
@@ -121,6 +139,9 @@ function reloadReportSummaryGridView() {
 		container: '#reportSummaryGridview', // id to update content
 		data: dataParams,
 		timeout: 99999
+	}).done(function (){
+		//reload dropdown values
+		$.pjax.reload({container: '#reportSummaryDropDownPjax', async:false});
 	});
 	$('#reportSummaryGridview').off('pjax:success').on('pjax:success', function () {
 		applyReportSummaryListeners();

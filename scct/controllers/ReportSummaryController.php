@@ -49,6 +49,9 @@ class ReportSummaryController extends BaseCardController
 				unset(Yii::$app->session['reportSummarySort']);
 			}
 
+			//check user role
+            $isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+
             // Store start/end date data
             $dateData = [];
             $startDate = null;
@@ -188,14 +191,7 @@ class ReportSummaryController extends BaseCardController
 			}
 			
 			//extract format indicators from response data
-			//not sure how dropdowns and different view logic will be handled
-            // $unapprovedTimeCardInProject = array_key_exists('unapprovedTimeCardInProject', $response) ? $response['unapprovedTimeCardInProject'] : false;
-            // $unapprovedTimeCardVisible = array_key_exists('unapprovedTimeCardVisible', $response) ? $response['unapprovedTimeCardVisible'] : false;
-            // $showFilter = $response['showProjectDropDown'];
-            // $projectWasSubmitted = $response['projectSubmitted'];
-			// $clientDropDown = $response['clientDropDown'];
-			// $projectDropDown = $response['projectDropDown'];
-			// $employeeDropDown = $response['employeeDropDown'];
+			$projectDropDown = $response['ProjectDropDown'];
 			
 			//check if user can approve cards
 			$canApprove = self::can('timeCardApproveCards') && self::can('mileageCardApprove');
@@ -241,12 +237,9 @@ class ReportSummaryController extends BaseCardController
 				'statusDataProvider' => $statusDataProvider,
 				'dateRangeDD' => $dateRangeDD,
 				'model' => $model,
-				// 'pages' => $pages,
-				// 'clientDropDown' => $clientDropDown,
-				// 'projectDropDown' => $projectDropDown,
-				// 'employeeDropDown' => $employeeDropDown,
-				// 'showFilter' => $showFilter,
-				'canApprove' => $canApprove
+				'projectDropDown' => $projectDropDown,
+				'canApprove' => $canApprove,
+				'isProjectManager' => $isProjectManager,
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {

@@ -1,0 +1,43 @@
+/*report-summary employee-detail*/
+.project-hours-container{
+	width:80%;
+}
+#DailyProjectHours{
+	max-height:16vh;
+	overflow-y: auto;
+}
+
+#DailyBreakdownHours{
+	height:31vh;
+	overflow-y:auto;
+	margin-top:2vh;
+}
+
+/*responsive css for table*/
+@media only screen and (max-height : 1080px) {
+	#DailyBreakdownHours{
+		max-height:30vh;
+	}
+	
+	#DailyProjectHours{
+		height:15vh;
+	}
+}
+
+@media only screen and (max-height : 1050px) {
+	#DailyBreakdownHours{
+		max-height:25vh;
+	}
+	#DailyProjectHours{
+		height:11vh;
+	}
+}
+
+@media only screen and (max-height : 768px) {
+	#DailyBreakdownHours{
+		max-height:20vh;
+	}
+	#DailyProjectHours{
+		height:8vh;
+	}
+}

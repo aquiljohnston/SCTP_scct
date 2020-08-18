@@ -23,8 +23,8 @@ $userColumns = [
 	[
 		'label' => 'Row Labels',
 		'attribute' => 'RowLabels',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 	]
 ];
 //add dynamic date columns
@@ -32,8 +32,8 @@ foreach($dateHeaders as $header){
 	$userColumns[] = [
 		'label' => $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 	];
 }
 $userColumns = array_merge(
@@ -42,80 +42,118 @@ $userColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 		],
 		[
 			'label' => 'Mileage To Approve',
 			'attribute' => 'MileageToApprove',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
 		],
 		[
 			'label' => 'Supervisor Approved',
 			'attribute' => 'SupervisorApproved',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
 		],
 		[
 			'label' => 'PM Submitted',
 			'attribute' => 'PMSubmitted',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
-		],
-		[
-			'class' => 'kartik\grid\CheckboxColumn',
-			'header' => Html::checkBox('selection_all', false, [
-				'class' => 'select-on-check-all',
-				//TODO supply bool for disabled check
-				//'disabled' => ($unapprovedTimeCardVisible)  ? false : true,
-				'disabled' => false,
-			]),
-			'checkboxOptions' => function ($model, $key, $index, $column){
-				// Disable if already approved
-				$isDisabled = $model['SupervisorApproved'] === 'Yes' || $model['UserID'] === Null;
-				$isHidden = $model['UserID'] === Null;
-				$result = [
-					//TODO look to provide userid
-					'user' => $model['UserID'],
-					'approved' => $model['SupervisorApproved']
-				];
-				if ($isDisabled) {
-					$result['disabled'] = true;
-				}
-				if ($isHidden) {
-					$result['hidden'] = true;
-				}
-				return $result;
-			}
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
 		],
 	]
 );
+//set up checkbox disabled status based on role type
+if($isProjectManager){
+	$userColumns = array_merge(
+		$userColumns,
+		[
+			[
+				'class' => 'kartik\grid\CheckboxColumn',
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+				'header' => Html::checkBox('selection_all', false, [
+					'class' => 'select-on-check-all',
+					//TODO supply bool for disabled check
+					//'disabled' => ($unapprovedTimeCardVisible)  ? false : true,
+					'disabled' => false,
+				]),
+				'checkboxOptions' => function ($model, $key, $index, $column){
+					// Disable if already approved
+					$isDisabled = $model['PMSubmitted'] === 'Yes' || $model['UserID'] === Null;
+					$isHidden = $model['UserID'] === Null;
+					$result = [
+						'user' => $model['UserID']
+					];
+					if ($isDisabled) {
+						$result['disabled'] = true;
+					}
+					if ($isHidden) {
+						$result['hidden'] = true;
+					}
+					return $result;
+				}
+			],
+		]
+	);
+}else{
+	$userColumns = array_merge(
+		$userColumns,
+		[
+			[
+				'class' => 'kartik\grid\CheckboxColumn',
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+				'header' => Html::checkBox('selection_all', false, [
+					'class' => 'select-on-check-all',
+					//TODO supply bool for disabled check
+					//'disabled' => ($unapprovedTimeCardVisible)  ? false : true,
+					'disabled' => false,
+				]),
+				'checkboxOptions' => function ($model, $key, $index, $column){
+					// Disable if already approved
+					$isDisabled = $model['SupervisorApproved'] === 'Yes' || $model['UserID'] === Null;
+					$isHidden = $model['UserID'] === Null;
+					$result = [
+						'user' => $model['UserID']
+					];
+					if ($isDisabled) {
+						$result['disabled'] = true;
+					}
+					if ($isHidden) {
+						$result['hidden'] = true;
+					}
+					return $result;
+				}
+			],
+		]
+);
+}
 //columns for project data
 $projColumns = [
 	[
 		'label' => 'Projects',
 		'attribute' => 'Projects',
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 	]
 ];
 //add dynamic date columns
@@ -123,8 +161,8 @@ foreach($dateHeaders as $header){
 	$projColumns[] = [
 		'label' => $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center'],
-		'contentOptions' => ['class' => 'text-center'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 	];
 }
 $projColumns = array_merge(
@@ -133,32 +171,32 @@ $projColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 		],
 		[
 			'label' => 'Mileage',
 			'attribute' => 'Mileage',
-			'headerOptions' => ['class' => 'text-center'],
-			'contentOptions' => ['class' => 'text-center'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
 		]
 	]
 );
@@ -180,7 +218,7 @@ $statusColumns = [
 ?>
 
 <div class="report-summary-index index-div">
-    <div class="lightBlueBar" style="height: 140px; padding: 10px;">
+    <div class="lightBlueBar" style="height: 100px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
         <div id="report_summary_filter">
             <div id="reportSummaryDropdownContainer">
@@ -243,13 +281,30 @@ $statusColumns = [
                             }"],
                     ]); ?>
 				</div>
+				<?php Pjax::begin(['id' => 'reportSummaryDropDownPjax', 'timeout' => false]) ?>
+					<div class="col-md-2 reportSummaryProjectFilterDD">
+						<?=
+							$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
+							['value' => $model->projectID, 'id'=>'reportSummaryProjectFilterDD'])->label('Project'); 
+						?>
+					</div>
+				<?php Pjax::end() ?>
 				<?php 
-					echo Html::button('Approve', 
-					[
-						'class' => 'btn btn-primary multiple_approve_btn',
-						'id' => 'rs_multiple_approve_btn_id',
-						'disabled' => true
-					]);
+					if($isProjectManager){
+						echo Html::button('Submit', 
+						[
+							'class' => 'btn btn-primary multiple_approve_btn',
+							'id' => 'rs_multiple_submit_btn_id',
+							'disabled' => true
+						]);
+					}else{
+						echo Html::button('Approve', 
+						[
+							'class' => 'btn btn-primary multiple_approve_btn',
+							'id' => 'rs_multiple_approve_btn_id',
+							'disabled' => true
+						]);
+					}
 				?>
 				<?php ActiveForm::end(); ?>
 			</div>
