@@ -2,14 +2,14 @@
 
 namespace app\assets;
 
-class ReportSummaryAsset extends AppAsset
+class EmployeeApprovalAsset extends AppAsset
 {
     public $css = [
-        'css/reportSummary.css',
+        'css/employeeApproval.css',
         'css/employeeDetail.css',
     ];
 	public $js = [
-        'js/report_summary.js',
+        'js/employee_approval.js',
         'js/datePicker.js',
 	];
 }

@@ -5,13 +5,15 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\widgets\Pjax;
-use app\assets\ReportSummaryAsset;
+use app\assets\EmployeeApprovalAsset;
 use app\controllers\BaseController;
 
 //register assets
-ReportSummaryAsset::register($this);
+EmployeeApprovalAsset::register($this);
 
 /* @var $this yii\web\View */
+$this->title = 'Employee Detail';
+
 ?>
 <style type="text/css">
 /* [data-key="0"] 

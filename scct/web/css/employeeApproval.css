@@ -1,30 +1,30 @@
-/*report-summary index*/
+/*employee-approval index*/
 .title{
     margin-top: -5px;
     font-size: 20px;
 }
 
-#rs_multiple_approve_btn_id{
+#ea_multiple_approve_btn_id{
 	float: right;
 }
 
-#rs_multiple_submit_btn_id{
+#ea_multiple_submit_btn_id{
 	float: right;
 }
 
-#GridViewForReportSummaryUser{
+#GridViewForEmployeeApprovalUser{
 	max-height: 36vh;
 	overflow-y: auto;
 	overflow-x: visible;
 }
 
 /*remove unnecessary framework generated scroll*/
-#GridViewForReportSummaryUser-container{
+#GridViewForEmployeeApprovalUser-container{
 	overflow-x:unset;
 }
 
 /*custom css for total row*/
-#GridViewForReportSummaryUser table tbody tr:last-child {
+#GridViewForEmployeeApprovalUser table tbody tr:last-child {
     background: #f0f0f2;
     color: #333;
     font-weight: bold;
@@ -33,7 +33,7 @@
     border-bottom-right-radius: 5px;
 }
 
-#GridViewForReportSummaryProj{
+#GridViewForEmployeeApprovalProj{
 	width: 80%;
 	height: 21vh;
 	overflow-y: auto;
@@ -41,7 +41,7 @@
 }
 
 /*custom css for total row*/
-#GridViewForReportSummaryProj table tbody tr:last-child {
+#GridViewForEmployeeApprovalProj table tbody tr:last-child {
     background: #f0f0f2;
     color: #333;
     font-weight: bold;
@@ -51,35 +51,35 @@
 }
 
 /*custom style for report summary user data table grid view hover*/
-#GridViewForReportSummaryUser table tbody tr td:hover{
+#GridViewForEmployeeApprovalUser table tbody tr td:hover{
     background-color: rgba(57, 12, 255, 0.25);
 }
 
 /*responsive css for table*/
 @media only screen and (max-height : 1080px) {
-	#GridViewForReportSummaryUser{
+	#GridViewForEmployeeApprovalUser{
 		max-height: 35vh;
 	}
 	
-	#GridViewForReportSummaryProj{
+	#GridViewForEmployeeApprovalProj{
 		height: 20vh;
 	}
 }
 
 @media only screen and (max-height : 1050px) {
-	#GridViewForReportSummaryUser{
+	#GridViewForEmployeeApprovalUser{
 		max-height: 30vh;
 	}
-	#GridViewForReportSummaryProj{
+	#GridViewForEmployeeApprovalProj{
 		height: 15vh;
 	}
 }
 
 @media only screen and (max-height : 768px) {
-	#GridViewForReportSummaryUser{
+	#GridViewForEmployeeApprovalUser{
 		max-height: 25vh;
 	}
-	#GridViewForReportSummaryProj{
+	#GridViewForEmployeeApprovalProj{
 		height: 10vh;
 	}
 }

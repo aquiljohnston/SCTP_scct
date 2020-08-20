@@ -8,33 +8,46 @@ use yii\widgets\Pjax;
 use kartik\form\ActiveForm;
 use kartik\daterange\DateRangePicker;
 use kartik\grid\CheckboxColumn;
-use app\assets\ReportSummaryAsset;
+use app\assets\EmployeeApprovalAsset;
 use app\controllers\BaseController;
 
 //register assets
-ReportSummaryAsset::register($this);
+EmployeeApprovalAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Report Summary';
+$this->title = 'Employee Approval';
+//array to build days of the week for table headers
+$dayOfWeek = [
+	'Sun',
+	'Mon',
+	'Tue',
+	'Wed',
+	'Thurs',
+	'Fri',
+	'Sat',
+];
+			
 //columns for user data
 $userColumns = [
 	[
 		'label' => 'Row Labels',
 		'attribute' => 'RowLabels',
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 	]
 ];
 //add dynamic date columns
+$i = 0;
 foreach($dateHeaders as $header){
 	$userColumns[] = [
-		'label' => $header,
+		'label' => $dayOfWeek[$i] . ' ' . $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 	];
+	$i++;
 }
 $userColumns = array_merge(
 	$userColumns,
@@ -42,44 +55,50 @@ $userColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+		],
+		[
+			'label' => 'Expense',
+			'attribute' => 'Expense',
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 		],
 		[
 			'label' => 'Mileage To Approve',
 			'attribute' => 'MileageToApprove',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.15%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
 		],
 		[
 			'label' => 'Supervisor Approved',
 			'attribute' => 'SupervisorApproved',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
 		],
 		[
 			'label' => 'PM Submitted',
 			'attribute' => 'PMSubmitted',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
 		],
 	]
 );
@@ -90,7 +109,7 @@ if($isProjectManager){
 		[
 			[
 				'class' => 'kartik\grid\CheckboxColumn',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
 				'header' => Html::checkBox('selection_all', false, [
 					'class' => 'select-on-check-all',
 					//TODO supply bool for disabled check
@@ -121,7 +140,7 @@ if($isProjectManager){
 		[
 			[
 				'class' => 'kartik\grid\CheckboxColumn',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 6.68%;'],
+				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
 				'header' => Html::checkBox('selection_all', false, [
 					'class' => 'select-on-check-all',
 					//TODO supply bool for disabled check
@@ -152,8 +171,8 @@ $projColumns = [
 	[
 		'label' => 'Projects',
 		'attribute' => 'Projects',
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 	]
 ];
 //add dynamic date columns
@@ -161,8 +180,8 @@ foreach($dateHeaders as $header){
 	$projColumns[] = [
 		'label' => $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 	];
 }
 $projColumns = array_merge(
@@ -171,32 +190,38 @@ $projColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%; white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+		],
+		[
+			'label' => 'Expense',
+			'attribute' => 'Expense',
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 		],
 		[
 			'label' => 'Mileage',
 			'attribute' => 'Mileage',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.7%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
 		]
 	]
 );
@@ -217,27 +242,27 @@ $statusColumns = [
 ];
 ?>
 
-<div class="report-summary-index index-div">
+<div class="employee-approval-index index-div">
     <div class="lightBlueBar" style="height: 100px; padding: 10px;">
         <h3 class="title"><?= Html::encode($this->title) ?></h3>
-        <div id="report_summary_filter">
-            <div id="reportSummaryDropdownContainer">
+        <div id="employee_approval_filter">
+            <div id="employeeApprovalDropdownContainer">
 				<?php $form = ActiveForm::begin([
                     'type' => ActiveForm::TYPE_HORIZONTAL,
                     'formConfig' => ['labelSpan' => 7, 'deviceSize' => ActiveForm::SIZE_SMALL],
                     'method' => 'get',
                     'options' => [
-                        'id' => 'ReportSummaryForm',
+                        'id' => 'EmployeeApprovalForm',
                     ],
-					'action' => Url::to(['report-summary/index'])
+					'action' => Url::to(['employee-approval/index'])
                 ]); ?>
-				<div class="col-md-2 ReportSummaryDateRangeDropDown">
-					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'reportSummaryDateRange'])->label("Week"); ?>
+				<div class="col-md-2 EmployeeApprovalDateRangeDropDown">
+					<?= $form->field($model, 'dateRangeValue', ['labelSpan' => 3])->dropDownList($dateRangeDD, ['value' => $model->dateRangeValue, 'id' => 'employeeApprovalDateRange'])->label("Week"); ?>
 				</div>
 				<?php if($model->dateRangeValue == 'other'){ ?>
-					<div id="reportSummaryDatePickerContainer" style="float: left; width: auto; display: block;">
+					<div id="employeeApprovalDatePickerContainer" style="float: left; width: auto; display: block;">
 				<?php } else { ?>
-					<div id="reportSummaryDatePickerContainer" style="float: left; width: auto; display: none;">
+					<div id="employeeApprovalDatePickerContainer" style="float: left; width: auto; display: none;">
 				<?php } ?>
                     <?= $form->field($model, 'dateRangePicker', [
                         'showLabels' => false
@@ -255,7 +280,7 @@ $statusColumns = [
                         ],
                         'pluginEvents' => [
                             "apply.daterangepicker" => "function() {
-                                "." var form = $('#reportSummaryDropdownContainer').find('#ReportSummaryForm');
+                                "." var form = $('#employeeApprovalDropdownContainer').find('#employeeApprovalForm');
 									if (form.find('.has-error').length){
 										return false;
 									}
@@ -263,29 +288,29 @@ $statusColumns = [
 									$.pjax.reload({
 										type: 'GET',
 										url: form.attr('action'),
-										container: '#reportSummaryGridview', // id to update content
+										container: '#employeeApprovalGridview', // id to update content
 										data: form.serialize(),
 										timeout: 99999
 									});
-									$('#reportSummaryGridview').off('pjax:success').on('pjax:success', function () {
-										applyReportSummaryListeners();
+									$('#employeeApprovalGridview').off('pjax:success').on('pjax:success', function () {
+										applyEmployeeApprovalListeners();
 										validateTaskToolTip();
-										reportSummaryApproveMultiple();
+										employeeApprovalApproveMultiple();
 										$('#loading').hide();
 										//TODO add button reloads if neccessary
 									});
-									$('#reportSummaryGridview').off('pjax:error').on('pjax:error', function () {
+									$('#employeeApprovalGridview').off('pjax:error').on('pjax:error', function () {
 										location.reload();
 									});
-                                    $('#reportSummaryDatePickerContainer').css(\"display\", \"block\"); "."
+                                    $('#employeeApprovalDatePickerContainer').css(\"display\", \"block\"); "."
                             }"],
                     ]); ?>
 				</div>
-				<?php Pjax::begin(['id' => 'reportSummaryDropDownPjax', 'timeout' => false]) ?>
-					<div class="col-md-2 reportSummaryProjectFilterDD">
+				<?php Pjax::begin(['id' => 'employeeApprovalDropDownPjax', 'timeout' => false]) ?>
+					<div class="col-md-2 employeeApprovalProjectFilterDD">
 						<?=
 							$form->field($model, 'projectID', ['labelSpan' => 3])->dropDownList($projectDropDown,
-							['value' => $model->projectID, 'id'=>'reportSummaryProjectFilterDD'])->label('Project'); 
+							['value' => $model->projectID, 'id'=>'employeeApprovalProjectFilterDD'])->label('Project'); 
 						?>
 					</div>
 				<?php Pjax::end() ?>
@@ -294,14 +319,14 @@ $statusColumns = [
 						echo Html::button('Submit', 
 						[
 							'class' => 'btn btn-primary multiple_approve_btn',
-							'id' => 'rs_multiple_submit_btn_id',
+							'id' => 'ea_multiple_submit_btn_id',
 							'disabled' => true
 						]);
 					}else{
 						echo Html::button('Approve', 
 						[
 							'class' => 'btn btn-primary multiple_approve_btn',
-							'id' => 'rs_multiple_approve_btn_id',
+							'id' => 'ea_multiple_approve_btn_id',
 							'disabled' => true
 						]);
 					}
@@ -311,12 +336,12 @@ $statusColumns = [
 		</div>
     </div>
 	
-    <div id="reportSummaryGridViewContainer">
-		<?php Pjax::begin(['id' => 'reportSummaryGridview', 'timeout' => false]) ?>
+    <div id="employeeApprovalyGridViewContainer">
+		<?php Pjax::begin(['id' => 'employeeApprovalGridview', 'timeout' => false]) ?>
 		<!--user data table-->
-        <div id="reportSummaryUserGV" class="reportSummaryUserForm">
+        <div id="employeeApprovalUserGV" class="employeeApprovalUserForm">
             <?= GridView::widget([
-                'id' => 'GridViewForReportSummaryUser',
+                'id' => 'GridViewForEmployeeApprovalUser',
                 'dataProvider' => $userDataProvider,
                 'export' => false,
                 'pjax' => true,
@@ -327,9 +352,9 @@ $statusColumns = [
             ]); ?>
         </div>
 		<!--proj data table-->
-		<div id="reportSummaryProjGV" class="reportSummaryProjForm">
+		<div id="employeeApprovalProjGV" class="employeeApprovalProjForm">
             <?= GridView::widget([
-                'id' => 'GridViewForReportSummaryProj',
+                'id' => 'GridViewForEmployeeApprovalProj',
                 'dataProvider' => $projDataProvider,
                 'export' => false,
                 'pjax' => true,
@@ -340,9 +365,9 @@ $statusColumns = [
             ]); ?>
         </div>
 		<!--status data table-->
-		<!--<div id="reportSummaryStatusGV" class="reportSummaryStatusForm">
+		<!--<div id="employeeApprovalStatusGV" class="employeeApprovalStatusForm">
             <?= GridView::widget([
-                'id' => 'GridViewForReportSummaryStatus',
+                'id' => 'GridViewForEmployeeApprovalStatus',
                 'dataProvider' => $statusDataProvider,
                 'export' => false,
                 'pjax' => true,

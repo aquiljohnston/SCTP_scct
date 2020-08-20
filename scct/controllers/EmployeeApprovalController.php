@@ -19,10 +19,7 @@ use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
 
-/**
- * TimeCardController implements the CRUD actions for TimeCard model.
- */
-class ReportSummaryController extends BaseCardController
+class EmployeeApprovalController extends BaseCardController
 {
     /**
      * Lists a summary of user data.
@@ -40,13 +37,13 @@ class ReportSummaryController extends BaseCardController
 			}
 
 			//Check if user has permissions
-			self::requirePermission("viewReportSummary");
+			self::requirePermission("viewEmployeeApproval");
 
 			//if request is not coming from report-summary reset session variables. 
 			$referrer = Yii::$app->request->referrer;
-			if(!strpos($referrer,'report-summary')){
-				unset(Yii::$app->session['reportSummaryFormData']);
-				unset(Yii::$app->session['reportSummarySort']);
+			if(!strpos($referrer,'employee-approval')){
+				unset(Yii::$app->session['employeeApprovalFormData']);
+				unset(Yii::$app->session['employeeApprovalSort']);
 			}
 
 			//check user role
@@ -96,14 +93,14 @@ class ReportSummaryController extends BaseCardController
                 //parse sort data
                 $sortField = str_replace('-', '', $sort, $sortCount);
                 $sortOrder = $sortCount > 0 ? 'DESC' : 'ASC';
-				Yii::$app->session['reportSummarySort'] = [
+				Yii::$app->session['employeeApprovalSort'] = [
 					'sortField' => $sortField,
 					'sortOrder' => $sortOrder
 				];
             } else {
-				if(Yii::$app->session['reportSummarySort']){
-					$sortField = Yii::$app->session['reportSummarySort']['sortField'];
-					$sortOrder = Yii::$app->session['reportSummarySort']['sortOrder'];
+				if(Yii::$app->session['employeeApprovalSort']){
+					$sortField = Yii::$app->session['employeeApprovalSort']['sortField'];
+					$sortOrder = Yii::$app->session['employeeApprovalSort']['sortOrder'];
 				}else{
 					//default sort values
 					$sortField = 'RowLabels';
@@ -113,11 +110,11 @@ class ReportSummaryController extends BaseCardController
 
             // check if type was post, if so, get value from $model
             if ($model->load(Yii::$app->request->queryParams)){
-				Yii::$app->session['reportSummaryFormData'] = $model;
+				Yii::$app->session['employeeApprovalFormData'] = $model;
 			}else{
 				//set defaults to session data if avaliable
-				if(Yii::$app->session['reportSummaryFormData']){
-					$model = Yii::$app->session['reportSummaryFormData'];
+				if(Yii::$app->session['employeeApprovalFormData']){
+					$model = Yii::$app->session['employeeApprovalFormData'];
 				}else{
 					//set default values
 					$model->pageSize = 50;
@@ -171,7 +168,7 @@ class ReportSummaryController extends BaseCardController
 				'sortOrder' => $sortOrder,
 			]);
 			// set url
-			$url = 'base-card%2Freport-summary&' . $httpQuery;
+			$url = 'base-card%2Femployee-approval&' . $httpQuery;
 
 			//execute request
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
@@ -274,7 +271,7 @@ class ReportSummaryController extends BaseCardController
 			}
 
 			//Check if user has permissions
-			self::requirePermission("reportSummaryEmployeeDetail");
+			self::requirePermission("employeeApprovalDetail");
 
 
 			//build api url path

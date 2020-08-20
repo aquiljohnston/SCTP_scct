@@ -108,8 +108,8 @@ class PermissionDictionary {
 		'viewCGE', //View CGE
         'viewTrackerMenu', // View Tracker
 		'viewTrainingMenu', // View Training Videos
-		'viewReportSummary', //View Report Summary Screen
-		'reportSummaryEmployeeDetail', //View Employee Detail Screen
+		'viewEmployeeApproval', //View Employee Approval Screen
+		'employeeApprovalDetail', //View Employee Detail Screen
     ];
 
     private static $scctTemplatePermissions = [
