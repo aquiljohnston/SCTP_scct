@@ -294,7 +294,7 @@ $statusColumns = [
 									});
 									$('#employeeApprovalGridview').off('pjax:success').on('pjax:success', function () {
 										applyEmployeeApprovalListeners();
-										validateTaskToolTip();
+										employeeDetailToolTip();
 										employeeApprovalApproveMultiple();
 										$('#loading').hide();
 										//TODO add button reloads if neccessary
