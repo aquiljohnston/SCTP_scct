@@ -2,7 +2,7 @@ $(function () {
     $(document).ready(function () {
         if ($('#employeeApprovalGridview').length > 0) {
 			applyEmployeeApprovalListeners();
-            validateTaskToolTip();
+            employeeDetailToolTip();
 			employeeApprovalApproveMultiple();
         }
 		if($('#employeeApprovalDateRange').length > 0){
@@ -24,10 +24,11 @@ function applyEmployeeApprovalListeners() {
 			var userid = JSON.parse($(this).parent().attr('data-key')).UserID;
 			//current column
 			var col = $(this).attr('data-col-seq');
-			var startDate = $(this).closest('table').find('th').eq(col)[0].innerHTML;//.innerHTML;
+			var dateHeader = $(this).closest('table').find('th').eq(col)[0].innerHTML;//.innerHTML;
+			var date = dateHeader.split(" ")[1];
 			var currentURL = window.location;
 			var baseUrl = currentURL .protocol + "//" + currentURL.host + "/" + currentURL.pathname.split('/')[1];
-			var url = baseUrl + "/employee-detail?userID="+userid+"&startDate="+startDate;
+			var url = baseUrl + "/employee-detail?userID="+userid+"&date="+date;
 			//reirect to employee detail screen
 			window.location.href = url;
 		}
@@ -66,7 +67,7 @@ function applyEmployeeApprovalListeners() {
     });
 }
 
-function validateTaskToolTip() {
+function employeeDetailToolTip() {
     $.each($('#GridViewForEmployeeApprovalUser tbody tr td'),function(){
         if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
 			&& JSON.parse($(this).parent().attr('data-key')).UserID != null) {
@@ -140,7 +141,7 @@ function reloadEmployeeApprovalGridView() {
 	});
 	$('#employeeApprovalGridview').off('pjax:success').on('pjax:success', function () {
 		applyEmployeeApprovalListeners();
-		validateTaskToolTip();
+		employeeDetailToolTip();
 		employeeApprovalApproveMultiple();
 		$('#loading').hide();
 		//TODO add button reloads if neccessary

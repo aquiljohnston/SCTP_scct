@@ -29,6 +29,7 @@ class EmployeeApprovalController extends BaseCardController
      * @throws \yii\web\HttpException
      */
     public function actionIndex($projectID = null, $projectFilterString = null,  $activeWeek = null, $dateRange = null){
+		//TODO clean up extra code
 		// try {
 			//guest redirect
 			if (Yii::$app->user->isGuest)
@@ -262,7 +263,7 @@ class EmployeeApprovalController extends BaseCardController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionEmployeeDetail($userID, $startDate){
+    public function actionEmployeeDetail($userID, $date){
 		// try {
 			//guest redirect
 			if (Yii::$app->user->isGuest)
@@ -277,7 +278,7 @@ class EmployeeApprovalController extends BaseCardController
 			//build api url path
 			$url = 'base-card%2Femployee-detail&' . http_build_query([
 				'userID' => $userID,
-				'startDate' => $startDate,
+				'date' => $date,
 			]);
 			
 			//execute request
