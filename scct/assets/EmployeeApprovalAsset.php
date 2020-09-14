@@ -10,6 +10,7 @@ class EmployeeApprovalAsset extends AppAsset
     ];
 	public $js = [
         'js/employee_approval.js',
+        'js/employee_detail.js',
         'js/datePicker.js',
 	];
 }

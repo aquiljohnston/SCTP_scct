@@ -110,6 +110,7 @@ class PermissionDictionary {
 		'viewTrainingMenu', // View Training Videos
 		'viewEmployeeApproval', //View Employee Approval Screen
 		'employeeApprovalDetail', //View Employee Detail Screen
+		'employeeApprovalDetailEdit', //Edit Employee Detail Screen
     ];
 
     private static $scctTemplatePermissions = [

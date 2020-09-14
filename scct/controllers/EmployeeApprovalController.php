@@ -18,6 +18,7 @@ use yii\web\UnauthorizedHttpException;
 use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
+use app\models\EmployeeDetailTime;
 
 class EmployeeApprovalController extends BaseCardController
 {
@@ -315,6 +316,67 @@ class EmployeeApprovalController extends BaseCardController
 				return $this->renderAjax('employee-detail', $dataArray);
 			}else{
 				return $this->render('employee-detail', $dataArray);
+			}
+        // } catch (UnauthorizedHttpException $e){
+            // Yii::$app->response->redirect(['login/index']);
+        // } catch(ForbiddenHttpException $e) {
+            // throw $e;
+        // } catch(ErrorException $e) {
+            // throw new \yii\web\HttpException(400);
+        // } catch(Exception $e) {
+            // throw new ServerErrorHttpException();
+        // }
+    }
+	
+	/**
+     * Populates the Employee Detail Edit Modal
+     * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\HttpException
+     */
+    public function actionEmployeeDetailModal(){
+		// try {
+			//guest redirect
+			if (Yii::$app->user->isGuest)
+			{
+				return $this->redirect(['/login']);
+			}
+
+			//Check if user has permissionse
+			self::requirePermission("employeeApprovalDetailEdit");
+			
+			Yii::trace(json_encode($_POST));
+			
+			//if GET pull data params to populate form
+			if (isset($_POST)){
+				$data = $_POST['Current'];
+				$prevData = $_POST['Prev'];
+				$nextData = $_POST['Next'];
+				$model = new EmployeeDetailTime;
+				$prevModel = new EmployeeDetailTime;
+				$nextModel = new EmployeeDetailTime;
+				
+				$model->attributes = $data;
+				$prevModel->attributes = $prevData;
+				$nextModel->attributes = $nextData;
+				
+				yii::trace('current ' . json_encode($model->attributes));
+				yii::trace('prev ' . json_encode($prevModel->attributes));
+				yii::trace('next ' . json_encode($nextModel->attributes));
+				
+				$dataArray = [
+					'model' => $model,
+					'prevModel' => $prevModel,
+					'nextModel' => $nextModel,
+				];
+			}
+			
+			//calling index page to pass dataProvider.
+			if(Yii::$app->request->isAjax) {
+				return $this->renderAjax('_employee-detail-edit-modal', $dataArray);
+			}else{
+				return $this->render('_employee-detail-edit-modal', $dataArray);
 			}
         // } catch (UnauthorizedHttpException $e){
             // Yii::$app->response->redirect(['login/index']);

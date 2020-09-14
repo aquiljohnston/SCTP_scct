@@ -13,6 +13,11 @@
 	margin-top:2vh;
 }
 
+/*custom style for hours breakdown table grid view hover*/
+#DailyBreakdownHours table tbody tr:hover{
+    background-color: rgba(57, 12, 255, 0.25);
+}
+
 /*responsive css for table*/
 @media only screen and (max-height : 1080px) {
 	#DailyBreakdownHours{

@@ -78,6 +78,10 @@ $this->title = 'Employee Detail';
 			'caption' => '',
 			'columns' => [
 				[
+					'label' => 'RowID',
+					'attribute' => 'RowID',
+					'hidden' => true
+				],[
 					'label' => 'Project',
 					'attribute' => 'Project',
 					'headerOptions' => ['class' => 'text-left'],
@@ -117,26 +121,15 @@ $this->title = 'Employee Detail';
 			Total w/out lunch:
 		</p>
     <?php Pjax::end() ?>
-    <!--<?php
-    Pjax::begin(['id' => 'showTime', 'timeout' => false]);
+    <?php
+    Pjax::begin(['id' => 'editTime', 'timeout' => false]);
 		Modal::begin([
-			'header' => '<h4>ADD TASK</h4>',
-			'id' => 'addTaskModal',
+			'header' => '<h4>Edit Time</h4>',
+			'id' => 'editTimeModal',
 			'size' => 'modal-lg',
 		]);
-		echo "<div id='modalAddTask'><span id='modalContentSpan'></span></div>";
+		echo "<div id='editTimeModal'><span id='editTimeModalContentSpan'></span></div>";
 		Modal::end();
     Pjax::end();
     ?>
-	<?php
-    Pjax::begin(['id' => 'timeReason', 'timeout' => false]);
-		Modal::begin([
-			'header' => '<h4>DEACTIVATE REASON</h4>',
-			'id' => 'timeReasonModal',
-			//no size defaults to medium
-		]);
-		echo "<div id='modalTimeReason'><span id='timeReasonModalContentSpan'></span></div>";
-		Modal::end();
-	Pjax::end();
-    ?>-->
 </div>
