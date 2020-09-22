@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\Models;
 
 use Yii;
 
@@ -50,7 +50,7 @@ use Yii;
  * @property string  $ActivityAppVersion
  * @property string  $ActivityAppVersionName
  */
-class Activity extends \yii\base\model
+class Activity extends \yii\base\Model
 {
 	
 	public  $ActivityID;

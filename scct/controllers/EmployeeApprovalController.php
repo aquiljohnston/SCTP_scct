@@ -170,7 +170,9 @@ class EmployeeApprovalController extends BaseCardController
 				'sortOrder' => $sortOrder,
 			]);
 			// set url
-			$url = 'base-card%2Femployee-approval&' . $httpQuery;
+
+			$url = 'employee-approval&' . $httpQuery;
+                        
 
 			//execute request
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3);

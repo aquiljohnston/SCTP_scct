@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\user;
+use app\models\User;
 use app\models\UserSearch;
 use app\controllers\BaseController;
 use yii\web\NotFoundHttpException;

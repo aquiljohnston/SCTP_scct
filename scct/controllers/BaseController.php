@@ -99,7 +99,7 @@ class BaseController extends Controller
     //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url, $version = Constants::DEFAULT_VERSION)
 	{
-        $url = self::prependURL($url, $version);
+        	$url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::getXClient(),

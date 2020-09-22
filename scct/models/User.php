@@ -35,7 +35,7 @@ use app\constants\Constants;
  * @property ProjectUserTb[] $projectUserTbs
  * @property KeyTb $userKey
  */
-class User extends \yii\base\model implements IdentityInterface
+class User extends \yii\base\Model implements IdentityInterface
 {
     // /**
      // * @inheritdoc

@@ -114,7 +114,7 @@ class PermissionDictionary {
     ];
 
     private static $scctTemplatePermissions = [
-        ];
+    ];
 
     public static function permissionIsExample($permission) {
         return in_array($permission, self::$examplePermissions);
