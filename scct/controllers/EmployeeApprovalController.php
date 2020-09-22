@@ -170,7 +170,8 @@ class EmployeeApprovalController extends BaseCardController
 				'sortOrder' => $sortOrder,
 			]);
 			// set url
-			$url = 'base-card%2Femployee-approval&' . $httpQuery;
+
+			$url = 'employee-approval&' . $httpQuery;
 
 			//execute request
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
@@ -180,8 +181,8 @@ class EmployeeApprovalController extends BaseCardController
             $statusData = $response['StatusData'];
 			
 			//get date values from user data for dynamic headers
+			$dateHeaders = [];
 			if($userData != null){
-				$dateHeaders = [];
 				foreach ($userData[0] as $key => $value){
 					if(strpos($key, '/') !== false){
 						$dateHeaders[] = $key;

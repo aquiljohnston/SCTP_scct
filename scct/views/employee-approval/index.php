@@ -314,22 +314,26 @@ $statusColumns = [
 						?>
 					</div>
 				<?php Pjax::end() ?>
+                                            
 				<?php 
+                                
+                               $approveButton = [
+                                                    'class' => 'btn btn-primary multiple_approve_btn',
+                                                    'id' => 'tc_multiple_approve_btn_id',
+                                                    'disabled' => true
+                                                ];
+                               
 					if($isProjectManager){
-						echo Html::button('Submit', 
-						[
-							'class' => 'btn btn-primary multiple_approve_btn',
-							'id' => 'ea_multiple_submit_btn_id',
-							'disabled' => true
-						]);
-					}else{
-						echo Html::button('Approve', 
+					
+                                                echo Html::button('Approve', 
 						[
 							'class' => 'btn btn-primary multiple_approve_btn',
 							'id' => 'ea_multiple_approve_btn_id',
 							'disabled' => true
 						]);
-					}
+					}elseif($canApprove){
+                                                        echo Html::button('Approve',$approveButton);
+                                        }
 				?>
 				<?php ActiveForm::end(); ?>
 			</div>
