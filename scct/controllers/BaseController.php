@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use app\dictionaries\PermissionDictionary;
 use Yii;
-use app\models\user;
+use app\models\User;
 use app\models\UserSearch;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
@@ -65,11 +65,12 @@ class BaseController extends Controller
         //if the servername contains the string local in the name ( localhost or apidev.local )
         //or it is in a local class of IPs
         if(YII_ENV_DEV && (strpos($_SERVER['SERVER_NAME'],'local')!==false
-                ||  $_SERVER['SERVER_NAME'] === '0.0.0.0'
-                || strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
+			|| $_SERVER['SERVER_NAME'] === '0.0.0.0'
+			|| strpos($_SERVER['SERVER_NAME'],'192.168.')===0)
 		) 
 		{
-            return "scctdev";
+			return "scctstage";
+            // return "scctdev";
             // return "scanadev";
         }
         else {
@@ -99,7 +100,7 @@ class BaseController extends Controller
     //function generates and executes a "GET" request and returns the response
 	public static function executeGetRequest($url, $version = Constants::DEFAULT_VERSION)
 	{
-        	$url = self::prependURL($url, $version);
+		$url = self::prependURL($url, $version);
 		//set headers
 		$headers = array(
 			'X-Client:' . self::getXClient(),
@@ -385,7 +386,7 @@ class BaseController extends Controller
      * It will return nav menu in json format
      * @return mixed
      * @throws ForbiddenHttpException
-     */
+    */
     public function actionGetNavMenu()
     {
 		$navMenuUrl = "menu%2Fget";//Switch for localhost
