@@ -280,7 +280,7 @@ $statusColumns = [
                         ],
                         'pluginEvents' => [
                             "apply.daterangepicker" => "function() {
-                                "." var form = $('#employeeApprovalDropdownContainer').find('#employeeApprovalForm');
+                                "." var form = $('#employeeApprovalDropdownContainer').find('#EmployeeApprovalForm');
 									if (form.find('.has-error').length){
 										return false;
 									}
