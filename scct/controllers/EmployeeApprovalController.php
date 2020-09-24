@@ -227,8 +227,8 @@ class EmployeeApprovalController extends BaseCardController
 				// ]
 			// ];
 
-            // set pages to dispatch table
-            // $pages = new Pagination($response['pages']);
+			// set pages to dispatch table
+			// $pages = new Pagination($response['pages']);
 
 			$dataArray = [
 				'userDataProvider' => $userDataProvider,
@@ -240,6 +240,8 @@ class EmployeeApprovalController extends BaseCardController
 				'projectDropDown' => $projectDropDown,
 				'canApprove' => $canApprove,
 				'isProjectManager' => $isProjectManager,
+				'startDate' => $startDate,
+				'endDate' =>  $endDate
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -389,4 +391,44 @@ class EmployeeApprovalController extends BaseCardController
             // throw new ServerErrorHttpException();
         // }
     }
+        
+	public function actionApproveTimecards(){
+		try{
+			if (Yii::$app->request->isAjax) {
+				//get requesting controller type
+				$requestType = self::getRequestType();
+				$data = Yii::$app->request->post();					
+				// loop the data array to get all id's.	
+				$cardIDArray = array();
+                                
+				foreach($data['userid'] as $keyitem){
+					$cardIDArray[] = $keyitem;
+				}
+				$startDate = $data['startDate'];
+				$endDate = $data['endDate'];
+				$data = array(
+					'cardIDArray' => $cardIDArray,
+					'startDate' =>  $startDate,
+					'endDate' =>  $endDate
+				);		
+				$json_data = json_encode($data);
+				
+				// post url
+				$putUrl = $requestType.'%2Fapprove-timecards';
+                                
+				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
+				//Handle API response if we want to do more robust error handling
+			} else {
+			  throw new \yii\web\BadRequestHttpException;
+			}
+		} catch (UnauthorizedHttpException $e){
+			Yii::$app->response->redirect(['login/index']);
+		} catch(ForbiddenHttpException $e) {
+			throw $e;
+		} catch(ErrorException $e) {
+			throw new \yii\web\HttpException(400);
+		} catch(Exception $e) {
+			throw new ServerErrorHttpException();
+		}
+	}
 }

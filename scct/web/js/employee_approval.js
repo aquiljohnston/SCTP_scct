@@ -80,6 +80,8 @@ function employeeApprovalApproveMultiple() {
     $('#ea_multiple_approve_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForEmployeeApprovalUser').yiiGridView('getSelectedRows');
         var quantifier = "";
+        var startDate = $('#startDateinp').val();
+        var endDate = $('#startDateinp').val();
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
@@ -104,9 +106,11 @@ function employeeApprovalApproveMultiple() {
 			$('#loading').show();
             $.ajax({
                 type: 'POST',
-                url: '/employee-approval/approve-multiple',
+                url: '/employee-approval/approve-timecards',
                 data: {
-                    userid: primaryKeys
+                    userid: primaryKeys,
+                    startDate: startDate,
+                    endDate: endDate
                 },
 				success: function(data){
 					reloadEmployeeApprovalGridView();

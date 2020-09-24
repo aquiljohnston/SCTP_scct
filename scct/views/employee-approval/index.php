@@ -383,6 +383,8 @@ $statusColumns = [
 		<?php Pjax::end() ?>
     </div>
 </div>
+<input type="hidden" value="<?php echo  $startDate?>" id="startDateinp">
+<input type="hidden" value="<?php echo $endDate?>" id="endDateinp">
 <!--ctGrowl used for on screen notifications-->
  <!--<div id = "ctGrowlContainer"></div>
  <ul id = "ct-growl-clone">
