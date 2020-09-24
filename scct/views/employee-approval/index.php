@@ -317,23 +317,22 @@ $statusColumns = [
                                             
 				<?php 
                                 
-                               $approveButton = [
-                                                    'class' => 'btn btn-primary multiple_approve_btn',
-                                                    'id' => 'tc_multiple_approve_btn_id',
-                                                    'disabled' => true
-                                                ];
+					$approveButton = [
+						'class' => 'btn btn-primary multiple_approve_btn',
+						'id' => 'tc_multiple_approve_btn_id',
+						'disabled' => false
+					];
                                
-					if($isProjectManager){
-					
-                                                echo Html::button('Approve', 
+					if($isProjectManager){					
+						echo Html::button('Approve', 
 						[
 							'class' => 'btn btn-primary multiple_approve_btn',
 							'id' => 'ea_multiple_approve_btn_id',
-							'disabled' => true
+							'disabled' => false
 						]);
 					}elseif($canApprove){
-                                                        echo Html::button('Approve',$approveButton);
-                                        }
+						echo Html::button('Approve',$approveButton);
+					}
 				?>
 				<?php ActiveForm::end(); ?>
 			</div>
