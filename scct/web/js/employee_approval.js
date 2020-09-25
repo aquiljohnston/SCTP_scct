@@ -77,7 +77,7 @@ function employeeDetailToolTip() {
 }
 
 function employeeApprovalApproveMultiple() {	
-    $('#ea_multiple_approve_btn_id').off('click').click(function (event) {
+    $('#approve_timecard_btn_id').off('click').click(function (event) {
         var primaryKeys = $('#GridViewForEmployeeApprovalUser').yiiGridView('getSelectedRows');
         var quantifier = "";
         var startDate = $('#startDateinp').val();
