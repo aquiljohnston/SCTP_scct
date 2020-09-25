@@ -238,10 +238,10 @@ class BaseCardController extends BaseController
 	 * @param boolean $isAccountant is current user of role type accountant
 	 * returns boolean status for submit button
 	 */
-	protected static function getSubmitButtonStatus($projectID, $projectDropDown, $startDate, $endDate, $isAccountant)
+	protected  function getSubmitButtonStatus($projectID, $projectDropDown, $startDate, $endDate, $isAccountant)
 	{
 		//get requesting controller type
-		$requestType = self::getRequestType();
+		$requestType = $this->getRequestType();
 		$projArray = array();
 		$keys = array_keys($projectDropDown);
 		$keysCount = count($keys);
