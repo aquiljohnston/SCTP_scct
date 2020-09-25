@@ -202,7 +202,8 @@ class EmployeeApprovalController extends BaseCardController
 				'pagination' => false,
 				'key' => function ($userData) {
 					return array(
-						'UserID' => $userData['UserID']
+						'UserID' => $userData['UserID'],
+						'UserName' => $userData['RowLabels']
 					);
 				}
 			]);
@@ -280,7 +281,7 @@ class EmployeeApprovalController extends BaseCardController
 
 
 			//build api url path
-			$url = 'base-card%2Femployee-detail&' . http_build_query([
+			$url = 'employee-approval%2Femployee-detail&' . http_build_query([
 				'userID' => $userID,
 				'date' => $date,
 			]);
