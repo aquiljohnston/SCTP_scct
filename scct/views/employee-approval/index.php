@@ -319,7 +319,7 @@ $statusColumns = [
                                 
 					$approveButton = [
 						'class' => 'btn btn-primary multiple_approve_btn',
-						'id' => 'tc_multiple_approve_btn_id',
+						'id' => 'approve_timecard_btn_id',
 						'disabled' => false
 					];
                                
@@ -327,7 +327,7 @@ $statusColumns = [
 						echo Html::button('Approve', 
 						[
 							'class' => 'btn btn-primary multiple_approve_btn',
-							'id' => 'ea_multiple_approve_btn_id',
+							'id' => 'tc_multiple_approve_btn_id', // need to add js listener
 							'disabled' => false
 						]);
 					}elseif($canApprove){

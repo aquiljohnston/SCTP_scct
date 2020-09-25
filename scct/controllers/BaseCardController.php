@@ -276,7 +276,7 @@ class BaseCardController extends BaseController
 	}
 	
 	//get controller for requested action to determine type
-	public function getRequestType(){
+	protected function getRequestType(){
 		$requestString = Yii::$app->requestedRoute;
 		$requestArray = explode('/', $requestString);
 		return $requestArray[0];
