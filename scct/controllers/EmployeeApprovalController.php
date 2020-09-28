@@ -269,7 +269,7 @@ class EmployeeApprovalController extends BaseCardController
      * @throws \yii\web\HttpException
      */
     public function actionEmployeeDetail($userID, $date){
-		// try {
+		try {
 			//guest redirect
 			if (Yii::$app->user->isGuest)
 			{
@@ -278,7 +278,6 @@ class EmployeeApprovalController extends BaseCardController
 
 			//Check if user has permissions
 			self::requirePermission("employeeApprovalDetail");
-
 
 			//build api url path
 			$url = 'employee-approval%2Femployee-detail&' . http_build_query([
@@ -321,15 +320,15 @@ class EmployeeApprovalController extends BaseCardController
 			}else{
 				return $this->render('employee-detail', $dataArray);
 			}
-        // } catch (UnauthorizedHttpException $e){
-            // Yii::$app->response->redirect(['login/index']);
-        // } catch(ForbiddenHttpException $e) {
-            // throw $e;
-        // } catch(ErrorException $e) {
-            // throw new \yii\web\HttpException(400);
-        // } catch(Exception $e) {
-            // throw new ServerErrorHttpException();
-        // }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
     }
 	
 	/**
