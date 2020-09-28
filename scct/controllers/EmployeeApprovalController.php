@@ -400,10 +400,15 @@ class EmployeeApprovalController extends BaseCardController
 				$requestType = self::getRequestType();
 				$data = Yii::$app->request->post();					
 				// loop the data array to get all id's.	
-				$cardIDArray = array();
-                                
+				$cardIDArray = "";
+				// $data = $data['userid'];
+				$dataSize = sizeof($data);
+				$x = 0;
 				foreach($data['userid'] as $keyitem){
-					$cardIDArray[] = $keyitem['UserID'];
+					$cardIDArray .= $keyitem['UserID'];
+					++$x;
+					if($x < $dataSize)
+						$cardIDArray .= ", ";
 				}
 				$startDate = $data['startDate'];
 				$endDate = $data['endDate'];
@@ -411,7 +416,7 @@ class EmployeeApprovalController extends BaseCardController
 					'cardIDArray' => $cardIDArray,
 					'startDate' =>  $startDate,
 					'endDate' =>  $endDate
-				);		
+				);
 				$json_data = json_encode($data);
 				
 				// post url
