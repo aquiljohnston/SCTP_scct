@@ -403,7 +403,7 @@ class EmployeeApprovalController extends BaseCardController
 				$cardIDArray = array();
                                 
 				foreach($data['userid'] as $keyitem){
-					$cardIDArray[] = $keyitem;
+					$cardIDArray[] = $keyitem['UserID'];
 				}
 				$startDate = $data['startDate'];
 				$endDate = $data['endDate'];
@@ -416,7 +416,6 @@ class EmployeeApprovalController extends BaseCardController
 				
 				// post url
 				$putUrl = $requestType.'%2Fapprove-timecards';
-                                
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
 				//Handle API response if we want to do more robust error handling
 			} else {
