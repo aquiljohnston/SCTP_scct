@@ -82,6 +82,10 @@ $this->title = 'Employee Detail';
 					'attribute' => 'RowID',
 					'hidden' => true
 				],[
+					'label' => 'ProjectID',
+					'attribute' => 'ProjectID',
+					'hidden' => true
+				],[
 					'label' => 'Project',
 					'attribute' => 'Project',
 					'headerOptions' => ['class' => 'text-left'],
@@ -133,3 +137,4 @@ $this->title = 'Employee Detail';
     Pjax::end();
     ?>
 </div>
+<input type="hidden" value="<?php echo $userID?>" id="userID">

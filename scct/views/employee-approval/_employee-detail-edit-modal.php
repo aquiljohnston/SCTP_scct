@@ -25,24 +25,24 @@ use kartik\form\ActiveForm;
     ]); ?>
 		<div class="form-group kv-fieldset-inline" id="employee_detail_form">
 			<div class="row">
-				<?= Html::activeLabel($model, 'ProjectName', [
+				<?= Html::activeLabel($model, 'ProjectID', [
 					'label' => 'Project',
 					'class' => 'col-sm-2 control-label'
-				]) ?>
+					]) ?>
 				<div class="col-sm-4">
-					<?= $form->field($model, 'ProjectName', [
+					<?= $form->field($model, 'ProjectID', [
 						'showLabels' => false
-					])->textInput(['placeholder' => '', 'type' => 'string']); ?>
+					])->dropDownList($projectDropDown); ?>
 				</div>
 				<?= Html::activeLabel($model, 'Task', [
 					'label' => 'Task',
 					'class' => 'col-sm-2 control-label'
-				]) ?>
+					]) ?>
 				<div class="col-sm-4">
 					<?= $form->field($model, 'Task', [
 						'showLabels' => false
-					])->textInput(['placeholder' => '', 'type' => 'string',
-						'readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,]); ?>
+					])->dropDownList($taskDropDown,
+						['readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'StartTime', [
 					'label' => 'Start Time',
