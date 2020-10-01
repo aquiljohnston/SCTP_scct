@@ -94,12 +94,12 @@ $userColumns = array_merge(
 			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
 			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
 		],
-		[
-			'label' => 'PM Submitted',
-			'attribute' => 'PMSubmitted',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
-		],
+		// [
+		// 	'label' => 'PM Submitted',
+		// 	'attribute' => 'PMSubmitted',
+		// 	'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
+		// 	'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
+		// ],
 	]
 );
 //set up checkbox disabled status based on role type

@@ -314,6 +314,7 @@ class EmployeeApprovalController extends BaseCardController
 				'projectDataProvider' => $projectDataProvider,
 				'breakdownDataProvider' => $breakdownDataProvider,
 				'totalData' => $totalData,
+				'userID'=> $userID,
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -339,7 +340,7 @@ class EmployeeApprovalController extends BaseCardController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionEmployeeDetailModal(){
+    public function actionEmployeeDetailModal($userID){
 		// try {
 			//guest redirect
 			if (Yii::$app->user->isGuest)
@@ -360,6 +361,8 @@ class EmployeeApprovalController extends BaseCardController
 				$model = new EmployeeDetailTime;
 				$prevModel = new EmployeeDetailTime;
 				$nextModel = new EmployeeDetailTime;
+				$projectDropDown = [];
+				$taskDropDown = [];
 				
 				$model->attributes = $data;
 				$prevModel->attributes = $prevData;
@@ -369,10 +372,28 @@ class EmployeeApprovalController extends BaseCardController
 				yii::trace('prev ' . json_encode($prevModel->attributes));
 				yii::trace('next ' . json_encode($nextModel->attributes));
 				
+				$getProjectDropdownURL = 'project%2Fget-project-dropdowns&' . http_build_query([
+					'userID' => $userID,
+				]);
+				$getProjectDropdownResponse = Parent::executeGetRequest($getProjectDropdownURL, Constants::API_VERSION_3);
+				$projectDropDown = json_decode($getProjectDropdownResponse, true);
+				
+				$getAllTaskUrl = 'task%2Fget-by-project&' . http_build_query([
+					'projectID' => $model->ProjectID,
+				]);
+				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_3);
+				$allTask = json_decode($getAllTaskResponse, true);
+				$taskDropDown = [];				
+				foreach($allTask['assets'] as $task) {
+					$taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
+				}
+				
 				$dataArray = [
 					'model' => $model,
 					'prevModel' => $prevModel,
 					'nextModel' => $nextModel,
+					'projectDropDown' => $projectDropDown,
+					'taskDropDown' => $taskDropDown,
 				];
 			}
 			
@@ -400,10 +421,15 @@ class EmployeeApprovalController extends BaseCardController
 				$requestType = self::getRequestType();
 				$data = Yii::$app->request->post();					
 				// loop the data array to get all id's.	
-				$cardIDArray = array();
-                                
+				$cardIDArray = "";
+				// $data = $data['userid'];
+				$dataSize = sizeof($data);
+				$x = 0;
 				foreach($data['userid'] as $keyitem){
-					$cardIDArray[] = $keyitem;
+					$cardIDArray .= $keyitem['UserID'];
+					++$x;
+					if($x < $dataSize)
+						$cardIDArray .= ", ";
 				}
 				$startDate = $data['startDate'];
 				$endDate = $data['endDate'];
@@ -411,12 +437,11 @@ class EmployeeApprovalController extends BaseCardController
 					'cardIDArray' => $cardIDArray,
 					'startDate' =>  $startDate,
 					'endDate' =>  $endDate
-				);		
+				);
 				$json_data = json_encode($data);
 				
 				// post url
 				$putUrl = $requestType.'%2Fapprove-timecards';
-                                
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
 				//Handle API response if we want to do more robust error handling
 			} else {

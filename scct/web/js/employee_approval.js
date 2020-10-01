@@ -19,9 +19,9 @@ function applyEmployeeApprovalListeners() {
 		//restrict click to only day of the week fields
 		//with values in the .text()
 		if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
-			&& JSON.parse($(this).parent().attr('data-key')).UserName != null){
+			&& JSON.parse($(this).parent().attr('data-key')).UserID != null){
 			//get data for redirect
-			var userid = JSON.parse($(this).parent().attr('data-key')).UserName;
+			var userid = JSON.parse($(this).parent().attr('data-key')).UserID;
 			//current column
 			var col = $(this).attr('data-col-seq');
 			var dateHeader = $(this).closest('table').find('th').eq(col)[0].innerHTML;//.innerHTML;
