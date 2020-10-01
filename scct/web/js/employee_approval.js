@@ -81,7 +81,7 @@ function employeeApprovalApproveMultiple() {
         var primaryKeys = $('#GridViewForEmployeeApprovalUser').yiiGridView('getSelectedRows');
         var quantifier = "";
         var startDate = $('#startDateinp').val();
-        var endDate = $('#startDateinp').val();
+        var endDate = $('#endDateinp').val();
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
