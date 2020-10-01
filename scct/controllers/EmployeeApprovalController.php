@@ -422,15 +422,10 @@ class EmployeeApprovalController extends BaseCardController
 				$data = Yii::$app->request->post();					
 				// loop the data array to get all id's.	
 				$cardIDArray = "";
-				// $data = $data['userid'];
-				$dataSize = sizeof($data);
-				$x = 0;
 				foreach($data['userid'] as $keyitem){
-					$cardIDArray .= $keyitem['UserID'];
-					++$x;
-					if($x < $dataSize)
-						$cardIDArray .= ", ";
+					$cardIDArray .= $keyitem['UserID'] . ",";
 				}
+				$cardIDArray = substr_replace($cardIDArray ,"", -1);
 				$startDate = $data['startDate'];
 				$endDate = $data['endDate'];
 				$data = array(
@@ -439,7 +434,7 @@ class EmployeeApprovalController extends BaseCardController
 					'endDate' =>  $endDate
 				);
 				$json_data = json_encode($data);
-				
+				Yii::trace("Data params json: " . $json_data);
 				// post url
 				$putUrl = $requestType.'%2Fapprove-timecards';
 				$putResponse = Parent::executePutRequest($putUrl, $json_data, Constants::API_VERSION_3); // indirect rbac
