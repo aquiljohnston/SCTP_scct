@@ -27,18 +27,20 @@ $this->title = 'Employee Detail';
 		<p>
 			<?= Html::a('Back', ['index'], ['class' => 'btn btn-primary']) ?>
 			<?php
-				echo Html::button('Deactivate', [
-					'class' => 'btn btn-primary',
-					'disabled' => true,
-					'id' => 'deactive_time_btn_id',
-					'style' => ['margin' => '.2%']
-				]);
-				echo Html::button('Add Task', [
-					'class' => 'btn btn-primary add_time_btn',
-					'disabled' => true, //TODO determine when should be disabled(($isPMApproved || ($isApproved && !$isProjectManager)) && !$isAccountant),
-					'id' => 'add_time_btn_id',
-					'style' => ['margin' => '.2%']
-				]);				
+				if(!$canAddTask) {
+					echo Html::button('Add Task', [
+						'class' => 'btn btn-primary add_time_btn',
+						'disabled' => true, 
+						'id' => 'add_task_btn_id',
+						'style' => ['margin' => '.2%']
+					]);
+				} else {
+					echo Html::button('Add Task', [
+						'class' => 'btn btn-primary add_time_btn',
+						'id' => 'add_task_btn_id',
+						'style' => ['margin' => '.2%']
+					]);
+				}			
 			?>
 		</p>
 		<br>

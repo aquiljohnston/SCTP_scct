@@ -310,11 +310,16 @@ class EmployeeApprovalController extends BaseCardController
 				}
 			]);
 			
+			//check user role
+			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
+			$isSupervisor = Yii::$app->session['UserAppRoleType'] == 'Supervisor';
+			
 			$dataArray = [
 				'projectDataProvider' => $projectDataProvider,
 				'breakdownDataProvider' => $breakdownDataProvider,
 				'totalData' => $totalData,
 				'userID'=> $userID,
+				'canAddTask'=> ($isSupervisor | $isProjectManager)
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -452,4 +457,88 @@ class EmployeeApprovalController extends BaseCardController
 			throw new ServerErrorHttpException();
 		}
 	}
+
+	/**
+     * Add task time for a given day.
+     * @param string $id
+     * @throws \yii\web\HttpException
+     * @return mixed
+     */
+    public function actionAddTaskTimeEntry($id, $inOvertime = 'false')
+    {		
+		try{
+			//Defensive Programming - Magic Numbers
+			//declare constants to hold constant values	
+			define('ENTRIES_ZERO_INDEX',0);
+			define('DATES_ZERO_INDEX',0);
+			define('DATES_FIRST_INDEX',1);
+			define('FROM_DATE_ZERO_INDEX',0);
+			define('TO_DATE_FIRST_INDEX',1);
+
+			//guest redirect
+			if (Yii::$app->user->isGuest){
+				return $this->redirect(['/login']);
+			}
+			
+			//todo: Check if user has permissions
+			// self::requirePermission("");
+			
+			// //build api url paths
+			// $entries_url = 'time-card%2Fshow-entries&' . http_build_query([
+			// 	'cardID' => $id,
+			// ]);
+			// $resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
+			// $cardData = json_decode($resp, true);
+
+		
+			
+			// $allTask = new ArrayDataProvider([
+			// 	'allModels' => $cardData['show-entries'],
+			// 	'pagination'=> false,
+			// ]);
+		
+			// $hoursOverview = new ArrayDataProvider([
+			// 	'allModels' => $cardData['hours-overview'],
+			// 	'key' => 'TimeEntryID',
+			// 	'pagination'=> false,
+			// ]);
+
+			return $this -> render('_employee-add-task-modal', [
+				'userId' => $id,
+				'model' => $cardData['card'],
+				'task' => [],
+				'hoursOverview' => [],
+				// 'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
+				// 'to' => $to,
+				// 'SundayDate' => $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
+				// 'MondayDate' => $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
+				// 'TuesdayDate' => $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
+				// 'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
+				// 'ThursdayDate' => $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
+				// 'FridayDate' => $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
+				// 'SaturdayDate' => $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
+				// 'projectName' => $projectName,
+				// 'fName' => $fName,
+				// 'lName' => $lName,
+				// 'SundayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
+				// 'MondayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
+				// 'TuesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
+				// 'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']))),
+				// 'ThursdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
+				// 'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
+				// 'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
+				'inOvertime' => $inOvertime,
+				// 'isProjectManager' => $isProjectManager,
+				// 'isAccountant' => $isAccountant
+			]);
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
 }
