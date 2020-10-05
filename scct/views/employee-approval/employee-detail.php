@@ -138,5 +138,18 @@ $this->title = 'Employee Detail';
 		Modal::end();
     Pjax::end();
     ?>
+
+    <?php
+    // add task
+    Pjax::begin(['id' => 'addTask', 'timeout' => false]);
+    Modal::begin([
+        'header' => '<h4>Add Task</h4>',
+        'id' => 'addTaskModal',
+        'size' => 'modal-lg',
+    ]);
+    echo "<div id='addTaskModal'><span id='addTaskModalContentSpan'></span></div>";
+    Modal::end();
+    Pjax::end();
+    ?>
 </div>
 <input type="hidden" value="<?php echo $userID?>" id="userID">

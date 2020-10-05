@@ -160,7 +160,19 @@ $(document).off('click', '#add_task_btn_id').on('click', '#add_task_btn_id', fun
 	// 	// not implemented now
 	// 	// resetSubmissionStatusDialog('addTaskEntry');
 	// }else{
+	$('#addTaskModal').modal('show').find('#addTaskModalContentSpan').html("Loading...");
 		addTaskEntry();
+
+	let userID = $('#userID').val();
+
+	$.pjax.reload({
+		type: 'POST',
+		replace: false,
+		url: '/employee-approval/add-task-modal?userID='+userID,
+		data: {},
+		container: '#addTaskModalContentSpan',
+		timeout: 99999
+	});
 	// }
 });
 

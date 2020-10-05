@@ -19,6 +19,8 @@ use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
 use app\models\EmployeeDetailTime;
+use function http_build_query;
+use function json_decode;
 
 class EmployeeApprovalController extends BaseCardController
 {
@@ -337,7 +339,53 @@ class EmployeeApprovalController extends BaseCardController
             // throw new ServerErrorHttpException();
         // }
     }
-	
+
+    public function actionAddTaskModal($userID)
+    {
+        //guest redirect
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['/login']);
+        }
+
+        //Check if user has permissionse
+        self::requirePermission("employeeApprovalDetailEdit");
+
+        $model = new EmployeeDetailTime;
+        $projectDropDown = [];
+
+
+        // project dropdown
+        $getProjectDropdownURL = 'project%2Fget-project-dropdowns&' . http_build_query([
+                'userID' => $userID,
+            ]);
+        $getProjectDropdownResponse = Parent::executeGetRequest($getProjectDropdownURL, Constants::API_VERSION_3);
+        $projectDropDown = json_decode($getProjectDropdownResponse, true);
+
+        //
+        $taskDropDown = [];
+        if (isset($_POST['projectID'])) {
+            $model->ProjectID = $_POST['projectID'];
+            $getAllTaskUrl = 'task%2Fget-by-project&' . http_build_query([
+                    'projectID' => $model->ProjectID,
+                ]);
+            $getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_3);
+            $allTask = json_decode($getAllTaskResponse, true);
+
+            if ($allTask) {
+                foreach ($allTask['assets'] as $task) {
+                    $taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
+                }
+            }
+
+        }
+        return $this->renderAjax('_employee-add-task-modal', [
+            'model'           => $model,
+            'projectDropDown' => $projectDropDown,
+            'taskDropDown'    => $taskDropDown,
+            'userID'          => $userID,
+        ]);
+    }
+
 	/**
      * Populates the Employee Detail Edit Modal
      * @return mixed
