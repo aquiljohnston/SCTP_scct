@@ -43,7 +43,7 @@ class EmployeeApprovalController extends BaseCardController
 			//Check if user has permissions
 			self::requirePermission("viewEmployeeApproval");
 
-			//if request is not coming from report-summary reset session variables. 
+			//if request is not coming from report-summary reset session variables.
 			$referrer = Yii::$app->request->referrer;
 			if(!strpos($referrer,'employee-approval')){
 				unset(Yii::$app->session['employeeApprovalFormData']);
@@ -72,7 +72,7 @@ class EmployeeApprovalController extends BaseCardController
 			$model->addRule('page', 'integer');
             $model->addRule('filter', 'string', ['max' => 100]); // Don't want overflow but we can have a relatively high max
             $model->addRule('dateRangePicker', 'string', ['max' => 32]);
-            $model->addRule('dateRangeValue', 'string', ['max' => 100]); 
+            $model->addRule('dateRangeValue', 'string', ['max' => 100]);
             $model->addRule('clientID', 'integer');
             $model->addRule('projectID', 'integer');
             $model->addRule('employeeID', 'integer');
@@ -89,7 +89,7 @@ class EmployeeApprovalController extends BaseCardController
                 $currentWeek => 'Current Week',
                 $other => 'Other'
             ];
-			
+
 			//"sort":"-RowLabels"
             //get sort data
             if (isset($_GET['sort'])){
@@ -140,7 +140,7 @@ class EmployeeApprovalController extends BaseCardController
 					}
 				}
             }
-			
+
 			//get start/end date based on dateRangeValue
             if ($model->dateRangeValue == 'other') {
                 if ($model->dateRangePicker == null){
@@ -181,7 +181,7 @@ class EmployeeApprovalController extends BaseCardController
             $userData = $response['UserData'];
             $projData = $response['ProjData'];
             $statusData = $response['StatusData'];
-			
+
 			//get date values from user data for dynamic headers
 			$dateHeaders = [];
 			if($userData != null){
@@ -191,13 +191,13 @@ class EmployeeApprovalController extends BaseCardController
 					}
 				}
 			}
-			
+
 			//extract format indicators from response data
 			$projectDropDown = $response['ProjectDropDown'];
-			
+
 			//check if user can approve cards
 			$canApprove = self::can('timeCardApproveCards') && self::can('mileageCardApprove');
-			
+
             // passing user data into dataProvider
             $userDataProvider = new ArrayDataProvider([
 				'allModels' => $userData,
@@ -209,19 +209,19 @@ class EmployeeApprovalController extends BaseCardController
 					);
 				}
 			]);
-			
+
 			// passing project data into dataProvider
 			$projDataProvider = new ArrayDataProvider([
 				'allModels' => $projData,
 				'pagination' => false
 			]);
-			
+
 			// passing status data into dataProvider
 			$statusDataProvider = new ArrayDataProvider([
 				'allModels' => $statusData,
 				'pagination' => false
 			]);
-			
+
 			//sorting with dynamic headers may prove to be problematic, currently weekday headers are dates
 			// Sorting UserData table
 			// $userDataProvider->sort = [
@@ -262,7 +262,7 @@ class EmployeeApprovalController extends BaseCardController
             // throw new ServerErrorHttpException();
         // }
     }
-	
+
 	/**
      * Lists a summary of user data.
      * @return mixed
@@ -287,7 +287,7 @@ class EmployeeApprovalController extends BaseCardController
 				'userID' => $userID,
 				'date' => $date,
 			]);
-			
+
 			//execute request
 			$response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
             $response = json_decode($response, true);
@@ -300,7 +300,7 @@ class EmployeeApprovalController extends BaseCardController
 				'allModels' => $projectData,
 				'pagination' => false
 			]);
-			
+
 			// passing project data into dataProvider
 			$breakdownDataProvider = new ArrayDataProvider([
 				'allModels' => $breakdownData,
@@ -311,11 +311,11 @@ class EmployeeApprovalController extends BaseCardController
 					);
 				}
 			]);
-			
+
 			//check user role
 			$isProjectManager = Yii::$app->session['UserAppRoleType'] == 'ProjectManager';
 			$isSupervisor = Yii::$app->session['UserAppRoleType'] == 'Supervisor';
-			
+
 			$dataArray = [
 				'projectDataProvider' => $projectDataProvider,
 				'breakdownDataProvider' => $breakdownDataProvider,
@@ -340,7 +340,7 @@ class EmployeeApprovalController extends BaseCardController
         // }
     }
 
-    public function actionAddTaskModal($userID)
+    public function actionAddTaskModal($userID, $date)
     {
         //guest redirect
         if (Yii::$app->user->isGuest) {
@@ -361,7 +361,7 @@ class EmployeeApprovalController extends BaseCardController
         $getProjectDropdownResponse = Parent::executeGetRequest($getProjectDropdownURL, Constants::API_VERSION_3);
         $projectDropDown = json_decode($getProjectDropdownResponse, true);
 
-        //
+        // get task dropdown
         $taskDropDown = [];
         if (isset($_POST['projectID'])) {
             $model->ProjectID = $_POST['projectID'];
@@ -376,13 +376,26 @@ class EmployeeApprovalController extends BaseCardController
                     $taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
                 }
             }
-
         }
+
+        //build api url path
+        $url = 'employee-approval%2Femployee-detail&' . http_build_query([
+                'userID' => $userID,
+                'date' => $date,
+            ]);
+
+        //execute request
+        $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
+        $response = json_decode($response, true);
+        $breakdownData = $response['BreakdownData'];
+
         return $this->renderAjax('_employee-add-task-modal', [
             'model'           => $model,
             'projectDropDown' => $projectDropDown,
             'taskDropDown'    => $taskDropDown,
             'userID'          => $userID,
+            'breakDownData'   => $breakdownData,
+            'date'=>$date
         ]);
     }
 
@@ -403,9 +416,9 @@ class EmployeeApprovalController extends BaseCardController
 
 			//Check if user has permissionse
 			self::requirePermission("employeeApprovalDetailEdit");
-			
+
 			Yii::trace(json_encode($_POST));
-			
+
 			//if GET pull data params to populate form
 			if (isset($_POST)){
 				$data = $_POST['Current'];
@@ -416,31 +429,31 @@ class EmployeeApprovalController extends BaseCardController
 				$nextModel = new EmployeeDetailTime;
 				$projectDropDown = [];
 				$taskDropDown = [];
-				
+
 				$model->attributes = $data;
 				$prevModel->attributes = $prevData;
 				$nextModel->attributes = $nextData;
-				
+
 				yii::trace('current ' . json_encode($model->attributes));
 				yii::trace('prev ' . json_encode($prevModel->attributes));
 				yii::trace('next ' . json_encode($nextModel->attributes));
-				
+
 				$getProjectDropdownURL = 'project%2Fget-project-dropdowns&' . http_build_query([
 					'userID' => $userID,
 				]);
 				$getProjectDropdownResponse = Parent::executeGetRequest($getProjectDropdownURL, Constants::API_VERSION_3);
 				$projectDropDown = json_decode($getProjectDropdownResponse, true);
-				
+
 				$getAllTaskUrl = 'task%2Fget-by-project&' . http_build_query([
 					'projectID' => $model->ProjectID,
 				]);
 				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_3);
 				$allTask = json_decode($getAllTaskResponse, true);
-				$taskDropDown = [];				
+				$taskDropDown = [];
 				foreach($allTask['assets'] as $task) {
 					$taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
 				}
-				
+
 				$dataArray = [
 					'model' => $model,
 					'prevModel' => $prevModel,
@@ -450,7 +463,7 @@ class EmployeeApprovalController extends BaseCardController
 					'userID' => $userID,
 				];
 			}
-			
+
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
 				return $this->renderAjax('_employee-detail-edit-modal', $dataArray);
@@ -467,14 +480,14 @@ class EmployeeApprovalController extends BaseCardController
             // throw new ServerErrorHttpException();
         // }
     }
-        
+
 	public function actionApproveTimecards(){
 		try{
 			if (Yii::$app->request->isAjax) {
 				//get requesting controller type
 				$requestType = self::getRequestType();
-				$data = Yii::$app->request->post();					
-				// loop the data array to get all id's.	
+				$data = Yii::$app->request->post();
+				// loop the data array to get all id's.
 				$cardIDArray = "";
 				foreach($data['userid'] as $keyitem){
 					$cardIDArray .= $keyitem['UserID'] . ",";
@@ -506,88 +519,4 @@ class EmployeeApprovalController extends BaseCardController
 			throw new ServerErrorHttpException();
 		}
 	}
-
-	/**
-     * Add task time for a given day.
-     * @param string $id
-     * @throws \yii\web\HttpException
-     * @return mixed
-     */
-    public function actionAddTaskTimeEntry($id, $inOvertime = 'false')
-    {		
-		try{
-			//Defensive Programming - Magic Numbers
-			//declare constants to hold constant values	
-			define('ENTRIES_ZERO_INDEX',0);
-			define('DATES_ZERO_INDEX',0);
-			define('DATES_FIRST_INDEX',1);
-			define('FROM_DATE_ZERO_INDEX',0);
-			define('TO_DATE_FIRST_INDEX',1);
-
-			//guest redirect
-			if (Yii::$app->user->isGuest){
-				return $this->redirect(['/login']);
-			}
-			
-			//todo: Check if user has permissions
-			// self::requirePermission("");
-			
-			// //build api url paths
-			// $entries_url = 'time-card%2Fshow-entries&' . http_build_query([
-			// 	'cardID' => $id,
-			// ]);
-			// $resp = Parent::executeGetRequest($entries_url, Constants::API_VERSION_3); // rbac check
-			// $cardData = json_decode($resp, true);
-
-		
-			
-			// $allTask = new ArrayDataProvider([
-			// 	'allModels' => $cardData['show-entries'],
-			// 	'pagination'=> false,
-			// ]);
-		
-			// $hoursOverview = new ArrayDataProvider([
-			// 	'allModels' => $cardData['hours-overview'],
-			// 	'key' => 'TimeEntryID',
-			// 	'pagination'=> false,
-			// ]);
-
-			return $this -> render('_employee-add-task-modal', [
-				'userId' => $id,
-				'model' => $cardData['card'],
-				'task' => [],
-				'hoursOverview' => [],
-				// 'from' => $from[FROM_DATE_ZERO_INDEX].'/'.$from[TO_DATE_FIRST_INDEX],
-				// 'to' => $to,
-				// 'SundayDate' => $SundayDate[DATES_ZERO_INDEX].'-'.$SundayDate[DATES_FIRST_INDEX],
-				// 'MondayDate' => $MondayDate[DATES_ZERO_INDEX].'-'.$MondayDate[DATES_FIRST_INDEX],
-				// 'TuesdayDate' => $TuesdayDate[DATES_ZERO_INDEX].'-'.$TuesdayDate[DATES_FIRST_INDEX],
-				// 'WednesdayDate' => $WednesdayDate[DATES_ZERO_INDEX].'-'.$WednesdayDate[DATES_FIRST_INDEX],
-				// 'ThursdayDate' => $ThursdayDate[DATES_ZERO_INDEX].'-'.$ThursdayDate[DATES_FIRST_INDEX],
-				// 'FridayDate' => $FridayDate[DATES_ZERO_INDEX].'-'.$FridayDate[DATES_FIRST_INDEX],
-				// 'SaturdayDate' => $SaturdayDate[DATES_ZERO_INDEX].'-'.$SaturdayDate[DATES_FIRST_INDEX],
-				// 'projectName' => $projectName,
-				// 'fName' => $fName,
-				// 'lName' => $lName,
-				// 'SundayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date1']))),
-				// 'MondayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date2']))),
-				// 'TuesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date3']))),
-				// 'WednesdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date4']))),
-				// 'ThursdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date5']))),
-				// 'FridayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date6']))),
-				// 'SaturdayDateFull' => date( "Y-m-d", strtotime(str_replace('-', '/', $cardData['show-entries'][ENTRIES_ZERO_INDEX]['Date7']))),
-				'inOvertime' => $inOvertime,
-				// 'isProjectManager' => $isProjectManager,
-				// 'isAccountant' => $isAccountant
-			]);
-		} catch (UnauthorizedHttpException $e){
-            Yii::$app->response->redirect(['login/index']);
-        } catch(ForbiddenHttpException $e) {
-            throw $e;
-        } catch(ErrorException $e) {
-            throw new \yii\web\HttpException(400);
-        } catch(Exception $e) {
-            throw new ServerErrorHttpException();
-        }
-    }
 }

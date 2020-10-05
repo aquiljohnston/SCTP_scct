@@ -161,35 +161,19 @@ $(document).off('click', '#add_task_btn_id').on('click', '#add_task_btn_id', fun
 	// 	// resetSubmissionStatusDialog('addTaskEntry');
 	// }else{
 	$('#addTaskModal').modal('show').find('#addTaskModalContentSpan').html("Loading...");
-		addTaskEntry();
 
+
+	//
 	let userID = $('#userID').val();
+	let timeCardDate = $('#timeCardDate').val();
 
 	$.pjax.reload({
 		type: 'POST',
 		replace: false,
-		url: '/employee-approval/add-task-modal?userID='+userID,
+		url: '/employee-approval/add-task-modal?userID='+userID+'&date='+timeCardDate,
 		data: {},
 		container: '#addTaskModalContentSpan',
 		timeout: 99999
 	});
 	// }
 });
-
-function addTaskEntry(){
-	var weekStart = 0;//$("#allTaskEntries table th").eq(0).attr('class');
-	var weekEnd = 0;//$("#allTaskEntries table th").eq(6).attr('class');
-	var SundayDate = 0;//$('#SundayDate').val();
-	var SaturdayDate = 0;//$('#SaturdayDate').val();
-	var inOvertime = 0;//$('#inOvertime').val();
-	console.log("add task entry called.");
-	// $('#addTaskModal').modal('show').find('#modalContentSpan').html("Loading...");
-	//Fetch modal content via pjax
-	// $.pjax.reload({
-	// 	type: 'GET',
-	// 	replace:false,
-	// 	url: '/employee-approval/add-task-time-entry?id='+0+ '&inOvertime=' + inOvertime,
-	// 	container: '#modalContentSpan', // id to update content
-	// 	timeout: 99999
-	// })
-}

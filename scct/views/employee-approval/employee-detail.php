@@ -153,3 +153,4 @@ $this->title = 'Employee Detail';
     ?>
 </div>
 <input type="hidden" value="<?php echo $userID?>" id="userID">
+<input type="hidden" value="<?php echo @$_GET['date']; ?>" id="timeCardDate">

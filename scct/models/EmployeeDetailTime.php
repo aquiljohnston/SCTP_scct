@@ -21,6 +21,7 @@ class EmployeeDetailTime extends \yii\base\model
 	public $Task;
 	public $StartTime;
 	public $EndTime;
+	public $TimeOfDay;
 
     /**
      * @inheritdoc
@@ -30,7 +31,7 @@ class EmployeeDetailTime extends \yii\base\model
         return [
             [['ID', 'ProjectID'], 'integer'],
             [['ProjectName', 'Task', 'StartTime', 'EndTime'], 'string'],
-            [['StartTime', 'EndTime'], 'safe']
+            [['StartTime', 'EndTime','TimeOfDay'], 'safe']
         ];
     }
 
