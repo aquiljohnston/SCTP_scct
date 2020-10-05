@@ -92,14 +92,24 @@ use kartik\form\ActiveForm;
 		</div>
 		<br>
 		<div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
-			<!-- not sure if we need this button<?= Html::Button('Cancel', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_cancel_btn']) ?>-->
 			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn']) ?>
 		</div>
     <?php ActiveForm::end(); ?>
 	<input type="hidden" value="<?php echo $userID?>" id="userID">
 	<script>
 	//form on time change update adjeacent rows
-	
+	//on start time change update end time of prev if it exist
+	$(document).off('change', '#employeedetailtime-starttime').on('change', '#employeedetailtime-starttime', function (){
+		if(!$('#employeedetailtime-prevendtime').val() == ''){
+			$('#employeedetailtime-prevendtime').val($('#employeedetailtime-starttime').val());
+		}
+	});
+	//on end time change update start time of next if it exist
+	$(document).off('change', '#employeedetailtime-endtime').on('change', '#employeedetailtime-endtime', function (){
+		if(!$('#employeedetailtime-nextstarttime').val() == ''){
+			$('#employeedetailtime-nextstarttime').val($('#employeedetailtime-endtime').val());
+		}
+	});
 	//form on project change reload task dropDownList
 	$(document).off('change', '#employeedetailtime-projectid').on('change', '#employeedetailtime-projectid', function (){
 		reloadTaskDropdown();
@@ -133,7 +143,7 @@ use kartik\form\ActiveForm;
 		
 	}
 	
-	//fetch formatted form values--
+	//fetch formatted form values
 	function getFormData(){
 		//get current row of data
 		id = $('#employeedetailtime-id').val();
