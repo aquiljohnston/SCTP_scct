@@ -399,6 +399,7 @@ class EmployeeApprovalController extends BaseCardController
 					'nextModel' => $nextModel,
 					'projectDropDown' => $projectDropDown,
 					'taskDropDown' => $taskDropDown,
+					'userID' => $userID,
 				];
 			}
 			

@@ -20,16 +20,16 @@ function applyEmployeeDetailListeners() {
 		endTime = $(this).find("td[data-col-seq='5']").text();
 		//grab previous row of data
 		prevRow = $(this).prev('tr');
-		prevProjectID = prevRow.find("td[data-col-seq='0']").text();
-		prevId = prevRow.find("td[data-col-seq='1']").text();
+		prevId = prevRow.find("td[data-col-seq='0']").text();
+		prevProjectID = prevRow.find("td[data-col-seq='1']").text();
 		prevProjectName = prevRow.find("td[data-col-seq='2']").text();
 		prevTask = prevRow.find("td[data-col-seq='3']").text();
 		prevStartTime = prevRow.find("td[data-col-seq='4']").text();
 		prevEndTime = prevRow.find("td[data-col-seq='5']").text();
 		//grab next row of data
 		nextRow = $(this).next('tr');
-		nextProjectID = nextRow.find("td[data-col-seq='0']").text();
-		nextId = nextRow.find("td[data-col-seq='1']").text();
+		nextId = nextRow.find("td[data-col-seq='0']").text();
+		nextProjectID = nextRow.find("td[data-col-seq='1']").text();
 		nextProjectName = nextRow.find("td[data-col-seq='2']").text();
 		nextTask = nextRow.find("td[data-col-seq='3']").text();
 		nextStartTime = nextRow.find("td[data-col-seq='4']").text();
