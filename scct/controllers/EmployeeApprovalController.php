@@ -320,8 +320,9 @@ class EmployeeApprovalController extends BaseCardController
 				'projectDataProvider' => $projectDataProvider,
 				'breakdownDataProvider' => $breakdownDataProvider,
 				'totalData' => $totalData,
-				'userID'=> $userID,
-				'canAddTask'=> ($isSupervisor | $isProjectManager)
+				'userID' => $userID,
+				'date' => $date,
+				'canAddTask' => ($isSupervisor | $isProjectManager),
 			];
 			//calling index page to pass dataProvider.
 			if(Yii::$app->request->isAjax) {
@@ -406,18 +407,15 @@ class EmployeeApprovalController extends BaseCardController
      * @throws ServerErrorHttpException
      * @throws \yii\web\HttpException
      */
-    public function actionEmployeeDetailModal($userID){
-		// try {
+    public function actionEmployeeDetailModal($userID, $date){
+		try {
 			//guest redirect
-			if (Yii::$app->user->isGuest)
-			{
+			if (Yii::$app->user->isGuest){
 				return $this->redirect(['/login']);
 			}
 
 			//Check if user has permissionse
 			self::requirePermission("employeeApprovalDetailEdit");
-
-			Yii::trace(json_encode($_POST));
 
 			//if GET pull data params to populate form
 			if (isset($_POST)){
@@ -434,10 +432,6 @@ class EmployeeApprovalController extends BaseCardController
 				$prevModel->attributes = $prevData;
 				$nextModel->attributes = $nextData;
 
-				yii::trace('current ' . json_encode($model->attributes));
-				yii::trace('prev ' . json_encode($prevModel->attributes));
-				yii::trace('next ' . json_encode($nextModel->attributes));
-
 				$getProjectDropdownURL = 'project%2Fget-project-dropdowns&' . http_build_query([
 					'userID' => $userID,
 				]);
@@ -449,9 +443,10 @@ class EmployeeApprovalController extends BaseCardController
 				]);
 				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_3);
 				$allTask = json_decode($getAllTaskResponse, true);
-				$taskDropDown = [];
+				//add 0 index when no task is present
+				$taskDropDown = [0 => ''];				
 				foreach($allTask['assets'] as $task) {
-					$taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
+					$taskDropDown[$task['TaskID']] = $task['TaskName'];
 				}
 
 				$dataArray = [
@@ -460,7 +455,6 @@ class EmployeeApprovalController extends BaseCardController
 					'nextModel' => $nextModel,
 					'projectDropDown' => $projectDropDown,
 					'taskDropDown' => $taskDropDown,
-					'userID' => $userID,
 				];
 			}
 
@@ -470,15 +464,15 @@ class EmployeeApprovalController extends BaseCardController
 			}else{
 				return $this->render('_employee-detail-edit-modal', $dataArray);
 			}
-        // } catch (UnauthorizedHttpException $e){
-            // Yii::$app->response->redirect(['login/index']);
-        // } catch(ForbiddenHttpException $e) {
-            // throw $e;
-        // } catch(ErrorException $e) {
-            // throw new \yii\web\HttpException(400);
-        // } catch(Exception $e) {
-            // throw new ServerErrorHttpException();
-        // }
+        } catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
     }
 
 	public function actionApproveTimecards(){
@@ -518,5 +512,41 @@ class EmployeeApprovalController extends BaseCardController
 		} catch(Exception $e) {
 			throw new ServerErrorHttpException();
 		}
+	}
+	
+	/**
+     * Calls api route to update existing employee detail records
+     * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\HttpException
+     */
+	public function actionEmployeeDetailUpdate(){
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest){
+				return $this->redirect(['/login']);
+			}
+			if (isset($_POST)){
+				//encode json data
+				$jsonData = json_encode($_POST);
+				//build api url path
+				$editUrl = 'employee-approval%2Fupdate';
+				$response = Parent::executePutRequest($editUrl, $jsonData, Constants::API_VERSION_3);
+				$response = json_decode($response, true);
+				//TODO advance response handling for error handling
+				return true;
+			}else{
+				return false;
+			}	
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
 	}
 }

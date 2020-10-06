@@ -7,8 +7,8 @@ use Yii;
 /**
  * @property integer $ID
  * @property integer $ProjectID
- * @property string $ProjectName
- * @property string $Task
+ * @property integer $TaskID
+ * @property string $TaskName
  * @property string $StartTime
  * @property string $EndTime
  */
@@ -17,8 +17,8 @@ class EmployeeDetailTime extends \yii\base\model
 
 	public $ID;
 	public $ProjectID;
-	public $ProjectName;
-	public $Task;
+	public $TaskID;
+	public $TaskName;
 	public $StartTime;
 	public $EndTime;
 	public $TimeOfDay;
@@ -29,9 +29,9 @@ class EmployeeDetailTime extends \yii\base\model
     public function rules()
     {
         return [
-            [['ID', 'ProjectID'], 'integer'],
-            [['ProjectName', 'Task', 'StartTime', 'EndTime'], 'string'],
-            [['StartTime', 'EndTime','TimeOfDay'], 'safe']
+            [['ID', 'ProjectID', 'TaskID'], 'integer'],
+            [['TaskName', 'StartTime', 'EndTime'], 'string'],
+            [['StartTime', 'EndTime'], 'safe']
         ];
     }
 
@@ -43,8 +43,8 @@ class EmployeeDetailTime extends \yii\base\model
         return [
             'ID' => 'Entry ID',
 			'ProjectID' => 'Project ID',
-			'ProjectName' => 'Project Name',
-			'Task' => 'Task',
+			'TaskID' => 'Task ID',
+			'TaskName' => 'Task Name',
 			'StartTime' => 'Start Time',
             'EndTime' => 'End Time',
         ];
