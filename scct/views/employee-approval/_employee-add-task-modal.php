@@ -25,13 +25,10 @@ EmployeeApprovalAsset::register($this);
 
 <div class="employee-detail-edit">
 
-    <!-- <input id="SundayDate" type="hidden" name="SundayDate" value=<?php //echo $SundayDateFull; ?>>
-    <input id="SaturdayDate" type="hidden" name="SaturdayDate" value=<?php //echo $SaturdayDateFull; ?>> -->
-
 
     <!--update form-->
     <?php $form = ActiveForm::begin([
-        'id'         => 'EmployeeDetailModalForm',
+        'id'         => 'EmployeeDetailAddTaskModalForm',
         'type'       => ActiveForm::TYPE_HORIZONTAL,
         'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_SMALL],
     ]); ?>
@@ -45,8 +42,8 @@ EmployeeApprovalAsset::register($this);
                 $startTime = date('H:i', strtotime($startTime['End Time']));
 
                 $checkboxArr = [
-                    $endTime   => 'Morning',
-                    $startTime => 'Afternoon'
+                    $endTime   => ucfirst(EmployeeDetailTime::TIME_OF_DAY_MORNING),
+                    $startTime => ucfirst(EmployeeDetailTime::TIME_OF_DAY_AFTERNOON)
                 ];
                 ?>
                 <div class="col-sm-12 text-center">
@@ -63,6 +60,7 @@ EmployeeApprovalAsset::register($this);
                     ]); ?>
                 </div>
                 <div class="clearfix"></div>
+                <p style="margin-top:15px;"></p>
             <?php } ?>
 
             <?= Html::activeHiddenInput($model, 'ID', ['value' => $model->ID]); ?>
@@ -84,10 +82,13 @@ EmployeeApprovalAsset::register($this);
                 'class' => 'col-sm-2 control-label'
             ]) ?>
             <div class="col-sm-4">
-                <?= $form->field($model, 'Task', [
+                <?= $form->field($model, 'TaskID', [
                     'showLabels' => false
                 ])->dropDownList($taskDropDown,
-                    ['readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,]); ?>
+                    [
+                        'readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,
+                        'prompt'   => 'Select a Task'
+                    ]); ?>
             </div>
 
             <?php Pjax::end() ?>
@@ -128,11 +129,14 @@ EmployeeApprovalAsset::register($this);
     </div>
     <br>
     <div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
-        <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn']) ?>
+        <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_add_task_submit_btn']) ?>
     </div>
-    <?php ActiveForm::end(); ?>
+    <?= $form->field($model, 'Task')->hiddenInput()->label(false); ?>
+    <?= $form->field($model, 'TimeOfDayName')->hiddenInput()->label(false); ?>
     <input type="hidden" value="<?php echo $userID ?>" id="userID">
     <input type="hidden" value="<?php echo $date ?>" id="date">
+    <?php ActiveForm::end(); ?>
+
 </div>
 
 <script>
@@ -143,7 +147,42 @@ EmployeeApprovalAsset::register($this);
             reloadTaskDropdown();
         });
 
+    // includes disabled fields in serialize
+    $.fn.serializeIncludeDisabled = function() {
+        let disabled = this.find(':input:disabled').removeAttr('disabled');
+        let serialized = this.serialize();
+        disabled.attr('disabled', 'disabled');
+        return serialized;
+    };
+
     $body = $('body');
+
+    $body.on('click', '#employee_detail_add_task_submit_btn', function(e) {
+
+        //
+        let formData = $('#EmployeeDetailAddTaskModalForm').serializeIncludeDisabled();
+
+        console.log(formData);
+
+        let url = '/employee-approval/add-task?userID=<?=$userID;?>&date=<?=$date;?>';
+        $.ajax({
+            url: url,
+            data: formData,
+            type: 'POST',
+            dataType: 'JSON',
+        }).done(function(data) {
+            alert('SUCCESS');
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            alert(errorThrown);
+        });
+    });
+
+    $body.on('change', '#employeedetailtime-taskid', function(e) {
+
+        console.log('here');
+        let taskName = $('#employeedetailtime-taskid option:selected').text();
+        $('#employeedetailtime-task').val('Task ' + taskName);
+    });
 
     //
     $body.on('click', '.time-of-day-checkbox', function(e) {
@@ -152,7 +191,7 @@ EmployeeApprovalAsset::register($this);
         let time = $(this).data('time');
         let isChecked = $(this).is(':checked');
 
-        if (timeOfDay == 'morning') {
+        if (timeOfDay == '<?=EmployeeDetailTime::TIME_OF_DAY_MORNING;?>') {
 
             if (isChecked) {
 
@@ -163,9 +202,11 @@ EmployeeApprovalAsset::register($this);
                 //
                 $('#employeedetailtime-starttime').val('');
                 $('#employeedetailtime-starttime').removeAttr('disabled');
+
+                $('#employeedetailtime-timeofdayname').val('morning');
             }
 
-        } else if (timeOfDay == 'afternoon') {
+        } else if (timeOfDay == '<?=EmployeeDetailTime::TIME_OF_DAY_AFTERNOON;?>') {
 
             if (isChecked) {
 
@@ -177,6 +218,7 @@ EmployeeApprovalAsset::register($this);
                 $('#employeedetailtime-endtime').val('');
                 $('#employeedetailtime-endtime').removeAttr('disabled');
 
+                $('#employeedetailtime-timeofdayname').val('afternoon');
             }
         }
     });

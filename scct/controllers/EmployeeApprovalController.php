@@ -19,8 +19,13 @@ use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
 use app\models\EmployeeDetailTime;
+use function date;
+use function end;
 use function http_build_query;
 use function json_decode;
+use function json_encode;
+use function print_r;
+use function strtotime;
 
 class EmployeeApprovalController extends BaseCardController
 {
@@ -373,7 +378,8 @@ class EmployeeApprovalController extends BaseCardController
 
             if ($allTask) {
                 foreach ($allTask['assets'] as $task) {
-                    $taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
+                    //$taskDropDown['Task ' . $task['TaskName']] = $task['TaskName'];
+                    $taskDropDown[$task['TaskID']] = $task['TaskName'];
                 }
             }
         }
@@ -519,4 +525,71 @@ class EmployeeApprovalController extends BaseCardController
 			throw new ServerErrorHttpException();
 		}
 	}
+
+    public function actionAddTask($userID, $date)
+    {
+        if (Yii::$app->request->isAjax) {
+
+
+            /** @var EmployeeDetailTime $employeeDetailTime */
+            $employeeDetailTime = new EmployeeDetailTime();
+            $employeeDetailTime->attributes = $_POST['EmployeeDetailTime'];
+
+            //build api url path
+            $url = 'employee-approval%2Femployee-detail&' . http_build_query([
+                    'userID' => $userID,
+                    'date'   => $date,
+                ]);
+            //execute request
+            $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
+            $response = json_decode($response, true);
+            $breakDownData = $response['BreakdownData'];
+
+
+            $postData = [
+                'New' => [
+                    'ProjectID' => $employeeDetailTime->ProjectID,
+                    'TaskID'    => $employeeDetailTime->TaskID,
+                    'TaskName'  => $employeeDetailTime->Task,
+                    'StartTime' => $date.' '.$employeeDetailTime->StartTime,
+                    'EndTime'   => $date.' '.$employeeDetailTime->EndTime
+                ]
+            ];
+
+            if ($breakDownData) {
+
+                // check if morning or afternoon
+                if ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_MORNING) {
+
+                    $current = @$breakDownData[0];
+                    $postData['Current'] = [
+                        'ID'        => $current['RowID'],
+                        'ProjectID' => 0,
+                        'TaskID'    => 0,
+                        'TaskName'  => $current['TaskName'],
+                        'StartTime' => $date.' '.$employeeDetailTime->StartTime,
+                        'EndTime'   => $date.' '.$employeeDetailTime->StartTime
+                    ];
+
+                } elseif ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_AFTERNOON) {
+
+                    $current = end($breakDownData);
+                    $postData['Current'] = [
+                        'ID'        => $current['RowID'],
+                        'ProjectID' => 0,
+                        'TaskID'    => 0,
+                        'TaskName'  => $current['TaskName'],
+                        'StartTime' => $date.' '.$employeeDetailTime->EndTime,
+                        'EndTime'   => $date.' '.$employeeDetailTime->EndTime
+                    ];
+                }
+            }
+
+            //execute post request
+            $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData), Constants::API_VERSION_3);
+
+            print_r($response);
+
+        }
+    }
 }

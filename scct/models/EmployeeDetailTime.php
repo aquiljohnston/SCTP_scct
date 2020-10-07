@@ -11,9 +11,13 @@ use Yii;
  * @property string $Task
  * @property string $StartTime
  * @property string $EndTime
+ * @property string $TaskID
  */
 class EmployeeDetailTime extends \yii\base\model
 {
+    const TIME_OF_DAY_MORNING = 'morning';
+    const TIME_OF_DAY_AFTERNOON = 'afternoon';
+
 
 	public $ID;
 	public $ProjectID;
@@ -22,6 +26,8 @@ class EmployeeDetailTime extends \yii\base\model
 	public $StartTime;
 	public $EndTime;
 	public $TimeOfDay;
+	public $TimeOfDayName;
+	public $TaskID;
 
     /**
      * @inheritdoc
@@ -29,9 +35,9 @@ class EmployeeDetailTime extends \yii\base\model
     public function rules()
     {
         return [
-            [['ID', 'ProjectID'], 'integer'],
+            [['ID', 'ProjectID', 'TaskID'], 'integer'],
             [['ProjectName', 'Task', 'StartTime', 'EndTime'], 'string'],
-            [['StartTime', 'EndTime','TimeOfDay'], 'safe']
+            [['StartTime', 'EndTime','TimeOfDay', 'TimeOfDayName'], 'safe']
         ];
     }
 
