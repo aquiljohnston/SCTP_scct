@@ -1,5 +1,6 @@
 <?php
 
+use app\components\MyArrayHelper;
 use app\models\EmployeeDetailTime;
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
@@ -52,7 +53,7 @@ EmployeeApprovalAsset::register($this);
                 krsort($startTimeArr);
                 krsort($endTimeArr);
 
-                $startTime = $startTimeArr[array_key_first($startTimeArr)];
+                $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
                 $endTime = end($endTimeArr);
 
 

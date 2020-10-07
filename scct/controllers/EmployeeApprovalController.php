@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\MyArrayHelper;
 use Yii;
 use app\controllers\BaseController;
 use yii\data\Pagination;
@@ -19,7 +20,6 @@ use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
 use app\models\EmployeeDetailTime;
-use function array_key_first;
 use function date;
 use function end;
 use function http_build_query;
@@ -572,7 +572,7 @@ class EmployeeApprovalController extends BaseCardController
                 krsort($startTimeArr);
                 krsort($endTimeArr);
 
-                $startTime = $startTimeArr[array_key_first($startTimeArr)];
+                $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
                 $endTime = end($endTimeArr);
 
                 // check if morning or afternoon
