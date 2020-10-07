@@ -41,43 +41,57 @@ EmployeeApprovalAsset::register($this);
     <div class="form-group kv-fieldset-inline" id="employee_detail_form">
         <div class="row">
 
-            <?php if (count($breakDownData) > 0) {
+            <?php
+            $hasBreakDownData = false;
+            if (count($breakDownData) > 0) {
 
-                $startTimeArr = [];
-                $endTimeArr = [];
-                foreach ($breakDownData as $breakDown) {
-                    $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown['Start Time'];
-                    $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown['End Time'];
+                $hasLoginActivity = array_search('LoginActivity', array_column($breakDownData, 'TaskName'));
+                $hasLogoutActivity = array_search('LogoutActivity', array_column($breakDownData, 'TaskName'));
+
+                if (strlen($hasLoginActivity) >= 1 && strlen($hasLogoutActivity) >= 1) {
+                    $hasBreakDownData = true;
                 }
 
-                krsort($startTimeArr);
-                krsort($endTimeArr);
-
-                $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
-                $endTime = end($endTimeArr);
+                if ($hasBreakDownData) {
 
 
-                $checkboxArr = [
-                    $endTime   => ucfirst(EmployeeDetailTime::TIME_OF_DAY_MORNING),
-                    $startTime => ucfirst(EmployeeDetailTime::TIME_OF_DAY_AFTERNOON)
-                ];
-                ?>
-                <div class="col-sm-12 text-center">
-                    <?= Html::activeRadioList($model, 'TimeOfDay', $checkboxArr, [
-                        'item' => function ($index, $label, $name, $checked, $value) use ($model) {
-                            return Html::radio($name, false, [
-                                    'value'            => $value,
-                                    'label'            => Html::encode($label) . ' (' . $value . ')',
-                                    'class'            => 'time-of-day-checkbox',
-                                    'data-time'        => $value,
-                                    'data-time-of-day' => strtolower($label)
-                                ]) . '<span style="margin-right:10px;"></span>';
-                        }
-                    ]); ?>
-                </div>
-                <div class="clearfix"></div>
-                <p style="margin-top:35px;"></p>
-            <?php } ?>
+                    $startTimeArr = [];
+                    $endTimeArr = [];
+                    foreach ($breakDownData as $breakDown) {
+                        $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown['Start Time'];
+                        $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown['End Time'];
+                    }
+
+                    krsort($startTimeArr);
+                    krsort($endTimeArr);
+
+                    $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
+                    $endTime = end($endTimeArr);
+
+
+                    $checkboxArr = [
+                        $endTime   => ucfirst(EmployeeDetailTime::TIME_OF_DAY_MORNING),
+                        $startTime => ucfirst(EmployeeDetailTime::TIME_OF_DAY_AFTERNOON)
+                    ];
+                    ?>
+                    <div class="col-sm-12 text-center">
+                        <?= Html::activeRadioList($model, 'TimeOfDay', $checkboxArr, [
+                            'item' => function ($index, $label, $name, $checked, $value) use ($model) {
+                                return Html::radio($name, false, [
+                                        'value'            => $value,
+                                        'label'            => Html::encode($label) . ' (' . $value . ')',
+                                        'class'            => 'time-of-day-checkbox',
+                                        'data-time'        => $value,
+                                        'data-time-of-day' => strtolower($label)
+                                    ]) . '<span style="margin-right:10px;"></span>';
+                            }
+                        ]); ?>
+                    </div>
+                    <div class="clearfix"></div>
+                    <p style="margin-top:35px;"></p>
+                <?php }
+            }
+            ?>
 
             <?= Html::activeHiddenInput($model, 'ID', ['value' => $model->ID]); ?>
             <!-- may need to add date depending on data format-->
@@ -118,7 +132,7 @@ EmployeeApprovalAsset::register($this);
                 $disableStartTime = false;
                 if ($model->TaskName == 'Employee Logout') {
                     $disableStartTime = true;
-                } else {
+                } elseif ($hasBreakDownData) {
                     $disableStartTime = true;
                 }
                 ?>
@@ -144,7 +158,7 @@ EmployeeApprovalAsset::register($this);
                 $disableEndTime = false;
                 if ($model->TaskName == 'Employee Login') {
                     $disableEndTime = true;
-                } else {
+                } elseif ($hasBreakDownData) {
                     $disableEndTime = true;
                 }
                 ?>
@@ -172,7 +186,7 @@ EmployeeApprovalAsset::register($this);
                     [
                         'class'    => 'btn btn-success',
                         'id'       => 'employee_detail_add_task_submit_btn',
-                        'disabled' => true
+                        'disabled' => $hasBreakDownData ? true : false
                     ]) ?>
             </div>
         </div>
