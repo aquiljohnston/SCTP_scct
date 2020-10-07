@@ -7,11 +7,11 @@ use Yii;
 /**
  * @property integer $ID
  * @property integer $ProjectID
- * @property string $ProjectName
- * @property string $Task
+ * @property integer $TaskID
+ * @property string $TaskName
  * @property string $StartTime
  * @property string $EndTime
- * @property string $TaskID
+ * @property string $ProjectName
  */
 class EmployeeDetailTime extends \yii\base\model
 {
@@ -21,13 +21,13 @@ class EmployeeDetailTime extends \yii\base\model
 
 	public $ID;
 	public $ProjectID;
-	public $ProjectName;
-	public $Task;
+	public $TaskID;
+	public $TaskName;
 	public $StartTime;
 	public $EndTime;
 	public $TimeOfDay;
 	public $TimeOfDayName;
-	public $TaskID;
+    public $ProjectName;
 
     /**
      * @inheritdoc
@@ -36,8 +36,9 @@ class EmployeeDetailTime extends \yii\base\model
     {
         return [
             [['ID', 'ProjectID', 'TaskID'], 'integer'],
-            [['ProjectName', 'Task', 'StartTime', 'EndTime'], 'string'],
+            [['ProjectName', 'TaskName', 'StartTime', 'EndTime'], 'string'],
             [['StartTime', 'EndTime','TimeOfDay', 'TimeOfDayName'], 'safe']
+
         ];
     }
 
@@ -49,8 +50,8 @@ class EmployeeDetailTime extends \yii\base\model
         return [
             'ID' => 'Entry ID',
 			'ProjectID' => 'Project ID',
-			'ProjectName' => 'Project Name',
-			'Task' => 'Task',
+			'TaskID' => 'Task ID',
+			'TaskName' => 'Task Name',
 			'StartTime' => 'Start Time',
             'EndTime' => 'End Time',
         ];

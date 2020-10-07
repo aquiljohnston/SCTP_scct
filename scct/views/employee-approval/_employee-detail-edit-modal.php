@@ -21,6 +21,7 @@ use kartik\form\ActiveForm;
 	<?php $form = ActiveForm::begin([
         'id' => 'EmployeeDetailModalForm',
         'type' => ActiveForm::TYPE_HORIZONTAL,
+        'action' => Url::to('/employee-approval/employee-detail-update'),
         'formConfig' => ['labelSpan' => 1, 'deviceSize' => ActiveForm::SIZE_SMALL],
     ]); ?>
 		<div class="form-group kv-fieldset-inline" id="employee_detail_form">
@@ -28,8 +29,8 @@ use kartik\form\ActiveForm;
 				<!--Prev Row Data-->
 				<?= Html::activeHiddenInput($prevModel, 'PrevID', ['value' => $prevModel->ID]); ?>
 				<?= Html::activeHiddenInput($prevModel, 'PrevProjectID', ['value' => $prevModel->ProjectID]); ?>
-				<?= Html::activeHiddenInput($prevModel, 'PrevProjectName', ['value' => $prevModel->ProjectName]); ?>
-				<?= Html::activeHiddenInput($prevModel, 'PrevTask', ['value' => $prevModel->Task]); ?>
+				<?= Html::activeHiddenInput($prevModel, 'PrevTaskID', ['value' => $prevModel->TaskID]); ?>
+				<?= Html::activeHiddenInput($prevModel, 'PrevTaskName', ['value' => $prevModel->TaskName]); ?>
 				<?= Html::activeHiddenInput($prevModel, 'PrevStartTime', ['value' => $prevModel->StartTime]); ?>
 				<?= Html::activeHiddenInput($prevModel, 'PrevEndTime', ['value' => $prevModel->EndTime]); ?>
 				<!--Current Row Data-->
@@ -44,19 +45,19 @@ use kartik\form\ActiveForm;
 						'showLabels' => false
 					])->dropDownList($projectDropDown); ?>
 				</div>
-				<?= Html::activeHiddenInput($model, 'ProjectName', ['value' => $model->ProjectName]); ?>
 				<?php Pjax::begin(['id' => 'taskDropDownPjax', 'timeout' => false]) ?>
-					<?= Html::activeLabel($model, 'Task', [
+					<?= Html::activeLabel($model, 'TaskID', [
 						'label' => 'Task',
 						'class' => 'col-sm-2 control-label'
 						]) ?>
 					<div class="col-sm-4">
-						<?= $form->field($model, 'Task', [
+						<?= $form->field($model, 'TaskID', [
 							'showLabels' => false
 						])->dropDownList($taskDropDown,
-							['readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,]); ?>
+							['readonly' => $model->TaskName == 'Employee Logout' || $model->TaskName == 'Employee Login' ? true : false,]); ?>
 					</div>
 				<?php Pjax::end() ?>
+				<?= Html::activeHiddenInput($nextModel, 'TaskName', ['value' => $model->TaskName]); ?>
 				<?= Html::activeLabel($model, 'StartTime', [
 					'label' => 'Start Time',
 					'class' => 'col-sm-2 control-label'
@@ -65,8 +66,8 @@ use kartik\form\ActiveForm;
 					<?= $form->field($model, 'StartTime', [
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
-						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE],
-						'disabled' => $model->Task == 'Employee Logout' ? true : false,
+						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE, 'showSeconds' => true],
+						'disabled' => $model->TaskName == 'Employee Logout' ? true : false,
 					]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EndTime', [
@@ -77,15 +78,15 @@ use kartik\form\ActiveForm;
 					<?= $form->field($model, 'EndTime', [
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
-						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE],
-						'disabled' => $model->Task == 'Employee Login' ? true : false,
+						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE, 'showSeconds' => true],
+						'disabled' => $model->TaskName == 'Employee Login' ? true : false,
 					]); ?>
 				</div>
 				<!--Next Row Data-->
 				<?= Html::activeHiddenInput($nextModel, 'NextID', ['value' => $nextModel->ID]); ?>
 				<?= Html::activeHiddenInput($nextModel, 'NextProjectID', ['value' => $nextModel->ProjectID]); ?>
-				<?= Html::activeHiddenInput($nextModel, 'NextProjectName', ['value' => $nextModel->ProjectName]); ?>
-				<?= Html::activeHiddenInput($nextModel, 'NextTask', ['value' => $nextModel->Task]); ?>
+				<?= Html::activeHiddenInput($nextModel, 'NextTaskID', ['value' => $nextModel->TaskID]); ?>
+				<?= Html::activeHiddenInput($nextModel, 'NextTaskName', ['value' => $nextModel->TaskName]); ?>
 				<?= Html::activeHiddenInput($nextModel, 'NextStartTime', ['value' => $nextModel->StartTime]); ?>
 				<?= Html::activeHiddenInput($nextModel, 'NextEndTime', ['value' => $nextModel->EndTime]); ?>
 			</div>
@@ -95,8 +96,13 @@ use kartik\form\ActiveForm;
 			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn']) ?>
 		</div>
     <?php ActiveForm::end(); ?>
-	<input type="hidden" value="<?php echo $userID?>" id="userID">
 	<script>
+	//form on task change update task name value
+	$(document).off('change', '#employeedetailtime-taskid').on('change', '#employeedetailtime-taskid', function (){
+		if($('#employeedetailtime-taskid').val() != 0){
+			$('#employeedetailtime-taskname').val('Task ' + $('#employeedetailtime-taskid option:selected').text());
+		}
+	});
 	//form on time change update adjeacent rows
 	//on start time change update end time of prev if it exist
 	$(document).off('change', '#employeedetailtime-starttime').on('change', '#employeedetailtime-starttime', function (){
@@ -114,12 +120,18 @@ use kartik\form\ActiveForm;
 	$(document).off('change', '#employeedetailtime-projectid').on('change', '#employeedetailtime-projectid', function (){
 		reloadTaskDropdown();
 	});
+	//form submit on click employee_detail_form_submit_btn
+	$(document).off('click', '#employee_detail_form_submit_btn').on('click', '#employee_detail_form_submit_btn', function (){
+		submitEdit();
+	});
 	//form validation check
 	function validateForm(){
 		
 	}
 	//form pjax reload
 	function reloadTaskDropdown(){
+		//get date for url
+		currentDate = $('#currentDate').val();
 		//get current user for project dropdown
 		userID = $('#userID').val();
 		//fetch formatted form values
@@ -129,7 +141,7 @@ use kartik\form\ActiveForm;
 		$.pjax.reload({
 			type: 'POST',
 			replace: false,
-			url: '/employee-approval/employee-detail-modal?userID=' + userID,
+			url: '/employee-approval/employee-detail-modal?userID=' + userID + '&date=' + currentDate,
 			data: data,
 			container: '#taskDropDownPjax',
 			timeout: 99999
@@ -140,37 +152,68 @@ use kartik\form\ActiveForm;
 	}
 	//form submit edit
 	function submitEdit(){
+		//get date to appened to time for edit
+		currentDate = $('#currentDate').val();
+		//fetch formatted form values with date param
+		data = getFormData(currentDate);
+		//get form object
+		var form = $('#EmployeeDetailModalForm');
 		
+		$('#loading').show();
+		$.ajax({
+			type: 'POST',
+			url: form.attr("action"),
+			data: data,
+			success: function (response) {
+				if(response){
+					$.pjax.reload({container:"#EmployeeDetailView", timeout: 99999}).done(function(){
+						$('#employee_detail_form_submit_btn').closest('.modal-dialog').parent().modal('hide');
+						$('#loading').hide();
+					});
+				}else
+					console.log('Internal Server Error');
+			},
+			error : function (){
+				console.log('Internal Server Error');
+			}
+		});
 	}
 	
 	//fetch formatted form values
-	function getFormData(){
+	function getFormData(currentDate = null){
 		//get current row of data
 		id = $('#employeedetailtime-id').val();
 		projectID = $('#employeedetailtime-projectid').val();
-		projectName = $('#employeedetailtime-projectname').val();
-		task = $('#employeedetailtime-task').val();
-		startTime = $('#employeedetailtime-starttime').val();
-		endTime = $('#employeedetailtime-endtime').val();
+		taskID = $('#employeedetailtime-taskid').val();
+		taskName = $('#employeedetailtime-taskname').val();
+		//append date if available for edit
+		startTime = currentDate != null ? currentDate + ' ' + $('#employeedetailtime-starttime').val() : $('#employeedetailtime-starttime').val();
+		endTime = currentDate != null ? currentDate + ' ' + $('#employeedetailtime-endtime').val() : $('#employeedetailtime-endtime').val();
 		//grab previous row of data
 		prevId = $('#employeedetailtime-previd').val();
 		prevProjectID = $('#employeedetailtime-prevprojectid').val();
-		prevProjectName = $('#employeedetailtime-prevprojectname').val();
-		prevTask = $('#employeedetailtime-prevtask').val();
-		prevStartTime = $('#employeedetailtime-prevstarttime').val();
-		prevEndTime = $('#employeedetailtime-prevendtime').val();
+		prevTaskID = $('#employeedetailtime-prevtaskid').val();
+		prevTaskName = $('#employeedetailtime-prevtaskname').val();
+		//append date if available for edit and time is not empty
+		prevStartTime = $('#employeedetailtime-prevstarttime').val() != '' && currentDate != null ?
+			currentDate + ' ' + $('#employeedetailtime-prevstarttime').val() : $('#employeedetailtime-prevstarttime').val();
+		prevEndTime = $('#employeedetailtime-prevendtime').val() != '' && currentDate != null ?
+			currentDate + ' ' + $('#employeedetailtime-prevendtime').val() : $('#employeedetailtime-prevendtime').val();
 		//grab next row of data
 		nextId = $('#employeedetailtime-nextid').val();
 		nextProjectID = $('#employeedetailtime-nextprojectid').val();
-		nextProjectName = $('#employeedetailtime-nextprojectname').val();
-		nextTask = $('#employeedetailtime-nexttask').val();
-		nextStartTime = $('#employeedetailtime-nextstarttime').val();
-		nextEndTime = $('#employeedetailtime-nextendtime').val();
+		nextTaskID = $('#employeedetailtime-nexttaskid').val();
+		nextTaskName = $('#employeedetailtime-nexttaskname').val();
+		//append date if available for edit and time is not empty
+		nextStartTime = $('#employeedetailtime-nextstarttime').val() != '' && currentDate != null ?
+			currentDate + ' ' + $('#employeedetailtime-nextstarttime').val() : $('#employeedetailtime-nextstarttime').val();
+		nextEndTime = $('#employeedetailtime-nextendtime').val() != '' && currentDate != null ?
+			currentDate + ' ' + $('#employeedetailtime-nextendtime').val() : $('#employeedetailtime-nextendtime').val();
 		
 		data = {
-			Current: {ID: id, ProjectID: projectID, ProjectName: projectName, Task: task, StartTime: startTime, EndTime: endTime},
-			Prev: {ID: prevId, ProjectID: prevProjectID,ProjectName: prevProjectName, Task: prevTask, StartTime: prevStartTime, EndTime: prevEndTime},
-			Next: {ID: nextId, ProjectID: nextProjectID,ProjectName: nextProjectName, Task: nextTask, StartTime: nextStartTime, EndTime: nextEndTime}
+			Current: {ID: id, ProjectID: projectID, TaskID: taskID, TaskName: taskName, StartTime: startTime, EndTime: endTime},
+			Prev: {ID: prevId, ProjectID: prevProjectID, TaskID: prevTaskID, TaskName: prevTaskName, StartTime: prevStartTime, EndTime: prevEndTime},
+			Next: {ID: nextId, ProjectID: nextProjectID, TaskID: nextTaskID, TaskName: nextTaskName, StartTime: nextStartTime, EndTime: nextEndTime}
 		};
 		
 		return data;

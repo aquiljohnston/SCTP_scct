@@ -93,8 +93,12 @@ $this->title = 'Employee Detail';
 					'headerOptions' => ['class' => 'text-left'],
 					'contentOptions' => ['class' => 'text-left'],
 				],[
+					'label' => 'TaskID',
+					'attribute' => 'TaskID',
+					'hidden' => true
+				],[
 					'label' => 'Task',
-					'attribute' => 'Task',
+					'attribute' => 'TaskName',
 					'headerOptions' => ['class' => 'text-left'],
 					'contentOptions' => ['class' => 'text-left'],
 				],[
@@ -153,4 +157,6 @@ $this->title = 'Employee Detail';
     ?>
 </div>
 <input type="hidden" value="<?php echo $userID?>" id="userID">
+<!--TODO consolidate date values-->
 <input type="hidden" value="<?php echo @$_GET['date']; ?>" id="timeCardDate">
+<input type="hidden" value="<?php echo $date?>" id="currentDate">

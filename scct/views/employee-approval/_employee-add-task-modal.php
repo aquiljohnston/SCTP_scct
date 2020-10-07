@@ -77,7 +77,7 @@ EmployeeApprovalAsset::register($this);
             <?= Html::activeHiddenInput($model, 'ProjectName', ['value' => $model->ProjectName]); ?>
 
             <?php Pjax::begin(['id' => 'addTaskDropDownPjax', 'timeout' => false]) ?>
-            <?= Html::activeLabel($model, 'Task', [
+            <?= Html::activeLabel($model, 'TaskName', [
                 'label' => 'Task',
                 'class' => 'col-sm-2 control-label'
             ]) ?>
@@ -86,7 +86,7 @@ EmployeeApprovalAsset::register($this);
                     'showLabels' => false
                 ])->dropDownList($taskDropDown,
                     [
-                        'readonly' => $model->Task == 'Employee Logout' || $model->Task == 'Employee Login' ? true : false,
+                        'readonly' => $model->TaskName == 'Employee Logout' || $model->TaskName == 'Employee Login' ? true : false,
                         'prompt'   => 'Select a Task'
                     ]); ?>
             </div>
@@ -105,7 +105,7 @@ EmployeeApprovalAsset::register($this);
                         'defaultTime'  => false,
                         'showMeridian' => false
                     ],
-                    'disabled'      => $model->Task == 'Employee Logout' ? true : false,
+                    'disabled'      => $model->TaskName == 'Employee Logout' ? true : false,
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -121,7 +121,7 @@ EmployeeApprovalAsset::register($this);
                         'defaultTime'  => false,
                         'showMeridian' => false
                     ],
-                    'disabled'      => $model->Task == 'Employee Login' ? true : false,
+                    'disabled'      => $model->TaskName == 'Employee Login' ? true : false,
                 ]); ?>
             </div>
 
@@ -131,7 +131,7 @@ EmployeeApprovalAsset::register($this);
     <div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
         <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_add_task_submit_btn']) ?>
     </div>
-    <?= $form->field($model, 'Task')->hiddenInput()->label(false); ?>
+    <?= $form->field($model, 'TaskName')->hiddenInput()->label(false); ?>
     <?= $form->field($model, 'TimeOfDayName')->hiddenInput()->label(false); ?>
     <input type="hidden" value="<?php echo $userID ?>" id="userID">
     <input type="hidden" value="<?php echo $date ?>" id="date">
@@ -181,7 +181,7 @@ EmployeeApprovalAsset::register($this);
 
         console.log('here');
         let taskName = $('#employeedetailtime-taskid option:selected').text();
-        $('#employeedetailtime-task').val('Task ' + taskName);
+        $('#employeedetailtime-taskname').val('Task ' + taskName);
     });
 
     //
