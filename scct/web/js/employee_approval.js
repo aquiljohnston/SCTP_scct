@@ -18,7 +18,7 @@ function applyEmployeeApprovalListeners() {
 	$(document).off('click', '#GridViewForEmployeeApprovalUser tbody tr td').on('click', '#GridViewForEmployeeApprovalUser tbody tr td',function (){
 		//restrict click to only day of the week fields
 		//with values in the .text()
-		if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
+		if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 
 			&& JSON.parse($(this).parent().attr('data-key')).UserID != null){
 			//get data for redirect
 			var userid = JSON.parse($(this).parent().attr('data-key')).UserID;
@@ -69,7 +69,7 @@ function applyEmployeeApprovalListeners() {
 
 function employeeDetailToolTip() {
     $.each($('#GridViewForEmployeeApprovalUser tbody tr td'),function(){
-        if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
+        if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8
 			&& JSON.parse($(this).parent().attr('data-key')).UserID != null) {
 				$(this).attr("title","Click to review this day.")
         } 
