@@ -19,11 +19,13 @@ use yii\base\Model;
 use yii\web\Response;
 use app\constants\Constants;
 use app\models\EmployeeDetailTime;
+use function array_key_first;
 use function date;
 use function end;
 use function http_build_query;
 use function json_decode;
 use function json_encode;
+use function krsort;
 use function print_r;
 use function strtotime;
 
@@ -560,10 +562,23 @@ class EmployeeApprovalController extends BaseCardController
 
             if ($breakDownData) {
 
+                $startTimeArr = [];
+                $endTimeArr = [];
+                foreach ($breakDownData as $breakDown) {
+                    $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown;
+                    $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown;
+                }
+
+                krsort($startTimeArr);
+                krsort($endTimeArr);
+
+                $startTime = $startTimeArr[array_key_first($startTimeArr)];
+                $endTime = end($endTimeArr);
+
                 // check if morning or afternoon
                 if ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_MORNING) {
 
-                    $current = @$breakDownData[0];
+                    $current = $endTime;
                     $postData['Current'] = [
                         'ID'        => $current['RowID'],
                         'ProjectID' => $current['ProjectID'],
@@ -575,7 +590,7 @@ class EmployeeApprovalController extends BaseCardController
 
                 } elseif ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_AFTERNOON) {
 
-                    $current = end($breakDownData);
+                    $current = $startTime;
                     $postData['Current'] = [
                         'ID'        => $current['RowID'],
                         'ProjectID' => $current['ProjectID'],
@@ -590,7 +605,7 @@ class EmployeeApprovalController extends BaseCardController
             //execute post request
             $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData), Constants::API_VERSION_3);
 
-            print_r($response);
+           return $response;
 
         }
     }

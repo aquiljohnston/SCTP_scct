@@ -16,6 +16,11 @@ EmployeeApprovalAsset::register($this);
 /* @var $this yii\web\View */
 /* @var $breakDownData array */
 /* @var $model EmployeeDetailTime */
+/* @var  $projectDropDown array */
+/* @var $taskDropDown array */
+/* @var $userID int */
+/* @var $date string */
+
 ?>
 <style type="text/css">
     [data-key="0"] {
@@ -37,9 +42,19 @@ EmployeeApprovalAsset::register($this);
 
             <?php if (count($breakDownData) > 0) {
 
-                $endTime = date('H:i', strtotime($breakDownData[0]['Start Time']));
-                $startTime = end($breakDownData);
-                $startTime = date('H:i', strtotime($startTime['End Time']));
+                $startTimeArr = [];
+                $endTimeArr = [];
+                foreach ($breakDownData as $breakDown) {
+                    $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown['Start Time'];
+                    $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown['End Time'];
+                }
+
+                krsort($startTimeArr);
+                krsort($endTimeArr);
+
+                $startTime = $startTimeArr[array_key_first($startTimeArr)];
+                $endTime = end($endTimeArr);
+
 
                 $checkboxArr = [
                     $endTime   => ucfirst(EmployeeDetailTime::TIME_OF_DAY_MORNING),
@@ -50,17 +65,17 @@ EmployeeApprovalAsset::register($this);
                     <?= Html::activeRadioList($model, 'TimeOfDay', $checkboxArr, [
                         'item' => function ($index, $label, $name, $checked, $value) use ($model) {
                             return Html::radio($name, false, [
-                                'value'            => $value,
-                                'label'            => Html::encode($label) . ' (' . $value . ')',
-                                'class'            => 'time-of-day-checkbox',
-                                'data-time'        => $value,
-                                'data-time-of-day' => strtolower($label)
-                            ]);
+                                    'value'            => $value,
+                                    'label'            => Html::encode($label) . ' (' . $value . ')',
+                                    'class'            => 'time-of-day-checkbox',
+                                    'data-time'        => $value,
+                                    'data-time-of-day' => strtolower($label)
+                                ]) . '<span style="margin-right:10px;"></span>';
                         }
                     ]); ?>
                 </div>
                 <div class="clearfix"></div>
-                <p style="margin-top:15px;"></p>
+                <p style="margin-top:35px;"></p>
             <?php } ?>
 
             <?= Html::activeHiddenInput($model, 'ID', ['value' => $model->ID]); ?>
@@ -97,15 +112,25 @@ EmployeeApprovalAsset::register($this);
                 'class' => 'col-sm-2 control-label'
             ]) ?>
             <div class="col-sm-4">
+
+                <?php
+                $disableStartTime = false;
+                if ($model->TaskName == 'Employee Logout') {
+                    $disableStartTime = true;
+                } else {
+                    $disableStartTime = true;
+                }
+                ?>
                 <?= $form->field($model, 'StartTime', [
-                    'showLabels' => false
+                    'showLabels' => false,
+
                 ])->widget(\kartik\widgets\TimePicker::classname(), [
                     'pluginOptions' => [
                         'placeholder'  => 'Enter time...',
                         'defaultTime'  => false,
                         'showMeridian' => false
                     ],
-                    'disabled'      => $model->TaskName == 'Employee Logout' ? true : false,
+                    'disabled'      => $disableStartTime,
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -113,24 +138,46 @@ EmployeeApprovalAsset::register($this);
                 'class' => 'col-sm-2 control-label'
             ]) ?>
             <div class="col-sm-4">
+
+                <?php
+                $disableEndTime = false;
+                if ($model->TaskName == 'Employee Login') {
+                    $disableEndTime = true;
+                } else {
+                    $disableEndTime = true;
+                }
+                ?>
                 <?= $form->field($model, 'EndTime', [
-                    'showLabels' => false
+                    'showLabels' => false,
+                    //'disabled'   => true
                 ])->widget(\kartik\widgets\TimePicker::classname(), [
                     'pluginOptions' => [
                         'placeholder'  => 'Enter time...',
                         'defaultTime'  => false,
                         'showMeridian' => false
                     ],
-                    'disabled'      => $model->TaskName == 'Employee Login' ? true : false,
+                    'disabled'      => $disableEndTime
                 ]); ?>
             </div>
 
         </div>
     </div>
+
     <br>
-    <div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
-        <?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_add_task_submit_btn']) ?>
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
+                <?= Html::Button('Submit',
+                    [
+                        'class'    => 'btn btn-success',
+                        'id'       => 'employee_detail_add_task_submit_btn',
+                        'disabled' => true
+                    ]) ?>
+            </div>
+        </div>
     </div>
+
+
     <?= $form->field($model, 'TaskName')->hiddenInput()->label(false); ?>
     <?= $form->field($model, 'TimeOfDayName')->hiddenInput()->label(false); ?>
     <input type="hidden" value="<?php echo $userID ?>" id="userID">
@@ -139,108 +186,4 @@ EmployeeApprovalAsset::register($this);
 
 </div>
 
-<script>
-    //form on project change reload task dropDownList
-    $(document).
-        off('change', '#employeedetailtime-projectid').
-        on('change', '#employeedetailtime-projectid', function() {
-            reloadTaskDropdown();
-        });
 
-    // includes disabled fields in serialize
-    $.fn.serializeIncludeDisabled = function() {
-        let disabled = this.find(':input:disabled').removeAttr('disabled');
-        let serialized = this.serialize();
-        disabled.attr('disabled', 'disabled');
-        return serialized;
-    };
-
-    $body = $('body');
-
-    $body.on('click', '#employee_detail_add_task_submit_btn', function(e) {
-
-        //
-        let formData = $('#EmployeeDetailAddTaskModalForm').serializeIncludeDisabled();
-
-        console.log(formData);
-
-        let url = '/employee-approval/add-task?userID=<?=$userID;?>&date=<?=$date;?>';
-        $.ajax({
-            url: url,
-            data: formData,
-            type: 'POST',
-            dataType: 'JSON',
-        }).done(function(data) {
-            alert('SUCCESS');
-        }).fail(function(jqXHR, textStatus, errorThrown) {
-            alert(errorThrown);
-        });
-    });
-
-    $body.on('change', '#employeedetailtime-taskid', function(e) {
-
-        console.log('here');
-        let taskName = $('#employeedetailtime-taskid option:selected').text();
-        $('#employeedetailtime-taskname').val('Task ' + taskName);
-    });
-
-    //
-    $body.on('click', '.time-of-day-checkbox', function(e) {
-
-        let timeOfDay = $(this).data('time-of-day');
-        let time = $(this).data('time');
-        let isChecked = $(this).is(':checked');
-
-        if (timeOfDay == '<?=EmployeeDetailTime::TIME_OF_DAY_MORNING;?>') {
-
-            if (isChecked) {
-
-                //
-                $('#employeedetailtime-endtime').val(time);
-                $('#employeedetailtime-endtime').attr('disabled', true);
-
-                //
-                $('#employeedetailtime-starttime').val('');
-                $('#employeedetailtime-starttime').removeAttr('disabled');
-
-                $('#employeedetailtime-timeofdayname').val('morning');
-            }
-
-        } else if (timeOfDay == '<?=EmployeeDetailTime::TIME_OF_DAY_AFTERNOON;?>') {
-
-            if (isChecked) {
-
-                //
-                $('#employeedetailtime-starttime').val(time);
-                $('#employeedetailtime-starttime').attr('disabled', true);
-
-                //
-                $('#employeedetailtime-endtime').val('');
-                $('#employeedetailtime-endtime').removeAttr('disabled');
-
-                $('#employeedetailtime-timeofdayname').val('afternoon');
-            }
-        }
-    });
-
-    //form pjax reload
-    function reloadTaskDropdown() {
-        //get current user for project dropdown
-        userID = $('#userID').val();
-        //fetch formatted form values
-        //  data = getFormData();
-
-        $('#loading').show();
-        $.pjax.reload({
-            type: 'POST',
-            replace: false,
-            url: '/employee-approval/add-task-modal?userID=' + userID + '&date=' + $('#date').val(),
-            data: {projectID: $('#employeedetailtime-projectid').val()},
-            container: '#addTaskDropDownPjax',
-            timeout: 99999,
-        });
-        $('#addTaskDropDownPjax').off('pjax:success').on('pjax:success', function() {
-            $('#loading').hide();
-        });
-    }
-</script>
