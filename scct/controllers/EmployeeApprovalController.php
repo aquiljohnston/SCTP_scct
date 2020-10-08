@@ -683,28 +683,28 @@ class EmployeeApprovalController extends BaseCardController
 				$endTime = $_POST['Current']['EndTime'];
 				if(strtotime($startTime) > strtotime($endTime)){
 					//if form is invalid return error message
-					$response = 'Start time must be before end time';
+					$response = 'Start time must be before end time.';
 					return $response;
 				}
 				
 				//check current start time is after pervious start time
 				$prevStartTime = $_POST['Prev']['StartTime'];
-				if(strtotime($startTime) < strtotime($prevStartTime)){
+				if($prevStartTime!= '' && strtotime($startTime) < strtotime($prevStartTime)){
 					//if form is invalid return error message
-					$response = 'Start time must be after previous start time of ' . $prevStartTime;
+					$response = 'Start time must be after previous start time of ' . $prevStartTime . '.';
 					return $response;
 				}
 				
 				//check current end time is before next end time
 				$nextEndTime = $_POST['Next']['EndTime'];
-				if(strtotime($endTime) > strtotime($nextEndTime)){
+				if($nextEndTime!= '' && strtotime($endTime) > strtotime($nextEndTime)){
 					//if form is invalid return error message
-					$response = 'End time must be before next end time of ' . $nextEndTime;
+					$response = 'End time must be before next end time of ' . $nextEndTime . '.';
 					return $response;
 				}
 				return $response;
 			}else{
-				$response = 'Internal Server Error';
+				$response = 'Internal Server Error.';
 				return $response;
 			}	
 		} catch (UnauthorizedHttpException $e){
