@@ -54,7 +54,8 @@ use kartik\form\ActiveForm;
 						<?= $form->field($model, 'TaskID', [
 							'showLabels' => false
 						])->dropDownList($taskDropDown,
-							['readonly' => $model->TaskName == 'Employee Logout' || $model->TaskName == 'Employee Login' ? true : false,]); ?>
+							['disabled' => $model->TaskID == 0 ? true : false,]
+						); ?>
 					</div>
 				<?php Pjax::end() ?>
 				<?= Html::activeHiddenInput($nextModel, 'TaskName', ['value' => $model->TaskName]); ?>
@@ -67,7 +68,6 @@ use kartik\form\ActiveForm;
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
 						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE, 'showSeconds' => true],
-						'disabled' => $model->TaskName == 'Employee Logout' ? true : false,
 					]); ?>
 				</div>
 				<?= Html::activeLabel($model, 'EndTime', [
@@ -79,7 +79,6 @@ use kartik\form\ActiveForm;
 						'showLabels' => false
 					])->widget(\kartik\widgets\TimePicker::classname(), [
 						'pluginOptions' => ['placeholder' => 'Enter time...','defaultTime' => FALSE, 'showMeridian' => FALSE, 'showSeconds' => true],
-						'disabled' => $model->TaskName == 'Employee Login' ? true : false,
 					]); ?>
 				</div>
 				<!--Next Row Data-->
@@ -93,7 +92,8 @@ use kartik\form\ActiveForm;
 		</div>
 		<br>
 		<div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
-			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn']) ?>
+			<span id = "error_message"></span>
+			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn', 'disabled' => true]) ?>
 		</div>
     <?php ActiveForm::end(); ?>
 	<script>
@@ -109,12 +109,14 @@ use kartik\form\ActiveForm;
 		if(!$('#employeedetailtime-prevendtime').val() == ''){
 			$('#employeedetailtime-prevendtime').val($('#employeedetailtime-starttime').val());
 		}
+		validateForm();
 	});
 	//on end time change update start time of next if it exist
 	$(document).off('change', '#employeedetailtime-endtime').on('change', '#employeedetailtime-endtime', function (){
 		if(!$('#employeedetailtime-nextstarttime').val() == ''){
 			$('#employeedetailtime-nextstarttime').val($('#employeedetailtime-endtime').val());
 		}
+		validateForm();
 	});
 	//form on project change reload task dropDownList
 	$(document).off('change', '#employeedetailtime-projectid').on('change', '#employeedetailtime-projectid', function (){
@@ -126,7 +128,29 @@ use kartik\form\ActiveForm;
 	});
 	//form validation check
 	function validateForm(){
-		
+		//get form data
+		data = getFormData();
+		//pass form to controller to perform rule check
+		$.ajax({
+			type: 'POST',
+			url: '/employee-approval/employee-detail-validate',
+			data: data,
+			success: function (response) {
+				if(response == ''){
+					//if response is true enable submit and clear validation message
+					$('#error_message').text('');
+					$('#employee_detail_form_submit_btn').prop('disabled', false);//enable button
+				}else{
+					//if response if false disable submit and display validation message
+					$('#error_message').text(response);
+					$('#employee_detail_form_submit_btn').prop('disabled', true); //disable button
+				}
+			},
+			error : function (){
+				//if error in validation disable submit and display error message
+				console.log('Internal Server Error');
+			}
+		});
 	}
 	//form pjax reload
 	function reloadTaskDropdown(){
