@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\DateHelper;
 use app\components\MyArrayHelper;
 use Yii;
 use app\controllers\BaseController;
@@ -10,6 +11,7 @@ use yii\base\Exception;
 use yii\filters\VerbFilter;
 use yii\data\ArrayDataProvider;
 use linslin\yii2\curl;
+use yii\helpers\Json;
 use yii\web\Request;
 use \DateTime;
 use yii\web\NotFoundHttpException;
@@ -550,6 +552,17 @@ class EmployeeApprovalController extends BaseCardController
             $response = json_decode($response, true);
             $breakDownData = $response['BreakdownData'];
 
+            foreach ($breakDownData as $breakDown) {
+                $checkBetweenDate = DateHelper::checkDateBetween($date . ' ' . $employeeDetailTime->StartTime.':00',
+                    $date . ' ' . $employeeDetailTime->EndTime.':00', $date . ' ' . $breakDown['Start Time'],
+                    $date . ' ' . $breakDown['End Time']
+                );
+
+                if ($checkBetweenDate) {
+                    return Json::encode(['success' => false, 'msg' => 'Invalid datetime range']);
+                }
+            }
+
 
             $postData = [
                 'New' => [
@@ -586,8 +599,8 @@ class EmployeeApprovalController extends BaseCardController
                         'ProjectID' => $current['ProjectID'],
                         'TaskID'    => $current['TaskID'],
                         'TaskName'  => $current['TaskName'],
-                        'StartTime' => $date.' '.$employeeDetailTime->StartTime,
-                        'EndTime'   => $date.' '.$employeeDetailTime->StartTime
+                        'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->StartTime
                     ];
 
                 } elseif ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_AFTERNOON) {
@@ -598,20 +611,20 @@ class EmployeeApprovalController extends BaseCardController
                         'ProjectID' => $current['ProjectID'],
                         'TaskID'    => $current['TaskID'],
                         'TaskName'  => $current['TaskName'],
-                        'StartTime' => $date.' '.$employeeDetailTime->EndTime,
-                        'EndTime'   => $date.' '.$employeeDetailTime->EndTime
+                        'StartTime' => $date . ' ' . $employeeDetailTime->EndTime,
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime
                     ];
                 }
             }
 
             //execute post request
-            $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData), Constants::API_VERSION_3);
+            $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData),
+                Constants::API_VERSION_3);
 
-           return $response;
+            return $response;
 
         }
     }
-
 	
 	/**
      * Calls api route to update existing employee detail records

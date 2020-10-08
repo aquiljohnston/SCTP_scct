@@ -146,6 +146,7 @@ EmployeeApprovalAsset::register($this);
                         'showMeridian' => false
                     ],
                     'disabled'      => $disableStartTime,
+                  //  'maxlength'     => 5
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -171,7 +172,8 @@ EmployeeApprovalAsset::register($this);
                         'defaultTime'  => false,
                         'showMeridian' => false
                     ],
-                    'disabled'      => $disableEndTime
+                    'disabled'      => $disableEndTime,
+                   // 'maxlength'     => 5
                 ]); ?>
             </div>
 
