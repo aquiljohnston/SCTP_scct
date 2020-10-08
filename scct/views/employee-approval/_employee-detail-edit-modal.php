@@ -91,14 +91,9 @@ use kartik\form\ActiveForm;
 			</div>
 		</div>
 		<br>
-		<div class="row">
-			<div class="col-sm-12 text-center">
-				<div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
-					<span id = "error_message"></span>
-					<br>
-					<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn', 'disabled' => true]) ?>
-				</div>
-			</div>
+		<div id="employeeDetailModalFormButtons" class="form-group" style="display:block">
+			<span id = "error_message"></span>
+			<?= Html::Button('Submit', ['class' => 'btn btn-success', 'id' => 'employee_detail_form_submit_btn', 'disabled' => true]) ?>
 		</div>
     <?php ActiveForm::end(); ?>
 	<script>
