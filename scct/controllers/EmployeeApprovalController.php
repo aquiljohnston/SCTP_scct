@@ -453,8 +453,10 @@ class EmployeeApprovalController extends BaseCardController
 				]);
 				$getAllTaskResponse = Parent::executeGetRequest($getAllTaskUrl, Constants::API_VERSION_3);
 				$allTask = json_decode($getAllTaskResponse, true);
-				//add 0 index when no task is present
-				$taskDropDown = [0 => ''];				
+				//add 0 index when no valid task
+				if($model->TaskID == 0){
+					$taskDropDown = [0 => $model->TaskName];
+				}					
 				foreach($allTask['assets'] as $task) {
 					$taskDropDown[$task['TaskID']] = $task['TaskName'];
 				}
@@ -660,4 +662,59 @@ class EmployeeApprovalController extends BaseCardController
         }
 	}
 
+	/**
+     * Validate form values
+     * @return mixed
+     * @throws ForbiddenHttpException
+     * @throws ServerErrorHttpException
+     * @throws \yii\web\HttpException
+     */
+	public function actionEmployeeDetailValidate(){
+		try{
+			//guest redirect
+			if (Yii::$app->user->isGuest){
+				return $this->redirect(['/login']);
+			}
+			if (isset($_POST)){
+				//if form is valid return empty error message so default to this
+				$response = '';
+				//check current start time is before end time
+				$startTime = $_POST['Current']['StartTime'];
+				$endTime = $_POST['Current']['EndTime'];
+				if(strtotime($startTime) > strtotime($endTime)){
+					//if form is invalid return error message
+					$response = 'Start time must be before end time';
+					return $response;
+				}
+				
+				//check current start time is after pervious start time
+				$prevStartTime = $_POST['Prev']['StartTime'];
+				if(strtotime($startTime) < strtotime($prevStartTime)){
+					//if form is invalid return error message
+					$response = 'Start time must be after previous start time of ' . $prevStartTime;
+					return $response;
+				}
+				
+				//check current end time is before next end time
+				$nextEndTime = $_POST['Next']['EndTime'];
+				if(strtotime($endTime) > strtotime($nextEndTime)){
+					//if form is invalid return error message
+					$response = 'End time must be before next end time of ' . $nextEndTime;
+					return $response;
+				}
+				return $response;
+			}else{
+				$response = 'Internal Server Error';
+				return $response;
+			}	
+		} catch (UnauthorizedHttpException $e){
+            Yii::$app->response->redirect(['login/index']);
+        } catch(ForbiddenHttpException $e) {
+            throw $e;
+        } catch(ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch(Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+	}
 }
