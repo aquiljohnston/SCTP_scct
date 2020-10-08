@@ -218,11 +218,14 @@ $(function() {
             if(data.success){
                 $('#addTaskModal').modal('hide');
                 $.pjax.reload({container: '#EmployeeDetailView', async: false});
+            } else {
+                alert(data.msg);
             }
               $('#loading').hide();
             
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert(errorThrown);
+             $('#loading').hide();
         });
     });
 
