@@ -35,6 +35,7 @@ class EmployeeDetailTime extends \yii\base\model
     public function rules()
     {
         return [
+            [['ProjectID', 'TaskID', 'StartTime', 'EndTime'], 'required'],
             [['ID', 'ProjectID', 'TaskID'], 'integer'],
             [['ProjectName', 'TaskName', 'StartTime', 'EndTime'], 'string'],
             [['StartTime', 'EndTime','TimeOfDay', 'TimeOfDayName'], 'safe']

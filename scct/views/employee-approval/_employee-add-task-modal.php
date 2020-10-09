@@ -43,12 +43,27 @@ EmployeeApprovalAsset::register($this);
 
             <?php
             $hasBreakDownData = false;
-            if (count($breakDownData) > 0) {
+            $breakDownDataCount = count($breakDownData);
+            ?>
+
+            <?php
+            $url = "/employee-approval/add-task?userID=" . $userID . "&date=" . $date;
+
+            if ($breakDownDataCount == 0) {
+
+                $url = "/employee-approval/add-task-initial?userID=" . $userID . "&date=" . $date;
+                ?>
+
+            <?php } ?>
+
+            <?php
+            if ($breakDownDataCount > 0) {
 
                 $hasLoginActivity = array_search('LoginActivity', array_column($breakDownData, 'TaskName'));
                 $hasLogoutActivity = array_search('LogoutActivity', array_column($breakDownData, 'TaskName'));
 
-                if (strlen($hasLoginActivity) >= 1 && strlen($hasLogoutActivity) >= 1) {
+                //
+                if (strlen($hasLoginActivity) >= 1 && ($hasLogoutActivity) >= 1) {
                     $hasBreakDownData = true;
                 }
 
@@ -62,6 +77,7 @@ EmployeeApprovalAsset::register($this);
                         $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown['End Time'];
                     }
 
+                    // sort in desc order
                     krsort($startTimeArr);
                     krsort($endTimeArr);
 
@@ -146,7 +162,7 @@ EmployeeApprovalAsset::register($this);
                         'showMeridian' => false
                     ],
                     'disabled'      => $disableStartTime,
-                  //  'maxlength'     => 5
+                    //  'maxlength'     => 5
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -173,7 +189,7 @@ EmployeeApprovalAsset::register($this);
                         'showMeridian' => false
                     ],
                     'disabled'      => $disableEndTime,
-                   // 'maxlength'     => 5
+                    // 'maxlength'     => 5
                 ]); ?>
             </div>
 
@@ -188,7 +204,8 @@ EmployeeApprovalAsset::register($this);
                     [
                         'class'    => 'btn btn-success',
                         'id'       => 'employee_detail_add_task_submit_btn',
-                        'disabled' => $hasBreakDownData ? true : false
+                        'disabled' => $hasBreakDownData ? true : false,
+                        'data-url' => $url
                     ]) ?>
             </div>
         </div>

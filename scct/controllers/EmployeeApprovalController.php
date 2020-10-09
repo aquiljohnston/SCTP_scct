@@ -4,8 +4,8 @@ namespace app\controllers;
 
 use app\components\DateHelper;
 use app\components\MyArrayHelper;
+use ErrorException;
 use Yii;
-use app\controllers\BaseController;
 use yii\data\Pagination;
 use yii\base\Exception;
 use yii\filters\VerbFilter;
@@ -456,7 +456,7 @@ class EmployeeApprovalController extends BaseCardController
 				//add 0 index when no valid task
 				if($model->TaskID == 0){
 					$taskDropDown = [0 => $model->TaskName];
-				}					
+				}
 				foreach($allTask['assets'] as $task) {
 					$taskDropDown[$task['TaskID']] = $task['TaskName'];
 				}
@@ -531,101 +531,207 @@ class EmployeeApprovalController extends BaseCardController
      * @param $date
      * @throws ForbiddenHttpException
      * @throws UnauthorizedHttpException
+     */
+    public function actionAddTaskInitial($userID, $date)
+    {
+        try {
+
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
+            }
+
+
+            if (Yii::$app->request->isAjax) {
+
+                /** @var EmployeeDetailTime $employeeDetailTime */
+                $employeeDetailTime = new EmployeeDetailTime();
+                $employeeDetailTime->attributes = $_POST['EmployeeDetailTime'];
+
+                //build api url path
+                $url = 'employee-approval%2Femployee-detail&' . http_build_query([
+                        'userID' => $userID,
+                        'date'   => $date,
+                    ]);
+                //execute request
+                $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
+                $response = json_decode($response, true);
+                $breakDownData = @(array)$response['BreakdownData'];
+
+                // check if breakdown data exists
+                if (count($breakDownData) > 0) {
+                    $response = 'Breakdown data exists.';
+                    return Json::encode(['success' => false, 'msg' => $response]);
+                }
+
+                // set task data for new task LoginActivity and LogoutActivity
+                $postData = [
+                    'New'    => [
+                        'ProjectID' => $employeeDetailTime->ProjectID,
+                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskName'  => $employeeDetailTime->TaskName,
+                        'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
+                        'UserID'    => $userID
+                    ],
+                    'Login'  => [
+                        'ProjectID' => $employeeDetailTime->ProjectID,
+                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskName'  => 'LoginActivity',
+                        'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->StartTime,
+                        'UserID'    => $userID
+                    ],
+                    'Logout' => [
+                        'ProjectID' => $employeeDetailTime->ProjectID,
+                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskName'  => 'LogoutActivity',
+                        'StartTime' => $date . ' ' . $employeeDetailTime->EndTime,
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
+                        'UserID'    => $userID
+                    ],
+                ];
+
+                // execute post request
+                $response = BaseController::executePostRequest('employee-approval%2Fcreate-initial', json_encode($postData),
+                    Constants::API_VERSION_3);
+
+                return $response;
+
+            }
+        } catch (UnauthorizedHttpException $e) {
+            Yii::$app->response->redirect(['login/index']);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
+        } catch (ErrorException $e) {
+            throw $e;
+            throw new \yii\web\HttpException(400);
+        } catch (Exception $e) {
+            throw new ServerErrorHttpException();
+        }
+    }
+
+    /**
+     * @param $userID
+     * @param $date
+     * @throws ForbiddenHttpException
+     * @throws UnauthorizedHttpException
      * @throws \yii\web\BadRequestHttpException
      */
     public function actionAddTask($userID, $date)
     {
-        if (Yii::$app->request->isAjax) {
+        try {
 
-
-            /** @var EmployeeDetailTime $employeeDetailTime */
-            $employeeDetailTime = new EmployeeDetailTime();
-            $employeeDetailTime->attributes = $_POST['EmployeeDetailTime'];
-
-            //build api url path
-            $url = 'employee-approval%2Femployee-detail&' . http_build_query([
-                    'userID' => $userID,
-                    'date'   => $date,
-                ]);
-            //execute request
-            $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
-            $response = json_decode($response, true);
-            $breakDownData = $response['BreakdownData'];
-
-            foreach ($breakDownData as $breakDown) {
-                $checkBetweenDate = DateHelper::checkDateBetween($date . ' ' . $employeeDetailTime->StartTime.':00',
-                    $date . ' ' . $employeeDetailTime->EndTime.':00', $date . ' ' . $breakDown['Start Time'],
-                    $date . ' ' . $breakDown['End Time']
-                );
-
-                if ($checkBetweenDate) {
-                    return Json::encode(['success' => false, 'msg' => 'Invalid datetime range']);
-                }
+            //guest redirect
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect(['/login']);
             }
 
+            //
+            if (Yii::$app->request->isAjax) {
 
-            $postData = [
-                'New' => [
-                    'ProjectID' => $employeeDetailTime->ProjectID,
-                    'TaskID'    => $employeeDetailTime->TaskID,
-                    'TaskName'  => $employeeDetailTime->TaskName,
-                    'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
-                    'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
-                    'UserID'    => $userID
-                ]
-            ];
 
-            if ($breakDownData) {
+                /** @var EmployeeDetailTime $employeeDetailTime */
+                $employeeDetailTime = new EmployeeDetailTime();
+                $employeeDetailTime->attributes = $_POST['EmployeeDetailTime'];
 
-                $startTimeArr = [];
-                $endTimeArr = [];
+                //build api url path
+                $url = 'employee-approval%2Femployee-detail&' . http_build_query([
+                        'userID' => $userID,
+                        'date'   => $date,
+                    ]);
+                //execute request
+                $response = Parent::executeGetRequest($url, Constants::API_VERSION_3);
+                $response = json_decode($response, true);
+                $breakDownData = $response['BreakdownData'];
+
                 foreach ($breakDownData as $breakDown) {
-                    $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown;
-                    $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown;
+                    $checkBetweenDate = DateHelper::checkDateBetween($date . ' ' . $employeeDetailTime->StartTime . ':00',
+                        $date . ' ' . $employeeDetailTime->EndTime . ':00', $date . ' ' . $breakDown['Start Time'],
+                        $date . ' ' . $breakDown['End Time']
+                    );
+
+                    if ($checkBetweenDate) {
+                        return Json::encode(['success' => false, 'msg' => 'Invalid datetime range']);
+                    }
                 }
 
-                krsort($startTimeArr);
-                krsort($endTimeArr);
-
-                $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
-                $endTime = end($endTimeArr);
-
-                // check if morning or afternoon
-                if ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_MORNING) {
-
-                    $current = $endTime;
-                    $postData['Current'] = [
-                        'ID'        => $current['RowID'],
-                        'ProjectID' => $current['ProjectID'],
-                        'TaskID'    => $current['TaskID'],
-                        'TaskName'  => $current['TaskName'],
+                // adding new task
+                $postData = [
+                    'New' => [
+                        'ProjectID' => $employeeDetailTime->ProjectID,
+                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskName'  => $employeeDetailTime->TaskName,
                         'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
-                        'EndTime'   => $date . ' ' . $employeeDetailTime->StartTime
-                    ];
+                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
+                        'UserID'    => $userID
+                    ]
+                ];
 
-                } elseif ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_AFTERNOON) {
+                if ($breakDownData) {
 
-                    $current = $startTime;
-                    $postData['Current'] = [
-                        'ID'        => $current['RowID'],
-                        'ProjectID' => $current['ProjectID'],
-                        'TaskID'    => $current['TaskID'],
-                        'TaskName'  => $current['TaskName'],
-                        'StartTime' => $date . ' ' . $employeeDetailTime->EndTime,
-                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime
-                    ];
+                    $startTimeArr = [];
+                    $endTimeArr = [];
+                    foreach ($breakDownData as $breakDown) {
+                        $startTimeArr[strtotime($breakDown['Start Time'])] = $breakDown;
+                        $endTimeArr[strtotime($breakDown['End Time'])] = $breakDown;
+                    }
+
+                    krsort($startTimeArr);
+                    krsort($endTimeArr);
+
+                    $startTime = $startTimeArr[MyArrayHelper::arrayKeyFirst($startTimeArr)];
+                    $endTime = end($endTimeArr);
+
+                    // check if morning or afternoon
+                    if ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_MORNING) {
+
+                        // update LoginActivity task
+                        $current = $endTime;
+                        $postData['Current'] = [
+                            'ID'        => $current['RowID'],
+                            'ProjectID' => $current['ProjectID'],
+                            'TaskID'    => $current['TaskID'],
+                            'TaskName'  => $current['TaskName'],
+                            'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
+                            'EndTime'   => $date . ' ' . $employeeDetailTime->StartTime
+                        ];
+
+                    } elseif ($employeeDetailTime->TimeOfDayName == EmployeeDetailTime::TIME_OF_DAY_AFTERNOON) {    // check if key contains LogoutActivity
+
+                        // update LogoutActivity task
+                        $current = $startTime;
+                        $postData['Current'] = [
+                            'ID'        => $current['RowID'],
+                            'ProjectID' => $current['ProjectID'],
+                            'TaskID'    => $current['TaskID'],
+                            'TaskName'  => $current['TaskName'],
+                            'StartTime' => $date . ' ' . $employeeDetailTime->EndTime,
+                            'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime
+                        ];
+                    }
                 }
+
+
+                //execute post request
+                $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData),
+                    Constants::API_VERSION_3);
+
+                return $response;
+
             }
 
-            //execute post request
-            $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData),
-                Constants::API_VERSION_3);
-
-            return $response;
-
+        } catch (UnauthorizedHttpException $e) {
+            Yii::$app->response->redirect(['login/index']);
+        } catch (ForbiddenHttpException $e) {
+            throw $e;
+        } catch (ErrorException $e) {
+            throw new \yii\web\HttpException(400);
+        } catch (Exception $e) {
+            throw new ServerErrorHttpException();
         }
     }
-	
+
 	/**
      * Calls api route to update existing employee detail records
      * @return mixed
@@ -650,7 +756,7 @@ class EmployeeApprovalController extends BaseCardController
 				return true;
 			}else{
 				return false;
-			}	
+			}
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {
@@ -686,7 +792,7 @@ class EmployeeApprovalController extends BaseCardController
 					$response = 'Start time must be before end time.';
 					return $response;
 				}
-				
+
 				//check current start time is after pervious start time
 				$prevStartTime = $_POST['Prev']['StartTime'];
 				if($prevStartTime!= '' && strtotime($startTime) < strtotime($prevStartTime)){
@@ -694,7 +800,7 @@ class EmployeeApprovalController extends BaseCardController
 					$response = 'Start time must be after previous start time of ' . $prevStartTime . '.';
 					return $response;
 				}
-				
+
 				//check current end time is before next end time
 				$nextEndTime = $_POST['Next']['EndTime'];
 				if($nextEndTime!= '' && strtotime($endTime) > strtotime($nextEndTime)){
@@ -706,7 +812,7 @@ class EmployeeApprovalController extends BaseCardController
 			}else{
 				$response = 'Internal Server Error.';
 				return $response;
-			}	
+			}
 		} catch (UnauthorizedHttpException $e){
             Yii::$app->response->redirect(['login/index']);
         } catch(ForbiddenHttpException $e) {
