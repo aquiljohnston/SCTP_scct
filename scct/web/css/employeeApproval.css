@@ -13,7 +13,7 @@
 }
 
 #GridViewForEmployeeApprovalUser{
-	max-height: 36vh;
+	max-height: 46vh;
 	overflow-y: auto;
 	overflow-x: visible;
 }
@@ -35,7 +35,7 @@
 
 #GridViewForEmployeeApprovalProj{
 	width: 80%;
-	height: 21vh;
+	height: 25vh;
 	overflow-y: auto;
 	margin-top: 2vh;
 }
@@ -58,28 +58,28 @@
 /*responsive css for table*/
 @media only screen and (max-height : 1080px) {
 	#GridViewForEmployeeApprovalUser{
-		max-height: 35vh;
+		max-height: 45vh;
 	}
 	
 	#GridViewForEmployeeApprovalProj{
-		height: 20vh;
+		height: 23vh;
 	}
 }
 
 @media only screen and (max-height : 1050px) {
 	#GridViewForEmployeeApprovalUser{
-		max-height: 30vh;
+		max-height: 45vh;
 	}
 	#GridViewForEmployeeApprovalProj{
-		height: 15vh;
+		height: 20vh;
 	}
 }
 
 @media only screen and (max-height : 768px) {
 	#GridViewForEmployeeApprovalUser{
-		max-height: 25vh;
+		max-height: 42vh;
 	}
 	#GridViewForEmployeeApprovalProj{
-		height: 10vh;
+		height: 16vh;
 	}
 }
