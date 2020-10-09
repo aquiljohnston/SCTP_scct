@@ -8,15 +8,6 @@ use kartik\form\ActiveForm;
 ?>
 
 <div class="employee-detail-edit">
-	<!--display boundry values-->
-	<div id="boundry_values">
-		<span id="start_boundry" class="col-sm-6">
-			<?= 'Minimum Start Time ' . ($prevModel->StartTime != ""  ? $prevModel->StartTime : "") ?>
-		</span>
-		<span id="end_boundry" class="col-sm-6">
-			<?= 'Maximum End Time ' . ($nextModel->EndTime != ""  ? $nextModel->EndTime : "") ?>
-		</span>
-	</div>
 	<!--update form-->
 	<?php $form = ActiveForm::begin([
         'id' => 'EmployeeDetailModalForm',
