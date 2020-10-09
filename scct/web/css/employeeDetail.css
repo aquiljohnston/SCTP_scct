@@ -3,12 +3,12 @@
 	width:80%;
 }
 #DailyProjectHours{
-	max-height:16vh;
+	max-height:22vh;
 	overflow-y: auto;
 }
 
 #DailyBreakdownHours{
-	height:31vh;
+	max-height:45vh;
 	overflow-y:auto;
 	margin-top:2vh;
 }
@@ -20,30 +20,29 @@
 
 /*responsive css for table*/
 @media only screen and (max-height : 1080px) {
-	#DailyBreakdownHours{
-		max-height:30vh;
-	}
-	
 	#DailyProjectHours{
-		height:15vh;
+		max-height:20vh;
+	}
+	#DailyBreakdownHours{
+		max-height:43vh;
 	}
 }
 
 @media only screen and (max-height : 1050px) {
-	#DailyBreakdownHours{
-		max-height:25vh;
-	}
 	#DailyProjectHours{
-		height:11vh;
+		max-height:20vh;
+	}
+	#DailyBreakdownHours{
+		max-height:43vh;
 	}
 }
 
 @media only screen and (max-height : 768px) {
-	#DailyBreakdownHours{
-		max-height:20vh;
-	}
 	#DailyProjectHours{
-		height:8vh;
+		max-height:15vh;
+	}
+	#DailyBreakdownHours{
+		max-height:38vh;
 	}
 }
 
