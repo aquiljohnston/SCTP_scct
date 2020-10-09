@@ -18,7 +18,7 @@ function applyEmployeeApprovalListeners() {
 	$(document).off('click', '#GridViewForEmployeeApprovalUser tbody tr td').on('click', '#GridViewForEmployeeApprovalUser tbody tr td',function (){
 		//restrict click to only day of the week fields
 		//with values in the .text()
-		if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
+		if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 
 			&& JSON.parse($(this).parent().attr('data-key')).UserID != null){
 			//get data for redirect
 			var userid = JSON.parse($(this).parent().attr('data-key')).UserID;
@@ -69,7 +69,7 @@ function applyEmployeeApprovalListeners() {
 
 function employeeDetailToolTip() {
     $.each($('#GridViewForEmployeeApprovalUser tbody tr td'),function(){
-        if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8 && ($(this).text()!= "-") 
+        if($(this).attr('data-col-seq') > 0 && $(this).attr('data-col-seq') < 8
 			&& JSON.parse($(this).parent().attr('data-key')).UserID != null) {
 				$(this).attr("title","Click to review this day.")
         } 
@@ -81,7 +81,7 @@ function employeeApprovalApproveMultiple() {
         var primaryKeys = $('#GridViewForEmployeeApprovalUser').yiiGridView('getSelectedRows');
         var quantifier = "";
         var startDate = $('#startDateinp').val();
-        var endDate = $('#startDateinp').val();
+        var endDate = $('#endDateinp').val();
 
         if(primaryKeys.length <= 1 ) { // We don't expect 0 or negative but we need to handle it
             quantifier = "this item?";
@@ -153,3 +153,27 @@ function reloadEmployeeApprovalGridView() {
 		location.reload();
 	});
 }
+
+//listener on add task button to launch modal and pass data to it
+$(document).off('click', '#add_task_btn_id').on('click', '#add_task_btn_id', function (){
+	// if($('#isSubmitted').val()){
+	// 	// not implemented now
+	// 	// resetSubmissionStatusDialog('addTaskEntry');
+	// }else{
+	$('#addTaskModal').modal('show').find('#addTaskModalContentSpan').html("Loading...");
+
+
+	//
+	let userID = $('#userID').val();
+	let timeCardDate = $('#timeCardDate').val();
+
+	$.pjax.reload({
+		type: 'POST',
+		replace: false,
+		url: '/employee-approval/add-task-modal?userID='+userID+'&date='+timeCardDate,
+		data: {},
+		container: '#addTaskModalContentSpan',
+		timeout: 99999
+	});
+	// }
+});

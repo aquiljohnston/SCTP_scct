@@ -11,41 +11,42 @@ function applyEmployeeDetailListeners() {
 	$(document).off('click', '#DailyBreakdownHours tbody tr').on('click', '#DailyBreakdownHours tbody tr',function (){
 		//get current user for project dropdown
 		userID = $('#userID').val();
+		date = $('#date').val();
 		//get current row of data
 		id = $(this).find("td[data-col-seq='0']").text();
 		projectID = $(this).find("td[data-col-seq='1']").text();
-		projectName = $(this).find("td[data-col-seq='2']").text();
-		task = $(this).find("td[data-col-seq='3']").text();
-		startTime = $(this).find("td[data-col-seq='4']").text();
-		endTime = $(this).find("td[data-col-seq='5']").text();
+		taskID = $(this).find("td[data-col-seq='3']").text();
+		taskName = $(this).find("td[data-col-seq='4']").text();
+		startTime = $(this).find("td[data-col-seq='5']").text();
+		endTime = $(this).find("td[data-col-seq='6']").text();
 		//grab previous row of data
 		prevRow = $(this).prev('tr');
-		prevProjectID = prevRow.find("td[data-col-seq='0']").text();
-		prevId = prevRow.find("td[data-col-seq='1']").text();
-		prevProjectName = prevRow.find("td[data-col-seq='2']").text();
-		prevTask = prevRow.find("td[data-col-seq='3']").text();
-		prevStartTime = prevRow.find("td[data-col-seq='4']").text();
-		prevEndTime = prevRow.find("td[data-col-seq='5']").text();
+		prevId = prevRow.find("td[data-col-seq='0']").text();
+		prevProjectID = prevRow.find("td[data-col-seq='1']").text();
+		prevTaskID = prevRow.find("td[data-col-seq='3']").text();
+		prevTaskName = prevRow.find("td[data-col-seq='4']").text();
+		prevStartTime = prevRow.find("td[data-col-seq='5']").text();
+		prevEndTime = prevRow.find("td[data-col-seq='6']").text();
 		//grab next row of data
 		nextRow = $(this).next('tr');
-		nextProjectID = nextRow.find("td[data-col-seq='0']").text();
-		nextId = nextRow.find("td[data-col-seq='1']").text();
-		nextProjectName = nextRow.find("td[data-col-seq='2']").text();
-		nextTask = nextRow.find("td[data-col-seq='3']").text();
-		nextStartTime = nextRow.find("td[data-col-seq='4']").text();
-		nextEndTime = nextRow.find("td[data-col-seq='5']").text();
+		nextId = nextRow.find("td[data-col-seq='0']").text();
+		nextProjectID = nextRow.find("td[data-col-seq='1']").text();
+		nextTaskID = nextRow.find("td[data-col-seq='3']").text();
+		nextTaskName = nextRow.find("td[data-col-seq='4']").text();
+		nextStartTime = nextRow.find("td[data-col-seq='5']").text();
+		nextEndTime = nextRow.find("td[data-col-seq='6']").text();
 		
 		data = {
-			Current: {ID: id, ProjectID: projectID, ProjectName: projectName, Task: task, StartTime: startTime, EndTime: endTime},
-			Prev: {ID: prevId, ProjectID: prevProjectID,ProjectName: prevProjectName, Task: prevTask, StartTime: prevStartTime, EndTime: prevEndTime},
-			Next: {ID: nextId, ProjectID: nextProjectID,ProjectName: nextProjectName, Task: nextTask, StartTime: nextStartTime, EndTime: nextEndTime}
+			Current: {ID: id, ProjectID: projectID, TaskID: taskID, TaskName: taskName, StartTime: startTime, EndTime: endTime},
+			Prev: {ID: prevId, ProjectID: prevProjectID, TaskID: prevTaskID, TaskName: prevTaskName, StartTime: prevStartTime, EndTime: prevEndTime},
+			Next: {ID: nextId, ProjectID: nextProjectID, TaskID: nextTaskID, TaskName: nextTaskName, StartTime: nextStartTime, EndTime: nextEndTime}
 		};
 		
 		$('#editTimeModal').modal('show').find('#editTimeModalContentSpan').html("Loading...");
 		$.pjax.reload({
 			type: 'POST',
 			replace: false,
-			url: '/employee-approval/employee-detail-modal?userID=' + userID,
+			url: '/employee-approval/employee-detail-modal?userID=' + userID + '&date=' + date,
 			data: data,
 			container: '#editTimeModalContentSpan',
 			timeout: 99999

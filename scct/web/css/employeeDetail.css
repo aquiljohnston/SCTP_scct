@@ -1,4 +1,4 @@
-/*report-summary employee-detail*/
+/*employee-approval employee-detail*/
 .project-hours-container{
 	width:80%;
 }
@@ -45,4 +45,9 @@
 	#DailyProjectHours{
 		height:8vh;
 	}
+}
+
+/*_employee-detail-edit-modal*/
+#error_message{
+	color:red;
 }
