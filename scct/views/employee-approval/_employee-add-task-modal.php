@@ -136,7 +136,6 @@ EmployeeApprovalAsset::register($this);
                         'prompt'   => 'Select a Task'
                     ]); ?>
             </div>
-
             <?php Pjax::end() ?>
             <?= Html::activeLabel($model, 'StartTime', [
                 'label' => 'Start Time',
@@ -162,7 +161,6 @@ EmployeeApprovalAsset::register($this);
                         'showMeridian' => false
                     ],
                     'disabled'      => $disableStartTime,
-                    //  'maxlength'     => 5
                 ]); ?>
             </div>
             <?= Html::activeLabel($model, 'EndTime', [
@@ -189,13 +187,24 @@ EmployeeApprovalAsset::register($this);
                         'showMeridian' => false
                     ],
                     'disabled'      => $disableEndTime,
-                    // 'maxlength'     => 5
                 ]); ?>
             </div>
-
+			<div id="coaDropDown" style="display:none">
+				 <?= Html::activeLabel($model, 'AccountType', [
+					'label' => 'Account Type',
+					'class' => 'col-sm-2 control-label'
+				]) ?>
+				<div class="col-sm-4">
+					<?= $form->field($model, 'AccountType', [
+						'showLabels' => false
+					])->dropDownList($coaDropDown,
+						[
+							'prompt'  => 'Select Account Type'
+						]); ?>
+				</div>
+			</div>
         </div>
     </div>
-
     <br>
     <div class="row">
         <div class="col-sm-12 text-center">
@@ -217,7 +226,16 @@ EmployeeApprovalAsset::register($this);
     <input type="hidden" value="<?php echo $userID ?>" id="userID">
     <input type="hidden" value="<?php echo $date ?>" id="date">
     <?php ActiveForm::end(); ?>
-
+	<script>
+		$(document).off('change', 'employeedetailtime-taskid').on('change', '#employeedetailtime-taskid', function (){
+			if($('#employeedetailtime-taskname').val() == 'Task OTHER'){
+				$('#coaDropDown').css('display', 'block');
+			}else{
+				console.log('not other');
+				$('#coaDropDown').css('display', 'none');
+			}
+		});
+	</script>
 </div>
 
 

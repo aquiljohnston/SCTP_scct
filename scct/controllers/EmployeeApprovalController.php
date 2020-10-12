@@ -388,6 +388,13 @@ class EmployeeApprovalController extends BaseCardController
                 }
             }
         }
+		
+		//build coa dropdown, may change to pull from backend in the future
+		$coaDropDown = [
+			'5015' => 'OH Holiday Pay',
+			'5016' => 'OH Bereavement/Jury Duty',
+			'5020' => 'PTO',
+		];
 
         //build api url path
         $url = 'employee-approval%2Femployee-detail&' . http_build_query([
@@ -404,6 +411,7 @@ class EmployeeApprovalController extends BaseCardController
             'model'           => $model,
             'projectDropDown' => $projectDropDown,
             'taskDropDown'    => $taskDropDown,
+			'coaDropDown'     => $coaDropDown,
             'userID'          => $userID,
             'breakDownData'   => $breakdownData,
             'date'=>$date
@@ -618,9 +626,8 @@ class EmployeeApprovalController extends BaseCardController
      * @throws UnauthorizedHttpException
      * @throws \yii\web\BadRequestHttpException
      */
-    public function actionAddTask($userID, $date)
-    {
-        try {
+    public function actionAddTask($userID, $date){
+        try{
 
             //guest redirect
             if (Yii::$app->user->isGuest) {
@@ -629,7 +636,6 @@ class EmployeeApprovalController extends BaseCardController
 
             //
             if (Yii::$app->request->isAjax) {
-
 
                 /** @var EmployeeDetailTime $employeeDetailTime */
                 $employeeDetailTime = new EmployeeDetailTime();
@@ -656,17 +662,17 @@ class EmployeeApprovalController extends BaseCardController
                     }
                 }
 
-                // adding new task
-                $postData = [
-                    'New' => [
-                        'ProjectID' => $employeeDetailTime->ProjectID,
-                        'TaskID'    => $employeeDetailTime->TaskID,
-                        'TaskName'  => $employeeDetailTime->TaskName,
-                        'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
-                        'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
-                        'UserID'    => $userID
-                    ]
-                ];
+				$postData = [
+					'New' => [
+						'ProjectID'   => $employeeDetailTime->ProjectID,
+						'TaskID'      => $employeeDetailTime->TaskID,
+						'TaskName'    => $employeeDetailTime->TaskName,
+						'AccountType' => $employeeDetailTime->AccountType,
+						'StartTime'   => $date . ' ' . $employeeDetailTime->StartTime,
+						'EndTime'     => $date . ' ' . $employeeDetailTime->EndTime,
+						'UserID'      => $userID
+					]
+				];
 
                 if ($breakDownData) {
 
@@ -711,8 +717,7 @@ class EmployeeApprovalController extends BaseCardController
                         ];
                     }
                 }
-
-
+				
                 //execute post request
                 $response = BaseController::executePostRequest('employee-approval%2Fcreate', json_encode($postData),
                     Constants::API_VERSION_3);
