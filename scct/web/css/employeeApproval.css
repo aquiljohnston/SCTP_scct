@@ -86,7 +86,7 @@
 
 @media (min-width : 1280px) and (min-height: 768px){
 	.employee-approval-index.index-div {
-		margin-top: 100px;
+		margin-top: 5%;
 	}
 
 	#GridViewForEmployeeApprovalProj{
@@ -95,6 +95,6 @@
 	}
 
 	#employeeApprovalyGridViewContainer{
-		margin-top: 15px;
+		margin-top: 30px;
 	}
 }
