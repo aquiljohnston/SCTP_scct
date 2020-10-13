@@ -584,7 +584,7 @@ class EmployeeApprovalController extends BaseCardController
                     ],
                     'Login'  => [
                         'ProjectID' => $employeeDetailTime->ProjectID,
-                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskID'    => 0, // no task activity
                         'TaskName'  => 'LoginActivity',
                         'StartTime' => $date . ' ' . $employeeDetailTime->StartTime,
                         'EndTime'   => $date . ' ' . $employeeDetailTime->StartTime,
@@ -592,7 +592,7 @@ class EmployeeApprovalController extends BaseCardController
                     ],
                     'Logout' => [
                         'ProjectID' => $employeeDetailTime->ProjectID,
-                        'TaskID'    => $employeeDetailTime->TaskID,
+                        'TaskID'    => 0, // no task activity
                         'TaskName'  => 'LogoutActivity',
                         'StartTime' => $date . ' ' . $employeeDetailTime->EndTime,
                         'EndTime'   => $date . ' ' . $employeeDetailTime->EndTime,
