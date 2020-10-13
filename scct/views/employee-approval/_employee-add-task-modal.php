@@ -199,7 +199,7 @@ EmployeeApprovalAsset::register($this);
                     [
                         'class'    => 'btn btn-success',
                         'id'       => 'employee_detail_add_task_submit_btn',
-                        'disabled' => $hasBreakDownData ? true : false,
+                        'disabled' => true, // disable until validation 
                         'data-url' => $url
                     ]) ?>
             </div>

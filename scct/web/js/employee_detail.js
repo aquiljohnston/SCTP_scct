@@ -12,7 +12,6 @@ $(function () {
 	setTaskId();
 	reloadTaskDropdownListner();
 
-
 });
 
 function applyEmployeeDetailListeners() {
@@ -124,12 +123,13 @@ function timeOfDayCheckbox(){
 		let timeOfDay = $(this).data('time-of-day');
 		let time = $(this).data('time');
 		let isChecked = $(this).is(':checked');
-
+		// enable submit button
+		enableSubmitButton();
 		// remove disabled attrs
 		$('#employeedetailtime-starttime').removeAttr('disabled');
 		$('#employeedetailtime-endtime').removeAttr('disabled');
 		$('#employee_detail_add_task_submit_btn').removeAttr('disabled');
-
+		
 		if (timeOfDay == 'morning') {
 
 			if (isChecked) {
@@ -166,7 +166,8 @@ function timeOfDayCheckbox(){
 // sets taskID hidden input
 function setTaskId() {
 	$('body').on('change', '#employeedetailtime-taskid', function(e) {
-
+		// enable submit button
+		enableSubmitButton();
 		let taskName = $('#employeedetailtime-taskid option:selected').text();
 		$('#employeedetailtime-taskname').val('Task ' + taskName);
 	});
@@ -174,11 +175,14 @@ function setTaskId() {
 
 //
 function reloadTaskDropdownListner(){
-	$(document).
-		off('change', '#employeedetailtime-projectid').
-		on('change', '#employeedetailtime-projectid', function() {
+	$(document).off('change', '#employeedetailtime-projectid')
+		.on('change', '#employeedetailtime-projectid', function() {
 			reloadTaskDropdown();
-		});
+			// enable submit button
+			enableSubmitButton();
+		})
+		.on('change', '#employeedetailtime-endtime', function() {enableSubmitButton()})
+		.on('change', '#employeedetailtime-starttime', function() {enableSubmitButton()})
 }
 
 
@@ -202,4 +206,31 @@ function reloadTaskDropdown() {
 		on('pjax:success', function() {
 			$('#loading').hide();
 		});
+}
+
+function enableSubmitButton() {
+	// get project and task value
+	let project = $('#employeedetailtime-projectid').val();
+	let task = $('#employeedetailtime-taskid').val();
+	// get start and end time value
+	let endTime = $('#employeedetailtime-endtime').val();
+	let startTime = $('#employeedetailtime-starttime').val();
+
+	// ensure start and end time are filled out
+	if(startTime.length === 0 || endTime.length === 0 || project.length === 0 || task.length === 0) {
+		$('#employee_detail_add_task_submit_btn').prop('disabled', true)
+		return;
+	}
+	// ensure end > start time
+	var startDT = new Date();
+	startDT.setHours(startTime.substring(0, 2), startTime.substring(3, 5));
+	var endDT = new Date();
+	endDT.setHours(endTime.substring(0, 2), endTime.substring(3, 5));
+	if(endDT <= startDT) {
+		$('#employee_detail_add_task_submit_btn').prop('disabled', true)
+		return;
+	}
+
+	// enable submit button
+	$('#employee_detail_add_task_submit_btn').prop('disabled', false)
 }
