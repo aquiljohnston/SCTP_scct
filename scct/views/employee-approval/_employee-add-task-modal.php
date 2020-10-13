@@ -189,20 +189,6 @@ EmployeeApprovalAsset::register($this);
                     'disabled'      => $disableEndTime,
                 ]); ?>
             </div>
-			<div id="coaDropDown" style="display:none">
-				 <?= Html::activeLabel($model, 'AccountType', [
-					'label' => 'Account Type',
-					'class' => 'col-sm-2 control-label'
-				]) ?>
-				<div class="col-sm-4">
-					<?= $form->field($model, 'AccountType', [
-						'showLabels' => false
-					])->dropDownList($coaDropDown,
-						[
-							'prompt'  => 'Select Account Type'
-						]); ?>
-				</div>
-			</div>
         </div>
     </div>
     <br>
@@ -226,16 +212,6 @@ EmployeeApprovalAsset::register($this);
     <input type="hidden" value="<?php echo $userID ?>" id="userID">
     <input type="hidden" value="<?php echo $date ?>" id="date">
     <?php ActiveForm::end(); ?>
-	<script>
-		$(document).off('change', 'employeedetailtime-taskid').on('change', '#employeedetailtime-taskid', function (){
-			if($('#employeedetailtime-taskname').val() == 'Task OTHER'){
-				$('#coaDropDown').css('display', 'block');
-			}else{
-				console.log('not other');
-				$('#coaDropDown').css('display', 'none');
-			}
-		});
-	</script>
 </div>
 
 

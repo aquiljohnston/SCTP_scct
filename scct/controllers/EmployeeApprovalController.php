@@ -388,13 +388,6 @@ class EmployeeApprovalController extends BaseCardController
                 }
             }
         }
-		
-		//build coa dropdown, may change to pull from backend in the future
-		$coaDropDown = [
-			'5015' => 'OH Holiday Pay',
-			'5016' => 'OH Bereavement/Jury Duty',
-			'5020' => 'PTO',
-		];
 
         //build api url path
         $url = 'employee-approval%2Femployee-detail&' . http_build_query([
@@ -411,7 +404,6 @@ class EmployeeApprovalController extends BaseCardController
             'model'           => $model,
             'projectDropDown' => $projectDropDown,
             'taskDropDown'    => $taskDropDown,
-			'coaDropDown'     => $coaDropDown,
             'userID'          => $userID,
             'breakDownData'   => $breakdownData,
             'date'=>$date
@@ -667,7 +659,6 @@ class EmployeeApprovalController extends BaseCardController
 						'ProjectID'   => $employeeDetailTime->ProjectID,
 						'TaskID'      => $employeeDetailTime->TaskID,
 						'TaskName'    => $employeeDetailTime->TaskName,
-						'AccountType' => $employeeDetailTime->AccountType,
 						'StartTime'   => $date . ' ' . $employeeDetailTime->StartTime,
 						'EndTime'     => $date . ' ' . $employeeDetailTime->EndTime,
 						'UserID'      => $userID
