@@ -50,3 +50,27 @@
 #error_message{
 	color:red;
 }
+
+@media (min-width : 1280px) and (min-height: 768px){
+	.report-summary-employee-detail.index-div {
+		margin-top: 100px;
+	}
+
+	#EmployeeDetailView{
+		margin-top: 15px;
+	}
+
+	#EmployeeDetailView .project-hours-container{
+		width: 100%;
+	}
+
+	#DailyProjectHours-pjax table{
+		margin-bottom: 0;
+	}
+
+	#DailyBreakdownHours{
+		max-height:45vh;
+		overflow-y:auto;
+		margin-top:15px;
+	}
+}

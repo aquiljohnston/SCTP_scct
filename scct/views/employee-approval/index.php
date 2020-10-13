@@ -34,8 +34,8 @@ $userColumns = [
 	[
 		'label' => 'Row Labels',
 		'attribute' => 'RowLabels',
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+		'contentOptions' => ['class' => 'text-center'],
 	]
 ];
 //add dynamic date columns
@@ -44,8 +44,8 @@ foreach($dateHeaders as $header){
 	$userColumns[] = [
 		'label' => $dayOfWeek[$i] . ' ' . $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+		'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+		'contentOptions' => ['class' => 'text-center'],
 	];
 	$i++;
 }
@@ -55,44 +55,44 @@ $userColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Expense',
 			'attribute' => 'Expense',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Mileage To Approve',
 			'attribute' => 'MileageToApprove',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%; white-space: pre-wrap;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 5.71%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Supervisor Approved',
 			'attribute' => 'SupervisorApproved',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%; white-space: pre-wrap;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.5%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		// [
 		// 	'label' => 'PM Submitted',
@@ -109,7 +109,7 @@ if($isProjectManager){
 		[
 			[
 				'class' => 'kartik\grid\CheckboxColumn',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
+				'headerOptions' => ['class' => 'text-center'],
 				'header' => Html::checkBox('selection_all', false, [
 					'class' => 'select-on-check-all',
 					//TODO supply bool for disabled check
@@ -140,7 +140,7 @@ if($isProjectManager){
 		[
 			[
 				'class' => 'kartik\grid\CheckboxColumn',
-				'headerOptions' => ['class' => 'text-center', 'style' => 'width: 5%;'],
+				'headerOptions' => ['class' => 'text-center'],
 				'header' => Html::checkBox('selection_all', false, [
 					'class' => 'select-on-check-all',
 					//TODO supply bool for disabled check
@@ -171,8 +171,8 @@ $projColumns = [
 	[
 		'label' => 'Projects',
 		'attribute' => 'Projects',
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
 	]
 ];
 //add dynamic date columns
@@ -180,8 +180,8 @@ foreach($dateHeaders as $header){
 	$projColumns[] = [
 		'label' => $header,
 		'attribute' => $header,
-		'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-		'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+		'headerOptions' => ['class' => 'text-center'],
+		'contentOptions' => ['class' => 'text-center'],
 	];
 }
 $projColumns = array_merge(
@@ -190,38 +190,38 @@ $projColumns = array_merge(
 		[
 			'label' => 'Total',
 			'attribute' => 'Total',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Paid Time Off',
 			'attribute' => 'PaidTimeOff',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%; white-space: pre-wrap;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center', 'style' => 'white-space: pre-wrap;'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Regular',
 			'attribute' => 'Regular',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Overtime',
 			'attribute' => 'Overtime',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Expense',
 			'attribute' => 'Expense',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		],
 		[
 			'label' => 'Mileage',
 			'attribute' => 'Mileage',
-			'headerOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
-			'contentOptions' => ['class' => 'text-center', 'style' => 'width: 7.14%;'],
+			'headerOptions' => ['class' => 'text-center'],
+			'contentOptions' => ['class' => 'text-center'],
 		]
 	]
 );
