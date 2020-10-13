@@ -28,6 +28,7 @@ class EmployeeDetailTime extends \yii\base\model
 	public $TimeOfDay;
 	public $TimeOfDayName;
     public $ProjectName;
+	public $AccountType;
 
     /**
      * @inheritdoc
@@ -35,8 +36,9 @@ class EmployeeDetailTime extends \yii\base\model
     public function rules()
     {
         return [
+            [['ProjectID', 'TaskID', 'StartTime', 'EndTime'], 'required'],
             [['ID', 'ProjectID', 'TaskID'], 'integer'],
-            [['ProjectName', 'TaskName', 'StartTime', 'EndTime'], 'string'],
+            [['ProjectName', 'TaskName', 'StartTime', 'EndTime', 'AccountType'], 'string'],
             [['StartTime', 'EndTime','TimeOfDay', 'TimeOfDayName'], 'safe']
 
         ];
@@ -54,6 +56,7 @@ class EmployeeDetailTime extends \yii\base\model
 			'TaskName' => 'Task Name',
 			'StartTime' => 'Start Time',
             'EndTime' => 'End Time',
+			'AccountType' => 'Account Type',
         ];
     }
 }
